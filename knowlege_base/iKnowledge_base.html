@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Knowlege base - Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/monokai-sublime.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<style>
+    #toc_container {
+      padding: 1em;
+    }
+  
+    li {
+      display: list-item;
+    }
+    a.intext {
+      word-wrap: break-word;
+    }
+  
+    .toc_section {
+      padding-top: 2em;
+    }
+  
+    .toc_subsection {
+      padding-top: 0.7em;
+      font-size: 0.8em;
+      padding-bottom: 0em;
+    }
+  
+    #toc_container li, #toc_container ul, #toc_container ul li {
+      list-style: outside none none !important;
+    }
+  
+    code {
+      border-radius: 0.7ex;
+      font-size: 1em;
+    }
+  
+    .inline {
+      display: inline;
+      padding: 0.1em 0.4em 0.1em 0.4em;
+      background-color: #f0f0f0;
+      color: brown;
+      border-radius: 0.7ex;
+      word-wrap: break-word;
+    }
+  
+    .shadow {
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+  
+    img.left {
+      margin: 0em 1em 0em 0em;
+    }
+  
+    img.right {
+      margin: 0em 0em 0em 1em;
+    }
+    p.no_bottom_pad {
+      padding-bottom: 0em;
+    }
+  
+    @media screen and (max-width: 45em) {
+      .to_col_if_narrow {
+        flex-direction: column;
+      }
+  
+      img.left, img.right {
+        margin: 0em 0em 1em 0em;
+      }
+    }
+  
+    table {
+      border-spacing: 0 5px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 120%;
+      /* line-height: 120%; */
+      border-top: 3px solid black;
+      border-bottom: 3px solid black;
+      /* padding-bottom: 1em; */
+      margin-bottom: 2em;
+    }
+  
+    thead, th {
+      border-bottom: 2px solid black;
+      border-spacing: 5px 5px;
+    }
+  
+    th, td {
+      padding: 0.4em 1em 0.4em 1em;
+      text-align: right;
+    }
+    .date {
+      padding-bottom: 1em;
+      text-align: right;
+    }
+    @media screen and (max-width: 50em) {
+      table {
+        font-size: 2.8vw;
+        line-height: 4.0vw;
+        border-top: 0.3vw solid black;
+        border-bottom: 0.3vw solid black;
+      }
+      thead, th {
+        border-bottom: 0.2vw solid black;
+      }
+      th, td {
+        padding: 0.4vh 2vw 0.4vh 2vw;
+      }
+      pre {
+        font-size: 0.8em;
+        line-height: 1.5em;
+      }
+      body {
+        font-size: 0.8em;
+      }
+      .date {
+        padding-bottom: 1em;
+        text-align: center;
+      }
+    }
+</style>
+
+<body>
+  <ul class="breadcrumb">
+    <a class="bread_crumb" href="index.html">Kirill Dikalin</a> / База знаний
+  </ul>
+
+  <h1 style="padding-top: 1em;"> Оглавление </h1>
+  <ul>
+    <li><a href="#Python">Python</a></li>
+    <ul>
+      <li><a href="#General questions">Общие вопросы по языку</a></li>
+      <li><a href="#OOP">ООП</a></li>
+        <ul>
+          <li><a href="#SOLID">SOLID</a>
+          <li><a href="#classes">Что такое классы</a>
+          <li><a href="#magic-methods">Что такое магические методы</a>
+          <li><a href="#mixin">Что такое миксин</a>
+        </ul>
+      <li><a href="#Types-and-data-structures-in-python">Типы и структуры данных в python</a></li>
+        <ul>
+          <li><a href="#Types-and-data-structures">Какие типы и структуры данных бывают в python?</a></li>
+          <li><a href="#mutable-and-immutable-data-types">Что такое мутабельные и иммутабельные типы данных?</a></li>
+          <li><a href="#dictionary-key">Что может быть в качестве ключа словаря?</a></li>
+          <li><a href="#python-hash">Что такое хеш-функция?</a></li>
+          <li><a href="#dictionary-in-python">В чём особенность словаря в python?</a></li>
+          <li><a href="#lists-tuples-and-sets">Списки, кортежи и множества в чём их отличие?</a></li>
+        </ul>
+      <li><a href="#GIL">GIL</a></li>
+        <ul>
+          <li><a href="#what-is-GIL">Что такое GIL?</a></li>
+          <li><a href="#multithreaded-and-multiprocessing-programs-in-python">Многопоточные и многопроцессорные программы в python</a></li>
+          <li><a href="#difference-between-threads-and-processes">Разница между потоками и процессами</a></li>
+          <li><a href="#what-are-race-conditions-and-thread-safety">Что такое условия гонки и потокобезопасность?</a></li>
+          <li><a href="#algorithm-for-scheduling-access-of-streams-to-shared-data">Алгоритм планирования доступа потоков к общим данным</a></li>
+        </ul>
+      <li><a href="#GC">GC</a></li>
+        <ul>
+          <li><a href="#memory-management-in-python">Как в питоне обстоят дела с памятью (управлением памятью)</a></li>
+          <li><a href="#how-much-does-it-cost-to-validate-an-element-in-notation">Сколько стоит проверка элемента в нотации?</a></li> 
+          <li><a href="#two-objects">Если есть два объекта и они указывают друг на друга</a></li>
+        </ul>
+      <li><a href="#Iterators-decorators-and-generators">Итераторы, декораторы и генераторы</a></li>
+        <ul>
+          <li><a href="#what-is-iterator">Что такое итератор?</a></li>  
+          <li><a href="#what-is-generator">Что такое генератор?</a></li>
+          <li><a href="#what-is-decorator">Что такое декоратор?</a></li>  
+          <li><a href="#standard-library-decorators">Какие декораторы стандартной библиотеки вы знаете?</a></li> 
+          <li><a href="#list-comprehension">Что такое list comprehension, какой синтаксис создания генераторов?</a></li>
+          <li><a href="#s-range-an-iterator">Является ли range итератором?</a></li>
+        </ul> 
+      <li><a href="#Algorithms">Алгоритмы</a></li>
+    </ul>
+    <li><a href="#SQL">SQL</a></li>
+    <ul>
+      <li><a href="#What-is-a-DBMS">Что такое СУБД?</a></li>
+      <li><a href="#types-of-DBMS">Какие типы СУБД в соответствии с моделями данных существуют?</a></li>
+      <li><a href="#primary-key">Что такое первичный ключ?</a></li>
+      <li><a href="#external-key">Что такое внешний ключ?</a></li>
+      <li><a href="#limitations-in-SQL">Ограничения в SQL</a></li>
+      <li><a href="#self-join">Что такое Self JOIN?</a></li>
+      <li><a href="#wildcards">Подстановочные знаки</a></li>
+      <li><a href="#aliases">Что делают псевдонимы Aliases?</a></li>
+      <li><a href="#difference-between-DELETE-and-TRUNCATE">Разница между командами DELETE и TRUNCATE</a></li>
+      <li><a href="#difference-between-WHERE-and-HAVING">vРазница между WHERE и HAVING</a></li>
+      <li><a href="#basic-sql-commands">Основные команды SQL</a></li>
+      <li><a href="#math-functions">Математические функции в SQL</a></li>
+      <li><a href="#window-functions">Оконные функции в SQL</a></li>
+      <li><a href="#differences-between-relational-and-non-relational-databases">Отличия реляционных и нереляционных баз данных</a></li>
+    </ul>
+   <li><a href="#Big-Data">Big Data</a></li>
+    <ul>
+      <li><a href="#dwh">Что такое DWH</a></li>  
+      <li><a href="#data-lake">Data Lake</a></li>
+      <li><a href="#data-marts">Витрины данных</a></li>
+      <li><a href="#ETL">ETL и ETL-запросы</a></li>
+      <li><a href="#ETL-process">Разработка ETL-процесса</a></li>
+      <li><a href="#Elements-of-the-ETL-process">Элементы ETL-процесса</a></li>
+      <li><a href="#hadoop">Что такое Hadoop?</a></li>
+      <li><a href="#data-vault">Data Vault</a></li>
+      <li><a href="#Apache-Kafka">Apache Kafka</a></li>
+      <li><a href="#Greenplum">Greenplum</a></li>
+      <li><a href="#distributed-file-system-HDFS">Распределенная файловая система HDFS</a></li>
+        <ul>
+          <li><a href="#HDFS-architecture">Архитектура HDFS</a></li>
+          <li><a href="#Shell-commands">Shell-команды</a></li>
+          <li><a href="#Java_API1">Java API</a></li>
+        </ul>
+      <li><a href="#MapReduce">MapReduce</a></li>
+        <ul>
+          <li><a href="#MapReduce-paradigm">Парадигма MapReduce</a></li>
+          <li><a href="#MapReduce-framework">Фреймворк MapReduce</a></li>
+          <li><a href="#Java_API2">Java API</a></li>
+          <li><a href="#Hadoop-Streaming">Hadoop Streaming</a></li>
+        </ul>
+      <li><a href="#Solving-problems-with-MapReduce">Решение задач с помощью MapReduce</a></li>
+        <ul>
+          <li><a href="#Algorithms-on-MapReduce">Алгоритмы на MapReduce</a></li>
+          <li><a href="#Relational-functions">Реляционные функции</a></li>
+          <li><a href="#TF-IDF-calculation">Расчет TF-IDF</a></li>
+        </ul>
+      <li><a href="#Graph-Algorithms-in-MapReduce">Алгоритмы на графах в MapReduce</a></li>
+        <ul>
+          <li><a href="#Graphs-in-MapReduce">Графы в MapReduce</a></li>
+          <li><a href="#Finding-the-shortest-path-in-a-graph">Поиск кратчайшего пути в графе</a></li>
+          <li><a href="#PageRank">PageRank</a></li>
+          <li><a href="#Problems-of-MR-algorithms-on-graphs">Проблемы MR-алгоритмов на графах</a></li>
+        </ul>
+      <li><a href="#Pig-and-Hive">Pig и Hive</a></li>
+        <ul>
+          <li><a href="#Pig">Pig</a></li>
+          <li><a href="#Basic-operators-of-PigLatin">Основные операторы PigLatin</a></li>
+          <li><a href="#Hive">Hive</a></li>
+          <li><a href="#Pig-vs-Hive">Pig vs Hive</a></li>
+        </ul>
+      <li><a href="#HBase-and-Cassandra">NoSQL базы данных: HBase и Cassandra</a></li>
+        <ul>
+          <li><a href="#Data-storage-methods">Способы хранения данных</a></li>
+          <li><a href="#NoSQL">NoSQL</a></li>
+          <li><a href="#Introduction-to-HBase">Введение в HBase</a></li>
+          <li><a href="#HBase-architecture">Архитектура HBase</a></li>
+          <li><a href="#Cassandra">Cassandra</a></li>
+        </ul>
+      <li><a href="#Spark">Spark</a></li>
+        <ul>
+          <li><a href="#Basic-concepts-of-Spark">Основные понятия Spark</a></li>
+          <li><a href="#Spark-Operators">Операторы Spark</a></li>
+          <li><a href="#Spark-framework">Фреймворк Spark</a></li>
+        </ul>
+      <li><a href="#YARN">YARN. MapReduce 2.0</a></li>
+        <ul>
+          <li><a href="#What-is-YARN">Что такое YARN?</a></li>
+          <li><a href="#YARN-components">Компоненты YARN</a></li>
+          <li><a href="#MapReduce-2.0">MapReduce 2.0</a></li>
+        </ul>
+    </ul>
+
+      <h1 id="Python">Python</h1>
+      <h2 id="General questions">Общие вопросы по языку</h2>
+
+      <h3>Разница 2 и 3 версии python</h3>
+      <br />
+      В Python 2 print был оператором: <code class="python inline">print "Hello, world"</code><br />
+      В Python 3 print - функция: <code class="python inline">print ("Hello, world")</code><br />
+      <br />
+      В Python 2 были две функции: <code class="python inline">range</code> - возвращает список; <code class="python inline">xrange</code> - возвращает итератор<br />
+      В Python 3 есть только функция <code class="python inline">range</code>, и она возвращает итератор<br />
+      <br />
+      В Python 2 при делении целых чисел возвращает целоче число<br />
+      В Python 3 при делении целых чисел возвращает вещественное число<br />
+      <br />
+
+      <h3>Магические методы</h3>      
+
+      Так как в Питоне 3 различий между строкой и юникодом больше нет,  <code class="python inline">__unicode__</code>  исчез, а появился  <code class="python inline">__bytes__</code>  (который ведёт себя так же как  <code class="python inline">__str__</code>  и  <code class="python inline">__unicode__</code>  в 2.7) для новых встроенных функций построения байтовых массивов.<br /><br />
+      Так как деление в Питоне 3 теперь по-умолчанию «правильное деление»,  <code class="python inline">__div__</code>  больше нет.<br /><br />
+       <code class="python inline">__coerce__</code>  больше нет, из-за избыточности и странного поведения.<br /><br />
+       <code class="python inline">__cmp__</code>  больше нет, из-за избыточности.<br /><br />
+       <code class="python inline">__nonzero__</code>  было переименовано в  <code class="python inline">__bool__</code> .<br /><br />
+       <code class="python inline">next</code>  у итераторов был переименован в  <code class="python inline">__next__</code> .<br /><br />
+
+      <h2 id="OOP">ООП</h2>
+
+      <h3 id="SOLID">SOLID</h3>
+
+      S - Принцип единственной ответственности (single responsibility principle)<br />
+      Для каждого класса должно быть определено единственное назначение. Не должно возникать God object, который занимается всем в программе.<br /><br />
+
+      O - Принцип открытости/закрытости (open–closed principle)<br />
+      «программные сущности … должны быть открыты для расширения, но закрыты для модификации». Мы должны иметь возможность добавлять функциональность.<br /><br />
+
+      L - Принцип подстановки Барбары Лисков (Liskov substitution principle)<br />
+      «объекты в программе должны быть заменяемыми на экземпляры их подтипов без изменения правильности выполнения программы». У объекта есть тип, но сами классы выстраиваются в иерархию классов. Подтип типа всю старую функциональность должен выполнять.<br /><br /> 
+
+      I - Принцип разделения интерфейса (interface segregation principle)<br />
+      «много интерфейсов, специально предназначенных для клиентов, лучше, чем один интерфейс общего назначения». Интерфейс - способ провзаимодействовать с какой-то программной действующей функцией.<br /><br /> 
+
+      D - Принцип инверсии зависимостей (dependency inversion principle) «Зависимость на Абстракциях. Нет зависимости на что-то конкретное».<br /><br />
+      
+      <h3 id="classes">Что такое классы</h3>
+      
+      Класс — тип, описывающий устройство объектов. Объект — это экземпляр класса.
+      
+      <pre><code class="language-python">class C: 
+  pass 
+имя_объекта = имя_класса()</code></pre>
+      
+      У класса может не быть тела. 
+
+      Простейший пример класса:
+      <pre><code class="python">class Rectangle:
+  default_color = "green" # статический атрибут 
+  def __init__(self, width, height): # конструктор класса
+    self.width = width # динамический атрибут
+    self.height = height # динамический атрибут</code></pre>
+      
+      В python нет возможности сделать несколько конструкторов. 
+
+      <h3 id="magic-methods">Что такое магические методы</h3>
+
+      Если какой-то идентификатор начинается с двух подчёркиваний, дальше пишется что-либо, потом снова два подчёркивания, то это спец метод.<br />
+      <h4>Какие магические методы и для чего используются?</h4> 
+
+      <pre><code class="python">class FileObject:
+  def __init__(self, filepath='~', filename='sample.txt'): # Обёртка для файлового объекта, чтобы быть уверенным в том, что файл будет закрыт при удалении.
+    self.file = open(join(filepath, filename), 'r+') # Открыть файл filename в filepath в режиме чтения и записи
+  def __del__(self):
+    self.file.close()
+    del self.file</code></pre>
+    Метод, который будет вызван при инициализации объекта.<br />
+    Это первый метод, который будет вызван при инициализации объекта. Он принимает в качестве параметров класс и потом любые другие аргументы, которые будут переданы в <code class="python inline">__init__</code> . <code class="python inline">__new__</code> используется весьма редко, но иногда бывает полезен, в частности, когда класс наследуется от неизменяемого (immutable) типа, такого как кортеж (tuple) или строка.<br />
+    
+    <pre><code class="python">__new__(cls, [...])</code></pre>
+
+    Инициализатор класса. Самый базовый магический метод, <code class="python inline">__init__</code> . С его помощью мы можем инициализировать объект.
+    
+    <pre><code class="python">__init__(self, [...])</code></pre>
+    Деструктор объекта
+    <pre><code class="python">__del__</code></pre>
+
+    Самый базовый из методов сравнения <code class="python inline">__cmp__(self, other)</code> . Он, в действительности, определяет поведение для 
+    всех операторов сравнения (>, ==, !=, итд.), но не всегда так, как вам это нужно (например, если эквивалентность 
+    двух экземпляров определяется по одному критерию, а то что один больше другого по какому-нибудь другому). 
+    <code class="python inline">__cmp__</code> должен вернуть отрицательное число, если <code class="python inline">self < other</code> , ноль, если <code class="python inline">self == other</code> , и положительное число 
+    в случае <code class="python inline">self > other</code> . Но, обычно, лучше определить каждое сравнение, которое вам нужно, чем определять их всех 
+    в <code class="python inline">__cmp__</code> . Но <code class="python inline">__cmp__</code> может быть хорошим способом избежать повторений и увеличить ясность, когда все необходимые 
+    сравнения оперируют одним критерием.
+    <ul>
+    <li><a><code class="python inline">__eq__(self, other)</code> Определяет поведение оператора равенства, ==</a></li>
+    <li><a><code class="python inline">__ne__(self, other)</code> Определяет поведение оператора неравенства, !=</a></li>
+    <li><a><code class="python inline">__lt__(self, other)</code> Определяет поведение оператора меньше, <</a></li>
+    <li><a><code class="python inline">__gt__(self, other)</code> Определяет поведение оператора больше, ></a></li>
+    <li><a><code class="python inline">__le__(self, other)</code> Определяет поведение оператора меньше или равно, <=</a></li>
+    <li><a><code class="python inline">__ge__(self, other)</code> Определяет поведение оператора больше или равно, >=</a></li>
+    </ul>
+    <h4>Унарные операторы и функции</h4>
+    Унарные операторы и функции имеют только один операнд — отрицание, абсолютное значение, и так далее.
+    <ul>
+    <li><a><code class="python inline">__pos__(self)</code> Определяет поведение для унарного плюса (+some_object)
+    <li><a><code class="python inline">__neg__(self)</code> Определяет поведение для отрицания(-some_object)
+    <li><a><code class="python inline">__abs__(self)</code> Определяет поведение для встроенной функции abs().
+    <li><a><code class="python inline">__invert__(self)</code> Определяет поведение для инвертирования оператором ~. Для объяснения что он делает смотри статью в Википедии о бинарных операторах.
+    <li><a><code class="python inline">__round__(self, n)</code> Определяет поведение для встроенной функции round(). n это число знаков после запятой, до которого округлить.
+    <li><a><code class="python inline">__floor__(self)</code> Определяет поведение для math.floor(), то есть, округления до ближайшего меньшего целого.
+    <li><a><code class="python inline">__ceil__(self)</code> Определяет поведение для math.ceil(), то есть, округления до ближайшего большего целого.
+    <li><a><code class="python inline">__trunc__(self)</code> Определяет поведение для math.trunc(), то есть, обрезания до целого.
+    </ul>
+      <h4>Обычные арифметические операторы</h4>
+    <ul>
+    <li><a><code class="python inline">__add__(self, other)</code> Сложение.
+    <li><a><code class="python inline">__sub__(self, other)</code> Вычитание.
+    <li><a><code class="python inline">__mul__(self, other)</code> Умножение.
+    <li><a><code class="python inline">__floordiv__(self, other)</code> Целочисленное деление, оператор //.
+    <li><a><code class="python inline">__div__(self, other)</code> Деление, оператор /.
+    <li><a><code class="python inline">__truediv__(self, other)</code> Правильное деление. Заметьте, что это работает только когда используется from __future__ import division.
+    <li><a><code class="python inline">__mod__(self, other)</code> Остаток от деления, оператор %.
+    <li><a><code class="python inline">__divmod__(self, other)</code> Определяет поведение для встроенной функции divmod().
+    <li><a><code class="python inline">__pow__</code> Возведение в степень, оператор **.
+    <li><a><code class="python inline">__lshift__(self, other)</code> Двоичный сдвиг влево, оператор <<.
+    <li><a><code class="python inline">__rshift__(self, other)</code> Двоичный сдвиг вправо, оператор >>.
+    <li><a><code class="python inline">__and__(self, other)</code> Двоичное И, оператор &.
+    <li><a><code class="python inline">__or__(self, other)</code> Двоичное ИЛИ, оператор |.
+    <li><a><code class="python inline">__xor__(self, other)</code> Двоичный xor, оператор ^.
+    </ul>
+      <h4>Магические методы преобразования типов</h4>
+    В Питоне множество магических методов, предназначенных для определения поведения для встроенных функций преобразования типов.
+    <ul>
+    <li><a><code class="python inline">__int__(self)</code> Преобразование типа в <a><code class="python inline">int</code>.
+    <li><a><code class="python inline">__long__(self)</code> Преобразование типа в <a><code class="python inline">long</code>.
+    <li><a><code class="python inline">__float__(self)</code> Преобразование типа в <a><code class="python inline">float</code>.
+    <li><a><code class="python inline">__complex__(self)</code> Преобразование типа в комплексное число.
+    <li><a><code class="python inline">__oct__(self)</code> Преобразование типа в восьмеричное число.
+    <li><a><code class="python inline">__hex__(self)</code> Преобразование типа в шестнадцатеричное число.
+    <li><a><code class="python inline">__index__(self)</code> Преобразование типа к <a><code class="python inline">int</code>, 
+      когда объект используется в срезах (выражения вида <a><code class="python inline">[start:stop:step]</code>). Если вы определяете 
+        свой числовой тип, который может использоваться как индекс списка, вы должны определить 
+        <a><code class="python inline">__index__</code>.
+    <li><a><code class="python inline">__trunc__(self)</code> Вызывается при 
+      <a><code class="python inline">math.trunc(self)</code>. Должен вернуть своё значение, обрезанное до целочисленного типа 
+        (обычно <a><code class="python inline">long)</code>.
+    <li><a><code class="python inline">__coerce__(self, other)</code> Метод для реализации арифметики с операндами разных типов. 
+      <a><code class="python inline">__coerce__</code> должен вернуть <a><code class="python inline">None</code> если преобразование типов невозможно. 
+        Если преобразование возможно, он должен вернуть пару (кортеж из 2-х элементов) из 
+        <a><code class="python inline">self</code> и <a><code class="python inline">other</code>, преобразованные к одному типу.
+    </ul>
+      <h4>Представление своих классов</h4>
+    Часто бывает полезно представление класса в виде строки. В Питоне существует несколько методов, которые вы можете определить для настройки поведения встроенных функций при представлении вашего класса.
+    <ul>
+    <li><a><code class="python inline">__str__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">str()</code>, вызванной для экземпляра вашего класса.
+    <li><a><code class="python inline">__repr__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">repr()</code>, вызванной для экземпляра вашего класса. 
+        Главное отличие от <a><code class="python inline">str()</code> в целевой аудитории. 
+          <a><code class="python inline">repr()</code> больше предназначен для машинно-ориентированного 
+            вывода (более того, это часто должен быть валидный код на Питоне), а 
+              <a><code class="python inline">str()</code> предназначен для чтения людьми.
+    <li><a><code class="python inline">__unicode__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">unicode()</code>, вызванной для экземпляра вашего класса. 
+        <a><code class="python inline">unicode()</code> похож на <a><code class="python inline">str()</code>, 
+          но возвращает строку в юникоде. Если клиент вызывает <a><code class="python inline">str()</code> на \
+            экземпляре вашего класса, а вы определили только <a><code class="python inline">__unicode__()</code>, 
+              то это не будет работать. Постарайтесь всегда определять <a><code class="python inline">__str__()</code> 
+                для случая, когда кто-то не имеет такой роскоши как юникод.
+    <li><a><code class="python inline">__format__(self, formatstr)</code> Определяет поведение, когда экземпляр вашего 
+      класса используется в форматировании строк нового стиля. Например, <a><code class="python inline">"Hello, {0:abc}!
+        ".format(a)</code> приведёт к вызову a.<a><code class="python inline">__format__("abc")</code>. Это может быть полезно 
+          для определения ваших собственных числовых или строковых типов, которым вы можете захотеть предоставить 
+            какие-нибудь специальные опции форматирования.
+    <li><a><code class="python inline">__hash__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">hash()</code>, вызванной для экземпляра вашего класса. Метод должен возвращать 
+        целочисленное значение, которое будет использоваться для быстрого сравнения ключей в словарях. 
+        Заметьте, что в таком случае обычно нужно определять и <a><code class="python inline">__eq__ тоже</code>. 
+          Руководствуйтесь следующим правилом: a == b подразумевает <a><code class="python inline">hash(a) == hash(b)</code>.
+    <li><a><code class="python inline">__nonzero__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">bool()</code>, вызванной для экземпляра вашего класса. Должна вернуть 
+        <a><code class="python inline">True</code> или <a><code class="python inline">False</code>, в зависимости от того, 
+          когда вы считаете экземпляр соответствующим <a><code class="python inline">True</code> или <a><code class="python inline">False</code>.
+    <li><a><code class="python inline">__dir__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">dir()</code>, вызванной на экземпляре вашего класса. Этот метод должен возвращать 
+        пользователю список атрибутов. Обычно, определение <a><code class="python inline">__dir__</code> не требуется, но может 
+          быть жизненно важно для интерактивного использования вашего класса, если вы переопределили 
+          <a><code class="python inline">__getattr__</code> или <a><code class="python inline">__getattribute__</code>.
+    <li><a><code class="python inline">__sizeof__(self)</code> Определяет поведение функции 
+      <a><code class="python inline">sys.getsizeof()</code>, вызванной на экземпляре вашего класса. Метод должен вернуть 
+        размер вашего объекта в байтах.
+    </ul>
+      <h4>Магия контейнеров</h4>
+    Магические методы, используемые контейнерами.
+    <ul>
+    <li><a><code class="python inline">__len__(self)</code> Возвращает количество элементов в контейнере. Часть протоколов для 
+      изменяемого и неизменяемого контейнеров.
+    <li><a><code class="python inline">__getitem__(self, key)</code> Определяет поведение при доступе к элементу, используя 
+      синтаксис <a><code class="python inline">self[key]</code>. Тоже относится и к протоколу изменяемых и к протоколу 
+        неизменяемых контейнеров. Должен выбрасывать соответствующие исключения: <a><code class="python inline">TypeError</code> 
+          если неправильный тип ключа и <a><code class="python inline">KeyError</code> если ключу не соответствует никакого значения.
+    <li><a><code class="python inline">__setitem__(self, key, value)</code> Определяет поведение при присваивании значения элементу, 
+      используя синтаксис <a><code class="python inline">self[nkey] = value</code>. Часть протокола изменяемого контейнера. 
+        Опять же, вы должны выбрасывать <a><code class="python inline">KeyError</code> и <a><code class="python inline">TypeError</code> в соответствующих случаях.
+    <li><a><code class="python inline">__delitem__(self, key)</code> Определяет поведение при удалении элемента (то есть 
+      <a><code class="python inline">del self[key])</code>. Это часть только протокола для изменяемого контейнера. 
+        Вы должны выбрасывать соответствующее исключение, если ключ некорректен.
+    <li><a><code class="python inline">__iter__(self)</code> Должен вернуть итератор для контейнера. 
+      Итераторы возвращаются в множестве ситуаций, главным образом для встроенной функции <a><code class="python inline">iter()</code> 
+        и в случае перебора элементов контейнера выражением <a><code class="python inline">for x in container:</code>. 
+          Итераторы сами по себе объекты и они тоже должны определять метод 
+          <a><code class="python inline">__iter__</code>, который возвращает <a><code class="python inline">self</code>.
+    <li><a><code class="python inline">__reversed__(self)</code> Вызывается чтобы определить поведения для встроенной функции 
+      <a><code class="python inline">reversed()</code>. Должен вернуть обратную версию последовательности. Реализуйте метод 
+        только если класс упорядоченный, как список или кортеж.
+    <li><a><code class="python inline">__contains__(self, item)</code> <a><code class="python inline">__contains__</code> 
+      предназначен для проверки принадлежности элемента с помощью <a><code class="python inline">in</code> и 
+        <a><code class="python inline">not in</code>. Вы спросите, почему же это не часть протокола последовательности? 
+          Потому что когда <a><code class="python inline">__contains__</code> не определён, Питон просто перебирает всю 
+            последовательность элемент за элементом и возвращает <a><code class="python inline">True</code> если находит нужный.
+    <li><a><code class="python inline">__missing__(self, key)</code> <a><code class="python inline">__missing__</code> 
+      используется при наследовании от <a><code class="python inline">dict</code> . Определяет поведение для для каждого 
+        случая, когда пытаются получить элемент по несуществующему ключу (так, например, если у меня есть словарь d и я пишу 
+        <a><code class="python inline">d["george"]</code> когда "george" не является ключом в словаре, вызывается d.
+          <a><code class="python inline">__missing__("george")</code>).
+    </ul>
+    <h4>Построение дескрипторов</h4>
+    Дескрипторы — это такие классы, с помощью которых можно добавить свою логику к событиям доступа (получение, 
+    изменение, удаление) к атрибутам других объектов. Дескрипторы не подразумевается использовать сами по себе; 
+    скорее, предполагается, что ими будут владеть какие-нибудь связанные с ними классы. Дескрипторы могут быть 
+    полезны для построения объектно-ориентированных баз данных или классов, чьи атрибуты зависят друг от друга. 
+    В частности, дескрипторы полезны при представлении атрибутов в нескольких системах исчисления или каких-либо 
+    вычисляемых атрибутов (как расстояние от начальной точки до представленной атрибутом точки на сетке).<br />
+    Чтобы класс стал дескриптором, он должен реализовать по крайней мере один метод из 
+    <a><code class="python inline">__get__</code>, <a><code class="python inline">__set__</code> или <a><code class="python inline">__delete__</code>.
+    <ul>
+    <li><a><code class="python inline">__get__(self, instance, instance_class)</code> Определяет поведение при возвращении значения из 
+      дескриптора. instance это объект, для чьего атрибута-дескриптора вызывается метод. <li><a><code class="python inline">owner</code> это тип (класс) объекта.
+    <li><a><code class="python inline">__set__(self, instance, value)</code> Определяет поведение при изменении значения из дескриптора. 
+      <a><code class="python inline">instance</code> это объект, для чьего атрибута-дескриптора вызывается метод. 
+        <a><code class="python inline">value</code> это значение для установки в дескриптор.
+    <li><a><code class="python inline">__delete__(self, instance)</code> Определяет поведение для удаления значения из дескриптора. 
+      <a><code class="python inline">instance</code> это объект, владеющий дескриптором
+    </ul>
