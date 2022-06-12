@@ -516,3 +516,17 @@ div.examples_text {
   padding-bottom: 1em;
   display: inline;
 }
+
+.buttonup {
+  width:130px; 
+  height:100px;
+  position:fixed;
+  bottom:0px;
+  right:50px;
+  }
+
+img {
+  display: block;
+  width: 25%;
+  height: auto;
+}
