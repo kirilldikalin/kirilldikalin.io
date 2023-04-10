@@ -301,6 +301,7 @@ a.proj_buttons:hover {
   font-size: 1.4em;
   font-weight: bold;
   line-height: 1.2em;
+  text-align: center;
 }
 .section_content {
   /* padding: 1em; */

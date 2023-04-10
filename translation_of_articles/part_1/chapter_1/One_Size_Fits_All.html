@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../translation_of_articles/tr_css.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/monokai-sublime.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
@@ -24,45 +25,43 @@
   
   <div class="our_framework">
     <div class="section_content">
-
       <div id="toc_container">
         <ul>
           <li class="toc_section"><a href="../../../translation_of_articles/part_1/chapter_1/fits_all.pdf" class="intext">Оригинал статьи</a></li><br /><br />
-          <li class="toc_section"><a href="../../../translation_of_articles/part_1/chapter_1/fits_all_ru.pdf" class="intext">Перевод статьи в формате pdf</a></li>
         </ul>
-
         <h1 style="padding-top: 1em;"> Оглавление </h1>
-        <ul>
-          <ul></ul><li><a class="intext">Аннотация</a></li>
-          <ul></ul><li><a class="intext">1. Введение</a></li>
-          <ul></ul><li><a class="intext">2. Хранилище данных</a>
-          <li class="toc_section"><a class="intext">3. Потоковая обработка</a>
-            <ul>
-              <li><a>3.1 Новые сенсорные приложения</a>
-              <li><a>3.2 Существующее приложение: обработка финансовых потоков</a>
-            </ul>
-          </li>
-          <li></li><a class="intext">4. Обсуждение производительности</a>
-            <ul>
-              <li><a>4.1 «Входящая» и «исходящая» обработка</a>
-              <li><a>4.2 Правильные примитивы</a>
-              <li><a class="intext">4.3 Полная интеграция обработки СУБД и логики приложения</a>
-              <li><a class="intext">4.4 Высокая доступность</a>
-              <li><a class="intext">4.5 Синхронизация</a>
-            </ul>
-          </li>
-          <li></li><a class="intext">5. Один размер подходит всем?</a>
-            <ul>
-              <li><a class="intext">5.1 Хранилища данных</a></li>
-              <li><a class="intext">5.2 Сенсорные сети</a></li>
-              <li><a class="intext">5.3 Текстовый поиск</a></li>
-              <li><a class="intext">5.4 Научные базы данных</a></li>
-              <li><a class="intext">5.5 Базы данных XML</a></li>
-            </ul>
-          </li> 
-          <li class="toc_section"><a class="intext">6. Комментарий по факторингу</a></li>
-          <li class="toc_section"><a class="intext">7. Заключительные замечания </a></li>         
-        </ul>
+          <ul>
+            <li class="toc_section"><a class="intext">Аннотация</a>
+            <li class="toc_section"><a class="intext">1. Введение</a>
+            <li class="toc_section"><a class="intext">2. Хранилище данных</a>
+            <li class="toc_section"><a class="intext">3. Потоковая обработка</a>
+              <ul>
+                <li><a class="intext">3.1 Новые сенсорные приложения</a>
+                <li><a class="intext">3.2 Существующее приложение: обработка финансовых потоков</a>
+              </ul>
+            </li>
+            <li><a class="toc_section" class="intext">4. Обсуждение производительности</a>
+              <ul>
+                <li><a class="intext">4.1 «Входящая» и «исходящая» обработка</a>
+                <li><a class="intext">4.2 Правильные примитивы</a>
+                <li><a class="intext">4.3 Полная интеграция обработки СУБД и логики приложения</a>
+                <li><a class="intext">4.4 Высокая доступность</a>
+                <li><a class="intext">4.5 Синхронизация</a>
+              </ul>
+            </li>
+            <li><a class="toc_section" class="intext">5. Один размер подходит всем?</a>
+              <ul>
+                <li><a class="intext">5.1 Хранилища данных</a></li>
+                <li><a class="intext">5.2 Сенсорные сети</a></li>
+                <li><a class="intext">5.3 Текстовый поиск</a></li>
+                <li><a class="intext">5.4 Научные базы данных</a></li>
+                <li><a class="intext">5.5 Базы данных XML</a></li>
+              </ul>
+            </li> 
+            <li class="toc_section"><a>6. Комментарий по факторингу</a></li>
+            <li class="toc_section"><a>7. Заключительные замечания </a></li>         
+          </ul>
+        </div>
       </div>
       
       <div class="section_name">
@@ -80,7 +79,7 @@
         текущего факторинга системных услуг в продукты.
       </p>
       <div class="section_name">
-        1 Введение
+        1. Введение
      </div>
      <p align="justify" class="p_on_project_pages">
         Реляционные СУБД появились в качестве исследовательских прототипов в 1970-х годах в форме System R и 
@@ -95,10 +94,10 @@
         этого выбора просты использование нескольких строк кода вызывает различные практические проблемы, включая:
       </p>
       <ul>
-        <li><a>• проблему стоимости, потому что затраты на обслуживание увеличиваются, по крайней мере, линейно с количеством строк кода;</a>
-        <li><a>• проблему совместимости, потому что все приложения должны работать с каждой строкой кода;</a>
-        <li><a>• проблему продаж, потому что продавцы не понимают, какой продукт попробовать продать покупателю;</a>
-        <li><a>• маркетинговую проблему, потому что несколько строк кода должны быть правильно позиционированы на рынке.</a>
+        <li><a>проблему стоимости, потому что затраты на обслуживание увеличиваются, по крайней мере, линейно с количеством строк кода;</a>
+        <li><a>проблему совместимости, потому что все приложения должны работать с каждой строкой кода;</a>
+        <li><a>проблему продаж, потому что продавцы не понимают, какой продукт попробовать продать покупателю;</a>
+        <li><a>маркетинговую проблему, потому что несколько строк кода должны быть правильно позиционированы на рынке.</a>
       </ul>
       <p align="justify" class="p_on_project_pages">
         Чтобы избежать этих проблем, все основные поставщики СУБД следовали поговорке «кладите все дрова на одну головку». 
@@ -117,7 +116,7 @@
         некоторыми заключительными замечаниями в разделе 7.
       </p>
       <div class="section_name">
-       2. Хранилище
+       2. Хранилище данных
       </div>
       <p align="justify" class="p_on_project_pages">
         В начале 1990-х годов появилась новая тенденция: предприятия захотели собрать вместе данные из нескольких операционных 
