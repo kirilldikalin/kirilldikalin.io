@@ -138,11 +138,11 @@
 
   <div class="our_framework">
     <div class="section_content">
-      <p class="p_on_project_pages">
+      <p class="p_on_project_pages_text">
         Тут записаны цифры в числе пи, которые я помню наизусть, чем больше, тем лучше соответственно
       </p>
       <p class="p_on_project_pages">
-        3,1415926535 8979323846 2643383279 5028841971 6939937510 5820974944 5923078164 0628620899 8628034825 3421170679
+        1415926535 8979323846 2643383279 5028841971 6939937510 5820974944 5923078164 0628620899 8628034825 3421170679
       </p>
 
       <body>
@@ -158,37 +158,64 @@
           }
         </style>
         <script>
-          const PI = "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"; // константа со строкой первых 100 знаков числа Пи после запятой
-          const inputField = document.querySelector('#input-field'); // выбираем поле для ввода значений
-          let currentIndex = 0; // индекс текущей ожидаемой цифры из строки Пи
+            const PI = "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
+            const inputField = document.querySelector('#input-field');
+            const digits = document.querySelector('.p_on_project_pages');
 
-          inputField.addEventListener('input', function(event) {
-            const value = event.data; // получаем введенный символ
+            let currentIndex = 0;
 
-            if (isNaN(parseInt(value, 10)) || value !== PI[currentIndex]) { // если символ не является числом или не соответствует текущей цифре в строке Пи
-              alert('Вы ввели неверное значение! Введите следующую цифру из числа Пи.');
-              inputField.value = inputField.value.slice(0, -1); // удаляем последний введенный символ из поля ввода
-              return;
-            }
+            inputField.addEventListener('input', function(event) {
+                const value = event.data;
+                const correctDigit = PI[currentIndex];
 
-            currentIndex++; // увеличиваем индекс текущей ожидаемой цифры в строке Пи
+                if (isNaN(parseInt(value, 10)) || value !== correctDigit) {
+                    const inputString = inputField.value.slice(0, -1);
+                    const correctPart = `<span style="color: green">${inputString}</span>`;
+                    const wrongPart = `<span style = "color: red">${correctDigit}</span>`;
+                    const restPart = PI.slice(inputString.length + 1);
+                    const outputString = `${correctPart}${wrongPart}${restPart}`;
+                    digits.innerHTML = outputString;
+                    inputField.value = inputString;
+                    return;
+                }
 
-            if (currentIndex === PI.length) { // если вся строка Пи была введена корректно
-              alert('Поздравляем! Вы ввели первые 100 знаков числа Пи после запятой.');
-              inputField.disabled = true; // блокируем поле ввода
-            }
+                const inputString = inputField.value;
+                const correctPart = `<span style = "color: green" > ${inputString} </span>`;
+                const restPart = PI.slice(inputString.length);
+                const outputString = `${correctPart}${restPart}`;
+                digits.innerHTML = outputString;
 
-            // создаем временный элемент span, вставляем в него введенный текст, измеряем его ширину и устанавливаем ширину поля ввода
-            const span = document.createElement('span');
-            span.style.fontSize = window.getComputedStyle(inputField).fontSize;
-            span.style.fontFamily = window.getComputedStyle(inputField).fontFamily;
-            span.textContent = inputField.value;
-            document.body.appendChild(span);
-            const inputWidth = span.offsetWidth + 2; // добавляем небольшой отступ
-            document.body.removeChild(span);
-            inputField.style.width = inputWidth + 'px'; // устанавливаем ширину поля ввода
-          });
+                currentIndex++;
+
+                if (currentIndex === PI.length) {
+                    alert('Поздравляем! Вы ввели первые 100 знаков числа Пи после запятой.');
+                    inputField.disabled = true;
+                }
+
+                const span = document.createElement('span');
+                span.style.fontSize = window.getComputedStyle(inputField).fontSize;
+                span.style.fontFamily = window.getComputedStyle(inputField).fontFamily;
+                span.textContent = inputField.value;
+                document.body.appendChild(span);
+                const inputWidth = span.offsetWidth + 2;
+                document.body.removeChild(span);
+                inputField.style.width = inputWidth + 'px';
+
+                const piDigits = digits.textContent.replace(/\s/g, '');
+                const inputDigits = inputField.value;
+                let correct = true;
+                let firstWrongIndex;
+
+                for (let i = 0; i < inputDigits.length; i++) {
+                    if (inputDigits[i] !== piDigits[i]) {
+                        correct = false;
+                        firstWrongIndex = i;
+                        break;
+                    }
+                }
+            });
         </script>        
       </head>
-      
-      
+    </div>
+  </div>
+</body>
