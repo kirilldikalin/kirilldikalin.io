@@ -287,12 +287,12 @@ a.proj_buttons:hover {
 }
 .section_name {
   padding: 0.5em;
-  /* padding-top: 1.5em; */
-  /* padding: 1em;
-  padding-top: 2em; */
+  padding-top: 1.5em;
+  padding: 1em;
+  padding-top: 2em;
   font-size: 2em;
   font-weight: bold;
-  /* margin: auto; */
+  margin: auto;
   text-align: center;
 }
 .subsection_name {
@@ -303,6 +303,40 @@ a.proj_buttons:hover {
   line-height: 1.2em;
   text-align: center;
 }
+.subsubsection_name {
+  padding-top: 1em;
+  padding-bottom: 1.1em;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1em;
+  text-align: center;
+}
+
+.footnote {
+  /* position: relative;
+  vertical-align: super;
+  font-size: smaller;
+  font-weight: bold; */
+  color: blue;
+  text-decoration: underline;
+  display: inline;
+  white-space: nowrap;
+}
+
+.footnote::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid black;
+}
+
+.footnote:hover {
+  color: red;
+}
+
+
 .section_content {
   /* padding: 1em; */
   font-size: 1.2em;
@@ -319,7 +353,7 @@ a.proj_buttons:hover {
   padding: 1em;
   margin: auto;
   max-width: 40em;
-  text-align: left;
+  text-align: justify;
 }
 .our_framework {
   margin: auto;
