@@ -112,3 +112,34 @@ th, td {
     text-align: center;
     }
 }
+
+.section_name {
+    padding: 0.5em;
+    /* padding-top: 1.5em; */
+    /* padding: 1em;
+    padding-top: 2em; */
+    font-size: 2em;
+    font-weight: bold;
+    /* margin: auto; */
+    text-align: center;
+}
+.subsection_name {
+    padding-top: 2em;
+    padding-bottom: 1.1em;
+    font-size: 1.4em;
+    font-weight: bold;
+    line-height: 1.2em;
+    text-align: center;
+}
+.section_content {
+    /* padding: 1em; */
+    font-size: 1.2em;
+    line-height: 1.35em;
+    padding: 1em;
+}
+.p_on_project_pages {
+    margin-top: 0em;
+    margin-bottom: 0em;
+    padding-top: 0em;
+    padding-bottom: 2em;
+}
