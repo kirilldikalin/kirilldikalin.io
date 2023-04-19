@@ -69,5 +69,31 @@
       </div>
     </div>
   </div>
-  <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png"></a>
+  <a href="#" title="Вернуться вверх" class="buttonup"><img src="https://4.downloader.disk.yandex.ru/preview/5de029be34a5cdbb5e429c49fc4d6e6aec3985e1f35f004daeae5ccecbda6906/inf/61s7b9hsv7ZmPFxVvCSpTq8-VqGWxgvVEwwOmaOpJMBfLj6tA1Bb-FP4--rMEiZ0rdTAtbZVC-WnNqvppi49zg%3D%3D?uid=387842181&filename=up-arrow.png&disposition=inline&hash=&limit=0&content_type=image%2Fpng&owner_uid=387842181&tknv=v2&size=2880x1402"></a>
+
+  <!-- JavaScript код для плавной прокрутки наверх страницы -->
+  <script>
+    document.querySelector('.buttonup').addEventListener('click', function(e) {
+    e.preventDefault();
+
+    // Получаем текущую позицию прокрутки
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Функция анимированной прокрутки
+    function scrollToTop() {
+        if (scrollTop > 0) {
+        // Если еще не достигли верха страницы, анимированно прокручиваем вверх
+        window.scrollTo(0, scrollTop);
+        scrollTop -= 500; // Шаг анимации
+        requestAnimationFrame(scrollToTop); // Рекурсивно вызываем функцию
+        } else {
+        // Когда достигли верха страницы, останавливаем анимацию
+        cancelAnimationFrame(scrollToTop);
+        }
+    }
+
+    scrollToTop(); // Запускаем анимацию
+    });
+    </script>
+
 </body>

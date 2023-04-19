@@ -349,6 +349,18 @@ a.proj_buttons:hover {
   padding-top: 0em;
   padding-bottom: 2em;
 }
+.p_on_project_pages_japan {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  padding-top: 0em;
+  padding-bottom: 2em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
+.p_on_project_pages_japan strong {
+  font-weight: bold; /* Применение жирного начертания к тегу <strong> */
+}
 .teaser {
   padding: 1em;
   margin: auto;
