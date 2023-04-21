@@ -58,13 +58,11 @@
       var popup = document.querySelector(".popup");
       
       resumeLink.addEventListener("click", function(event) {
-        event.preventDefault(); 
-        
+        event.stopPropagation();
         popup.style.display = "block";
-
         setTimeout(function() {
           popup.style.display = "none";
-            }, 2500);
+        }, 2500); 
       });
     </script>
 
