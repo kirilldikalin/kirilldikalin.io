@@ -82,7 +82,7 @@
       </div>
       <div class="row">
         <div class="column_right" style="width: 97%; margin-top: 0.5em;">
-          <a href="./knowlege_base/iKnowledge_base.html" class="project"> Разбор решений заданий проекта Эйлера </a>
+          <a href="./euler/euler.html" class="project"> Разбор решений заданий проекта Эйлера </a>
           <p class="project_description" style="line-height: 1.4;">
             Решения заданий с пояснениями на Python и Scala (В работе)
           </p>
@@ -124,29 +124,6 @@
           </p>
         </div>
       </div> -->
-
-      <a href="#" title="Вернуться вверх" class="buttonup"><img src="./images/up-arrow.png"></a>
-    
-      <!-- JavaScript код для плавной прокрутки наверх страницы -->
-      <script>
-        document.querySelector('.buttonup').addEventListener('click', function(e) {
-          e.preventDefault();
-
-          // Функция анимированной прокрутки
-          function scrollToTop() {
-            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            if (scrollTop > 0) {
-              // Если еще не достигли верха страницы, анимированно прокручиваем вверх
-              window.scrollTo(0, scrollTop - 500); // Уменьшаем scrollTop на 50 на каждом шаге
-              requestAnimationFrame(scrollToTop); // Рекурсивно вызываем функцию
-            } else {
-              // Когда достигли верха страницы, останавливаем анимацию
-              cancelAnimationFrame(scrollToTop);
-            }
-          }
-          scrollToTop(); // Запускаем анимацию
-        });
-      </script>
 
 </body>
 
