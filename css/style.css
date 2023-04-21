@@ -254,7 +254,7 @@ a.proj_buttons:hover {
 }
 
 .popup {
-  display: none !important;
+  display: none;
   position: fixed;
   top: 50%;
   left: 50%;
