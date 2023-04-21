@@ -101,29 +101,5 @@
       </head>
     </div>
   </div>
-
-  <a href="#" title="Вернуться вверх" class="buttonup"><img src="./images/up-arrow.png"></a>
-    
-  <!-- JavaScript код для плавной прокрутки наверх страницы -->
-  <script>
-    document.querySelector('.buttonup').addEventListener('click', function(e) {
-      e.preventDefault();
-
-      // Функция анимированной прокрутки
-      function scrollToTop() {
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > 0) {
-          // Если еще не достигли верха страницы, анимированно прокручиваем вверх
-          window.scrollTo(0, scrollTop - 500); // Уменьшаем scrollTop на 50 на каждом шаге
-          requestAnimationFrame(scrollToTop); // Рекурсивно вызываем функцию
-        } else {
-          // Когда достигли верха страницы, останавливаем анимацию
-          cancelAnimationFrame(scrollToTop);
-        }
-      }
-
-      scrollToTop(); // Запускаем анимацию
-    });
-  </script>
   
 </body>
