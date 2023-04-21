@@ -38,7 +38,7 @@
         <a class="social" href="https://github.com/kirilldikalin"> GitHub </a>
       </div>
       <div class="profile_link">
-        <a class="social" href="#" id="resumeLink"> Resume </a>
+        <a class="social" id="resumeLink"> Resume </a>
       </div>
     </div>
     <div class="profile_link_container">
@@ -56,6 +56,7 @@
       var popup = document.querySelector(".popup");
       
       resumeLink.addEventListener("click", function(event) {
+        event.preventDefault();
         event.stopPropagation();
         popup.style.display = "block";
         setTimeout(function() {
