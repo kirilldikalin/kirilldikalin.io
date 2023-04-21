@@ -23,8 +23,9 @@
     <h1 style="padding-top: 1em;"> <span class="name"></span> </h1>
 
     <p style="text-align: center; width: 90%; padding-bottom: 1em;">
-      Я Data Engineer работающий в департаменте управления данными Сбера - СберДате.<br />
-      Занимаюсь загрузкой данных в КАП.
+      Я Data Engineer работающий в департаменте управления данными Сбера - СберДате<br />
+      Занимаюсь загрузкой данных в КАП<br />
+      По совместительсту ревьювер на DE в Яндекс.Практикуме
     </p>
 
     <div class="profile_link_container">
@@ -37,7 +38,7 @@
         <a class="social" href="https://github.com/kirilldikalin"> GitHub </a>
       </div>
       <div class="profile_link">
-        <a class="social" href="./resume.pdf"> Resume </a>
+        <a class="social" href="#" id="resumeLink"> Resume </a>
       </div>
     </div>
     <div class="profile_link_container">
@@ -45,6 +46,27 @@
         <div class="author_name" style="font-size: larger;"> dikalinkirill@gmail.com </div>
       </div>
     </div>
+
+    <div class="popup">
+      Свяжитесь со мной и возможно вы его получите =)
+    </div>
+    
+
+    <script>
+      var resumeLink = document.getElementById("resumeLink");
+      
+      var popup = document.querySelector(".popup");
+      
+      resumeLink.addEventListener("click", function(event) {
+        event.preventDefault(); 
+        
+        popup.style.display = "block";
+
+        setTimeout(function() {
+          popup.style.display = "none";
+            }, 2500);
+      });
+    </script>
 
     <hr style="max-width: 60em;">
 
@@ -93,17 +115,9 @@
     <!-- <h1 style="padding-top: 1em;"> Статьи </h1>
       <div class="row">
         <div class="column_right" style="width: 97%; margin-top: 0.5em;">
-          <a href="./how_data_is_loaded_into_the_DWH.html" class="project"> Как происходит загрузка данных в КАП? </a>
+          <a href="" class="project">Data engineering: мифы и реальность</a>
           <p class="project_description" style="line-height: 1.4;">
-             Пояснение того, как я происходит загрузка данных в КАП Сбера. (В работе)
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="column_right" style="width: 97%; margin-top: 0.5em;">
-          <a href="" class="project"> Сборка NAS на базе Raspberry Pi</a>
-          <p class="project_description" style="line-height: 1.4;">
-             Собрание своего NAS на базе Raspberry Pi работающего на солнечной энергии. (В работе)
+            Мифы работы инженера данных (в работе)
           </p>
         </div>
       </div>
@@ -137,7 +151,6 @@
               cancelAnimationFrame(scrollToTop);
             }
           }
-
           scrollToTop(); // Запускаем анимацию
         });
       </script>

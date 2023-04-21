@@ -253,6 +253,18 @@ a.proj_buttons:hover {
   padding: 0 2em 0 2em;
 }
 
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f9f9f9;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 600px; /* Максимальная ширина окна */
+  text-align: center; /* Выравнивание текста по центру */
+}
 
 /* Project Page Style (Authors, conference) */
 .container_authors {

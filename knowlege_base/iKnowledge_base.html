@@ -21,135 +21,139 @@
     <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> / База знаний
   </ul>
 
-  <h1 style="padding-top: 1em;"> Оглавление </h1>
-  <ul>
-    <li><a href="#Python" class="intext">Python</a></li>
-    <ul>
-      <li><a href="#General questions" class="intext">Общие вопросы по языку</a></li>
-      <li><a href="#OOP" class="intext">ООП</a></li>
+  <div class="our_framework">
+    <div class="section_content">
+      <div id="toc_container">
+
+        <h1 style="padding-top: 1em;"> Оглавление </h1>
         <ul>
-          <li><a href="#SOLID" class="intext">SOLID</a>
-          <li><a href="#classes" class="intext">Что такое классы</a>
-          <li><a href="#magic-methods" class="intext">Что такое магические методы</a>
-          <li><a href="#mixin" class="intext">Что такое миксин</a>
-        </ul>
-      <li><a href="#Types-and-data-structures-in-python" class="intext">Типы и структуры данных в python</a></li>
-        <ul>
-          <li><a href="#Types-and-data-structures" class="intext">Какие типы и структуры данных бывают в python?</a></li>
-          <li><a href="#mutable-and-immutable-data-types" class="intext">Что такое мутабельные и иммутабельные типы данных?</a></li>
-          <li><a href="#dictionary-key" class="intext">Что может быть в качестве ключа словаря?</a></li>
-          <li><a href="#python-hash" class="intext">Что такое хеш-функция?</a></li>
-          <li><a href="#dictionary-in-python" class="intext">В чём особенность словаря в python?</a></li>
-          <li><a href="#lists-tuples-and-sets" class="intext">Списки, кортежи и множества в чём их отличие?</a></li>
-        </ul>
-      <li><a href="#GIL" class="intext">GIL</a></li>
-        <ul>
-          <li><a href="#what-is-GIL" class="intext">Что такое GIL?</a></li>
-          <li><a href="#multithreaded-and-multiprocessing-programs-in-python" class="intext">Многопоточные и многопроцессорные программы в python</a></li>
-          <li><a href="#difference-between-threads-and-processes" class="intext">Разница между потоками и процессами</a></li>
-          <li><a href="#what-are-race-conditions-and-thread-safety" class="intext">Что такое условия гонки и потокобезопасность?</a></li>
-          <li><a href="#algorithm-for-scheduling-access-of-streams-to-shared-data" class="intext">Алгоритм планирования доступа потоков к общим данным</a></li>
-        </ul>
-      <li><a href="#GC" class="intext">GC</a></li>
-        <ul>
-          <li><a href="#memory-management-in-python" class="intext">Как в питоне обстоят дела с памятью (управлением памятью)</a></li>
-          <li><a href="#how-much-does-it-cost-to-validate-an-element-in-notation" class="intext">Сколько стоит проверка элемента в нотации?</a></li>
-          <li><a href="#two-objects" class="intext">Если есть два объекта и они указывают друг на друга</a></li>
-        </ul>
-      <li><a href="#Iterators-decorators-and-generators" class="intext">Итераторы, декораторы и генераторы</a></li>
-        <ul>
-          <li><a href="#what-is-iterator" class="intext">Что такое итератор?</a></li>
-          <li><a href="#what-is-generator" class="intext">Что такое генератор?</a></li>
-          <li><a href="#what-is-decorator" class="intext">Что такое декоратор?</a></li>
-          <li><a href="#standard-library-decorators" class="intext">Какие декораторы стандартной библиотеки вы знаете?</a></li>
-          <li><a href="#list-comprehension" class="intext">Что такое list comprehension, какой синтаксис создания генераторов?</a></li>
-          <li><a href="#s-range-an-iterator" class="intext">Является ли range итератором?</a></li>
-        </ul> 
-      <li><a href="#Algorithms" class="intext">Алгоритмы</a></li>
-    </ul>
-    <li><a href="#SQL" class="intext">SQL</a></li>
-    <ul>
-      <li><a href="#What-is-a-DBMS" class="intext">Что такое СУБД?</a></li>
-      <li><a href="#types-of-DBMS" class="intext">Какие типы СУБД в соответствии с моделями данных существуют?</a></li>
-      <li><a href="#primary-key" class="intext">Что такое первичный ключ?</a></li>
-      <li><a href="#external-key" class="intext">Что такое внешний ключ?</a></li>
-      <li><a href="#limitations-in-SQL" class="intext">Ограничения в SQL</a></li>
-      <li><a href="#self-join" class="intext">Что такое Self JOIN?</a></li>
-      <li><a href="#wildcards" class="intext">Подстановочные знаки</a></li>
-      <li><a href="#aliases" class="intext">Что делают псевдонимы Aliases?</a></li>
-      <li><a href="#difference-between-DELETE-and-TRUNCATE" class="intext">Разница между командами DELETE и TRUNCATE</a></li>
-      <li><a href="#difference-between-WHERE-and-HAVING" class="intext">vРазница между WHERE и HAVING</a></li>
-      <li><a href="#basic-sql-commands" class="intext">Основные команды SQL</a></li>
-      <li><a href="#math-functions" class="intext">Математические функции в SQL</a></li>
-      <li><a href="#window-functions" class="intext">Оконные функции в SQL</a></li>
-      <li><a href="#differences-between-relational-and-non-relational-databases" class="intext">Отличия реляционных и нереляционных баз данных</a></li>
-    </ul>
-    <li><a href="#Big-Data" class="intext">Big Data</a></li>
-    <ul>
-      <li><a href="#dwh" class="intext">Что такое DWH</a></li>
-      <li><a href="#data-lake" class="intext">Data Lake</a></li>
-      <li><a href="#data-marts" class="intext">Витрины данных</a></li>
-      <li><a href="#ETL" class="intext">ETL и ETL-запросы</a></li>
-      <li><a href="#ETL-process" class="intext">Разработка ETL-процесса</a></li>
-      <li><a href="#Elements-of-the-ETL-process" class="intext">Элементы ETL-процесса</a></li>
-      <li><a href="#hadoop" class="intext">Что такое Hadoop?</a></li>
-      <li><a href="#data-vault" class="intext">Data Vault</a></li>
-      <li><a href="#Apache-Kafka" class="intext">Apache Kafka</a></li>
-      <li><a href="#Greenplum" class="intext">Greenplum</a></li>
-      <li><a href="#distributed-file-system-HDFS" class="intext">Распределенная файловая система HDFS</a></li>
-        <ul>
-          <li><a href="#HDFS-architecture" class="intext">Архитектура HDFS</a></li>
-          <li><a href="#Shell-commands" class="intext">Shell-команды</a></li>
-          <li><a href="#Java_API1" class="intext">Java API</a></li>
-        </ul>
-      <li><a href="#MapReduce" class="intext">MapReduce</a></li>
-        <ul>
-          <li><a href="#MapReduce-paradigm" class="intext">Парадигма MapReduce</a></li>
-          <li><a href="#MapReduce-framework" class="intext">Фреймворк MapReduce</a></li>
-          <li><a href="#Java_API2" class="intext">Java API</a></li>
-          <li><a href="#Hadoop-Streaming" class="intext">Hadoop Streaming</a></li>
-        </ul>
-      <li><a href="#Solving-problems-with-MapReduce" class="intext">Решение задач с помощью MapReduce</a></li>
-        <ul>
-          <li><a href="#Algorithms-on-MapReduce" class="intext">Алгоритмы на MapReduce</a></li>
-          <li><a href="#Relational-functions" class="intext">Реляционные функции</a></li>
-          <li><a href="#TF-IDF-calculation" class="intext">Расчет TF-IDF</a></li>
-        </ul>
-      <li><a href="#Graph-Algorithms-in-MapReduce" class="intext">Алгоритмы на графах в MapReduce</a></li>
-        <ul>
-          <li><a href="#Graphs-in-MapReduce" class="intext">Графы в MapReduce</a></li>
-          <li><a href="#Finding-the-shortest-path-in-a-graph" class="intext">Поиск кратчайшего пути в графе</a></li>
-          <li><a href="#PageRank" class="intext">PageRank</a></li>
-          <li><a href="#Problems-of-MR-algorithms-on-graphs" class="intext">Проблемы MR-алгоритмов на графах</a></li>
-        </ul>
-      <li><a href="#Pig-and-Hive" class="intext">Pig и Hive</a></li>
-        <ul>
-          <li><a href="#Pig" class="intext">Pig</a></li>
-          <li><a href="#Basic-operators-of-PigLatin" class="intext">Основные операторы PigLatin</a></li>
-          <li><a href="#Hive" class="intext">Hive</a></li>
-          <li><a href="#Pig-vs-Hive" class="intext">Pig vs Hive</a></li>
-        </ul>
-      <li><a href="#HBase-and-Cassandra" class="intext">NoSQL базы данных: HBase и Cassandra</a></li>
-        <ul>
-          <li><a href="#Data-storage-methods" class="intext">Способы хранения данных</a></li>
-          <li><a href="#NoSQL" class="intext">NoSQL</a></li>
-          <li><a href="#Introduction-to-HBase" class="intext">Введение в HBase</a></li>
-          <li><a href="#HBase-architecture" class="intext">Архитектура HBase</a></li>
-          <li><a href="#Cassandra" class="intext">Cassandra</a></li>
-        </ul>
-      <li><a href="#Spark" class="intext">Spark</a></li>
-        <ul>
-          <li><a href="#Basic-concepts-of-Spark" class="intext">Основные понятия Spark</a></li>
-          <li><a href="#Spark-Operators" class="intext">Операторы Spark</a></li>
-          <li><a href="#Spark-framework" class="intext">Фреймворк Spark</a></li>
-        </ul>
-      <li><a href="#YARN" class="intext">YARN. MapReduce 2.0</a></li>
-        <ul>
-          <li><a href="#What-is-YARN" class="intext">Что такое YARN?</a></li>
-          <li><a href="#YARN-components" class="intext">Компоненты YARN</a></li>
-          <li><a href="#MapReduce-2.0" class="intext">MapReduce 2.0</a></li>
-        </ul>
-    </ul>
+          <li><a href="#Python" class="intext">Python</a></li>
+          <ul>
+            <li><a href="#General questions" class="intext">Общие вопросы по языку</a></li>
+            <li><a href="#OOP" class="intext">ООП</a></li>
+              <ul>
+                <li><a href="#SOLID" class="intext">SOLID</a>
+                <li><a href="#classes" class="intext">Что такое классы</a>
+                <li><a href="#magic-methods" class="intext">Что такое магические методы</a>
+                <li><a href="#mixin" class="intext">Что такое миксин</a>
+              </ul>
+            <li><a href="#Types-and-data-structures-in-python" class="intext">Типы и структуры данных в python</a></li>
+              <ul>
+                <li><a href="#Types-and-data-structures" class="intext">Какие типы и структуры данных бывают в python?</a></li>
+                <li><a href="#mutable-and-immutable-data-types" class="intext">Что такое мутабельные и иммутабельные типы данных?</a></li>
+                <li><a href="#dictionary-key" class="intext">Что может быть в качестве ключа словаря?</a></li>
+                <li><a href="#python-hash" class="intext">Что такое хеш-функция?</a></li>
+                <li><a href="#dictionary-in-python" class="intext">В чём особенность словаря в python?</a></li>
+                <li><a href="#lists-tuples-and-sets" class="intext">Списки, кортежи и множества в чём их отличие?</a></li>
+              </ul>
+            <li><a href="#GIL" class="intext">GIL</a></li>
+              <ul>
+                <li><a href="#what-is-GIL" class="intext">Что такое GIL?</a></li>
+                <li><a href="#multithreaded-and-multiprocessing-programs-in-python" class="intext">Многопоточные и многопроцессорные программы в python</a></li>
+                <li><a href="#difference-between-threads-and-processes" class="intext">Разница между потоками и процессами</a></li>
+                <li><a href="#what-are-race-conditions-and-thread-safety" class="intext">Что такое условия гонки и потокобезопасность?</a></li>
+                <li><a href="#algorithm-for-scheduling-access-of-streams-to-shared-data" class="intext">Алгоритм планирования доступа потоков к общим данным</a></li>
+              </ul>
+            <li><a href="#GC" class="intext">GC</a></li>
+              <ul>
+                <li><a href="#memory-management-in-python" class="intext">Как в питоне обстоят дела с памятью (управлением памятью)</a></li>
+                <li><a href="#how-much-does-it-cost-to-validate-an-element-in-notation" class="intext">Сколько стоит проверка элемента в нотации?</a></li>
+                <li><a href="#two-objects" class="intext">Если есть два объекта и они указывают друг на друга</a></li>
+              </ul>
+            <li><a href="#Iterators-decorators-and-generators" class="intext">Итераторы, декораторы и генераторы</a></li>
+              <ul>
+                <li><a href="#what-is-iterator" class="intext">Что такое итератор?</a></li>
+                <li><a href="#what-is-generator" class="intext">Что такое генератор?</a></li>
+                <li><a href="#what-is-decorator" class="intext">Что такое декоратор?</a></li>
+                <li><a href="#standard-library-decorators" class="intext">Какие декораторы стандартной библиотеки вы знаете?</a></li>
+                <li><a href="#list-comprehension" class="intext">Что такое list comprehension, какой синтаксис создания генераторов?</a></li>
+                <li><a href="#s-range-an-iterator" class="intext">Является ли range итератором?</a></li>
+              </ul> 
+            <li><a href="#Algorithms" class="intext">Алгоритмы</a></li>
+          </ul>
+          <li><a href="#SQL" class="intext">SQL</a></li>
+          <ul>
+            <li><a href="#What-is-a-DBMS" class="intext">Что такое СУБД?</a></li>
+            <li><a href="#types-of-DBMS" class="intext">Какие типы СУБД в соответствии с моделями данных существуют?</a></li>
+            <li><a href="#primary-key" class="intext">Что такое первичный ключ?</a></li>
+            <li><a href="#external-key" class="intext">Что такое внешний ключ?</a></li>
+            <li><a href="#limitations-in-SQL" class="intext">Ограничения в SQL</a></li>
+            <li><a href="#self-join" class="intext">Что такое Self JOIN?</a></li>
+            <li><a href="#wildcards" class="intext">Подстановочные знаки</a></li>
+            <li><a href="#aliases" class="intext">Что делают псевдонимы Aliases?</a></li>
+            <li><a href="#difference-between-DELETE-and-TRUNCATE" class="intext">Разница между командами DELETE и TRUNCATE</a></li>
+            <li><a href="#difference-between-WHERE-and-HAVING" class="intext">vРазница между WHERE и HAVING</a></li>
+            <li><a href="#basic-sql-commands" class="intext">Основные команды SQL</a></li>
+            <li><a href="#math-functions" class="intext">Математические функции в SQL</a></li>
+            <li><a href="#window-functions" class="intext">Оконные функции в SQL</a></li>
+            <li><a href="#differences-between-relational-and-non-relational-databases" class="intext">Отличия реляционных и нереляционных баз данных</a></li>
+          </ul>
+          <li><a href="#Big-Data" class="intext">Big Data</a></li>
+          <ul>
+            <li><a href="#dwh" class="intext">Что такое DWH</a></li>
+            <li><a href="#data-lake" class="intext">Data Lake</a></li>
+            <li><a href="#data-marts" class="intext">Витрины данных</a></li>
+            <li><a href="#ETL" class="intext">ETL и ETL-запросы</a></li>
+            <li><a href="#ETL-process" class="intext">Разработка ETL-процесса</a></li>
+            <li><a href="#Elements-of-the-ETL-process" class="intext">Элементы ETL-процесса</a></li>
+            <li><a href="#hadoop" class="intext">Что такое Hadoop?</a></li>
+            <li><a href="#data-vault" class="intext">Data Vault</a></li>
+            <li><a href="#Apache-Kafka" class="intext">Apache Kafka</a></li>
+            <li><a href="#Greenplum" class="intext">Greenplum</a></li>
+            <li><a href="#distributed-file-system-HDFS" class="intext">Распределенная файловая система HDFS</a></li>
+              <ul>
+                <li><a href="#HDFS-architecture" class="intext">Архитектура HDFS</a></li>
+                <li><a href="#Shell-commands" class="intext">Shell-команды</a></li>
+                <li><a href="#Java_API1" class="intext">Java API</a></li>
+              </ul>
+            <li><a href="#MapReduce" class="intext">MapReduce</a></li>
+              <ul>
+                <li><a href="#MapReduce-paradigm" class="intext">Парадигма MapReduce</a></li>
+                <li><a href="#MapReduce-framework" class="intext">Фреймворк MapReduce</a></li>
+                <li><a href="#Java_API2" class="intext">Java API</a></li>
+                <li><a href="#Hadoop-Streaming" class="intext">Hadoop Streaming</a></li>
+              </ul>
+            <li><a href="#Solving-problems-with-MapReduce" class="intext">Решение задач с помощью MapReduce</a></li>
+              <ul>
+                <li><a href="#Algorithms-on-MapReduce" class="intext">Алгоритмы на MapReduce</a></li>
+                <li><a href="#Relational-functions" class="intext">Реляционные функции</a></li>
+                <li><a href="#TF-IDF-calculation" class="intext">Расчет TF-IDF</a></li>
+              </ul>
+            <li><a href="#Graph-Algorithms-in-MapReduce" class="intext">Алгоритмы на графах в MapReduce</a></li>
+              <ul>
+                <li><a href="#Graphs-in-MapReduce" class="intext">Графы в MapReduce</a></li>
+                <li><a href="#Finding-the-shortest-path-in-a-graph" class="intext">Поиск кратчайшего пути в графе</a></li>
+                <li><a href="#PageRank" class="intext">PageRank</a></li>
+                <li><a href="#Problems-of-MR-algorithms-on-graphs" class="intext">Проблемы MR-алгоритмов на графах</a></li>
+              </ul>
+            <li><a href="#Pig-and-Hive" class="intext">Pig и Hive</a></li>
+              <ul>
+                <li><a href="#Pig" class="intext">Pig</a></li>
+                <li><a href="#Basic-operators-of-PigLatin" class="intext">Основные операторы PigLatin</a></li>
+                <li><a href="#Hive" class="intext">Hive</a></li>
+                <li><a href="#Pig-vs-Hive" class="intext">Pig vs Hive</a></li>
+              </ul>
+            <li><a href="#HBase-and-Cassandra" class="intext">NoSQL базы данных: HBase и Cassandra</a></li>
+              <ul>
+                <li><a href="#Data-storage-methods" class="intext">Способы хранения данных</a></li>
+                <li><a href="#NoSQL" class="intext">NoSQL</a></li>
+                <li><a href="#Introduction-to-HBase" class="intext">Введение в HBase</a></li>
+                <li><a href="#HBase-architecture" class="intext">Архитектура HBase</a></li>
+                <li><a href="#Cassandra" class="intext">Cassandra</a></li>
+              </ul>
+            <li><a href="#Spark" class="intext">Spark</a></li>
+              <ul>
+                <li><a href="#Basic-concepts-of-Spark" class="intext">Основные понятия Spark</a></li>
+                <li><a href="#Spark-Operators" class="intext">Операторы Spark</a></li>
+                <li><a href="#Spark-framework" class="intext">Фреймворк Spark</a></li>
+              </ul>
+            <li><a href="#YARN" class="intext">YARN. MapReduce 2.0</a></li>
+              <ul>
+                <li><a href="#What-is-YARN" class="intext">Что такое YARN?</a></li>
+                <li><a href="#YARN-components" class="intext">Компоненты YARN</a></li>
+                <li><a href="#MapReduce-2.0" class="intext">MapReduce 2.0</a></li>
+              </ul>
+          </ul>
 
       <h1 id="Python">Python</h1>
       <h2 id="General questions">Общие вопросы по языку</h2>
@@ -168,17 +172,20 @@
 
       <h3>Магические методы</h3>      
 
+      <p align="justify" class="p_on_project_pages">
       Так как в Питоне 3 различий между строкой и юникодом больше нет,  <code class="python inline">__unicode__</code>  исчез, а появился  <code class="python inline">__bytes__</code>  (который ведёт себя так же как  <code class="python inline">__str__</code>  и  <code class="python inline">__unicode__</code>  в 2.7) для новых встроенных функций построения байтовых массивов.<br /><br />
       Так как деление в Питоне 3 теперь по-умолчанию «правильное деление»,  <code class="python inline">__div__</code>  больше нет.<br /><br />
        <code class="python inline">__coerce__</code>  больше нет, из-за избыточности и странного поведения.<br /><br />
        <code class="python inline">__cmp__</code>  больше нет, из-за избыточности.<br /><br />
        <code class="python inline">__nonzero__</code>  было переименовано в  <code class="python inline">__bool__</code> .<br /><br />
        <code class="python inline">next</code>  у итераторов был переименован в  <code class="python inline">__next__</code> .<br /><br />
+      </p>
 
       <h2 id="OOP">ООП</h2>
 
       <h3 id="SOLID">SOLID</h3>
 
+      <p align="justify" class="p_on_project_pages">
       S - Принцип единственной ответственности (single responsibility principle)<br />
       Для каждого класса должно быть определено единственное назначение. Не должно возникать God object, который занимается всем в программе.<br /><br />
 
@@ -192,23 +199,24 @@
       «много интерфейсов, специально предназначенных для клиентов, лучше, чем один интерфейс общего назначения». Интерфейс - способ провзаимодействовать с какой-то программной действующей функцией.<br /><br /> 
 
       D - Принцип инверсии зависимостей (dependency inversion principle) «Зависимость на Абстракциях. Нет зависимости на что-то конкретное».<br /><br />
-      
+      </p>
+
       <h3 id="classes">Что такое классы</h3>
       
       Класс — тип, описывающий устройство объектов. Объект — это экземпляр класса.
       
       <pre><code class="language-python">class C: 
-  pass 
-имя_объекта = имя_класса()</code></pre>
+      pass 
+      имя_объекта = имя_класса()</code></pre>
       
       У класса может не быть тела. 
 
       Простейший пример класса:
       <pre><code class="python">class Rectangle:
-  default_color = "green" # статический атрибут 
-  def __init__(self, width, height): # конструктор класса
-    self.width = width # динамический атрибут
-    self.height = height # динамический атрибут</code></pre>
+      default_color = "green" # статический атрибут 
+      def __init__(self, width, height): # конструктор класса
+      self.width = width # динамический атрибут
+      self.height = height # динамический атрибут</code></pre>
       
       В python нет возможности сделать несколько конструкторов. 
 
@@ -218,38 +226,45 @@
       <h4>Какие магические методы и для чего используются?</h4> 
 
       <pre><code class="python">class FileObject:
-  def __init__(self, filepath='~', filename='sample.txt'): # Обёртка для файлового объекта, чтобы быть уверенным в том, что файл будет закрыт при удалении.
-    self.file = open(join(filepath, filename), 'r+') # Открыть файл filename в filepath в режиме чтения и записи
-  def __del__(self):
-    self.file.close()
-    del self.file</code></pre>
-    Метод, который будет вызван при инициализации объекта.<br />
-    Это первый метод, который будет вызван при инициализации объекта. Он принимает в качестве параметров класс и потом любые другие аргументы, которые будут переданы в <code class="python inline">__init__</code> . <code class="python inline">__new__</code> используется весьма редко, но иногда бывает полезен, в частности, когда класс наследуется от неизменяемого (immutable) типа, такого как кортеж (tuple) или строка.<br />
-    
-    <pre><code class="python">__new__(cls, [...])</code></pre>
+      def __init__(self, filepath='~', filename='sample.txt'): # Обёртка для файлового объекта, чтобы быть уверенным в том, что файл будет закрыт при удалении.
+      self.file = open(join(filepath, filename), 'r+') # Открыть файл filename в filepath в режиме чтения и записи
+      def __del__(self):
+      self.file.close()
+      del self.file</code></pre>
 
-    Инициализатор класса. Самый базовый магический метод, <code class="python inline">__init__</code> . С его помощью мы можем инициализировать объект.
-    
-    <pre><code class="python">__init__(self, [...])</code></pre>
-    Деструктор объекта
-    <pre><code class="python">__del__</code></pre>
+      <p align="justify" class="p_on_project_pages">
+      Метод, который будет вызван при инициализации объекта.<br />
+      Это первый метод, который будет вызван при инициализации объекта. Он принимает в качестве параметров класс и потом любые другие аргументы, которые будут переданы в <code class="python inline">__init__</code> . <code class="python inline">__new__</code> используется весьма редко, но иногда бывает полезен, в частности, когда класс наследуется от неизменяемого (immutable) типа, такого как кортеж (tuple) или строка.<br />
+      </p>
 
-    Самый базовый из методов сравнения <code class="python inline">__cmp__(self, other)</code> . Он, в действительности, определяет поведение для 
-    всех операторов сравнения (>, ==, !=, итд.), но не всегда так, как вам это нужно (например, если эквивалентность 
-    двух экземпляров определяется по одному критерию, а то что один больше другого по какому-нибудь другому). 
-    <code class="python inline">__cmp__</code> должен вернуть отрицательное число, если <code class="python inline">self < other</code> , ноль, если <code class="python inline">self == other</code> , и положительное число 
-    в случае <code class="python inline">self > other</code> . Но, обычно, лучше определить каждое сравнение, которое вам нужно, чем определять их всех 
-    в <code class="python inline">__cmp__</code> . Но <code class="python inline">__cmp__</code> может быть хорошим способом избежать повторений и увеличить ясность, когда все необходимые 
-    сравнения оперируют одним критерием.
-    <ul>
-    <li><a><code class="python inline">__eq__(self, other)</code> Определяет поведение оператора равенства, ==</a></li>
-    <li><a><code class="python inline">__ne__(self, other)</code> Определяет поведение оператора неравенства, !=</a></li>
-    <li><a><code class="python inline">__lt__(self, other)</code> Определяет поведение оператора меньше, <</a></li>
-    <li><a><code class="python inline">__gt__(self, other)</code> Определяет поведение оператора больше, ></a></li>
-    <li><a><code class="python inline">__le__(self, other)</code> Определяет поведение оператора меньше или равно, <=</a></li>
-    <li><a><code class="python inline">__ge__(self, other)</code> Определяет поведение оператора больше или равно, >=</a></li>
-    </ul>
+      <pre><code class="python">__new__(cls, [...])</code></pre>
+
+      Инициализатор класса. Самый базовый магический метод, <code class="python inline">__init__</code> . С его помощью мы можем инициализировать объект.
+    
+      <pre><code class="python">__init__(self, [...])</code></pre>
+      Деструктор объекта
+      <pre><code class="python">__del__</code></pre>
+
+      <p align="justify" class="p_on_project_pages">
+      Самый базовый из методов сравнения <code class="python inline">__cmp__(self, other)</code> . Он, в действительности, определяет поведение для 
+      всех операторов сравнения (>, ==, !=, итд.), но не всегда так, как вам это нужно (например, если эквивалентность 
+      двух экземпляров определяется по одному критерию, а то что один больше другого по какому-нибудь другому). 
+      <code class="python inline">__cmp__</code> должен вернуть отрицательное число, если <code class="python inline">self < other</code> , ноль, если <code class="python inline">self == other</code> , и положительное число 
+      в случае <code class="python inline">self > other</code> . Но, обычно, лучше определить каждое сравнение, которое вам нужно, чем определять их всех 
+      в <code class="python inline">__cmp__</code> . Но <code class="python inline">__cmp__</code> может быть хорошим способом избежать повторений и увеличить ясность, когда все необходимые 
+      сравнения оперируют одним критерием.
+      <ul>
+      <li><a><code class="python inline">__eq__(self, other)</code> Определяет поведение оператора равенства, ==</a></li>
+      <li><a><code class="python inline">__ne__(self, other)</code> Определяет поведение оператора неравенства, !=</a></li>
+      <li><a><code class="python inline">__lt__(self, other)</code> Определяет поведение оператора меньше, <</a></li>
+      <li><a><code class="python inline">__gt__(self, other)</code> Определяет поведение оператора больше, ></a></li>
+      <li><a><code class="python inline">__le__(self, other)</code> Определяет поведение оператора меньше или равно, <=</a></li>
+      <li><a><code class="python inline">__ge__(self, other)</code> Определяет поведение оператора больше или равно, >=</a></li>
+      </ul>
+      </p>
+
     <h4>Унарные операторы и функции</h4>
+    
     Унарные операторы и функции имеют только один операнд — отрицание, абсолютное значение, и так далее.
     <ul>
     <li><a><code class="python inline">__pos__(self)</code> Определяет поведение для унарного плюса (+some_object)
