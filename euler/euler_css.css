@@ -143,3 +143,19 @@ th, td {
     padding-top: 0em;
     padding-bottom: 2em;
 }
+
+.dark_img_big {
+    background-color: #fff;
+    padding: 10px;
+    border: 2px solid var(--color-border-variation-1);
+    width: 600px;
+    height: 400px;
+    justify-content: center;
+}
+
+.dark_img {
+    background-color: #fff;
+    padding: 10px;
+    border: 2px solid var(--color-border-variation-1);
+    margin-right: 10px; 
+}

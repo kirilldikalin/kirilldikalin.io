@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>projecteuler solutions - Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../euler/euler_css.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/monokai-sublime.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+  <ul class="breadcrumb">
+      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
+      / 
+      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+      / 
+      786
+  </ul>
+
+  <div class="our_framework">
+    <div class="section_content">
+      <div id="toc_container">
+            
+        <h2 id="786">Бильярд</h2>
+
+            <div align="justify" class="problem_content">
+              <p> The following diagram shows a billiard table of a special quadrilateral shape. The four angles
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mi class="mjx-i" space="2">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mi class="mjx-i" space="2">
+                      <mjx-c class="mjx-c1D436 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mi class="mjx-i" space="2">
+                      <mjx-c class="mjx-c1D437 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                      <mo>,</mo>
+                      <mi>B</mi>
+                      <mo>,</mo>
+                      <mi>C</mi>
+                      <mo>,</mo>
+                      <mi>D</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> are
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-msup>
+                      <mjx-mn class="mjx-n">
+                        <mjx-c class="mjx-c31"></mjx-c>
+                        <mjx-c class="mjx-c32"></mjx-c>
+                        <mjx-c class="mjx-c30"></mjx-c>
+                      </mjx-mn>
+                      <mjx-script style="vertical-align: 0.393em;">
+                        <mjx-mo class="mjx-n" size="s">
+                          <mjx-c class="mjx-c2218"></mjx-c>
+                        </mjx-mo>
+                      </mjx-script>
+                    </mjx-msup>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-msup space="2">
+                      <mjx-mn class="mjx-n">
+                        <mjx-c class="mjx-c39"></mjx-c>
+                        <mjx-c class="mjx-c30"></mjx-c>
+                      </mjx-mn>
+                      <mjx-script style="vertical-align: 0.393em;">
+                        <mjx-mo class="mjx-n" size="s">
+                          <mjx-c class="mjx-c2218"></mjx-c>
+                        </mjx-mo>
+                      </mjx-script>
+                    </mjx-msup>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-msup space="2">
+                      <mjx-mn class="mjx-n">
+                        <mjx-c class="mjx-c36"></mjx-c>
+                        <mjx-c class="mjx-c30"></mjx-c>
+                      </mjx-mn>
+                      <mjx-script style="vertical-align: 0.393em;">
+                        <mjx-mo class="mjx-n" size="s">
+                          <mjx-c class="mjx-c2218"></mjx-c>
+                        </mjx-mo>
+                      </mjx-script>
+                    </mjx-msup>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c2C"></mjx-c>
+                    </mjx-mo>
+                    <mjx-msup space="2">
+                      <mjx-mn class="mjx-n">
+                        <mjx-c class="mjx-c39"></mjx-c>
+                        <mjx-c class="mjx-c30"></mjx-c>
+                      </mjx-mn>
+                      <mjx-script style="vertical-align: 0.393em;">
+                        <mjx-mo class="mjx-n" size="s">
+                          <mjx-c class="mjx-c2218"></mjx-c>
+                        </mjx-mo>
+                      </mjx-script>
+                    </mjx-msup>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <msup>
+                        <mn>120</mn>
+                        <mo>∘</mo>
+                      </msup>
+                      <mo>,</mo>
+                      <msup>
+                        <mn>90</mn>
+                        <mo>∘</mo>
+                      </msup>
+                      <mo>,</mo>
+                      <msup>
+                        <mn>60</mn>
+                        <mo>∘</mo>
+                      </msup>
+                      <mo>,</mo>
+                      <msup>
+                        <mn>90</mn>
+                        <mo>∘</mo>
+                      </msup>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> respectively, and the lengths
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                      <mi>B</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> and
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D437 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                      <mi>D</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> are equal. </p>
+              <div style="text-align:center;"> <img src="project/images/p786_billiard_shape.jpg" class="dark_img" alt="" height="160"> </div>
+              <p> The diagram on the left shows the trace of an infinitesimally small billiard ball, departing from point
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>, bouncing twice on the edges of the table, and finally returning back to point
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>. The diagram on the right shows another such trace, but this time bouncing eight times: </p>
+              <div style="text-align:center;"> <img src="project/images/p786_billiard_traces.jpg" class="dark_img" alt="" height="160"> </div>
+              <p> The table has no friction and all bounces are perfect elastic collisions.
+                <br> Note that no bounce should happen on any of the corners, as the behaviour would be unpredictable. </p>
+              <p> Let
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c28"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D441 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c29"></mjx-c>
+                    </mjx-mo>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>B</mi>
+                      <mo stretchy="false">(</mo>
+                      <mi>N</mi>
+                      <mo stretchy="false">)</mo>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> be the number of possible traces of the ball, departing from point
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>, bouncing at most
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D441 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>N</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container> times on the edges and returning back to point
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D434 TEX-I"></mjx-c>
+                    </mjx-mi>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>A</mi>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>. </p>
+              <p> For example,
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c28"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n">
+                      <mjx-c class="mjx-c31"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                    </mjx-mn>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c29"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mo class="mjx-n" space="4">
+                      <mjx-c class="mjx-c3D"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n" space="4">
+                      <mjx-c class="mjx-c36"></mjx-c>
+                    </mjx-mn>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>B</mi>
+                      <mo stretchy="false">(</mo>
+                      <mn>10</mn>
+                      <mo stretchy="false">)</mo>
+                      <mo>=</mo>
+                      <mn>6</mn>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>,
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c28"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n">
+                      <mjx-c class="mjx-c31"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                    </mjx-mn>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c29"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mo class="mjx-n" space="4">
+                      <mjx-c class="mjx-c3D"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n" space="4">
+                      <mjx-c class="mjx-c34"></mjx-c>
+                      <mjx-c class="mjx-c37"></mjx-c>
+                      <mjx-c class="mjx-c38"></mjx-c>
+                    </mjx-mn>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>B</mi>
+                      <mo stretchy="false">(</mo>
+                      <mn>100</mn>
+                      <mo stretchy="false">)</mo>
+                      <mo>=</mo>
+                      <mn>478</mn>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>,
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c28"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n">
+                      <mjx-c class="mjx-c31"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                    </mjx-mn>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c29"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mo class="mjx-n" space="4">
+                      <mjx-c class="mjx-c3D"></mjx-c>
+                    </mjx-mo>
+                    <mjx-mn class="mjx-n" space="4">
+                      <mjx-c class="mjx-c34"></mjx-c>
+                      <mjx-c class="mjx-c35"></mjx-c>
+                      <mjx-c class="mjx-c37"></mjx-c>
+                      <mjx-c class="mjx-c39"></mjx-c>
+                      <mjx-c class="mjx-c30"></mjx-c>
+                    </mjx-mn>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>B</mi>
+                      <mo stretchy="false">(</mo>
+                      <mn>1000</mn>
+                      <mo stretchy="false">)</mo>
+                      <mo>=</mo>
+                      <mn>45790</mn>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>. </p>
+              <p> Find
+                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 117.3%; position: relative;">
+                  <mjx-math class="MJX-TEX" aria-hidden="true">
+                    <mjx-mi class="mjx-i">
+                      <mjx-c class="mjx-c1D435 TEX-I"></mjx-c>
+                    </mjx-mi>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c28"></mjx-c>
+                    </mjx-mo>
+                    <mjx-msup>
+                      <mjx-mn class="mjx-n">
+                        <mjx-c class="mjx-c31"></mjx-c>
+                        <mjx-c class="mjx-c30"></mjx-c>
+                      </mjx-mn>
+                      <mjx-script style="vertical-align: 0.393em;">
+                        <mjx-mn class="mjx-n" size="s">
+                          <mjx-c class="mjx-c39"></mjx-c>
+                        </mjx-mn>
+                      </mjx-script>
+                    </mjx-msup>
+                    <mjx-mo class="mjx-n">
+                      <mjx-c class="mjx-c29"></mjx-c>
+                    </mjx-mo>
+                  </mjx-math>
+                  <mjx-assistive-mml unselectable="on" display="inline">
+                    <math xmlns="http://www.w3.org/1998/Math/MathML">
+                      <mi>B</mi>
+                      <mo stretchy="false">(</mo>
+                      <msup>
+                        <mn>10</mn>
+                        <mn>9</mn>
+                      </msup>
+                      <mo stretchy="false">)</mo>
+                    </math>
+                  </mjx-assistive-mml>
+                </mjx-container>. </p>
+            </div>
+                
+            </div>
+
+
+
+        <h2>Решение</h2>
