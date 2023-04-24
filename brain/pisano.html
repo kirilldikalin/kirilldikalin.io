@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Brain training - Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+
+  <style>
+    .result {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+    .error {
+        color: red;
+    }
+  </style>
+
+</head>
+
+<body>
+    <ul class="breadcrumb">
+      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
+      / 
+      <a class="bread_crumb" href="../brain/main_brain.html">brain</a>
+      /
+      fibbonachi
+    </ul>
+
+  <h1>Последовательность Фибоначчи</h1>
+
+  <div class="our_framework">
+    <div class="section_content">
+      <p class="p_on_project_pages_text">
+        Элементы числовой последовательности
+      </p>
+      <p class="p_on_project_pages">
+        n		a(n)<br>
+        0		0<br>
+        1		1<br>
+        2		1<br>
+        3		2<br>
+        4		3<br>
+        5		5<br>
+        6		8<br>
+        7		13<br>
+        8		21<br>
+        9		34<br>
+        10		55<br>
+        11		89<br>
+        12		144<br>
+        13		233<br>
+        14		377<br>
+        15		610<br>
+        16		987<br>
+        17		1597<br>
+        18		2584<br>
+        19		4181<br>
+        20		6765<br>
+        21		10946<br>
+        22		17711<br>
+        23		28657<br>
+        24		46368<br>
+        25		75025<br>
+        26		121393<br>
+        27		196418<br>
+        28		317811<br>
+        29		514229<br>
+        30		832040<br>
+        31		1346269<br>
+        32		2178309<br>
+        33		3524578<br>
+        34		5702887<br>
+        35		9227465<br>
+        36		14930352<br>
+        37		24157817<br>
+        38		39088169<br>
+        39		63245986<br>
+        40		102334155<br>
+      </p>
+      
+      <h1>Проверка чисел</h1>
+      <p>Введите число из последовательности и нажмите Enter:</p>
+      <input type="text" id="inputNumber" autofocus>
+      <div class="result" id="result"></div>
+      
+      <script>
+          var numbers = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711];
+          var currentIndex = 0;
+          var resultDiv = document.getElementById("result");
+      
+          function checkNumber() {
+              var inputNumber = document.getElementById("inputNumber").value;
+              var lastNumber = numbers[currentIndex];
+      
+              if (inputNumber.length > 0 && !isNaN(inputNumber)) {
+                  if (inputNumber == lastNumber) {
+                      resultDiv.innerHTML += "<span class='error'></span>" + lastNumber + ", ";
+                      currentIndex++;
+                  } else {
+                      resultDiv.innerHTML = resultDiv.innerHTML.replace("<span class='error'></span>" + lastNumber, "<span class='error'></span>" + inputNumber);
+                      numbers[currentIndex] = Number(inputNumber);
+                  }
+                  document.getElementById("inputNumber").value = "";
+              }
+      
+              if (currentIndex == numbers.length) {
+                  resultDiv.textContent = resultDiv.textContent.slice(0, -2);
+                  document.getElementById("inputNumber").disabled = true;
+              }
+          }
+      
+          document.getElementById("inputNumber").addEventListener("keydown", function(event) {
+              if (event.keyCode === 13) {
+                  checkNumber();
+              }
+          });
+      </script>
+      
+  
+
+      </head>
+    </div>
+  </div>
+  
+</body>
