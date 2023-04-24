@@ -148,7 +148,16 @@ th, td {
     background-color: #fff;
     padding: 10px;
     border: 2px solid var(--color-border-variation-1);
-    width: 600px;
+    width: 900px;
+    height: 400px;
+    justify-content: center;
+}
+
+.dark_img_big_high_width{
+    background-color: #fff;
+    padding: 10px;
+    border: 2px solid var(--color-border-variation-1);
+    width: 1200px;
     height: 400px;
     justify-content: center;
 }
