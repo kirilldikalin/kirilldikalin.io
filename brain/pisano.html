@@ -10,6 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+
+  <style>
+    .result {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+    .error {
+        color: red;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -72,77 +83,47 @@
         39		63245986<br>
         40		102334155<br>
       </p>
-
-      <body>
-        <div>
-          <label for="input-field">Начнём</label>
-          <input type="text" id="input-field">
-        </div>
-      </body> 
-      <head>
-        <style>
-          #input-field {
-            width: 50px; /* начальная ширина поля ввода */
+      
+      <h1>Проверка чисел</h1>
+      <p>Введите число из последовательности и нажмите Enter:</p>
+      <input type="text" id="inputNumber" autofocus>
+      <div class="result" id="result"></div>
+      
+      <script>
+          var numbers = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711];
+          var currentIndex = 0;
+          var resultDiv = document.getElementById("result");
+      
+          function checkNumber() {
+              var inputNumber = document.getElementById("inputNumber").value;
+              var lastNumber = numbers[currentIndex];
+      
+              if (inputNumber.length > 0 && !isNaN(inputNumber)) {
+                  if (inputNumber == lastNumber) {
+                      resultDiv.innerHTML += "<span class='error'></span>" + lastNumber + ", ";
+                      currentIndex++;
+                  } else {
+                      resultDiv.innerHTML = resultDiv.innerHTML.replace("<span class='error'></span>" + lastNumber, "<span class='error'></span>" + inputNumber);
+                      numbers[currentIndex] = Number(inputNumber);
+                  }
+                  document.getElementById("inputNumber").value = "";
+              }
+      
+              if (currentIndex == numbers.length) {
+                  resultDiv.textContent = resultDiv.textContent.slice(0, -2);
+                  document.getElementById("inputNumber").disabled = true;
+              }
           }
-        </style>
-        <script>
-            const PI = "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
-            const inputField = document.querySelector('#input-field');
-            const digits = document.querySelector('.p_on_project_pages');
+      
+          document.getElementById("inputNumber").addEventListener("keydown", function(event) {
+              if (event.keyCode === 13) {
+                  checkNumber();
+              }
+          });
+      </script>
+      
+  
 
-            let currentIndex = 0;
-
-            inputField.addEventListener('input', function(event) {
-                const value = event.data;
-                const correctDigit = PI[currentIndex];
-
-                if (isNaN(parseInt(value, 10)) || value !== correctDigit) {
-                    const inputString = inputField.value.slice(0, -1);
-                    const correctPart = `<span style="color: green">${inputString}</span>`;
-                    const wrongPart = `<span style = "color: red">${correctDigit}</span>`;
-                    const restPart = PI.slice(inputString.length + 1);
-                    const outputString = `${correctPart}${wrongPart}${restPart}`;
-                    digits.innerHTML = outputString;
-                    inputField.value = inputString;
-                    return;
-                }
-
-                const inputString = inputField.value;
-                const correctPart = `<span style = "color: green" > ${inputString} </span>`;
-                const restPart = PI.slice(inputString.length);
-                const outputString = `${correctPart}${restPart}`;
-                digits.innerHTML = outputString;
-
-                currentIndex++;
-
-                if (currentIndex === PI.length) {
-                    alert('Поздравляем! Вы ввели первые 100 знаков числа Пи после запятой.');
-                    inputField.disabled = true;
-                }
-
-                const span = document.createElement('span');
-                span.style.fontSize = window.getComputedStyle(inputField).fontSize;
-                span.style.fontFamily = window.getComputedStyle(inputField).fontFamily;
-                span.textContent = inputField.value;
-                document.body.appendChild(span);
-                const inputWidth = span.offsetWidth + 2;
-                document.body.removeChild(span);
-                inputField.style.width = inputWidth + 'px';
-
-                const piDigits = digits.textContent.replace(/\s/g, '');
-                const inputDigits = inputField.value;
-                let correct = true;
-                let firstWrongIndex;
-
-                for (let i = 0; i < inputDigits.length; i++) {
-                    if (inputDigits[i] !== piDigits[i]) {
-                        correct = false;
-                        firstWrongIndex = i;
-                        break;
-                    }
-                }
-            });
-        </script>        
       </head>
     </div>
   </div>
