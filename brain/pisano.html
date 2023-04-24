@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Brain training - Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <ul class="breadcrumb">
+      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
+      / 
+      <a class="bread_crumb" href="../brain/main_brain.html">brain</a>
+      /
+      fibbonachi
+    </ul>
+
+  <h1>Последовательность Фибоначчи</h1>
+
+  <div class="our_framework">
+    <div class="section_content">
+      <p class="p_on_project_pages_text">
+        Элементы числовой последовательности
+      </p>
+      <p class="p_on_project_pages">
+        n		a(n)<br>
+        0		0<br>
+        1		1<br>
+        2		1<br>
+        3		2<br>
+        4		3<br>
+        5		5<br>
+        6		8<br>
+        7		13<br>
+        8		21<br>
+        9		34<br>
+        10		55<br>
+        11		89<br>
+        12		144<br>
+        13		233<br>
+        14		377<br>
+        15		610<br>
+        16		987<br>
+        17		1597<br>
+        18		2584<br>
+        19		4181<br>
+        20		6765<br>
+        21		10946<br>
+        22		17711<br>
+        23		28657<br>
+        24		46368<br>
+        25		75025<br>
+        26		121393<br>
+        27		196418<br>
+        28		317811<br>
+        29		514229<br>
+        30		832040<br>
+        31		1346269<br>
+        32		2178309<br>
+        33		3524578<br>
+        34		5702887<br>
+        35		9227465<br>
+        36		14930352<br>
+        37		24157817<br>
+        38		39088169<br>
+        39		63245986<br>
+        40		102334155<br>
+      </p>
+
+      <body>
+        <div>
+          <label for="input-field">Начнём</label>
+          <input type="text" id="input-field">
+        </div>
+      </body> 
+      <head>
+        <style>
+          #input-field {
+            width: 50px; /* начальная ширина поля ввода */
+          }
+        </style>
+        <script>
+            const PI = "1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679";
+            const inputField = document.querySelector('#input-field');
+            const digits = document.querySelector('.p_on_project_pages');
+
+            let currentIndex = 0;
+
+            inputField.addEventListener('input', function(event) {
+                const value = event.data;
+                const correctDigit = PI[currentIndex];
+
+                if (isNaN(parseInt(value, 10)) || value !== correctDigit) {
+                    const inputString = inputField.value.slice(0, -1);
+                    const correctPart = `<span style="color: green">${inputString}</span>`;
+                    const wrongPart = `<span style = "color: red">${correctDigit}</span>`;
+                    const restPart = PI.slice(inputString.length + 1);
+                    const outputString = `${correctPart}${wrongPart}${restPart}`;
+                    digits.innerHTML = outputString;
+                    inputField.value = inputString;
+                    return;
+                }
+
+                const inputString = inputField.value;
+                const correctPart = `<span style = "color: green" > ${inputString} </span>`;
+                const restPart = PI.slice(inputString.length);
+                const outputString = `${correctPart}${restPart}`;
+                digits.innerHTML = outputString;
+
+                currentIndex++;
+
+                if (currentIndex === PI.length) {
+                    alert('Поздравляем! Вы ввели первые 100 знаков числа Пи после запятой.');
+                    inputField.disabled = true;
+                }
+
+                const span = document.createElement('span');
+                span.style.fontSize = window.getComputedStyle(inputField).fontSize;
+                span.style.fontFamily = window.getComputedStyle(inputField).fontFamily;
+                span.textContent = inputField.value;
+                document.body.appendChild(span);
+                const inputWidth = span.offsetWidth + 2;
+                document.body.removeChild(span);
+                inputField.style.width = inputWidth + 'px';
+
+                const piDigits = digits.textContent.replace(/\s/g, '');
+                const inputDigits = inputField.value;
+                let correct = true;
+                let firstWrongIndex;
+
+                for (let i = 0; i < inputDigits.length; i++) {
+                    if (inputDigits[i] !== piDigits[i]) {
+                        correct = false;
+                        firstWrongIndex = i;
+                        break;
+                    }
+                }
+            });
+        </script>        
+      </head>
+    </div>
+  </div>
+  
+</body>
