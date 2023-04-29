@@ -596,3 +596,15 @@ img {
   width: 25%;
   height: auto;
 }
+
+.wp-block-table {
+  overflow-x: auto;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
