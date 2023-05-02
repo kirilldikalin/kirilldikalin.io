@@ -31,189 +31,49 @@
             
         <h2 id="763">Амебы на 3D-сетке</h2>
 
-        <div align="justify" class="problem_content">
-            <p> Рассмотрим трехмерную кубическую сетку. Амеба, находящаяся в кубе
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mo stretchy="false">(</mo>
-                            <mi>x</mi>
-                            <mo>,</mo>
-                            <mi>y</mi>
-                            <mo>,</mo>
-                            <mi>z</mi>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> может разделиться на три амебы, которые займут кубы
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mo stretchy="false">(</mo>
-                            <mi>x</mi>
-                            <mo>+</mo>
-                            <mn>1</mn>
-                            <mo>,</mo>
-                            <mi>y</mi>
-                            <mo>,</mo>
-                            <mi>z</mi>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mo stretchy="false">(</mo>
-                            <mi>x</mi>
-                            <mo>,</mo>
-                            <mi>y</mi>
-                            <mo>+</mo>
-                            <mn>1</mn>
-                            <mo>,</mo>
-                            <mi>z</mi>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> и
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mo stretchy="false">(</mo>
-                            <mi>x</mi>
-                            <mo>,</mo>
-                            <mi>y</mi>
-                            <mo>,</mo>
-                            <mi>z</mi>
-                            <mo>+</mo>
-                            <mn>1</mn>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>при условии, что эти кубы пусты. </p>
-            <p> Изначально на сетке находится только одна амеба в кубе
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mo stretchy="false">(</mo>
-                            <mn>0</mn>
-                            <mo>,</mo>
-                            <mn>0</mn>
-                            <mo>,</mo>
-                            <mn>0</mn>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>. После
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
-                    <mjx-math class="MJX-TEX" aria-hidden="true">
-                        <mjx-mi class="mjx-i">
-                            <mjx-c class="mjx-c1D441 TEX-I"></mjx-c>
-                        </mjx-mi>
-                    </mjx-math>
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>N</mi>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> делений на сетке будет расположено
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mn>2</mn>
-                            <mi>N</mi>
-                            <mo>+</mo>
-                            <mn>1</mn>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> амеб. Расположение, которое можно достичь несколькими разными способами, засчитывается только один раз. Пусть
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mi>N</mi>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> будет количеством различных возможных расположений после
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>N</mi>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> делений. </p>
-            <p> Например,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mn>2</mn>
-                            <mo stretchy="false">)</mo>
-                            <mo>=</mo>
-                            <mn>3</mn>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mn>10</mn>
-                            <mo stretchy="false">)</mo>
-                            <mo>=</mo>
-                            <mn>44499</mn>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mn>20</mn>
-                            <mo stretchy="false">)</mo>
-                            <mo>=</mo>
-                            <mn>9204559704</mn>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> и последние девять цифр
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mn>100</mn>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container> =
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mn>780166455</mn>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>. </p>
-            <p> Найдите
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="14" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                        <math xmlns="http://www.w3.org/1998/Math/MathML">
-                            <mi>D</mi>
-                            <mo stretchy="false">(</mo>
-                            <mn>10</mn>
-                            <mstyle scriptlevel="0">
-                                <mspace width="0.167em"></mspace>
-                            </mstyle>
-                            <mn>000</mn>
-                            <mo stretchy="false">)</mo>
-                        </math>
-                    </mjx-assistive-mml>
-                </mjx-container>. В качестве ответа приведите последние девять цифр полученного числа. </p>
-        </div>
+        <p align="justify" class="p_on_project_pages">
+          Рассмотрим трехмерную кубическую сетку. Амеба, находящаяся в кубе
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>)</mo></math>
+          может разделиться на три амебы, которые займут кубы
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>)</mo></math>
+          ,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>z</mi><mo>)</mo></math>
+          и
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>+</mo><mn>1</mn><mo>)</mo></math>
+          при условии, что эти кубы пусты. 
+        </p>
 
+        <p align="justify" class="p_on_project_pages">
+          Изначально на сетке находится только одна амеба в кубе
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>)</mo></math>
+          . После
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math>
+          делений на сетке будет расположено
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mi>N</mi><mo>+</mo><mn>1</mn></math>
+          амеб. Расположение, которое можно достичь несколькими разными способами, засчитывается только один раз. Пусть
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mi>N</mi><mo>)</mo></math>
+          будет количеством различных возможных расположений после
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math>
+          делений. 
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Например,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>3</mn></math>
+          ,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>10</mn><mo>)</mo><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo><mn>44499</mn></math>
+          ,
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>20</mn><mo>)</mo><mo>=</mo><mn>9204559704</mn></math>
+          и последние девять цифр
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>100</mn><mo>)</mo><mo>=</mo><mn>780166455</mn></math>
+          .
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Найдите
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>10000</mn><mo>)</mo></math>
+          . В качестве ответа приведите последние девять цифр полученного числа. 
+        </p>
+        </div>
 
         <h2>Решение</h2>

@@ -31,247 +31,97 @@
             
         <h2 id="780">Ториангуляции</h2>
 
-            <div align="justify" class="problem_content">
-                <p>Для положительных вещественных чисел
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>a</mi>
-                                <mo>,</mo>
-                                <mi>b ,</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>тор
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>a</mi>
-                                <mo>×</mo>
-                                <mi>b</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> это прямоугольник шириной
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>a</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> и высотой
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>b ,</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>чьи левая и правая сторона идентичны, равно как и верхняя и нижняя сторона. Другими словами, при прочерчивании пути на прямоугольнике, достигнув края прямоугольника путь "оборачивается вокруг" и продолжается из соответствующей точки на противоположной стороне.</p>
-                <p> Выкладывание плиткой тора - это способ разбить его на равносторонние треугольники с длиной стороны 1. Например, следующие три изображения показывают соответственно тор
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mn>1</mn>
-                                <mo>×</mo>
-                                <mfrac>
-                                    <msqrt>
-                                        <mn>3</mn>
-                                    </msqrt>
-                                    <mn>2</mn>
-                                </mfrac>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> с двумя треугольниками, тор
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <msqrt>
-                                    <mn>3</mn>
-                                </msqrt>
-                                <mo>×</mo>
-                                <mn>1</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> с четырьмя треугольниками и тор примерно 
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mn>2.8432</mn>
-                                <mo>×</mo>
-                                <mn>2.1322</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> с 14 треугольниками:</p>
-                <div style="text-align:center; display: flex; justify-content: center;"> 
-                    <img src="https://projecteuler.net/project/images/p780_sample-small-1.png" 
-                        class="dark_img" alt="" height="160"> 
-                    <img src="https://projecteuler.net/project/images/p780_sample-small-2.png" 
-                        class="dark_img" alt="" height="160"> 
-                    <img src="https://projecteuler.net/project/images/p780_sample-small-3.png" 
-                        class="dark_img" alt="" height="160"> 
-                </div>
-                    
-                <p>Для тора
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>a</mi>
-                                <mo>×</mo>
-                                <mi>b</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> два выкладывания плиткой называются эквивалентными, если возможно получить одно выкладывание из другого путем непрерывного перемещения всех треугольников так, чтобы ни в какой момент перемещения между ними не образовывалось пустот и никакие треугольники не перекрывались. Например, анимация ниже демонстрирует эквивалентность двух выкладываний:</p>
-                <div style="text-align:center; display: flex; justify-content: center;"> 
-                    <img src="https://projecteuler.net/project/images/p780_animation.gif" 
+          <p align="justify" class="p_on_project_pages">
+            Для положительных вещественных чисел
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>,</mo><mi>b</mi></math>
+            ,тор
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>&#xd7;</mo><mi>b</mi></math>
+            это прямоугольник шириной 
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>
+            и высотой
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>b</mi><mo>,</mo></math>
+            чьи левая и правая сторона идентичны, равно как и верхняя и нижняя сторона. 
+            Другими словами, при прочерчивании пути на прямоугольнике, достигнув края 
+            прямоугольника путь "оборачивается вокруг" и продолжается из соответствующей 
+            точки на противоположной стороне.
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            Выкладывание плиткой тора - это способ разбить его на равносторонние треугольники 
+            с длиной стороны 1. Например, следующие три изображения показывают соответственно тор
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1</mn><mo>&#xd7;</mo><mfrac><msqrt><mn>3</mn></msqrt><mn>2</mn></mfrac></math>
+            с двумя треугольниками, тор
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>3</mn></msqrt><mo>&#xd7;</mo><mn>1</mn></math>
+            с четырьмя треугольниками и тор примерно 
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2.8432</mn><mo>&#xd7;</mo><mn>2.1322</mn></math>
+            с 14 треугольниками:
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            <div style="text-align:center; display: flex; justify-content: center;"> 
+                <img src="https://projecteuler.net/project/images/p780_sample-small-1.png" 
                     class="dark_img" alt="" height="160"> 
-                </div>
-                <p>Пусть
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>F</mi>
-                                <mo stretchy="false">(</mo>
-                                <mi>n</mi>
-                                <mo stretchy="false">)</mo>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> будет общим количеством неэквивалентных выкладываний плиткой для всех возможных торов с ровно
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>n</mi>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> треугольниками. Например,
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>F</mi>
-                                <mo stretchy="false">(</mo>
-                                <mn>6</mn>
-                                <mo stretchy="false">)</mo>
-                                <mo>=</mo>
-                                <mn>8 ,</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>с показанными ниже восемью неэквивалентными выкладываниями для торов с шестью треугольниками:</p>
-                    <div style="text-align:center; display: flex; justify-content: center;"> 
-                        <img src="https://projecteuler.net/project/images/p780_t6-all.png" 
-                        class="dark_img_big" alt=""> 
-                    </div>
-                    <p>Пусть
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>G</mi>
-                                <mo stretchy="false">(</mo>
-                                <mi>N</mi>
-                                <mo stretchy="false">)</mo>
-                                <mo>=</mo>
-                                <munderover>
-                                    <mo data-mjx-texclass="OP">∑</mo>
-                                    <mrow data-mjx-texclass="ORD">
-                                        <mi>n</mi>
-                                        <mo>=</mo>
-                                        <mn>1</mn>
-                                    </mrow>
-                                    <mi>N</mi>
-                                </munderover>
-                                <mi>F</mi>
-                                <mo stretchy="false">(</mo>
-                                <mi>n</mi>
-                                <mo stretchy="false">) .</mo>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>Известно, что
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>G</mi>
-                                <mo stretchy="false">(</mo>
-                                <mn>6</mn>
-                                <mo stretchy="false">)</mo>
-                                <mo>=</mo>
-                                <mn>14</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>,
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>G</mi>
-                                <mo stretchy="false">(</mo>
-                                <mn>100</mn>
-                                <mo stretchy="false">)</mo>
-                                <mo>=</mo>
-                                <mn>8090</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container> и
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="14" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>G</mi>
-                                <mo stretchy="false">(</mo>
-                                <msup>
-                                    <mn>10</mn>
-                                    <mn>5</mn>
-                                </msup>
-                                <mo stretchy="false">)</mo>
-                                <mo>≡</mo>
-                                <mn>645124048</mn>
-                                <mspace width="0.444em"></mspace>
-                                <mo stretchy="false">(</mo>
-                                <mi>mod</mi>
-                                <mspace width="0.333em"></mspace>
-                                <mn>1</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>000</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>000</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>007</mn>
-                                <mo stretchy="false">)</mo>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>.</p>
-                <p>Найдите
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="15" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mi>G</mi>
-                                <mo stretchy="false">(</mo>
-                                <msup>
-                                    <mn>10</mn>
-                                    <mn>9</mn>
-                                </msup>
-                                <mo stretchy="false">)</mo>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>. В качестве ответа приведите остаток от деления полученного результата на
-                    <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="16" style="font-size: 117.3%; position: relative;">
-                        <mjx-assistive-mml unselectable="on" display="inline">
-                            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                                <mn>1</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>000</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>000</mn>
-                                <mstyle scriptlevel="0">
-                                    <mspace width="0.167em"></mspace>
-                                </mstyle>
-                                <mn>007</mn>
-                            </math>
-                        </mjx-assistive-mml>
-                    </mjx-container>.</p>
+                <img src="https://projecteuler.net/project/images/p780_sample-small-2.png" 
+                    class="dark_img" alt="" height="160"> 
+                <img src="https://projecteuler.net/project/images/p780_sample-small-3.png" 
+                    class="dark_img" alt="" height="160"> 
             </div>
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            Для тора
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>&#xd7;</mo><mi>b</mi></math>
+            два выкладывания плиткой называются эквивалентными, если возможно получить 
+            одно выкладывание из другого путем непрерывного перемещения всех треугольников 
+            так, чтобы ни в какой момент перемещения между ними не образовывалось пустот 
+            и никакие треугольники не перекрывались. Например, анимация ниже демонстрирует 
+            эквивалентность двух выкладываний:
+          </p>
+          
+          <p align="justify" class="p_on_project_pages">
+            <div style="text-align:center; display: flex; justify-content: center;"> 
+                <img src="https://projecteuler.net/project/images/p780_animation.gif" 
+                class="dark_img" alt="" height="160"> 
+            </div>
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            Пусть
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>F</mi><mo>(</mo><mi>n</mi><mo>)</mo></math>
+            будет общим количеством неэквивалентных выкладываний плиткой для всех возможных торов с ровно
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math>
+            треугольниками. Например,
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>F</mi><mo>(</mo><mn>6</mn><mo>)</mo><mo>=</mo><mn>8</mn></math>
+            с показанными ниже восемью неэквивалентными выкладываниями для торов с шестью треугольниками:
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            <div style="text-align:center; display: flex; justify-content: center;"> 
+                <img src="https://projecteuler.net/project/images/p780_t6-all.png" 
+                class="dark_img_big" alt=""> 
+            </div>
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            Пусть
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mi>N</mi><mo>)</mo><mo>=</mo><munderover accent='false' accentunder='false'><mo>&#x2211;</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>F</mi><mo>(</mo><mi>N</mi><mo>)</mo></math>
+            . Известно, что
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mn>6</mn><mo>)</mo><mo>=</mo><mn>14</mn></math>
+            ,
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mn>100</mn><mo>)</mo><mo>=</mo><mn>8090</mn></math>
+            и
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><msup><mn>10</mn><mn>5</mn></msup><mo>)</mo><mo>&#x2261;</mo><mn>645124048</mn><mo>&#xA0;</mo><mo>(</mo><mi>m</mi><mi>o</mi><mi>d</mi><mo>&#xA0;</mo><mn>1</mn><mi>
+              </mi><mn>000</mn><mi>
+              </mi><mn>000</mn><mi>
+              </mi><mn>007</mn><mo>)</mo></math>
+          </p>
+
+          <p align="justify" class="p_on_project_pages">
+            Найдите
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><msup><mn>10</mn><mn>9</mn></msup><mo>)</mo></math>
+            . В качестве ответа приведите остаток от деления полученного результата на
+              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1000000007</mn></math>
+            .
+          </p>
 
         <h2>Решение</h2>
