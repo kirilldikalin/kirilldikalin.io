@@ -236,6 +236,27 @@
         </p>
 
         <p align="justify" class="p_on_project_pages">
+          Мы знаем, что вероятность того, что два числа будут взаимно простыми, равна  
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>6</mn><mrow><msup><mi>&#x3c0;</mi><mn>2</mn></msup></mrow></mfrac></math>
+          таким образом, исключая случай, когда 
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>3</mn><mo>|</mo><mi>y</mi></math>
+          даёт
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi><mo>-</mo><mfrac><mi>p</mi><mn>3</mn></mfrac><mo>+</mo><mfrac><mi>p</mi><mn>9</mn></mfrac><mo>-</mo><mfrac><mi>p</mi><mn>27</mn></mfrac><mo>+</mo><mo>&#xb7;</mo><mo>&#xb7;</mo><mo>&#xb7;</mo><mo>=</mo><mfrac><mn>6</mn><mrow><msup><mi>&#x3c0;</mi><mn>2</mn></msup></mrow></mfrac></math>
+          поэтому
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>p</mi><mo>=</mo><mfrac><mn>9</mn><mrow><mn>2</mn><msup><mi>&#x3c0;</mi><mn>2</mn></msup></mrow></mfrac></math>
+        </p>
+  
+        <p align="justify" class="p_on_project_pages">
+          Поскольку
+            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>4</mn><mo>(</mo><msubsup><mo>&#x2211;</mo><mrow><mn>18</mn><mi>x</mi><mo>+</mo><mn>10</mn><mi>y</mi><mo>&#x2264;</mo><mn>3</mn><mi>n</mi><mo>+</mo><mn>6</mn><mo>,</mo><mi>x</mi><mo>&gt;</mo><mn>0</mn><mo>,</mo><mi>y</mi><mo>&gt;</mo><mn>0</mn></mrow><mrow/></msubsup><mn>1</mn><mo>)</mo><mo>+</mo><mn>2</mn><mo>&#x2248;</mo><mn>4</mn><mo>(</mo><munderover accent='false' accentunder='false'><mo>&#x2211;</mo><mrow><mi>x</mi><mo>=</mo><mn>1</mn></mrow><mrow><mo>(</mo><mi>n</mi><mo>+</mo><mn>2</mn><mo>)</mo><mo>/</mo><mn>6</mn></mrow></munderover><mfrac><mrow><mn>3</mn><mi>n</mi><mo>+</mo><mn>6</mn><mo>-</mo><mn>18</mn><mi>x</mi></mrow><mn>10</mn></mfrac><mo>)</mo><mo>&#x2248;</mo><mfrac><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow><mn>10</mn></mfrac><mi>&#x3bf;</mi><mo>(</mo><mi>n</mi><mo>)</mo></math>
+          мы получаем:
+        </p>
+        
+        <p align="justify" class="p_on_project_pages">
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><munder accentunder='false'><mi>lim</mi><mrow><mi>N</mi><mo lspace="0" rspace="0">&#x2192;</mo><mi>&#x221e;</mi></mrow></munder><mfrac><mrow><mi>B</mi><mo>(</mo><mi>N</mi><mo>)</mo></mrow><mrow><msup><mi>N</mi><mn>2</mn></msup></mrow></mfrac><mo>=</mo><mfrac><mn>9</mn><mrow><mn>20</mn><msup><mi>&#x3c0;</mi><mn>2</mn></msup></mrow></mfrac><mo>&#x2248;</mo><mn>0</mn><mo>,</mo><mn>045594532639051997</mn></math>
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
           Код решения:
         </p>
 
@@ -292,17 +313,15 @@
       <p align="justify" class="p_on_project_pages">
         Этот код вычисляет Мертенсову функцию M(n), которая определяется как сумма значений 
         функции μ(k) (функция Мёбиуса) на отрезке [1,n], где μ(1) = 1, а для k > 1 равна 0, если
-         k имеет квадратный делитель, и (-1)^r, если k является произведением r различных простых 
-         чисел.
+        k имеет квадратный делитель, и (-1)^r, если k является произведением r различных простых 
+        чисел.
       </p>
 
       <p align="justify" class="p_on_project_pages">
         1. Импортируем необходимые модули:
-        <ul>
           <li>functools.lru_cache используется для создания декоратора мемоизации функций.</br>
           <li>math.sqrt используется для вычисления квадратного корня.</br>
           <li>math.floor используется для округления вниз.</br>
-        </ul>
       </p>
 
       <p align="justify" class="p_on_project_pages">
