@@ -370,6 +370,15 @@ a.proj_buttons:hover {
   word-break: break-word;
   text-align: left;
 }
+.p_on_project_pages_japan_hist {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  padding-top: 0em;
+  padding-bottom: 0em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
 .p_on_project_pages_japan strong {
   font-weight: bold; /* Применение жирного начертания к тегу <strong> */
 }
@@ -603,7 +612,7 @@ img {
 
 .table-responsive {
   display: block;
-  width: 100%;
+  width: 110%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
