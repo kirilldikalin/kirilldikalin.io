@@ -626,3 +626,37 @@ img {
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
+
+/* .colour-scheme-cycler {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  width: 1.2rem;
+  height: 1.2rem;
+  float: right;
+  transform: translate(0, 50%);
+}
+
+.colour-scheme-cycler svg {
+  color: var(--colour-rule-strong);
+  height: 1.2rem;
+  width: 1.2rem;
+  display: none;
+}
+
+:root[data-colour_scheme="dark"] #colour-scheme-cycler svg.colour-scheme-icon-when-dark {
+    display: initial;
+}
+
+svg:not(:root) {
+    overflow-clip-margin: content-box;
+    overflow: hidden;
+}
+
+:root {
+    --colour-rule-strong: var(--light, #888) var(--dark, #777);
+    --colour-rule-light: var(--light, #ddd) var(--dark, #222);
+
+} */

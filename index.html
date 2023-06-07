@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
     <title> Kirill Dikalin </title>
   </head>
@@ -19,6 +16,13 @@
   </style>
 
   <body>
+
+    <!-- <button id="colour-scheme-cycler" onclick="setColourScheme(nextColourScheme())">
+      <svg aria-hidden="true" class="colour-scheme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+      <svg aria-hidden="true" class="colour-scheme-icon-when-dark"><use href="#svg-moon"></use></svg>
+      <svg aria-hidden="true" class="colour-scheme-icon-when-light"><use href="#svg-sun"></use></svg>
+      <span class="visually-hidden">Toggle light / dark / auto colour theme</span>
+    </button> -->
 
     <h1 style="padding-top: 1em;"> <span class="name"></span> </h1>
 
@@ -88,7 +92,18 @@
           </p>
         </div>
       </div>
-      <h1 style="padding-top: 1em;"> Общее </h1>
+
+    <h1 style="padding-top: 1em;">Публикации</h1>
+      <div class="row">
+        <div class="column_right" style="width: 97%; margin-top: 0.5em;">
+          <a href="./articles/myths_DE.html" class="project"> Data engineering: мифы и реальность </a>
+          <p class="project_description" style="line-height: 1.4;">
+            «Инженеров данных заменит автоматика» и другие мифы о DE
+          </p>
+        </div>
+      </div>  
+    
+    <h1 style="padding-top: 1em;"> Общее </h1>
       <div class="row">
         <div class="column_right" style="width: 97%; margin-top: 0.5em;">
           <a href="./brain/main_brain.html" class="project"> Готовь свой brain </a>
