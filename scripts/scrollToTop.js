@@ -1,12 +1,15 @@
-// Функция для плавной прокрутки наверх страницы
+var buttonUp = document.querySelector('.buttonup');
+
 function scrollToTop() {
-    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > 0) {
-      // Если еще не достигли верха страницы, анимированно прокручиваем вверх
-      window.scrollTo(0, scrollTop - 500); // Уменьшаем scrollTop на 50 на каждом шаге
-      requestAnimationFrame(scrollToTop); // Рекурсивно вызываем функцию
-    } else {
-      // Когда достигли верха страницы, останавливаем анимацию
-      cancelAnimationFrame(scrollToTop);
+        var scrollSpeed = scrollTop / 20; // Регулируем делитель для настройки замедления
+        window.scrollTo(0, scrollTop - scrollSpeed);
+        setTimeout(scrollToTop, 16);
     }
-  }
+}
+
+buttonUp.addEventListener('click', function(event) {
+    event.preventDefault();
+    scrollToTop();
+});
