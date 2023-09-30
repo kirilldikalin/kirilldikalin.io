@@ -123,6 +123,7 @@ th, td {
     /* margin: auto; */
     text-align: center;
 }
+
 .subsection_name {
     padding-top: 2em;
     padding-bottom: 1.1em;
@@ -142,4 +143,12 @@ th, td {
     margin-bottom: 0em;
     padding-top: 0em;
     padding-bottom: 2em;
+}
+.enlarged-image {
+    width: 450px; /* Новая ширина */
+    height: auto; /* Автоматическая высота, чтобы сохранить пропорции */
+}
+.enlarged-image-large{
+    width: 750px; /* Новая ширина */
+    height: auto; /* Автоматическая высота, чтобы сохранить пропорции */
 }
