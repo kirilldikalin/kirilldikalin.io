@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>A Conceptual Framework for System Fault Tolerance Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../translation_of_articles/tr_css.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/monokai-sublime.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link rel="icon" href="../../../images/favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+  <ul class="breadcrumb">
+    <a class="bread_crumb" href="../../../index.html">Kirill Dikalin</a> 
+    / 
+    <a href="../../../translation_of_articles/translation_of_articles.html" class="project"> Перевод статей</a> 
+    / 
+    <a class="bread_crumb" href="../chapter_1/Bibliography_1_1.html">Библиография, Глава 1, Часть 1</a> 
+    / 
+    Simple Testing Can Prevent Most Critical Failures
+  </ul>
+
+  <h1 style="padding-top: 1em;">Simple Testing Can Prevent Most Critical Failures</h1>
+  <h1 style="padding-top: 0.01em;">/</h1>
+  <h1 style="padding-top: 0.01em;">«Простое тестирование может предотвратить наиболее критические сбои»</h1>
+
+  <div class="our_framework">
+    <div class="section_content">
+      <div id="toc_container">
+
+        <ul>
+            <li class="toc_section"><a href="./origins/STCPMCF/STCPMCF.pdf" class="intext">Оригинал статьи</a></li>
+        </ul>
+
+        <h1 style="padding-top: 0.01em;">Оглавление</h1>
+        <ul>
+            <li class="toc_section"><a href="#Abstract" class="intext">Аннотация</a>
+            <li class="toc_section"><a href="#1" class="intext">1. Введение</a>
+            <li class="toc_section"><a href="#2" class="intext">2. Методология и ограничения</a>
+            <li class="toc_section"><a href="#3" class="intext">3. Общие выводы</a>
+                <ul>
+                    <li><a href="#3.1" class="intext">3.1. Сложность отказов</a>
+                    <li><a href="#3.2" class="intext">3.2. Возможности для улучшения тестирования</a>
+                    <li><a href="#3.3" class="intext">3.3. Роль времени</a>
+                    <li><a href="#3.4" class="intext">3.4. Логи предоставляют возможности диагностики</a>
+                    <li><a href="#3.5" class="intext">3.5. Воспроизводимость отказов</a>
+                </ul>
+            <li class="toc_section"><a href="#4" class="intext">4. Катастрофические неудачи</a>
+                <ul>
+                    <li><a href="#4.1" class="intext">4.1. Тривиальные ошибки в обработчиках ошибок</a>
+                    <li><a href="#4.2" class="intext">4.2. Системные ошибки</a>
+                    <li><a href="#4.3" class="intext">4.3. Обсуждение</a>
+                </ul>
+            <li class="toc_section"><a href="#5" class="intext">5. Аспиратор: простая проверка</a>
+                <ul>
+                    <li><a href="#5.1" class="intext">5.1. Реализация аспиратора</a>
+                    <li><a href="#5.2" class="intext">5.2. Проверка реальных систем</a>
+                    <li><a href="#5.3" class="intext">5.3. Опыт</a>
+                </ul>
+            <li class="toc_section"><a href="#6" class="intext">6. Сопутствующая работа</a>
+            <li class="toc_section"><a href="#7" class="intext">7 Conclusions</a>
+
+        </ul>
