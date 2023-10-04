@@ -393,6 +393,11 @@ a.proj_buttons:hover {
   max-width: 60em;
   text-align: left;
 }
+.our_framework_main {
+  margin: auto;
+  max-width: 100em;
+  text-align: left;
+}
 .img {
   padding: 1.5em;
   margin-left: auto;
