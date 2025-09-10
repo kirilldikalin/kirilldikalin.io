@@ -606,6 +606,8 @@ div.examples_text {
   right: 50px;
 }
 
+/* Removed arrow sizing override - let original images display naturally */
+
 @media screen and (max-width: 768px) {
   .buttonup, .buttondown {
     bottom: 10px;
@@ -625,7 +627,7 @@ img {
 
 .table-responsive {
   display: block;
-  width: 110%;
+  width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -673,3 +675,22 @@ svg:not(:root) {
     --colour-rule-light: var(--light, #ddd) var(--dark, #222);
 
 } */
+
+/* Глобальные стили для предотвращения проблем с длинными строками */
+.section_content {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Стили для элементов с длинными числами или текстом */
+p, div, span {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Специальные стили для моноширинных шрифтов */
+pre, code, .monospace {
+  word-break: break-all;
+  white-space: pre-wrap;
+}

@@ -168,3 +168,31 @@ th, td {
     border: 2px solid var(--color-border-variation-1);
     margin-right: 10px; 
 }
+
+/* Увеличенный размер для межстрочных (display) формул MathJax */
+mjx-container[display="true"],
+mjx-container[jax="CHTML"][display="true"] {
+  font-size: 1.5em !important;
+  line-height: 1.3;
+  margin: 1em 0;
+}
+
+/* Увеличение размера для блоковых формул MathML (на случай их использования) */
+math[display="block"],
+p > math:only-child {
+  font-size: 1.5em !important;
+  line-height: 1.3;
+}
+
+/* Немного увеличиваем inline-формулы (не display) для читабельности */
+mjx-container:not([display="true"]),
+mjx-container[jax="CHTML"]:not([display="true"]) {
+  font-size: 1.15em !important;
+  line-height: 1.15;
+}
+
+/* Inline MathML (без display="block") */
+math:not([display="block"]) {
+  font-size: 1.15em !important;
+  line-height: 1.15;
+}

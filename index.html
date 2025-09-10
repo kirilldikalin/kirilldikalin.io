@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Личные проекты, публикации и база знаний Кирилла Дикалина: переводы статей, решения задач Проекта Эйлера, тренировки памяти и другое.">
+    <meta property="og:title" content="Kirill Dikalin"/>
+    <meta property="og:description" content="Проекты, публикации и база знаний Кирилла Дикалина."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="/"/>
+    <link rel="canonical" href="/">
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="icon" href="./images/favicon.ico" type="image/x-icon">
-    <title> Kirill Dikalin </title>
+    <title>Kirill Dikalin</title>
+    <style>
+      p { line-height: 1.4em; }
+    </style>
   </head>
-</html>
-
-  <style>
-    p {
-      line-height: 1.4em;
-    }
-  </style>
-
   <body>
-
     <!-- <button id="colour-scheme-cycler" onclick="setColourScheme(nextColourScheme())">
       <svg aria-hidden="true" class="colour-scheme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
       <svg aria-hidden="true" class="colour-scheme-icon-when-dark"><use href="#svg-moon"></use></svg>
@@ -27,9 +27,10 @@
     <h1 style="padding-top: 1em;"> <span class="name"></span> </h1>
 
     <p style="text-align: center; width: 90%; padding-bottom: 1em;">
-      Руководитель направления аналитической инфраструктуры онлайн-продаж Альфа банка<br />
-      Автор и Ревьювер курса DE в Яндекс.Практикуме<br />
-      Ведущий вебинаров в онлайн школе OTUS
+      Руководитель направления аналитической инфраструктуры онлайн-продаж Альфа банка <br />
+      Автор и Ревьювер курса DE в Яндекс.Практикуме <br />
+      Преподаватель центра непрерывного образования ВШЭ <br />
+      Руководитель курса по System Design и ведущий вебинаров в онлайн школе OTUS
     </p>
 
     <div class="profile_link_container">
@@ -47,7 +48,7 @@
       </div>
     </div>
 
-    <div class="popup">
+    <div class="popup" role="dialog" aria-live="polite">
       Свяжитесь со мной и возможно вы его получите =)
     </div>
     
@@ -70,6 +71,14 @@
     <h1 style="padding-top: 1em;"> Проекты </h1>
       <div class="row">
         <div class="column_right" style="width: 97%; margin-top: 0.5em;">
+          <a href="./euler/euler.html" class="project"> Решения задач проекта Эйлера </a>
+          <p class="project_description" style="line-height: 1.4;">
+            Разбор самых сложных задач
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column_right" style="width: 97%; margin-top: 0.5em;">
           <a href="./translation_of_articles/translation_of_articles.html" class="project"> Перевод статей из кабанчика </a>
           <p class="project_description" style="line-height: 1.4;">
             Перевод статей упомянутых в книге "Высоко-нагруженные приложения. Программирование масштабирование поддержка"
@@ -81,14 +90,6 @@
           <a href="./knowlege_base/iKnowledge_base.html" class="project"> База знаний </a>
           <p class="project_description" style="line-height: 1.4;">
             Self made база знаний (В процессе переноса с гитхаба)
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="column_right" style="width: 97%; margin-top: 0.5em;">
-          <a href="./euler/euler.html" class="project"> Разбор решений заданий проекта Эйлера </a>
-          <p class="project_description" style="line-height: 1.4;">
-            Разбор самых сложных задач
           </p>
         </div>
       </div>
@@ -137,7 +138,7 @@
           </p>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="column_right" style="width: 97%; margin-top: 0.5em;">
           <a href="./japan/japan_main.html" class="project"> Япония </a>
           <p class="project_description" style="line-height: 1.4;">
@@ -152,7 +153,8 @@
             Свалка разных интересностей
           </p>
         </div>
-      </div>
+      </div> -->
 
   </body>
+</html>
 

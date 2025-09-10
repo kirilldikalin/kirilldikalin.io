@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 
 <head>
   <meta charset="utf-8">
   <title>Brain training - Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Последовательность Фибоначчи: запоминание чисел и проверка.">
+  <meta property="og:title" content="Последовательность Фибоначчи — тренировка памяти"/>
+  <meta property="og:description" content="Запоминайте числа Фибоначчи и проверяйте себя."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="/brain/pisano.html"/>
+  <link rel="canonical" href="/brain/pisano.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
@@ -15,9 +21,26 @@
     .result {
         font-size: 18px;
         margin-top: 10px;
+        word-wrap: break-word;
+        word-break: break-all;
+        overflow-wrap: break-word;
+        max-width: 100%;
     }
     .error {
         color: red;
+    }
+    
+    /* Обеспечиваем перенос длинных строк */
+    .section_content {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    
+    /* Адаптивность для мобильных устройств */
+    @media screen and (max-width: 768px) {
+      .result {
+        font-size: 16px;
+      }
     }
   </style>
 

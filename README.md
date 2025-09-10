@@ -11,8 +11,6 @@ Contains:
 <h2>General</h2>
 
 - [Memory training, such as memorizing the numbers after the decimal point in the number pi](https://kirilldikalin.github.io/kirilldikalin.io/brain/main_brain.html)
-- [My passion for Japan, history and language learning](https://kirilldikalin.github.io/kirilldikalin.io/japan/japan_main.html)
-- [Dump various interesting things, such as haiku in DE](https://kirilldikalin.github.io/kirilldikalin.io/random.html)
 
 <br><br>
 
@@ -27,5 +25,3 @@ Contains:
 <h2>Общее</h2>
 
 - [Тренировка памяти](https://kirilldikalin.github.io/kirilldikalin.io/brain/main_brain.html)
-- [Моё увлечение Японией](https://kirilldikalin.github.io/kirilldikalin.io/japan/japan_main.html)
-- [Свалка разных интересностей, например хокку про DE](https://kirilldikalin.github.io/kirilldikalin.io/random.html)
