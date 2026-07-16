@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 
 <head>
   <meta charset="utf-8">
   <title>A Conceptual Framework for System Fault Tolerance Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/translation_of_articles/part_1/chapter_1/CFSFT.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
@@ -22,7 +23,7 @@
     / 
     <a href="../../../translation_of_articles/translation_of_articles.html" class="project"> Перевод статей</a> 
     / 
-    <a class="bread_crumb" href="../chapter_1/Bibliography_1_1.html">Библиография, Глава 1, Часть 1</a> 
+    <a class="bread_crumb" href="../chapter_1/bibliography_1_1.html">Библиография, Глава 1, Часть 1</a>
     / 
     A Conceptual Framework for System Fault Tolerance
   </ul>
@@ -39,127 +40,32 @@
           <li class="toc_section"><a href="https://insights.sei.cmu.edu/documents/1068/1992_005_001_16112.pdf" class="intext">Оригинал статьи</a></li>
         </ul>
 
-        <h1 style="padding-top: 0.01em;">Оглавление</h1>
+        <p class="p_on_project_pages">
+          Перевод пока выполнен частично: опубликованы разделы 1–2.3.
+        </p>
+        <h1 style="padding-top: 0.01em;">Оглавление переведённой части</h1>
           <ul>
-            <li class="toc_section"><a href="#1" class="intext">1. Введение</a>
-            <ul>
-              <li><a href="#1.1" class="intext">1.1 Что такое система?</a>
-            </ul>
+            <li class="toc_section"><a href="#1" class="intext">1. Введение</a></li>
+            <li class="toc_section"><a href="#1.1" class="intext">1.1 Что такое система?</a></li>
             <li class="toc_section"><a href="#2" class="intext">2. Требования</a>
-            <ul>
-              <li><a href="#2.1" class="intext">2.1 Надежные системы</a>
-              <li><a href="#2.2" class="intext">2.2 Подходы к обеспечению надежности</a>
               <ul>
-                <li><a href="#2.2.1" class="intext">2.2.1 Предотвращение ошибок</a>
-                <li><a href="#2.2.2" class="intext">2.2.2 Устранение неисправности</a>
-                <li><a href="#2.2.3" class="intext">2.2.3 Отказоустойчивость</a>
-                <li><a href="#2.2.4" class="intext">2.2.4 Предотвращение ошибок</a>
-              </ul>
-              <li><a href="#2.3" class="intext">2.3 Характеристики надежности</a>
-              <ul>
-                <li><a href="#2.3.1" class="intext">2.3.1 Количественные цели</a>
-                <li><a href="#2.3.2" class="intext">2.3.2 Качественные цели</a>
-              </ul>        
-            </ul>
-            <li class="toc_section"><a href="#3" class="intext">3. Концепции отказоустойчивости с примерами</a>
-              <ul>
-                <li><a href="#3.1" class="intext">3.1 Введение</a>
-                <li><a href="#3.2" class="intext">3.2 Неисправности и отказы</a>
-                <ul>
-                  <li><a href="#3.2.1" class="intext">3.2.1 Определения</a>
+                <li><a href="#2.1" class="intext">2.1 Надёжные системы</a></li>
+                <li><a href="#2.2" class="intext">2.2 Подходы к обеспечению надёжности</a>
                   <ul>
-                    <li><a href="#3.2.1.1" class="intext">3.2.1.1 Определение концепции</a>   
-                    <li><a href="#3.2.1.2" class="intext">3.2.1.2 Пример моста</a>
-                    <li><a href="#3.2.1.3" class="intext">3.2.1.3 Пример компьютерной системы</a>                                              
+                    <li><a href="#2.2.1" class="intext">2.2.1 Предотвращение ошибок</a></li>
+                    <li><a href="#2.2.2" class="intext">2.2.2 Устранение неисправностей</a></li>
+                    <li><a href="#2.2.3" class="intext">2.2.3 Отказоустойчивость</a></li>
+                    <li><a href="#2.2.4" class="intext">2.2.4 Уклонение от ошибок</a></li>
                   </ul>
-                </ul>   
-                <li><a href="#3.3" class="intext">3.3 Отношения зависимости</a>
-                <ul>
-                  <li><a href="#3.3.1" class="intext">3.3.1 Определения</a>
-                    <ul>
-                      <li><a href="#3.3.1.1" class="intext">3.3.1.1 Определение концепции</a>
-                      <li><a href="#3.3.1.2" class="intext">3.3.1.2 Пример моста</a>
-                      <li><a href="#3.3.1.3" class="intext">3.3.1.3 Пример компьютерной системы</a>                        
-                    </ul>
-                  <li><a href="#3.3.2" class="intext">3.3.2 Области отказа</a>
-                    <ul>
-                      <li><a href="#3.3.2.1" class="intext">3.3.1.1 Определение концепции</a>
-                      <li><a href="#3.3.2.2" class="intext">3.3.1.2 Пример моста</a>
-                      <li><a href="#3.3.2.3" class="intext">3.3.1.3 Пример компьютерной системы</a>                        
-                    </ul>
-                </ul>                  
-                <li><a href="#3.4" class="intext">3.4 Классы неисправностей</a>
+                </li>
+                <li><a href="#2.3" class="intext">2.3 Характеристики надёжности</a>
                   <ul>
-                    <li><a href="#3.4.1" class="intext">3.4.1 Местоположение</a>
-                      <ul>
-                        <li><a href="#3.4.1.1" class="intext">3.4.1.1 Неисправности атомарных компонентов</a>
-                        <li><a href="#3.4.1.2" class="intext">3.4.1.2 Неисправности составных компонентов</a>
-                        <li><a href="#3.4.1.3" class="intext">3.4.1.3 Неисправности системного уровня</a> 
-                        <li><a href="#3.4.1.4" class="intext">3.4.1.4 Внешние неисправности</a> 
-                      </ul>
-                    <li><a href="#3.4.2" class="intext">3.4.2 Эффекты</a>
-                      <ul>
-                        <li><a href="#3.4.2.1" class="intext">3.4.2.1 Ошибки значений</a>
-                        <li><a href="#3.4.2.2" class="intext">3.4.2.2 Сбои синхронизации</a>
-                      </ul>
-                    <li><a href="#3.4.3" class="intext">3.4.3 Продолжительность</a>
-                    <li><a href="#3.4.4" class="intext">3.4.4 Непосредственная причина</a>
-                    <li><a href="#3.4.5" class="intext">3.4.5 Основная причина</a>
+                    <li><a href="#2.3.1" class="intext">2.3.1 Количественные цели</a></li>
+                    <li><a href="#2.3.2" class="intext">2.3.2 Качественные цели</a></li>
                   </ul>
-                <li><a href="#3.5" class="intext">3.5 Другие атрибуты отказа</a>
-                  <ul>
-                    <li><a href="#3.5.1" class="intext">3.5.1 Наблюдаемость</a>
-                      <ul>
-                        <li><a href="#3.5.1.1" class="intext">3.5.1.1 Определение концепции</a>
-                        <li><a href="#3.5.1.2" class="intext">3.5.1.2 Пример моста</a>
-                        <li><a href="#3.5.1.3" class="intext">3.5.1.3 Пример компьютерной системы</a> 
-                      </ul>
-                    <li><a href="#3.5.2" class="intext">3.5.2 Распространение</a>
-                      <ul>
-                        <li><a href="#3.5.2.1" class="intext">3.5.2.1 Определение концепции</a>
-                        <li><a href="#3.5.2.2" class="intext">3.5.2.2 Пример моста</a>
-                        <li><a href="#3.5.2.3" class="intext">3.5.2.3 Пример компьютерной системы</a> 
-                      </ul>
-                  </ul>
+                </li>
               </ul>
             </li>
-            <li class="toc_section"><a href="#5" class="intext">4. Механизмы отказоустойчивости</a>
-              <ul>
-                <li><a href="#4.1" class="intext">4.1 Характеристики, уникальные для цифровых компьютерных систем</a>
-                <li><a href="#4.2" class="intext">4.2 Управление резервированием</a>
-                  <ul>
-                    <li><a href="#4.2.1" class="intext">4.2.1 Резервирование пространства</a>
-                    <li><a href="#4.2.2" class="intext">4.2.2 Временная избыточность</a>
-                    <li><a href="#4.2.3" class="intext">4.2.3 Часы</a>
-                    <li><a href="#4.2.4" class="intext">4.2.4 Области локализации неисправностей</a> 
-                    <li><a href="#4.2.5" class="intext">4.2.5 Общие отказы</a> 
-                    <li><a href="#4.2.6" class="intext">4.2.6 Encoding</a> 
-                  </ul>
-                <li><a href="#4.3" class="intext">4.3 Методы приемочных испытаний</a>
-                  <ul>
-                    <li><a href="#4.3.1" class="intext">4.3.1 Обнаружение неисправностей</a>
-                    <li><a href="#4.3.2" class="intext">4.3.2 Диагностика неисправностей</a>
-                    <li><a href="#4.3.3" class="intext">4.3.3 Сдерживание неисправностей</a>
-                    <li><a href="#4.3.4" class="intext">4.3.4 Маскирование неисправностей</a> 
-                    <li><a href="#4.3.5" class="intext">4.3.5 Компенсация неисправностей</a> 
-                    <li><a href="#4.3.6" class="intext">4.3.6 Ремонт неисправностей</a> 
-                  </ul>                  
-                <li><a href="#4.4" class="intext">4.4 Методы сравнения</a>
-                  <ul>
-                    <li><a href="#4.4.1" class="intext">4.3.1 Обнаружение неисправностей</a>
-                    <li><a href="#4.4.2" class="intext">4.3.2 Диагностика неисправностей</a>
-                      <ul>
-                        <li><a href="#4.4.2.1" class="intext">4.4.2.1 Вопросы голосования</a>
-                      </ul>
-                    <li><a href="#4.4.3" class="intext">4.3.3 Сдерживание неисправностей</a>
-                    <li><a href="#4.4.4" class="intext">4.3.4 Маскирование неисправностей</a> 
-                    <li><a href="#4.4.5" class="intext">4.3.5 Компенсация неисправностей</a> 
-                    <li><a href="#4.4.6" class="intext">4.3.6 Ремонт неисправностей</a> 
-                  </ul>                       
-                <li><a href="#4.5" class="intext">4.5 Разнообразие</a>
-              </ul>
-            </li>
-            <li class="toc_section"><a href="#5" class="intext">5 Собираем все вместе</a></li>         
           </ul>
         </div>
       </div>
@@ -191,7 +97,7 @@
         В заключительном разделе вновь рассматриваются ключевые концепции статьи и предлагаются некоторые правила 
         проектирования отказоустойчивых систем.
       </p>
-      <p align="justify" class="p_on_project_pages">
+      <p id="1.1" align="justify" class="p_on_project_pages">
         Что такое система?
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -209,10 +115,10 @@
         системные функции, включая восстановление после сбоя, могут требовать действий оператора. На рисунке не показаны, 
         но одинаково важны проектировщики и сопровождающие системы.
       </p>
-      <div class="section_name">
+      <div id="2" class="section_name">
         2. Требования
       </div>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.1" align="justify" class="subsubsection_name">
         2.1 Надежные системы
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -227,7 +133,7 @@
         система также недоступна (по крайней мере, когда она работает неправильно). Защищенная система, которая не допускает 
         санкционированного доступа, также недоступна. Ненадежная система управления ядерными реакторами, вероятно, также небезопасна.
       </p>
-      <p align="justify" class="subsection_name">
+      <p id="2.2" align="justify" class="subsection_name">
         2.2 Подходы к обеспечению надежности
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -236,7 +142,7 @@
         системы с помощью методов предотвращения сбоев. Во время внедрения мы можем повысить надежность системы с помощью методов 
         устранения неисправностей. Во время выполнения требуется отказоустойчивость и методы уклонения от ошибок.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.2.1" align="justify" class="subsubsection_name">
         2.2.1 Предотвращение ошибок
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -244,7 +150,7 @@
         появление ошибок. Устраненная неисправность – это неисправность, которую не нужно устранять позднее. Используемые методы включают 
         методологии проектирования, методологии проверки и проверки, моделирование, а также проверки и обходы кода.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.2.2" align="justify" class="subsubsection_name">
         2.2.2 Устранение неисправности
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -252,7 +158,7 @@
         изменения в систему. Диапазон методов, используемых для устранения ошибок, включает модульное тестирование, интеграционное 
         тестирование, регрессионное тестирование и последовательное тестирование. Как правило, устранить неисправность намного дороже, чем избежать ее.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.2.3" align="justify" class="subsubsection_name">
         2.2.3 Отказоустойчивость
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -261,7 +167,7 @@
         этих сбоев. Чтобы система была отказоустойчивой, она должна быть способна обнаруживать, диагностировать, ограничивать, маскировать, 
         компенсировать и восстанавливаться после сбоев. Эти концепции будут подробно обсуждаться в 4 разделе этой статьи.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.2.4" align="justify" class="subsubsection_name">
         2.2.4 Уклонение от ошибок
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -275,13 +181,13 @@
         даже если общая производительность формально укладывается в спецификации.
       </p>
 
-      <p align="justify" class="subsection_name">
+      <p id="2.3" align="justify" class="subsection_name">
         2.3 Характеристики надежности
       </p>
       <p align="justify" class="p_on_project_pages">
         Уровень отказоустойчивости системы может быть задан количественно или качественно.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.3.1" align="justify" class="subsubsection_name">
         2.3.1 Количественные цели
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -292,7 +198,7 @@
         не даёт возможности с достаточной уверенностью подтвердить соответствие системы столь жёсткой цели. Тем не менее, требования в таком 
         виде встречаются достаточно часто.
       </p>
-      <p align="justify" class="subsubsection_name">
+      <p id="2.3.2" align="justify" class="subsubsection_name">
         2.3.2 Качественные цели
       </p>
       <p align="justify" class="p_on_project_pages">
@@ -320,4 +226,5 @@
 
       <script src="../../../scripts/scrollToTop.js"></script>
 
-</body>    
+</body>
+</html>
