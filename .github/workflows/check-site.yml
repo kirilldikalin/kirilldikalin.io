@@ -1,0 +1,32 @@
+name: Check site
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check public links and anchors
+        run: python3 scripts/check_site.py
+
+      - name: Check JavaScript syntax
+        run: find . -path ./.git -prune -o -name '*.js' -print0 | xargs -0 -n1 node --check

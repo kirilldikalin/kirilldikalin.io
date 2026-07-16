@@ -42,3 +42,14 @@ Yandex developer dashboard:
 2. Use a separate key for local development if local map testing is required.
 3. Configure usage limits and notifications.
 4. Rotate the current key if its restriction history is unknown.
+
+## Validation
+
+Run the public page, link, and anchor check locally:
+
+```shell
+python3 scripts/check_site.py
+```
+
+GitHub Actions runs the same check and validates JavaScript syntax on pushes to `master` and
+`develop`, and on pull requests.

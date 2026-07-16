@@ -1,4 +1,5 @@
-#toc_container {
+#toc_container,
+.toc_container {
     padding: 1em;
 }
 
@@ -19,7 +20,12 @@ a.intext {
     padding-bottom: 0em;
 }
 
-#toc_container li, #toc_container ul, #toc_container ul li {
+#toc_container li,
+#toc_container ul,
+#toc_container ul li,
+.toc_container li,
+.toc_container ul,
+.toc_container ul li {
     list-style: outside none none !important;
 }
 
