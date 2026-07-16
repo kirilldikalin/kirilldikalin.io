@@ -23,6 +23,7 @@ PUBLIC_PAGES = (
     "euler/786.html",
     "euler/792.html",
     "euler/798.html",
+    "euler/1003.html",
     "knowlege_base/iKnowledge_base.html",
     "translation_of_articles/translation_of_articles.html",
     "translation_of_articles/part_1/chapter_1/CFSFT.html",
