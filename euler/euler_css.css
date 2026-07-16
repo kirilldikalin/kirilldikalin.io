@@ -19,8 +19,29 @@ a.intext {
     padding-bottom: 0em;
 }
 
-#toc_container li, #toc_container ul, #toc_container ul li {
+.euler_toc li,
+.euler_toc ul,
+.euler_toc ul li {
     list-style: outside none none !important;
+}
+
+.euler_article ul,
+.euler_article ol {
+    padding-left: 2.5em;
+}
+
+.euler_article ul {
+    list-style: disc outside;
+}
+
+.euler_article ol {
+    list-style: decimal outside;
+}
+
+.euler_article li {
+    display: list-item;
+    margin-bottom: 0.35em;
+    text-align: justify;
 }
 
 code {
