@@ -120,7 +120,7 @@
 
       <div>
         <label for="input-field">Продолжай... 3,</label>
-        <input type="text" id="input-field">
+        <input type="text" id="input-field" inputmode="numeric" autocomplete="off">
       </div>
     </div>
   </div>
@@ -168,16 +168,6 @@
       return groups.join(' ');
     }
 
-    function formatDigitsWithSpans(digitsString, inputString) {
-      // Форматируем с пробелами, но сохраняем цветовую разметку
-      const groups = [];
-      for (let i = 0; i < digitsString.length; i += 10) {
-        const group = digitsString.slice(i, i + 10);
-        groups.push(group);
-      }
-      return groups.join(' ');
-    }
-
     function displayDigits() {
       if (digitsHidden) {
         digits.innerHTML = '<span class="hidden-digits">[Цифры скрыты]</span>';
@@ -213,6 +203,7 @@
       lastError = false;
       inputField.value = '';
       inputField.disabled = false;
+      inputField.maxLength = PI.length;
       inputField.style.width = '50px';
       displayDigits();
       updateProgress();
@@ -227,7 +218,7 @@
     // Обработчики событий
     difficultyInputs.forEach(input => {
       input.addEventListener('change', function() {
-        setDifficulty(parseInt(this.value));
+        setDifficulty(parseInt(this.value, 10));
       });
     });
 
@@ -239,38 +230,31 @@
 
     restartBtn.addEventListener('click', restart);
 
-    inputField.addEventListener('input', function(event) {
+    inputField.addEventListener('input', function() {
       if (gameCompleted) return;
-      
-      const value = event.data;
-      const correctDigit = PI[currentIndex];
-
-      if (isNaN(parseInt(value, 10)) || value !== correctDigit) {
-        const inputString = inputField.value.slice(0, -1);
-        inputField.value = inputString;
-        lastError = true;
-        if (!digitsHidden) {
-          const correctPart = `<span style="color: green">${inputString}</span>`;
-          const wrongPart = `<span style="color: red">${correctDigit}</span>`;
-          const restPart = PI.slice(inputString.length + 1);
-          const outputString = `${correctPart}${wrongPart}${restPart}`;
-          digits.innerHTML = outputString;
-        }
-        return;
-      }
 
       const inputString = inputField.value;
-      lastError = false; // Сбрасываем флаг ошибки при правильном вводе
-      if (!digitsHidden) {
-        const correctPart = `<span style="color: green">${inputString}</span>`;
-        const restPart = PI.slice(inputString.length);
-        const outputString = `${correctPart}${restPart}`;
-        digits.innerHTML = outputString;
-      }
-      // Если цифры скрыты, ничего не показываем, но состояние сохраняется
+      let validLength = 0;
 
-      currentIndex++;
-      updateProgress();
+      while (
+        validLength < inputString.length &&
+        inputString[validLength] === PI[validLength]
+      ) {
+        validLength++;
+      }
+
+      if (validLength !== inputString.length) {
+        inputField.value = inputString.slice(0, validLength);
+        currentIndex = validLength;
+        lastError = true;
+        displayDigits();
+        updateProgress();
+      } else {
+        currentIndex = inputString.length;
+        lastError = false;
+        displayDigits();
+        updateProgress();
+      }
 
       if (currentIndex === PI.length) {
         alert(`Поздравляем! Вы ввели первые ${PI.length} знаков числа Пи после запятой.`);
@@ -284,12 +268,13 @@
       span.style.fontFamily = window.getComputedStyle(inputField).fontFamily;
       span.textContent = inputField.value;
       document.body.appendChild(span);
-      const inputWidth = span.offsetWidth + 2;
+      const inputWidth = Math.max(span.offsetWidth + 2, 50);
       document.body.removeChild(span);
       inputField.style.width = inputWidth + 'px';
     });
 
     // Инициализация
+    inputField.maxLength = PI.length;
     updateProgress();
     inputField.focus();
   </script>

@@ -52,7 +52,7 @@
       / 
       <a class="bread_crumb" href="../brain/main_brain.html">brain</a>
       /
-      fibbonachi
+      fibonacci
     </ul>
 
   <h1>Последовательность Фибоначчи</h1>
@@ -109,46 +109,58 @@
       
       <h1>Проверка чисел</h1>
       <p>Введите число из последовательности и нажмите Enter:</p>
-      <input type="text" id="inputNumber" autofocus>
+      <input type="text" id="inputNumber" inputmode="numeric" autocomplete="off" autofocus>
       <div class="result" id="result"></div>
+      <div class="result" id="feedback" aria-live="polite"></div>
       
       <script>
-          var numbers = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711];
-          var currentIndex = 0;
-          var resultDiv = document.getElementById("result");
+          const numbers = [0, 1];
+          while (numbers.length <= 40) {
+              numbers.push(numbers[numbers.length - 1] + numbers[numbers.length - 2]);
+          }
+
+          let currentIndex = 0;
+          const input = document.getElementById("inputNumber");
+          const resultDiv = document.getElementById("result");
+          const feedbackDiv = document.getElementById("feedback");
       
           function checkNumber() {
-              var inputNumber = document.getElementById("inputNumber").value;
-              var lastNumber = numbers[currentIndex];
-      
-              if (inputNumber.length > 0 && !isNaN(inputNumber)) {
-                  if (inputNumber == lastNumber) {
-                      resultDiv.innerHTML += "<span class='error'></span>" + lastNumber + ", ";
-                      currentIndex++;
-                  } else {
-                      resultDiv.innerHTML = resultDiv.innerHTML.replace("<span class='error'></span>" + lastNumber, "<span class='error'></span>" + inputNumber);
-                      numbers[currentIndex] = Number(inputNumber);
-                  }
-                  document.getElementById("inputNumber").value = "";
+              const inputNumber = input.value.trim();
+
+              if (!/^\d+$/.test(inputNumber)) {
+                  feedbackDiv.textContent = "Введите целое неотрицательное число.";
+                  feedbackDiv.classList.add("error");
+                  return;
               }
-      
-              if (currentIndex == numbers.length) {
-                  resultDiv.textContent = resultDiv.textContent.slice(0, -2);
-                  document.getElementById("inputNumber").disabled = true;
+
+              if (Number(inputNumber) !== numbers[currentIndex]) {
+                  feedbackDiv.textContent = "Неверно, попробуйте ещё раз.";
+                  feedbackDiv.classList.add("error");
+                  input.select();
+                  return;
+              }
+
+              const separator = currentIndex === numbers.length - 1 ? "" : ", ";
+              resultDiv.textContent += numbers[currentIndex] + separator;
+              currentIndex++;
+              input.value = "";
+              feedbackDiv.textContent = "Верно.";
+              feedbackDiv.classList.remove("error");
+
+              if (currentIndex === numbers.length) {
+                  feedbackDiv.textContent = "Готово: последовательность до F(40) введена без ошибок.";
+                  input.disabled = true;
               }
           }
       
-          document.getElementById("inputNumber").addEventListener("keydown", function(event) {
-              if (event.keyCode === 13) {
+          input.addEventListener("keydown", function(event) {
+              if (event.key === "Enter") {
                   checkNumber();
               }
           });
       </script>
-      
-  
-
-      </head>
     </div>
   </div>
   
 </body>
+</html>
