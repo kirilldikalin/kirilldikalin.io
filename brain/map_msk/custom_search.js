@@ -1,8 +1,12 @@
 function init() {
     var myMap;
+    var toggleButton = document.getElementById('toggle');
 
-    $('#toggle').bind({
-        click: function () {
+    if (!toggleButton) {
+        return;
+    }
+
+    toggleButton.addEventListener('click', function () {
             if (!myMap) {
                 myMap = new ymaps.Map('map', {
                     center: [55.754264, 37.623629],
@@ -15,11 +19,10 @@ function init() {
                         [55.724256, 37.533087],
                         [55.786955, 37.694363]
                     ]
-                }),
-                // Создаем коллекцию.
-                myCollection = new ymaps.GeoObjectCollection(),
+                });
+
                 // Создаем массив с данными.
-                myPoints = [
+                var myPoints = [
                 { coords: [55.760152, 37.649001], text: 'улица Покровка' },
                 { coords: [55.769428, 37.595303], text: 'Триумфальная площадь' },
                 { coords: [55.771388, 37.601034], text: 'Садовая-Триумфальная улица' },
@@ -57,18 +60,7 @@ function init() {
                 { coords: [55.758762, 37.582924], text: 'Кудринская площадь' },
                 { coords: [55.758762, 37.582924], text: 'Садовая-Кудринская улица' },
                 { coords: [55.767423, 37.593048], text: 'Большая Садовая улица' }
-                ], {
-                    searchControlProvider: 'yandex#search'
-                };
-                // Заполняем коллекцию данными.
-                for (var i = 0, l = myPoints.length; i < l; i++) {
-                    var point = myPoints[i];
-                    myCollection.add(new ymaps.Placemark(
-                        point.coords, {
-                            balloonContentBody: point.text
-                        }
-                    ));
-                }
+                ];
 
                 // Создаем экземпляр класса ymaps.control.SearchControl
                 var mySearchControl = new ymaps.control.SearchControl({
@@ -83,14 +75,13 @@ function init() {
                 myMap.controls
                     .add(mySearchControl, { float: 'right' });
 
-                $("#toggle").attr('value', 'Скрыть карту');
+                toggleButton.value = 'Скрыть карту';
             }
             else {
                 myMap.destroy();// Деструктор карты
                 myMap = null;
-                $("#toggle").attr('value', 'Показать карту снова');
+                toggleButton.value = 'Показать карту снова';
             }
-        }
     });
 }
 

@@ -25,3 +25,20 @@ Contains:
 <h2>Общее</h2>
 
 - [Тренировка памяти](https://kirilldikalin.github.io/kirilldikalin.io/brain/main_brain.html)
+
+## Browser dependencies
+
+- Highlight.js is loaded only by the knowledge base, where it highlights Python code examples.
+- MathJax is loaded only by Euler pages that contain TeX formulas.
+- The Moscow streets trainer uses the Yandex Maps browser API without jQuery.
+
+## Yandex Maps API key
+
+The browser must receive the Yandex Maps API key, so moving it to another JavaScript file or an
+environment variable would not make it secret on GitHub Pages. Protect the production key in the
+Yandex developer dashboard:
+
+1. Allow requests only from `kirilldikalin.github.io`.
+2. Use a separate key for local development if local map testing is required.
+3. Configure usage limits and notifications.
+4. Rotate the current key if its restriction history is unknown.
