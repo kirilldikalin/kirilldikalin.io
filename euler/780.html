@@ -3,122 +3,601 @@
 
 <head>
   <meta charset="utf-8">
-  <title>projecteuler solutions - Kirill Dikalin</title>
+  <title>780. Ториангуляции — Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 780: полосы на торе, подсчёт обходов, тройной подсчёт и целые Эйзенштейна.">
+  <meta property="og:title" content="780. Ториангуляции — Kirill Dikalin"/>
+  <meta property="og:description" content="Живой разбор Project Euler 780: от геометрического тупика до арифметической формулы."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/780.html"/>
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/780.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <ul class="breadcrumb">
-      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
-      / 
-      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
-      / 
-      780
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    780
   </ul>
 
   <div class="our_framework">
     <div class="section_content">
       <div id="toc_container" class="euler_article">
-            
         <h2 id="780">Ториангуляции</h2>
 
-          <p align="justify" class="p_on_project_pages">
-            Для положительных вещественных чисел
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>,</mo><mi>b</mi></math>
-            ,тор
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>&#xd7;</mo><mi>b</mi></math>
-            это прямоугольник шириной 
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi></math>
-            и высотой
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>b</mi><mo>,</mo></math>
-            чьи левая и правая сторона идентичны, равно как и верхняя и нижняя сторона. 
-            Другими словами, при прочерчивании пути на прямоугольнике, достигнув края 
-            прямоугольника путь "оборачивается вокруг" и продолжается из соответствующей 
-            точки на противоположной стороне.
-          </p>
+        <h3>Условие задачи</h3>
 
-          <p align="justify" class="p_on_project_pages">
-            Выкладывание плиткой тора - это способ разбить его на равносторонние треугольники 
-            с длиной стороны 1. Например, следующие три изображения показывают соответственно тор
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1</mn><mo>&#xd7;</mo><mfrac><msqrt><mn>3</mn></msqrt><mn>2</mn></mfrac></math>
-            с двумя треугольниками, тор
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><msqrt><mn>3</mn></msqrt><mo>&#xd7;</mo><mn>1</mn></math>
-            с четырьмя треугольниками и тор примерно 
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2.8432</mn><mo>&#xd7;</mo><mn>2.1322</mn></math>
-            с 14 треугольниками:
-          </p>
+        <p align="justify" class="p_on_project_pages">
+          Название Toriangulations склеено из слов <em>torus</em> и <em>triangulations</em>.
+          Берётся прямоугольник $a\times b$, его противоположные стороны склеиваются, и получившийся тор нужно
+          замостить единичными равносторонними треугольниками. Два замощения считаются эквивалентными,
+          если одно можно непрерывно превратить в другое без разрывов и наложений.
+        </p>
 
-          <p align="justify" class="p_on_project_pages">
-            <div style="text-align:center; display: flex; justify-content: center;"> 
-                <img src="https://projecteuler.net/project/images/p780_sample-small-1.png" 
-                    class="dark_img" alt="" height="160"> 
-                <img src="https://projecteuler.net/project/images/p780_sample-small-2.png" 
-                    class="dark_img" alt="" height="160"> 
-                <img src="https://projecteuler.net/project/images/p780_sample-small-3.png" 
-                    class="dark_img" alt="" height="160"> 
-            </div>
-          </p>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1em; padding-bottom:2em;">
+          <img src="https://projecteuler.net/project/images/p780_sample-small-1.png"
+               alt="Тор с замощением из двух треугольников" loading="lazy" style="max-width:100%; height:auto;">
+          <img src="https://projecteuler.net/project/images/p780_sample-small-2.png"
+               alt="Тор с замощением из четырёх треугольников" loading="lazy" style="max-width:100%; height:auto;">
+          <img src="https://projecteuler.net/project/images/p780_sample-small-3.png"
+               alt="Тор с замощением из четырнадцати треугольников" loading="lazy" style="max-width:100%; height:auto;">
+        </div>
 
-          <p align="justify" class="p_on_project_pages">
-            Для тора
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>a</mi><mo>&#xd7;</mo><mi>b</mi></math>
-            два выкладывания плиткой называются эквивалентными, если возможно получить 
-            одно выкладывание из другого путем непрерывного перемещения всех треугольников 
-            так, чтобы ни в какой момент перемещения между ними не образовывалось пустот 
-            и никакие треугольники не перекрывались. Например, анимация ниже демонстрирует 
-            эквивалентность двух выкладываний:
-          </p>
-          
-          <p align="justify" class="p_on_project_pages">
-            <div style="text-align:center; display: flex; justify-content: center;"> 
-                <img src="https://projecteuler.net/project/images/p780_animation.gif" 
-                class="dark_img" alt="" height="160"> 
-            </div>
-          </p>
+        <p align="justify" class="p_on_project_pages">
+          Пусть $F(n)$ — число классов замощений всех возможных торов ровно $n$ треугольниками, а
+        </p>
 
-          <p align="justify" class="p_on_project_pages">
-            Пусть
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>F</mi><mo>(</mo><mi>n</mi><mo>)</mo></math>
-            будет общим количеством неэквивалентных выкладываний плиткой для всех возможных торов с ровно
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>n</mi></math>
-            треугольниками. Например,
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>F</mi><mo>(</mo><mn>6</mn><mo>)</mo><mo>=</mo><mn>8</mn></math>
-            с показанными ниже восемью неэквивалентными выкладываниями для торов с шестью треугольниками:
-          </p>
+        <p align="center">
+          $$G(N)=\sum_{n=1}^{N}F(n).$$
+        </p>
 
-          <p align="justify" class="p_on_project_pages">
-            <div style="text-align:center; display: flex; justify-content: center;"> 
-                <img src="https://projecteuler.net/project/images/p780_t6-all.png" 
-                class="dark_img_big" alt=""> 
-            </div>
-          </p>
+        <p align="justify" class="p_on_project_pages">
+          Известно, что $G(6)=14$, $G(100)=8090$ и
+          $G(10^5)\equiv645124048\pmod{1\,000\,000\,007}$.
+          Требуется найти $G(10^9)$ по тому же модулю.
+          Полное условие и исходные иллюстрации находятся на
+          <a class="intext" href="https://projecteuler.net/problem=780" target="_blank" rel="noopener noreferrer">странице Project Euler 780</a>.
+        </p>
 
-          <p align="justify" class="p_on_project_pages">
-            Пусть
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mi>N</mi><mo>)</mo><mo>=</mo><munderover accent='false' accentunder='false'><mo>&#x2211;</mo><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mi>F</mi><mo>(</mo><mi>N</mi><mo>)</mo></math>
-            . Известно, что
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mn>6</mn><mo>)</mo><mo>=</mo><mn>14</mn></math>
-            ,
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><mn>100</mn><mo>)</mo><mo>=</mo><mn>8090</mn></math>
-            и
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><msup><mn>10</mn><mn>5</mn></msup><mo>)</mo><mo>&#x2261;</mo><mn>645124048</mn><mo>&#xA0;</mo><mo>(</mo><mi>m</mi><mi>o</mi><mi>d</mi><mo>&#xA0;</mo><mn>1</mn><mi>
-              </mi><mn>000</mn><mi>
-              </mi><mn>000</mn><mi>
-              </mi><mn>007</mn><mo>)</mo></math>
-          </p>
+        <div style="text-align:center; padding-bottom:2em;">
+          <img src="https://projecteuler.net/project/images/p780_animation.gif"
+               alt="Анимация непрерывного перехода между эквивалентными замощениями"
+               loading="lazy" style="max-width:100%; height:auto;">
+        </div>
 
-          <p align="justify" class="p_on_project_pages">
-            Найдите
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>G</mi><mo>(</mo><msup><mn>10</mn><mn>9</mn></msup><mo>)</mo></math>
-            . В качестве ответа приведите остаток от деления полученного результата на
-              <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>1000000007</mn></math>
-            .
-          </p>
+        <h3>Почему я на этой задаче застрял</h3>
 
-        <h2>Решение</h2>
+        <p align="justify" class="p_on_project_pages">
+          Сначала условие провоцирует рисовать треугольники и пытаться понять, какие картинки можно непрерывно
+          деформировать друг в друга. Это почти сразу превращается в болото: размеры тора вещественные,
+          прямоугольник склеен по двум направлениям, а один и тот же рисунок можно разрезать в разных местах.
+          Я долго пытался найти инвариант непосредственно у рисунка, но такой взгляд только умножал частные случаи.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В итоге задача распалась для меня на три отдельных препятствия:
+        </p>
+
+        <ol>
+          <li>понять, какую форму вообще может иметь любое замощение;</li>
+          <li>закодировать эту форму целыми числами, несмотря на вещественные размеры тора;</li>
+          <li>найти и исправить замощения, которые один и тот же подсчёт видит несколько раз.</li>
+        </ol>
+
+        <p align="justify" class="p_on_project_pages">
+          Первая действительно полезная зацепка нашлась в
+          <a class="intext" href="https://projecteuler.net/thread=780" target="_blank" rel="noopener noreferrer">обсуждении решивших задачу</a>:
+          ecnerwala предложил перестать классифицировать картинки и считать направления полос.
+          После этого геометрия наконец начала сжиматься до арифметики.
+        </p>
+
+        <h3>Первая рабочая идея: развернуть тор</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Возьмём прямоугольник тора и приклеим к нему бесконечно много копий по горизонтали и вертикали.
+          Замощение продолжится до замощения всей плоскости единичными равносторонними треугольниками.
+          Высота такого треугольника равна
+        </p>
+
+        <p align="center">
+          $$h=\frac{\sqrt3}{2}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В плоскости треугольники неизбежно собираются в бесконечные параллельные полосы ширины $h$.
+          Внутри каждой полосы ориентации чередуются: вверх, вниз, вверх, вниз.
+          Причина локальная: каждая сторона должна полностью совпасть со стороной соседа, а в каждой вершине
+          сходятся шесть углов по $60^\circ$. Продолжив один ряд через общие стороны, мы получаем полосу постоянной
+          ширины; её граница вынуждает соседний ряд быть параллельным.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Это был главный перелом. Вместо огромного зоопарка триангуляций остались замкнутые полосы.
+          Из чередования ориентаций сразу следует, что число треугольников $n$ обязательно чётно.
+          Но здесь же спрятана будущая проблема:
+        </p>
+
+        <ul>
+          <li>у обычного сдвинутого замощения направление полос единственно;</li>
+          <li>у регулярной треугольной решётки полосы можно провести в трёх направлениях.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Второй пункт я сначала недооценил. Именно он позже испортил первую почти готовую формулу.
+        </p>
+
+        <h3>Как одна полоса обходит тор</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Чтобы не путать размеры прямоугольника с параметрами обхода, обозначим стороны тора через $u$ и $v$.
+          За один полный оборот полоса проходит $a$ горизонтальных и $b$ вертикальных периодов.
+          На развёртке её направляющий вектор равен
+        </p>
+
+        <p align="center">
+          $$(au,bv),$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где можно считать $a&gt;0$, $b\geq0$ и $\gcd(a,b)=1$.
+          Взаимная простота здесь не украшение: без неё мы несколько раз описывали бы один более короткий обход.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть после склейки получилось $k$ параллельных полос. В каждой полосе находится
+        </p>
+
+        <p align="center">
+          $$\frac{n}{2k}$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          пар треугольников, поэтому $k\mid n/2$, а длина замкнутого обхода равна $n/(2k)$.
+          Теперь геометрия даёт два уравнения. Первое — по площади:
+        </p>
+
+        <p align="center">
+          $$uv=\frac{\sqrt3}{4}n.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Второе — по длине направляющего вектора:
+        </p>
+
+        <p align="center">
+          $$(au)^2+(bv)^2=\left(\frac{n}{2k}\right)^2.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Сначала я воспринимал эти равенства только как необходимые проверки. Оказалось, что они ещё и достаточны:
+          суммарная длина всех полос равна $n/2$, а отношение площади тора к этой длине равно
+          $\sqrt3/2$ — ровно ширине одной полосы. Значит, подходящими полосами действительно можно заполнить весь тор.
+        </p>
+
+        <h3>Простой случай: полосы параллельны стороне</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Если $b=0$, взаимная простота заставляет взять $a=1$. Два уравнения сразу дают
+        </p>
+
+        <p align="center">
+          $$u=\frac{n}{2k},\qquad v=\frac{\sqrt3}{2}k.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для каждого делителя $k\mid n/2$ существует одно замощение. Полосы могут быть горизонтальными или
+          вертикальными, поэтому вклад равен
+        </p>
+
+        <p align="center">
+          $$2\tau\!\left(\frac n2\right),$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где $\tau(r)$ — число положительных делителей $r$. Для суммы по всем $n\leq N$ положим
+        </p>
+
+        <p align="center">
+          $$M=\left\lfloor\frac N2\right\rfloor,
+          \qquad
+          D(X)=\sum_{d=1}^{X}\left\lfloor\frac Xd\right\rfloor.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Тогда весь вклад полос, параллельных сторонам, равен
+        </p>
+
+        <p align="center">
+          $$S_0(N)=2D(M).$$
+        </p>
+
+        <h3>Наклонные полосы и квадратный корень</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Случай $a,b&gt;0$ поначалу выглядел самым неприятным: размеры $u$ и $v$ вещественные,
+          а считать нужно целочисленные классы. Помогла замена
+        </p>
+
+        <p align="center">
+          $$A=au,\qquad B=bv,\qquad m=\frac{n}{2k}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После сложения и вычитания уравнений площади и длины получаются два квадрата:
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          (A+B)^2=m^2+\sqrt3\,abkm,
+          \qquad
+          (A-B)^2=m^2-\sqrt3\,abkm.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Положительное решение существует тогда и только тогда, когда
+        </p>
+
+        <p align="center">
+          $$m&gt;\sqrt3\,abk.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Равенство невозможно из-за иррациональности $\sqrt3$. Знак $A-B$ даёт два различных отношения сторон,
+          а наклон полосы может быть положительным или отрицательным. Поэтому каждый допустимый набор
+          $(a,b,k,m)$ даёт четыре замощения.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В этот момент стало понятно, зачем была нужна взаимная простота. Зафиксируем произведение $x=ab$.
+          Если
+        </p>
+
+        <p align="center">
+          $$x=\prod_{i=1}^{r}p_i^{e_i},$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          то каждая простая степень должна целиком попасть либо в $a$, либо в $b$.
+          Значит, число упорядоченных взаимно простых пар с произведением $x$ равно
+        </p>
+
+        <p align="center">
+          $$R(x)=2^{\omega(x)},$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где $\omega(x)$ — число различных простых делителей $x$.
+          Для фиксированных $k$ и $x$ допустимые $m$ лежат в промежутке
+        </p>
+
+        <p align="center">
+          $$\sqrt3\,kx&lt;m\leq\left\lfloor\frac Mk\right\rfloor.$$
+        </p>
+
+        <h3>Первая почти правильная формула</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Обозначим $[y]_+=\max(y,0)$. Подсчёт по направлениям полос приводит к формуле
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          \boxed{
+          \begin{aligned}
+          S(N)={}&2D(M)\\
+          &+4\sum_{k\geq1}\sum_{x\geq1}2^{\omega(x)}
+          \left[
+          \left\lfloor\frac Mk\right\rfloor-
+          \left\lfloor\sqrt3\,kx\right\rfloor
+          \right]_+.
+          \end{aligned}
+          }
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Сумма конечна: для данного $k$ достаточно брать
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          x\leq
+          \left\lfloor
+          \frac{\lfloor M/k\rfloor}{\sqrt3\,k}
+          \right\rfloor.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Именно здесь у меня был самый неприятный затуп. Формула выглядела законченной: осевые полосы учтены,
+          наклоны и отражения учтены, условие взаимной простоты учтено. Но контрольные значения получались больше нужных.
+          Я перепроверял коэффициент $4$, границы по $m$ и делители, хотя ошибка была вообще не в арифметике.
+        </p>
+
+        <h3>Откуда взялся тройной подсчёт</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Обычное замощение действительно имеет одно направление полос. Но в регулярной треугольной решётке
+          один и тот же набор треугольников можно разрезать на полосы вдоль каждого из трёх семейств параллельных рёбер.
+          Поэтому $S(N)$ считает такое замощение три раза вместо одного.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Это тот случай, когда ошибка выглядит как неверный коэффициент, а на самом деле вызвана дополнительной симметрией.
+          Для каждого регулярного решёточного замощения нужно вычесть две лишние копии.
+          Если $E(n)$ — число таких замощений с ровно $n$ треугольниками, то
+        </p>
+
+        <p align="center">
+          $$G(N)=S(N)-2\sum_{n\leq N}E(n).$$
+        </p>
+
+        <div style="text-align:center; padding-bottom:2em;">
+          <img src="https://projecteuler.net/project/images/p780_t6-all.png"
+               alt="Восемь неэквивалентных замощений торов шестью треугольниками"
+               loading="lazy" style="max-width:100%; height:auto;">
+        </div>
+
+        <h3>Целые Эйзенштейна: недостающий кусок</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Самостоятельно догадаться до целых Эйзенштейна на этом месте мне не удалось.
+          Подсказка снова нашлась в том же обсуждении: вершины регулярной треугольной решётки образуют именно
+          решётку целых Эйзенштейна. После этого странная геометрическая поправка стала обычной задачей о делителях.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Положим
+        </p>
+
+        <p align="center">
+          $$\rho=e^{i\pi/3}=\frac12+\frac{\sqrt3}{2}i,
+          \qquad
+          \mathbb Z[\rho]=\{r+s\rho:r,s\in\mathbb Z\}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После переноса один угол прямоугольника можно поместить в $0$. Из-за периодичности остальные углы тоже
+          должны быть точками этой решётки, поэтому стороны задаются двумя перпендикулярными элементами $U$ и $V$.
+          Уникальность разложения в кольце целых Эйзенштейна даёт параметризацию
+        </p>
+
+        <p align="center">
+          $$U=az,\qquad V=b\sqrt{-3}\,z,$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          либо ту же пару с переставленными сторонами. Здесь $a,b$ — положительные целые,
+          а $z$ рассматривается с точностью до умножения на единицу кольца.
+          Площадь прямоугольника равна $ab\sqrt3\,|z|^2$, откуда число треугольников
+        </p>
+
+        <p align="center">
+          $$n=4ab|z|^2.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В частности, регулярное решёточное замощение возможно только при $4\mid n$.
+          Поведение простых в кольце зависит от остатка по модулю $3$:
+        </p>
+
+        <ul>
+          <li>если $p\equiv1\pmod3$, простое распадается на два сопряжённых множителя и даёт вклад $(e+1)^2$;</li>
+          <li>если $p\equiv2\pmod3$, простое остаётся простым и даёт вклад $e+1$;</li>
+          <li>простое $3$ разветвляется, но в этом подсчёте также даёт вклад $e+1$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Перестановка двух перпендикулярных сторон добавляет множитель $2$. Поэтому
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          E(n)=
+          \begin{cases}
+          \displaystyle
+          2\prod_{p^e\parallel n/4}
+          \begin{cases}
+          (e+1)^2,&p\equiv1\pmod3,\\
+          e+1,&p\not\equiv1\pmod3,
+          \end{cases}
+          &4\mid n,\\[1.2em]
+          0,&4\nmid n.
+          \end{cases}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Удобно вынести произведение в мультипликативную функцию
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          H(m)=
+          \prod_{p^e\parallel m}
+          \begin{cases}
+          (e+1)^2,&p\equiv1\pmod3,\\
+          e+1,&p\not\equiv1\pmod3.
+          \end{cases}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Тогда $E(4m)=2H(m)$.
+        </p>
+
+        <h3>Итоговая формула</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть
+        </p>
+
+        <p align="center">
+          $$M=\left\lfloor\frac N2\right\rfloor,
+          \qquad
+          L=\left\lfloor\frac N4\right\rfloor.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После удаления двух лишних копий каждой регулярной решётки получаем
+        </p>
+
+        <p align="center" style="overflow-x:auto;">
+          $$
+          \boxed{
+          \begin{aligned}
+          G(N)={}&2D(M)\\
+          &+4\sum_{k\geq1}\sum_{x\geq1}2^{\omega(x)}
+          \left[
+          \left\lfloor\frac Mk\right\rfloor-
+          \left\lfloor\sqrt3\,kx\right\rfloor
+          \right]_+\\
+          &-4\sum_{m=1}^{L}H(m).
+          \end{aligned}
+          }
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Теперь у трёх строк есть ясный геометрический смысл:
+        </p>
+
+        <ol>
+          <li>полосы параллельны стороне прямоугольника;</li>
+          <li>полосы наклонены, а $2^{\omega(x)}$ считает примитивные типы обхода;</li>
+          <li>вычитаются две лишние копии регулярных треугольных решёток.</li>
+        </ol>
+
+        <h3>Как считать это без новых сюрпризов</h3>
+
+        <h4>Делительная сумма</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          В $D(X)$ одинаковые частные можно обрабатывать блоками. Если
+          $q=\lfloor X/d\rfloor$, то это значение сохраняется до
+          $r=\lfloor X/q\rfloor$. После учёта всего отрезка $d,\ldots,r$ переходим к $r+1$.
+          Таких блоков порядка $\sqrt X$.
+        </p>
+
+        <h4>Решета для двух мультипликативных функций</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Значения $2^{\omega(x)}$ удобно получать решетом: каждый новый простой делитель удваивает значение у всех
+          своих кратных. Функция $H(m)$ тоже считается решетом по минимальному простому делителю и показателю его степени.
+          Число реально встречающихся пар $(k,x)$ линейно по $N$, поскольку
+        </p>
+
+        <p align="center">
+          $$
+          \sum_{k\geq1}\frac{M}{\sqrt3\,k^2}
+          &lt;\frac{M}{\sqrt3}\cdot\frac{\pi^2}{6}.
+          $$
+        </p>
+
+        <h4>Ловушка с $\sqrt3$</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Здесь я едва не сделал обычный вариант через <code class="inline">double</code>.
+          В обсуждении несколько участников отдельно предупреждают, что такой код проходит маленькие проверки,
+          но ломается именно на $N=10^9$ из-за округления числа, почти совпавшего с целым.
+          Один из них потратил на поиск этой причины около восьми часов — это чужой опыт, но очень полезное предупреждение.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Вещественные вычисления здесь вообще не нужны. Для положительного целого $t$
+        </p>
+
+        <p align="center">
+          $$
+          \left\lfloor t\sqrt3\right\rfloor
+          =\left\lfloor\sqrt{3t^2}\right\rfloor.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Правая часть вычисляется целочисленным квадратным корнем. Число $3t^2$ не бывает полным квадратом при $t&gt;0$,
+          поэтому пограничной неоднозначности нет. Остаток по модулю $1\,000\,000\,007$ можно брать после каждого
+          сложения и умножения, но границы сумм и целые части нужно считать до модульного сокращения.
+        </p>
+
+        <h3>Проверки</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Я проверял не только готовое $G(N)$, но и две части, из которых оно собирается:
+          сырой полосовой подсчёт $S(N)$ и накопленное число регулярных решёток
+          $E_{\leq N}=\sum_{n\leq N}E(n)$. Получилось:
+        </p>
+
+        <ul>
+          <li>для $N=6$: $S=18$, $E_{\leq N}=2$, поэтому $G=14$;</li>
+          <li>для $N=100$: $S=8494$, $E_{\leq N}=202$, поэтому $G=8090$;</li>
+          <li>для $N=10^5$: $S=22647276698$, $E_{\leq N}=1076248$, поэтому $G=22645124202\equiv645124048\pmod{1\,000\,000\,007}$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Последняя проверка особенно полезна: она достаточно большая, чтобы поймать ошибки в решете,
+          поправке за регулярные решётки и вычислении $\lfloor\sqrt3\,kx\rfloor$.
+        </p>
+
+        <h3>Что в итоге оказалось самым красивым</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Больше всего мне нравится, что непрерывные деформации здесь не уничтожают дискретность, а проявляют её.
+          Полосы можно двигать, но числа обходов $(a,b)$, число компонент $k$ и выбор ветви $A-B$ непрерывно не меняются.
+          Поэтому классы эквивалентности кодируются целыми числами.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          А единственное место, где описание полосами неоднозначно, — идеальная треугольная решётка.
+          Её лишняя симметрия сначала портит ответ тройным подсчётом, а затем неожиданно приводит к целым Эйзенштейна
+          и разбиению простых по модулю $3$. В одной задаче встретились топология тора, евклидова геометрия,
+          делители, решета и алгебраическая теория чисел.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для требуемого $N=10^9$ остаётся подставить $M=500000000$ и $L=250000000$ в итоговую формулу,
+          выполнить сравнения с $\sqrt3$ через целочисленный корень и взять остаток по заданному модулю.
+          Готовый код и итоговый численный остаток здесь не привожу.
+        </p>
+
+        <h3>Источники</h3>
+
+        <ul>
+          <li><a class="intext" href="https://projecteuler.net/problem=780" target="_blank" rel="noopener noreferrer">официальное условие Project Euler 780</a>;</li>
+          <li><a class="intext" href="https://projecteuler.net/thread=780" target="_blank" rel="noopener noreferrer">обсуждение решивших задачу</a> — идеи полосового подсчёта, решёточной поправки и предупреждение о точности $\sqrt3$.</li>
+        </ul>
+      </div>
+
+      <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>
+      <a href="#" title="Промотать вниз" class="buttondown"><img src="../images/down-arrow.png" alt="Вниз"></a>
+    </div>
+  </div>
+
+  <script src="../scripts/scrollToTop.js"></script>
+  <script src="../scripts/scrollToBottom.js"></script>
+</body>
+</html>
