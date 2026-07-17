@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610" role="img" aria-labelledby="title desc">
+<title id="title">Остатки по модулю шесть и запрет попадания в вершину</title>
+<desc id="desc">Показаны запретные классы точек и луч через примитивный вектор U=(2,1). Первые пять кратных безопасны, а 6U снова является образом A.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e66a32"/></marker>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;fill:#1d2a3a}
+.label{font-size:20px;font-weight:600}.small{font-size:16px}.tiny{font-size:14px}.math{font-family:Georgia,'Times New Roman',serif;font-style:italic}
+</style>
+</defs>
+<rect width="100%" height="100%" rx="18" fill="#fbfaf6"/>
+<text x="52" y="52" class="label">Один период решётки повторяется по модулю 6</text>
+<line x1="80" y1="117" x2="80" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="138" y1="117" x2="138" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="196" y1="117" x2="196" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="254" y1="117" x2="254" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="312" y1="117" x2="312" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="370" y1="117" x2="370" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="428" y1="117" x2="428" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="486" y1="117" x2="486" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="544" y1="117" x2="544" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="602" y1="117" x2="602" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="660" y1="117" x2="660" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="718" y1="117" x2="718" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="776" y1="117" x2="776" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="525" x2="776" y2="525" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="457" x2="776" y2="457" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="389" x2="776" y2="389" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="321" x2="776" y2="321" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="253" x2="776" y2="253" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="185" x2="776" y2="185" stroke="#d9dde5" stroke-width="1"/>
+<line x1="80" y1="117" x2="776" y2="117" stroke="#d9dde5" stroke-width="1"/>
+<circle cx="80" cy="525" r="9" fill="#168c8c" opacity="0.38"/>
+<text x="91" y="515" class="tiny">H₁</text>
+<circle cx="80" cy="117" r="9" fill="#168c8c" opacity="0.38"/>
+<text x="91" y="107" class="tiny">H₁</text>
+<circle cx="138" cy="457" r="9" fill="#7b61a8" opacity="0.38"/>
+<text x="149" y="447" class="tiny">M</text>
+<circle cx="138" cy="253" r="9" fill="#7b61a8" opacity="0.38"/>
+<text x="149" y="243" class="tiny">M</text>
+<circle cx="196" cy="389" r="9" fill="#3f6db2" opacity="0.38"/>
+<text x="207" y="379" class="tiny">H₂</text>
+<circle cx="312" cy="457" r="9" fill="#7b61a8" opacity="0.38"/>
+<text x="323" y="447" class="tiny">M</text>
+<circle cx="312" cy="253" r="9" fill="#d9a321" opacity="0.38"/>
+<text x="323" y="243" class="tiny">T</text>
+<circle cx="428" cy="525" r="9" fill="#168c8c" opacity="0.38"/>
+<text x="439" y="515" class="tiny">H₁</text>
+<circle cx="428" cy="117" r="9" fill="#168c8c" opacity="0.38"/>
+<text x="439" y="107" class="tiny">H₁</text>
+<circle cx="486" cy="457" r="9" fill="#7b61a8" opacity="0.38"/>
+<circle cx="486" cy="253" r="9" fill="#7b61a8" opacity="0.38"/>
+<circle cx="544" cy="389" r="9" fill="#3f6db2" opacity="0.38"/>
+<circle cx="660" cy="457" r="9" fill="#7b61a8" opacity="0.38"/>
+<circle cx="660" cy="253" r="9" fill="#d9a321" opacity="0.38"/>
+<circle cx="776" cy="525" r="9" fill="#168c8c" opacity="0.38"/>
+<circle cx="776" cy="117" r="9" fill="#168c8c" opacity="0.38"/>
+<line x1="80" y1="525" x2="776" y2="117" stroke="#e66a32" stroke-width="4" marker-end="url(#arrow)"/>
+<circle cx="196" cy="457" r="7" fill="#fbfaf6" stroke="#e66a32" stroke-width="3"/>
+<text x="205" y="480" class="tiny math">U</text>
+<circle cx="312" cy="389" r="7" fill="#fbfaf6" stroke="#e66a32" stroke-width="3"/>
+<text x="321" y="412" class="tiny math">2U</text>
+<circle cx="428" cy="321" r="7" fill="#fbfaf6" stroke="#e66a32" stroke-width="3"/>
+<text x="437" y="344" class="tiny math">3U</text>
+<circle cx="544" cy="253" r="7" fill="#fbfaf6" stroke="#e66a32" stroke-width="3"/>
+<text x="553" y="276" class="tiny math">4U</text>
+<circle cx="660" cy="185" r="7" fill="#fbfaf6" stroke="#e66a32" stroke-width="3"/>
+<text x="669" y="208" class="tiny math">5U</text>
+<circle cx="776" cy="117" r="10" fill="#168c8c" stroke="#e66a32" stroke-width="3"/>
+<text x="785" y="140" class="tiny math">6U</text>
+<text x="76" y="555" class="tiny">0</text>
+<text x="192" y="555" class="tiny">2</text>
+<text x="308" y="555" class="tiny">4</text>
+<text x="424" y="555" class="tiny">6</text>
+<text x="540" y="555" class="tiny">8</text>
+<text x="656" y="555" class="tiny">10</text>
+<text x="772" y="555" class="tiny">12</text>
+<text x="50" y="530" class="tiny">0</text>
+<text x="50" y="394" class="tiny">2</text>
+<text x="50" y="258" class="tiny">4</text>
+<text x="50" y="122" class="tiny">6</text>
+<rect x="820" y="80" width="250" height="155" rx="12" fill="#ffffff" stroke="#d9dde5"/>
+<text x="842" y="115" class="small">Запретные классы:</text>
+<circle cx="846" cy="145" r="7" fill="#168c8c"/><text x="864" y="151" class="tiny">образы A</text>
+<circle cx="846" cy="177" r="7" fill="#d9a321"/><text x="864" y="183" class="tiny">центры / образы C</text>
+<circle cx="846" cy="209" r="7" fill="#7b61a8"/><text x="864" y="215" class="tiny">образы B и D</text>
+<text x="820" y="290" class="small math">gcd(u,v)=1</text>
+<text x="820" y="325" class="small math">u ≠ v (mod 3)</text>
+<text x="820" y="375" class="small">⇒ U,…,5U безопасны</text>
+<text x="820" y="415" class="small">⇒ первое возвращение — 6U</text>
+</svg>

@@ -1,0 +1,224 @@
+:root {
+  color-scheme: light;
+  --e786-background: #fbfaf6;
+  --e786-foreground: #1d2a3a;
+  --e786-muted: #667085;
+  --e786-grid: #d9dde5;
+  --e786-orange: #e66a32;
+  --e786-teal: #168c8c;
+  --e786-blue: #3f6db2;
+  --e786-purple: #7b61a8;
+  --e786-panel: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-width: 0;
+  background: var(--e786-background);
+  color: var(--e786-foreground);
+  font-family: "Courier Prime", monospace;
+}
+
+body > main {
+  width: 100%;
+}
+
+#euler786-explainer {
+  width: 100%;
+  padding: 18px 20px 12px;
+  background: var(--e786-background);
+  color: var(--e786-foreground);
+}
+
+#euler786-explainer .euler786-stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+#euler786-explainer .euler786-stages button {
+  min-height: 40px;
+  padding: 8px 14px;
+  border: 1px solid var(--e786-grid);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--e786-foreground);
+  font: inherit;
+  cursor: pointer;
+}
+
+#euler786-explainer .euler786-stages button:hover {
+  border-color: var(--e786-orange);
+}
+
+#euler786-explainer .euler786-stages button:focus-visible,
+#euler786-explainer input:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--e786-orange) 45%, transparent);
+  outline-offset: 2px;
+}
+
+#euler786-explainer .euler786-stages button[aria-pressed="true"] {
+  border-color: var(--e786-orange);
+  background: var(--e786-orange);
+  color: #ffffff;
+}
+
+#euler786-explainer .euler786-caption {
+  min-height: 48px;
+  margin: 0;
+  color: var(--e786-muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+#euler786-explainer .euler786-lattice-controls {
+  display: grid;
+  grid-template-columns: auto minmax(180px, 1fr) auto;
+  align-items: center;
+  gap: 10px 16px;
+  margin: 4px 0 2px;
+}
+
+#euler786-explainer .euler786-lattice-controls[hidden] {
+  display: none;
+}
+
+#euler786-explainer .euler786-lattice-controls label,
+#euler786-explainer .euler786-lattice-controls p {
+  margin: 0;
+  font-size: 15px;
+}
+
+#euler786-explainer .euler786-lattice-controls input {
+  width: 100%;
+  accent-color: var(--e786-orange);
+}
+
+#euler786-explainer svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+#euler786-explainer svg text {
+  fill: var(--e786-foreground);
+  font-family: "Courier Prime", monospace;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#euler786-explainer svg .e786-math {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+#euler786-explainer svg .e786-grid {
+  stroke: var(--e786-grid);
+  stroke-width: 1;
+}
+
+#euler786-explainer svg .e786-axis,
+#euler786-explainer svg .e786-table {
+  fill: none;
+  stroke: var(--e786-foreground);
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+#euler786-explainer svg .e786-copy {
+  fill: color-mix(in srgb, var(--e786-blue) 10%, transparent);
+  stroke: var(--e786-grid);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+#euler786-explainer svg .e786-route {
+  fill: none;
+  stroke: var(--e786-orange);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#euler786-explainer svg .e786-helper {
+  fill: none;
+  stroke: var(--e786-teal);
+  stroke-width: 2;
+  stroke-dasharray: 8 7;
+}
+
+#euler786-explainer svg .e786-hit {
+  fill: var(--e786-background);
+  stroke: var(--e786-orange);
+  stroke-width: 3;
+}
+
+#euler786-explainer svg .e786-a-point {
+  fill: var(--e786-teal);
+  stroke: var(--e786-background);
+  stroke-width: 3;
+}
+
+#euler786-explainer svg .e786-region {
+  fill: color-mix(in srgb, var(--e786-blue) 12%, transparent);
+}
+
+#euler786-explainer svg .e786-boundary {
+  stroke: var(--e786-blue);
+  stroke-width: 3;
+}
+
+#euler786-explainer svg .e786-valid {
+  fill: var(--e786-orange);
+  stroke: var(--e786-background);
+  stroke-width: 1;
+}
+
+#euler786-explainer svg .e786-hidden {
+  fill: var(--e786-background);
+  stroke: var(--e786-blue);
+  stroke-width: 2;
+}
+
+#euler786-explainer svg .e786-excluded {
+  fill: none;
+  stroke: var(--e786-muted);
+  stroke-width: 1.6;
+}
+
+#euler786-explainer svg .e786-annotation {
+  fill: var(--e786-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  #euler786-explainer {
+    padding: 14px 10px 8px;
+  }
+
+  #euler786-explainer .euler786-stages button {
+    flex: 1 1 120px;
+  }
+
+  #euler786-explainer .euler786-lattice-controls {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  #euler786-explainer svg text {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #euler786-explainer .euler786-stages button {
+    transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  }
+}

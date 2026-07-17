@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650" role="img" aria-labelledby="title desc">
+<title id="title">Видимые точки в арифметическом треугольнике</title>
+<desc id="desc">Целые точки внутри 18x+10y&lt;=180. Точки с взаимно простыми координатами и y не кратным 3 засчитываются.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e66a32"/></marker>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;fill:#1d2a3a}
+.label{font-size:20px;font-weight:600}.small{font-size:16px}.tiny{font-size:14px}.math{font-family:Georgia,'Times New Roman',serif;font-style:italic}
+</style>
+</defs>
+<rect width="100%" height="100%" rx="18" fill="#fbfaf6"/>
+<text x="52" y="52" class="label">После всех отражений остаётся задача о целых точках</text>
+<line x1="105" y1="565" x2="847.0" y2="565" stroke="#1d2a3a" stroke-width="2" marker-end="url(#arrow)"/>
+<line x1="105" y1="565" x2="105" y2="41.39999999999998" stroke="#1d2a3a" stroke-width="2" marker-end="url(#arrow)"/>
+<polygon points="105.00,565.00 805.00,565.00 105.00,61.00" fill="#3f6db212" stroke="none"/>
+<line x1="805" y1="565" x2="105" y2="61" stroke="#3f6db2" stroke-width="3"/>
+<circle cx="175" cy="537" r="6" fill="#e66a32"/>
+<circle cx="175" cy="509" r="6" fill="#e66a32"/>
+<path d="M170 476 L180 486 M170 486 L180 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="175" cy="453" r="6" fill="#e66a32"/>
+<circle cx="175" cy="425" r="6" fill="#e66a32"/>
+<path d="M170 392 L180 402 M170 402 L180 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="175" cy="369" r="6" fill="#e66a32"/>
+<circle cx="175" cy="341" r="6" fill="#e66a32"/>
+<path d="M170 308 L180 318 M170 318 L180 308" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="175" cy="285" r="6" fill="#e66a32"/>
+<circle cx="175" cy="257" r="6" fill="#e66a32"/>
+<path d="M170 224 L180 234 M170 234 L180 224" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="175" cy="201" r="6" fill="#e66a32"/>
+<circle cx="175" cy="173" r="6" fill="#e66a32"/>
+<path d="M170 140 L180 150 M170 150 L180 140" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="175" cy="117" r="6" fill="#e66a32"/>
+<circle cx="245" cy="537" r="6" fill="#e66a32"/>
+<circle cx="245" cy="509" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M240 476 L250 486 M240 486 L250 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="245" cy="453" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="245" cy="425" r="6" fill="#e66a32"/>
+<path d="M240 392 L250 402 M240 402 L250 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="245" cy="369" r="6" fill="#e66a32"/>
+<circle cx="245" cy="341" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M240 308 L250 318 M240 318 L250 308" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="245" cy="285" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="245" cy="257" r="6" fill="#e66a32"/>
+<path d="M240 224 L250 234 M240 234 L250 224" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="245" cy="201" r="6" fill="#e66a32"/>
+<circle cx="245" cy="173" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="315" cy="537" r="6" fill="#e66a32"/>
+<circle cx="315" cy="509" r="6" fill="#e66a32"/>
+<path d="M310 476 L320 486 M310 486 L320 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="315" cy="453" r="6" fill="#e66a32"/>
+<circle cx="315" cy="425" r="6" fill="#e66a32"/>
+<path d="M310 392 L320 402 M310 402 L320 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="315" cy="369" r="6" fill="#e66a32"/>
+<circle cx="315" cy="341" r="6" fill="#e66a32"/>
+<path d="M310 308 L320 318 M310 318 L320 308" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="315" cy="285" r="6" fill="#e66a32"/>
+<circle cx="315" cy="257" r="6" fill="#e66a32"/>
+<path d="M310 224 L320 234 M310 234 L320 224" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="385" cy="537" r="6" fill="#e66a32"/>
+<circle cx="385" cy="509" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M380 476 L390 486 M380 486 L390 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="385" cy="453" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="385" cy="425" r="6" fill="#e66a32"/>
+<path d="M380 392 L390 402 M380 402 L390 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="385" cy="369" r="6" fill="#e66a32"/>
+<circle cx="385" cy="341" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M380 308 L390 318 M380 318 L390 308" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="385" cy="285" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="455" cy="537" r="6" fill="#e66a32"/>
+<circle cx="455" cy="509" r="6" fill="#e66a32"/>
+<path d="M450 476 L460 486 M450 486 L460 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="455" cy="453" r="6" fill="#e66a32"/>
+<circle cx="455" cy="425" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M450 392 L460 402 M450 402 L460 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="455" cy="369" r="6" fill="#e66a32"/>
+<circle cx="455" cy="341" r="6" fill="#e66a32"/>
+<path d="M450 308 L460 318 M450 318 L460 308" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="525" cy="537" r="6" fill="#e66a32"/>
+<circle cx="525" cy="509" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M520 476 L530 486 M520 486 L530 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="525" cy="453" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<circle cx="525" cy="425" r="6" fill="#e66a32"/>
+<path d="M520 392 L530 402 M520 402 L530 392" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="525" cy="369" r="6" fill="#e66a32"/>
+<circle cx="595" cy="537" r="6" fill="#e66a32"/>
+<circle cx="595" cy="509" r="6" fill="#e66a32"/>
+<path d="M590 476 L600 486 M590 486 L600 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="595" cy="453" r="6" fill="#e66a32"/>
+<circle cx="595" cy="425" r="6" fill="#e66a32"/>
+<circle cx="665" cy="537" r="6" fill="#e66a32"/>
+<circle cx="665" cy="509" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/>
+<path d="M660 476 L670 486 M660 486 L670 476" stroke="#667085" stroke-width="2" opacity="0.65"/>
+<circle cx="735" cy="537" r="6" fill="#e66a32"/>
+<line x1="105" y1="565" x2="385" y2="341" stroke="#168c8c" stroke-width="2.5" stroke-dasharray="8 7"/>
+<circle cx="175" cy="509" r="9" fill="none" stroke="#168c8c" stroke-width="3"/>
+<circle cx="245" cy="453" r="9" fill="none" stroke="#168c8c" stroke-width="3"/>
+<text x="101" y="593" class="tiny">0</text>
+<text x="171" y="593" class="tiny">1</text>
+<text x="241" y="593" class="tiny">2</text>
+<text x="311" y="593" class="tiny">3</text>
+<text x="381" y="593" class="tiny">4</text>
+<text x="451" y="593" class="tiny">5</text>
+<text x="521" y="593" class="tiny">6</text>
+<text x="591" y="593" class="tiny">7</text>
+<text x="661" y="593" class="tiny">8</text>
+<text x="731" y="593" class="tiny">9</text>
+<text x="801" y="593" class="tiny">10</text>
+<text x="70" y="570" class="tiny">0</text>
+<text x="70" y="486" class="tiny">3</text>
+<text x="70" y="402" class="tiny">6</text>
+<text x="70" y="318" class="tiny">9</text>
+<text x="70" y="234" class="tiny">12</text>
+<text x="70" y="150" class="tiny">15</text>
+<text x="70" y="66" class="tiny">18</text>
+<text x="855" y="578" class="small math">x=β</text>
+<text x="72" y="92" class="small math">y=α</text>
+<text x="505" y="160" class="small math">18x + 10y = L</text>
+<rect x="790" y="105" width="265" height="220" rx="12" fill="#ffffff" stroke="#d9dde5"/>
+<circle cx="818" cy="145" r="6" fill="#e66a32"/><text x="838" y="151" class="tiny">видимая: gcd(x,y)=1</text>
+<circle cx="818" cy="183" r="5" fill="#fbfaf6" stroke="#3f6db2" stroke-width="2"/><text x="838" y="189" class="tiny">скрытая: gcd(x,y)&gt;1</text>
+<path d="M812 216 L824 228 M812 228 L824 216" stroke="#667085" stroke-width="2"/><text x="838" y="227" class="tiny">исключена: 3 | y</text>
+<text x="812" y="270" class="tiny">(1,2) закрывает точки</text>
+<text x="812" y="295" class="tiny">(2,4), (3,6), … на том же луче</text>
+<text x="560" y="625" class="small math">18x+10y ≤ 3N+6</text>
+</svg>

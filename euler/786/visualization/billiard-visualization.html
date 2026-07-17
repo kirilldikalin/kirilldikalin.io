@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 786 — интерактивная визуализация</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="billiard-visualization.css">
+  <script defer src="billiard-visualization.js"></script>
+</head>
+<body>
+  <main>
+    <section id="euler786-explainer" class="euler786-explainer" aria-label="От бильярдной траектории к видимым точкам решётки">
+      <nav class="euler786-stages" aria-label="Этапы преобразования">
+        <button type="button" data-euler786-stage="0" aria-pressed="true">1. Бильярд</button>
+        <button type="button" data-euler786-stage="1" aria-pressed="false">2. Развёртка</button>
+        <button type="button" data-euler786-stage="2" aria-pressed="false">3. Решётка</button>
+      </nav>
+
+      <p id="euler786-stage-caption" class="euler786-caption" aria-live="polite">
+        Два упругих отражения дают замкнутую ломаную A → P → Q → A.
+      </p>
+
+      <div id="euler786-lattice-controls" class="euler786-lattice-controls" hidden>
+        <label for="euler786-n">
+          Предел отражений <i>N</i>: <strong id="euler786-n-value">100</strong>
+        </label>
+        <input id="euler786-n" type="range" min="10" max="200" value="100" step="1">
+        <p aria-live="polite">
+          Допустимых пар: <strong id="euler786-pairs">0</strong> ·
+          трасс: <strong id="euler786-traces">0</strong>
+        </p>
+      </div>
+
+      <svg id="euler786-svg" viewBox="0 0 900 510" role="img" aria-labelledby="euler786-svg-title euler786-svg-desc">
+        <title id="euler786-svg-title">Преобразование бильярдных маршрутов в видимые точки</title>
+        <desc id="euler786-svg-desc">Замкнутая траектория с двумя отражениями внутри специального четырёхугольника.</desc>
+        <g id="euler786-canvas"></g>
+      </svg>
+    </section>
+  </main>
+</body>
+</html>

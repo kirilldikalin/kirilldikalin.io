@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="610" viewBox="0 0 1100 610" role="img" aria-labelledby="title desc">
+<title id="title">Сходимость отношения B(N)/N²</title>
+<desc id="desc">Точки точных значений B(N)/N² сходятся к 9/(20π²). Горизонтальная пунктирная линия показывает предел.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e66a32"/></marker>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;fill:#1d2a3a}
+.label{font-size:20px;font-weight:600}.small{font-size:16px}.tiny{font-size:14px}.math{font-family:Georgia,'Times New Roman',serif;font-style:italic}
+</style>
+</defs>
+<rect width="100%" height="100%" rx="18" fill="#fbfaf6"/>
+<text x="52" y="50" class="label">Квадратичный рост — не догадка, а площадь треугольника</text>
+<line x1="105" y1="500.19736842105266" x2="1040" y2="500.19736842105266" stroke="#d9dde5" stroke-width="1"/>
+<text x="43" y="505.19736842105266" class="tiny">0.046</text>
+<line x1="105" y1="387.0394736842104" x2="1040" y2="387.0394736842104" stroke="#d9dde5" stroke-width="1"/>
+<text x="43" y="392.0394736842104" class="tiny">0.050</text>
+<line x1="105" y1="273.8815789473684" x2="1040" y2="273.8815789473684" stroke="#d9dde5" stroke-width="1"/>
+<text x="43" y="278.8815789473684" class="tiny">0.054</text>
+<line x1="105" y1="160.7236842105262" x2="1040" y2="160.7236842105262" stroke="#d9dde5" stroke-width="1"/>
+<text x="43" y="165.7236842105262" class="tiny">0.058</text>
+<line x1="105" y1="104.14473684210526" x2="1040" y2="104.14473684210526" stroke="#d9dde5" stroke-width="1"/>
+<text x="43" y="109.14473684210526" class="tiny">0.060</text>
+<line x1="105.0" y1="90" x2="105.0" y2="520" stroke="#d9dde5" stroke-width="1"/>
+<text x="89.0" y="550" class="tiny">10^1</text>
+<line x1="388.2449269555731" y1="90" x2="388.2449269555731" y2="520" stroke="#d9dde5" stroke-width="1"/>
+<text x="372.2449269555731" y="550" class="tiny">10^2</text>
+<line x1="671.4898539111462" y1="90" x2="671.4898539111462" y2="520" stroke="#d9dde5" stroke-width="1"/>
+<text x="655.4898539111462" y="550" class="tiny">10^3</text>
+<line x1="954.7347808667191" y1="90" x2="954.7347808667191" y2="520" stroke="#d9dde5" stroke-width="1"/>
+<text x="938.7347808667191" y="550" class="tiny">10^4</text>
+<line x1="105" y1="520" x2="1040" y2="520" stroke="#1d2a3a" stroke-width="2"/>
+<line x1="105" y1="90" x2="105" y2="520" stroke="#1d2a3a" stroke-width="2"/>
+<path d="M 105.00 104.14 L 190.27 245.59 L 302.98 420.99 L 388.24 449.28 L 473.51 484.64 L 586.22 501.33 L 671.49 506.14 L 756.76 508.95 L 869.47 510.54 L 954.73 511.15 L 1040.00 511.41" fill="none" stroke="#e66a32" stroke-width="4"/>
+<circle cx="105.00" cy="104.14" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="190.27" cy="245.59" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="302.98" cy="420.99" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="388.24" cy="449.28" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="473.51" cy="484.64" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="586.22" cy="501.33" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="671.49" cy="506.14" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="756.76" cy="508.95" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="869.47" cy="510.54" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="954.73" cy="511.15" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<circle cx="1040.00" cy="511.41" r="5" fill="#e66a32" stroke="#fbfaf6" stroke-width="2"/>
+<line x1="105" y1="511.6678266583972" x2="1040" y2="511.6678266583972" stroke="#168c8c" stroke-width="3" stroke-dasharray="10 8"/>
+<text x="725" y="497.6678266583972" class="small math">9/(20π²) ≈ 0.045594532639</text>
+<text x="960" y="570" class="small math">N</text>
+<text x="20" y="83" class="small math">B(N)/N²</text>
+<text x="155" y="140" class="tiny">малые N ещё чувствуют границу</text>
+<text x="770" y="480" class="tiny">дальше остаётся плотность видимых точек</text>
+</svg>

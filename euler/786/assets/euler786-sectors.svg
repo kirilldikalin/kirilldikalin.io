@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="650" viewBox="0 0 1180 650" role="img" aria-labelledby="title desc">
+<title id="title">Четыре сектора направлений сворачиваются в одну арифметическую область</title>
+<desc id="desc">Конус -2u&lt;v&lt;u разбит прямыми v=0, v=-u/2 и v=-u. Для каждого сектора показана линейная замена координат.</desc>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#e66a32"/></marker>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;fill:#1d2a3a}
+.label{font-size:20px;font-weight:600}.small{font-size:16px}.tiny{font-size:14px}.math{font-family:Georgia,'Times New Roman',serif;font-style:italic}
+</style>
+</defs>
+<rect width="100%" height="100%" rx="18" fill="#fbfaf6"/>
+<text x="52" y="52" class="label">Допустимый угол выхода из A</text>
+<polygon points="70.00,245.00 400.00,245.00 400.00,83.00" fill="#e66a3240" stroke="none"/>
+<polygon points="70.00,245.00 400.00,326.00 400.00,245.00" fill="#168c8c40" stroke="none"/>
+<polygon points="70.00,245.00 400.00,407.00 400.00,326.00" fill="#3f6db240" stroke="none"/>
+<polygon points="70.00,245.00 400.00,569.00 400.00,407.00" fill="#7b61a840" stroke="none"/>
+<line x1="70" y1="245" x2="400" y2="83" stroke="#1d2a3a" stroke-width="2"/>
+<text x="409" y="88" class="tiny math">v=u</text>
+<line x1="70" y1="245" x2="400" y2="245" stroke="#1d2a3a" stroke-width="2"/>
+<text x="409" y="250" class="tiny math">v=0</text>
+<line x1="70" y1="245" x2="400" y2="326.0" stroke="#1d2a3a" stroke-width="2"/>
+<text x="409" y="331.0" class="tiny math">v=-u/2</text>
+<line x1="70" y1="245" x2="400" y2="407" stroke="#1d2a3a" stroke-width="2"/>
+<text x="409" y="412" class="tiny math">v=-u</text>
+<line x1="70" y1="245" x2="400" y2="569" stroke="#1d2a3a" stroke-width="2"/>
+<text x="409" y="574" class="tiny math">v=-2u</text>
+<line x1="70" y1="245" x2="427.5" y2="245" stroke="#1d2a3a" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="438.5" y="252" class="small math">u</text>
+<text x="48" y="74.9" class="small math">v</text>
+<text x="490" y="92" class="small">I.  α=u-v,      β=v</text>
+<text x="490" y="127" class="small">II. α=u+2v,    β=-v</text>
+<text x="490" y="162" class="small">III. α=-u-2v,  β=u+v</text>
+<text x="490" y="197" class="small">IV. α=2u+v,    β=-u-v</text>
+<path d="M650 245 C730 215, 760 215, 815 245" fill="none" stroke="#e66a32" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="668" y="205" class="small">все четыре дают одну формулу</text>
+<rect x="800" y="260" width="330" height="230" rx="14" fill="#ffffff" stroke="#d9dde5"/>
+<text x="833" y="305" class="label math">α,β &gt; 0</text>
+<text x="833" y="345" class="small math">gcd(α,β)=1</text>
+<text x="833" y="383" class="small math">3 ∤ α</text>
+<text x="833" y="432" class="label math">J(α,β)=</text>
+<text x="935" y="430" class="small math">10α+18β-3-r</text>
+<line x1="924" y1="439" x2="1095" y2="439" stroke="#1d2a3a" stroke-width="1.5"/>
+<text x="1004" y="466" class="small math">3</text>
+<text x="833" y="525" class="tiny math">r = α mod 3 ∈ {1,2}</text>
+<text x="52" y="625" class="small">Две граничные прямые дают отдельно два кратчайших маршрута.</text>
+</svg>

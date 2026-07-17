@@ -3,195 +3,958 @@
 
 <head>
   <meta charset="utf-8">
-  <title>projecteuler solutions - Kirill Dikalin</title>
+  <title>786. Бильярд — Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 786: развёртка бильярда, шестиугольная решётка, видимые точки и функция Мёбиуса.">
+  <meta property="og:title" content="786. Бильярд — Kirill Dikalin"/>
+  <meta property="og:description" content="Разбор Project Euler 786 с интерактивной визуализацией перехода от рикошетов к точкам решётки."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/786.html"/>
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/786.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./786/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <ul class="breadcrumb">
-      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
-      / 
-      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
-      / 
-      786
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    786
   </ul>
 
   <div class="our_framework">
     <div class="section_content">
       <div id="toc_container" class="euler_article">
-            
         <h2 id="786">Бильярд</h2>
 
-            <div align="justify" class="problem_content">
-              <p> Диаграмма ниже показывает бильярдный стол особой четырехугольной формы. Четыре угла
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                      <mo>,</mo>
-                      <mi>B</mi>
-                      <mo>,</mo>
-                      <mi>C</mi>
-                      <mo>,</mo>
-                      <mi>D</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> равны
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <msup>
-                        <mn>120</mn>
-                        <mo>∘</mo>
-                      </msup>
-                      <mo>,</mo>
-                      <msup>
-                        <mn>90</mn>
-                        <mo>∘</mo>
-                      </msup>
-                      <mo>,</mo>
-                      <msup>
-                        <mn>60</mn>
-                        <mo>∘</mo>
-                      </msup>
-                      <mo>,</mo>
-                      <msup>
-                        <mn>90</mn>
-                        <mo>∘</mo>
-                      </msup>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> соответственно, а длины
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                      <mi>B</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> и
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                      <mi>D</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> равны между собой.</p>
-              <div style="text-align:center; display: flex; justify-content: center;"> 
-                <img src="https://projecteuler.net/project/images/p786_billiard_shape.jpg" 
-                class="dark_img_big" alt="" height="160"> 
-              </div>
-              <p> Диаграмма слева показывает траекторию бесконечного малого бильярдного шара, начавшего движение из точки
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>, дважды отбившегося от бортов стола и вернувшегося обратно в точку
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>. Диаграмма справа показывает другую такую траекторию, но на этот раз шар отбился от бортов восемь раз:</p>
-                <div style="text-align:center; display: flex; justify-content: center; width: 1000px; height: 400px;"> 
-                  <img src="https://projecteuler.net/project/images/p786_billiard_traces.jpg" 
-                  class="dark_img_big_high_width" alt="" height="160"> 
-                </div>
-              <p> На столе отсутствует трение и все отскоки являются идеально эластичными столкновениями.
-                <br> Заметим, что ни один отскок не должен происходить в любом из углов стола, так как поведение шара в таком случае будет непредсказуемым. </p>
-              <p> Пусть
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>B</mi>
-                      <mo stretchy="false">(</mo>
-                      <mi>N</mi>
-                      <mo stretchy="false">)</mo>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> будет количеством возможных траекторий шара, начавшего движение из точки
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>, отбившегося не более
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>N</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container> раз от бортов и вернувшегося обратно в точку
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>A</mi>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>. </p>
-              <p> Например,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>B</mi>
-                      <mo stretchy="false">(</mo>
-                      <mn>10</mn>
-                      <mo stretchy="false">)</mo>
-                      <mo>=</mo>
-                      <mn>6</mn>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>B</mi>
-                      <mo stretchy="false">(</mo>
-                      <mn>100</mn>
-                      <mo stretchy="false">)</mo>
-                      <mo>=</mo>
-                      <mn>478</mn>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>,
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>B</mi>
-                      <mo stretchy="false">(</mo>
-                      <mn>1000</mn>
-                      <mo stretchy="false">)</mo>
-                      <mo>=</mo>
-                      <mn>45790</mn>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>. </p>
-              <p> Найдите
-                <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 117.3%; position: relative;">
-                  <mjx-assistive-mml unselectable="on" display="inline">
-                    <math xmlns="http://www.w3.org/1998/Math/MathML">
-                      <mi>B</mi>
-                      <mo stretchy="false">(</mo>
-                      <msup>
-                        <mn>10</mn>
-                        <mn>9</mn>
-                      </msup>
-                      <mo stretchy="false">)</mo>
-                    </math>
-                  </mjx-assistive-mml>
-                </mjx-container>. </p>
-            </div>
+        <h3>Условие задачи</h3>
 
-        <h2>Решение</h2>
+        <p align="justify" class="p_on_project_pages">
+          Бильярдный стол имеет форму четырёхугольника $ABCD$ с углами
+          $120^\circ$, $90^\circ$, $60^\circ$ и $90^\circ$, причём $AB=AD$.
+          Шар выходит из вершины $A$, упруго отражается от сторон и должен вернуться в $A$.
+          Попадать в углы стола запрещено.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть $B(N)$ — количество возможных замкнутых траекторий не более чем с $N$ отражениями.
+          Из условия известны значения
+        </p>
+
+        <p align="center">
+          $$B(10)=6,\qquad B(100)=478,\qquad B(1000)=45790.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Требуется найти $B(10^9)$. Полное условие доступно на
+          <a class="intext" href="https://projecteuler.net/problem=786" target="_blank" rel="noopener noreferrer">странице Project Euler 786</a>.
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-table.svg"
+               alt="Исходный четырёхугольник и правильный шестиугольник из шести его отражённых копий">
+          <figcaption>Исходный стол и правильный шестиугольник, который появляется после отражений.</figcaption>
+        </figure>
+
+        <h3>Почему симуляция здесь не помогает</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          В этой задаче особенно легко начать считать не то. Шар отражается от четырёх сторон,
+          после каждого удара меняет направление, а число ударов может доходить до миллиарда.
+          Первая мысль — взять вектор скорости, выписать закон отражения и проследить траекторию. Я с этого и начал.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После двух-трёх отражений стало ясно, что такой подход описывает один маршрут, но никак не помогает
+          пересчитать все маршруты. Нужен был не более быстрый симулятор, а другой взгляд на геометрию.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Классический приём для таких задач — развёртка бильярда. Наглядное объяснение есть в статье
+          <a class="intext" href="https://www.quantamagazine.org/the-mysterious-math-of-billiards-tables-20240215/" target="_blank" rel="noopener noreferrer">The Mysterious Math of Billiards Tables</a>,
+          а строгая формулировка — в §1.3 работы Говарда Мазура и Сержа Табачникова
+          <a class="intext" href="https://www.math.uchicago.edu/~masur/handbook1.pdf" target="_blank" rel="noopener noreferrer">Rational billiards and flat structures</a>.
+          В момент удара можно отражать не траекторию, а сам стол. Тогда ломаная линия распрямляется.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Всё решение после этого раскладывается на три шага:
+        </p>
+
+        <ol>
+          <li>развернуть бильярдную траекторию в прямую линию;</li>
+          <li>понять, в какие отражённые копии вершины $A$ эта линия может прийти;</li>
+          <li>пересчитать примитивные целые точки внутри треугольника.</li>
+        </ol>
+
+        <h3>1. Стол внутри правильного шестиугольника</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Если отражать исходный четырёхугольник относительно его сторон, шесть копий точно собираются
+          в правильный шестиугольник. Вершина $C$ становится его центром, $A$ — вершиной,
+          а $B$ и $D$ — серединами двух соседних сторон.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Продолжая отражения, мы замощаем плоскость правильными шестиугольниками.
+          Одновременно их центры образуют треугольную решётку. В развёртке присутствуют сразу две сетки:
+        </p>
+
+        <ul>
+          <li>сплошная треугольная сетка;</li>
+          <li>«пунктирная» сетка сторон шестиугольников.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Это различие существенно: количество ударов равно сумме пересечений с обеими сетками.
+        </p>
+
+        <h3>2. Развёртка: шар больше не отражается</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          По закону упругого отражения угол падения равен углу отражения.
+          Если зеркально отразить стол относительно стороны в момент удара,
+          продолжение траектории в отражённой копии пойдёт по той же прямой.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Повторяя эту операцию после каждого удара, получаем один прямой отрезок.
+          Каждый удар теперь соответствует пересечению границы соседних копий стола.
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-unfolding.svg"
+               alt="Развёрнутая траектория как прямой отрезок в шестиугольном замощении"
+               loading="lazy">
+          <figcaption>Вместо отражения шара отражаем стол — ломаная превращается в прямую.</figcaption>
+        </figure>
+
+        <p align="justify" class="p_on_project_pages">
+          Возвращение в исходную вершину $A$ означает, что прямая пришла в некоторый зеркальный образ $A'$.
+          Поэтому вместо начальных направлений можно считать возможные концы $A'$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Подходит не каждый образ $A$. Открытый отрезок $AA'$ не должен пройти ни через одну вершину замощения:
+          такая точка соответствует запрещённому удару в угол. Именно этот запрет превращает геометрию в арифметику.
+        </p>
+
+        <h3>3. Координаты и запрещённые остатки</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Выберем косоугольный базис треугольной решётки
+        </p>
+
+        <p align="center">
+          $$
+          e_1=\left(\frac16,0\right),
+          \qquad
+          e_2=\left(-\frac1{12},\frac{\sqrt3}{12}\right),
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          и поместим $A$ в $(0,0)$. Запись $(x,y)$ далее означает физическую точку $xe_1+ye_2$.
+          Масштаб не важен, зато все интересующие нас вершины получают целые координаты.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Образы вершин распадаются на шесть классов по модулю $6$:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \begin{aligned}
+          \mathcal H_1&=(6\mathbb Z)^2,\\
+          \mathcal H_2&=(2,2)+(6\mathbb Z)^2,\\
+          \mathcal T&=(4,4)+(6\mathbb Z)^2,\\
+          \mathcal M_1&=(1,1)+(6\mathbb Z)^2,\\
+          \mathcal M_2&=(1,-2)+(6\mathbb Z)^2,\\
+          \mathcal M_3&=(-2,1)+(6\mathbb Z)^2.
+          \end{aligned}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Множества $\mathcal H_1\cup\mathcal H_2$ содержат образы $A$,
+          $\mathcal T$ — образы $C$, а три множества $\mathcal M_i$ — образы $B$ и $D$.
+          Поэтому запрещённые остатки $(x,y)\pmod6$ равны
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \mathcal C=\{(0,0),(1,1),(2,2),(4,4),(1,4),(4,1)\}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Вся бесконечная геометрия свернулась в проверку шести точек внутри одного квадрата остатков.
+        </p>
+
+        <h3>4. Почему конец имеет вид $6(u,v)$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть допустимый конец развёрнутой траектории равен
+        </p>
+
+        <p align="center">
+          $$
+          P=(a,b),
+          \qquad
+          d=\gcd(|a|,|b|),
+          \qquad
+          U=(u,v)=\frac Pd,
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          так что $\gcd(|u|,|v|)=1$. Целые точки на открытом отрезке от $0$ до $P$ имеют вид
+          $U,2U,\ldots,(d-1)U$. Если одна из них попадает в $\mathcal C$, шар ударяется в угол.
+        </p>
+
+        <h4>Случай $u\equiv v\pmod3$ невозможен</h4>
+
+        <ul>
+          <li>если $u\equiv v\equiv0\pmod3$, числа $u$ и $v$ не взаимно просты;</li>
+          <li>если $u\equiv v\equiv1\pmod3$, уже $U\pmod6$ принадлежит запрещённому классу;</li>
+          <li>если $u\equiv v\equiv2\pmod3$, то $2U\equiv(4,4)\pmod6$, то есть луч приходит в образ $C$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Следовательно,
+        </p>
+
+        <p align="center">
+          $$u\not\equiv v\pmod3.$$
+        </p>
+
+        <h4>Первые пять кратных безопасны</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          При $u\not\equiv v\pmod3$ точки $jU$ для $j=1,2,4,5$ не могут попасть в $\mathcal C$:
+          их координаты различны по модулю $3$, а у запрещённых классов одинаковы.
+          Для $j=3$ возможны только остатки $(0,3)$, $(3,0)$ и $(3,3)$ — их в $\mathcal C$ тоже нет.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Шестая точка уже является образом $A$:
+        </p>
+
+        <p align="center">
+          $$6U=(6u,6v)\in\mathcal H_1.$$
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-residues.svg"
+               alt="Запрещённые классы по модулю 6 и первые шесть кратных примитивного направления"
+               loading="lazy">
+          <figcaption>Первые пять кратных примитивного направления безопасны, шестое возвращает в образ $A$.</figcaption>
+        </figure>
+
+        <p align="justify" class="p_on_project_pages">
+          Из угла $A=120^\circ$ луч должен выходить между направлениями $(1,1)$ и $(1,-2)$.
+          Значит,
+        </p>
+
+        <p align="center">
+          $$u&gt;0,\qquad -2u&lt;v&lt;u.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Все допустимые концы описываются точно:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          \mathcal P=
+          \left\{
+          6(u,v):
+          \gcd(u,v)=1,
+          \ u&gt;0,
+          \ -2u&lt;v&lt;u,
+          \ u\not\equiv v\pmod3
+          \right\}.
+          }
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Запрет «не ударяться в угол» стал двумя арифметическими условиями:
+          взаимной простотой и сравнением по модулю $3$.
+        </p>
+
+        <h3>5. Сколько ударов соответствует $(u,v)$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Теперь нужно посчитать, сколько границ пересекает отрезок от $0$ до $6(u,v)$.
+          Границы бывают двух типов.
+        </p>
+
+        <h4>5.1. Стороны треугольной сетки</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Три семейства параллельных прямых имеют уравнения
+        </p>
+
+        <p align="center">
+          $$x=6k+4,\qquad y=6k+4,\qquad x+y=6k+2,$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где $k\in\mathbb Z$. Подставим параметризацию отрезка
+          $(x,y)=(6tu,6tv)$ при $0&lt;t&lt;1$.
+          Первое семейство пересекается $u$ раз, второе — $|v|$ раз, третье — $|u+v|$ раз. Поэтому
+        </p>
+
+        <p align="center">
+          $$\boxed{I_\triangle(u,v)=u+|v|+|u+v|}.$$
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          I_\triangle(u,v)=
+          \begin{cases}
+          2u+2v,&0&lt;v&lt;u,\\
+          2u,&-u\leq v\leq0,\\
+          -2v,&-2u&lt;v&lt;-u.
+          \end{cases}
+          $$
+        </p>
+
+        <h4>5.2. Стороны шестиугольников</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Здесь прямые идут в тех же направлениях, но занимают только часть каждого периода.
+          Для одного семейства условие пересечения после подстановки $t$ сводится к
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          t=\frac{k}{u-v},
+          \qquad
+          0\leq
+          \frac{ku\bmod(u-v)}{u-v}
+          \leq\frac13.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Так как $\gcd(u,u-v)=\gcd(u,v)=1$, умножение на $u$ переставляет все ненулевые остатки
+          по модулю $u-v$. В первой трети периода оказывается ровно
+          $\lfloor(u-v)/3\rfloor$ пересечений.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Обозначим
+        </p>
+
+        <p align="center">
+          $$\delta\equiv u-v\pmod3,\qquad\delta\in\{1,2\}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Аналогичный подсчёт для двух других направлений даёт
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          I_{\mathrm{hex}}(u,v)=
+          \begin{cases}
+          \dfrac{4u+2v-3-\delta}{3},&u+2v&gt;0,\\[8pt]
+          \dfrac{2u-2v-6+\delta}{3},&u+2v&lt;0.
+          \end{cases}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Равенство $u+2v=0$ невозможно: тогда $u-v$ делилось бы на $3$.
+          Складывая два типа границ, получаем точное число ударов:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          I(u,v)=
+          \begin{cases}
+          \dfrac{10u+8v-3-\delta}{3},&0&lt;v&lt;u,\\[8pt]
+          \dfrac{10u+2v-3-\delta}{3},&-\dfrac u2&lt;v\leq0,\\[10pt]
+          \dfrac{8u-2v-6+\delta}{3},&-u\leq v&lt;-\dfrac u2,\\[10pt]
+          \dfrac{2u-8v-6+\delta}{3},&-2u&lt;v&lt;-u.
+          \end{cases}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Формула выглядит хуже исходной задачи, но следующий переход снова делает её простой.
+        </p>
+
+        <h3>6. Четыре сектора на самом деле одинаковы</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          В каждом диапазоне введём новые положительные координаты:
+        </p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Сектор</th>
+              <th>Диапазон $v$</th>
+              <th>Замена координат</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>I</td>
+              <td>$0&lt;v&lt;u$</td>
+              <td>$\alpha=u-v$, $\beta=v$</td>
+            </tr>
+            <tr>
+              <td>II</td>
+              <td>$-u/2&lt;v\leq0$</td>
+              <td>$\alpha=u+2v$, $\beta=-v$</td>
+            </tr>
+            <tr>
+              <td>III</td>
+              <td>$-u\leq v&lt;-u/2$</td>
+              <td>$\alpha=-u-2v$, $\beta=u+v$</td>
+            </tr>
+            <tr>
+              <td>IV</td>
+              <td>$-2u&lt;v&lt;-u$</td>
+              <td>$\alpha=2u+v$, $\beta=-u-v$</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p align="justify" class="p_on_project_pages">
+          Каждая замена имеет целочисленную обратную, сохраняет взаимную простоту
+          и переводит $u\not\equiv v\pmod3$ в условие $3\nmid\alpha$.
+          Пусть $r\in\{1,2\}$ — остаток $\alpha$ по модулю $3$.
+          Во всех четырёх секторах число ударов становится одной линейной формой:
+        </p>
+
+        <p align="center">
+          $$
+          \boxed{
+          J(\alpha,\beta)=
+          \frac{10\alpha+18\beta-3-r}{3}
+          }.
+          $$
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-sectors.svg"
+               alt="Четыре сектора допустимых направлений и единая формула после линейных замен"
+               loading="lazy">
+          <figcaption>Четыре сектора сворачиваются в одну арифметическую область.</figcaption>
+        </figure>
+
+        <p align="justify" class="p_on_project_pages">
+          Границы $v=0$ и $v=-u$ соответствуют $\beta=0$. Из взаимной простоты тогда следует $\alpha=1$.
+          Это два особых кратчайших маршрута с двумя ударами. Каждая внутренняя точка $\alpha,\beta&gt;0$
+          даёт четыре маршрута — по одному из каждого сектора.
+        </p>
+
+        <p align="center">
+          $$B(N)=4C(N)+2,$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          C(N)=\#\left\{
+          (\alpha,\beta)\in\mathbb Z_{&gt;0}^2:
+          \gcd(\alpha,\beta)=1,
+          \ 3\nmid\alpha,
+          \ J(\alpha,\beta)\leq N
+          \right\}.
+          $$
+        </p>
+
+        <h3>7. Треугольник $18x+10y\leq3N+6$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Неравенство $J(\alpha,\beta)\leq N$ равносильно
+        </p>
+
+        <p align="center">
+          $$10\alpha+18\beta\leq3N+3+r.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Левая часть сравнима с $\alpha$, а значит с $r$, по модулю $3$.
+          Поэтому границу $3N+3+r$ можно заменить общей границей $3N+6$:
+          между ними нет дополнительных значений с нужным остатком.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Поменяем координаты местами: $x=\beta$, $y=\alpha$. Получаем центральную формулу решения:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          C(N)=\#\left\{
+          (x,y)\in\mathbb Z_{&gt;0}^2:
+          \gcd(x,y)=1,
+          \ 3\nmid y,
+          \ 18x+10y\leq3N+6
+          \right\}.
+          }
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Теперь мы считаем целые точки внутри прямоугольного треугольника,
+          но берём только видимые из начала координат и исключаем каждую третью горизонталь.
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-visible-points.svg"
+               alt="Видимые, составные и исключённые точки внутри треугольника"
+               loading="lazy">
+          <figcaption>Оранжевые точки дают маршруты; составные и точки с $3\mid y$ исключаются.</figcaption>
+        </figure>
+
+        <h4>Интерактивная схема перехода</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Переключатели показывают исходный маршрут, развёртку и решётку.
+          На третьем этапе ползунок $N$ перестраивает треугольник и пересчитывает число трасс.
+        </p>
+
+        <iframe
+          class="euler786-visualization-frame"
+          src="./786/visualization/billiard-visualization.html"
+          title="Как бильярдные маршруты превращаются в видимые точки решётки"
+          loading="lazy">
+        </iframe>
+
+        <p align="justify" class="p_on_project_pages">
+          Если $\gcd(x,y)=d&gt;1$, точка $(x/d,y/d)$ лежит на том же луче ближе к началу координат.
+          В развёртке траектория встречает специальную вершину раньше выбранного конца.
+          Это стандартная связь между взаимной простотой и
+          <a class="intext" href="https://mathworld.wolfram.com/VisiblePoint.html" target="_blank" rel="noopener noreferrer">видимостью целой точки</a>.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          При $N=10$ имеем $18x+10y\leq36$. Единственная допустимая положительная пара — $(1,1)$.
+          Она даёт четыре внутренних маршрута с восемью ударами; ещё два граничных маршрута имеют по два удара.
+          Итого $B(10)=6$.
+        </p>
+
+        <h3>8. Функция Мёбиуса и примитивные точки</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Формула с треугольником объясняет геометрию, но прямой перебор для $N=10^9$ всё ещё слишком велик.
+          Условие взаимной простоты снимается тождеством
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \mathbf1_{\gcd(x,y)=1}
+          =\sum_{d\mid x,\ d\mid y}\mu(d),
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где $\mu$ — функция Мёбиуса. Это принцип включения-исключения, упакованный по общим делителям;
+          связь с обращением по делителям описана в
+          <a class="intext" href="https://encyclopediaofmath.org/wiki/M%C3%B6bius_series" target="_blank" rel="noopener noreferrer">Encyclopedia of Mathematics</a>.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Положим $L=3N+6$ и определим число точек без условия взаимной простоты:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          T(m)=\#\left\{
+          (a,b)\in\mathbb Z_{&gt;0}^2:
+          3\nmid b,
+          \ 18a+10b\leq m
+          \right\}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Если $d\mid x$ и $d\mid y$, пишем $x=da$, $y=db$.
+          Делители $d$, кратные $3$, не дают вклада, потому что $3\nmid y$. Поэтому
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          C(N)=
+          \sum_{\substack{1\leq d\leq\lfloor L/28\rfloor\\3\nmid d}}
+          \mu(d)
+          T\!\left(\left\lfloor\frac Ld\right\rfloor\right)
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Число $28$ — минимальный вес положительной пары: $18\cdot1+10\cdot1=28$.
+        </p>
+
+        <h4>8.1. Формула для $T(m)$</h4>
+
+        <p align="justify" class="p_on_project_pages">
+          Запишем
+        </p>
+
+        <p align="center">
+          $$b=3q+s,\qquad s\in\{1,2\},\qquad q\geq0.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для фиксированных $s$ и $q$ число возможных $a$ равно
+        </p>
+
+        <p align="center">
+          $$\left\lfloor\frac{m-10s-30q}{18}\right\rfloor.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Если
+        </p>
+
+        <p align="center">
+          $$Q_s=\left\lfloor\frac{m-18-10s}{30}\right\rfloor,$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          то
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          T(m)=
+          \sum_{s=1}^{2}\sum_{q=0}^{Q_s}
+          \left\lfloor\frac{m-10s-30q}{18}\right\rfloor.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Разобьём $q$ по остаткам: $q=3t+j$, где $j\in\{0,1,2\}$.
+          При увеличении $t$ на единицу числитель уменьшается на $90$, а дробь — ровно на $5$:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \left\lfloor
+          \frac{m-10s-30j-90t}{18}
+          \right\rfloor
+          =
+          \left\lfloor
+          \frac{m-10s-30j}{18}
+          \right\rfloor-5t.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Каждая из шести сумм стала арифметической прогрессией. Положим
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          n_{s,j}=\max\left(0,\left\lfloor\frac{Q_s-j}{3}\right\rfloor+1\right),
+          \qquad
+          A_{s,j}=\left\lfloor\frac{m-10s-30j}{18}\right\rfloor.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Тогда точная формула содержит всего шесть слагаемых:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          T(m)=
+          \sum_{s=1}^{2}\sum_{j=0}^{2}
+          \left(
+          n_{s,j}A_{s,j}
+          -5\frac{n_{s,j}(n_{s,j}-1)}2
+          \right)
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Иными словами, $T(m)$ — квадратичный квазиполином периода $90$.
+        </p>
+
+        <h3>9. Как не суммировать сто миллионов значений $d$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Аргумент $T$ зависит от $d$ только через $q=\lfloor L/d\rfloor$.
+          Эта величина принимает лишь $O(\sqrt L)$ различных значений.
+          Если для левой границы $\ell$ имеем $q=\lfloor L/\ell\rfloor$, то тот же частный сохраняется до
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          r=\min\left(
+          \left\lfloor\frac L{28}\right\rfloor,
+          \left\lfloor\frac Lq\right\rfloor
+          \right).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Введём ограниченную сумматорную функцию Мёбиуса
+        </p>
+
+        <p align="center">
+          $$M_3(t)=\sum_{\substack{d\leq t\\3\nmid d}}\mu(d).$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Целый блок $[\ell,r]$ даёт один вклад:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          C(N)=
+          \sum_{\text{блоки }[\ell,r]}
+          \bigl(M_3(r)-M_3(\ell-1)\bigr)T(q)
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для $N=10^9$ таких блоков около ста тысяч, а не сто миллионов.
+          Осталось быстро получать $M_3(t)$. Пусть
+        </p>
+
+        <p align="center">
+          $$M(t)=\sum_{d\leq t}\mu(d)$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          — обычная функция Мертенса. Для чисел, кратных $3$,
+        </p>
+
+        <p align="center">
+          $$
+          \mu(3e)=
+          \begin{cases}
+          -\mu(e),&3\nmid e,\\
+          0,&3\mid e.
+          \end{cases}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Поэтому
+        </p>
+
+        <p align="center">
+          $$M(t)=M_3(t)-M_3\!\left(\left\lfloor\frac t3\right\rfloor\right),$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          откуда
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          M_3(t)=
+          M(t)+M\!\left(\left\lfloor\frac t3\right\rfloor\right)
+          +M\!\left(\left\lfloor\frac t9\right\rfloor\right)+\cdots
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Саму $M(t)$ можно вычислять рекурсивно из тождества
+        </p>
+
+        <p align="center">
+          $$\sum_{k=1}^{t}M\!\left(\left\lfloor\frac tk\right\rfloor\right)=1.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Действительно,
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \sum_{k\leq t}\sum_{d\leq t/k}\mu(d)
+          =\sum_{n\leq t}\sum_{d\mid n}\mu(d)=1.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Выделяя $k=1$, получаем
+        </p>
+
+        <p align="center">
+          $$
+          M(t)=1-
+          \sum_{k=2}^{t}M\!\left(\left\lfloor\frac tk\right\rfloor\right).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Частные $\lfloor t/k\rfloor$ снова группируются в $O(\sqrt t)$ блоков.
+          Небольшая таблица $\mu$, мемоизация больших значений $M(t)$ и блочная сумма делают вычисление сублинейным.
+        </p>
+
+        <h3>10. Почему ответ растёт как $N^2$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          При больших $N$ треугольник $18x+10y\leq3N+6$ имеет катеты примерно $N/6$ и $3N/10$.
+          Его площадь равна
+        </p>
+
+        <p align="center">
+          $$\frac12\cdot\frac N6\cdot\frac{3N}{10}=\frac{N^2}{40}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Плотность точек, для которых одновременно $\gcd(x,y)=1$ и $3\nmid y$, равна
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \frac23\prod_{p\neq3}\left(1-\frac1{p^2}\right)
+          =\frac23\cdot\frac{1/\zeta(2)}{1-1/9}
+          =\frac9{2\pi^2}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Следовательно,
+        </p>
+
+        <p align="center">
+          $$
+          C(N)\sim\frac9{80\pi^2}N^2,
+          \qquad
+          \boxed{B(N)\sim\frac9{20\pi^2}N^2}.
+          $$
+        </p>
+
+        <figure class="euler786-figure">
+          <img src="./786/assets/euler786-growth.svg"
+               alt="Сходимость отношения B(N) к N в квадрате к 9 делённому на 20 пи в квадрате"
+               loading="lazy">
+          <figcaption>Точные значения $B(N)/N^2$ сходятся к $9/(20\pi^2)$.</figcaption>
+        </figure>
+
+        <p align="justify" class="p_on_project_pages">
+          Асимптотика служит независимой проверкой. Если точная сумма заметно отклоняется от
+          $9N^2/(20\pi^2)$, ошибка почти наверняка связана с потерянным сектором,
+          неверным учётом строк $3\mid y$ или неправильной границей $3N+6$.
+        </p>
+
+        <h3>11. Контрольные значения и итоговая цепочка</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Точные формулы воспроизводят все проверки из условия:
+        </p>
+
+        <ul>
+          <li>$B(10)=6$;</li>
+          <li>$B(100)=478$;</li>
+          <li>$B(1000)=45790$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Вся задача умещается в цепочку эквивалентностей:
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \begin{aligned}
+          \text{бильярдная трасса}
+          &\longleftrightarrow
+          \text{прямая в отражённом замощении}\\
+          &\longleftrightarrow
+          6(u,v),\quad
+          \gcd(u,v)=1,\quad
+          u\not\equiv v\pmod3\\
+          &\longleftrightarrow
+          (x,y)&gt;0,\quad
+          \gcd(x,y)=1,\quad
+          3\nmid y,\\
+          &\hspace{35mm}18x+10y\leq3N+6.
+          \end{aligned}
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Окончательная точная формула имеет вид
+        </p>
+
+        <p align="center" class="euler786-wide-formula">
+          $$
+          \boxed{
+          B(N)=
+          4\sum_{\substack{1\leq d\leq\lfloor(3N+6)/28\rfloor\\3\nmid d}}
+          \mu(d)
+          T\!\left(
+          \left\lfloor\frac{3N+6}{d}\right\rfloor
+          \right)+2
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Функция $T(m)$ вычисляется шестью арифметическими прогрессиями из раздела 8.1,
+          а сумма по $d$ сворачивается в блоки через $M_3$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В конце от исходного бильярда почти ничего не осталось. Закон отражения дал развёртку;
+          углы $120^\circ$, $90^\circ$, $60^\circ$, $90^\circ$ породили шестиугольную решётку;
+          запрет удара в вершину стал условием взаимной простоты; число ударов превратилось в линейное неравенство;
+          а миллиард исчез благодаря функции Мёбиуса и группировке одинаковых частных.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Похожий переход от отражений к треугольной решётке встречается в
+          <a class="intext" href="https://projecteuler.net/problem=202" target="_blank" rel="noopener noreferrer">Project Euler 202: Laserbeam</a>.
+          Здесь дополнительная шестиугольная сетка делает геометрию богаче:
+          именно она приносит сравнение по модулю $3$ и коэффициенты $10$ и $18$.
+        </p>
+      </div>
+
+      <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>
+      <a href="#" title="Промотать вниз" class="buttondown"><img src="../images/down-arrow.png" alt="Вниз"></a>
+    </div>
+  </div>
+
+  <script src="../scripts/scrollToTop.js"></script>
+  <script src="../scripts/scrollToBottom.js"></script>
+</body>
+</html>
