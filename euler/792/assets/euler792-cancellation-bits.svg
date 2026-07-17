@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
+<title id="title">Двоичная отмена в хвосте для n=9261</title>
+<desc id="desc">Накопленные остатки по модулю 64 заканчиваются двоичным 110000, давая четыре дополнительных множителя 2.</desc>
+
+<style>
+  :root { --bg:#fbfbfd; --fg:#171821; --muted:#626779; --grid:#d9dce6;
+          --a:#2b6de0; --b:#db5a42; --c:#6e57c5; --soft:#eef3ff; }
+  .bg { fill:var(--bg); }
+  .fg { fill:var(--fg); }
+  .muted { fill:var(--muted); }
+  .grid { stroke:var(--grid); stroke-width:1; }
+  .axis { stroke:var(--fg); stroke-width:1.5; }
+  .line-a { fill:none; stroke:var(--a); stroke-width:4; stroke-linejoin:round; stroke-linecap:round; }
+  .line-b { fill:none; stroke:var(--b); stroke-width:4; stroke-linejoin:round; stroke-linecap:round; }
+  .mark-a { fill:var(--a); }
+  .mark-b { fill:var(--b); }
+  .mark-c { fill:var(--c); }
+  .soft { fill:var(--soft); }
+  text { font-family:"Courier Prime","Courier New",monospace; }
+  .title { font-size:28px; font-weight:600; }
+  .subtitle { font-size:18px; font-weight:500; }
+  .label { font-size:16px; }
+  .small { font-size:14px; }
+  .mono { font-family:"Courier Prime","Courier New",monospace; }
+</style>
+
+<rect class="bg" width="1200" height="650"/>
+<text x="70" y="55" class="fg title">Как два равных минимума поднимают valuation</text>
+<text x="70" y="86" class="muted label">Хвост для n=9261 делим на 2⁹²⁶⁸ и считаем по модулю 64. Показаны накопленные остатки.</text>
+<text x="367.5" y="128" text-anchor="middle" class="muted small">2^5</text>
+<text x="472.5" y="128" text-anchor="middle" class="muted small">2^4</text>
+<text x="577.5" y="128" text-anchor="middle" class="muted small">2^3</text>
+<text x="682.5" y="128" text-anchor="middle" class="muted small">2^2</text>
+<text x="787.5" y="128" text-anchor="middle" class="muted small">2^1</text>
+<text x="892.5" y="128" text-anchor="middle" class="muted small">2^0</text>
+<text x="293" y="185" text-anchor="end" class="fg label">k=9262</text>
+<rect x="320" y="155" width="95" height="46" rx="8" class="soft"/>
+<text x="367.5" y="186" text-anchor="middle" class="fg label mono">0</text>
+<rect x="425" y="155" width="95" height="46" rx="8" class="mark-a"/>
+<text x="472.5" y="186" text-anchor="middle" class="fg label mono">1</text>
+<rect x="530" y="155" width="95" height="46" rx="8" class="mark-a"/>
+<text x="577.5" y="186" text-anchor="middle" class="fg label mono">1</text>
+<rect x="635" y="155" width="95" height="46" rx="8" class="soft"/>
+<text x="682.5" y="186" text-anchor="middle" class="fg label mono">0</text>
+<rect x="740" y="155" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="186" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="155" width="95" height="46" rx="8" class="mark-a"/>
+<text x="892.5" y="186" text-anchor="middle" class="fg label mono">1</text>
+<text x="969" y="185" class="muted label mono">= 25</text>
+<text x="293" y="241" text-anchor="end" class="fg label">+ k=9263</text>
+<rect x="320" y="211" width="95" height="46" rx="8" class="mark-a"/>
+<text x="367.5" y="242" text-anchor="middle" class="fg label mono">1</text>
+<rect x="425" y="211" width="95" height="46" rx="8" class="soft"/>
+<text x="472.5" y="242" text-anchor="middle" class="fg label mono">0</text>
+<rect x="530" y="211" width="95" height="46" rx="8" class="mark-a"/>
+<text x="577.5" y="242" text-anchor="middle" class="fg label mono">1</text>
+<rect x="635" y="211" width="95" height="46" rx="8" class="mark-a"/>
+<text x="682.5" y="242" text-anchor="middle" class="fg label mono">1</text>
+<rect x="740" y="211" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="242" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="211" width="95" height="46" rx="8" class="mark-a"/>
+<text x="892.5" y="242" text-anchor="middle" class="fg label mono">1</text>
+<text x="969" y="241" class="muted label mono">= 45</text>
+<text x="293" y="297" text-anchor="end" class="fg label">+ k=9264</text>
+<rect x="320" y="267" width="95" height="46" rx="8" class="mark-a"/>
+<text x="367.5" y="298" text-anchor="middle" class="fg label mono">1</text>
+<rect x="425" y="267" width="95" height="46" rx="8" class="soft"/>
+<text x="472.5" y="298" text-anchor="middle" class="fg label mono">0</text>
+<rect x="530" y="267" width="95" height="46" rx="8" class="soft"/>
+<text x="577.5" y="298" text-anchor="middle" class="fg label mono">0</text>
+<rect x="635" y="267" width="95" height="46" rx="8" class="mark-a"/>
+<text x="682.5" y="298" text-anchor="middle" class="fg label mono">1</text>
+<rect x="740" y="267" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="298" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="267" width="95" height="46" rx="8" class="soft"/>
+<text x="892.5" y="298" text-anchor="middle" class="fg label mono">0</text>
+<text x="969" y="297" class="muted label mono">= 36</text>
+<text x="293" y="353" text-anchor="end" class="fg label">+ k=9265</text>
+<rect x="320" y="323" width="95" height="46" rx="8" class="soft"/>
+<text x="367.5" y="354" text-anchor="middle" class="fg label mono">0</text>
+<rect x="425" y="323" width="95" height="46" rx="8" class="soft"/>
+<text x="472.5" y="354" text-anchor="middle" class="fg label mono">0</text>
+<rect x="530" y="323" width="95" height="46" rx="8" class="mark-a"/>
+<text x="577.5" y="354" text-anchor="middle" class="fg label mono">1</text>
+<rect x="635" y="323" width="95" height="46" rx="8" class="soft"/>
+<text x="682.5" y="354" text-anchor="middle" class="fg label mono">0</text>
+<rect x="740" y="323" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="354" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="323" width="95" height="46" rx="8" class="soft"/>
+<text x="892.5" y="354" text-anchor="middle" class="fg label mono">0</text>
+<text x="969" y="353" class="muted label mono">= 08</text>
+<text x="293" y="409" text-anchor="end" class="fg label">+ k=9266</text>
+<rect x="320" y="379" width="95" height="46" rx="8" class="mark-a"/>
+<text x="367.5" y="410" text-anchor="middle" class="fg label mono">1</text>
+<rect x="425" y="379" width="95" height="46" rx="8" class="mark-a"/>
+<text x="472.5" y="410" text-anchor="middle" class="fg label mono">1</text>
+<rect x="530" y="379" width="95" height="46" rx="8" class="soft"/>
+<text x="577.5" y="410" text-anchor="middle" class="fg label mono">0</text>
+<rect x="635" y="379" width="95" height="46" rx="8" class="soft"/>
+<text x="682.5" y="410" text-anchor="middle" class="fg label mono">0</text>
+<rect x="740" y="379" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="410" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="379" width="95" height="46" rx="8" class="soft"/>
+<text x="892.5" y="410" text-anchor="middle" class="fg label mono">0</text>
+<text x="969" y="409" class="muted label mono">= 48</text>
+<text x="293" y="465" text-anchor="end" class="fg label">+ k=9267</text>
+<rect x="320" y="435" width="95" height="46" rx="8" class="soft"/>
+<text x="367.5" y="466" text-anchor="middle" class="fg label mono">0</text>
+<rect x="425" y="435" width="95" height="46" rx="8" class="mark-a"/>
+<text x="472.5" y="466" text-anchor="middle" class="fg label mono">1</text>
+<rect x="530" y="435" width="95" height="46" rx="8" class="soft"/>
+<text x="577.5" y="466" text-anchor="middle" class="fg label mono">0</text>
+<rect x="635" y="435" width="95" height="46" rx="8" class="soft"/>
+<text x="682.5" y="466" text-anchor="middle" class="fg label mono">0</text>
+<rect x="740" y="435" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="466" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="435" width="95" height="46" rx="8" class="soft"/>
+<text x="892.5" y="466" text-anchor="middle" class="fg label mono">0</text>
+<text x="969" y="465" class="muted label mono">= 16</text>
+<text x="293" y="521" text-anchor="end" class="fg label">+ k=9268</text>
+<rect x="320" y="491" width="95" height="46" rx="8" class="mark-a"/>
+<text x="367.5" y="522" text-anchor="middle" class="fg label mono">1</text>
+<rect x="425" y="491" width="95" height="46" rx="8" class="mark-a"/>
+<text x="472.5" y="522" text-anchor="middle" class="fg label mono">1</text>
+<rect x="530" y="491" width="95" height="46" rx="8" class="soft"/>
+<text x="577.5" y="522" text-anchor="middle" class="fg label mono">0</text>
+<rect x="635" y="491" width="95" height="46" rx="8" class="soft"/>
+<text x="682.5" y="522" text-anchor="middle" class="fg label mono">0</text>
+<rect x="740" y="491" width="95" height="46" rx="8" class="soft"/>
+<text x="787.5" y="522" text-anchor="middle" class="fg label mono">0</text>
+<rect x="845" y="491" width="95" height="46" rx="8" class="soft"/>
+<text x="892.5" y="522" text-anchor="middle" class="fg label mono">0</text>
+<text x="969" y="521" class="muted label mono">= 48</text>
+<text x="315" y="590" class="fg subtitle">Финал: 48 = 110000₂, поэтому первые четыре бита равны нулю и ν₂ поднимается на 4.</text>
+</svg>

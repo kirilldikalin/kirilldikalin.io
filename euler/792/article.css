@@ -1,0 +1,58 @@
+.euler792-article > p {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 2em;
+  text-align: justify;
+}
+
+.euler792-article > p:has(> .math.display) {
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+}
+
+.euler792-article figure {
+  margin: 0 0 2em;
+  text-align: center;
+}
+
+.euler792-article figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--color-border-variation-1);
+  border-radius: 0.7ex;
+  background: #fbfbfd;
+}
+
+.euler792-article figcaption {
+  margin-top: 0.6em;
+  font-size: 0.85em;
+  line-height: 1.35;
+}
+
+.euler792-article table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  font-size: 0.85em;
+  line-height: 1.35;
+}
+
+.euler792-explorer-frame {
+  display: block;
+  width: 100%;
+  height: 650px;
+  margin: 0 0 2em;
+  border: 1px solid var(--color-border-variation-1);
+  border-radius: 0.7ex;
+  background: #fbfbfd;
+}
+
+@media screen and (max-width: 50em) {
+  .euler792-explorer-frame {
+    height: 790px;
+  }
+}

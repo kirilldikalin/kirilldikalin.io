@@ -3,283 +3,1252 @@
 
 <head>
   <meta charset="utf-8">
-  <title>projecteuler solutions - Kirill Dikalin</title>
+  <title>792. Слишком много двоек — Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 792: двоичный вес, центральные биномиальные коэффициенты и короткий 2-адический хвост.">
+  <meta property="og:title" content="792. Слишком много двоек — Kirill Dikalin">
+  <meta property="og:description" content="Разбор Project Euler 792 с интерактивным исследователем 2-адического хвоста.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/792.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/792.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./792/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <ul class="breadcrumb">
-      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
-      / 
-      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
-      / 
-      792
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    792
   </ul>
 
   <div class="our_framework">
     <div class="section_content">
-      <div id="toc_container" class="euler_article">
-            
+      <div id="toc_container" class="euler_article euler792-article">
         <h2 id="792">Слишком много двоек</h2>
 
-            <div align="justify" class="problem_content">
-                <p> Определим
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <msub>
-                          <mi>ν</mi>
-                          <mn>2</mn>
-                        </msub>
-                        <mo stretchy="false">(</mo>
-                        <mi>n</mi>
-                        <mo stretchy="false">)</mo>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> как наибольшее целое число
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>r</mi>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> такое что
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <msup>
-                          <mn>2</mn>
-                          <mi>r</mi>
-                        </msup>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> делит
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>n</mi>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>нацело. Например,
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <msub>
-                          <mi>ν</mi>
-                          <mn>2</mn>
-                        </msub>
-                        <mo stretchy="false">(</mo>
-                        <mn>24</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>3</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. </p>
-                <p> Определим
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mstyle displaystyle="true" scriptlevel="0">
-                          <mi>S</mi>
-                          <mo stretchy="false">(</mo>
-                          <mi>n</mi>
-                          <mo stretchy="false">)</mo>
-                          <mo>=</mo>
-                          <munderover>
-                            <mo data-mjx-texclass="OP">∑</mo>
-                            <mrow data-mjx-texclass="ORD">
-                              <mi>k</mi>
-                              <mo>=</mo>
-                              <mn>1</mn>
-                            </mrow>
-                            <mi>n</mi>
-                          </munderover>
-                          <mo stretchy="false">(</mo>
-                          <mo>−</mo>
-                          <mn>2</mn>
-                          <msup>
-                            <mo stretchy="false">)</mo>
-                            <mi>k</mi>
-                          </msup>
-                          <mrow data-mjx-texclass="ORD">
-                            <mrow data-mjx-texclass="OPEN">
-                              <mo minsize="2.047em" maxsize="2.047em">(</mo>
-                            </mrow>
-                            <mfrac linethickness="0">
-                              <mrow>
-                                <mn>2</mn>
-                                <mi>k</mi>
-                              </mrow>
-                              <mi>k</mi>
-                            </mfrac>
-                            <mrow data-mjx-texclass="CLOSE">
-                              <mo minsize="2.047em" maxsize="2.047em">)</mo>
-                            </mrow>
-                          </mrow>
-                        </mstyle>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> и
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>u</mi>
-                        <mo stretchy="false">(</mo>
-                        <mi>n</mi>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <msub>
-                          <mi>ν</mi>
-                          <mn>2</mn>
-                        </msub>
-                        <mrow data-mjx-texclass="ORD">
-                          <mo minsize="1.623em" maxsize="1.623em">(</mo>
-                        </mrow>
-                        <mn>3</mn>
-                        <mi>S</mi>
-                        <mo stretchy="false">(</mo>
-                        <mi>n</mi>
-                        <mo stretchy="false">)</mo>
-                        <mo>+</mo>
-                        <mn>4</mn>
-                        <mrow data-mjx-texclass="ORD">
-                          <mo minsize="1.623em" maxsize="1.623em">)</mo>
-                        </mrow>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. </p>
-                <p> Например, если
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>n</mi>
-                        <mo>=</mo>
-                        <mn>4</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>, то
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>S</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>4</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>980</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> и
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="9" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mn>3</mn>
-                        <mi>S</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>4</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>+</mo>
-                        <mn>4</mn>
-                        <mo>=</mo>
-                        <mn>2944</mn>
-                        <mo>=</mo>
-                        <msup>
-                          <mn>2</mn>
-                          <mn>7</mn>
-                        </msup>
-                        <mo>⋅</mo>
-                        <mn>23</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>, отсюда и
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="10" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>u</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>4</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>7</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>.
-                  <br> Вам также известно, что
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="11" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>u</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>20</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>24</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. </p>
-                <p> Также определим
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="12" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mstyle displaystyle="true" scriptlevel="0">
-                          <mi>U</mi>
-                          <mo stretchy="false">(</mo>
-                          <mi>N</mi>
-                          <mo stretchy="false">)</mo>
-                          <mo>=</mo>
-                          <munderover>
-                            <mo data-mjx-texclass="OP">∑</mo>
-                            <mrow data-mjx-texclass="ORD">
-                              <mi>n</mi>
-                              <mo>=</mo>
-                              <mn>1</mn>
-                            </mrow>
-                            <mi>N</mi>
-                          </munderover>
-                          <mi>u</mi>
-                          <mo stretchy="false">(</mo>
-                          <msup>
-                            <mi>n</mi>
-                            <mn>3</mn>
-                          </msup>
-                          <mo stretchy="false">)</mo>
-                        </mstyle>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. Известно, что
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="13" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>U</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>5</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>241</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. </p>
-                <p> Найдите
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="14" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>U</mi>
-                        <mo stretchy="false">(</mo>
-                        <msup>
-                          <mn>10</mn>
-                          <mn>4</mn>
-                        </msup>
-                        <mo stretchy="false">)</mo>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. </p>
-              </div>
+        <h3>Условие задачи</h3>
 
-        <h2>Решение</h2>
+        <p align="justify" class="p_on_project_pages">
+          Для ненулевого целого $n$ обозначим через $\nu_2(n)$ наибольшее $r$, для которого $2^r$ делит $n$.
+          Определим
+        </p>
+
+        <p align="center">
+          $$
+          S(n)=\sum_{k=1}^{n}(-2)^k\binom{2k}{k},
+          \qquad
+          u(n)=\nu_2\bigl(3S(n)+4\bigr),
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          а затем $U(N)=\sum_{n=1}^{N}u(n^3)$. Из условия известны $u(4)=7$, $u(20)=24$ и $U(5)=241$.
+          Требуется найти $U(10^4)$. Полное условие доступно на
+          <a class="intext" href="https://projecteuler.net/problem=792" target="_blank" rel="noopener noreferrer">странице Project Euler 792</a>.
+        </p>
+
+        <h3>Разбор решения</h3>
+<p>В этой задаче всё устроено так, чтобы первая естественная идея
+оказалась почти бесполезной. Нам дают</p>
+<p><span class="math display">\[
+S(n)=\sum_{k=1}^{n}(-2)^k\binom{2k}{k},
+\qquad
+u(n)=\nu_2\bigl(3S(n)+4\bigr),
+\]</span></p>
+<p>а затем просят сложить <span class="math inline">\(u(m^3)\)</span>
+для <span class="math inline">\(m\le 10^4\)</span>. Последний аргумент
+равен <span class="math inline">\(10^{12}\)</span>. Уже одно это
+говорит: вычислять <span class="math inline">\(S(n)\)</span> по
+определению нельзя. Даже если забыть про размер целых чисел,
+понадобилось бы порядка <span class="math inline">\(10^{12}\)</span>
+членов только для одного последнего значения.</p>
+<p>Но задача спрашивает не само число <span
+class="math inline">\(3S(n)+4\)</span>. Ей нужна только позиция его
+первой единицы в двоичной записи, то есть количество нулей на конце. Это
+совсем другая информация. Иногда ради неё можно выбросить почти всё
+число — и здесь именно такой случай.</p>
+<p>Мой путь к решению начался с трёх наблюдений. Сначала я выписал
+несколько значений и увидел, что <span
+class="math inline">\(u(n)\)</span> держится рядом с <span
+class="math inline">\(n\)</span>. Затем посмотрел на <a class="intext" target="_blank" rel="noopener noreferrer" href="https://arxiv.org/abs/1907.11902">формулу Лежандра</a> и теорему
+Куммера: они объяснили, почему рядом с <span
+class="math inline">\(n\)</span> постоянно возникает число единиц в
+двоичной записи. Наконец, производящая функция центральных биномиальных
+коэффициентов подсказала, что конечная сумма является началом ряда,
+который сходится в мире <span class="math inline">\(2\)</span>-адических
+чисел. После этого огромная сумма развернулась: вместо первых <span
+class="math inline">\(n\)</span> членов оказалось достаточно исследовать
+несколько членов <strong>после</strong> <span
+class="math inline">\(n\)</span>.</p>
+<p>Ниже я проведу основную линию до конца, а затем вернусь к
+альтернативам. У этой задачи действительно много дверей: конечное
+биномиальное тождество, последовательность OEIS, рекуррентность, теорема
+Куммера, вычисление биномиалов по модулю <span
+class="math inline">\(2^r\)</span>, гипергеометрическая форма и короткий
+<span class="math inline">\(2\)</span>-адический хвост. Они описывают
+один объект с разных сторон, но вычислительно ведут себя очень
+по-разному.</p>
+<figure>
+<img src="./792/assets/euler792-method-map.svg"
+alt="Карта основных и альтернативных путей решения"  loading="lazy" />
+<figcaption aria-hidden="true">Карта основных и альтернативных путей
+решения</figcaption>
+</figure>
+<h3 id="что-именно-измеряет-nu_2">1. Что именно измеряет <span
+class="math inline">\(\nu_2\)</span></h3>
+<p>Для ненулевого целого <span class="math inline">\(x\)</span></p>
+<p><span class="math display">\[
+\nu_2(x)=r
+\quad\Longleftrightarrow\quad
+x=2^r q,\qquad q\text{ нечётно}.
+\]</span></p>
+<p>Это не просто «сколько раз число делится на два». У valuation есть
+правило, которое управляет всей задачей:</p>
+<p><span class="math display">\[
+\nu_2(x+y)\ge \min\bigl(\nu_2(x),\nu_2(y)\bigr).
+\]</span></p>
+<p>Если две valuation различны, неравенство превращается в
+равенство:</p>
+<p><span class="math display">\[
+\nu_2(x)&lt;\nu_2(y)
+\quad\Longrightarrow\quad
+\nu_2(x+y)=\nu_2(x).
+\]</span></p>
+<p>Причина проста. Пусть <span class="math inline">\(x=2^r a\)</span>,
+где <span class="math inline">\(a\)</span> нечётно, а <span
+class="math inline">\(y=2^{r+d}b\)</span>, где <span
+class="math inline">\(d&gt;0\)</span>. Тогда</p>
+<p><span class="math display">\[
+x+y=2^r\bigl(a+2^d b\bigr),
+\]</span></p>
+<p>и выражение в скобках остаётся нечётным. Член с меньшей valuation
+безраздельно определяет первую ненулевую двоичную цифру суммы.</p>
+<p>Опасность возникает только при ничьей. Если</p>
+<p><span class="math display">\[
+\nu_2(x)=\nu_2(y)=r,
+\]</span></p>
+<p>то после вынесения <span class="math inline">\(2^r\)</span>
+складываются два нечётных числа. Их сумма чётна, поэтому valuation
+обязательно поднимается хотя бы на один, а иногда сразу на несколько
+уровней. В обычной арифметике мы спрашиваем, насколько велики слагаемые;
+здесь важнее узнать, на каком двоичном этаже они впервые появляются и не
+уничтожают ли друг друга на этом этаже.</p>
+<p>Именно поэтому дальнейшее решение естественно делится на два
+случая:</p>
+<ul>
+<li>если среди valuation слагаемых есть единственный минимум, ответ
+известен сразу;</li>
+<li>если минимум повторяется, приходится вычислять нечётные части и
+отслеживать переносы.</li>
+</ul>
+<h3 id="двоичный-вес-и-центральный-биномиальный-коэффициент">2. Двоичный
+вес и центральный биномиальный коэффициент</h3>
+<p>Обозначим через <span class="math inline">\(s_2(m)\)</span> число
+единиц в двоичной записи <span class="math inline">\(m\)</span>.
+Например,</p>
+<p><span class="math display">\[
+13=1101_2,
+\qquad
+s_2(13)=3.
+\]</span></p>
+<p>Формула Лежандра при <span class="math inline">\(p=2\)</span>
+принимает особенно красивый вид:</p>
+<p><span class="math display">\[
+\nu_2(m!)=\sum_{j\ge1}\left\lfloor\frac{m}{2^j}\right\rfloor
+=m-s_2(m).
+\]</span></p>
+<p>Применим её к центральному биномиальному коэффициенту:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nu_2\binom{2m}{m}
+&amp;=\nu_2((2m)!)-2\nu_2(m!)\\
+&amp;=\bigl(2m-s_2(2m)\bigr)-2\bigl(m-s_2(m)\bigr).
+\end{aligned}
+\]</span></p>
+<p>Умножение на два просто приписывает двоичной записи ноль, поэтому
+<span class="math inline">\(s_2(2m)=s_2(m)\)</span>. Следовательно,</p>
+<p><span class="math display">\[
+\boxed{\nu_2\binom{2m}{m}=s_2(m).}
+\]</span></p>
+<p>Это частный случай теоремы Куммера: valuation биномиального
+коэффициента равна числу переносов при сложении соответствующих чисел в
+системе счисления по основанию <span class="math inline">\(p\)</span>.
+Для <span class="math inline">\(\binom{2m}{m}\)</span> мы складываем
+<span class="math inline">\(m+m\)</span> в двоичной системе; число
+переносов оказывается равным <span
+class="math inline">\(s_2(m)\)</span>.</p>
+<p>Теперь рассмотрим отдельное слагаемое исходной суммы:</p>
+<p><span class="math display">\[
+t_m=(-2)^m\binom{2m}{m}.
+\]</span></p>
+<p>Его valuation равна</p>
+<p><span class="math display">\[
+\boxed{\nu_2(t_m)=m+s_2(m).}
+\]</span></p>
+<p>Главный член — линейный <span class="math inline">\(m\)</span>.
+Двоичный вес добавляет лишь <span class="math inline">\(O(\log
+m)\)</span>. Вот первое объяснение того, почему искомое <span
+class="math inline">\(u(n)\)</span> должно быть близко к <span
+class="math inline">\(n\)</span>.</p>
+<h3 id="первая-дверь-точное-конечное-тождество">3. Первая дверь: точное
+конечное тождество</h3>
+<p>До <span class="math inline">\(2\)</span>-адических чисел можно дойти
+не сразу. Сначала полезно преобразовать конечную сумму в другую конечную
+сумму. Введём</p>
+<p><span class="math display">\[
+a_n=\sum_{j=0}^{n}(-2)^j\binom{2n+1}{n-j}.
+\]</span></p>
+<p>Тогда выполняется точное тождество</p>
+<p><span class="math display">\[
+\boxed{3S(n)+4=(-2)^{n+2}a_n.}
+\tag{1}
+\]</span></p>
+<p>Проверка для <span class="math inline">\(n=4\)</span> уже выглядит
+обнадёживающе:</p>
+<p><span class="math display">\[
+a_4=46,
+\qquad
+(-2)^6a_4=64\cdot46=2944.
+\]</span></p>
+<p>Отсюда немедленно следует</p>
+<p><span class="math display">\[
+\boxed{u(n)=n+2+\nu_2(a_n).}
+\tag{2}
+\]</span></p>
+<p>То есть почти вся valuation известна заранее. Трудная часть, <span
+class="math inline">\(\nu_2(a_n)\)</span>, растёт лишь
+логарифмически.</p>
+<h4 id="аккуратное-доказательство-тождества">3.1. Аккуратное
+доказательство тождества</h4>
+<p>Сумму <span class="math inline">\(a_n\)</span> удобно записать как
+коэффициент:</p>
+<p><span class="math display">\[
+a_n=[x^n]\frac{(1+x)^{2n+1}}{1+2x}.
+\tag{3}
+\]</span></p>
+<p>Действительно, разложение <span
+class="math inline">\(1/(1+2x)=\sum_{j\ge0}(-2x)^j\)</span> даёт именно
+нужную свёртку коэффициентов. Обозначим</p>
+<p><span class="math display">\[
+F_n(x)=\frac{(1+x)^{2n+1}}{1+2x},
+\qquad
+f_r=[x^r]F_n(x).
+\]</span></p>
+<p>Из равенства <span
+class="math inline">\((1+2x)F_n(x)=(1+x)^{2n+1}\)</span> получаем</p>
+<p><span class="math display">\[
+f_{n+1}+2f_n=\binom{2n+1}{n+1}=\binom{2n+1}{n}
+\]</span></p>
+<p>и</p>
+<p><span class="math display">\[
+f_n+2f_{n-1}=\binom{2n+1}{n}.
+\]</span></p>
+<p>Поскольку <span
+class="math inline">\(F_{n+1}(x)=(1+x)^2F_n(x)\)</span>,</p>
+<p><span class="math display">\[
+\begin{aligned}
+a_{n+1}
+&amp;=[x^{n+1}](1+x)^2F_n(x)\\
+&amp;=f_{n+1}+2f_n+f_{n-1}\\
+&amp;=\binom{2n+1}{n}+\frac{\binom{2n+1}{n}-a_n}{2}.
+\end{aligned}
+\]</span></p>
+<p>Значит,</p>
+<p><span class="math display">\[
+2a_{n+1}+a_n=3\binom{2n+1}{n}.
+\tag{4}
+\]</span></p>
+<p>Положим <span class="math inline">\(R_n=(-2)^{n+2}a_n\)</span>.
+Тогда</p>
+<p><span class="math display">\[
+\begin{aligned}
+R_{n+1}-R_n
+&amp;=(-2)^{n+2}\bigl(-2a_{n+1}-a_n\bigr)\\
+&amp;=-3(-2)^{n+2}\binom{2n+1}{n}\\
+&amp;=3(-2)^{n+1}\binom{2n+2}{n+1}.
+\end{aligned}
+\]</span></p>
+<p>Но правая часть — ровно приращение <span
+class="math inline">\(3S(n)\)</span> при переходе от <span
+class="math inline">\(n\)</span> к <span
+class="math inline">\(n+1\)</span>. При <span
+class="math inline">\(n=0\)</span> обе стороны (1) равны <span
+class="math inline">\(4\)</span>, поэтому тождество доказано
+индукцией.</p>
+<h4 id="неожиданная-встреча-с-oeis">3.2. Неожиданная встреча с OEIS</h4>
+<p>Первые значения <span class="math inline">\(a_n\)</span> таковы:</p>
+<p><span class="math display">\[
+1,1,4,13,46,166,610,2269,8518,\ldots
+\]</span></p>
+<p>Это <a class="intext" target="_blank" rel="noopener noreferrer" href="https://oeis.org/A026641">OEIS A026641</a>. У
+последовательности есть совсем иная комбинаторная интерпретация: она
+считает вершины чётной исходящей степени во всех упорядоченных деревьях
+с <span class="math inline">\(n\)</span> рёбрами. Для нашей задачи
+важнее другие записи с той же страницы:</p>
+<p><span class="math display">\[
+A(z)=\sum_{n\ge0}a_nz^n
+=\frac{2}{3\sqrt{1-4z}-1+4z},
+\tag{5}
+\]</span></p>
+<p>а также D-конечная рекуррентность</p>
+<p><span class="math display">\[
+2n a_n+(4-7n)a_{n-1}+2(1-2n)a_{n-2}=0.
+\tag{6}
+\]</span></p>
+<p>Эта находка полезна концептуально: странная сумма не случайна, она
+сидит внутри хорошо изученной алгебраической производящей функции. Но
+вычислительно рекуррентность (6) обманчива. Чтобы добраться до <span
+class="math inline">\(a_{10^{12}}\)</span>, линейный проход всё равно
+потребует <span class="math inline">\(10^{12}\)</span> шагов. Попытка
+ускорить рекуррентность матричными произведениями сталкивается с
+делением на <span class="math inline">\(n\)</span>, а чётные знаменатели
+нельзя просто обратить по модулю <span
+class="math inline">\(2^r\)</span>. Поэтому OEIS объясняет структуру, но
+не даёт самого короткого алгоритма.</p>
+<h3
+id="вторая-дверь-сумма-которая-расходится-в-mathbb-r-но-сходится-в-mathbb-q_2">4.
+Вторая дверь: сумма, которая расходится в <span
+class="math inline">\(\mathbb R\)</span>, но сходится в <span
+class="math inline">\(\mathbb Q_2\)</span></h3>
+<p>Теперь начинается самый красивый поворот.</p>
+<p>Известная производящая функция центральных биномиальных коэффициентов
+имеет вид</p>
+<p><span class="math display">\[
+\frac1{\sqrt{1-4x}}
+=\sum_{k=0}^{\infty}\binom{2k}{k}x^k.
+\tag{7}
+\]</span></p>
+<p>В вещественных числах подставлять <span
+class="math inline">\(x=-2\)</span> нельзя: члены растут примерно как
+<span class="math inline">\(8^k/\sqrt{k}\)</span>. Но <span
+class="math inline">\(2\)</span>-адическая сходимость смотрит не на
+вещественный размер. Ряд сходится, если valuation его членов стремится к
+бесконечности. А мы уже знаем</p>
+<p><span class="math display">\[
+\nu_2\left((-2)^k\binom{2k}{k}\right)=k+s_2(k)\longrightarrow\infty.
+\]</span></p>
+<p>Следовательно,</p>
+<p><span class="math display">\[
+T=\sum_{k=0}^{\infty}(-2)^k\binom{2k}{k}
+\]</span></p>
+<p>корректно определён в <span class="math inline">\(\mathbb
+Q_2\)</span>. Хорошее строгое введение в такую сходимость и
+ультраметрическое неравенство можно найти в <a class="intext" target="_blank" rel="noopener noreferrer" href="https://kconrad.math.uconn.edu/math5020f11/evertsepadicnotes.pdf">конспекте
+по <span class="math inline">\(p\)</span>-адическим числам</a>.</p>
+<p>Формальное тождество (7) можно возвести в квадрат, а затем непрерывно
+вычислить при <span class="math inline">\(x=-2\)</span>. Получаем</p>
+<p><span class="math display">\[
+T^2=\frac1{1-4(-2)}=\frac19.
+\]</span></p>
+<p>Значит, <span class="math inline">\(T=\pm1/3\)</span>. В <span
+class="math inline">\(2\)</span>-адическом мире нельзя выбирать знак по
+вещественному понятию «положительности», поэтому посмотрим на несколько
+младших битов. Все члены начиная с <span
+class="math inline">\(k=2\)</span> делятся на <span
+class="math inline">\(8\)</span>, следовательно,</p>
+<p><span class="math display">\[
+T\equiv1-4\equiv5\pmod8.
+\]</span></p>
+<p>При этом</p>
+<p><span class="math display">\[
+-\frac13\equiv5\pmod8,
+\]</span></p>
+<p>так что правильная ветвь корня равна</p>
+<p><span class="math display">\[
+\boxed{T=-\frac13.}
+\tag{8}
+\]</span></p>
+<p>Поскольку <span class="math inline">\(S(n)\)</span> начинается с
+<span class="math inline">\(k=1\)</span>, бесконечный предел равен</p>
+<p><span class="math display">\[
+\sum_{k=1}^{\infty}(-2)^k\binom{2k}{k}
+=T-1=-\frac43.
+\]</span></p>
+<p>И вот зачем в условии стояла комбинация <span
+class="math inline">\(3S(n)+4\)</span>: она уничтожает весь бесконечный
+ряд.</p>
+<p><span class="math display">\[
+\begin{aligned}
+3S(n)+4
+&amp;=-3\sum_{k=n+1}^{\infty}(-2)^k\binom{2k}{k}.
+\end{aligned}
+\tag{9}
+\]</span></p>
+<p>Множитель <span class="math inline">\(-3\)</span> нечётен и valuation
+не меняет. Поэтому</p>
+<p><span class="math display">\[
+\boxed{
+u(n)=\nu_2\left(\sum_{k=n+1}^{\infty}(-2)^k\binom{2k}{k}\right).
+}
+\tag{10}
+\]</span></p>
+<p>Исходные <span class="math inline">\(n\)</span> членов исчезли.
+Остался хвост, и valuation его членов быстро растёт.</p>
+<h3 id="сначала-попробуем-обойтись-только-valuation-слагаемых">5.
+Сначала попробуем обойтись только valuation слагаемых</h3>
+<p>Положим</p>
+<p><span class="math display">\[
+\lambda(k)=\nu_2(t_k)=k+s_2(k).
+\]</span></p>
+<p>Если минимум <span class="math inline">\(\lambda(k)\)</span> среди
+<span class="math inline">\(k&gt;n\)</span> достигается ровно один раз,
+ультраметрическое правило немедленно даёт</p>
+<p><span class="math display">\[
+u(n)=\min_{k&gt;n}\lambda(k).
+\tag{11}
+\]</span></p>
+<p>Бесконечный минимум искать не нужно. Первый кандидат <span
+class="math inline">\(k=n+1\)</span> имеет высоту</p>
+<p><span class="math display">\[
+\lambda(n+1)=n+1+s_2(n+1).
+\]</span></p>
+<p>А для</p>
+<p><span class="math display">\[
+k\ge n+1+s_2(n+1)
+\]</span></p>
+<p>выполнено</p>
+<p><span class="math display">\[
+\lambda(k)\ge k+1&gt;\lambda(n+1).
+\]</span></p>
+<p>Значит, достаточно проверить короткое окно</p>
+<p><span class="math display">\[
+n+1\le k&lt;n+1+s_2(n+1),
+\tag{12}
+\]</span></p>
+<p>длина которого не превосходит числа двоичных разрядов <span
+class="math inline">\(n\)</span>.</p>
+<p>Например, при <span class="math inline">\(n=20\)</span></p>
+<p><span class="math display">\[
+\lambda(21)=21+s_2(21)=21+3=24
+\]</span></p>
+<p>и это единственный минимум. Мы сразу получаем данное в условии <span
+class="math inline">\(u(20)=24\)</span>, не вычислив ни одного большого
+биномиального коэффициента.</p>
+<p>Для кубов <span class="math inline">\(m^3\)</span>, <span
+class="math inline">\(1\le m\le10^4\)</span>, критерий единственного
+минимума срабатывает в <span class="math inline">\(9618\)</span>
+случаях. Остаются <span class="math inline">\(382\)</span> ничьи, причём
+в каждом из них минимальных членов ровно два. Это уже решает более <span
+class="math inline">\(96\%\)</span> задачи с помощью одних двоичных
+весов.</p>
+<figure>
+<img src="./792/assets/euler792-tail-minima.svg"
+alt="Уникальный минимум и столкновение двух минимумов"  loading="lazy" />
+<figcaption aria-hidden="true">Уникальный минимум и столкновение двух
+минимумов</figcaption>
+</figure>
+<iframe class="euler792-explorer-frame" src="./792/interactive/too-many-twos-explorer.html" title="Исследователь 2-адического хвоста Too Many Twos" loading="lazy">
+</iframe>
+<h3 id="почему-ничья-меняет-всё">6. Почему ничья меняет всё</h3>
+<p>Рассмотрим первый особенно наглядный куб:</p>
+<p><span class="math display">\[
+n=21^3=9261.
+\]</span></p>
+<p>В хвосте два одинаковых минимальных уровня:</p>
+<p><span class="math display">\[
+\lambda(9262)=9268,
+\qquad
+\lambda(9264)=9268.
+\]</span></p>
+<p>Если бы минимум был один, ответом было бы <span
+class="math inline">\(9268\)</span>. Но после деления соответствующих
+слагаемых на <span class="math inline">\(2^{9268}\)</span> их нечётные
+части по модулю <span class="math inline">\(64\)</span> равны <span
+class="math inline">\(25\)</span> и <span
+class="math inline">\(55\)</span>. Уже их сумма</p>
+<p><span class="math display">\[
+25+55=80=16\cdot5
+\]</span></p>
+<p>содержит четыре дополнительные двойки. Члены следующих уровней тоже
+участвуют в переносах. Если последовательно добавить существенные
+слагаемые хвоста и каждый раз смотреть на накопленный остаток по модулю
+<span class="math inline">\(64\)</span>, получится двоичная картина
+ниже.</p>
+<figure>
+<img src="./792/assets/euler792-cancellation-bits.svg"
+alt="Отмена младших битов в хвосте для n=9261"  loading="lazy" />
+<figcaption aria-hidden="true">Отмена младших битов в хвосте для
+n=9261</figcaption>
+</figure>
+<p>Финальный остаток на этом масштабе равен <span
+class="math inline">\(48=110000_2\)</span>: четыре младших бита исчезли,
+поэтому valuation хвоста поднимается с <span
+class="math inline">\(9268\)</span> до <span
+class="math inline">\(9272\)</span>. Этот пример хорошо показывает,
+почему одной функции <span class="math inline">\(k+s_2(k)\)</span>
+недостаточно. Она говорит, <strong>где</strong> могут начаться
+слагаемые, но при совпадении уровней надо знать хотя бы несколько битов
+их нечётных частей.</p>
+<h3 id="рекомендуемый-путь-вынести-первый-член-хвоста">7. Рекомендуемый
+путь: вынести первый член хвоста</h3>
+<p>Можно вычислять нечётные части центральных биномиальных коэффициентов
+по модулю <span class="math inline">\(2^r\)</span>. Это универсальный
+путь, и мы к нему вернёмся. Но в данной задаче есть более короткий
+приём: отношения соседних слагаемых известны точно.</p>
+<p>Напомним</p>
+<p><span class="math display">\[
+t_k=(-2)^k\binom{2k}{k}.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+\frac{t_{k+1}}{t_k}
+=-2\frac{(2k+2)(2k+1)}{(k+1)^2}
+=-4\frac{2k+1}{k+1}.
+\tag{13}
+\]</span></p>
+<p>Вынесем первый член хвоста:</p>
+<p><span class="math display">\[
+\sum_{k=n+1}^{\infty}t_k=t_{n+1}R_n,
+\]</span></p>
+<p>где</p>
+<p><span class="math display">\[
+R_n=1+r_1+r_2+\cdots,
+\qquad
+r_j=\frac{t_{n+1+j}}{t_{n+1}}.
+\]</span></p>
+<p>Начинаем с <span class="math inline">\(r_0=1\)</span>, а последующие
+члены получаем рекуррентно:</p>
+<p><span class="math display">\[
+\boxed{
+r_{j+1}=r_j\left(-4\frac{2n+2j+3}{n+j+2}\right).
+}
+\tag{14}
+\]</span></p>
+<p>Ни одного огромного <span
+class="math inline">\(\binom{2k}{k}\)</span> в этой формуле нет. В
+каждом шаге участвуют лишь числа порядка <span
+class="math inline">\(n\)</span>, то есть не более <span
+class="math inline">\(40\)</span> бит при <span
+class="math inline">\(n\le10^{12}\)</span>.</p>
+<p>Valuation вынесенного члена известна по формуле Куммера:</p>
+<p><span class="math display">\[
+\nu_2(t_{n+1})=n+1+s_2(n+1).
+\]</span></p>
+<p>Следовательно,</p>
+<p><span class="math display">\[
+\boxed{
+u(n)=n+1+s_2(n+1)+\nu_2(R_n).
+}
+\tag{15}
+\]</span></p>
+<p>Именно эта формула является самой удобной вычислительной
+магистралью.</p>
+<h4 id="почему-хвост-можно-остановить-строго-а-не-на-глаз">7.1. Почему
+хвост можно остановить строго, а не «на глаз»</h4>
+<p>Нужно убедиться, что обрезание бесконечного <span
+class="math inline">\(R_n\)</span> не меняет valuation. Для отдельного
+нормированного члена</p>
+<p><span class="math display">\[
+\begin{aligned}
+\nu_2(r_j)
+&amp;=\nu_2(t_{n+1+j})-\nu_2(t_{n+1})\\
+&amp;=j+s_2(n+1+j)-s_2(n+1).
+\end{aligned}
+\tag{16}
+\]</span></p>
+<p>Пусть</p>
+<p><span class="math display">\[
+R_n^{(J)}=\sum_{j=0}^{J}r_j
+\]</span></p>
+<p>— уже вычисленная часть. Обозначим <span
+class="math inline">\(s=s_2(n+1)\)</span>. Для любого пропущенного <span
+class="math inline">\(j\ge J+1\)</span></p>
+<p><span class="math display">\[
+\nu_2(r_j)
+=j+s_2(n+1+j)-s
+\ge J+2-s.
+\]</span></p>
+<p>Поэтому условие</p>
+<p><span class="math display">\[
+\boxed{
+\nu_2\bigl(R_n^{(J)}\bigr)&lt;J+2-s_2(n+1)
+}
+\tag{17}
+\]</span></p>
+<p>является сертификатом завершения. Вся оставшаяся бесконечная сумма
+начинается строго выше уже найденной первой единицы и изменить её не
+может.</p>
+<p>Это важная деталь. Мы не утверждаем заранее, что «двадцати членов
+обычно хватает». Мы увеличиваем <span class="math inline">\(J\)</span>,
+пока не получим проверяемое неравенство (17). Так исключаются неприятные
+редкие случаи с длинной цепочкой отмен.</p>
+<p>Для всех <span class="math inline">\(10^4\)</span> требуемых кубов
+самый длинный реально понадобившийся префикс дошёл лишь до <span
+class="math inline">\(J=32\)</span>. Это не предположение алгоритма, а
+результат применения строгого критерия к каждому аргументу.</p>
+<h4 id="как-складывать-рациональные-числа-2-адически">7.2. Как
+складывать рациональные числа <span
+class="math inline">\(2\)</span>-адически</h4>
+<p>В (14) встречаются знаменатели. Это не проблема. Любое ненулевое
+рациональное число можно представить как</p>
+<p><span class="math display">\[
+x=2^e\frac{p}{q},
+\]</span></p>
+<p>где <span class="math inline">\(p\)</span> и <span
+class="math inline">\(q\)</span> нечётны. Тогда <span
+class="math inline">\(\nu_2(x)=e\)</span>, а <span
+class="math inline">\(q\)</span> обратимо по модулю любой степени
+двойки. Для вычисления нескольких младших <span
+class="math inline">\(2\)</span>-адических битов достаточно хранить:</p>
+<ul>
+<li>показатель <span class="math inline">\(e\)</span>;</li>
+<li>нечётную единицу <span class="math inline">\(p
+q^{-1}\pmod{2^r}\)</span>.</li>
+</ul>
+<p>При умножении показатели складываются, единицы перемножаются. При
+сложении выносится меньшая степень двойки, а единицы складываются на
+общем уровне. Если младшие биты уничтожились, valuation результата
+повышается — ровно тот эффект, который мы видели при <span
+class="math inline">\(n=9261\)</span>.</p>
+<p>Для математической проверки можно вообще хранить обычные точные
+рациональные числа: префикс короткий, поэтому числители и знаменатели
+остаются умеренного размера. Для быстрой реализации удобнее
+нормализованная пара «valuation + нечётная единица по модулю <span
+class="math inline">\(2^r\)</span>».</p>
+<h3 id="как-из-отдельных-um3-получается-un">8. Как из отдельных <span
+class="math inline">\(u(m^3)\)</span> получается <span
+class="math inline">\(U(N)\)</span></h3>
+<p>Подставим <span class="math inline">\(n=m^3\)</span> в (15). Если
+обозначить</p>
+<p><span class="math display">\[
+c_m=\nu_2(R_{m^3}),
+\]</span></p>
+<p>то</p>
+<p><span class="math display">\[
+u(m^3)=m^3+1+s_2(m^3+1)+c_m.
+\]</span></p>
+<p>Сумма кубов известна:</p>
+<p><span class="math display">\[
+\sum_{m=1}^{N}m^3
+=\left(\frac{N(N+1)}2\right)^2.
+\]</span></p>
+<p>Поэтому</p>
+<p><span class="math display">\[
+\boxed{
+U(N)=
+\left(\frac{N(N+1)}2\right)^2
++N
++\sum_{m=1}^{N}s_2(m^3+1)
++\sum_{m=1}^{N}c_m.
+}
+\tag{18}
+\]</span></p>
+<p>Первая часть вычисляется в замкнутом виде. Двоичный вес считается
+непосредственно по записи <span class="math inline">\(m^3+1\)</span>.
+Коррекция <span class="math inline">\(c_m\)</span> получается из
+короткого хвоста и критерия (17).</p>
+<p>На требуемом диапазоне в <span class="math inline">\(9235\)</span>
+случаях из <span class="math inline">\(10000\)</span> коррекция <span
+class="math inline">\(c_m\)</span> равна нулю. Но редкие ненулевые
+коррекции нельзя просто игнорировать: они имеют оба знака и иногда по
+модулю достигают двузначных значений.</p>
+<h3 id="почти-правильная-формула-и-ловушка-ответ-сошёлся-случайно">9.
+Почти правильная формула и ловушка «ответ сошёлся случайно»</h3>
+<p>Эксперименты быстро подталкивают к ещё более простой догадке:</p>
+<p><span class="math display">\[
+u(m^3)\stackrel{?}{\approx}m^3+s_2(m^3)+1.
+\tag{19}
+\]</span></p>
+<p>Она выглядит правдоподобно из-за формулы Куммера и действительно даёт
+удивительно точную сумму. Определим накопленную ошибку</p>
+<p><span class="math display">\[
+D(M)=\sum_{m=1}^{M}
+\Bigl(u(m^3)-m^3-s_2(m^3)-1\Bigr).
+\]</span></p>
+<figure>
+<img src="./792/assets/euler792-correction-walk.svg"
+alt="Накопленная ошибка почти правильной popcount-формулы"  loading="lazy" />
+<figcaption aria-hidden="true">Накопленная ошибка почти правильной
+popcount-формулы</figcaption>
+</figure>
+<p>Отдельные ошибки вовсе не малы и не всегда нулевые, но положительные
+и отрицательные отклонения долго компенсируют друг друга. При <span
+class="math inline">\(M=10^4\)</span> наивная сумма промахивается всего
+на единицу. Это прекрасная проверка здравого смысла и одновременно
+опасная ловушка: близость итогов не доказывает формулу для отдельных
+членов.</p>
+<p>Математическая причина близости ясна. Первый хвостовой член даёт
+<span class="math inline">\(n+1+s_2(n+1)\)</span>, а добавочные
+изменения возникают только из переносов и совпадений низких уровней. Они
+логарифмические на фоне основного <span class="math inline">\(n\)</span>
+и часто меняют знак. Но утверждение о почти полной компенсации на
+конкретном конечном диапазоне остаётся наблюдением, а не заменой точного
+вычисления.</p>
+<h3 id="альтернативная-ветка-считать-a_npmod2r">10. Альтернативная
+ветка: считать <span class="math inline">\(a_n\pmod{2^r}\)</span></h3>
+<p>Вернёмся к конечному тождеству (1). Оно предлагает другой строгий
+алгоритм:</p>
+<p><span class="math display">\[
+a_n=\sum_{j=0}^{n}(-2)^j\binom{2n+1}{n-j}.
+\]</span></p>
+<p>Если нужна valuation меньше <span class="math inline">\(r\)</span>,
+все члены с <span class="math inline">\(j\ge r\)</span> автоматически
+исчезают по модулю <span class="math inline">\(2^r\)</span>. Поэтому</p>
+<p><span class="math display">\[
+a_n\equiv
+\sum_{j=0}^{r-1}(-2)^j\binom{2n+1}{n-j}\pmod{2^r}.
+\tag{20}
+\]</span></p>
+<p>Если полученный остаток ненулевой, его число конечных двоичных нулей
+и есть <span class="math inline">\(\nu_2(a_n)\)</span>. Если остаток
+равен нулю, увеличиваем <span class="math inline">\(r\)</span> и
+повторяем. На рассматриваемых кубах максимальная встретившаяся valuation
+<span class="math inline">\(a_{m^3}\)</span> равна <span
+class="math inline">\(32\)</span>, поэтому несколько десятков бит
+точности достаточно, но алгоритм не обязан знать это заранее.</p>
+<h4 id="соседние-биномиальные-коэффициенты">10.1. Соседние биномиальные
+коэффициенты</h4>
+<p>Положим</p>
+<p><span class="math display">\[
+B_j=\binom{2n+1}{n-j}.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+\frac{B_{j+1}}{B_j}=\frac{n-j}{n+j+2}.
+\tag{21}
+\]</span></p>
+<p>Значит, после вычисления <span
+class="math inline">\(B_0=\binom{2n+1}{n}\)</span> остальные <span
+class="math inline">\(r-1\)</span> коэффициентов строятся короткой
+рекуррентностью. Деление снова выполняется после отделения степеней
+двойки: нечётная часть знаменателя обратима по модулю <span
+class="math inline">\(2^r\)</span>.</p>
+<p>Valuation каждого <span class="math inline">\(B_j\)</span> можно
+получить без самого коэффициента по теореме Куммера:</p>
+<p><span class="math display">\[
+\nu_2(B_j)
+=s_2(n-j)+s_2(n+j+1)-s_2(2n+1).
+\tag{22}
+\]</span></p>
+<p>Остаётся трудная деталь: найти нечётную часть огромного <span
+class="math inline">\(B_0\)</span>.</p>
+<h4 id="нечётная-часть-факториала">10.2. Нечётная часть факториала</h4>
+<p>Определим</p>
+<p><span class="math display">\[
+F_r(m)=\frac{m!}{2^{\nu_2(m!)}}\pmod{2^r}.
+\]</span></p>
+<p>Тогда нечётная часть биномиального коэффициента выражается через</p>
+<p><span class="math display">\[
+F_r(2n+1)F_r(n)^{-1}F_r(n+1)^{-1}\pmod{2^r}.
+\]</span></p>
+<p>Все обратные существуют, потому что <span
+class="math inline">\(F_r(m)\)</span> нечётно. Нечётный факториал имеет
+естественную рекурсию. Если</p>
+<p><span class="math display">\[
+P_r(m)=\prod_{\substack{1\le j\le m\\j\text{ нечётно}}}j\pmod{2^r},
+\]</span></p>
+<p>то после удаления одного множителя <span
+class="math inline">\(2\)</span> из каждого чётного числа остаются
+нечётные части чисел до <span class="math inline">\(\lfloor
+m/2\rfloor\)</span>. Поэтому</p>
+<p><span class="math display">\[
+F_r(m)=P_r(m)F_r\left(\left\lfloor\frac m2\right\rfloor\right),
+\]</span></p>
+<p>и, разворачивая рекурсию,</p>
+<p><span class="math display">\[
+F_r(m)=\prod_{q\ge0}P_r\left(\left\lfloor\frac{m}{2^q}\right\rfloor\right).
+\tag{23}
+\]</span></p>
+<p>Для малой точности таблицу префиксных произведений нечётных остатков
+можно подготовить заранее. Для большой точности и огромных аргументов
+нужен более серьёзный алгоритм. Стандартная ссылка здесь — обзор Эндрю
+Гранвилла <a class="intext" target="_blank" rel="noopener noreferrer" href="https://www.cecm.sfu.ca/organics/papers/granville/">The Arithmetic
+Properties of Binomial Coefficients</a>, где биномиальные коэффициенты
+систематически вычисляются по модулю степеней простого числа.</p>
+<p>Эта ветка универсальна: она работает не только с центральными
+биномиальными коэффициентами и не зависит от удачного отношения (13). Но
+для конкретной задачи 792 она тяжелее, чем нормированный хвост.</p>
+<h3 id="гипергеометрическая-дверь">11. Гипергеометрическая дверь</h3>
+<p>Конечная сумма <span class="math inline">\(a_n\)</span> является
+гипергеометрическим многочленом. Вынесем центральный коэффициент:</p>
+<p><span class="math display">\[
+\frac{\binom{2n+1}{n-j}}{\binom{2n+1}{n}}
+=\frac{(-1)^j(-n)_j}{(n+2)_j},
+\]</span></p>
+<p>где <span class="math inline">\((x)_j\)</span> — возрастающий
+факториал Похгаммера. Поэтому</p>
+<p><span class="math display">\[
+\boxed{
+a_n=\binom{2n+1}{n}\,
+{}_2F_1(-n,1;n+2;2).
+}
+\tag{24}
+\]</span></p>
+<p>Ряд заканчивается, потому что параметр <span
+class="math inline">\(-n\)</span> — отрицательное целое. Формула (24)
+удобна, если уже есть библиотека для <span
+class="math inline">\(p\)</span>-адических или модульных
+гипергеометрических вычислений.</p>
+<p>У хвостовой формы тоже есть гипергеометрическая запись. Из (14)</p>
+<p><span class="math display">\[
+R_n={}_2F_1\left(1,n+\frac32;n+2;-8\right)
+\]</span></p>
+<p>в <span class="math inline">\(2\)</span>-адическом смысле. Но
+практический алгоритм от этого не меняется: вычисление
+гипергеометрического ряда и есть последовательное умножение на
+рациональное отношение соседних членов. Громкое название здесь полезно
+скорее для классификации, чем для реализации.</p>
+<h3 id="рекуррентность-красивая-теория-неудобная-арифметика">12.
+Рекуррентность: красивая теория, неудобная арифметика</h3>
+<p>Производящая функция (5) алгебраична, поэтому последовательность
+<span class="math inline">\(a_n\)</span> D-конечна и удовлетворяет
+(6):</p>
+<p><span class="math display">\[
+a_n=\left(\frac72-\frac2n\right)a_{n-1}
++\left(2-\frac1n\right)a_{n-2}.
+\tag{25}
+\]</span></p>
+<p>Для первых миллионов значений это отличный способ. Но у нас нужны
+только <span class="math inline">\(10000\)</span> разреженных индексов
+вида <span class="math inline">\(m^3\)</span>, крупнейший из которых
+равен <span class="math inline">\(10^{12}\)</span>. Обычная рекурсия
+тратит работу на все промежуточные индексы.</p>
+<p>Можно мечтать о быстром произведении переходных матриц. Над полем
+рациональных чисел применимы двоичное расщепление и методы для
+голономных последовательностей. Однако наша конечная цель — арифметика
+по модулю <span class="math inline">\(2^r\)</span>, а коэффициенты (25)
+содержат <span class="math inline">\(1/n\)</span>. Когда <span
+class="math inline">\(n\)</span> чётно, обратного элемента по модулю
+<span class="math inline">\(2^r\)</span> нет. Приходится отдельно
+отслеживать valuation числителей и знаменателей, после чего метод
+постепенно превращается в ту же <span
+class="math inline">\(2\)</span>-адическую арифметику, но с более
+тяжёлой организацией.</p>
+<p>Вывод не в том, что рекуррентность «плохая». Она превосходно
+доказывает структурные свойства и порождает последовательность. Просто
+разреженные гигантские индексы и модуль — не её естественная
+геометрия.</p>
+<h3 id="ещё-одна-ветка-уровни-минимумов-вместо-полного-хвоста">13. Ещё
+одна ветка: уровни минимумов вместо полного хвоста</h3>
+<p>Между чистым критерием единственного минимума и точным рациональным
+хвостом есть промежуточный алгоритм.</p>
+<ol type="1">
+<li>Для <span class="math inline">\(k&gt;n\)</span> вычисляем уровни
+<span class="math inline">\(\lambda(k)=k+s_2(k)\)</span>.</li>
+<li>Находим минимальный уровень и все слагаемые на нём.</li>
+<li>Складываем их нечётные части по модулю небольшой степени
+двойки.</li>
+<li>Если они не уничтожились, valuation найдена.</li>
+<li>Если уничтожились, поднимаемся на следующий уровень и добавляем
+слагаемые, начинающиеся там.</li>
+</ol>
+<p>Это буквально сложение двоичных столбиков снизу вверх. Метод может
+быть очень быстрым: почти всегда первый уровень содержит один член. Но
+реализация сложнее, чем короткий хвост, потому что надо аккуратно
+собирать нечётные части центральных биномиалов. Его главное достоинство
+— объяснительное: он показывает, что редкие аномалии <span
+class="math inline">\(u(n)\)</span> являются не хаосом, а каскадами
+отмен на нескольких младших уровнях.</p>
+<h4 id="постоянный-бит-ещё-один-взгляд-на-тот-же-алгоритм">13.1.
+«Постоянный бит»: ещё один взгляд на тот же алгоритм</h4>
+<p>Можно рассуждать вообще без слов «<span
+class="math inline">\(2\)</span>-адическая сходимость», только на языке
+двоичных записей. Слагаемое</p>
+<p><span class="math display">\[
+t_k=(-2)^k\binom{2k}{k}
+\]</span></p>
+<p>делится как минимум на <span class="math inline">\(2^k\)</span>.
+Поэтому оно не затрагивает разряды с номерами меньше <span
+class="math inline">\(k\)</span>. После того как мы дошли до члена <span
+class="math inline">\(t_k\)</span>, все более младшие биты частичной
+суммы стали постоянными: ни один будущий член уже не сможет их
+изменить.</p>
+<p>Но бесконечная комбинация</p>
+<p><span class="math display">\[
+3\sum_{k=1}^{\infty}t_k+4
+\]</span></p>
+<p>равна нулю. Следовательно, каждый бит конечной частичной суммы,
+который уже стал постоянным, обязан совпасть с соответствующим битом
+нуля. Если среди «замороженных» разрядов вдруг появилась единица, она
+должна быть уничтожена ещё не учтённой частью, а значит мы неверно
+оценили границу того, какие разряды действительно заморожены.</p>
+<p>В корректной формулировке это приводит к той же проверке: найдя
+первую единицу частичной хвостовой суммы, нужно убедиться, что valuation
+каждого оставшегося слагаемого строго выше неё. Тогда единица постоянна,
+и valuation известна. Условие (17) является компактной алгебраической
+записью этого рассуждения.</p>
+<p>Этот взгляд полезен педагогически. <span
+class="math inline">\(2\)</span>-адическая норма перестаёт выглядеть
+экзотикой: она всего лишь организует вычисление справа налево, от
+младших двоичных разрядов к старшим.</p>
+<h4 id="дерево-классов-по-модулю-2q">13.2. Дерево классов по модулю
+<span class="math inline">\(2^q\)</span></h4>
+<p>Ещё один естественный эксперимент — группировать <span
+class="math inline">\(n\)</span> по остаткам modulo <span
+class="math inline">\(16,32,64,\ldots\)</span> и искать формулу для
+<span class="math inline">\(u(n)-n\)</span> внутри каждого класса. На
+первых уровнях возникают очень чистые закономерности. Это неудивительно:
+функции</p>
+<p><span class="math display">\[
+s_2(n+1+j)-s_2(n+1)
+\]</span></p>
+<p>полностью определяются цепочками переносов в двоичной записи, а
+переносы локально зависят от нескольких младших битов.</p>
+<p>Для кубов ситуация выглядит особенно соблазнительно. Кубы по модулю
+<span class="math inline">\(16\)</span> занимают только классы</p>
+<p><span class="math display">\[
+0,1,3,5,7,8,9,11,13,15.
+\]</span></p>
+<p>Можно построить дерево:</p>
+<ul>
+<li>сначала выбрать остаток <span
+class="math inline">\(m^3\bmod16\)</span>;</li>
+<li>затем, если на текущем уровне возникает ничья, уточнить остаток по
+модулю <span class="math inline">\(32\)</span>;</li>
+<li>потом по модулю <span class="math inline">\(64\)</span>, и так
+далее;</li>
+<li>на каждом листе записать значение коррекции.</li>
+</ul>
+<p>Такой алгоритм в принципе точен, если продолжать ветвление до
+появления сертификата. Но у него есть две проблемы. Во-первых, красивые
+первые ветви создают ложное ощущение короткой замкнутой формулы. Редкие
+исключения уходят глубоко в дерево. Во-вторых, дерево фактически вручную
+воспроизводит вычисление <span
+class="math inline">\(\nu_2(R_n)\)</span>: каждый новый бит модуля — ещё
+один <span class="math inline">\(2\)</span>-адический уровень
+точности.</p>
+<p>Поэтому классы остатков хороши для исследования и визуального поиска
+закономерностей, но плохи как основной текст доказательства. Хвостовой
+метод автоматически проходит ровно столько уровней, сколько требуется
+конкретному <span class="math inline">\(n\)</span>, и не заставляет
+заранее печатать огромное дерево случаев.</p>
+<h4
+id="взвешенные-раскраски-как-комбинаторное-объяснение-тождества">13.3.
+Взвешенные раскраски как комбинаторное объяснение тождества</h4>
+<p>У конечного тождества (1) есть не только алгебраическое
+доказательство. Используя симметрию биномиальных коэффициентов,</p>
+<p><span class="math display">\[
+\binom{2n+1}{n-j}=\binom{2n+1}{n+j+1},
+\]</span></p>
+<p>его правую часть можно записать как</p>
+<p><span class="math display">\[
+(-2)^{n+2}a_n
+=-2\sum_{m=n+1}^{2n+1}\binom{2n+1}{m}(-2)^m.
+\tag{26}
+\]</span></p>
+<p>Представим <span class="math inline">\(2n+1\)</span> позиций.
+Выбираем <span class="math inline">\(m&gt;n\)</span> небелых позиций, а
+каждую выбранную красим в один из двух цветов. Таких раскрасок</p>
+<p><span class="math display">\[
+\binom{2n+1}{m}2^m.
+\]</span></p>
+<p>Знак <span class="math inline">\((-1)^m\)</span> зависит от чётности
+числа небелых позиций, а внешний множитель <span
+class="math inline">\(-2\)</span> можно воспринимать как дополнительный
+двухцветный маркер со сменой знака.</p>
+<p>Теперь увеличим <span class="math inline">\(n\)</span> на единицу, то
+есть добавим две новые позиции и поднимем минимально допустимое число
+небелых позиций. Почти все способы раскрасить две новые позиции
+разбиваются на пары противоположных знаков:</p>
+<ul>
+<li>две небелые позиции дают четыре выбора цветов;</li>
+<li>одна небелая и одна белая тоже дают четыре выбора;</li>
+<li>их чётности различны, поэтому веса сокращаются.</li>
+</ul>
+<p>Несокращёнными остаются только граничные конфигурации, у которых
+старые <span class="math inline">\(2n+1\)</span> позиций содержали ровно
+минимально необходимое число небелых. Их суммарный вклад превращается
+в</p>
+<p><span class="math display">\[
+3(-2)^{n+1}\binom{2n+2}{n+1},
+\]</span></p>
+<p>то есть в приращение <span class="math inline">\(3S(n)\)</span>. Это
+комбинаторная тень рекуррентности (4). Она не даёт более быстрого
+алгоритма, зато объясняет, почему в странном тождестве появляются именно
+коэффициент <span class="math inline">\(3\)</span>, степень <span
+class="math inline">\((-2)^{n+2}\)</span> и центральный биномиальный
+коэффициент.</p>
+<h4 id="каталановская-ветвь-выбора-корня">13.4. Каталановская ветвь
+выбора корня</h4>
+<p>Правильный корень в (8) можно определить ещё одним способом.
+Производящая функция чисел Каталана</p>
+<p><span class="math display">\[
+C(x)=\sum_{k\ge0}\frac1{k+1}\binom{2k}{k}x^k
+=\frac{1-\sqrt{1-4x}}{2x}
+\]</span></p>
+<p>удовлетворяет</p>
+<p><span class="math display">\[
+C(x)=1+xC(x)^2.
+\tag{27}
+\]</span></p>
+<p>При <span class="math inline">\(x=-2\)</span> ряд снова сходится
+<span class="math inline">\(2\)</span>-адически. Уравнение
+становится</p>
+<p><span class="math display">\[
+2C^2+C-1=0,
+\]</span></p>
+<p>то есть <span class="math inline">\(C(-2)\in\{1/2,-1\}\)</span>. Но
+сам ряд начинается как</p>
+<p><span class="math display">\[
+1-2+8-\cdots\equiv-1\pmod8,
+\]</span></p>
+<p>поэтому <span class="math inline">\(C(-2)=-1\)</span>.</p>
+<p>Центральная биномиальная производящая функция связана с каталановской
+равенством</p>
+<p><span class="math display">\[
+\frac1{\sqrt{1-4x}}=\frac1{1-2xC(x)}.
+\]</span></p>
+<p>Подставляя <span class="math inline">\(x=-2\)</span> и <span
+class="math inline">\(C(-2)=-1\)</span>, получаем</p>
+<p><span class="math display">\[
+\frac1{1+4C(-2)}=-\frac13.
+\]</span></p>
+<p>Это тот же результат, но ветвь корня выбирается через квадратичное
+уравнение Каталана. Такой путь особенно естественен, если начать
+исследование не с центральных биномиальных коэффициентов, а с их деления
+на <span class="math inline">\(k+1\)</span>.</p>
+<h4 id="формальный-принцип-переноса-между-mathbb-r-и-mathbb-q_2">13.5.
+Формальный принцип переноса между <span class="math inline">\(\mathbb
+R\)</span> и <span class="math inline">\(\mathbb Q_2\)</span></h4>
+<p>Иногда подстановка <span class="math inline">\(x=-2\)</span> вызывает
+закономерный вопрос: почему тождество, знакомое из вещественного
+анализа, обязано сохраниться в другом поле?</p>
+<p>Ответ состоит в том, что равенство (7) прежде всего является
+равенством <strong>формальных</strong> степенных рядов над <span
+class="math inline">\(\mathbb Q\)</span>. Его можно проверить
+коэффициент за коэффициентом, не говоря ни о вещественных, ни о <span
+class="math inline">\(2\)</span>-адических числах. Формальные операции
+сложения, умножения и возведения в конечную степень сохраняют это
+равенство.</p>
+<p>Дальше мы выбираем полное нормированное поле и точку, в которой оба
+ряда сходятся. В <span class="math inline">\(\mathbb Q_2\)</span> при
+<span class="math inline">\(x=-2\)</span> valuation коэффициента,
+умноженного на <span class="math inline">\(x^k\)</span>, стремится к
+бесконечности. Значит:</p>
+<ul>
+<li>частичные суммы образуют последовательность Коши;</li>
+<li>произведение пределов равно пределу произведений;</li>
+<li>коэффициентное тождество можно вычислить в выбранной точке.</li>
+</ul>
+<p>Осторожность требуется при произвольной композиции бесконечных рядов,
+но здесь мы используем только умножение и квадрат. Поэтому переход
+полностью строг.</p>
+<h4 id="оценка-сложности-разных-маршрутов">13.6. Оценка сложности разных
+маршрутов</h4>
+<p>Полезно сравнить не только формулы, но и объём работы.</p>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 40%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Подход</th>
+<th style="text-align: right;">Работа для одного <span
+class="math inline">\(u(n)\)</span></th>
+<th>Что происходит при <span
+class="math inline">\(n\approx10^{12}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Сумма по определению</td>
+<td style="text-align: right;"><span class="math inline">\(O(n)\)</span>
+биномиальных членов</td>
+<td>практически невозможно</td>
+</tr>
+<tr>
+<td>Рекуррентность <span
+class="math inline">\(a_0,\ldots,a_n\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(O(n)\)</span>
+шагов</td>
+<td>практически невозможно</td>
+</tr>
+<tr>
+<td>Единственный минимум <span
+class="math inline">\(\lambda(k)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(O(\log
+n)\)</span> popcount</td>
+<td>закрывает большинство кубов</td>
+</tr>
+<tr>
+<td>Конечная сумма modulo <span class="math inline">\(2^r\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(O(r)\)</span>
+биномиалов плюс нечётный факториал</td>
+<td>быстро при хорошем алгоритме Granville</td>
+</tr>
+<tr>
+<td>Нормированный хвост</td>
+<td style="text-align: right;"><span class="math inline">\(O(J)\)</span>
+рациональных отношений</td>
+<td><span class="math inline">\(J\le32\)</span> на всём нужном
+диапазоне</td>
+</tr>
+</tbody>
+</table>
+<p>Главное различие — зависимость от самого <span
+class="math inline">\(n\)</span>. В первых двух строках <span
+class="math inline">\(n\)</span> задаёт число шагов. В последних трёх
+оно влияет в основном на длину двоичной записи и размер операндов.
+Именно такой переход нужен во всех задачах, где индекс огромен, а
+искомая <span class="math inline">\(p\)</span>-адическая точность
+мала.</p>
+<h3 id="как-выбрать-подход">14. Как выбрать подход</h3>
+<p>У задачи нет единственного «правильного» языка. Выбор зависит от
+цели.</p>
+<h4 id="если-хочется-самого-прозрачного-доказательства">Если хочется
+самого прозрачного доказательства</h4>
+<p>Начните с конечного тождества</p>
+<p><span class="math display">\[
+3S(n)+4=(-2)^{n+2}a_n.
+\]</span></p>
+<p>Оно полностью элементарно и сразу объясняет линейную часть <span
+class="math inline">\(u(n)\)</span>.</p>
+<h4 id="если-нужен-самый-короткий-точный-вычислительный-путь">Если нужен
+самый короткий точный вычислительный путь</h4>
+<p>Используйте <span class="math inline">\(2\)</span>-адический предел,
+вынесите <span class="math inline">\(t_{n+1}\)</span>, стройте <span
+class="math inline">\(r_j\)</span> по (14) и останавливайтесь по
+сертификату (17). Это избегает и огромных сумм, и вычисления огромного
+биномиального коэффициента.</p>
+<h4 id="если-уже-есть-библиотека-биномиалов-по-модулю-pr">Если уже есть
+библиотека биномиалов по модулю <span
+class="math inline">\(p^r\)</span></h4>
+<p>Используйте конечную сумму (20), теорему Куммера и нечётные
+факториалы. Этот путь тяжелее, но лучше переносится на другие простые
+<span class="math inline">\(p\)</span> и другие биномиальные задачи.</p>
+<h4 id="если-исследуется-структура-последовательности">Если исследуется
+структура последовательности</h4>
+<p>Полезны OEIS A026641, производящая функция (5), рекуррентность (6),
+гипергеометрическая форма (24) и распределение popcount. Они объясняют,
+откуда взялись закономерности, хотя не все из них одинаково хороши для
+финального подсчёта.</p>
+<h4
+id="если-хочется-сначала-решить-большинство-случаев-без-модульной-арифметики">Если
+хочется сначала решить большинство случаев без модульной арифметики</h4>
+<p>Проверяйте уникальность минимума <span
+class="math inline">\(\lambda(k)\)</span> в коротком окне (12). Для этой
+задачи так закрываются <span class="math inline">\(9618\)</span> из
+<span class="math inline">\(10000\)</span> кубов. Оставшиеся случаи
+передаются точному хвостовому методу.</p>
+<h3 id="что-здесь-особенно-легко-сделать-неправильно">15. Что здесь
+особенно легко сделать неправильно</h3>
+<h4
+id="подставить-x-2-в-вещественную-производящую-функцию-без-оговорок">Подставить
+<span class="math inline">\(x=-2\)</span> в вещественную производящую
+функцию без оговорок</h4>
+<p>В <span class="math inline">\(\mathbb R\)</span> ряд расходится.
+Подстановка имеет смысл только после перехода к <span
+class="math inline">\(2\)</span>-адической норме и доказательства, что
+valuation членов стремится к бесконечности.</p>
+<h4 id="выбрать-неправильный-квадратный-корень">Выбрать неправильный
+квадратный корень</h4>
+<p>Из <span class="math inline">\(T^2=1/9\)</span> ещё не следует, какая
+из двух <span class="math inline">\(2\)</span>-адических ветвей нужна.
+Знак выбирается сравнением по модулю <span
+class="math inline">\(8\)</span>, а не вещественной
+положительностью.</p>
+<h4
+id="остановить-хвост-фиксированным-числом-членов-без-проверки">Остановить
+хвост фиксированным числом членов без проверки</h4>
+<p>То, что двадцати или тридцати членов хватает на тестах, — полезное
+наблюдение, но не доказательство. Условие (17) превращает эвристику в
+сертификат.</p>
+<h4
+id="считать-что-минимум-valuation-суммы-всегда-равен-минимуму-valuation-членов">Считать,
+что минимум valuation суммы всегда равен минимуму valuation членов</h4>
+<p>Это верно лишь при уникальном минимуме. Два нечётных числа на одном
+уровне обязательно уничтожают младший бит.</p>
+<h4 id="делить-на-чётное-число-по-модулю-2r">Делить на чётное число по
+модулю <span class="math inline">\(2^r\)</span></h4>
+<p>Чётный знаменатель необратим. Сначала надо вынести его степень
+двойки, а обращать только нечётную часть.</p>
+<h4 id="довериться-почти-совпавшему-ответу">Довериться почти совпавшему
+ответу</h4>
+<p>Popcount-приближение для итоговой суммы ошибается всего на единицу.
+Это особенно коварный вид ошибки: численный результат выглядит слишком
+хорошим, чтобы быть случайным, но всё равно остаётся неверным.</p>
+<h3 id="проверки-которые-замыкают-решение">16. Проверки, которые
+замыкают решение</h3>
+<p>Надёжная реализация должна пройти несколько независимых уровней
+контроля.</p>
+<ol type="1">
+<li>Для малых <span class="math inline">\(n\)</span> вычислить <span
+class="math inline">\(S(n)\)</span> буквально и сравнить с хвостовой
+формулой. Проверка первых ста значений уже хорошо ловит ошибки индекса и
+знака.</li>
+<li>Воспроизвести <span class="math inline">\(u(4)=7\)</span> и <span
+class="math inline">\(u(20)=24\)</span>.</li>
+<li>Воспроизвести <span class="math inline">\(U(5)=241\)</span>.</li>
+<li>Для каждого куба останавливаться только после выполнения (17), а не
+после заранее выбранного количества итераций.</li>
+<li>Отдельно проверить случаи с двумя минимумами, например <span
+class="math inline">\(n=21^3\)</span>.</li>
+<li>Сравнить итог с конечным тождеством (1) на диапазоне, где <span
+class="math inline">\(a_n\)</span> ещё можно вычислить напрямую.</li>
+</ol>
+<p>При таком наборе проверок формула (18) уже не является догадкой.
+Каждый её член либо замкнут, либо вычисляется короткой сертифицированной
+процедурой. Финальное сложение намеренно оставлено без публикации
+численного ответа: математически существенная часть задачи заканчивается
+не последней арифметической операцией, а доказательством того, почему
+для каждого <span class="math inline">\(m^3\)</span> достаточно
+нескольких десятков <span class="math inline">\(2\)</span>-адических
+шагов вместо <span class="math inline">\(m^3\)</span> исходных
+слагаемых.</p>
+<h3 id="короткое-резюме-всей-истории">17. Короткое резюме всей
+истории</h3>
+<p>Исходная сумма выглядит огромной, потому что мы сначала смотрим на
+неё вещественными глазами. В <span
+class="math inline">\(2\)</span>-адическом мире множители <span
+class="math inline">\(2^k\)</span> делают поздние члены всё меньше, и
+производящая функция сходится к <span
+class="math inline">\(-1/3\)</span>. Специальная комбинация <span
+class="math inline">\(3S(n)+4\)</span> вычитает этот предел, оставляя
+хвост.</p>
+<p>Дальше теорема Куммера сообщает высоту каждого хвостового члена:</p>
+<p><span class="math display">\[
+\nu_2\left((-2)^k\binom{2k}{k}\right)=k+s_2(k).
+\]</span></p>
+<p>Почти всегда один член лежит ниже всех остальных и мгновенно
+определяет ответ. В редких случаях несколько членов встречаются на одном
+уровне и гасят младшие биты. Чтобы обработать их без гигантских
+биномиальных коэффициентов, мы делим весь хвост на первый член и строим
+короткий рациональный ряд по отношению</p>
+<p><span class="math display">\[
+\frac{t_{k+1}}{t_k}=-4\frac{2k+1}{k+1}.
+\]</span></p>
+<p>Наконец, ультраметрическое неравенство даёт строгий критерий
+остановки. Так задача с индексами до <span
+class="math inline">\(10^{12}\)</span> сводится примерно к нескольким
+сотням тысяч операций над небольшими <span
+class="math inline">\(2\)</span>-адическими числами.</p>
+<p>Это и есть главный урок Too Many Twos: когда требуется только число
+двоек, нельзя позволять огромным целым числам диктовать способ
+вычисления. Нужно сразу перейти в пространство, где двойки являются не
+помехой, а системой координат.</p>
+      </div>
+
+      <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>
+      <a href="#" title="Промотать вниз" class="buttondown"><img src="../images/down-arrow.png" alt="Вниз"></a>
+    </div>
+  </div>
+
+  <script src="../scripts/scrollToTop.js"></script>
+  <script src="../scripts/scrollToBottom.js"></script>
+</body>
+</html>

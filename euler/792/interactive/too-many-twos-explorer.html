@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Too Many Twos — исследователь 2-адического хвоста</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="too-many-twos-explorer.css">
+</head>
+<body>
+  <main>
+    <section id="euler792-explorer" class="e792-explorer" aria-labelledby="e792-explorer-title">
+      <div class="e792-control-row">
+        <label for="e792-root">
+          <span id="e792-explorer-title">Корень куба m</span>
+          <strong data-e792-root-value>21</strong>
+        </label>
+        <input id="e792-root" type="range" min="1" max="10000" value="21" step="1" aria-describedby="e792-detail">
+      </div>
+
+      <div class="e792-metrics" aria-live="polite">
+        <span><small>Аргумент n=m³</small><strong data-e792-n>9261</strong></span>
+        <span><small>Точное u(n)</small><strong data-e792-u>9272</strong></span>
+        <span><small>Минимумов</small><strong data-e792-minima>2</strong></span>
+      </div>
+
+      <svg class="e792-chart" viewBox="0 0 760 430" role="img" aria-labelledby="e792-chart-title e792-chart-desc">
+        <title id="e792-chart-title">Valuation членов 2-адического хвоста</title>
+        <desc id="e792-chart-desc">График значений k минус n плюс число единиц в двоичной записи k. Минимальные точки выделены.</desc>
+        <g data-e792-chart></g>
+      </svg>
+
+      <p id="e792-detail" class="e792-detail" data-e792-detail>
+        Два равных минимума; после двоичной отмены хвост стабилизируется на шаге 9.
+      </p>
+    </section>
+  </main>
+  <script src="too-many-twos-explorer.js"></script>
+</body>
+</html>
