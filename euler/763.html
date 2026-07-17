@@ -3,74 +3,411 @@
 
 <head>
   <meta charset="utf-8">
-  <title>projecteuler solutions - Kirill Dikalin</title>
+  <title>763. Амёбы на 3D-сетке — Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 763: диагональные слои, канонические состояния змейки и динамическое программирование.">
+  <meta property="og:title" content="763. Амёбы на 3D-сетке — Kirill Dikalin"/>
+  <meta property="og:description" content="Разбор Project Euler 763 через диагональные слои и двухпараметрическую рекуррентность."/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/763.html"/>
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/763.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <ul class="breadcrumb">
-      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
-      / 
-      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
-      / 
-      763
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    763
   </ul>
 
   <div class="our_framework">
     <div class="section_content">
       <div id="toc_container" class="euler_article">
-            
-        <h2 id="763">Амебы на 3D-сетке</h2>
+        <h2 id="763">Амёбы на 3D-сетке</h2>
+
+        <h3>Условие задачи</h3>
 
         <p align="justify" class="p_on_project_pages">
-          Рассмотрим трехмерную кубическую сетку. Амеба, находящаяся в кубе
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>)</mo></math>
-          может разделиться на три амебы, которые займут кубы
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>)</mo></math>
-          ,
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>z</mi><mo>)</mo></math>
-          и
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>+</mo><mn>1</mn><mo>)</mo></math>
-          при условии, что эти кубы пусты. 
+          Рассмотрим трёхмерную кубическую решётку. Амёба в клетке $(x,y,z)$ может разделиться на три амёбы,
+          которые займут клетки $(x+1,y,z)$, $(x,y+1,z)$ и $(x,y,z+1)$, если все они свободны.
+          Изначально занята только клетка $(0,0,0)$. После $N$ делений на решётке находится $2N+1$ амёб.
         </p>
 
         <p align="justify" class="p_on_project_pages">
-          Изначально на сетке находится только одна амеба в кубе
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mo>(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>)</mo></math>
-          . После
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math>
-          делений на сетке будет расположено
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mn>2</mn><mi>N</mi><mo>+</mo><mn>1</mn></math>
-          амеб. Расположение, которое можно достичь несколькими разными способами, засчитывается только один раз. Пусть
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mi>N</mi><mo>)</mo></math>
-          будет количеством различных возможных расположений после
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>N</mi></math>
-          делений. 
+          Обозначим через $D(N)$ количество различных расположений, достижимых после $N$ делений.
+          Разные последовательности делений, которые приводят к одному расположению, считаются одним вариантом.
+          Из условия известны контрольные значения
+        </p>
+
+        <p align="center">
+          $$D(2)=3,\qquad D(10)=44499,\qquad D(20)=9204559704,$$
         </p>
 
         <p align="justify" class="p_on_project_pages">
-          Например,
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>2</mn><mo>)</mo><mo>=</mo><mn>3</mn></math>
-          ,
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>10</mn><mo>)</mo><mo>&#xA0;</mo><mo>=</mo><mo>&#xA0;</mo><mn>44499</mn></math>
-          ,
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>20</mn><mo>)</mo><mo>=</mo><mn>9204559704</mn></math>
-          и последние девять цифр
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>100</mn><mo>)</mo><mo>=</mo><mn>780166455</mn></math>
-          .
+          а последние девять цифр $D(100)$ равны $780166455$.
+          Требуется найти последние девять цифр $D(10000)$.
+          Полное условие доступно на
+          <a class="intext" href="https://projecteuler.net/problem=763" target="_blank" rel="noopener noreferrer">странице Project Euler 763</a>.
+        </p>
+
+        <h3>Почему не нужно хранить порядок делений</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть $s_{x,y,z}\in\{0,1\}$ показывает, происходило ли деление в клетке $(x,y,z)$,
+          а $a_{x,y,z}\in\{0,1\}$ — занята ли эта клетка в конечной конфигурации.
+          Баланс амёб в каждой клетке имеет вид
+        </p>
+
+        <p align="center">
+          $$
+          a_{x,y,z}=
+          \mathbf 1_{(x,y,z)=(0,0,0)}-s_{x,y,z}
+          +s_{x-1,y,z}+s_{x,y-1,z}+s_{x,y,z-1},
+          $$
         </p>
 
         <p align="justify" class="p_on_project_pages">
-          Найдите
-            <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>D</mi><mo>(</mo><mn>10000</mn><mo>)</mo></math>
-          . В качестве ответа приведите последние девять цифр полученного числа. 
+          где величины с отрицательной координатой считаются нулевыми. Всего произошло ровно $N$ делений, поэтому
         </p>
-        </div>
 
-        <h2>Решение</h2>
+        <p align="center">
+          $$\sum_{x,y,z\geq0}s_{x,y,z}=N.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Удобнее всего увидеть связь между набором делений и итоговым расположением в полиномиальной форме. Введём
+        </p>
+
+        <p align="center">
+          $$
+          P(X,Y,Z)=\sum a_{x,y,z}X^xY^yZ^z,
+          \qquad
+          S(X,Y,Z)=\sum s_{x,y,z}X^xY^yZ^z.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Деление в клетке $(x,y,z)$ удаляет один соответствующий моном и добавляет три дочерних.
+          Поэтому оно изменяет $P$ на
+        </p>
+
+        <p align="center">
+          $$X^xY^yZ^z(X+Y+Z-1),$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          а для всей конфигурации получается равенство
+        </p>
+
+        <p align="center">
+          $$\boxed{P=1+(X+Y+Z-1)S}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Если два набора делений дали одно и то же $P$, то
+          $(X+Y+Z-1)(S_1-S_2)=0$. Кольцо полиномов не имеет делителей нуля, следовательно, $S_1=S_2$.
+          Значит, каждое достижимое расположение однозначно определяется множеством клеток, в которых произошло деление;
+          различные допустимые порядки одного и того же набора отдельно считать не требуется.
+        </p>
+
+        <h3>Диагональные слои</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Разобьём решётку на диагональные слои
+        </p>
+
+        <p align="center">
+          $$L_k=\{(x,y,z)\in\mathbb Z_{\geq0}^3:x+y+z=k\}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Все дочерние клетки деления из $L_k$ лежат в $L_{k+1}$. Поэтому процесс можно рассматривать послойно.
+          До выполнения делений очередная клетка следующего слоя может получить амёб от трёх родителей;
+          её промежуточная кратность равна $0$, $1$, $2$ или $3$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Кратность $3$ недопустима: три амёбы пытаются занять одну клетку. Геометрический разбор переходов показывает,
+          что среди клеток кратности $2$ нельзя допускать три типа локальных фигур:
+        </p>
+
+        <ul>
+          <li>треугольник;</li>
+          <li>Y-образное ветвление;</li>
+          <li>две параллельные части, соединённые поперечиной — «степлер».</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Каждая такая фигура после вынужденного продолжения создаёт клетку кратности $3$.
+          Если их исключить, клетки кратности $2$ образуют неветвящуюся ломаную — змейку.
+          С точностью до поворотов и отражений её форма кодируется всего двумя неотрицательными числами $(a,b)$:
+        </p>
+
+        <ul>
+          <li>в состоянии $(a,b)$ находится $a+b+1$ активных клеток змейки;</li>
+          <li>$a$ и $b$ описывают длину и положение последнего сегмента после нормализации симметрий;</li>
+          <li>на границах $a=0$, $a=1$ или $b=0$ некоторые геометрические переходы совпадают, поэтому в формулах появляются коэффициенты $2$, $3$ и $4$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Это ключевое сжатие задачи: вместо хранения произвольного рисунка целого слоя достаточно хранить пару $(a,b)$.
+        </p>
+
+        <h3>Двухпараметрическая рекуррентность</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть $F_{a,b}(m)$ — количество допустимых завершений из канонического состояния $(a,b)$
+          при бюджете $m$ дальнейших делений. Начальное условие:
+        </p>
+
+        <p align="center">
+          $$F_{0,0}(0)=1.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Значения с отрицательным $m$ равны нулю. Чтобы построить состояние с $a+b+1$ активными клетками,
+          необходимо выполнить как минимум
+        </p>
+
+        <p align="center">
+          $$1+2+\dots+(a+b)=\frac{(a+b)(a+b+1)}2$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          предыдущих делений. Поэтому действует дополнительное граничное условие
+        </p>
+
+        <p align="center">
+          $$
+          F_{a,b}(m)=0
+          \quad\text{при}\quad
+          m&lt;\frac{(a+b)(a+b+1)}2.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Чтобы не повторять один и тот же сдвиг аргумента, обозначим
+        </p>
+
+        <p align="center">
+          $$G_m(p,q)=F_{p,q}(m-p-q-1).$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Величина $p+q+1$ вычитается потому, что именно столько клеток делится в текущем слое,
+          если следующим становится состояние $(p,q)$. После нормализации поворотов и отражений остаются шесть случаев.
+        </p>
+
+        <h4>1. Пустая каноническая граница</h4>
+
+        <p align="center">
+          $$\boxed{F_{0,0}(m)=3G_m(0,0)+3G_m(1,0)}.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Коэффициент $3$ соответствует трём равноправным направлениям координатных осей.
+        </p>
+
+        <h4>2. Граница $a=0$, $b\geq1$</h4>
+
+        <p align="center">
+          $$
+          \boxed{
+          F_{0,b}(m)=G_m(0,b)+G_m(b-1,1)+G_m(0,b+1)+G_m(b,1)
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Этот граничный случай важно выписать отдельно: формально он получается из общей формулы после зануления состояний
+          с отрицательным первым индексом, но без явной записи его легко пропустить при реализации.
+        </p>
+
+        <h4>3. Граница $(1,0)$</h4>
+
+        <p align="center">
+          $$
+          \boxed{
+          F_{1,0}(m)=G_m(0,0)+4G_m(1,0)+G_m(2,0)+2G_m(1,1)
+          }.
+          $$
+        </p>
+
+        <h4>4. Случай $a=1$, $b\geq1$</h4>
+
+        <p align="center">
+          $$
+          \boxed{
+          \begin{aligned}
+          F_{1,b}(m)={}&G_m(b,0)+G_m(b+1,0)+G_m(b,1)\\
+          &+G_m(1,b)+G_m(b+1,1)+G_m(1,b+1).
+          \end{aligned}
+          }
+          $$
+        </p>
+
+        <h4>5. Случай $a\geq2$, $b=0$</h4>
+
+        <p align="center">
+          $$
+          \boxed{
+          \begin{aligned}
+          F_{a,0}(m)={}&G_m(a-1,0)+2G_m(a,0)+2G_m(a-1,1)\\
+          &+G_m(a+1,0)+2G_m(a,1).
+          \end{aligned}
+          }
+          $$
+        </p>
+
+        <h4>6. Общий случай $a\geq2$, $b\geq1$</h4>
+
+        <p align="center">
+          $$
+          \boxed{
+          \begin{aligned}
+          F_{a,b}(m)={}&G_m(a-1,b)+G_m(a,b)+G_m(a-1,b+1)\\
+          &+G_m(a+b-1,1)+G_m(a,b+1)+G_m(a+b,1).
+          \end{aligned}
+          }
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Каждое слагаемое соответствует одному допустимому способу изменить голову или хвост змейки.
+          Повторяющиеся после нормализации варианты дают коэффициенты больше единицы.
+          Остальные локальные продолжения отбрасываются, потому что создают ветвление, треугольник или в дальнейшем клетку кратности $3$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Первое деление исходной амёбы обязательно. После него остаётся бюджет $N-1$, поэтому искомое количество конфигураций равно
+        </p>
+
+        <p align="center">
+          $$\boxed{D(N)=F_{0,0}(N-1)}.$$
+        </p>
+
+        <h3>Как вычислить динамику</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Значения вычисляются по возрастанию $m$. Для каждого $m$ достаточно обрабатывать только пары $(a,b)$,
+          которые проходят треугольное ограничение. При $m\leq9999$ выполняется
+        </p>
+
+        <p align="center">
+          $$a+b\leq140,$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          поскольку
+        </p>
+
+        <p align="center">
+          $$\frac{140\cdot141}{2}=9870,
+          \qquad
+          \frac{141\cdot142}{2}=10011.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Наивно можно сохранить все значения $F_{a,b}(m)$, но это расходует слишком много памяти.
+          Рекуррентность читает состояние $(a,b)$ только со сдвигом $a+b+1$, поэтому для каждой пары достаточно
+          кольцевого буфера длины $a+b+2$. Новое значение перезаписывает элемент, который уже не понадобится.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для одного $m$ существует $O(m)$ допустимых пар $(a,b)$, а полный расчёт требует $O(N^2)$ операций.
+          Благодаря кольцевым буферам память уменьшается до $O(N^{3/2})$. Все значения для основной задачи можно сразу
+          вычислять по модулю $10^9$: сложение и умножение на небольшие коэффициенты совместимы с взятием остатка.
+        </p>
+
+        <h3>Эскиз алгоритма без готового кода</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Публично я не привожу готовую реализацию, но порядок вычислений можно описать так:
+        </p>
+
+        <ol>
+          <li>Создать состояние для каждой пары $(a,b)$ с $a+b\leq140$ и выделить кольцевой буфер длины $a+b+2$.</li>
+          <li>Записать базу $F_{0,0}(0)=1$; остальные ячейки изначально равны нулю.</li>
+          <li>Перебирать $m$ от $1$ до $N-1$.</li>
+          <li>Для текущего $m$ найти максимальное $a+b$, удовлетворяющее треугольному ограничению.</li>
+          <li>Перебрать допустимые пары $(a,b)$ и применить соответствующий из шести случаев рекуррентности.</li>
+          <li>После каждого сложения сохранять результат по модулю $10^9$.</li>
+          <li>Вернуть $F_{0,0}(N-1)$.</li>
+        </ol>
+
+        <h3>Проверки</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Для небольших $N$ можно независимо перебрать все достижимые множества занятых клеток.
+          Такой прямой перебор для $N=0,1,\ldots,8$ даёт последовательность
+        </p>
+
+        <p align="center">
+          $$1,\ 1,\ 3,\ 9,\ 30,\ 99,\ 336,\ 1134,\ 3855.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Динамика воспроизводит эту последовательность и все четыре контрольных значения из условия:
+        </p>
+
+        <ul>
+          <li>$D(2)=3$;</li>
+          <li>$D(10)=44499$;</li>
+          <li>$D(20)=9204559704$;</li>
+          <li>$D(100)\equiv780166455\pmod{10^9}$.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Совпадение прямого перебора с динамикой проверяет переходы на маленьких состояниях,
+          а значения $D(20)$ и $D(100)$ дополнительно ловят ошибки в границах и модульной арифметике.
+        </p>
+
+        <h3>Итог</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Главная идея решения — отказаться от перебора последовательностей делений и перейти к диагональным слоям.
+          После исключения невозможных локальных фигур весь сложный рисунок слоя сжимается до состояния змейки $(a,b)$.
+          Треугольная нижняя граница оставляет лишь небольшое число состояний, а кольцевые буферы делают расчёт практичным по памяти.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В результате последние девять цифр числа конфигураций после $10000$ делений равны
+        </p>
+
+        <p align="center">
+          $$\boxed{D(10000)\equiv798443574\pmod{10^9}}.$$
+        </p>
+      </div>
+
+      <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>
+      <a href="#" title="Промотать вниз" class="buttondown"><img src="../images/down-arrow.png" alt="Вниз"></a>
+    </div>
+  </div>
+
+  <script src="../scripts/scrollToTop.js"></script>
+  <script src="../scripts/scrollToBottom.js"></script>
+</body>
+</html>
