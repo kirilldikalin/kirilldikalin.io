@@ -1,40 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
+
 <head>
     <meta charset="utf-8">
-    <title>Brain training - Kirill Dikalin</title>
+    <title>Улицы Москвы: тренажёр ЦАО — Kirill Dikalin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Интерактивный тренажёр улиц Центрального административного округа Москвы: называйте улицы, следите за прогрессом по районам и запоминайте их положение на карте.">
+    <meta name="theme-color" content="#f6f6f4">
+    <meta property="og:title" content="Улицы Москвы: тренажёр ЦАО">
+    <meta property="og:description" content="Тренажёр, который помогает запомнить улицы центра Москвы и их положение на карте.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/brain/map_msk/map_msk.html">
+    <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/brain/map_msk/map_msk.html">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="./map_msk.css">
     <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
 
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=302af765-6c16-4994-992f-ec50c7f8746c" type="text/javascript"></script>
-    <script src="./custom_search.js" type="text/javascript"></script>
+    <script src="./vendor/leaflet/leaflet.js" defer></script>
+    <script src="./quiz-core.js" defer></script>
+    <script src="./map_msk.js" defer></script>
 </head>
 
 <body>
-    <ul class="breadcrumb">
-        <a class="bread_crumb" href="../../index.html">Kirill Dikalin</a> 
-        / 
-        <a class="bread_crumb" href="../main_brain.html">brain</a>
-        /
-        moscow map
-    </ul>
-    
-    <div class="our_framework">
-        <div class="section_content">
-            <p class="p_on_project_pages_text">
-                На этой карте находится центр Москвы. 
-                При вводе названия улицы на карте устанавливается метка. 
-                Цель - назвать все улицы внутри садового кольца
-            </p>
-            <input type="button" value="Показать карту" id="toggle"/>
-            <p>
-                <div id="map" style="width: 950px; height: 620px"></div>
-            </p>
+    <nav aria-label="Хлебные крошки">
+        <ul class="breadcrumb quiz-breadcrumb">
+            <li><a class="bread_crumb" href="../../index.html">Kirill Dikalin</a></li>
+            <li aria-hidden="true">/</li>
+            <li><a class="bread_crumb" href="../main_brain.html">brain</a></li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page">улицы Москвы</li>
+        </ul>
+    </nav>
 
+    <main class="street-quiz">
+        <header class="quiz-intro">
+            <p class="quiz-kicker">тренировка памяти</p>
+            <h1>Улицы Москвы: ЦАО</h1>
+            <p>
+                Пишите названия улиц без подтверждения кнопкой. Когда ответ совпадёт с одним из
+                допустимых вариантов, улица загорится на карте, а прогресс обновится автоматически.
+            </p>
+        </header>
+
+        <section class="quiz-panel" id="quiz-panel" aria-busy="true">
+            <div class="quiz-answer-block">
+                <label for="street-answer">Название улицы</label>
+                <input
+                    id="street-answer"
+                    name="street-answer"
+                    type="text"
+                    autocomplete="off"
+                    autocapitalize="sentences"
+                    spellcheck="false"
+                    enterkeyhint="done"
+                    aria-describedby="answer-help answer-feedback"
+                    disabled
+                >
+                <p id="answer-help" class="quiz-help">
+                    Регистр, «ё/е», дефисы и сокращения вроде «ул.» не важны. Нажимать Enter необязательно.
+                </p>
+                <p id="answer-feedback" class="quiz-feedback" aria-live="polite" aria-atomic="true">
+                    Загружаю карту и список улиц…
+                </p>
+            </div>
+
+            <div class="quiz-progress-block" aria-label="Общий прогресс">
+                <div class="quiz-progress-copy">
+                    <span>Прогресс</span>
+                    <strong id="progress-text">0 / 0</strong>
+                </div>
+                <progress id="quiz-progress" max="1" value="0" aria-label="Общий прогресс по улицам ЦАО">0%</progress>
+            </div>
+
+            <div class="quiz-actions">
+                <button
+                    class="quiz-button"
+                    id="toggle-missing"
+                    type="button"
+                    aria-pressed="false"
+                    disabled
+                >
+                    Показать оставшиеся
+                </button>
+                <button class="quiz-button quiz-button-secondary" id="reset-quiz" type="button" disabled>
+                    Сбросить прогресс
+                </button>
+            </div>
+        </section>
+
+        <section class="quiz-error" id="quiz-error" role="alert" hidden>
+            <h2>Карту не удалось загрузить</h2>
+            <p id="quiz-error-message">
+                Проверьте соединение и попробуйте ещё раз.
+            </p>
+            <button class="quiz-button" id="retry-load" type="button">Попробовать снова</button>
+        </section>
+
+        <section class="quiz-complete" id="quiz-complete" aria-live="polite" hidden>
+            <p class="quiz-complete-mark" aria-hidden="true">✓</p>
+            <div>
+                <h2>Все улицы названы</h2>
+                <p>Теперь наведите курсор на улицу, нажмите на неё или выберите с клавиатуры — название появится под картой.</p>
+            </div>
+        </section>
+
+        <section class="quiz-map-section" aria-labelledby="map-heading">
+            <h2 class="visually-hidden" id="map-heading">Карта улиц Центрального административного округа</h2>
+            <div class="quiz-map-frame">
+                <div
+                    class="quiz-map"
+                    id="quiz-map"
+                    role="region"
+                    aria-label="Интерактивная карта улиц Центрального административного округа Москвы"
+                ></div>
+                <div class="quiz-loading" id="quiz-loading" role="status">
+                    Загружаю геометрию…
+                </div>
+            </div>
+            <div class="quiz-map-picker" id="map-street-picker" hidden>
+                <label for="map-street-select">Найти названную улицу на карте</label>
+                <select id="map-street-select">
+                    <option value="">Выберите улицу</option>
+                </select>
+            </div>
+            <p class="quiz-map-caption" id="map-street-label" aria-live="polite" aria-atomic="true">
+                Угаданные улицы будут выделены чёрным.
+            </p>
+        </section>
+
+        <section class="quiz-districts" id="quiz-districts" aria-labelledby="districts-heading" hidden>
+            <div class="quiz-section-heading">
+                <div>
+                    <p class="quiz-kicker">районы ЦАО</p>
+                    <h2 id="districts-heading">Прогресс по районам</h2>
+                </div>
+                <p>Одна улица учитывается только в одном районе, даже если проходит через несколько.</p>
+            </div>
+            <div class="quiz-district-grid" id="district-grid"></div>
+        </section>
+    </main>
+
+    <noscript>
+        <p class="quiz-noscript">Для работы тренажёра нужен JavaScript.</p>
+    </noscript>
 </body>
+
 </html>
