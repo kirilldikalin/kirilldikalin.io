@@ -29,6 +29,7 @@
         pulseTimers: new Map(),
         matcher: null,
         mode: 'quiz',
+        quizDistrictId: '',
         learningDistrictIds: new Set(),
         showMissing: false,
         complete: false,
@@ -66,6 +67,7 @@
         elements.panel = document.getElementById('quiz-panel');
         elements.modeQuiz = document.getElementById('mode-quiz');
         elements.modeLearning = document.getElementById('mode-learning');
+        elements.quizDistrictSelect = document.getElementById('quiz-district-select');
         elements.learningControls = document.getElementById('learning-controls');
         elements.learningDistrictFilter = document.getElementById('learning-district-filter');
         elements.input = document.getElementById('street-answer');
@@ -79,6 +81,8 @@
         elements.errorMessage = document.getElementById('quiz-error-message');
         elements.retry = document.getElementById('retry-load');
         elements.complete = document.getElementById('quiz-complete');
+        elements.completeTitle = document.getElementById('quiz-complete-title');
+        elements.completeCopy = document.getElementById('quiz-complete-copy');
         elements.loading = document.getElementById('quiz-loading');
         elements.mapSection = document.querySelector('.quiz-map-section');
         elements.map = document.getElementById('quiz-map');
@@ -86,6 +90,7 @@
         elements.mapStreetSelect = document.getElementById('map-street-select');
         elements.mapStreetLabel = document.getElementById('map-street-label');
         elements.districtsSection = document.getElementById('quiz-districts');
+        elements.districtsDescription = document.getElementById('districts-description');
         elements.districtGrid = document.getElementById('district-grid');
     }
 
@@ -97,6 +102,7 @@
         elements.modeLearning.addEventListener('click', function () {
             setMode('learning');
         });
+        elements.quizDistrictSelect.addEventListener('change', updateQuizDistrictSelection);
         elements.learningDistrictFilter.addEventListener('change', function (event) {
             if (!event.target.matches('input[type="checkbox"][data-district-id]')) {
                 return;
@@ -367,24 +373,28 @@
         state.guessedIds = new Set(restored.guessedIds);
         state.showMissing = restored.showMissing;
         state.mode = restored.mode;
+        state.quizDistrictId = restored.quizDistrictId;
         state.learningDistrictIds = new Set(restored.learningDistrictIds);
-        state.complete = state.guessedIds.size === state.streets.length;
+        updateQuizCompletion();
         state.selectedStreetId = null;
         state.hoveredStreetId = null;
         state.streetPickerBuilt = false;
         state.loaded = true;
 
         renderMapData();
+        buildQuizDistrictSelect();
         buildLearningDistrictFilter();
         buildDistrictCards();
         renderInterface();
         setLoadingState(false);
 
+        var quizProgress = getQuizProgress();
         if (state.complete) {
-            setFeedback('Прогресс восстановлен: все объекты уже названы.', 'success');
-        } else if (state.guessedIds.size) {
+            setFeedback('Прогресс восстановлен: все выбранные объекты уже названы.', 'success');
+        } else if (quizProgress.guessedCount) {
             setFeedback(
-                'Прогресс восстановлен: ' + state.guessedIds.size + ' из ' + state.streets.length + '.',
+                'Прогресс восстановлен: ' + quizProgress.guessedCount +
+                    ' из ' + quizProgress.total + '.',
                 'neutral'
             );
         } else {
@@ -395,8 +405,11 @@
             map.invalidateSize({ animate: false });
             if (state.mode === 'learning') {
                 fitLearningSelection();
-            } else if (!state.complete) {
-                elements.input.focus({ preventScroll: true });
+            } else {
+                fitQuizSelection();
+                if (!state.complete) {
+                    elements.input.focus({ preventScroll: true });
+                }
             }
         });
     }
@@ -524,13 +537,7 @@
 
     function bindStreetLayer(feature, layer) {
         var streetId = feature.properties.id;
-        var streetName = feature.properties.name;
         state.streetLayers.set(streetId, layer);
-        layer.bindTooltip(streetName, {
-            sticky: true,
-            direction: 'top',
-            opacity: 1
-        });
 
         layer.on('mouseover', function () {
             if (!canInspectStreet(streetId)) {
@@ -565,6 +572,39 @@
         );
     }
 
+    function isStreetInQuizScope(streetId) {
+        var street = state.streetById.get(streetId);
+        return Boolean(
+            street &&
+            core.streetMatchesQuizDistrict(street, state.quizDistrictId)
+        );
+    }
+
+    function getQuizScopeStreets() {
+        return state.streets.filter(function (street) {
+            return core.streetMatchesQuizDistrict(street, state.quizDistrictId);
+        });
+    }
+
+    function getQuizProgress() {
+        var streets = getQuizScopeStreets();
+        var guessedCount = streets.filter(function (street) {
+            return state.guessedIds.has(street.id);
+        }).length;
+
+        return {
+            streets: streets,
+            total: streets.length,
+            guessedCount: guessedCount
+        };
+    }
+
+    function updateQuizCompletion() {
+        var progress = getQuizProgress();
+        state.complete = progress.total > 0 && progress.guessedCount === progress.total;
+        return progress;
+    }
+
     function canInspectStreet(streetId) {
         if (!state.loaded) {
             return false;
@@ -573,7 +613,8 @@
             state.mode,
             state.complete,
             state.guessedIds.has(streetId),
-            isLearningStreetAvailable(streetId)
+            isLearningStreetAvailable(streetId),
+            isStreetInQuizScope(streetId)
         );
     }
 
@@ -634,6 +675,17 @@
             });
         }
 
+        if (!isStreetInQuizScope(streetId)) {
+            return Object.assign({}, baseStyle, {
+                color: '#e1e1dc',
+                weight: 0.9,
+                opacity: 0.3,
+                radius: 2.5,
+                fillColor: '#e1e1dc',
+                fillOpacity: 0.3
+            });
+        }
+
         if (state.guessedIds.has(streetId)) {
             return Object.assign({}, baseStyle, {
                 color: '#262626',
@@ -676,6 +728,13 @@
         var inspectable = canInspectStreet(streetId);
         path.classList.toggle('is-interactive', inspectable);
         if (!inspectable) {
+            if (
+                typeof layer.getTooltip === 'function' &&
+                layer.getTooltip() &&
+                typeof layer.unbindTooltip === 'function'
+            ) {
+                layer.unbindTooltip();
+            }
             path.setAttribute('aria-hidden', 'true');
             path.removeAttribute('tabindex');
             path.removeAttribute('role');
@@ -684,6 +743,17 @@
         }
 
         var street = state.streetById.get(streetId);
+        if (
+            typeof layer.getTooltip === 'function' &&
+            !layer.getTooltip() &&
+            typeof layer.bindTooltip === 'function'
+        ) {
+            layer.bindTooltip(street.name, {
+                sticky: true,
+                direction: 'top',
+                opacity: 1
+            });
+        }
         path.removeAttribute('aria-hidden');
         path.setAttribute('tabindex', '0');
         path.setAttribute('role', 'button');
@@ -760,18 +830,24 @@
         }
 
         var street = state.streetById.get(result.streetId);
-        elements.input.value = '';
+        if (!isStreetInQuizScope(street.id)) {
+            setFeedback('Этот объект не относится к выбранному району.', 'warning');
+            return;
+        }
 
         if (state.guessedIds.has(street.id)) {
+            elements.input.value = '';
             setFeedback('«' + street.name + '» уже была названа.', 'warning');
             pulseStreet(street.id);
             return;
         }
 
+        elements.input.value = '';
         state.guessedIds.add(street.id);
         pulseStreet(street.id);
 
-        if (state.guessedIds.size === state.streets.length) {
+        updateQuizCompletion();
+        if (state.complete) {
             finishQuiz();
             return;
         }
@@ -811,9 +887,13 @@
         state.complete = true;
         state.showMissing = false;
         var progressSaved = persistProgress();
+        var district = state.districtById.get(state.quizDistrictId);
+        var successMessage = district ?
+            'Готово: названы все объекты района «' + district.name + '».' :
+            'Готово: названы все объекты.';
         setFeedback(
             progressSaved ?
-                'Готово: названы все объекты.' :
+                successMessage :
                 'Все объекты названы, но браузер не разрешил сохранить результат.',
             progressSaved ? 'success' : 'warning'
         );
@@ -839,11 +919,16 @@
     }
 
     function resetQuiz() {
-        if (!state.loaded || !state.guessedIds.size) {
+        var quizProgress = getQuizProgress();
+        if (!state.loaded || !quizProgress.guessedCount) {
             return;
         }
 
-        if (!window.confirm('Сбросить весь прогресс по ЦАО?')) {
+        var district = state.districtById.get(state.quizDistrictId);
+        var confirmation = district ?
+            'Сбросить прогресс района «' + district.name + '»?' :
+            'Сбросить весь прогресс по ЦАО?';
+        if (!window.confirm(confirmation)) {
             return;
         }
 
@@ -853,9 +938,11 @@
         });
         state.pulseTimers.clear();
         state.pulsingIds.clear();
-        state.guessedIds.clear();
+        quizProgress.streets.forEach(function (street) {
+            state.guessedIds.delete(street.id);
+        });
         state.showMissing = false;
-        state.complete = false;
+        updateQuizCompletion();
         state.selectedStreetId = null;
         state.hoveredStreetId = null;
         elements.input.value = '';
@@ -919,6 +1006,52 @@
         });
     }
 
+    function buildQuizDistrictSelect() {
+        elements.quizDistrictSelect.replaceChildren();
+
+        var allDistricts = document.createElement('option');
+        allDistricts.value = '';
+        allDistricts.textContent = 'Весь ЦАО';
+        elements.quizDistrictSelect.append(allDistricts);
+
+        state.districts.forEach(function (district) {
+            var option = document.createElement('option');
+            option.value = district.id;
+            option.textContent = district.name;
+            elements.quizDistrictSelect.append(option);
+        });
+
+        elements.quizDistrictSelect.value = state.quizDistrictId;
+    }
+
+    function updateQuizDistrictSelection() {
+        if (!state.loaded) {
+            return;
+        }
+
+        var districtId = elements.quizDistrictSelect.value;
+        state.quizDistrictId = state.districtById.has(districtId) ? districtId : '';
+        state.streetPickerBuilt = false;
+        state.selectedStreetId = null;
+        state.hoveredStreetId = null;
+        closeStreetTooltips();
+        updateQuizCompletion();
+        persistProgress();
+        renderInterface();
+        fitQuizSelection();
+
+        var district = state.districtById.get(state.quizDistrictId);
+        setFeedback(
+            district ?
+                'Выбран район «' + district.name + '».' :
+                'Выбран весь ЦАО.',
+            'neutral'
+        );
+        if (!state.complete) {
+            elements.input.focus({ preventScroll: true });
+        }
+    }
+
     function buildLearningDistrictFilter() {
         elements.learningDistrictFilter.replaceChildren();
         state.districts.forEach(function (district) {
@@ -969,12 +1102,29 @@
                 map.invalidateSize({ animate: false });
                 if (state.mode === 'learning') {
                     fitLearningSelection();
-                } else if (state.fullBounds && state.fullBounds.isValid()) {
-                    map.fitBounds(state.fullBounds, {
-                        padding: [12, 12],
-                        animate: false
-                    });
+                } else {
+                    fitQuizSelection();
                 }
+            });
+        }
+    }
+
+    function fitQuizSelection() {
+        if (!state.loaded || state.mode !== 'quiz') {
+            return;
+        }
+
+        var bounds = state.fullBounds;
+        if (state.quizDistrictId) {
+            var layer = state.districtLayers.get(state.quizDistrictId);
+            if (layer && typeof layer.getBounds === 'function') {
+                bounds = layer.getBounds();
+            }
+        }
+        if (bounds && bounds.isValid()) {
+            map.fitBounds(bounds, {
+                padding: [18, 18],
+                animate: false
             });
         }
     }
@@ -1055,7 +1205,7 @@
         emptyOption.textContent = 'Выберите объект';
         elements.mapStreetSelect.append(emptyOption);
 
-        state.streets.forEach(function (street) {
+        getQuizScopeStreets().forEach(function (street) {
             var option = document.createElement('option');
             option.value = street.id;
             option.textContent = street.name;
@@ -1065,10 +1215,12 @@
     }
 
     function renderInterface(options) {
-        var guessedCount = state.guessedIds.size;
-        var total = state.streets.length;
+        var quizProgress = getQuizProgress();
+        var guessedCount = quizProgress.guessedCount;
+        var total = quizProgress.total;
         var percentage = core.formatPercentage(guessedCount, total);
         var isLearning = state.mode === 'learning';
+        var district = state.districtById.get(state.quizDistrictId);
 
         elements.progress.max = Math.max(total, 1);
         elements.progress.value = guessedCount;
@@ -1080,6 +1232,8 @@
         elements.actions.hidden = isLearning;
         elements.learningControls.hidden = !isLearning;
         elements.districtsSection.hidden = isLearning || !state.loaded;
+        elements.quizDistrictSelect.disabled = !state.loaded || isLearning;
+        elements.quizDistrictSelect.value = state.quizDistrictId;
         elements.modeQuiz.classList.toggle('is-active', !isLearning);
         elements.modeLearning.classList.toggle('is-active', isLearning);
         elements.modeQuiz.setAttribute('aria-pressed', String(!isLearning));
@@ -1093,6 +1247,12 @@
             'Показать оставшиеся';
         elements.reset.disabled = !state.loaded || guessedCount === 0 || isLearning;
         elements.complete.hidden = !state.complete || isLearning;
+        elements.completeTitle.textContent = district ?
+            'Все объекты района названы' :
+            'Все объекты названы';
+        elements.completeCopy.textContent = district ?
+            'Теперь названия улиц и мостов этого района доступны прямо на карте.' :
+            'Теперь названия всех улиц и мостов доступны прямо на карте.';
         if (state.complete && !state.streetPickerBuilt) {
             buildStreetPicker();
         }
@@ -1101,7 +1261,10 @@
         elements.map.classList.toggle('is-learning', isLearning);
 
         if (!isLearning && options && options.streetId) {
-            renderDistrictCard(state.streetById.get(options.streetId).quizDistrictId);
+            renderDistrictCard(
+                state.quizDistrictId ||
+                    state.streetById.get(options.streetId).quizDistrictId
+            );
         } else if (!isLearning) {
             renderDistrictCards();
         }
@@ -1111,14 +1274,26 @@
 
     function renderDistrictCards() {
         state.districts.forEach(function (district) {
-            renderDistrictCard(district.id);
+            var card = state.districtCards.get(district.id);
+            var visible = !state.quizDistrictId || state.quizDistrictId === district.id;
+            card.root.hidden = !visible;
+            if (visible) {
+                renderDistrictCard(district.id);
+            }
         });
+        elements.districtsDescription.textContent = state.quizDistrictId ?
+            'Учитываются все улицы и мосты, пересекающие выбранный район.' :
+            'Каждый объект учитывается в одном основном районе.';
     }
 
     function renderDistrictCard(districtId) {
         var district = state.districtById.get(districtId);
         var card = state.districtCards.get(districtId);
-        var streets = state.streetsByDistrict.get(districtId);
+        var streets = state.quizDistrictId === districtId ?
+            state.streets.filter(function (street) {
+                return core.streetMatchesQuizDistrict(street, districtId);
+            }) :
+            state.streetsByDistrict.get(districtId);
         var guessedStreets = streets.filter(function (street) {
             return state.guessedIds.has(street.id);
         });
@@ -1182,7 +1357,7 @@
                 'Оставшиеся объекты выделены пунктиром; названия по-прежнему скрыты.';
             return;
         }
-        if (state.complete || state.guessedIds.size) {
+        if (state.complete || getQuizProgress().guessedCount) {
             elements.mapStreetLabel.textContent =
                 'Наведите курсор на угаданный объект, чтобы увидеть его название.';
             return;
@@ -1198,7 +1373,8 @@
             state.guessedIds,
             state.showMissing,
             state.mode,
-            state.learningDistrictIds
+            state.learningDistrictIds,
+            state.quizDistrictId
         );
 
         if (!saved && !state.storageWarningShown) {
@@ -1226,6 +1402,7 @@
 
         if (isLoading) {
             elements.input.disabled = true;
+            elements.quizDistrictSelect.disabled = true;
             elements.toggleMissing.disabled = true;
             elements.reset.disabled = true;
             setFeedback('Загружаю карту и список объектов…', 'neutral');
@@ -1244,6 +1421,7 @@
             'Не удалось прочитать локальный набор объектов. Проверьте соединение и попробуйте ещё раз.';
         elements.retry.disabled = false;
         elements.input.disabled = true;
+        elements.quizDistrictSelect.disabled = true;
         elements.toggleMissing.disabled = true;
         elements.reset.disabled = true;
         setFeedback('Тренажёр временно недоступен.', 'warning');

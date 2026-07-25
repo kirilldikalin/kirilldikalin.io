@@ -13,6 +13,7 @@ test('page keeps the requested quiz control order and concise copy', () => {
     const positions = [
         'id="mode-quiz"',
         'id="quiz-panel"',
+        'id="quiz-district-select"',
         'id="quiz-map"',
         'id="quiz-actions"',
         'id="quiz-districts"'
@@ -49,4 +50,16 @@ test('district layer is noninteractive and street inspection is mode-aware', () 
     assert.match(script, /core\.isStreetInspectable/);
     assert.match(script, /dashArray:\s*'6 5'/);
     assert.match(script, /state\.mode === 'learning'/);
+});
+
+test('unguessed quiz streets never receive an eager tooltip', () => {
+    const bindStart = script.indexOf('function bindStreetLayer');
+    const configureStart = script.indexOf('function configureStreetPath');
+    const scheduleStart = script.indexOf('function scheduleAnswerCheck');
+    assert.ok(bindStart !== -1 && configureStart > bindStart && scheduleStart > configureStart);
+
+    assert.doesNotMatch(script.slice(bindStart, configureStart), /bindTooltip/);
+    assert.match(script.slice(configureStart, scheduleStart), /if \(!inspectable\)/);
+    assert.match(script.slice(configureStart, scheduleStart), /unbindTooltip/);
+    assert.match(script.slice(configureStart, scheduleStart), /bindTooltip\(street\.name/);
 });

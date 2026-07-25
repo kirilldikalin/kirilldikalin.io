@@ -29,7 +29,8 @@ const emptyProgress = {
     guessedIds: [],
     showMissing: false,
     mode: 'quiz',
-    learningDistrictIds: []
+    learningDistrictIds: [],
+    quizDistrictId: ''
 };
 
 test('normalizeAnswer normalizes Russian street names and common abbreviations', () => {
@@ -92,11 +93,12 @@ test('formatPercentage uses one decimal only when needed', () => {
 });
 
 test('inspectability follows quiz and learning mode rules', () => {
-    assert.equal(core.isStreetInspectable('quiz', false, false, true), false);
-    assert.equal(core.isStreetInspectable('quiz', false, true, false), true);
-    assert.equal(core.isStreetInspectable('quiz', true, false, false), true);
-    assert.equal(core.isStreetInspectable('learning', false, false, true), true);
-    assert.equal(core.isStreetInspectable('learning', true, true, false), false);
+    assert.equal(core.isStreetInspectable('quiz', false, false, true, true), false);
+    assert.equal(core.isStreetInspectable('quiz', false, true, false, true), true);
+    assert.equal(core.isStreetInspectable('quiz', true, false, false, true), true);
+    assert.equal(core.isStreetInspectable('quiz', true, true, true, false), false);
+    assert.equal(core.isStreetInspectable('learning', false, false, true, false), true);
+    assert.equal(core.isStreetInspectable('learning', true, true, false, true), false);
 });
 
 test('loadProgress rejects corrupt and incompatible saved state', async (t) => {
@@ -135,7 +137,8 @@ test('loadProgress rejects corrupt and incompatible saved state', async (t) => {
                 guessedIds: ['street-1'],
                 showMissing: false,
                 mode: 'quiz',
-                learningDistrictIds: []
+                learningDistrictIds: [],
+                quizDistrictId: ''
             }
         );
     });
@@ -182,7 +185,37 @@ test('loadProgress restores only unique street IDs from the current dataset', ()
             guessedIds: ['street-2', 'street-1'],
             showMissing: true,
             mode: 'learning',
-            learningDistrictIds: ['arbat']
+            learningDistrictIds: ['arbat'],
+            quizDistrictId: ''
+        }
+    );
+});
+
+test('loadProgress restores a valid quiz district from schema 3', () => {
+    const storage = new MemoryStorage();
+    storage.setItem(core.STORAGE_KEY, JSON.stringify({
+        schemaVersion: 3,
+        datasetVersion: 'dataset-v2',
+        guessedIds: ['street-1'],
+        showMissing: false,
+        mode: 'quiz',
+        learningDistrictIds: [],
+        quizDistrictId: 'arbat'
+    }));
+
+    assert.deepEqual(
+        core.loadProgress(
+            storage,
+            'dataset-v2',
+            new Set(['street-1']),
+            new Set(['arbat', 'basmanny'])
+        ),
+        {
+            guessedIds: ['street-1'],
+            showMissing: false,
+            mode: 'quiz',
+            learningDistrictIds: [],
+            quizDistrictId: 'arbat'
         }
     );
 });
@@ -197,18 +230,20 @@ test('saveProgress writes versioned state and clearProgress removes it', () => {
             new Set(['street-1', 'street-3']),
             true,
             'learning',
-            new Set(['arbat', 'khamovniki'])
+            new Set(['arbat', 'khamovniki']),
+            'arbat'
         ),
         true
     );
 
     const stored = JSON.parse(storage.getItem(core.STORAGE_KEY));
-    assert.equal(stored.schemaVersion, 2);
+    assert.equal(stored.schemaVersion, 3);
     assert.equal(stored.datasetVersion, 'dataset-v2');
     assert.deepEqual(stored.guessedIds, ['street-1', 'street-3']);
     assert.equal(stored.showMissing, true);
     assert.equal(stored.mode, 'learning');
     assert.deepEqual(stored.learningDistrictIds, ['arbat', 'khamovniki']);
+    assert.equal(stored.quizDistrictId, 'arbat');
     assert.equal(Number.isNaN(Date.parse(stored.updatedAt)), false);
 
     assert.equal(core.clearProgress(storage), true);
@@ -241,4 +276,8 @@ test('streetMatchesDistrictSelection uses every intersected district', () => {
     assert.equal(core.streetMatchesDistrictSelection(street, new Set(['arbat'])), true);
     assert.equal(core.streetMatchesDistrictSelection(street, new Set(['presnensky'])), true);
     assert.equal(core.streetMatchesDistrictSelection(street, new Set(['tverskoy'])), false);
+    assert.equal(core.streetMatchesQuizDistrict(street, ''), true);
+    assert.equal(core.streetMatchesQuizDistrict(street, 'arbat'), true);
+    assert.equal(core.streetMatchesQuizDistrict(street, 'presnensky'), true);
+    assert.equal(core.streetMatchesQuizDistrict(street, 'tverskoy'), false);
 });

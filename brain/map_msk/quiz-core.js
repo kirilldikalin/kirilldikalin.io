@@ -2,7 +2,7 @@
     'use strict';
 
     var STORAGE_KEY = 'kirilldikalin.map_msk.progress';
-    var STORAGE_SCHEMA_VERSION = 2;
+    var STORAGE_SCHEMA_VERSION = 3;
 
     var TYPE_FORMS = {
         'ал': 'аллея',
@@ -208,7 +208,8 @@
             guessedIds: [],
             showMissing: false,
             mode: 'quiz',
-            learningDistrictIds: []
+            learningDistrictIds: [],
+            quizDistrictId: ''
         };
 
         if (!storage) {
@@ -224,6 +225,7 @@
             var stored = JSON.parse(rawValue);
             if (
                 (stored.schemaVersion !== 1 &&
+                    stored.schemaVersion !== 2 &&
                     stored.schemaVersion !== STORAGE_SCHEMA_VERSION) ||
                 !Array.isArray(stored.guessedIds)
             ) {
@@ -238,7 +240,7 @@
             });
 
             var districtIds = new Set();
-            if (stored.schemaVersion === STORAGE_SCHEMA_VERSION &&
+            if (stored.schemaVersion >= 2 &&
                 Array.isArray(stored.learningDistrictIds)) {
                 stored.learningDistrictIds.forEach(function (districtId) {
                     if (!validDistrictIds || validDistrictIds.has(districtId)) {
@@ -247,13 +249,25 @@
                 });
             }
 
+            var quizDistrictId = '';
+            if (
+                stored.schemaVersion === STORAGE_SCHEMA_VERSION &&
+                typeof stored.quizDistrictId === 'string' &&
+                (!stored.quizDistrictId ||
+                    !validDistrictIds ||
+                    validDistrictIds.has(stored.quizDistrictId))
+            ) {
+                quizDistrictId = stored.quizDistrictId;
+            }
+
             return {
                 guessedIds: Array.from(uniqueIds),
                 showMissing: Boolean(stored.showMissing),
-                mode: stored.schemaVersion === STORAGE_SCHEMA_VERSION ?
+                mode: stored.schemaVersion >= 2 ?
                     normalizeMode(stored.mode) :
                     'quiz',
-                learningDistrictIds: Array.from(districtIds)
+                learningDistrictIds: Array.from(districtIds),
+                quizDistrictId: quizDistrictId
             };
         } catch (error) {
             return emptyProgress;
@@ -266,7 +280,8 @@
         guessedIds,
         showMissing,
         mode,
-        learningDistrictIds
+        learningDistrictIds,
+        quizDistrictId
     ) {
         if (!storage) {
             return false;
@@ -280,6 +295,7 @@
                 showMissing: Boolean(showMissing),
                 mode: normalizeMode(mode),
                 learningDistrictIds: Array.from(learningDistrictIds || []),
+                quizDistrictId: typeof quizDistrictId === 'string' ? quizDistrictId : '',
                 updatedAt: new Date().toISOString()
             }));
             return true;
@@ -310,11 +326,25 @@
         });
     }
 
-    function isStreetInspectable(mode, complete, guessed, learningAvailable) {
+    function streetMatchesQuizDistrict(street, quizDistrictId) {
+        if (!quizDistrictId) {
+            return true;
+        }
+        return Array.isArray(street.districtIds) &&
+            street.districtIds.indexOf(quizDistrictId) !== -1;
+    }
+
+    function isStreetInspectable(
+        mode,
+        complete,
+        guessed,
+        learningAvailable,
+        quizAvailable
+    ) {
         if (normalizeMode(mode) === 'learning') {
             return Boolean(learningAvailable);
         }
-        return Boolean(complete || guessed);
+        return quizAvailable !== false && Boolean(complete || guessed);
     }
 
     function formatPercentage(value, total) {
@@ -339,6 +369,7 @@
         saveProgress: saveProgress,
         clearProgress: clearProgress,
         streetMatchesDistrictSelection: streetMatchesDistrictSelection,
+        streetMatchesQuizDistrict: streetMatchesQuizDistrict,
         isStreetInspectable: isStreetInspectable,
         formatPercentage: formatPercentage
     });

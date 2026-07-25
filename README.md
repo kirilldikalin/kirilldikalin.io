@@ -34,7 +34,8 @@ Contains:
 - MathJax is loaded only by Euler pages that contain TeX formulas.
 - The Moscow streets trainer uses a local copy of Leaflet 1.9.4 and a local GeoJSON dataset derived
   from OpenStreetMap. It does not request map tiles or a map API at runtime. The regular mode
-  tracks answers; learning mode reveals names on the map for all or selected CAO districts.
+  tracks answers for all of CAO or one selected district and reveals only guessed names; learning
+  mode reveals names on the map for all or selected CAO districts.
 
 ## Yandex Maps API key
 

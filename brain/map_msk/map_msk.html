@@ -62,6 +62,13 @@
         </section>
 
         <section class="quiz-panel" id="quiz-panel" aria-busy="true">
+            <div class="quiz-scope-control">
+                <label for="quiz-district-select">Район</label>
+                <select id="quiz-district-select" disabled>
+                    <option value="">Весь ЦАО</option>
+                </select>
+            </div>
+
             <div class="quiz-answer-block">
                 <label for="street-answer">Название улицы или моста</label>
                 <input
@@ -100,8 +107,8 @@
         <section class="quiz-complete" id="quiz-complete" aria-live="polite" hidden>
             <p class="quiz-complete-mark" aria-hidden="true">✓</p>
             <div>
-                <h2>Все объекты названы</h2>
-                <p>Теперь названия всех улиц и мостов доступны прямо на карте.</p>
+                <h2 id="quiz-complete-title">Все объекты названы</h2>
+                <p id="quiz-complete-copy">Теперь названия всех улиц и мостов доступны прямо на карте.</p>
             </div>
         </section>
 
@@ -150,7 +157,7 @@
                     <p class="quiz-kicker">районы ЦАО</p>
                     <h2 id="districts-heading">Прогресс по районам</h2>
                 </div>
-                <p>Каждый объект учитывается в одном основном районе.</p>
+                <p id="districts-description">Каждый объект учитывается в одном основном районе.</p>
             </div>
             <div class="quiz-district-grid" id="district-grid"></div>
         </section>
