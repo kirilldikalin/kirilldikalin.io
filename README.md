@@ -30,13 +30,17 @@ Contains:
 
 - Highlight.js is loaded only by the knowledge base, where it highlights Python code examples.
 - MathJax is loaded only by Euler pages that contain TeX formulas.
-- The Moscow streets trainer uses the Yandex Maps browser API without jQuery.
+- The Moscow streets trainer uses a local copy of Leaflet 1.9.4 and a local GeoJSON dataset derived
+  from OpenStreetMap. It does not request map tiles or a map API at runtime.
 
 ## Yandex Maps API key
 
-The browser must receive the Yandex Maps API key, so moving it to another JavaScript file or an
-environment variable would not make it secret on GitHub Pages. Protect the production key in the
-Yandex developer dashboard:
+The Moscow streets trainer no longer uses Yandex Maps. The remaining browser integration is the
+experimental Russia map in `brain/map_russia/map_russia.html`; its key is also present in the Git
+history. A browser key cannot be hidden by moving it to another JavaScript file, an environment
+variable, or a GitHub Actions secret because the final value is delivered to every visitor.
+
+Rotate the historical key and protect any replacement in the Yandex developer dashboard:
 
 1. Allow requests only from `kirilldikalin.github.io`.
 2. Use a separate key for local development if local map testing is required.
@@ -49,7 +53,9 @@ Run the public page, link, and anchor check locally:
 
 ```shell
 python3 scripts/check_site.py
+node --test brain/map_msk/tests/*.test.js
+python3 brain/map_msk/tools/build_cao_map.py --validate-only brain/map_msk/data/cao-map.json
 ```
 
-GitHub Actions runs the same check and validates JavaScript syntax on pushes to `master` and
+GitHub Actions runs these checks and validates JavaScript syntax on pushes to `master` and
 `develop`, and on pull requests.

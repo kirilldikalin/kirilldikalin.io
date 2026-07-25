@@ -30,3 +30,9 @@ jobs:
 
       - name: Check JavaScript syntax
         run: find . -path ./.git -prune -o -name '*.js' -print0 | xargs -0 -n1 node --check
+
+      - name: Test Moscow streets trainer
+        run: node --test brain/map_msk/tests/*.test.js
+
+      - name: Validate Moscow streets dataset
+        run: python3 brain/map_msk/tools/build_cao_map.py --validate-only brain/map_msk/data/cao-map.json
