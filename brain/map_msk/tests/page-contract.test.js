@@ -14,6 +14,7 @@ test('page keeps the requested quiz control order and concise copy', () => {
         'id="mode-quiz"',
         'id="quiz-panel"',
         'id="quiz-district-select"',
+        'id="allow-short-answers"',
         'id="quiz-map"',
         'id="quiz-actions"',
         'id="quiz-districts"'
@@ -28,6 +29,9 @@ test('page keeps the requested quiz control order and concise copy', () => {
         'Нажимать Enter необязательно',
         'Регистр, «ё/е»'
     ].forEach((copy) => assert.equal(page.includes(copy), false, `obsolete copy remains: ${copy}`));
+
+    assert.match(page, /id="allow-short-answers" type="checkbox"/);
+    assert.match(page, /Принимать названия без типа/);
 });
 
 test('trainer uses only local map dependencies at runtime', () => {

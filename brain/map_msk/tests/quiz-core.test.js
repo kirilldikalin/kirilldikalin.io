@@ -30,7 +30,8 @@ const emptyProgress = {
     showMissing: false,
     mode: 'quiz',
     learningDistrictIds: [],
-    quizDistrictId: ''
+    quizDistrictId: '',
+    allowShortAnswers: false
 };
 
 test('normalizeAnswer normalizes Russian street names and common abbreviations', () => {
@@ -49,22 +50,26 @@ test('createMatcher requires a street type and accepts typed abbreviations', () 
         {
             id: 'nikitskaya',
             name: 'Большая Никитская улица',
-            aliases: ['ул. Большая Никитская']
+            aliases: ['ул. Большая Никитская'],
+            kind: 'улица'
         },
         {
             id: 'bolotnaya-street',
             name: 'Болотная улица',
-            aliases: []
+            aliases: [],
+            kind: 'улица'
         },
         {
             id: 'bolotnaya-square',
             name: 'Болотная площадь',
-            aliases: []
+            aliases: [],
+            kind: 'площадь'
         },
         {
             id: 'krymsky-bridge',
             name: 'Крымский мост',
-            aliases: []
+            aliases: [],
+            kind: 'мост'
         }
     ]);
 
@@ -83,6 +88,68 @@ test('createMatcher requires a street type and accepts typed abbreviations', () 
     assert.equal(matcher.match('Крымский мост').streetId, 'krymsky-bridge');
     assert.equal(matcher.match('неизвестная улица').status, 'unknown');
     assert.equal(matcher.match('   ').status, 'empty');
+});
+
+test('createMatcher optionally accepts exact untyped names without guessing partial input', () => {
+    const matcher = core.createMatcher([
+        {
+            id: 'nikitskaya',
+            name: 'Большая Никитская улица',
+            aliases: ['ул. Большая Никитская'],
+            kind: 'улица'
+        },
+        {
+            id: 'bolotnaya-street',
+            name: 'Болотная улица',
+            aliases: [],
+            kind: 'улица'
+        },
+        {
+            id: 'bolotnaya-square',
+            name: 'Болотная площадь',
+            aliases: [],
+            kind: 'площадь'
+        },
+        {
+            id: 'krymsky-bridge',
+            name: 'Крымский мост',
+            aliases: [],
+            kind: 'мост'
+        },
+        {
+            id: 'kuznetsky-most-street',
+            name: 'Кузнецкий Мост, улица',
+            aliases: [],
+            kind: 'улица'
+        }
+    ]);
+    const shortAnswers = { allowTypeOmission: true };
+
+    assert.deepEqual(matcher.match('Большая Никитская', shortAnswers), {
+        status: 'match',
+        streetId: 'nikitskaya',
+        normalizedValue: 'большая никитская',
+        typeOmitted: true
+    });
+    assert.deepEqual(matcher.match('Крымский', shortAnswers), {
+        status: 'match',
+        streetId: 'krymsky-bridge',
+        normalizedValue: 'крымский',
+        typeOmitted: true
+    });
+    assert.equal(
+        matcher.match('Кузнецкий мост', shortAnswers).streetId,
+        'kuznetsky-most-street'
+    );
+    assert.deepEqual(
+        matcher.match('Болотная', shortAnswers).streetIds.sort(),
+        ['bolotnaya-square', 'bolotnaya-street']
+    );
+    assert.equal(matcher.match('Большая', shortAnswers).status, 'incomplete');
+    assert.equal(
+        matcher.match('Болотная улица', shortAnswers).streetId,
+        'bolotnaya-street'
+    );
 });
 
 test('formatPercentage uses one decimal only when needed', () => {
@@ -138,7 +205,8 @@ test('loadProgress rejects corrupt and incompatible saved state', async (t) => {
                 showMissing: false,
                 mode: 'quiz',
                 learningDistrictIds: [],
-                quizDistrictId: ''
+                quizDistrictId: '',
+                allowShortAnswers: false
             }
         );
     });
@@ -186,7 +254,8 @@ test('loadProgress restores only unique street IDs from the current dataset', ()
             showMissing: true,
             mode: 'learning',
             learningDistrictIds: ['arbat'],
-            quizDistrictId: ''
+            quizDistrictId: '',
+            allowShortAnswers: false
         }
     );
 });
@@ -215,8 +284,33 @@ test('loadProgress restores a valid quiz district from schema 3', () => {
             showMissing: false,
             mode: 'quiz',
             learningDistrictIds: [],
-            quizDistrictId: 'arbat'
+            quizDistrictId: 'arbat',
+            allowShortAnswers: false
         }
+    );
+});
+
+test('loadProgress restores the short-answer option only from schema 4', () => {
+    const storage = new MemoryStorage();
+    storage.setItem(core.STORAGE_KEY, JSON.stringify({
+        schemaVersion: 4,
+        datasetVersion: 'dataset-v2',
+        guessedIds: ['street-1'],
+        showMissing: false,
+        mode: 'quiz',
+        learningDistrictIds: [],
+        quizDistrictId: 'arbat',
+        allowShortAnswers: true
+    }));
+
+    assert.equal(
+        core.loadProgress(
+            storage,
+            'dataset-v2',
+            new Set(['street-1']),
+            new Set(['arbat'])
+        ).allowShortAnswers,
+        true
     );
 });
 
@@ -231,19 +325,21 @@ test('saveProgress writes versioned state and clearProgress removes it', () => {
             true,
             'learning',
             new Set(['arbat', 'khamovniki']),
-            'arbat'
+            'arbat',
+            true
         ),
         true
     );
 
     const stored = JSON.parse(storage.getItem(core.STORAGE_KEY));
-    assert.equal(stored.schemaVersion, 3);
+    assert.equal(stored.schemaVersion, 4);
     assert.equal(stored.datasetVersion, 'dataset-v2');
     assert.deepEqual(stored.guessedIds, ['street-1', 'street-3']);
     assert.equal(stored.showMissing, true);
     assert.equal(stored.mode, 'learning');
     assert.deepEqual(stored.learningDistrictIds, ['arbat', 'khamovniki']);
     assert.equal(stored.quizDistrictId, 'arbat');
+    assert.equal(stored.allowShortAnswers, true);
     assert.equal(Number.isNaN(Date.parse(stored.updatedAt)), false);
 
     assert.equal(core.clearProgress(storage), true);

@@ -2,7 +2,7 @@
     'use strict';
 
     var STORAGE_KEY = 'kirilldikalin.map_msk.progress';
-    var STORAGE_SCHEMA_VERSION = 3;
+    var STORAGE_SCHEMA_VERSION = 4;
 
     var TYPE_FORMS = {
         'ал': 'аллея',
@@ -113,25 +113,23 @@
         owners.get(alias).add(streetId);
     }
 
-    function createMatcher(streets) {
-        var owners = new Map();
+    function removeObjectType(normalizedAlias, kind) {
+        var normalizedKind = normalizeAnswer(kind);
+        if (!normalizedAlias || !STREET_TYPES[normalizedKind]) {
+            return '';
+        }
 
-        streets.forEach(function (street) {
-            var rawAliases = [street.name].concat(
-                Array.isArray(street.aliases) ? street.aliases : []
-            );
+        var tokens = normalizedAlias.split(' ');
+        var typeIndex = tokens.lastIndexOf(normalizedKind);
+        if (typeIndex === -1) {
+            return '';
+        }
 
-            rawAliases.forEach(function (rawAlias) {
-                var normalizedAlias = normalizeAnswer(rawAlias);
-                if (!normalizedAlias) {
-                    return;
-                }
-                if (hasStreetType(normalizedAlias)) {
-                    addOwner(owners, normalizedAlias, street.id);
-                }
-            });
-        });
+        tokens.splice(typeIndex, 1);
+        return tokens.join(' ').trim();
+    }
 
+    function splitOwners(owners) {
         var index = new Map();
         var conflicts = new Map();
 
@@ -144,14 +142,87 @@
         });
 
         return {
-            match: function (value) {
+            index: index,
+            conflicts: conflicts
+        };
+    }
+
+    function createMatcher(streets) {
+        var fullOwners = new Map();
+        var shortOwners = new Map();
+
+        streets.forEach(function (street) {
+            var rawAliases = [street.name].concat(
+                Array.isArray(street.aliases) ? street.aliases : []
+            );
+
+            rawAliases.forEach(function (rawAlias) {
+                var normalizedAlias = normalizeAnswer(rawAlias);
+                if (!normalizedAlias) {
+                    return;
+                }
+                if (hasStreetType(normalizedAlias)) {
+                    addOwner(fullOwners, normalizedAlias, street.id);
+                    addOwner(
+                        shortOwners,
+                        removeObjectType(normalizedAlias, street.kind),
+                        street.id
+                    );
+                }
+            });
+        });
+
+        var fullAliases = splitOwners(fullOwners);
+        var shortAliases = splitOwners(shortOwners);
+
+        return {
+            match: function (value, options) {
                 var normalizedValue = normalizeAnswer(value);
+                var allowTypeOmission = Boolean(
+                    options && options.allowTypeOmission
+                );
 
                 if (!normalizedValue) {
                     return {
                         status: 'empty',
                         normalizedValue: ''
                     };
+                }
+
+                if (fullAliases.index.has(normalizedValue)) {
+                    return {
+                        status: 'match',
+                        streetId: fullAliases.index.get(normalizedValue),
+                        normalizedValue: normalizedValue
+                    };
+                }
+
+                if (fullAliases.conflicts.has(normalizedValue)) {
+                    return {
+                        status: 'ambiguous',
+                        streetIds: fullAliases.conflicts.get(normalizedValue).slice(),
+                        normalizedValue: normalizedValue
+                    };
+                }
+
+                if (allowTypeOmission) {
+                    if (shortAliases.index.has(normalizedValue)) {
+                        return {
+                            status: 'match',
+                            streetId: shortAliases.index.get(normalizedValue),
+                            normalizedValue: normalizedValue,
+                            typeOmitted: true
+                        };
+                    }
+
+                    if (shortAliases.conflicts.has(normalizedValue)) {
+                        return {
+                            status: 'ambiguous',
+                            streetIds: shortAliases.conflicts.get(normalizedValue).slice(),
+                            normalizedValue: normalizedValue,
+                            typeOmitted: true
+                        };
+                    }
                 }
 
                 if (!hasStreetType(normalizedValue)) {
@@ -161,29 +232,15 @@
                     };
                 }
 
-                if (index.has(normalizedValue)) {
-                    return {
-                        status: 'match',
-                        streetId: index.get(normalizedValue),
-                        normalizedValue: normalizedValue
-                    };
-                }
-
-                if (conflicts.has(normalizedValue)) {
-                    return {
-                        status: 'ambiguous',
-                        streetIds: conflicts.get(normalizedValue).slice(),
-                        normalizedValue: normalizedValue
-                    };
-                }
-
                 return {
                     status: 'unknown',
                     normalizedValue: normalizedValue
                 };
             },
-            aliasCount: index.size,
-            conflicts: conflicts
+            aliasCount: fullAliases.index.size,
+            conflicts: fullAliases.conflicts,
+            shortAliasCount: shortAliases.index.size,
+            shortConflicts: shortAliases.conflicts
         };
     }
 
@@ -209,7 +266,8 @@
             showMissing: false,
             mode: 'quiz',
             learningDistrictIds: [],
-            quizDistrictId: ''
+            quizDistrictId: '',
+            allowShortAnswers: false
         };
 
         if (!storage) {
@@ -226,6 +284,7 @@
             if (
                 (stored.schemaVersion !== 1 &&
                     stored.schemaVersion !== 2 &&
+                    stored.schemaVersion !== 3 &&
                     stored.schemaVersion !== STORAGE_SCHEMA_VERSION) ||
                 !Array.isArray(stored.guessedIds)
             ) {
@@ -251,7 +310,7 @@
 
             var quizDistrictId = '';
             if (
-                stored.schemaVersion === STORAGE_SCHEMA_VERSION &&
+                stored.schemaVersion >= 3 &&
                 typeof stored.quizDistrictId === 'string' &&
                 (!stored.quizDistrictId ||
                     !validDistrictIds ||
@@ -267,7 +326,10 @@
                     normalizeMode(stored.mode) :
                     'quiz',
                 learningDistrictIds: Array.from(districtIds),
-                quizDistrictId: quizDistrictId
+                quizDistrictId: quizDistrictId,
+                allowShortAnswers: stored.schemaVersion >= 4 ?
+                    Boolean(stored.allowShortAnswers) :
+                    false
             };
         } catch (error) {
             return emptyProgress;
@@ -281,7 +343,8 @@
         showMissing,
         mode,
         learningDistrictIds,
-        quizDistrictId
+        quizDistrictId,
+        allowShortAnswers
     ) {
         if (!storage) {
             return false;
@@ -296,6 +359,7 @@
                 mode: normalizeMode(mode),
                 learningDistrictIds: Array.from(learningDistrictIds || []),
                 quizDistrictId: typeof quizDistrictId === 'string' ? quizDistrictId : '',
+                allowShortAnswers: Boolean(allowShortAnswers),
                 updatedAt: new Date().toISOString()
             }));
             return true;

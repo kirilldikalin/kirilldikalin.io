@@ -30,6 +30,7 @@
         matcher: null,
         mode: 'quiz',
         quizDistrictId: '',
+        allowShortAnswers: false,
         learningDistrictIds: new Set(),
         showMissing: false,
         complete: false,
@@ -68,6 +69,7 @@
         elements.modeQuiz = document.getElementById('mode-quiz');
         elements.modeLearning = document.getElementById('mode-learning');
         elements.quizDistrictSelect = document.getElementById('quiz-district-select');
+        elements.allowShortAnswers = document.getElementById('allow-short-answers');
         elements.learningControls = document.getElementById('learning-controls');
         elements.learningDistrictFilter = document.getElementById('learning-district-filter');
         elements.input = document.getElementById('street-answer');
@@ -103,6 +105,7 @@
             setMode('learning');
         });
         elements.quizDistrictSelect.addEventListener('change', updateQuizDistrictSelection);
+        elements.allowShortAnswers.addEventListener('change', updateAnswerMode);
         elements.learningDistrictFilter.addEventListener('change', function (event) {
             if (!event.target.matches('input[type="checkbox"][data-district-id]')) {
                 return;
@@ -374,6 +377,7 @@
         state.showMissing = restored.showMissing;
         state.mode = restored.mode;
         state.quizDistrictId = restored.quizDistrictId;
+        state.allowShortAnswers = restored.allowShortAnswers;
         state.learningDistrictIds = new Set(restored.learningDistrictIds);
         updateQuizCompletion();
         state.selectedStreetId = null;
@@ -813,12 +817,32 @@
             return;
         }
 
-        var result = state.matcher.match(elements.input.value);
+        var result = state.matcher.match(elements.input.value, {
+            allowTypeOmission: state.allowShortAnswers
+        });
         if (result.status === 'empty') {
             return;
         }
         if (result.status === 'incomplete') {
             return;
+        }
+        if (
+            result.status === 'ambiguous' &&
+            result.typeOmitted &&
+            state.quizDistrictId
+        ) {
+            var scopedStreetIds = result.streetIds.filter(isStreetInQuizScope);
+            if (scopedStreetIds.length === 1) {
+                result = {
+                    status: 'match',
+                    streetId: scopedStreetIds[0],
+                    normalizedValue: result.normalizedValue,
+                    typeOmitted: true
+                };
+            } else if (scopedStreetIds.length === 0) {
+                setFeedback('Этот объект не относится к выбранному району.', 'warning');
+                return;
+            }
         }
         if (result.status === 'ambiguous') {
             setFeedback('Название неоднозначно.', 'warning');
@@ -1052,6 +1076,25 @@
         }
     }
 
+    function updateAnswerMode() {
+        if (!state.loaded) {
+            return;
+        }
+
+        state.allowShortAnswers = elements.allowShortAnswers.checked;
+        persistProgress();
+        setFeedback(
+            state.allowShortAnswers ?
+                'Можно вводить название без типа объекта.' :
+                'Снова требуется полное название с типом объекта.',
+            'neutral'
+        );
+        if (state.allowShortAnswers) {
+            scheduleAnswerCheck();
+        }
+        elements.input.focus({ preventScroll: true });
+    }
+
     function buildLearningDistrictFilter() {
         elements.learningDistrictFilter.replaceChildren();
         state.districts.forEach(function (district) {
@@ -1234,6 +1277,9 @@
         elements.districtsSection.hidden = isLearning || !state.loaded;
         elements.quizDistrictSelect.disabled = !state.loaded || isLearning;
         elements.quizDistrictSelect.value = state.quizDistrictId;
+        elements.allowShortAnswers.disabled =
+            !state.loaded || state.complete || isLearning;
+        elements.allowShortAnswers.checked = state.allowShortAnswers;
         elements.modeQuiz.classList.toggle('is-active', !isLearning);
         elements.modeLearning.classList.toggle('is-active', isLearning);
         elements.modeQuiz.setAttribute('aria-pressed', String(!isLearning));
@@ -1374,7 +1420,8 @@
             state.showMissing,
             state.mode,
             state.learningDistrictIds,
-            state.quizDistrictId
+            state.quizDistrictId,
+            state.allowShortAnswers
         );
 
         if (!saved && !state.storageWarningShown) {
@@ -1403,6 +1450,7 @@
         if (isLoading) {
             elements.input.disabled = true;
             elements.quizDistrictSelect.disabled = true;
+            elements.allowShortAnswers.disabled = true;
             elements.toggleMissing.disabled = true;
             elements.reset.disabled = true;
             setFeedback('Загружаю карту и список объектов…', 'neutral');
@@ -1422,6 +1470,7 @@
         elements.retry.disabled = false;
         elements.input.disabled = true;
         elements.quizDistrictSelect.disabled = true;
+        elements.allowShortAnswers.disabled = true;
         elements.toggleMissing.disabled = true;
         elements.reset.disabled = true;
         setFeedback('Тренажёр временно недоступен.', 'warning');
