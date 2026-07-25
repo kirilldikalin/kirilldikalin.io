@@ -15,6 +15,9 @@ const dataset = JSON.parse(
 const collisionReport = JSON.parse(
     fs.readFileSync(path.join(dataDirectory, 'street_alias_collisions.json'), 'utf8')
 );
+const referenceAudit = JSON.parse(
+    fs.readFileSync(path.join(dataDirectory, 'street_reference_audit.json'), 'utf8')
+);
 
 function assertNonEmptyString(value, label) {
     assert.equal(typeof value, 'string', `${label} must be a string`);
@@ -42,6 +45,16 @@ function assertMultiLineString(geometry, label) {
             assertPosition(position, `${label} line ${lineIndex} point ${positionIndex}`);
         });
     });
+}
+
+function assertStreetGeometry(street) {
+    const label = `street ${street.id} geometry`;
+    if (street.geometry && street.geometry.type === 'Point') {
+        assert.equal(street.kind, 'площадь', `${label} point must represent a square`);
+        assertPosition(street.geometry.coordinates, label);
+        return;
+    }
+    assertMultiLineString(street.geometry, label);
 }
 
 function assertPolygonGeometry(geometry, label) {
@@ -78,7 +91,7 @@ test('street IDs and geometries are valid and district references are consistent
         assert.equal(allIds.has(street.id), false, `duplicate entity id: ${street.id}`);
         allIds.add(street.id);
 
-        assertMultiLineString(street.geometry, `street ${street.id} geometry`);
+        assertStreetGeometry(street);
         assert.ok(Array.isArray(street.districtIds), `street ${street.id} districtIds must be an array`);
         assert.ok(street.districtIds.length > 0, `street ${street.id} must belong to a district`);
         assert.equal(
@@ -100,11 +113,12 @@ test('street IDs and geometries are valid and district references are consistent
     });
 });
 
-test('quiz excludes duplicate carriageways, projected roads and technical structures', () => {
+test('quiz includes bridges but excludes duplicate carriageways and technical structures', () => {
     const allowedKinds = new Set([
         'аллея',
         'бульвар',
         'линия',
+        'мост',
         'набережная',
         'переулок',
         'площадь',
@@ -127,6 +141,18 @@ test('quiz excludes duplicate carriageways, projected roads and technical struct
             aliases.length,
             `street ${street.id} contains duplicate aliases`
         );
+    });
+
+    const bridges = dataset.streets.filter((street) => street.kind === 'мост');
+    assert.equal(bridges.length, dataset.meta.counts.bridges);
+    assert.ok(bridges.length >= 31, 'expected named CAO bridges from the reference list');
+    [
+        'Большой Каменный мост',
+        'Крымский мост',
+        'Патриарший мост',
+        'Шелепихинский мост'
+    ].forEach((name) => {
+        assert.ok(bridges.some((street) => street.name === name), `missing bridge: ${name}`);
     });
 });
 
@@ -223,5 +249,34 @@ test('matcher conflicts exactly match the generated collision report', () => {
         const result = matcher.match(alias);
         assert.equal(result.status, 'ambiguous', `collision is accepted as an answer: ${alias}`);
         assert.deepEqual(result.streetIds.slice().sort(), streetIds);
+    });
+});
+
+test('reference audit classifies every supplied name and matches the dataset version', () => {
+    assert.equal(referenceAudit.schemaVersion, 1);
+    assert.equal(referenceAudit.datasetVersion, dataset.meta.datasetVersion);
+    assert.equal(referenceAudit.reference.entryCount, 1079);
+    assert.equal(
+        referenceAudit.counts.matched + referenceAudit.counts.referenceOnly,
+        referenceAudit.counts.referenceEntries
+    );
+    assert.equal(referenceAudit.counts.datasetObjects, dataset.streets.length);
+    assert.equal(
+        referenceAudit.counts.datasetBridges,
+        dataset.streets.filter((street) => street.kind === 'мост').length
+    );
+    assert.equal(referenceAudit.matched.length, referenceAudit.counts.matched);
+    assert.equal(referenceAudit.referenceOnly.length, referenceAudit.counts.referenceOnly);
+    assert.equal(referenceAudit.datasetOnly.length, referenceAudit.counts.datasetOnly);
+
+    referenceAudit.referenceOnly.forEach((entry) => {
+        assertNonEmptyString(entry.referenceName, 'reference-only name');
+        assert.ok(
+            [
+                'no-current-osm-linear-geometry',
+                'bridge-without-current-osm-cao-geometry'
+            ].includes(entry.status),
+            `unclassified reference name: ${entry.referenceName}`
+        );
     });
 });

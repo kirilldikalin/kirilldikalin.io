@@ -30,6 +30,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "data" / "cao-map.json"
 DEFAULT_OVERRIDES = ROOT / "data" / "street_overrides.json"
 DEFAULT_COLLISIONS = ROOT / "data" / "street_alias_collisions.json"
+DEFAULT_REFERENCE = ROOT / "data" / "cao-reference-streets.txt"
+DEFAULT_REFERENCE_AUDIT = ROOT / "data" / "street_reference_audit.json"
 
 DEFAULT_ENDPOINT = "https://overpass-api.de/api/interpreter"
 USER_AGENT = (
@@ -117,6 +119,7 @@ QUIZ_KINDS = {
     "аллея",
     "линия",
     "просек",
+    "мост",
 }
 
 SIMPLIFY_TOLERANCE_METERS = 5.0
@@ -162,6 +165,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--overrides", type=Path, default=DEFAULT_OVERRIDES)
     parser.add_argument("--collisions-output", type=Path, default=DEFAULT_COLLISIONS)
+    parser.add_argument("--reference", type=Path, default=DEFAULT_REFERENCE)
+    parser.add_argument(
+        "--reference-audit-output",
+        type=Path,
+        default=DEFAULT_REFERENCE_AUDIT,
+    )
     parser.add_argument(
         "--raw-dir",
         type=Path,
@@ -348,6 +357,35 @@ def features_query(bbox: Sequence[float]) -> str:
         f'  way({overpass_bbox})["waterway"="river"]["name"="Москва"];\n'
         ");\n"
         "out body geom qt;"
+    )
+
+
+def bridges_query(bbox: Sequence[float]) -> str:
+    west, south, east, north = bbox
+    overpass_bbox = f"{south:.7f},{west:.7f},{north:.7f},{east:.7f}"
+    return (
+        "[out:json][timeout:240];\n"
+        f'rel({overpass_bbox})["man_made"="bridge"]["name"]'
+        "->.bridge_relations;\n"
+        "(\n"
+        f'  way({overpass_bbox})["bridge:name"];\n'
+        f'  way({overpass_bbox})["man_made"="bridge"]["name"];\n'
+        "  .bridge_relations;\n"
+        "  way(r.bridge_relations);\n"
+        ");\n"
+        "out body geom qt;"
+    )
+
+
+def squares_query(bbox: Sequence[float]) -> str:
+    west, south, east, north = bbox
+    overpass_bbox = f"{south:.7f},{west:.7f},{north:.7f},{east:.7f}"
+    return (
+        "[out:json][timeout:180];\n"
+        "(\n"
+        f'  nwr({overpass_bbox})["place"="square"]["name"];\n'
+        ");\n"
+        "out body center geom qt;"
     )
 
 
@@ -771,6 +809,24 @@ def normalize_text(value: str) -> str:
     return value
 
 
+def normalize_answer_text(value: str) -> str:
+    value = unicodedata.normalize("NFKC", value)
+    value = value.casefold().replace("ё", "е")
+    value = re.sub(r"[‐‑‒–—−-]", " ", value)
+    value = re.sub(r"[«»„“”\"'`´.,;:!?()[\]{}\\/|№]", " ", value)
+    tokens = re.sub(r"\s+", " ", value).strip().split()
+    if len(tokens) > 1 and tokens[0] in STREET_TYPE_WORDS:
+        street_type = tokens.pop(0)
+        if tokens[-1] != street_type:
+            tokens.append(street_type)
+    return " ".join(tokens)
+
+
+def answer_has_type(value: str) -> bool:
+    tokens = normalize_answer_text(value).split()
+    return len(tokens) > 1 and any(token in STREET_TYPE_WORDS for token in tokens)
+
+
 def display_text(value: str) -> str:
     value = unicodedata.normalize("NFKC", value)
     value = re.sub(r"\s+", " ", value).strip()
@@ -787,28 +843,38 @@ def split_tag_names(value: Any) -> list[str]:
     ]
 
 
-def stripped_type_alias(value: str) -> str | None:
-    normalized = normalize_text(value)
-    words = "|".join(re.escape(word) for word in STREET_TYPE_WORDS)
-    patterns = (
-        rf"^(?:{words})\s+(.+)$",
-        rf"^(.+?)\s+(?:{words})$",
-    )
-    for pattern in patterns:
-        match = re.match(pattern, normalized)
-        if match:
-            candidate = match.group(1).strip()
-            if len(candidate) >= 2:
-                return candidate
-    return None
-
-
 def kind_from_name(value: str) -> str:
     normalized = normalize_text(value)
     for kind in STREET_TYPE_WORDS:
         if re.search(rf"(?:^|\s){re.escape(kind)}(?:$|\s)", normalized):
             return kind
     return "дорога"
+
+
+def is_bridge_name(value: str) -> bool:
+    return kind_from_name(value) == "мост"
+
+
+def comparison_signature(value: str) -> tuple[str, ...]:
+    normalized = unicodedata.normalize("NFKC", value)
+    normalized = normalized.casefold().replace("ё", "е")
+    normalized = re.sub(r"[‐‑‒–—−.,;:!?()[\]{}\\/|№]", " ", normalized)
+    normalized = re.sub(r"\s+", " ", normalized).strip()
+    return tuple(sorted(normalized.split()))
+
+
+def read_reference_names(path: Path) -> list[str]:
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except FileNotFoundError as exc:
+        raise BuildError(f"Reference street list is missing: {path}") from exc
+    names = [display_text(line) for line in lines if display_text(line)]
+    if not names:
+        raise BuildError(f"Reference street list is empty: {path}")
+    normalized = [normalize_text(name) for name in names]
+    if len(normalized) != len(set(normalized)):
+        raise BuildError("Reference street list contains duplicate names")
+    return names
 
 
 def street_id(normalized_name: str) -> str:
@@ -928,11 +994,147 @@ def build_districts(
     return districts, clippers
 
 
+def collect_bridge_groups(
+    response: dict[str, Any],
+    cao_clipper: PolygonClipper,
+) -> tuple[dict[str, dict[str, Any]], dict[str, int]]:
+    ways = {
+        int(element["id"]): element
+        for element in response.get("elements", [])
+        if element.get("type") == "way" and element.get("id") is not None
+    }
+    candidates: dict[str, dict[str, Any]] = {}
+    counters: dict[str, int] = defaultdict(int)
+
+    def add_candidate(
+        name: str,
+        source_ways: Iterable[dict[str, Any]],
+        *,
+        priority: int,
+        aliases: Iterable[str] = (),
+    ) -> None:
+        canonical_name = display_text(name)
+        if not is_bridge_name(canonical_name):
+            return
+        key = normalize_text(canonical_name)
+        lines: list[Line] = []
+        way_ids: set[int] = set()
+        highway_types: set[str] = set()
+        for way in source_ways:
+            clipped = cao_clipper.clip_lines(feature_lines(way))
+            if not clipped:
+                continue
+            lines.extend(clipped)
+            way_ids.add(int(way["id"]))
+            highway = way.get("tags", {}).get("highway")
+            if highway:
+                highway_types.add(str(highway))
+        if not lines:
+            return
+
+        entry = candidates.setdefault(
+            key,
+            {
+                "name": canonical_name,
+                "priority": priority,
+                "lines": [],
+                "highwayTypes": set(),
+                "sourceAliases": set(),
+                "sourceWayIds": set(),
+            },
+        )
+        if priority > entry["priority"]:
+            entry["priority"] = priority
+            entry["lines"] = []
+            entry["highwayTypes"] = set()
+            entry["sourceWayIds"] = set()
+        if priority == entry["priority"]:
+            entry["lines"].extend(lines)
+            entry["highwayTypes"].update(highway_types)
+            entry["sourceWayIds"].update(way_ids)
+        entry["sourceAliases"].update(
+            display_text(alias)
+            for alias in aliases
+            if display_text(alias)
+        )
+
+    for way in ways.values():
+        tags = way.get("tags", {})
+        bridge_name = tags.get("bridge:name")
+        if isinstance(bridge_name, str):
+            add_candidate(
+                bridge_name,
+                [way],
+                priority=3,
+                aliases=split_tag_names(tags.get("alt_name")),
+            )
+
+    for relation in response.get("elements", []):
+        tags = relation.get("tags", {})
+        name = tags.get("name")
+        if (
+            relation.get("type") != "relation"
+            or tags.get("man_made") != "bridge"
+            or not isinstance(name, str)
+            or not is_bridge_name(name)
+        ):
+            continue
+        member_ways = [
+            ways[int(member["ref"])]
+            for member in relation.get("members", [])
+            if member.get("type") == "way"
+            and member.get("ref") is not None
+            and int(member["ref"]) in ways
+        ]
+        transport_ways = [
+            way
+            for way in member_ways
+            if way.get("tags", {}).get("highway")
+            or way.get("tags", {}).get("railway")
+        ]
+        add_candidate(
+            name,
+            transport_ways or member_ways,
+            priority=2,
+            aliases=[
+                alias
+                for tag_name in ALIAS_TAGS
+                for alias in split_tag_names(tags.get(tag_name))
+            ],
+        )
+
+    for way in ways.values():
+        tags = way.get("tags", {})
+        name = tags.get("name")
+        if (
+            tags.get("man_made") == "bridge"
+            and isinstance(name, str)
+            and is_bridge_name(name)
+        ):
+            add_candidate(
+                name,
+                [way],
+                priority=1,
+                aliases=[
+                    alias
+                    for tag_name in ALIAS_TAGS
+                    for alias in split_tag_names(tags.get(tag_name))
+                ],
+            )
+
+    counters["bridgeSourceCount"] = len(candidates)
+    counters["bridgeSourceWayCount"] = sum(
+        len(group["sourceWayIds"]) for group in candidates.values()
+    )
+    return candidates, dict(counters)
+
+
 def build_streets(
     response: dict[str, Any],
     cao_clipper: PolygonClipper,
     district_clippers: dict[str, PolygonClipper],
     overrides: dict[str, Any],
+    reference_names: Sequence[str],
 ) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, int]]:
     excluded = {normalize_text(name) for name in overrides["excludeNames"]}
     forced = {normalize_text(name) for name in overrides["forceIncludeNames"]}
@@ -1004,6 +1206,27 @@ def build_streets(
         group["sourceWayIds"].add(int(element["id"]))
         counters["usedAuxiliaryWayCount"] += 1
 
+    bridge_groups, bridge_counters = collect_bridge_groups(response, cao_clipper)
+    counters.update(bridge_counters)
+    for key, bridge_group in bridge_groups.items():
+        if key in excluded:
+            counters["excludedBridgeOverrideCount"] += 1
+            continue
+        group = groups.setdefault(
+            key,
+            {
+                "name": bridge_group["name"],
+                "lines": [],
+                "highwayTypes": set(),
+                "sourceAliases": set(),
+                "sourceWayIds": set(),
+            },
+        )
+        group["lines"].extend(bridge_group["lines"])
+        group["highwayTypes"].update(bridge_group["highwayTypes"])
+        group["sourceAliases"].update(bridge_group["sourceAliases"])
+        group["sourceWayIds"].update(bridge_group["sourceWayIds"])
+
     streets_working: list[dict[str, Any]] = []
     dropped_short_names: list[str] = []
     for key, group in groups.items():
@@ -1056,7 +1279,6 @@ def build_streets(
                 "kind": kind_from_name(group["name"]),
                 "normalizedName": key,
                 "sourceAliases": source_aliases,
-                "typeAlias": stripped_type_alias(group["name"]),
                 "districtIds": [
                     district_id
                     for district_id in DISTRICT_ORDER
@@ -1105,20 +1327,35 @@ def build_streets(
         if target_key not in by_normalized_name:
             raise BuildError(f"Alias override targets unknown street: {target}")
         for alias in values:
-            normalized_alias = normalize_text(alias)
+            normalized_alias = normalize_answer_text(alias)
             if normalized_alias:
                 override_aliases[target_key].add(normalized_alias)
+
+    signatures: dict[tuple[str, ...], list[dict[str, Any]]] = defaultdict(list)
+    for street in streets_working:
+        signatures[comparison_signature(street["name"])].append(street)
+    for reference_name in reference_names:
+        matches = signatures.get(comparison_signature(reference_name), [])
+        if len(matches) == 1:
+            override_aliases[matches[0]["normalizedName"]].add(
+                normalize_answer_text(reference_name)
+            )
 
     alias_claims: dict[str, set[str]] = defaultdict(set)
     alias_origins: dict[tuple[str, str], set[str]] = defaultdict(set)
     for street in streets_working:
         key = street["normalizedName"]
-        candidates: list[tuple[str, str]] = [(key, "canonical")]
-        candidates.extend((alias, "osm") for alias in street["sourceAliases"])
-        if street["typeAlias"]:
-            candidates.append((street["typeAlias"], "type-stripped"))
+        candidates: list[tuple[str, str]] = [
+            (normalize_answer_text(street["name"]), "canonical")
+        ]
         candidates.extend(
-            (alias, "override") for alias in override_aliases.get(key, set())
+            (normalize_answer_text(alias), "osm")
+            for alias in street["sourceAliases"]
+            if normalize_answer_text(alias) and answer_has_type(alias)
+        )
+        candidates.extend(
+            (alias, "reference-or-override")
+            for alias in override_aliases.get(key, set())
         )
         for alias, origin in candidates:
             alias_claims[alias].add(street["id"])
@@ -1156,7 +1393,7 @@ def build_streets(
             for alias, street_ids in alias_claims.items()
             if street["id"] in street_ids and alias not in collisions
         )
-        if street["normalizedName"] not in aliases:
+        if normalize_answer_text(street["name"]) not in aliases:
             raise BuildError(
                 f"Canonical alias was lost for {street['name']}; "
                 "another street normalizes to the same name"
@@ -1164,13 +1401,16 @@ def build_streets(
         output = {
             key: value
             for key, value in street.items()
-            if key not in {"normalizedName", "sourceAliases", "typeAlias"}
+            if key not in {"normalizedName", "sourceAliases"}
         }
         output["aliases"] = aliases
         streets.append(output)
 
     streets.sort(key=lambda item: normalize_text(item["name"]))
     counters["droppedShortStreetCount"] = len(dropped_short_names)
+    counters["bridges"] = sum(
+        1 for street in streets if street["kind"] == "мост"
+    )
     return (
         streets,
         {
@@ -1179,6 +1419,118 @@ def build_streets(
         },
         dict(counters),
     )
+
+
+def build_reference_square_points(
+    response: dict[str, Any],
+    reference_names: Sequence[str],
+    existing_streets: Sequence[dict[str, Any]],
+    cao_clipper: PolygonClipper,
+    district_clippers: dict[str, PolygonClipper],
+) -> list[dict[str, Any]]:
+    existing_signatures = {
+        comparison_signature(value)
+        for street in existing_streets
+        for value in [street["name"], *street.get("aliases", [])]
+    }
+    square_elements: dict[tuple[str, ...], list[dict[str, Any]]] = defaultdict(list)
+    for element in response.get("elements", []):
+        tags = element.get("tags", {})
+        name = tags.get("name")
+        if tags.get("place") != "square" or not isinstance(name, str):
+            continue
+        comparison_name = (
+            name if kind_from_name(name) == "площадь" else f"площадь {name}"
+        )
+        square_elements[comparison_signature(comparison_name)].append(element)
+
+    points: list[dict[str, Any]] = []
+    used_ids = {street["id"] for street in existing_streets}
+    for reference_name in reference_names:
+        signature = comparison_signature(reference_name)
+        if kind_from_name(reference_name) != "площадь" or signature in existing_signatures:
+            continue
+        elements = square_elements.get(signature, [])
+        if not elements:
+            continue
+        element = sorted(
+            elements,
+            key=lambda item: (
+                {"node": 0, "way": 1, "relation": 2}.get(item.get("type"), 3),
+                int(item.get("id", 0)),
+            ),
+        )[0]
+        if element.get("type") == "node":
+            point = (float(element["lon"]), float(element["lat"]))
+        elif isinstance(element.get("center"), dict):
+            point = (
+                float(element["center"]["lon"]),
+                float(element["center"]["lat"]),
+            )
+        elif isinstance(element.get("bounds"), dict):
+            bounds = element["bounds"]
+            point = (
+                (float(bounds["minlon"]) + float(bounds["maxlon"])) / 2.0,
+                (float(bounds["minlat"]) + float(bounds["maxlat"])) / 2.0,
+            )
+        else:
+            geometry = overpass_geometry(element)
+            if not geometry:
+                continue
+            bbox = bbox_for_points(geometry)
+            point = (
+                (bbox[0] + bbox[2]) / 2.0,
+                (bbox[1] + bbox[3]) / 2.0,
+            )
+        if not point_in_multipolygon(point, cao_clipper.polygons):
+            continue
+        district_ids = [
+            district_id
+            for district_id in DISTRICT_ORDER
+            if point_in_multipolygon(point, district_clippers[district_id].polygons)
+        ]
+        if not district_ids:
+            raise BuildError(
+                f"Reference square belongs to no CAO district: {reference_name}"
+            )
+        source_name = display_text(element["tags"]["name"])
+        canonical_name = (
+            source_name
+            if kind_from_name(source_name) == "площадь"
+            else f"площадь {source_name}"
+        )
+        identifier = street_id(normalize_text(canonical_name))
+        if identifier in used_ids:
+            raise BuildError(f"Reference square ID collision: {canonical_name}")
+        used_ids.add(identifier)
+        aliases = sorted(
+            {
+                normalize_answer_text(canonical_name),
+                normalize_answer_text(reference_name),
+            }
+        )
+        points.append(
+            {
+                "id": identifier,
+                "name": canonical_name,
+                "kind": "площадь",
+                "districtIds": district_ids,
+                "quizDistrictId": district_ids[0],
+                "highwayTypes": [],
+                "lengthMeters": 0,
+                "bbox": quantize_bbox([point[0], point[1], point[0], point[1]]),
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        quantize_number(point[0]),
+                        quantize_number(point[1]),
+                    ],
+                },
+                "aliases": aliases,
+            }
+        )
+        existing_signatures.add(signature)
+    return points
 
 
 def build_river(
@@ -1221,6 +1573,96 @@ def build_river(
                 )
             ],
         },
+    }
+
+
+def build_reference_audit(
+    reference_path: Path,
+    reference_names: Sequence[str],
+    streets: Sequence[dict[str, Any]],
+    *,
+    dataset_version: str,
+    generated_at: str,
+) -> dict[str, Any]:
+    signature_owners: dict[tuple[str, ...], set[str]] = defaultdict(set)
+    street_by_id = {street["id"]: street for street in streets}
+    for street in streets:
+        for value in [street["name"], *street.get("aliases", [])]:
+            signature_owners[comparison_signature(value)].add(street["id"])
+
+    matched: list[dict[str, str]] = []
+    reference_only: list[dict[str, str]] = []
+    matched_street_ids: set[str] = set()
+    for reference_name in reference_names:
+        owners = signature_owners.get(comparison_signature(reference_name), set())
+        if len(owners) > 1:
+            names = sorted(street_by_id[street_id]["name"] for street_id in owners)
+            raise BuildError(
+                f"Reference name is ambiguous: {reference_name} -> {names}"
+            )
+        if len(owners) == 1:
+            street_id_value = next(iter(owners))
+            matched_street_ids.add(street_id_value)
+            matched.append(
+                {
+                    "referenceName": reference_name,
+                    "streetId": street_id_value,
+                    "datasetName": street_by_id[street_id_value]["name"],
+                }
+            )
+            continue
+
+        kind = kind_from_name(reference_name)
+        reference_only.append(
+            {
+                "referenceName": reference_name,
+                "kind": kind,
+                "status": (
+                    "bridge-without-current-osm-cao-geometry"
+                    if kind == "мост"
+                    else "no-current-osm-linear-geometry"
+                ),
+            }
+        )
+
+    dataset_only = [
+        {
+            "streetId": street["id"],
+            "datasetName": street["name"],
+            "kind": street["kind"],
+            "status": "not-present-in-reference-snapshot",
+        }
+        for street in streets
+        if street["id"] not in matched_street_ids
+    ]
+    reference_bytes = reference_path.read_bytes()
+    return {
+        "schemaVersion": 1,
+        "datasetVersion": dataset_version,
+        "generatedAt": generated_at,
+        "reference": {
+            "file": reference_path.name,
+            "entryCount": len(reference_names),
+            "sha256": hashlib.sha256(reference_bytes).hexdigest(),
+            "description": (
+                "User-provided public CAO list; comparison source, not an "
+                "authoritative replacement for current OSM geometry."
+            ),
+            "officialNameReference": "https://www.nalog.gov.ru/opendata/7707329152-fias/",
+        },
+        "counts": {
+            "referenceEntries": len(reference_names),
+            "matched": len(matched),
+            "referenceOnly": len(reference_only),
+            "datasetOnly": len(dataset_only),
+            "datasetObjects": len(streets),
+            "datasetBridges": sum(
+                1 for street in streets if street["kind"] == "мост"
+            ),
+        },
+        "matched": matched,
+        "referenceOnly": reference_only,
+        "datasetOnly": dataset_only,
     }
 
 
@@ -1297,7 +1739,7 @@ def validate_dataset(dataset: dict[str, Any]) -> dict[str, int]:
         if len(aliases) != len(set(aliases)):
             raise BuildError(f"Street {street['name']} has duplicate aliases")
         for alias in aliases:
-            if alias != normalize_text(alias):
+            if alias != normalize_answer_text(alias):
                 raise BuildError(
                     f"Alias is not normalized for {street['name']}: {alias}"
                 )
@@ -1308,14 +1750,27 @@ def validate_dataset(dataset: dict[str, Any]) -> dict[str, int]:
                     f"({owner}, {identifier})"
                 )
         geometry = street.get("geometry", {})
-        lines = geometry.get("coordinates")
-        if geometry.get("type") != "MultiLineString" or not lines:
+        coordinates = geometry.get("coordinates")
+        if geometry.get("type") == "Point":
+            if street["kind"] != "площадь":
+                raise BuildError(
+                    f"Only a square may use point geometry: {street['name']}"
+                )
+            if (
+                not isinstance(coordinates, list)
+                or len(coordinates) < 2
+                or not all(isinstance(value, (int, float)) for value in coordinates[:2])
+            ):
+                raise BuildError(f"Square {street['name']} has an invalid point")
+            coordinate_count += 1
+        elif geometry.get("type") == "MultiLineString" and coordinates:
+            for line in coordinates:
+                if len(line) < 2:
+                    raise BuildError(f"Street {street['name']} has a short line")
+                line_count += 1
+                coordinate_count += len(line)
+        else:
             raise BuildError(f"Street {street['name']} has empty geometry")
-        for line in lines:
-            if len(line) < 2:
-                raise BuildError(f"Street {street['name']} has a short line")
-            line_count += 1
-            coordinate_count += len(line)
 
     context = dataset["context"]
     if not isinstance(context, list) or len(context) != 2:
@@ -1347,8 +1802,12 @@ def validate_dataset(dataset: dict[str, Any]) -> dict[str, int]:
     }
 
 
-def build(args: argparse.Namespace, raw_dir: Path) -> tuple[dict[str, Any], dict[str, Any]]:
+def build(
+    args: argparse.Namespace,
+    raw_dir: Path,
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     overrides = load_overrides(args.overrides)
+    reference_names = read_reference_names(args.reference)
     discovery = cached_query(
         name="discovery",
         query=DISCOVERY_QUERY,
@@ -1388,12 +1847,51 @@ def build(args: argparse.Namespace, raw_dir: Path) -> tuple[dict[str, Any], dict
         refresh=args.refresh,
         offline=args.offline,
     )
+    bridge_query_text = bridges_query(cao_bbox)
+    bridges = cached_query(
+        name="bridges",
+        query=bridge_query_text,
+        raw_dir=raw_dir,
+        endpoint=args.endpoint,
+        refresh=args.refresh,
+        offline=args.offline,
+    )
+    square_query_text = squares_query(cao_bbox)
+    squares = cached_query(
+        name="squares",
+        query=square_query_text,
+        raw_dir=raw_dir,
+        endpoint=args.endpoint,
+        refresh=args.refresh,
+        offline=args.offline,
+    )
+    combined_elements: dict[tuple[str, int], dict[str, Any]] = {}
+    for response in (features, bridges):
+        for element in response.get("elements", []):
+            if element.get("id") is None or not element.get("type"):
+                continue
+            combined_elements[(element["type"], int(element["id"]))] = element
+    combined_features = {"elements": list(combined_elements.values())}
     districts, district_clippers = build_districts(
         discovered_districts, boundary_relations
     )
     streets, collision_details, counters = build_streets(
-        features, cao_clipper, district_clippers, overrides
+        combined_features,
+        cao_clipper,
+        district_clippers,
+        overrides,
+        reference_names,
     )
+    reference_square_points = build_reference_square_points(
+        squares,
+        reference_names,
+        streets,
+        cao_clipper,
+        district_clippers,
+    )
+    streets.extend(reference_square_points)
+    streets.sort(key=lambda item: normalize_text(item["name"]))
+    counters["referenceSquarePoints"] = len(reference_square_points)
     west, south, east, north = cao_bbox
     bbox_geometry: MultiPolygon = [
         [[
@@ -1410,6 +1908,8 @@ def build(args: argparse.Namespace, raw_dir: Path) -> tuple[dict[str, Any], dict
         timestamp_from_response(discovery),
         timestamp_from_response(boundaries),
         timestamp_from_response(features),
+        timestamp_from_response(bridges),
+        timestamp_from_response(squares),
     ]
     generated_at = max(timestamps)
     cao_simplified = simplify_multipolygon(
@@ -1442,6 +1942,12 @@ def build(args: argparse.Namespace, raw_dir: Path) -> tuple[dict[str, Any], dict
                     ).hexdigest(),
                     "featuresSha256": hashlib.sha256(
                         feature_query_text.encode("utf-8")
+                    ).hexdigest(),
+                    "bridgesSha256": hashlib.sha256(
+                        bridge_query_text.encode("utf-8")
+                    ).hexdigest(),
+                    "squaresSha256": hashlib.sha256(
+                        square_query_text.encode("utf-8")
                     ).hexdigest(),
                 },
             },
@@ -1495,11 +2001,18 @@ def build(args: argparse.Namespace, raw_dir: Path) -> tuple[dict[str, Any], dict
         ),
         **collision_details,
     }
+    reference_audit = build_reference_audit(
+        args.reference,
+        reference_names,
+        streets,
+        dataset_version=dataset_version,
+        generated_at=generated_at,
+    )
     print(
         "Validated: "
         + ", ".join(f"{key}={value}" for key, value in stats.items())
     )
-    return dataset, collision_report
+    return dataset, collision_report, reference_audit
 
 
 def main() -> int:
@@ -1517,16 +2030,25 @@ def main() -> int:
             raise BuildError("--offline requires --raw-dir")
         if args.raw_dir:
             args.raw_dir.mkdir(parents=True, exist_ok=True)
-            dataset, collisions = build(args, args.raw_dir)
+            dataset, collisions, reference_audit = build(args, args.raw_dir)
         else:
             with tempfile.TemporaryDirectory(prefix="cao-map-osm-") as temp:
-                dataset, collisions = build(args, Path(temp))
+                dataset, collisions, reference_audit = build(args, Path(temp))
         write_json(args.output, dataset, compact=True)
         write_json(args.collisions_output, collisions, compact=False)
+        write_json(
+            args.reference_audit_output,
+            reference_audit,
+            compact=False,
+        )
         print(f"Wrote {args.output} ({args.output.stat().st_size} bytes)")
         print(
             f"Wrote {args.collisions_output} "
             f"({args.collisions_output.stat().st_size} bytes)"
+        )
+        print(
+            f"Wrote {args.reference_audit_output} "
+            f"({args.reference_audit_output.stat().st_size} bytes)"
         )
         return 0
     except BuildError as exc:

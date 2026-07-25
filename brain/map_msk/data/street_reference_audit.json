@@ -1,0 +1,5661 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "osm-20260725135106-a7b40105f9ef",
+  "generatedAt": "2026-07-25T13:51:06Z",
+  "reference": {
+    "file": "cao-reference-streets.txt",
+    "entryCount": 1079,
+    "sha256": "2dab810d85d1c9b68b46c1bbfc9433368b791e2e425e973881e8293038580a26",
+    "description": "User-provided public CAO list; comparison source, not an authoritative replacement for current OSM geometry.",
+    "officialNameReference": "https://www.nalog.gov.ru/opendata/7707329152-fias/"
+  },
+  "counts": {
+    "referenceEntries": 1079,
+    "matched": 1058,
+    "referenceOnly": 21,
+    "datasetOnly": 40,
+    "datasetObjects": 1098,
+    "datasetBridges": 48
+  },
+  "matched": [
+    {
+      "referenceName": "10-летия Октября, улица",
+      "streetId": "street-c1e66b968597",
+      "datasetName": "улица 10-летия Октября"
+    },
+    {
+      "referenceName": "1905 Года, улица",
+      "streetId": "street-ce848e16cc20",
+      "datasetName": "улица 1905 года"
+    },
+    {
+      "referenceName": "Абельмановская Застава, площадь",
+      "streetId": "street-f359fe3d3776",
+      "datasetName": "площадь Абельмановская Застава"
+    },
+    {
+      "referenceName": "Абельмановская улица",
+      "streetId": "street-263a42d2213a",
+      "datasetName": "Абельмановская улица"
+    },
+    {
+      "referenceName": "Абрикосовский переулок",
+      "streetId": "street-4bc63ba38450",
+      "datasetName": "Абрикосовский переулок"
+    },
+    {
+      "referenceName": "Академика Петровского, улица",
+      "streetId": "street-3d32dc38f4f9",
+      "datasetName": "улица Академика Петровского"
+    },
+    {
+      "referenceName": "Академика Сахарова, проспект",
+      "streetId": "street-a65b50d0f976",
+      "datasetName": "проспект Академика Сахарова"
+    },
+    {
+      "referenceName": "Академика Туполева, набережная",
+      "streetId": "street-7f0bd659d401",
+      "datasetName": "набережная Академика Туполева"
+    },
+    {
+      "referenceName": "Александра Лукьянова, улица",
+      "streetId": "street-a53f5d2319ba",
+      "datasetName": "улица Александра Лукьянова"
+    },
+    {
+      "referenceName": "Александра Невского, переулок",
+      "streetId": "street-a7c2bd2b5f76",
+      "datasetName": "переулок Александра Невского"
+    },
+    {
+      "referenceName": "Александра Невского, улица",
+      "streetId": "street-6192e7743da4",
+      "datasetName": "улица Александра Невского"
+    },
+    {
+      "referenceName": "Александра Солженицына, улица",
+      "streetId": "street-9cfbdb742102",
+      "datasetName": "улица Александра Солженицына"
+    },
+    {
+      "referenceName": "Ананьевский переулок",
+      "streetId": "street-c2f1d750c9f4",
+      "datasetName": "Ананьевский переулок"
+    },
+    {
+      "referenceName": "Анатолия Живова, улица",
+      "streetId": "street-85f70bd2cd6e",
+      "datasetName": "улица Анатолия Живова"
+    },
+    {
+      "referenceName": "Андреевский мост",
+      "streetId": "street-25ea04e274b0",
+      "datasetName": "Пушкинский мост"
+    },
+    {
+      "referenceName": "Андроньевская набережная",
+      "streetId": "street-4b32435fd6cf",
+      "datasetName": "Андроньевская набережная"
+    },
+    {
+      "referenceName": "Андроньевская площадь",
+      "streetId": "street-24a11eb600aa",
+      "datasetName": "Андроньевская площадь"
+    },
+    {
+      "referenceName": "Андроньевский проезд",
+      "streetId": "street-451ddaf96eae",
+      "datasetName": "Андроньевский проезд"
+    },
+    {
+      "referenceName": "Анны Северьяновой, улица",
+      "streetId": "street-9c5df3b76869",
+      "datasetName": "улица Анны Северьяновой"
+    },
+    {
+      "referenceName": "Антонова-Овсеенко, улица",
+      "streetId": "street-f647f53c5d80",
+      "datasetName": "улица Антонова-Овсеенко"
+    },
+    {
+      "referenceName": "Апакова, проезд",
+      "streetId": "street-5cbf7e883d41",
+      "datasetName": "проезд Апакова"
+    },
+    {
+      "referenceName": "Аптекарский переулок",
+      "streetId": "street-838f7baaec65",
+      "datasetName": "Аптекарский переулок"
+    },
+    {
+      "referenceName": "Арбат, улица",
+      "streetId": "street-67b9eeba9c57",
+      "datasetName": "улица Арбат"
+    },
+    {
+      "referenceName": "Арбатецкая улица",
+      "streetId": "street-f1e50e35ea4c",
+      "datasetName": "Арбатецкая улица"
+    },
+    {
+      "referenceName": "Арбатская площадь",
+      "streetId": "street-0e799bd87d64",
+      "datasetName": "Арбатская площадь"
+    },
+    {
+      "referenceName": "Арбатские Ворота, площадь",
+      "streetId": "street-80a5d3ff5a3c",
+      "datasetName": "площадь Арбатские Ворота"
+    },
+    {
+      "referenceName": "Арбатский переулок",
+      "streetId": "street-fd2d09e14cfa",
+      "datasetName": "Арбатский переулок"
+    },
+    {
+      "referenceName": "Аристарховский переулок",
+      "streetId": "street-3352c8c17779",
+      "datasetName": "Аристарховский переулок"
+    },
+    {
+      "referenceName": "Армянский переулок",
+      "streetId": "street-280b3e975d58",
+      "datasetName": "Армянский переулок"
+    },
+    {
+      "referenceName": "Архангельский переулок",
+      "streetId": "street-23680151ca93",
+      "datasetName": "Архангельский переулок"
+    },
+    {
+      "referenceName": "Архивный 1-й, переулок",
+      "streetId": "street-b80662675d5d",
+      "datasetName": "1-й Архивный переулок"
+    },
+    {
+      "referenceName": "Астаховский мост",
+      "streetId": "street-df725375c2c0",
+      "datasetName": "Астаховский мост"
+    },
+    {
+      "referenceName": "Астраханский переулок",
+      "streetId": "street-1e21beb1bd0c",
+      "datasetName": "Астраханский переулок"
+    },
+    {
+      "referenceName": "Ащеулов переулок",
+      "streetId": "street-690647b70e47",
+      "datasetName": "Ащеулов переулок"
+    },
+    {
+      "referenceName": "Бабьегородский 1-й, переулок",
+      "streetId": "street-187f1a5eb874",
+      "datasetName": "1-й Бабьегородский переулок"
+    },
+    {
+      "referenceName": "Бабьегородский 2-й, переулок",
+      "streetId": "street-038e6a146ba3",
+      "datasetName": "2-й Бабьегородский переулок"
+    },
+    {
+      "referenceName": "Багратион, мост",
+      "streetId": "street-c1bb398b4674",
+      "datasetName": "мост Багратион"
+    },
+    {
+      "referenceName": "Бакунинская улица",
+      "streetId": "street-8083f74e94c2",
+      "datasetName": "Бакунинская улица"
+    },
+    {
+      "referenceName": "Балакиревский переулок",
+      "streetId": "street-88ba85ddf9f1",
+      "datasetName": "Балакиревский переулок"
+    },
+    {
+      "referenceName": "Балчуг, улица",
+      "streetId": "street-61d46bb46f3b",
+      "datasetName": "улица Балчуг"
+    },
+    {
+      "referenceName": "Банковский переулок",
+      "streetId": "street-5970d72f8ad1",
+      "datasetName": "Банковский переулок"
+    },
+    {
+      "referenceName": "Банный переулок",
+      "streetId": "street-34f511f62fc8",
+      "datasetName": "Банный переулок"
+    },
+    {
+      "referenceName": "Банный проезд",
+      "streetId": "street-df8a7e97aa15",
+      "datasetName": "Банный проезд"
+    },
+    {
+      "referenceName": "Барашёвский переулок",
+      "streetId": "street-1d0b105703b8",
+      "datasetName": "Барашёвский переулок"
+    },
+    {
+      "referenceName": "Баррикадная улица",
+      "streetId": "street-f7fe78969544",
+      "datasetName": "Баррикадная улица"
+    },
+    {
+      "referenceName": "Барыковский переулок",
+      "streetId": "street-644017714946",
+      "datasetName": "Барыковский переулок"
+    },
+    {
+      "referenceName": "Басманный 1-й, переулок",
+      "streetId": "street-e73c532a8af4",
+      "datasetName": "1-й Басманный переулок"
+    },
+    {
+      "referenceName": "Басманный переулок",
+      "streetId": "street-5b2df48b8c4a",
+      "datasetName": "Басманный переулок"
+    },
+    {
+      "referenceName": "Басманный тупик",
+      "streetId": "street-e92373e1338c",
+      "datasetName": "Басманный тупик"
+    },
+    {
+      "referenceName": "Бауманская 2-я, улица",
+      "streetId": "street-bb6e9db7c06a",
+      "datasetName": "2-я Бауманская улица"
+    },
+    {
+      "referenceName": "Бауманская улица",
+      "streetId": "street-f6ad6cde124d",
+      "datasetName": "Бауманская улица"
+    },
+    {
+      "referenceName": "Бахрушина, улица",
+      "streetId": "street-718ea529aaeb",
+      "datasetName": "улица Бахрушина"
+    },
+    {
+      "referenceName": "Безымянный проезд",
+      "streetId": "street-b1b930e9dbc7",
+      "datasetName": "Безымянный проезд"
+    },
+    {
+      "referenceName": "Белгородский проезд",
+      "streetId": "street-53f1ff06d125",
+      "datasetName": "Белгородский проезд"
+    },
+    {
+      "referenceName": "Бережковский мост",
+      "streetId": "street-faa714e6ea5e",
+      "datasetName": "Бережковский мост"
+    },
+    {
+      "referenceName": "Берников переулок",
+      "streetId": "street-23f73a1da1ef",
+      "datasetName": "Берников переулок"
+    },
+    {
+      "referenceName": "Берниковская набережная",
+      "streetId": "street-f1d5f575b974",
+      "datasetName": "Берниковская набережная"
+    },
+    {
+      "referenceName": "Берсеневская набережная",
+      "streetId": "street-f06de958bd98",
+      "datasetName": "Берсеневская набережная"
+    },
+    {
+      "referenceName": "Библиотечная улица",
+      "streetId": "street-7599e01af0db",
+      "datasetName": "Библиотечная улица"
+    },
+    {
+      "referenceName": "Биржевая площадь",
+      "streetId": "street-d56cf02649e2",
+      "datasetName": "Биржевая площадь"
+    },
+    {
+      "referenceName": "Благовещенский переулок",
+      "streetId": "street-031ab3f2cab7",
+      "datasetName": "Благовещенский переулок"
+    },
+    {
+      "referenceName": "Бобров переулок",
+      "streetId": "street-2a0ce4caeaea",
+      "datasetName": "Бобров переулок"
+    },
+    {
+      "referenceName": "Богословский переулок",
+      "streetId": "street-889fbc1d73f8",
+      "datasetName": "Богословский переулок"
+    },
+    {
+      "referenceName": "Богоявленский переулок",
+      "streetId": "street-f34b855cbcc2",
+      "datasetName": "Богоявленский переулок"
+    },
+    {
+      "referenceName": "Болотная набережная",
+      "streetId": "street-924e322e59b2",
+      "datasetName": "Болотная набережная"
+    },
+    {
+      "referenceName": "Болотная площадь",
+      "streetId": "street-04d3081c4b53",
+      "datasetName": "Болотная площадь"
+    },
+    {
+      "referenceName": "Болотная улица",
+      "streetId": "street-34f3db3310c3",
+      "datasetName": "Болотная улица"
+    },
+    {
+      "referenceName": "Больничный переулок",
+      "streetId": "street-01dacd7be410",
+      "datasetName": "Больничный переулок"
+    },
+    {
+      "referenceName": "Большая Андроньевская улица",
+      "streetId": "street-93689793baf1",
+      "datasetName": "Большая Андроньевская улица"
+    },
+    {
+      "referenceName": "Большая Бронная улица",
+      "streetId": "street-8f07bb5923ef",
+      "datasetName": "Большая Бронная улица"
+    },
+    {
+      "referenceName": "Большая Грузинская улица",
+      "streetId": "street-7a6c23f2899a",
+      "datasetName": "Большая Грузинская улица"
+    },
+    {
+      "referenceName": "Большая Декабрьская улица",
+      "streetId": "street-8e96a65ece33",
+      "datasetName": "Большая Декабрьская улица"
+    },
+    {
+      "referenceName": "Большая Дмитровка, улица",
+      "streetId": "street-79d517f01660",
+      "datasetName": "улица Большая Дмитровка"
+    },
+    {
+      "referenceName": "Большая Екатерининская улица",
+      "streetId": "street-a1f4168cb2e4",
+      "datasetName": "Большая Екатерининская улица"
+    },
+    {
+      "referenceName": "Большая Калитниковская улица",
+      "streetId": "street-cf672ac8a5cc",
+      "datasetName": "Большая Калитниковская улица"
+    },
+    {
+      "referenceName": "Большая Лубянка, улица",
+      "streetId": "street-e374b80a6a49",
+      "datasetName": "улица Большая Лубянка"
+    },
+    {
+      "referenceName": "Большая Молчановка, улица",
+      "streetId": "street-865abcc96304",
+      "datasetName": "улица Большая Молчановка"
+    },
+    {
+      "referenceName": "Большая Никитская улица",
+      "streetId": "street-0ca45fde3fd3",
+      "datasetName": "Большая Никитская улица"
+    },
+    {
+      "referenceName": "Большая Ордынка, улица",
+      "streetId": "street-db89d379c44a",
+      "datasetName": "улица Большая Ордынка"
+    },
+    {
+      "referenceName": "Большая Переяславская улица",
+      "streetId": "street-6f76f4b16d90",
+      "datasetName": "Большая Переяславская улица"
+    },
+    {
+      "referenceName": "Большая Пионерская улица",
+      "streetId": "street-acf91b742b9f",
+      "datasetName": "Большая Пионерская улица"
+    },
+    {
+      "referenceName": "Большая Пироговская улица",
+      "streetId": "street-508b45bba03e",
+      "datasetName": "Большая Пироговская улица"
+    },
+    {
+      "referenceName": "Большая Полянка, улица",
+      "streetId": "street-f5745698e61e",
+      "datasetName": "улица Большая Полянка"
+    },
+    {
+      "referenceName": "Большая Почтовая улица",
+      "streetId": "street-e6d19365d553",
+      "datasetName": "Большая Почтовая улица"
+    },
+    {
+      "referenceName": "Большая Садовая улица",
+      "streetId": "street-02da5e8a39a0",
+      "datasetName": "Большая Садовая улица"
+    },
+    {
+      "referenceName": "Большая Серпуховская улица",
+      "streetId": "street-b614a5585941",
+      "datasetName": "Большая Серпуховская улица"
+    },
+    {
+      "referenceName": "Большая Спасская улица",
+      "streetId": "street-c8914f90a4d3",
+      "datasetName": "Большая Спасская улица"
+    },
+    {
+      "referenceName": "Большая Сухаревская площадь",
+      "streetId": "street-b91fa7c8c91a",
+      "datasetName": "Большая Сухаревская площадь"
+    },
+    {
+      "referenceName": "Большая Татарская улица",
+      "streetId": "street-7bb8e15e711e",
+      "datasetName": "Большая Татарская улица"
+    },
+    {
+      "referenceName": "Большая Якиманка, улица",
+      "streetId": "street-a24ced4ae02e",
+      "datasetName": "улица Большая Якиманка"
+    },
+    {
+      "referenceName": "Большие Каменщики, улица",
+      "streetId": "street-6b152bac5578",
+      "datasetName": "улица Большие Каменщики"
+    },
+    {
+      "referenceName": "Большой Афанасьевский переулок",
+      "streetId": "street-86baface49b1",
+      "datasetName": "Большой Афанасьевский переулок"
+    },
+    {
+      "referenceName": "Большой Балканский переулок",
+      "streetId": "street-d7cd79a57733",
+      "datasetName": "Большой Балканский переулок"
+    },
+    {
+      "referenceName": "Большой Ватин переулок",
+      "streetId": "street-18e3a30a73b9",
+      "datasetName": "Большой Ватин переулок"
+    },
+    {
+      "referenceName": "Большой Власьевский переулок",
+      "streetId": "street-285fd2f8509e",
+      "datasetName": "Большой Власьевский переулок"
+    },
+    {
+      "referenceName": "Большой Гнездниковский переулок",
+      "streetId": "street-997b8b495d49",
+      "datasetName": "Большой Гнездниковский переулок"
+    },
+    {
+      "referenceName": "Большой Головин переулок",
+      "streetId": "street-a8f24d3913c9",
+      "datasetName": "Большой Головин переулок"
+    },
+    {
+      "referenceName": "Большой Девятинский переулок",
+      "streetId": "street-63070b61d42d",
+      "datasetName": "Большой Девятинский переулок"
+    },
+    {
+      "referenceName": "Большой Демидовский переулок",
+      "streetId": "street-16f63bcbbfea",
+      "datasetName": "Большой Демидовский переулок"
+    },
+    {
+      "referenceName": "Большой Дровяной переулок",
+      "streetId": "street-54589616351d",
+      "datasetName": "Большой Дровяной переулок"
+    },
+    {
+      "referenceName": "Большой Златоустинский переулок",
+      "streetId": "street-0f1309fca4d7",
+      "datasetName": "Большой Златоустинский переулок"
+    },
+    {
+      "referenceName": "Большой Знаменский переулок",
+      "streetId": "street-98d97eb4d5a5",
+      "datasetName": "Большой Знаменский переулок"
+    },
+    {
+      "referenceName": "Большой Казённый переулок",
+      "streetId": "street-82336b7f16e9",
+      "datasetName": "Большой Казённый переулок"
+    },
+    {
+      "referenceName": "Большой Калитниковский проезд",
+      "streetId": "street-40cfe86a022c",
+      "datasetName": "Большой Калитниковский проезд"
+    },
+    {
+      "referenceName": "Большой Каменный мост",
+      "streetId": "street-0c0b300b3301",
+      "datasetName": "Большой Каменный мост"
+    },
+    {
+      "referenceName": "Большой Каретный переулок",
+      "streetId": "street-d4ae05098794",
+      "datasetName": "Большой Каретный переулок"
+    },
+    {
+      "referenceName": "Большой Кисельный переулок",
+      "streetId": "street-3b64e960a195",
+      "datasetName": "Большой Кисельный переулок"
+    },
+    {
+      "referenceName": "Большой Кисловский переулок",
+      "streetId": "street-023653c8b846",
+      "datasetName": "Большой Кисловский переулок"
+    },
+    {
+      "referenceName": "Большой Козихинский переулок",
+      "streetId": "street-aa520ca4dfb4",
+      "datasetName": "Большой Козихинский переулок"
+    },
+    {
+      "referenceName": "Большой Козловский переулок",
+      "streetId": "street-6d5e6289c37c",
+      "datasetName": "Большой Козловский переулок"
+    },
+    {
+      "referenceName": "Большой Кондратьевский переулок",
+      "streetId": "street-b9c2efdbb555",
+      "datasetName": "Большой Кондратьевский переулок"
+    },
+    {
+      "referenceName": "Большой Конюшковский переулок",
+      "streetId": "street-a4e1fd436762",
+      "datasetName": "Большой Конюшковский переулок"
+    },
+    {
+      "referenceName": "Большой Краснопрудный тупик",
+      "streetId": "street-db18fbb79924",
+      "datasetName": "Большой Краснопрудный тупик"
+    },
+    {
+      "referenceName": "Большой Краснохолмский мост",
+      "streetId": "street-ae96eff8efdc",
+      "datasetName": "Большой Краснохолмский мост"
+    },
+    {
+      "referenceName": "Большой Лёвшинский переулок",
+      "streetId": "street-ac38f0d470d5",
+      "datasetName": "Большой Лёвшинский переулок"
+    },
+    {
+      "referenceName": "Большой Могильцевский переулок",
+      "streetId": "street-d4f52f16e0da",
+      "datasetName": "Большой Могильцевский переулок"
+    },
+    {
+      "referenceName": "Большой Москворецкий мост",
+      "streetId": "street-fd5e796f1a02",
+      "datasetName": "Большой Москворецкий мост"
+    },
+    {
+      "referenceName": "Большой Николоворобинский переулок",
+      "streetId": "street-e45b137831bc",
+      "datasetName": "Большой Николоворобинский переулок"
+    },
+    {
+      "referenceName": "Большой Николопесковский переулок",
+      "streetId": "street-ff8e2e14288b",
+      "datasetName": "Большой Николопесковский переулок"
+    },
+    {
+      "referenceName": "Большой Овчинниковский переулок",
+      "streetId": "street-0a784102ba23",
+      "datasetName": "Большой Овчинниковский переулок"
+    },
+    {
+      "referenceName": "Большой Ордынский переулок",
+      "streetId": "street-c1b85195883a",
+      "datasetName": "Большой Ордынский переулок"
+    },
+    {
+      "referenceName": "Большой Палашёвский переулок",
+      "streetId": "street-6c7f32cea133",
+      "datasetName": "Большой Палашёвский переулок"
+    },
+    {
+      "referenceName": "Большой Патриарший переулок",
+      "streetId": "street-de8c19891d94",
+      "datasetName": "Большой Патриарший переулок"
+    },
+    {
+      "referenceName": "Большой Полуярославский переулок",
+      "streetId": "street-f93eea7b0893",
+      "datasetName": "Большой Полуярославский переулок"
+    },
+    {
+      "referenceName": "Большой Предтеченский переулок",
+      "streetId": "street-91d0456e92d7",
+      "datasetName": "Большой Предтеченский переулок"
+    },
+    {
+      "referenceName": "Большой Путинковский переулок",
+      "streetId": "street-ee1bc2d15057",
+      "datasetName": "Большой Путинковский переулок"
+    },
+    {
+      "referenceName": "Большой Ржевский переулок",
+      "streetId": "street-f19561db2bd0",
+      "datasetName": "Большой Ржевский переулок"
+    },
+    {
+      "referenceName": "Большой Рогожский переулок",
+      "streetId": "street-eeadbb0dd0b0",
+      "datasetName": "Большой Рогожский переулок"
+    },
+    {
+      "referenceName": "Большой Саввинский переулок",
+      "streetId": "street-c8b6a57195f1",
+      "datasetName": "Большой Саввинский переулок"
+    },
+    {
+      "referenceName": "Большой Сергиевский переулок",
+      "streetId": "street-efcd78913b28",
+      "datasetName": "Большой Сергиевский переулок"
+    },
+    {
+      "referenceName": "Большой Симоновский переулок",
+      "streetId": "street-4b2b8462836a",
+      "datasetName": "Большой Симоновский переулок"
+    },
+    {
+      "referenceName": "Большой Спасоглинищевский переулок",
+      "streetId": "street-fdb7cf457390",
+      "datasetName": "Большой Спасоглинищевский переулок"
+    },
+    {
+      "referenceName": "Большой Строченовский переулок",
+      "streetId": "street-5a84f70832a0",
+      "datasetName": "Большой Строченовский переулок"
+    },
+    {
+      "referenceName": "Большой Сухаревский переулок",
+      "streetId": "street-737f38dd4317",
+      "datasetName": "Большой Сухаревский переулок"
+    },
+    {
+      "referenceName": "Большой Татарский переулок",
+      "streetId": "street-787a463ac9b6",
+      "datasetName": "Большой Татарский переулок"
+    },
+    {
+      "referenceName": "Большой Тишинский переулок",
+      "streetId": "street-a53bd5c2008b",
+      "datasetName": "Большой Тишинский переулок"
+    },
+    {
+      "referenceName": "Большой Толмачёвский переулок",
+      "streetId": "street-a84824996a12",
+      "datasetName": "Большой Толмачёвский переулок"
+    },
+    {
+      "referenceName": "Большой Трёхгорный переулок",
+      "streetId": "street-68f410e78d2d",
+      "datasetName": "Большой Трёхгорный переулок"
+    },
+    {
+      "referenceName": "Большой Трёхсвятительский переулок",
+      "streetId": "street-a298b3ab00f9",
+      "datasetName": "Большой Трёхсвятительский переулок"
+    },
+    {
+      "referenceName": "Большой Устьинский мост",
+      "streetId": "street-805451fd2bed",
+      "datasetName": "Большой Устьинский мост"
+    },
+    {
+      "referenceName": "Большой Факельный переулок",
+      "streetId": "street-a9d2d730ea61",
+      "datasetName": "Большой Факельный переулок"
+    },
+    {
+      "referenceName": "Большой Харитоньевский переулок",
+      "streetId": "street-f42379987c6f",
+      "datasetName": "Большой Харитоньевский переулок"
+    },
+    {
+      "referenceName": "Большой Черкасский переулок",
+      "streetId": "street-2cee3a8db936",
+      "datasetName": "Большой Черкасский переулок"
+    },
+    {
+      "referenceName": "Большой Чудов переулок",
+      "streetId": "street-ed9188957194",
+      "datasetName": "Большой Чудов переулок"
+    },
+    {
+      "referenceName": "Борисоглебский переулок",
+      "streetId": "street-1ab89b633653",
+      "datasetName": "Борисоглебский переулок"
+    },
+    {
+      "referenceName": "Боровицкая площадь",
+      "streetId": "street-6b4dcd3aea05",
+      "datasetName": "Боровицкая площадь"
+    },
+    {
+      "referenceName": "Бородинский мост",
+      "streetId": "street-f3d89f3c9d40",
+      "datasetName": "Бородинский мост"
+    },
+    {
+      "referenceName": "Борьбы, площадь",
+      "streetId": "street-0e9971d8275d",
+      "datasetName": "площадь Борьбы"
+    },
+    {
+      "referenceName": "Ботанический переулок",
+      "streetId": "street-6252079d471c",
+      "datasetName": "Ботанический переулок"
+    },
+    {
+      "referenceName": "Боярский переулок",
+      "streetId": "street-d891913253e5",
+      "datasetName": "Боярский переулок"
+    },
+    {
+      "referenceName": "Брестская 1-я, улица",
+      "streetId": "street-da5d862fc65c",
+      "datasetName": "1-я Брестская улица"
+    },
+    {
+      "referenceName": "Брестская 2-я, улица",
+      "streetId": "street-e060f45758e6",
+      "datasetName": "2-я Брестская улица"
+    },
+    {
+      "referenceName": "Бригадирский переулок",
+      "streetId": "street-3f3cacfdad04",
+      "datasetName": "Бригадирский переулок"
+    },
+    {
+      "referenceName": "Бродников переулок",
+      "streetId": "street-91a9578d24c4",
+      "datasetName": "Бродников переулок"
+    },
+    {
+      "referenceName": "Брошевский переулок",
+      "streetId": "street-ffb0dd02d904",
+      "datasetName": "Брошевский переулок"
+    },
+    {
+      "referenceName": "Брюсов переулок",
+      "streetId": "street-ec1838204650",
+      "datasetName": "Брюсов переулок"
+    },
+    {
+      "referenceName": "Бурденко, улица",
+      "streetId": "street-c86b268195f4",
+      "datasetName": "улица Бурденко"
+    },
+    {
+      "referenceName": "Бутиковский переулок",
+      "streetId": "street-df5925aef965",
+      "datasetName": "Бутиковский переулок"
+    },
+    {
+      "referenceName": "Бутырский Вал, улица",
+      "streetId": "street-ffbc8927628e",
+      "datasetName": "улица Бутырский Вал"
+    },
+    {
+      "referenceName": "Вадковский переулок",
+      "streetId": "street-55dea9e492ff",
+      "datasetName": "Вадковский переулок"
+    },
+    {
+      "referenceName": "Валовая улица",
+      "streetId": "street-3aa574e5f22b",
+      "datasetName": "Валовая улица"
+    },
+    {
+      "referenceName": "Варварка, улица",
+      "streetId": "street-198cb263dc4d",
+      "datasetName": "улица Варварка"
+    },
+    {
+      "referenceName": "Варварские Ворота, площадь",
+      "streetId": "street-38ecf5177e04",
+      "datasetName": "площадь Варварские Ворота"
+    },
+    {
+      "referenceName": "Варсонофьевский переулок",
+      "streetId": "street-987288a4f3c6",
+      "datasetName": "Варсонофьевский переулок"
+    },
+    {
+      "referenceName": "Васильевская улица",
+      "streetId": "street-202c44308be4",
+      "datasetName": "Васильевская улица"
+    },
+    {
+      "referenceName": "Васильевский Спуск, площадь",
+      "streetId": "street-fe0762a0c41e",
+      "datasetName": "площадь Васильевский Спуск"
+    },
+    {
+      "referenceName": "Васнецова, переулок",
+      "streetId": "street-4fe02e075d64",
+      "datasetName": "переулок Васнецова"
+    },
+    {
+      "referenceName": "Ведерников переулок",
+      "streetId": "street-5a59a627fbb4",
+      "datasetName": "Ведерников переулок"
+    },
+    {
+      "referenceName": "Вековая улица",
+      "streetId": "street-c8a2afa10ed8",
+      "datasetName": "Вековая улица"
+    },
+    {
+      "referenceName": "Верземнека, улица",
+      "streetId": "street-44aaf3fc2ebc",
+      "datasetName": "улица Верземнека"
+    },
+    {
+      "referenceName": "Верхний Новоспасский проезд",
+      "streetId": "street-74d388c01d72",
+      "datasetName": "Верхний Новоспасский проезд"
+    },
+    {
+      "referenceName": "Верхний Предтеченский переулок",
+      "streetId": "street-cc104d79a7ae",
+      "datasetName": "Верхний Предтеченский переулок"
+    },
+    {
+      "referenceName": "Верхний Сусальный переулок",
+      "streetId": "street-c6887a463db2",
+      "datasetName": "Верхний Сусальный переулок"
+    },
+    {
+      "referenceName": "Верхняя Красносельская улица",
+      "streetId": "street-b81378950685",
+      "datasetName": "Верхняя Красносельская улица"
+    },
+    {
+      "referenceName": "Верхняя Радищевская улица",
+      "streetId": "street-f5b1914b4df8",
+      "datasetName": "Верхняя Радищевская улица"
+    },
+    {
+      "referenceName": "Верхняя Сыромятническая улица",
+      "streetId": "street-aa4fb9d453fe",
+      "datasetName": "Верхняя Сыромятническая улица"
+    },
+    {
+      "referenceName": "Весковский переулок",
+      "streetId": "street-49bc95131e9c",
+      "datasetName": "Весковский переулок"
+    },
+    {
+      "referenceName": "Весковский тупик",
+      "streetId": "street-d869d97ed616",
+      "datasetName": "Весковский тупик"
+    },
+    {
+      "referenceName": "Ветошный переулок",
+      "streetId": "street-a3b8572c77f4",
+      "datasetName": "Ветошный переулок"
+    },
+    {
+      "referenceName": "Вишняковский переулок",
+      "streetId": "street-542523674d48",
+      "datasetName": "Вишняковский переулок"
+    },
+    {
+      "referenceName": "Водопроводный переулок",
+      "streetId": "street-f7039a5384e0",
+      "datasetName": "Водопроводный переулок"
+    },
+    {
+      "referenceName": "Воздвиженка, улица",
+      "streetId": "street-ff277184080e",
+      "datasetName": "улица Воздвиженка"
+    },
+    {
+      "referenceName": "Вознесенский переулок",
+      "streetId": "street-249a6dd75aac",
+      "datasetName": "Вознесенский переулок"
+    },
+    {
+      "referenceName": "Волгоградский проспект",
+      "streetId": "street-5696c2b525bb",
+      "datasetName": "Волгоградский проспект"
+    },
+    {
+      "referenceName": "Волков переулок",
+      "streetId": "street-03fc4d214623",
+      "datasetName": "Волков переулок"
+    },
+    {
+      "referenceName": "Волконский 1-й, переулок",
+      "streetId": "street-4f50b6ee5044",
+      "datasetName": "1-й Волконский переулок"
+    },
+    {
+      "referenceName": "Волконский 2-й, переулок",
+      "streetId": "street-e0ed3494b609",
+      "datasetName": "2-й Волконский переулок"
+    },
+    {
+      "referenceName": "Воловья улица",
+      "streetId": "street-65eaa1b1e2f0",
+      "datasetName": "Воловья улица"
+    },
+    {
+      "referenceName": "Волховский переулок",
+      "streetId": "street-0bab7c57225b",
+      "datasetName": "Волховский переулок"
+    },
+    {
+      "referenceName": "Волхонка, улица",
+      "streetId": "street-540450eb7b3c",
+      "datasetName": "улица Волхонка"
+    },
+    {
+      "referenceName": "Воровского, площадь",
+      "streetId": "street-dd424183cdb7",
+      "datasetName": "площадь Воровского"
+    },
+    {
+      "referenceName": "Воронцово Поле, улица",
+      "streetId": "street-b7259e0ee390",
+      "datasetName": "улица Воронцово Поле"
+    },
+    {
+      "referenceName": "Воронцовская улица",
+      "streetId": "street-525bebc18510",
+      "datasetName": "Воронцовская улица"
+    },
+    {
+      "referenceName": "Воронцовский переулок",
+      "streetId": "street-847f0ba721a6",
+      "datasetName": "Воронцовский переулок"
+    },
+    {
+      "referenceName": "Воротниковский переулок",
+      "streetId": "street-46b01bb2dd04",
+      "datasetName": "Воротниковский переулок"
+    },
+    {
+      "referenceName": "Воскресенские Ворота, проезд",
+      "streetId": "street-44143f8209aa",
+      "datasetName": "проезд Воскресенские Ворота"
+    },
+    {
+      "referenceName": "Вражский 1-й, переулок",
+      "streetId": "street-256cad99f0f0",
+      "datasetName": "1-й Вражский переулок"
+    },
+    {
+      "referenceName": "Вражский 2-й, переулок",
+      "streetId": "street-c7a0e06ffb84",
+      "datasetName": "2-й Вражский переулок"
+    },
+    {
+      "referenceName": "Всеволожский переулок",
+      "streetId": "street-3eb1f86dbdc3",
+      "datasetName": "Всеволожский переулок"
+    },
+    {
+      "referenceName": "Всехсвятский проезд",
+      "streetId": "street-28000cf47d40",
+      "datasetName": "Всехсвятский проезд"
+    },
+    {
+      "referenceName": "Вспольный переулок",
+      "streetId": "street-f19c993637ae",
+      "datasetName": "Вспольный переулок"
+    },
+    {
+      "referenceName": "Выползов переулок",
+      "streetId": "street-7e413139f60c",
+      "datasetName": "Выползов переулок"
+    },
+    {
+      "referenceName": "Высокояузский мост",
+      "streetId": "street-f49b0513830d",
+      "datasetName": "Высокояузский мост"
+    },
+    {
+      "referenceName": "Выставочный переулок",
+      "streetId": "street-5009f66e83b3",
+      "datasetName": "Выставочный переулок"
+    },
+    {
+      "referenceName": "Гаврикова улица",
+      "streetId": "street-5a7339574848",
+      "datasetName": "Гаврикова улица"
+    },
+    {
+      "referenceName": "Гагаринский переулок",
+      "streetId": "street-3c581059fc62",
+      "datasetName": "Гагаринский переулок"
+    },
+    {
+      "referenceName": "Газетный переулок",
+      "streetId": "street-80e2fe783946",
+      "datasetName": "Газетный переулок"
+    },
+    {
+      "referenceName": "Газовский переулок",
+      "streetId": "street-993763d27be1",
+      "datasetName": "Газовский переулок"
+    },
+    {
+      "referenceName": "Гарднеровский переулок",
+      "streetId": "street-bb9765d1a170",
+      "datasetName": "Гарднеровский переулок"
+    },
+    {
+      "referenceName": "Гашека, улица",
+      "streetId": "street-b9411c1d78cf",
+      "datasetName": "улица Гашека"
+    },
+    {
+      "referenceName": "Гвоздева, улица",
+      "streetId": "street-2c4e2bec7342",
+      "datasetName": "улица Гвоздева"
+    },
+    {
+      "referenceName": "Георгиевский переулок",
+      "streetId": "street-aa40764004cf",
+      "datasetName": "Георгиевский переулок"
+    },
+    {
+      "referenceName": "Гжельский переулок",
+      "streetId": "street-4a4dd240da66",
+      "datasetName": "Гжельский переулок"
+    },
+    {
+      "referenceName": "Гиляровского, улица",
+      "streetId": "street-213c6d5a841d",
+      "datasetName": "улица Гиляровского"
+    },
+    {
+      "referenceName": "Глазовский переулок",
+      "streetId": "street-4dc6696972c9",
+      "datasetName": "Глазовский переулок"
+    },
+    {
+      "referenceName": "Глинистый переулок",
+      "streetId": "street-7e59c74f1977",
+      "datasetName": "Глинистый переулок"
+    },
+    {
+      "referenceName": "Глинищевский переулок",
+      "streetId": "street-03420e07ee10",
+      "datasetName": "Глинищевский переулок"
+    },
+    {
+      "referenceName": "Глубокий переулок",
+      "streetId": "street-573c13f0e3f9",
+      "datasetName": "Глубокий переулок"
+    },
+    {
+      "referenceName": "Глухарёв переулок",
+      "streetId": "street-8ba473e252ff",
+      "datasetName": "Глухарёв переулок"
+    },
+    {
+      "referenceName": "Гоголевский бульвар",
+      "streetId": "street-77fe96fc8ed1",
+      "datasetName": "Гоголевский бульвар"
+    },
+    {
+      "referenceName": "Голиковский переулок",
+      "streetId": "street-51e3e834ec4c",
+      "datasetName": "Голиковский переулок"
+    },
+    {
+      "referenceName": "Голутвинский 1-й, переулок",
+      "streetId": "street-8e012f93d266",
+      "datasetName": "1-й Голутвинский переулок"
+    },
+    {
+      "referenceName": "Голутвинский 3-й, переулок",
+      "streetId": "street-c1fd2c823469",
+      "datasetName": "3-й Голутвинский переулок"
+    },
+    {
+      "referenceName": "Голутвинский 4-й, переулок",
+      "streetId": "street-549847f6919c",
+      "datasetName": "4-й Голутвинский переулок"
+    },
+    {
+      "referenceName": "Гольяновская улица",
+      "streetId": "street-3f1513ba1545",
+      "datasetName": "Гольяновская улица"
+    },
+    {
+      "referenceName": "Гольяновский проезд",
+      "streetId": "street-f81c01790ed9",
+      "datasetName": "Гольяновский проезд"
+    },
+    {
+      "referenceName": "Гончарная набережная",
+      "streetId": "street-02903b9e2465",
+      "datasetName": "Гончарная набережная"
+    },
+    {
+      "referenceName": "Гончарная улица",
+      "streetId": "street-97bcfe5c5318",
+      "datasetName": "Гончарная улица"
+    },
+    {
+      "referenceName": "Гончарный 2-й, переулок",
+      "streetId": "street-adf22cd4c020",
+      "datasetName": "2-й Гончарный переулок"
+    },
+    {
+      "referenceName": "Гончарный проезд",
+      "streetId": "street-8ad305afea83",
+      "datasetName": "Гончарный проезд"
+    },
+    {
+      "referenceName": "Горлов тупик",
+      "streetId": "street-52a998a2ead6",
+      "datasetName": "Горлов тупик"
+    },
+    {
+      "referenceName": "Гороховский переулок",
+      "streetId": "street-a8330590353f",
+      "datasetName": "Гороховский переулок"
+    },
+    {
+      "referenceName": "Госпитальная набережная",
+      "streetId": "street-1641d255d76d",
+      "datasetName": "Госпитальная набережная"
+    },
+    {
+      "referenceName": "Госпитальная площадь",
+      "streetId": "street-3d5534469071",
+      "datasetName": "Госпитальная площадь"
+    },
+    {
+      "referenceName": "Госпитальная улица",
+      "streetId": "street-378c4df502a1",
+      "datasetName": "Госпитальная улица"
+    },
+    {
+      "referenceName": "Госпитальный Вал, улица",
+      "streetId": "street-c0312e8bcd2f",
+      "datasetName": "улица Госпитальный Вал"
+    },
+    {
+      "referenceName": "Госпитальный мост",
+      "streetId": "street-92740e81d766",
+      "datasetName": "Госпитальный мост"
+    },
+    {
+      "referenceName": "Госпитальный переулок",
+      "streetId": "street-fbf16340daca",
+      "datasetName": "Госпитальный переулок"
+    },
+    {
+      "referenceName": "Гранатный переулок",
+      "streetId": "street-175c8756f3ef",
+      "datasetName": "Гранатный переулок"
+    },
+    {
+      "referenceName": "Грохольский переулок",
+      "streetId": "street-173b7c416602",
+      "datasetName": "Грохольский переулок"
+    },
+    {
+      "referenceName": "Грузинская площадь",
+      "streetId": "street-536d3f09ffa7",
+      "datasetName": "Грузинская площадь"
+    },
+    {
+      "referenceName": "Грузинский Вал, улица",
+      "streetId": "street-426664c757c8",
+      "datasetName": "улица Грузинский Вал"
+    },
+    {
+      "referenceName": "Грузинский переулок",
+      "streetId": "street-69eec35768e4",
+      "datasetName": "Грузинский переулок"
+    },
+    {
+      "referenceName": "Гусятников переулок",
+      "streetId": "street-6b9057c15c06",
+      "datasetName": "Гусятников переулок"
+    },
+    {
+      "referenceName": "Давыдовский переулок",
+      "streetId": "street-901d333db986",
+      "datasetName": "Давыдовский переулок"
+    },
+    {
+      "referenceName": "Даев переулок",
+      "streetId": "street-483bf88f7b46",
+      "datasetName": "Даев переулок"
+    },
+    {
+      "referenceName": "Дашков переулок",
+      "streetId": "street-f7f4ca3a1114",
+      "datasetName": "Дашков переулок"
+    },
+    {
+      "referenceName": "Девичьего Поля, проезд",
+      "streetId": "street-9f8320ddc2c7",
+      "datasetName": "проезд Девичьего Поля"
+    },
+    {
+      "referenceName": "Девяткин переулок",
+      "streetId": "street-fd104b4e83f6",
+      "datasetName": "Девяткин переулок"
+    },
+    {
+      "referenceName": "Дегтярный переулок",
+      "streetId": "street-1fc40cb96d9d",
+      "datasetName": "Дегтярный переулок"
+    },
+    {
+      "referenceName": "Делегатская улица",
+      "streetId": "street-5340a5dcb3a2",
+      "datasetName": "Делегатская улица"
+    },
+    {
+      "referenceName": "Денежный переулок",
+      "streetId": "street-c778e0b275f8",
+      "datasetName": "Денежный переулок"
+    },
+    {
+      "referenceName": "Денисовский переулок",
+      "streetId": "street-4cd792689ada",
+      "datasetName": "Денисовский переулок"
+    },
+    {
+      "referenceName": "Динамовская улица",
+      "streetId": "street-552eb6c9341f",
+      "datasetName": "Динамовская улица"
+    },
+    {
+      "referenceName": "Динамовский 2-й, переулок",
+      "streetId": "street-719008bbeab6",
+      "datasetName": "2-й Динамовский переулок"
+    },
+    {
+      "referenceName": "Дмитровский переулок",
+      "streetId": "street-8c7e9c9e9779",
+      "datasetName": "Дмитровский переулок"
+    },
+    {
+      "referenceName": "Добровольческая улица",
+      "streetId": "street-aecf93b09b7c",
+      "datasetName": "Добровольческая улица"
+    },
+    {
+      "referenceName": "Добровольческий переулок",
+      "streetId": "street-d4c071fff092",
+      "datasetName": "Добровольческий переулок"
+    },
+    {
+      "referenceName": "Доброслободская улица",
+      "streetId": "street-f2d109813844",
+      "datasetName": "Доброслободская улица"
+    },
+    {
+      "referenceName": "Добрынинский 1-й, переулок",
+      "streetId": "street-19389a47e14a",
+      "datasetName": "1-й Добрынинский переулок"
+    },
+    {
+      "referenceName": "Добрынинский 2-й, переулок",
+      "streetId": "street-ffeff0f829d3",
+      "datasetName": "2-й Добрынинский переулок"
+    },
+    {
+      "referenceName": "Добрынинский 3-й, переулок",
+      "streetId": "street-91c7e9e836c2",
+      "datasetName": "3-й Добрынинский переулок"
+    },
+    {
+      "referenceName": "Добрынинский 4-й, переулок",
+      "streetId": "street-b08bd730a888",
+      "datasetName": "4-й Добрынинский переулок"
+    },
+    {
+      "referenceName": "Доватора, улица",
+      "streetId": "street-9e5505ef9156",
+      "datasetName": "улица Доватора"
+    },
+    {
+      "referenceName": "Докучаев переулок",
+      "streetId": "street-5e7652a081a7",
+      "datasetName": "Докучаев переулок"
+    },
+    {
+      "referenceName": "Долгоруковская улица",
+      "streetId": "street-44bb901e9a61",
+      "datasetName": "Долгоруковская улица"
+    },
+    {
+      "referenceName": "Донская улица",
+      "streetId": "street-811f1610f652",
+      "datasetName": "Донская улица"
+    },
+    {
+      "referenceName": "Достоевского, переулок",
+      "streetId": "street-8754a5f675bd",
+      "datasetName": "переулок Достоевского"
+    },
+    {
+      "referenceName": "Достоевского, улица",
+      "streetId": "street-9438bc0697d9",
+      "datasetName": "улица Достоевского"
+    },
+    {
+      "referenceName": "Дружинниковская улица",
+      "streetId": "street-591a68b0fe33",
+      "datasetName": "Дружинниковская улица"
+    },
+    {
+      "referenceName": "Дубининская улица",
+      "streetId": "street-f39eec5f5acf",
+      "datasetName": "Дубининская улица"
+    },
+    {
+      "referenceName": "Дубровская 1-я, улица",
+      "streetId": "street-0ca4b0eab5cb",
+      "datasetName": "1-я Дубровская улица"
+    },
+    {
+      "referenceName": "Дубровская 2-я, улица",
+      "streetId": "street-1a5e63a2702a",
+      "datasetName": "2-я Дубровская улица"
+    },
+    {
+      "referenceName": "Дурасовский переулок",
+      "streetId": "street-0d3bd1f202ff",
+      "datasetName": "Дурасовский переулок"
+    },
+    {
+      "referenceName": "Дурова, улица",
+      "streetId": "street-e3ff54535cfc",
+      "datasetName": "улица Дурова"
+    },
+    {
+      "referenceName": "Еланского, улица",
+      "streetId": "street-80f7160391a9",
+      "datasetName": "улица Еланского"
+    },
+    {
+      "referenceName": "Елизаветинский переулок",
+      "streetId": "street-59d9022ce426",
+      "datasetName": "Елизаветинский переулок"
+    },
+    {
+      "referenceName": "Елисеевский переулок",
+      "streetId": "street-0755fb0121ad",
+      "datasetName": "Елисеевский переулок"
+    },
+    {
+      "referenceName": "Елоховская площадь",
+      "streetId": "street-97fdb407bc87",
+      "datasetName": "Елоховская площадь"
+    },
+    {
+      "referenceName": "Елоховский проезд",
+      "streetId": "street-4009ea225bf2",
+      "datasetName": "Елоховский проезд"
+    },
+    {
+      "referenceName": "Ермакова Роща, улица",
+      "streetId": "street-4783b8af55c2",
+      "datasetName": "улица Ермакова Роща"
+    },
+    {
+      "referenceName": "Ермолаевский переулок",
+      "streetId": "street-dd762c535b3f",
+      "datasetName": "Ермолаевский переулок"
+    },
+    {
+      "referenceName": "Еропкинский переулок",
+      "streetId": "street-97977f307501",
+      "datasetName": "Еропкинский переулок"
+    },
+    {
+      "referenceName": "Ефремова, улица",
+      "streetId": "street-ac9a3c8a58ee",
+      "datasetName": "улица Ефремова"
+    },
+    {
+      "referenceName": "Живарев переулок",
+      "streetId": "street-47be142cae5f",
+      "datasetName": "Живарёв переулок"
+    },
+    {
+      "referenceName": "Житная улица",
+      "streetId": "street-ac9901f52ef2",
+      "datasetName": "Житная улица"
+    },
+    {
+      "referenceName": "Жуков проезд",
+      "streetId": "street-857c438875f9",
+      "datasetName": "Жуков проезд"
+    },
+    {
+      "referenceName": "Жуковского, улица",
+      "streetId": "street-956b00cd1e4e",
+      "datasetName": "улица Жуковского"
+    },
+    {
+      "referenceName": "Забелина, улица",
+      "streetId": "street-f1d5e429137d",
+      "datasetName": "улица Забелина"
+    },
+    {
+      "referenceName": "Заморенова, улица",
+      "streetId": "street-37102272af47",
+      "datasetName": "улица Заморёнова"
+    },
+    {
+      "referenceName": "Зацепа, улица",
+      "streetId": "street-5b15f0c8750c",
+      "datasetName": "улица Зацепа"
+    },
+    {
+      "referenceName": "Зацепская площадь",
+      "streetId": "street-60ecba2e63f5",
+      "datasetName": "Зацепская площадь"
+    },
+    {
+      "referenceName": "Зацепский Вал, улица",
+      "streetId": "street-630a1aeaec20",
+      "datasetName": "улица Зацепский Вал"
+    },
+    {
+      "referenceName": "Зацепский тупик",
+      "streetId": "street-c809597d0dd8",
+      "datasetName": "Зацепский тупик"
+    },
+    {
+      "referenceName": "Зачатьевский 1-й, переулок",
+      "streetId": "street-5f2fac9b8375",
+      "datasetName": "1-й Зачатьевский переулок"
+    },
+    {
+      "referenceName": "Зачатьевский 2-й, переулок",
+      "streetId": "street-9e50c014e2e6",
+      "datasetName": "2-й Зачатьевский переулок"
+    },
+    {
+      "referenceName": "Зачатьевский 3-й, переулок",
+      "streetId": "street-e04b6d909b37",
+      "datasetName": "3-й Зачатьевский переулок"
+    },
+    {
+      "referenceName": "Звенигородская 2-я, улица",
+      "streetId": "street-df0938177efb",
+      "datasetName": "2-я Звенигородская улица"
+    },
+    {
+      "referenceName": "Звенигородский 2-й, переулок",
+      "streetId": "street-d4a62eb1398a",
+      "datasetName": "2-й Звенигородский переулок"
+    },
+    {
+      "referenceName": "Звенигородский 4-й, переулок",
+      "streetId": "street-e29b952c547f",
+      "datasetName": "4-й Звенигородский переулок"
+    },
+    {
+      "referenceName": "Звенигородское шоссе",
+      "streetId": "street-2b6106c55fa0",
+      "datasetName": "Звенигородское шоссе"
+    },
+    {
+      "referenceName": "Зверев мост",
+      "streetId": "street-b7589655e2a0",
+      "datasetName": "Зверев мост"
+    },
+    {
+      "referenceName": "Звонарский переулок",
+      "streetId": "street-08da3ee6bb8b",
+      "datasetName": "Звонарский переулок"
+    },
+    {
+      "referenceName": "Земельный 1-й, переулок",
+      "streetId": "street-d6c09978277b",
+      "datasetName": "1-й Земельный переулок"
+    },
+    {
+      "referenceName": "Земледельческий переулок",
+      "streetId": "street-e85e37f2d5cf",
+      "datasetName": "Земледельческий переулок"
+    },
+    {
+      "referenceName": "Земляной Вал, площадь",
+      "streetId": "street-9c1288531215",
+      "datasetName": "площадь Земляной Вал"
+    },
+    {
+      "referenceName": "Земляной Вал, улица",
+      "streetId": "street-376754c1267a",
+      "datasetName": "улица Земляной Вал"
+    },
+    {
+      "referenceName": "Землянский переулок",
+      "streetId": "street-c1b536c7518a",
+      "datasetName": "Землянский переулок"
+    },
+    {
+      "referenceName": "Знаменка, улица",
+      "streetId": "street-8bd4dc08bf51",
+      "datasetName": "улица Знаменка"
+    },
+    {
+      "referenceName": "Зоологическая улица",
+      "streetId": "street-7a9773ad113b",
+      "datasetName": "Зоологическая улица"
+    },
+    {
+      "referenceName": "Зоологический переулок",
+      "streetId": "street-6f4f6e3d7609",
+      "datasetName": "Зоологический переулок"
+    },
+    {
+      "referenceName": "Зубовская площадь",
+      "streetId": "street-fb0afe31e333",
+      "datasetName": "Зубовская площадь"
+    },
+    {
+      "referenceName": "Зубовская улица",
+      "streetId": "street-46df669950e7",
+      "datasetName": "Зубовская улица"
+    },
+    {
+      "referenceName": "Зубовский бульвар",
+      "streetId": "street-ab1f58ca7aa6",
+      "datasetName": "Зубовский бульвар"
+    },
+    {
+      "referenceName": "Зубовский проезд",
+      "streetId": "street-cc38fc64def3",
+      "datasetName": "Зубовский проезд"
+    },
+    {
+      "referenceName": "Иверский переулок",
+      "streetId": "street-bb43c2206385",
+      "datasetName": "Иверский переулок"
+    },
+    {
+      "referenceName": "Иерусалимская улица",
+      "streetId": "street-ee3ac22b79c7",
+      "datasetName": "Иерусалимская улица"
+    },
+    {
+      "referenceName": "Известковый переулок",
+      "streetId": "street-b414d5582e09",
+      "datasetName": "Известковый переулок"
+    },
+    {
+      "referenceName": "Ильинка, улица",
+      "streetId": "street-1adfec8ad988",
+      "datasetName": "улица Ильинка"
+    },
+    {
+      "referenceName": "Ильинские Ворота, площадь",
+      "streetId": "street-d688540d1dea",
+      "datasetName": "площадь Ильинские Ворота"
+    },
+    {
+      "referenceName": "Индустриальный переулок",
+      "streetId": "street-22346e50f4e9",
+      "datasetName": "Индустриальный переулок"
+    },
+    {
+      "referenceName": "Ипатьевский переулок",
+      "streetId": "street-148c3716c414",
+      "datasetName": "Ипатьевский переулок"
+    },
+    {
+      "referenceName": "Ирининский 1-й, переулок",
+      "streetId": "street-18ff02a4b3ef",
+      "datasetName": "1-й Ирининский переулок"
+    },
+    {
+      "referenceName": "Ирининский 2-й, переулок",
+      "streetId": "street-e30638f850fa",
+      "datasetName": "2-й Ирининский переулок"
+    },
+    {
+      "referenceName": "Ирининский 3-й, переулок",
+      "streetId": "street-233513284d19",
+      "datasetName": "3-й Ирининский переулок"
+    },
+    {
+      "referenceName": "Кадашёвская набережная",
+      "streetId": "street-273ed18b2d50",
+      "datasetName": "Кадашёвская набережная"
+    },
+    {
+      "referenceName": "Кадашёвский 1-й, переулок",
+      "streetId": "street-f78f1600d307",
+      "datasetName": "1-й Кадашёвский переулок"
+    },
+    {
+      "referenceName": "Кадашёвский 2-й, переулок",
+      "streetId": "street-22cf27afefef",
+      "datasetName": "2-й Кадашёвский переулок"
+    },
+    {
+      "referenceName": "Кадашёвский 3-й, переулок",
+      "streetId": "street-c2d4d83c8cfc",
+      "datasetName": "3-й Кадашёвский переулок"
+    },
+    {
+      "referenceName": "Кадашёвский тупик",
+      "streetId": "street-325a7e864676",
+      "datasetName": "Кадашёвский тупик"
+    },
+    {
+      "referenceName": "Казакова, улица",
+      "streetId": "street-c55c7ea33828",
+      "datasetName": "улица Казакова"
+    },
+    {
+      "referenceName": "Казанский переулок",
+      "streetId": "street-eb20cc9f377f",
+      "datasetName": "Казанский переулок"
+    },
+    {
+      "referenceName": "Казарменный переулок",
+      "streetId": "street-ded7028017f3",
+      "datasetName": "Казарменный переулок"
+    },
+    {
+      "referenceName": "Казачий 1-й, переулок",
+      "streetId": "street-b1849daa779f",
+      "datasetName": "1-й Казачий переулок"
+    },
+    {
+      "referenceName": "Казачий 2-й, переулок",
+      "streetId": "street-0c97fe451d85",
+      "datasetName": "2-й Казачий переулок"
+    },
+    {
+      "referenceName": "Каланчёвская улица",
+      "streetId": "street-b0e7b5f378c1",
+      "datasetName": "Каланчёвская улица"
+    },
+    {
+      "referenceName": "Каланчёвский тупик",
+      "streetId": "street-fe235b8c8fde",
+      "datasetName": "Каланчёвский тупик"
+    },
+    {
+      "referenceName": "Калашный переулок",
+      "streetId": "street-81cef658e159",
+      "datasetName": "Калашный переулок"
+    },
+    {
+      "referenceName": "Калмыков переулок",
+      "streetId": "street-cb81d1a302c4",
+      "datasetName": "Калмыков переулок"
+    },
+    {
+      "referenceName": "Калошин переулок",
+      "streetId": "street-5669db865418",
+      "datasetName": "Калошин переулок"
+    },
+    {
+      "referenceName": "Калужская площадь",
+      "streetId": "street-d0b1141b2354",
+      "datasetName": "Калужская площадь"
+    },
+    {
+      "referenceName": "Каменная Слобода, переулок",
+      "streetId": "street-a38faf5acec9",
+      "datasetName": "переулок Каменная Слобода"
+    },
+    {
+      "referenceName": "Камергерский переулок",
+      "streetId": "street-0874df36f4a0",
+      "datasetName": "Камергерский переулок"
+    },
+    {
+      "referenceName": "Капельский переулок",
+      "streetId": "street-0cc4d9d8ffc9",
+      "datasetName": "Капельский переулок"
+    },
+    {
+      "referenceName": "Капранова, переулок",
+      "streetId": "street-e888f6b40c69",
+      "datasetName": "переулок Капранова"
+    },
+    {
+      "referenceName": "Карелин проезд",
+      "streetId": "street-e7f108dc293d",
+      "datasetName": "Карелин проезд"
+    },
+    {
+      "referenceName": "Каретный Ряд, улица",
+      "streetId": "street-6e875efd5a75",
+      "datasetName": "улица Каретный Ряд"
+    },
+    {
+      "referenceName": "Карманицкий переулок",
+      "streetId": "street-ac824849b9b6",
+      "datasetName": "Карманицкий переулок"
+    },
+    {
+      "referenceName": "Качалинская улица",
+      "streetId": "street-44e8c7a0bd6f",
+      "datasetName": "Качалинская улица"
+    },
+    {
+      "referenceName": "Кисельный тупик",
+      "streetId": "street-373b6c7ab6f2",
+      "datasetName": "Кисельный тупик"
+    },
+    {
+      "referenceName": "Китайгородский проезд",
+      "streetId": "street-7724bdd5542f",
+      "datasetName": "Китайгородский проезд"
+    },
+    {
+      "referenceName": "Климашкина, улица",
+      "streetId": "street-4e905407d16b",
+      "datasetName": "улица Климашкина"
+    },
+    {
+      "referenceName": "Климентовский переулок",
+      "streetId": "street-a37ce4e24d8a",
+      "datasetName": "Климентовский переулок"
+    },
+    {
+      "referenceName": "Ковров переулок",
+      "streetId": "street-8ac125179f1e",
+      "datasetName": "Ковров переулок"
+    },
+    {
+      "referenceName": "Кожевническая улица",
+      "streetId": "street-75eafb89e4e6",
+      "datasetName": "Кожевническая улица"
+    },
+    {
+      "referenceName": "Кожевнический проезд",
+      "streetId": "street-b05406303001",
+      "datasetName": "Кожевнический проезд"
+    },
+    {
+      "referenceName": "Козицкий переулок",
+      "streetId": "street-7f2c8c4a9335",
+      "datasetName": "Козицкий переулок"
+    },
+    {
+      "referenceName": "Колобовский 1-й, переулок",
+      "streetId": "street-3d94bbfa0df9",
+      "datasetName": "1-й Колобовский переулок"
+    },
+    {
+      "referenceName": "Колобовский 2-й, переулок",
+      "streetId": "street-351beaaa8a0a",
+      "datasetName": "2-й Колобовский переулок"
+    },
+    {
+      "referenceName": "Колобовский 3-й, переулок",
+      "streetId": "street-e4dd1967f205",
+      "datasetName": "3-й Колобовский переулок"
+    },
+    {
+      "referenceName": "Колокольников переулок",
+      "streetId": "street-a5cfb57c2427",
+      "datasetName": "Колокольников переулок"
+    },
+    {
+      "referenceName": "Колпачный переулок",
+      "streetId": "street-cf0f352836a3",
+      "datasetName": "Колпачный переулок"
+    },
+    {
+      "referenceName": "Колымажный переулок",
+      "streetId": "street-92504e445b0c",
+      "datasetName": "Колымажный переулок"
+    },
+    {
+      "referenceName": "Комиссариатский мост",
+      "streetId": "street-535ba52a9446",
+      "datasetName": "Комиссариатский мост"
+    },
+    {
+      "referenceName": "Комиссариатский переулок",
+      "streetId": "street-364c3a451435",
+      "datasetName": "Комиссариатский переулок"
+    },
+    {
+      "referenceName": "Коммунистический переулок",
+      "streetId": "street-7dbdea690869",
+      "datasetName": "Коммунистический переулок"
+    },
+    {
+      "referenceName": "Композиторская улица",
+      "streetId": "street-3492323b09d3",
+      "datasetName": "Композиторская улица"
+    },
+    {
+      "referenceName": "Комсомольская площадь",
+      "streetId": "street-d5c8be5196d6",
+      "datasetName": "Комсомольская площадь"
+    },
+    {
+      "referenceName": "Комсомольский проспект",
+      "streetId": "street-5aef6ec771d7",
+      "datasetName": "Комсомольский проспект"
+    },
+    {
+      "referenceName": "Комсомольской площади, проезд",
+      "streetId": "street-131335c0e788",
+      "datasetName": "проезд Комсомольской Площади"
+    },
+    {
+      "referenceName": "Кондрашёвский тупик",
+      "streetId": "street-1dc6259cc213",
+      "datasetName": "Кондрашёвский тупик"
+    },
+    {
+      "referenceName": "Конный переулок",
+      "streetId": "street-504f7514bc32",
+      "datasetName": "Конный переулок"
+    },
+    {
+      "referenceName": "Конюшковская улица",
+      "streetId": "street-bac3fa4ab63e",
+      "datasetName": "Конюшковская улица"
+    },
+    {
+      "referenceName": "Кооперативная улица",
+      "streetId": "street-2e9f82c87793",
+      "datasetName": "Кооперативная улица"
+    },
+    {
+      "referenceName": "Коптельский 1-й, переулок",
+      "streetId": "street-56a1a2e88ed1",
+      "datasetName": "1-й Коптельский переулок"
+    },
+    {
+      "referenceName": "Коптельский 2-й, переулок",
+      "streetId": "street-e2611452a05f",
+      "datasetName": "2-й Коптельский переулок"
+    },
+    {
+      "referenceName": "Копьевский переулок",
+      "streetId": "street-a6c5224eb792",
+      "datasetName": "Копьёвский переулок"
+    },
+    {
+      "referenceName": "Коробейников переулок",
+      "streetId": "street-a9fca51d2ef6",
+      "datasetName": "Коробейников переулок"
+    },
+    {
+      "referenceName": "Коровий Вал, улица",
+      "streetId": "street-b8838af96732",
+      "datasetName": "улица Коровий Вал"
+    },
+    {
+      "referenceName": "Космодамианская набережная",
+      "streetId": "street-180df3dd3039",
+      "datasetName": "Космодамианская набережная"
+    },
+    {
+      "referenceName": "Костикова, улица",
+      "streetId": "street-69bd35ba1fb9",
+      "datasetName": "улица Костикова"
+    },
+    {
+      "referenceName": "Костомаровская набережная",
+      "streetId": "street-ffd41b5a5140",
+      "datasetName": "Костомаровская набережная"
+    },
+    {
+      "referenceName": "Костомаровский мост",
+      "streetId": "street-08b1e5266398",
+      "datasetName": "Костомаровский мост"
+    },
+    {
+      "referenceName": "Костомаровский переулок",
+      "streetId": "street-2d3e138c6255",
+      "datasetName": "Костомаровский переулок"
+    },
+    {
+      "referenceName": "Костянский переулок",
+      "streetId": "street-ec2f5e71260c",
+      "datasetName": "Костянский переулок"
+    },
+    {
+      "referenceName": "Котельническая набережная",
+      "streetId": "street-4ed9dd1dbe47",
+      "datasetName": "Котельническая набережная"
+    },
+    {
+      "referenceName": "Котельнический 1-й, переулок",
+      "streetId": "street-fda9ed02750e",
+      "datasetName": "1-й Котельнический переулок"
+    },
+    {
+      "referenceName": "Котельнический 2-й, переулок",
+      "streetId": "street-34be97e14671",
+      "datasetName": "2-й Котельнический переулок"
+    },
+    {
+      "referenceName": "Котельнический 3-й, переулок",
+      "streetId": "street-f6c45a68a570",
+      "datasetName": "3-й Котельнический переулок"
+    },
+    {
+      "referenceName": "Котельнический 4-й, переулок",
+      "streetId": "street-a75f1140040f",
+      "datasetName": "4-й Котельнический переулок"
+    },
+    {
+      "referenceName": "Котельнический 5-й, переулок",
+      "streetId": "street-ab8f9f4d3818",
+      "datasetName": "5-й Котельнический переулок"
+    },
+    {
+      "referenceName": "Крапивенский переулок",
+      "streetId": "street-9b27b22d0b2b",
+      "datasetName": "Крапивенский переулок"
+    },
+    {
+      "referenceName": "Красина, улица",
+      "streetId": "street-0e84dbb100a8",
+      "datasetName": "улица Красина"
+    },
+    {
+      "referenceName": "Красная Пресня, улица",
+      "streetId": "street-6646f99d2515",
+      "datasetName": "улица Красная Пресня"
+    },
+    {
+      "referenceName": "Красная площадь",
+      "streetId": "street-14898c9e34f8",
+      "datasetName": "Красная площадь"
+    },
+    {
+      "referenceName": "Красноворотский проезд",
+      "streetId": "street-cf9aa9d433c7",
+      "datasetName": "Красноворотский проезд"
+    },
+    {
+      "referenceName": "Красногвардейская 3-я, улица",
+      "streetId": "street-0a5af1f6dee4",
+      "datasetName": "3-я Красногвардейская улица"
+    },
+    {
+      "referenceName": "Красногвардейский 1-й, проезд",
+      "streetId": "street-5f4c495de173",
+      "datasetName": "1-й Красногвардейский проезд"
+    },
+    {
+      "referenceName": "Красногвардейский 2-й, проезд",
+      "streetId": "street-ed48a5ba6097",
+      "datasetName": "2-й Красногвардейский проезд"
+    },
+    {
+      "referenceName": "Красногвардейский бульвар",
+      "streetId": "street-8b7ca3cc5cf5",
+      "datasetName": "Красногвардейский бульвар"
+    },
+    {
+      "referenceName": "Краснопресненская Застава, площадь",
+      "streetId": "street-6b7d4bfed011",
+      "datasetName": "площадь Краснопресненская Застава"
+    },
+    {
+      "referenceName": "Краснопресненская набережная",
+      "streetId": "street-780018b9aa46",
+      "datasetName": "Краснопресненская набережная"
+    },
+    {
+      "referenceName": "Краснопролетарская улица",
+      "streetId": "street-7f7468845919",
+      "datasetName": "Краснопролетарская улица"
+    },
+    {
+      "referenceName": "Краснопрудная улица",
+      "streetId": "street-c348d76a8eb1",
+      "datasetName": "Краснопрудная улица"
+    },
+    {
+      "referenceName": "Краснопрудный переулок",
+      "streetId": "street-c65f9292dc5d",
+      "datasetName": "Краснопрудный переулок"
+    },
+    {
+      "referenceName": "Красносельский 1-й, переулок",
+      "streetId": "street-79367f9f5b74",
+      "datasetName": "1-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский 2-й, переулок",
+      "streetId": "street-e2ad417aeb74",
+      "datasetName": "2-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский 3-й, переулок",
+      "streetId": "street-cc05f694e0cb",
+      "datasetName": "3-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский 4-й, переулок",
+      "streetId": "street-d0f9a2ec4c2d",
+      "datasetName": "4-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский 5-й, переулок",
+      "streetId": "street-f1df0ff1d562",
+      "datasetName": "5-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский 6-й, переулок",
+      "streetId": "street-bf0b911b3069",
+      "datasetName": "6-й Красносельский переулок"
+    },
+    {
+      "referenceName": "Красносельский тупик",
+      "streetId": "street-4b15e2c85bfa",
+      "datasetName": "Красносельский тупик"
+    },
+    {
+      "referenceName": "Краснохолмская набережная",
+      "streetId": "street-5d6497b87974",
+      "datasetName": "Краснохолмская набережная"
+    },
+    {
+      "referenceName": "Красные Ворота, площадь",
+      "streetId": "street-3d99bf1fce93",
+      "datasetName": "площадь Красные Ворота"
+    },
+    {
+      "referenceName": "Кремлёвская набережная",
+      "streetId": "street-1fbb3f387191",
+      "datasetName": "Кремлёвская набережная"
+    },
+    {
+      "referenceName": "Кремлёвский проезд",
+      "streetId": "street-748d81182ddd",
+      "datasetName": "Кремлёвский проезд"
+    },
+    {
+      "referenceName": "Крестовоздвиженский переулок",
+      "streetId": "street-019050da8ba9",
+      "datasetName": "Крестовоздвиженский переулок"
+    },
+    {
+      "referenceName": "Крестовский 2-й, переулок",
+      "streetId": "street-de123571c9c8",
+      "datasetName": "2-й Крестовский переулок"
+    },
+    {
+      "referenceName": "Крестьянская Застава, площадь",
+      "streetId": "street-0ee3caf42052",
+      "datasetName": "площадь Крестьянская Застава"
+    },
+    {
+      "referenceName": "Крестьянская площадь",
+      "streetId": "street-14046d8aa2e7",
+      "datasetName": "Крестьянская площадь"
+    },
+    {
+      "referenceName": "Крестьянский тупик",
+      "streetId": "street-864d42f95d57",
+      "datasetName": "Крестьянский тупик"
+    },
+    {
+      "referenceName": "Кривоарбатский переулок",
+      "streetId": "street-747976742c64",
+      "datasetName": "Кривоарбатский переулок"
+    },
+    {
+      "referenceName": "Кривоколенный переулок",
+      "streetId": "street-8cbf2541a0ed",
+      "datasetName": "Кривоколенный переулок"
+    },
+    {
+      "referenceName": "Кривоникольский переулок",
+      "streetId": "street-5ba99bf34121",
+      "datasetName": "Кривоникольский переулок"
+    },
+    {
+      "referenceName": "Кропоткинский переулок",
+      "streetId": "street-96727005712c",
+      "datasetName": "Кропоткинский переулок"
+    },
+    {
+      "referenceName": "Крутицкая набережная",
+      "streetId": "street-287fef13fcc5",
+      "datasetName": "Крутицкая набережная"
+    },
+    {
+      "referenceName": "Крутицкая улица",
+      "streetId": "street-a32eaa5ff391",
+      "datasetName": "Крутицкая улица"
+    },
+    {
+      "referenceName": "Крутицкий 1-й, переулок",
+      "streetId": "street-7f403afb5ca8",
+      "datasetName": "1-й Крутицкий переулок"
+    },
+    {
+      "referenceName": "Крутицкий 3-й, переулок",
+      "streetId": "street-e5500417291c",
+      "datasetName": "3-й Крутицкий переулок"
+    },
+    {
+      "referenceName": "Крутицкий 4-й, переулок",
+      "streetId": "street-89a7dfa09e15",
+      "datasetName": "4-й Крутицкий переулок"
+    },
+    {
+      "referenceName": "Крымская набережная",
+      "streetId": "street-489fb68ecfea",
+      "datasetName": "Крымская набережная"
+    },
+    {
+      "referenceName": "Крымская площадь",
+      "streetId": "street-a97b481a32a9",
+      "datasetName": "Крымская площадь"
+    },
+    {
+      "referenceName": "Крымский Вал, улица",
+      "streetId": "street-5ff67b70c4cf",
+      "datasetName": "улица Крымский Вал"
+    },
+    {
+      "referenceName": "Крымский мост",
+      "streetId": "street-93049d673849",
+      "datasetName": "Крымский мост"
+    },
+    {
+      "referenceName": "Крымский проезд",
+      "streetId": "street-8ed05102bf11",
+      "datasetName": "Крымский проезд"
+    },
+    {
+      "referenceName": "Крымский тупик",
+      "streetId": "street-76b0ea67d8e4",
+      "datasetName": "Крымский тупик"
+    },
+    {
+      "referenceName": "Ксеньинский переулок",
+      "streetId": "street-86a3e4e34737",
+      "datasetName": "Ксеньинский переулок"
+    },
+    {
+      "referenceName": "Кудринская площадь",
+      "streetId": "street-905aaac12acb",
+      "datasetName": "Кудринская площадь"
+    },
+    {
+      "referenceName": "Кудринский переулок",
+      "streetId": "street-ce93a32615f0",
+      "datasetName": "Кудринский переулок"
+    },
+    {
+      "referenceName": "Кузнецкий Мост, улица",
+      "streetId": "street-98ce9e7d0c3c",
+      "datasetName": "улица Кузнецкий Мост"
+    },
+    {
+      "referenceName": "Курского Вокзала, площадь",
+      "streetId": "street-56ccc714a8f2",
+      "datasetName": "площадь Курского Вокзала"
+    },
+    {
+      "referenceName": "Курсовой переулок",
+      "streetId": "street-14112385e5c8",
+      "datasetName": "Курсовой переулок"
+    },
+    {
+      "referenceName": "Лавров переулок",
+      "streetId": "street-57d1e8131d5d",
+      "datasetName": "Лавров переулок"
+    },
+    {
+      "referenceName": "Лаврский переулок",
+      "streetId": "street-b8cf3973a5b2",
+      "datasetName": "Лаврский переулок"
+    },
+    {
+      "referenceName": "Лаврушинский переулок",
+      "streetId": "street-d9d8df69e95e",
+      "datasetName": "Лаврушинский переулок"
+    },
+    {
+      "referenceName": "Ладожская улица",
+      "streetId": "street-4208257c1c8d",
+      "datasetName": "Ладожская улица"
+    },
+    {
+      "referenceName": "Лебяжий переулок",
+      "streetId": "street-fde9b63da2df",
+      "datasetName": "Лебяжий переулок"
+    },
+    {
+      "referenceName": "Ленивка, улица",
+      "streetId": "street-22935cedddc4",
+      "datasetName": "улица Ленивка"
+    },
+    {
+      "referenceName": "Ленинский проспект",
+      "streetId": "street-4049e25fa653",
+      "datasetName": "Ленинский проспект"
+    },
+    {
+      "referenceName": "Леонтьевский переулок",
+      "streetId": "street-67efce7650d8",
+      "datasetName": "Леонтьевский переулок"
+    },
+    {
+      "referenceName": "Лермонтовская площадь",
+      "streetId": "street-ae0c9a312534",
+      "datasetName": "Лермонтовская площадь"
+    },
+    {
+      "referenceName": "Лесная улица",
+      "streetId": "street-ba7a4def05f6",
+      "datasetName": "Лесная улица"
+    },
+    {
+      "referenceName": "Лесной 1-й, переулок",
+      "streetId": "street-6afb0b9ae0b8",
+      "datasetName": "1-й Лесной переулок"
+    },
+    {
+      "referenceName": "Лесной 2-й, переулок",
+      "streetId": "street-721ee05a5e3c",
+      "datasetName": "2-й Лесной переулок"
+    },
+    {
+      "referenceName": "Лесной 3-й, переулок",
+      "streetId": "street-a063d8c3a6ec",
+      "datasetName": "3-й Лесной переулок"
+    },
+    {
+      "referenceName": "Лесной 4-й, переулок",
+      "streetId": "street-2201612d123d",
+      "datasetName": "4-й Лесной переулок"
+    },
+    {
+      "referenceName": "Леснорядская 2-я, улица",
+      "streetId": "street-cc455c200361",
+      "datasetName": "2-я Леснорядская улица"
+    },
+    {
+      "referenceName": "Леснорядская улица",
+      "streetId": "street-d7506e36537b",
+      "datasetName": "Леснорядская улица"
+    },
+    {
+      "referenceName": "Леснорядский переулок",
+      "streetId": "street-0bfadae0d831",
+      "datasetName": "Леснорядский переулок"
+    },
+    {
+      "referenceName": "Летниковская улица",
+      "streetId": "street-d43a799c704f",
+      "datasetName": "Летниковская улица"
+    },
+    {
+      "referenceName": "Лефортовская набережная",
+      "streetId": "street-873f08080061",
+      "datasetName": "Лефортовская набережная"
+    },
+    {
+      "referenceName": "Лефортовская площадь",
+      "streetId": "street-f124acb85d88",
+      "datasetName": "Лефортовская площадь"
+    },
+    {
+      "referenceName": "Лефортовский мост",
+      "streetId": "street-e9a928330e6e",
+      "datasetName": "Лефортовский мост"
+    },
+    {
+      "referenceName": "Лефортовский переулок",
+      "streetId": "street-32fa7c1b7936",
+      "datasetName": "Лефортовский переулок"
+    },
+    {
+      "referenceName": "Литвина-Седого, улица",
+      "streetId": "street-dd27f5daa45e",
+      "datasetName": "улица Литвина-Седого"
+    },
+    {
+      "referenceName": "Лихов переулок",
+      "streetId": "street-8214d01f4bd3",
+      "datasetName": "Лихов переулок"
+    },
+    {
+      "referenceName": "Лобачика, улица",
+      "streetId": "street-c9799e8875d4",
+      "datasetName": "улица Лобачика"
+    },
+    {
+      "referenceName": "Лопухинский переулок",
+      "streetId": "street-4d0a6b378e0f",
+      "datasetName": "Лопухинский переулок"
+    },
+    {
+      "referenceName": "Лубочный переулок",
+      "streetId": "street-a83534480ff7",
+      "datasetName": "Лубочный переулок"
+    },
+    {
+      "referenceName": "Лубянская площадь",
+      "streetId": "street-7f61cb2edfe0",
+      "datasetName": "Лубянская площадь"
+    },
+    {
+      "referenceName": "Лубянский проезд",
+      "streetId": "street-7ae61c1ef821",
+      "datasetName": "Лубянский проезд"
+    },
+    {
+      "referenceName": "Лужнецкая набережная",
+      "streetId": "street-40220457205a",
+      "datasetName": "Лужнецкая набережная"
+    },
+    {
+      "referenceName": "Лужнецкий мост",
+      "streetId": "street-c55541ac1f7b",
+      "datasetName": "Лужнецкий мост"
+    },
+    {
+      "referenceName": "Лужнецкий проезд",
+      "streetId": "street-35499847e690",
+      "datasetName": "Лужнецкий проезд"
+    },
+    {
+      "referenceName": "Лужники, улица",
+      "streetId": "street-f035dec1ee34",
+      "datasetName": "улица Лужники"
+    },
+    {
+      "referenceName": "Луков переулок",
+      "streetId": "street-a7f4e3758192",
+      "datasetName": "Луков переулок"
+    },
+    {
+      "referenceName": "Лучников переулок",
+      "streetId": "street-deb339cfd04e",
+      "datasetName": "Лучников переулок"
+    },
+    {
+      "referenceName": "Лыщиков переулок",
+      "streetId": "street-3b1b6c559979",
+      "datasetName": "Лыщиков переулок"
+    },
+    {
+      "referenceName": "Льва Толстого, улица",
+      "streetId": "street-d546a7746eef",
+      "datasetName": "улица Льва Толстого"
+    },
+    {
+      "referenceName": "Люсиновская улица",
+      "streetId": "street-fdab211b5d47",
+      "datasetName": "Люсиновская улица"
+    },
+    {
+      "referenceName": "Люсиновский 1-й, переулок",
+      "streetId": "street-359210325db8",
+      "datasetName": "1-й Люсиновский переулок"
+    },
+    {
+      "referenceName": "Люсиновский 3-й, переулок",
+      "streetId": "street-af6ccdd0d542",
+      "datasetName": "3-й Люсиновский переулок"
+    },
+    {
+      "referenceName": "Лялин переулок",
+      "streetId": "street-c030d15a724a",
+      "datasetName": "Лялин переулок"
+    },
+    {
+      "referenceName": "Лялина площадь",
+      "streetId": "street-dc4f7f11fdfa",
+      "datasetName": "Лялина площадь"
+    },
+    {
+      "referenceName": "Магистральная 2-я, улица",
+      "streetId": "street-12a1acb041b6",
+      "datasetName": "2-я Магистральная улица"
+    },
+    {
+      "referenceName": "Магистральная 3-я, улица",
+      "streetId": "street-c4dd6164e293",
+      "datasetName": "3-я Магистральная улица"
+    },
+    {
+      "referenceName": "Макаренко, улица",
+      "streetId": "street-e4c6b3810243",
+      "datasetName": "улица Макаренко"
+    },
+    {
+      "referenceName": "Малая Андроньевская улица",
+      "streetId": "street-056320c18d25",
+      "datasetName": "Малая Андроньевская улица"
+    },
+    {
+      "referenceName": "Малая Бронная улица",
+      "streetId": "street-0a8fb517cde2",
+      "datasetName": "Малая Бронная улица"
+    },
+    {
+      "referenceName": "Малая Грузинская улица",
+      "streetId": "street-1ebb1b8160a0",
+      "datasetName": "Малая Грузинская улица"
+    },
+    {
+      "referenceName": "Малая Дмитровка, улица",
+      "streetId": "street-7eb92b8a54cd",
+      "datasetName": "улица Малая Дмитровка"
+    },
+    {
+      "referenceName": "Малая Екатерининская улица",
+      "streetId": "street-ef1c4e8eb38e",
+      "datasetName": "Малая Екатерининская улица"
+    },
+    {
+      "referenceName": "Малая Калитниковская улица",
+      "streetId": "street-0b0c67238d56",
+      "datasetName": "Малая Калитниковская улица"
+    },
+    {
+      "referenceName": "Малая Красносельская улица",
+      "streetId": "street-44f5788c9f9f",
+      "datasetName": "Малая Красносельская улица"
+    },
+    {
+      "referenceName": "Малая Лубянка, улица",
+      "streetId": "street-4a478c22033e",
+      "datasetName": "улица Малая Лубянка"
+    },
+    {
+      "referenceName": "Малая Молчановка, улица",
+      "streetId": "street-b77200225518",
+      "datasetName": "улица Малая Молчановка"
+    },
+    {
+      "referenceName": "Малая Никитская улица",
+      "streetId": "street-2965dd23fb8c",
+      "datasetName": "Малая Никитская улица"
+    },
+    {
+      "referenceName": "Малая Ордынка, улица",
+      "streetId": "street-7542ef7469a0",
+      "datasetName": "улица Малая Ордынка"
+    },
+    {
+      "referenceName": "Малая Переяславская улица",
+      "streetId": "street-71003e72c056",
+      "datasetName": "Малая Переяславская улица"
+    },
+    {
+      "referenceName": "Малая Пионерская улица",
+      "streetId": "street-36131b082d3f",
+      "datasetName": "Малая Пионерская улица"
+    },
+    {
+      "referenceName": "Малая Пироговская улица",
+      "streetId": "street-4240b2ac607f",
+      "datasetName": "Малая Пироговская улица"
+    },
+    {
+      "referenceName": "Малая Полянка, улица",
+      "streetId": "street-f71f0d5a4472",
+      "datasetName": "улица Малая Полянка"
+    },
+    {
+      "referenceName": "Малая Почтовая улица",
+      "streetId": "street-e598af2e0dd1",
+      "datasetName": "Малая Почтовая улица"
+    },
+    {
+      "referenceName": "Малая Сухаревская площадь",
+      "streetId": "street-910d12d2f312",
+      "datasetName": "Малая Сухаревская площадь"
+    },
+    {
+      "referenceName": "Малая Якиманка, улица",
+      "streetId": "street-2df0b633747d",
+      "datasetName": "улица Малая Якиманка"
+    },
+    {
+      "referenceName": "Малые Каменщики, улица",
+      "streetId": "street-68cedbef9618",
+      "datasetName": "улица Малые Каменщики"
+    },
+    {
+      "referenceName": "Малый Афанасьевский переулок",
+      "streetId": "street-02c9c638f9bc",
+      "datasetName": "Малый Афанасьевский переулок"
+    },
+    {
+      "referenceName": "Малый Боженинский переулок",
+      "streetId": "street-70319bfb139e",
+      "datasetName": "Малый Боженинский переулок"
+    },
+    {
+      "referenceName": "Малый Власьевский переулок",
+      "streetId": "street-10062fc2af98",
+      "datasetName": "Малый Власьевский переулок"
+    },
+    {
+      "referenceName": "Малый Гавриков переулок",
+      "streetId": "street-bc7a03bec57e",
+      "datasetName": "Малый Гавриков переулок"
+    },
+    {
+      "referenceName": "Малый Гнездниковский переулок",
+      "streetId": "street-205639004a72",
+      "datasetName": "Малый Гнездниковский переулок"
+    },
+    {
+      "referenceName": "Малый Головин переулок",
+      "streetId": "street-7530d404f49d",
+      "datasetName": "Малый Головин переулок"
+    },
+    {
+      "referenceName": "Малый Демидовский переулок",
+      "streetId": "street-0f0edd5f47b4",
+      "datasetName": "Малый Демидовский переулок"
+    },
+    {
+      "referenceName": "Малый Дровяной переулок",
+      "streetId": "street-f48c71b2f042",
+      "datasetName": "Малый Дровяной переулок"
+    },
+    {
+      "referenceName": "Малый Златоустинский переулок",
+      "streetId": "street-d599b592cc8e",
+      "datasetName": "Малый Златоустинский переулок"
+    },
+    {
+      "referenceName": "Малый Знаменский переулок",
+      "streetId": "street-1cb1a1fca8c7",
+      "datasetName": "Малый Знаменский переулок"
+    },
+    {
+      "referenceName": "Малый Ивановский переулок",
+      "streetId": "street-9f4e4163ef49",
+      "datasetName": "Малый Ивановский переулок"
+    },
+    {
+      "referenceName": "Малый Казённый переулок",
+      "streetId": "street-cfe521c7a417",
+      "datasetName": "Малый Казённый переулок"
+    },
+    {
+      "referenceName": "Малый Каковинский переулок",
+      "streetId": "street-b812fe83200f",
+      "datasetName": "Малый Каковинский переулок"
+    },
+    {
+      "referenceName": "Малый Калитниковский проезд",
+      "streetId": "street-07b94a3a0ead",
+      "datasetName": "Малый Калитниковский проезд"
+    },
+    {
+      "referenceName": "Малый Каменный мост",
+      "streetId": "street-706bfdf78ca8",
+      "datasetName": "Малый Каменный мост"
+    },
+    {
+      "referenceName": "Малый Каретный переулок",
+      "streetId": "street-8f933ee5ce24",
+      "datasetName": "Малый Каретный переулок"
+    },
+    {
+      "referenceName": "Малый Кисельный переулок",
+      "streetId": "street-acafb73d2d50",
+      "datasetName": "Малый Кисельный переулок"
+    },
+    {
+      "referenceName": "Малый Кисловский переулок",
+      "streetId": "street-0c414bda52ac",
+      "datasetName": "Малый Кисловский переулок"
+    },
+    {
+      "referenceName": "Малый Козихинский переулок",
+      "streetId": "street-0a51e6869bbe",
+      "datasetName": "Малый Козихинский переулок"
+    },
+    {
+      "referenceName": "Малый Козловский переулок",
+      "streetId": "street-0c9b83b7dd5f",
+      "datasetName": "Малый Козловский переулок"
+    },
+    {
+      "referenceName": "Малый Конюшковский переулок",
+      "streetId": "street-ef60517de65a",
+      "datasetName": "Малый Конюшковский переулок"
+    },
+    {
+      "referenceName": "Малый Краснопрудный тупик",
+      "streetId": "street-8b9bd8f0711f",
+      "datasetName": "Малый Краснопрудный тупик"
+    },
+    {
+      "referenceName": "Малый Краснохолмский мост",
+      "streetId": "street-cb107d67e45b",
+      "datasetName": "Малый Краснохолмский мост"
+    },
+    {
+      "referenceName": "Малый Лёвшинский переулок",
+      "streetId": "street-26e6d32e5c4f",
+      "datasetName": "Малый Лёвшинский переулок"
+    },
+    {
+      "referenceName": "Малый Могильцевский переулок",
+      "streetId": "street-4959cacb6db0",
+      "datasetName": "Малый Могильцевский переулок"
+    },
+    {
+      "referenceName": "Малый Москворецкий мост",
+      "streetId": "street-fe953100e2e7",
+      "datasetName": "Малый Москворецкий мост"
+    },
+    {
+      "referenceName": "Малый Николоворобинский переулок",
+      "streetId": "street-a4ec047a7f91",
+      "datasetName": "Малый Николоворобинский переулок"
+    },
+    {
+      "referenceName": "Малый Николопесковский переулок",
+      "streetId": "street-7e24999759d1",
+      "datasetName": "Малый Николопесковский переулок"
+    },
+    {
+      "referenceName": "Малый Новопесковский переулок",
+      "streetId": "street-fb29be5a3652",
+      "datasetName": "Малый Новопесковский переулок"
+    },
+    {
+      "referenceName": "Малый Ордынский переулок",
+      "streetId": "street-05192778de0f",
+      "datasetName": "Малый Ордынский переулок"
+    },
+    {
+      "referenceName": "Малый Палашёвский переулок",
+      "streetId": "street-74a7fc2b7110",
+      "datasetName": "Малый Палашёвский переулок"
+    },
+    {
+      "referenceName": "Малый Патриарший переулок",
+      "streetId": "street-cebfe019205a",
+      "datasetName": "Малый Патриарший переулок"
+    },
+    {
+      "referenceName": "Малый Полуярославский переулок",
+      "streetId": "street-cf8c16b778b5",
+      "datasetName": "Малый Полуярославский переулок"
+    },
+    {
+      "referenceName": "Малый Предтеченский переулок",
+      "streetId": "street-9f75cacca071",
+      "datasetName": "Малый Предтеченский переулок"
+    },
+    {
+      "referenceName": "Малый Путинковский переулок",
+      "streetId": "street-31be6edc8c17",
+      "datasetName": "Малый Путинковский переулок"
+    },
+    {
+      "referenceName": "Малый Ржевский переулок",
+      "streetId": "street-e823901fd4d2",
+      "datasetName": "Малый Ржевский переулок"
+    },
+    {
+      "referenceName": "Малый Рогожский переулок",
+      "streetId": "street-000798820b4f",
+      "datasetName": "Малый Рогожский переулок"
+    },
+    {
+      "referenceName": "Малый Саввинский переулок",
+      "streetId": "street-70a746b1c7ac",
+      "datasetName": "Малый Саввинский переулок"
+    },
+    {
+      "referenceName": "Малый Сергиевский переулок",
+      "streetId": "street-cc328227b277",
+      "datasetName": "Малый Сергиевский переулок"
+    },
+    {
+      "referenceName": "Малый Спасоглинищевский переулок",
+      "streetId": "street-38c283ed464c",
+      "datasetName": "Малый Спасоглинищевский переулок"
+    },
+    {
+      "referenceName": "Малый Строченовский переулок",
+      "streetId": "street-77e3f1ab6b32",
+      "datasetName": "Малый Строченовский переулок"
+    },
+    {
+      "referenceName": "Малый Сухаревский переулок",
+      "streetId": "street-87eaf418dbfe",
+      "datasetName": "Малый Сухаревский переулок"
+    },
+    {
+      "referenceName": "Малый Татарский переулок",
+      "streetId": "street-cc8611c926ff",
+      "datasetName": "Малый Татарский переулок"
+    },
+    {
+      "referenceName": "Малый Тишинский переулок",
+      "streetId": "street-a458d8ff5a36",
+      "datasetName": "Малый Тишинский переулок"
+    },
+    {
+      "referenceName": "Малый Толмачёвский переулок",
+      "streetId": "street-1193f906685a",
+      "datasetName": "Малый Толмачёвский переулок"
+    },
+    {
+      "referenceName": "Малый Трёхгорный переулок",
+      "streetId": "street-45e0a0aee559",
+      "datasetName": "Малый Трёхгорный переулок"
+    },
+    {
+      "referenceName": "Малый Трёхсвятительский переулок",
+      "streetId": "street-4436b2a85d22",
+      "datasetName": "Малый Трёхсвятительский переулок"
+    },
+    {
+      "referenceName": "Малый Устьинский мост",
+      "streetId": "street-7a5bc6894287",
+      "datasetName": "Малый Устьинский мост"
+    },
+    {
+      "referenceName": "Малый Факельный переулок",
+      "streetId": "street-c8f33f94a479",
+      "datasetName": "Малый Факельный переулок"
+    },
+    {
+      "referenceName": "Малый Харитоньевский переулок",
+      "streetId": "street-cb6e6681fe2d",
+      "datasetName": "Малый Харитоньевский переулок"
+    },
+    {
+      "referenceName": "Малый Черкасский переулок",
+      "streetId": "street-bb39f3d7e587",
+      "datasetName": "Малый Черкасский переулок"
+    },
+    {
+      "referenceName": "Мамоновский переулок",
+      "streetId": "street-f3a6ba01b73c",
+      "datasetName": "Мамоновский переулок"
+    },
+    {
+      "referenceName": "Манежная площадь",
+      "streetId": "street-3e61ca823613",
+      "datasetName": "Манежная площадь"
+    },
+    {
+      "referenceName": "Манежная улица",
+      "streetId": "street-77485d6129c7",
+      "datasetName": "Манежная улица"
+    },
+    {
+      "referenceName": "Мансуровский переулок",
+      "streetId": "street-ed9665ff9360",
+      "datasetName": "Мансуровский переулок"
+    },
+    {
+      "referenceName": "Мантулинская улица",
+      "streetId": "street-474ade02fdc0",
+      "datasetName": "Мантулинская улица"
+    },
+    {
+      "referenceName": "Марксистская улица",
+      "streetId": "street-33c1989ed050",
+      "datasetName": "Марксистская улица"
+    },
+    {
+      "referenceName": "Марксистский переулок",
+      "streetId": "street-423a238bfb60",
+      "datasetName": "Марксистский переулок"
+    },
+    {
+      "referenceName": "Мароновский переулок",
+      "streetId": "street-5e70728654ad",
+      "datasetName": "Мароновский переулок"
+    },
+    {
+      "referenceName": "Маросейка, улица",
+      "streetId": "street-643d0374e73f",
+      "datasetName": "улица Маросейка"
+    },
+    {
+      "referenceName": "Мартыновский переулок",
+      "streetId": "street-9e1971f4a7f6",
+      "datasetName": "Мартыновский переулок"
+    },
+    {
+      "referenceName": "Маши Порываевой, улица",
+      "streetId": "street-656c56363cec",
+      "datasetName": "улица Маши Порываевой"
+    },
+    {
+      "referenceName": "Машкова, улица",
+      "streetId": "street-e1bca8031e5f",
+      "datasetName": "улица Машкова"
+    },
+    {
+      "referenceName": "Маяковского, переулок",
+      "streetId": "street-d366eb88ca9e",
+      "datasetName": "переулок Маяковского"
+    },
+    {
+      "referenceName": "Медвежий переулок",
+      "streetId": "street-a4095c422528",
+      "datasetName": "Медвежий переулок"
+    },
+    {
+      "referenceName": "Международная улица",
+      "streetId": "street-acc007ac4c73",
+      "datasetName": "Международная улица"
+    },
+    {
+      "referenceName": "Мельникова, улица",
+      "streetId": "street-25c7a12b78a6",
+      "datasetName": "улица Мельникова"
+    },
+    {
+      "referenceName": "Мельницкий переулок",
+      "streetId": "street-1a5c3aa55975",
+      "datasetName": "Мельницкий переулок"
+    },
+    {
+      "referenceName": "Мерзляковский переулок",
+      "streetId": "street-1c4e11b5d5e8",
+      "datasetName": "Мерзляковский переулок"
+    },
+    {
+      "referenceName": "Мещанская улица",
+      "streetId": "street-bdad85e78c7d",
+      "datasetName": "Мещанская улица"
+    },
+    {
+      "referenceName": "Милютинский переулок",
+      "streetId": "street-d8c29e41c565",
+      "datasetName": "Милютинский переулок"
+    },
+    {
+      "referenceName": "Мира, проспект",
+      "streetId": "street-549c617ce191",
+      "datasetName": "проспект Мира"
+    },
+    {
+      "referenceName": "Миусская 1-я, улица",
+      "streetId": "street-bb9bddc47583",
+      "datasetName": "1-я Миусская улица"
+    },
+    {
+      "referenceName": "Миусская 2-я, улица",
+      "streetId": "street-102b9ebe4ba7",
+      "datasetName": "2-я Миусская улица"
+    },
+    {
+      "referenceName": "Миусская площадь",
+      "streetId": "street-460ef157b795",
+      "datasetName": "Миусская площадь"
+    },
+    {
+      "referenceName": "Миусский переулок",
+      "streetId": "street-95032421ee58",
+      "datasetName": "Миусский переулок"
+    },
+    {
+      "referenceName": "Михайловский проезд",
+      "streetId": "street-3fa13acc4608",
+      "datasetName": "Михайловский проезд"
+    },
+    {
+      "referenceName": "Молочный переулок",
+      "streetId": "street-9226822a08df",
+      "datasetName": "Молочный переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 1-й, переулок",
+      "streetId": "street-839c3bc71e39",
+      "datasetName": "1-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 2-й, переулок",
+      "streetId": "street-8a04aadb3a60",
+      "datasetName": "2-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 3-й, переулок",
+      "streetId": "street-16f464914a8e",
+      "datasetName": "3-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 4-й, переулок",
+      "streetId": "street-3de64ae35dfa",
+      "datasetName": "4-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 5-й, переулок",
+      "streetId": "street-a05cda0d27f7",
+      "datasetName": "5-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Монетчиковский 6-й, переулок",
+      "streetId": "street-c706dc9a53f0",
+      "datasetName": "6-й Монетчиковский переулок"
+    },
+    {
+      "referenceName": "Моревский проезд",
+      "streetId": "street-2657606e1cc7",
+      "datasetName": "Моревский проезд"
+    },
+    {
+      "referenceName": "Москворецкая набережная",
+      "streetId": "street-d71cdde75506",
+      "datasetName": "Москворецкая набережная"
+    },
+    {
+      "referenceName": "Москворецкая улица",
+      "streetId": "street-47ad94d6322e",
+      "datasetName": "Москворецкая улица"
+    },
+    {
+      "referenceName": "Московско-Казанский переулок",
+      "streetId": "street-9adc65b2dda1",
+      "datasetName": "Московско-Казанский переулок"
+    },
+    {
+      "referenceName": "Моховая улица",
+      "streetId": "street-c84da7db8657",
+      "datasetName": "Моховая улица"
+    },
+    {
+      "referenceName": "Мрузовский переулок",
+      "streetId": "street-452a9b17c918",
+      "datasetName": "Мрузовский переулок"
+    },
+    {
+      "referenceName": "Мукомольный проезд",
+      "streetId": "street-a717bd4be0e9",
+      "datasetName": "Мукомольный проезд"
+    },
+    {
+      "referenceName": "Мытная улица",
+      "streetId": "street-dcb8784ddec2",
+      "datasetName": "Мытная улица"
+    },
+    {
+      "referenceName": "Мясницкая улица",
+      "streetId": "street-f45c66893912",
+      "datasetName": "Мясницкая улица"
+    },
+    {
+      "referenceName": "Мясницкие Ворота, площадь",
+      "streetId": "street-7f3dcc4bcf12",
+      "datasetName": "площадь Мясницкие Ворота"
+    },
+    {
+      "referenceName": "Мясницкий проезд",
+      "streetId": "street-71de43106554",
+      "datasetName": "Мясницкий проезд"
+    },
+    {
+      "referenceName": "Налесный переулок",
+      "streetId": "street-4a85cf9cd01c",
+      "datasetName": "Налесный переулок"
+    },
+    {
+      "referenceName": "Напрудный переулок",
+      "streetId": "street-08bf9f320e19",
+      "datasetName": "Напрудный переулок"
+    },
+    {
+      "referenceName": "Народная улица",
+      "streetId": "street-4a7d9f1c8c98",
+      "datasetName": "Народная улица"
+    },
+    {
+      "referenceName": "Нарышкинский проезд",
+      "streetId": "street-fb31bdb6be03",
+      "datasetName": "Нарышкинский проезд"
+    },
+    {
+      "referenceName": "Наставнический переулок",
+      "streetId": "street-fa8875e2e5ae",
+      "datasetName": "Наставнический переулок"
+    },
+    {
+      "referenceName": "Настасьинский переулок",
+      "streetId": "street-607e63aea761",
+      "datasetName": "Настасьинский переулок"
+    },
+    {
+      "referenceName": "Нащокинский переулок",
+      "streetId": "street-4157bc7fb221",
+      "datasetName": "Нащокинский переулок"
+    },
+    {
+      "referenceName": "Неглинная улица",
+      "streetId": "street-968b0a3a86a8",
+      "datasetName": "Неглинная улица"
+    },
+    {
+      "referenceName": "Неопалимовский 1-й, переулок",
+      "streetId": "street-5786bbac1beb",
+      "datasetName": "1-й Неопалимовский переулок"
+    },
+    {
+      "referenceName": "Неопалимовский 2-й, переулок",
+      "streetId": "street-df4374d42045",
+      "datasetName": "2-й Неопалимовский переулок"
+    },
+    {
+      "referenceName": "Неопалимовский 3-й, переулок",
+      "streetId": "street-52c68c62df05",
+      "datasetName": "3-й Неопалимовский переулок"
+    },
+    {
+      "referenceName": "Несвижский переулок",
+      "streetId": "street-a27eb3397191",
+      "datasetName": "Несвижский переулок"
+    },
+    {
+      "referenceName": "Нижегородская улица",
+      "streetId": "street-5bacb99b18d3",
+      "datasetName": "Нижегородская улица"
+    },
+    {
+      "referenceName": "Нижегородский переулок",
+      "streetId": "street-9b39d9c2d5d9",
+      "datasetName": "Нижегородский переулок"
+    },
+    {
+      "referenceName": "Нижний Кисельный переулок",
+      "streetId": "street-2381bafd1fea",
+      "datasetName": "Нижний Кисельный переулок"
+    },
+    {
+      "referenceName": "Нижний Кисловский переулок",
+      "streetId": "street-23ebe8f0c71e",
+      "datasetName": "Нижний Кисловский переулок"
+    },
+    {
+      "referenceName": "Нижний Сусальный переулок",
+      "streetId": "street-3ea80d81f12c",
+      "datasetName": "Нижний Сусальный переулок"
+    },
+    {
+      "referenceName": "Нижняя Красносельская улица",
+      "streetId": "street-9372a395a3b3",
+      "datasetName": "Нижняя Красносельская улица"
+    },
+    {
+      "referenceName": "Нижняя Краснохолмская улица",
+      "streetId": "street-998d97daa293",
+      "datasetName": "Нижняя Краснохолмская улица"
+    },
+    {
+      "referenceName": "Нижняя Радищевская улица",
+      "streetId": "street-c19270b6448f",
+      "datasetName": "Нижняя Радищевская улица"
+    },
+    {
+      "referenceName": "Нижняя Сыромятническая улица",
+      "streetId": "street-5624403002b7",
+      "datasetName": "Нижняя Сыромятническая улица"
+    },
+    {
+      "referenceName": "Никитников переулок",
+      "streetId": "street-89d368abcd4d",
+      "datasetName": "Никитников переулок"
+    },
+    {
+      "referenceName": "Никитские Ворота, площадь",
+      "streetId": "street-fefd56cb9c09",
+      "datasetName": "площадь Никитские Ворота"
+    },
+    {
+      "referenceName": "Никитский бульвар",
+      "streetId": "street-a6ce188620fa",
+      "datasetName": "Никитский бульвар"
+    },
+    {
+      "referenceName": "Никитский переулок",
+      "streetId": "street-efc9e7792138",
+      "datasetName": "Никитский переулок"
+    },
+    {
+      "referenceName": "Николаева, улица",
+      "streetId": "street-f8cce6879a29",
+      "datasetName": "улица Николаева"
+    },
+    {
+      "referenceName": "Николоваганьковский переулок",
+      "streetId": "street-e6d3ba78c441",
+      "datasetName": "Николоваганьковский переулок"
+    },
+    {
+      "referenceName": "Николощеповский 1-й, переулок",
+      "streetId": "street-8cbdded0a389",
+      "datasetName": "1-й Николощеповский переулок"
+    },
+    {
+      "referenceName": "Николощеповский 2-й, переулок",
+      "streetId": "street-9baae3efb329",
+      "datasetName": "2-й Николощеповский переулок"
+    },
+    {
+      "referenceName": "Николоямская набережная",
+      "streetId": "street-da5fe69d6d59",
+      "datasetName": "Николоямская набережная"
+    },
+    {
+      "referenceName": "Николоямская улица",
+      "streetId": "street-e873749579fe",
+      "datasetName": "Николоямская улица"
+    },
+    {
+      "referenceName": "Николоямский переулок",
+      "streetId": "street-bc9fb84ee222",
+      "datasetName": "Николоямский переулок"
+    },
+    {
+      "referenceName": "Николоямской тупик",
+      "streetId": "street-b12e5fc07784",
+      "datasetName": "Николоямской тупик"
+    },
+    {
+      "referenceName": "Никольская улица",
+      "streetId": "street-4ebcaf42ca9f",
+      "datasetName": "Никольская улица"
+    },
+    {
+      "referenceName": "Никольский переулок",
+      "streetId": "street-c84dcc441215",
+      "datasetName": "Никольский переулок"
+    },
+    {
+      "referenceName": "Никоновский переулок",
+      "streetId": "street-be4759eb07d8",
+      "datasetName": "Никоновский переулок"
+    },
+    {
+      "referenceName": "Новая Басманная улица",
+      "streetId": "street-f409e402f48d",
+      "datasetName": "Новая Басманная улица"
+    },
+    {
+      "referenceName": "Новая Дорога, улица",
+      "streetId": "street-a5590ae74261",
+      "datasetName": "улица Новая Дорога"
+    },
+    {
+      "referenceName": "Новая Переведеновская улица",
+      "streetId": "street-0c7339ee225e",
+      "datasetName": "Новая Переведеновская улица"
+    },
+    {
+      "referenceName": "Новая площадь",
+      "streetId": "street-ae7dbed63896",
+      "datasetName": "Новая площадь"
+    },
+    {
+      "referenceName": "Новинский бульвар",
+      "streetId": "street-b6a1778dd09c",
+      "datasetName": "Новинский бульвар"
+    },
+    {
+      "referenceName": "Новинский переулок",
+      "streetId": "street-e2343a211241",
+      "datasetName": "Новинский переулок"
+    },
+    {
+      "referenceName": "Новоандреевский мост",
+      "streetId": "street-a9357e2b6d61",
+      "datasetName": "Андреевский автодорожный мост"
+    },
+    {
+      "referenceName": "Новоарбатский мост",
+      "streetId": "street-8210d3d46818",
+      "datasetName": "Новоарбатский мост"
+    },
+    {
+      "referenceName": "Нововаганьковский переулок",
+      "streetId": "street-43cfc83e12ac",
+      "datasetName": "Нововаганьковский переулок"
+    },
+    {
+      "referenceName": "Нововоротниковский переулок",
+      "streetId": "street-123188373385",
+      "datasetName": "Нововоротниковский переулок"
+    },
+    {
+      "referenceName": "Новодевичий проезд",
+      "streetId": "street-65337d6e3c25",
+      "datasetName": "Новодевичий проезд"
+    },
+    {
+      "referenceName": "Новодевичьего Монастыря, площадь",
+      "streetId": "street-a6bd848ead64",
+      "datasetName": "площадь Новодевичьего Монастыря"
+    },
+    {
+      "referenceName": "Новодевичья набережная",
+      "streetId": "street-6fff56499dbc",
+      "datasetName": "Новодевичья набережная"
+    },
+    {
+      "referenceName": "Новокирочный переулок",
+      "streetId": "street-9295b85fd6c5",
+      "datasetName": "Новокирочный переулок"
+    },
+    {
+      "referenceName": "Новоконюшенный переулок",
+      "streetId": "street-d768ae7f69e2",
+      "datasetName": "Новоконюшенный переулок"
+    },
+    {
+      "referenceName": "Новокрымский проезд",
+      "streetId": "street-b8cc0e72d5f9",
+      "datasetName": "Новокрымский проезд"
+    },
+    {
+      "referenceName": "Новокузнецкая улица",
+      "streetId": "street-24e24b6c4317",
+      "datasetName": "Новокузнецкая улица"
+    },
+    {
+      "referenceName": "Новокузнецкий 1-й, переулок",
+      "streetId": "street-ef6e906661c7",
+      "datasetName": "1-й Новокузнецкий переулок"
+    },
+    {
+      "referenceName": "Новокузнецкий 2-й, переулок",
+      "streetId": "street-28ee833d7bd8",
+      "datasetName": "2-й Новокузнецкий переулок"
+    },
+    {
+      "referenceName": "Новолесная улица",
+      "streetId": "street-0ca09c685c4d",
+      "datasetName": "Новолесная улица"
+    },
+    {
+      "referenceName": "Новолесной переулок",
+      "streetId": "street-91dadeaf14de",
+      "datasetName": "Новолесной переулок"
+    },
+    {
+      "referenceName": "Новопресненский переулок",
+      "streetId": "street-313daa4ad0a3",
+      "datasetName": "Новопресненский переулок"
+    },
+    {
+      "referenceName": "Новорогожская улица",
+      "streetId": "street-405f5f8ee809",
+      "datasetName": "Новорогожская улица"
+    },
+    {
+      "referenceName": "Новорязанская улица",
+      "streetId": "street-d6527cc6b4d9",
+      "datasetName": "Новорязанская улица"
+    },
+    {
+      "referenceName": "Новоселенский переулок",
+      "streetId": "street-60e2a51e873b",
+      "datasetName": "Новоселенский переулок"
+    },
+    {
+      "referenceName": "Новослободская улица",
+      "streetId": "street-d81429ddd831",
+      "datasetName": "Новослободская улица"
+    },
+    {
+      "referenceName": "Новоспасский мост",
+      "streetId": "street-a029814a0ee3",
+      "datasetName": "Новоспасский мост"
+    },
+    {
+      "referenceName": "Новоспасский переулок",
+      "streetId": "street-b6480d414f2f",
+      "datasetName": "Новоспасский переулок"
+    },
+    {
+      "referenceName": "Новоспасский проезд",
+      "streetId": "street-a879263a3768",
+      "datasetName": "Новоспасский проезд"
+    },
+    {
+      "referenceName": "Новосущёвская улица",
+      "streetId": "street-75c0e4e4d4fc",
+      "datasetName": "Новосущёвская улица"
+    },
+    {
+      "referenceName": "Новый 1-й, переулок",
+      "streetId": "street-879bda9a7fae",
+      "datasetName": "1-й Новый переулок"
+    },
+    {
+      "referenceName": "Новый 2-й, переулок",
+      "streetId": "street-c74726646d0d",
+      "datasetName": "2-й Новый переулок"
+    },
+    {
+      "referenceName": "Новый 3-й, переулок",
+      "streetId": "street-6d9a38522ec5",
+      "datasetName": "3-й Новый переулок"
+    },
+    {
+      "referenceName": "Новый Арбат, улица",
+      "streetId": "street-941f87b341ad",
+      "datasetName": "улица Новый Арбат"
+    },
+    {
+      "referenceName": "Ножовый переулок",
+      "streetId": "street-3a71a052e173",
+      "datasetName": "Ножовый переулок"
+    },
+    {
+      "referenceName": "Оболенский переулок",
+      "streetId": "street-7d481e3c49f1",
+      "datasetName": "Оболенский переулок"
+    },
+    {
+      "referenceName": "Обуха, переулок",
+      "streetId": "street-d4be0beee46c",
+      "datasetName": "переулок Обуха"
+    },
+    {
+      "referenceName": "Обыденский 1-й, переулок",
+      "streetId": "street-c29a53338355",
+      "datasetName": "1-й Обыденский переулок"
+    },
+    {
+      "referenceName": "Обыденский 2-й, переулок",
+      "streetId": "street-0f24a57fbee4",
+      "datasetName": "2-й Обыденский переулок"
+    },
+    {
+      "referenceName": "Обыденский 3-й, переулок",
+      "streetId": "street-3a6062332dc4",
+      "datasetName": "3-й Обыденский переулок"
+    },
+    {
+      "referenceName": "Овчинниковская набережная",
+      "streetId": "street-1bc5d613268e",
+      "datasetName": "Овчинниковская набережная"
+    },
+    {
+      "referenceName": "Огородная Слобода, переулок",
+      "streetId": "street-15932d9029b4",
+      "datasetName": "переулок Огородная Слобода"
+    },
+    {
+      "referenceName": "Озерковская набережная",
+      "streetId": "street-811e2c277083",
+      "datasetName": "Озерковская набережная"
+    },
+    {
+      "referenceName": "Олимпийский проспект",
+      "streetId": "street-543f7aee4265",
+      "datasetName": "Олимпийский проспект"
+    },
+    {
+      "referenceName": "Олсуфьевский переулок",
+      "streetId": "street-860a05c340a3",
+      "datasetName": "Олсуфьевский переулок"
+    },
+    {
+      "referenceName": "Ольховская улица",
+      "streetId": "street-9a61dad4598e",
+      "datasetName": "Ольховская улица"
+    },
+    {
+      "referenceName": "Ольховский 1-й, тупик",
+      "streetId": "street-2357c1f4163c",
+      "datasetName": "1-й Ольховский тупик"
+    },
+    {
+      "referenceName": "Ольховский переулок",
+      "streetId": "street-8048f620d27a",
+      "datasetName": "Ольховский переулок"
+    },
+    {
+      "referenceName": "Ольховский тупик",
+      "streetId": "street-414be050d3af",
+      "datasetName": "Ольховский тупик"
+    },
+    {
+      "referenceName": "Ордынский тупик",
+      "streetId": "street-f5a43a27a2d5",
+      "datasetName": "Ордынский тупик"
+    },
+    {
+      "referenceName": "Орликов переулок",
+      "streetId": "street-c4f6b738ce9b",
+      "datasetName": "Орликов переулок"
+    },
+    {
+      "referenceName": "Орлово-Давыдовский, переулок",
+      "streetId": "street-39edded8ce6c",
+      "datasetName": "Орлово-Давыдовский переулок"
+    },
+    {
+      "referenceName": "Орловский переулок",
+      "streetId": "street-7e74cdcf4267",
+      "datasetName": "Орловский переулок"
+    },
+    {
+      "referenceName": "Оружейный переулок",
+      "streetId": "street-2fc3b0668eec",
+      "datasetName": "Оружейный переулок"
+    },
+    {
+      "referenceName": "Остоженка, улица",
+      "streetId": "street-4ac15fe84a06",
+      "datasetName": "улица Остоженка"
+    },
+    {
+      "referenceName": "Охотный Ряд, улица",
+      "streetId": "street-19122b9eb979",
+      "datasetName": "улица Охотный Ряд"
+    },
+    {
+      "referenceName": "Павелецкая площадь",
+      "streetId": "street-bfeb146ae1f2",
+      "datasetName": "Павелецкая площадь"
+    },
+    {
+      "referenceName": "Павла Андреева, улица",
+      "streetId": "street-5d7a37f835a6",
+      "datasetName": "улица Павла Андреева"
+    },
+    {
+      "referenceName": "Палиха, улица",
+      "streetId": "street-86af53ee6117",
+      "datasetName": "улица Палиха"
+    },
+    {
+      "referenceName": "Панкратьевский переулок",
+      "streetId": "street-fa1c086cd467",
+      "datasetName": "Панкратьевский переулок"
+    },
+    {
+      "referenceName": "Пантелеевская улица",
+      "streetId": "street-192e0b3eeb6f",
+      "datasetName": "Пантелеевская улица"
+    },
+    {
+      "referenceName": "Пантелеевский переулок",
+      "streetId": "street-867721532a89",
+      "datasetName": "Пантелеевский переулок"
+    },
+    {
+      "referenceName": "Панфиловский переулок",
+      "streetId": "street-6b88181cedf5",
+      "datasetName": "Панфиловский переулок"
+    },
+    {
+      "referenceName": "Патриарший мост",
+      "streetId": "street-1aeb22ae6c31",
+      "datasetName": "Патриарший мост"
+    },
+    {
+      "referenceName": "Певческий переулок",
+      "streetId": "street-ed4abd5e62b1",
+      "datasetName": "Певческий переулок"
+    },
+    {
+      "referenceName": "Переведеновский переулок",
+      "streetId": "street-c4163b34b572",
+      "datasetName": "Переведеновский переулок"
+    },
+    {
+      "referenceName": "Переяславский переулок",
+      "streetId": "street-01f96b541233",
+      "datasetName": "Переяславский переулок"
+    },
+    {
+      "referenceName": "Перуновский переулок",
+      "streetId": "street-e81343dd7099",
+      "datasetName": "Перуновский переулок"
+    },
+    {
+      "referenceName": "Пестовский переулок",
+      "streetId": "street-e6e74c36f416",
+      "datasetName": "Пестовский переулок"
+    },
+    {
+      "referenceName": "Петроверигский переулок",
+      "streetId": "street-0003edbfa7db",
+      "datasetName": "Петроверигский переулок"
+    },
+    {
+      "referenceName": "Петровка, улица",
+      "streetId": "street-f242de6f3929",
+      "datasetName": "улица Петровка"
+    },
+    {
+      "referenceName": "Петровские Ворота, площадь",
+      "streetId": "street-fe7b911ab29f",
+      "datasetName": "площадь Петровские Ворота"
+    },
+    {
+      "referenceName": "Петровские Линии, улица",
+      "streetId": "street-f2857bbaab63",
+      "datasetName": "улица Петровские Линии"
+    },
+    {
+      "referenceName": "Петровский бульвар",
+      "streetId": "street-4a96de0ad0d6",
+      "datasetName": "Петровский бульвар"
+    },
+    {
+      "referenceName": "Петровский переулок",
+      "streetId": "street-ff20b77a9152",
+      "datasetName": "Петровский переулок"
+    },
+    {
+      "referenceName": "Петропавловский переулок",
+      "streetId": "street-dfc9f5d6053b",
+      "datasetName": "Петропавловский переулок"
+    },
+    {
+      "referenceName": "Печатников переулок",
+      "streetId": "street-e50381891673",
+      "datasetName": "Печатников переулок"
+    },
+    {
+      "referenceName": "Пименовский тупик",
+      "streetId": "street-4a8ad4782966",
+      "datasetName": "Пименовский тупик"
+    },
+    {
+      "referenceName": "Плетешковский переулок",
+      "streetId": "street-750fcaf138e2",
+      "datasetName": "Плетешковский переулок"
+    },
+    {
+      "referenceName": "Плотников переулок",
+      "streetId": "street-c073c2024576",
+      "datasetName": "Плотников переулок"
+    },
+    {
+      "referenceName": "Плющиха, улица",
+      "streetId": "street-2762c8cfada8",
+      "datasetName": "улица Плющиха"
+    },
+    {
+      "referenceName": "Поварская улица",
+      "streetId": "street-d94cc215cc6e",
+      "datasetName": "Поварская улица"
+    },
+    {
+      "referenceName": "Погодинская улица",
+      "streetId": "street-97eee7c6c1e7",
+      "datasetName": "Погодинская улица"
+    },
+    {
+      "referenceName": "Погорельский переулок",
+      "streetId": "street-1c85ccf43517",
+      "datasetName": "Погорельский переулок"
+    },
+    {
+      "referenceName": "Подвойского, улица",
+      "streetId": "street-35c08ecff2df",
+      "datasetName": "улица Подвойского"
+    },
+    {
+      "referenceName": "Подгорская набережная",
+      "streetId": "street-d2fe84f73dea",
+      "datasetName": "Подгорская набережная"
+    },
+    {
+      "referenceName": "Подколокольный переулок",
+      "streetId": "street-60003185161e",
+      "datasetName": "Подколокольный переулок"
+    },
+    {
+      "referenceName": "Подкопаевский переулок",
+      "streetId": "street-e90eb56befea",
+      "datasetName": "Подкопаевский переулок"
+    },
+    {
+      "referenceName": "Подсосенский переулок",
+      "streetId": "street-78ee9919e560",
+      "datasetName": "Подсосенский переулок"
+    },
+    {
+      "referenceName": "Пожарский переулок",
+      "streetId": "street-4348d495d457",
+      "datasetName": "Пожарский переулок"
+    },
+    {
+      "referenceName": "Покровка, улица",
+      "streetId": "street-cd07b61ece83",
+      "datasetName": "улица Покровка"
+    },
+    {
+      "referenceName": "Покровские Ворота, площадь",
+      "streetId": "street-5cc9e6987216",
+      "datasetName": "площадь Покровские Ворота"
+    },
+    {
+      "referenceName": "Покровский бульвар",
+      "streetId": "street-097823758773",
+      "datasetName": "Покровский бульвар"
+    },
+    {
+      "referenceName": "Полуярославская набережная",
+      "streetId": "street-1ef696875a6f",
+      "datasetName": "Полуярославская набережная"
+    },
+    {
+      "referenceName": "Полянский 2-й, переулок",
+      "streetId": "street-30f30b81e28d",
+      "datasetName": "2-й Полянский переулок"
+    },
+    {
+      "referenceName": "Полянский переулок",
+      "streetId": "street-7169a707e9bc",
+      "datasetName": "Полянский переулок"
+    },
+    {
+      "referenceName": "Померанцев переулок",
+      "streetId": "street-1936bbbf813f",
+      "datasetName": "Померанцев переулок"
+    },
+    {
+      "referenceName": "Порядковый переулок",
+      "streetId": "street-7b96a8f2f1c7",
+      "datasetName": "Порядковый переулок"
+    },
+    {
+      "referenceName": "Посланников переулок",
+      "streetId": "street-79bc8c88d265",
+      "datasetName": "Посланников переулок"
+    },
+    {
+      "referenceName": "Последний переулок",
+      "streetId": "street-302f71dda683",
+      "datasetName": "Последний переулок"
+    },
+    {
+      "referenceName": "Пост Брянский, улица",
+      "streetId": "street-b17d19ae5f13",
+      "datasetName": "улица Брянский Пост"
+    },
+    {
+      "referenceName": "Потаповский переулок",
+      "streetId": "street-c1237676edcd",
+      "datasetName": "Потаповский переулок"
+    },
+    {
+      "referenceName": "Пресненская набережная",
+      "streetId": "street-5c311df94bbd",
+      "datasetName": "Пресненская набережная"
+    },
+    {
+      "referenceName": "Пресненский Вал, улица",
+      "streetId": "street-2fff535868dc",
+      "datasetName": "улица Пресненский Вал"
+    },
+    {
+      "referenceName": "Пресненский переулок",
+      "streetId": "street-ac38bc76542f",
+      "datasetName": "Пресненский переулок"
+    },
+    {
+      "referenceName": "Пречистенка, улица",
+      "streetId": "street-297246be52d8",
+      "datasetName": "улица Пречистенка"
+    },
+    {
+      "referenceName": "Пречистенская набережная",
+      "streetId": "street-26f2922a1f40",
+      "datasetName": "Пречистенская набережная"
+    },
+    {
+      "referenceName": "Пречистенские Ворота, площадь",
+      "streetId": "street-5c8f102dd8db",
+      "datasetName": "площадь Пречистенские Ворота"
+    },
+    {
+      "referenceName": "Пречистенский переулок",
+      "streetId": "street-7f02d9883809",
+      "datasetName": "Пречистенский переулок"
+    },
+    {
+      "referenceName": "Причальный проезд",
+      "streetId": "street-339ebc0b977f",
+      "datasetName": "Причальный проезд"
+    },
+    {
+      "referenceName": "Приютский переулок",
+      "streetId": "street-7310917829a5",
+      "datasetName": "Приютский переулок"
+    },
+    {
+      "referenceName": "Прокудинский переулок",
+      "streetId": "street-26b8163cc6b8",
+      "datasetName": "Прокудинский переулок"
+    },
+    {
+      "referenceName": "Просвирин переулок",
+      "streetId": "street-3657354e2292",
+      "datasetName": "Просвирин переулок"
+    },
+    {
+      "referenceName": "Протопоповский переулок",
+      "streetId": "street-7d51f362d46d",
+      "datasetName": "Протопоповский переулок"
+    },
+    {
+      "referenceName": "Проточный переулок",
+      "streetId": "street-e56723b97dc9",
+      "datasetName": "Проточный переулок"
+    },
+    {
+      "referenceName": "Прямикова, улица",
+      "streetId": "street-8500f7e4de46",
+      "datasetName": "улица Прямикова"
+    },
+    {
+      "referenceName": "Прямой переулок",
+      "streetId": "street-dbf0a221a754",
+      "datasetName": "Прямой переулок"
+    },
+    {
+      "referenceName": "Пуговишников переулок",
+      "streetId": "street-64881dd26a3f",
+      "datasetName": "Пуговишников переулок"
+    },
+    {
+      "referenceName": "Путейский тупик",
+      "streetId": "street-509f15b90dc4",
+      "datasetName": "Путейский тупик"
+    },
+    {
+      "referenceName": "Пушечная улица",
+      "streetId": "street-0b1a2cf5ec52",
+      "datasetName": "Пушечная улица"
+    },
+    {
+      "referenceName": "Пушкарёв переулок",
+      "streetId": "street-936602ff300b",
+      "datasetName": "Пушкарёв переулок"
+    },
+    {
+      "referenceName": "Пушкинская площадь",
+      "streetId": "street-e358c7ad5801",
+      "datasetName": "Пушкинская площадь"
+    },
+    {
+      "referenceName": "Пыжевский переулок",
+      "streetId": "street-f578f5c02b49",
+      "datasetName": "Пыжёвский переулок"
+    },
+    {
+      "referenceName": "Пыхов-Церковный проезд",
+      "streetId": "street-b93b041534c9",
+      "datasetName": "Пыхов-Церковный проезд"
+    },
+    {
+      "referenceName": "Пятницкая улица",
+      "streetId": "street-7531c8979e42",
+      "datasetName": "Пятницкая улица"
+    },
+    {
+      "referenceName": "Пятницкий переулок",
+      "streetId": "street-ad2facfc8a51",
+      "datasetName": "Пятницкий переулок"
+    },
+    {
+      "referenceName": "Рабочая улица",
+      "streetId": "street-f694f9c3ce40",
+      "datasetName": "Рабочая улица"
+    },
+    {
+      "referenceName": "Рабфаковский переулок",
+      "streetId": "street-e3f8c3e77220",
+      "datasetName": "Рабфаковский переулок"
+    },
+    {
+      "referenceName": "Радио, улица",
+      "streetId": "street-6132b80ec0a1",
+      "datasetName": "улица Радио"
+    },
+    {
+      "referenceName": "Разгуляй, площадь",
+      "streetId": "street-e997cac539a7",
+      "datasetName": "площадь Разгуляй"
+    },
+    {
+      "referenceName": "Расторгуевский переулок",
+      "streetId": "street-6fb7045d57f7",
+      "datasetName": "Расторгуевский переулок"
+    },
+    {
+      "referenceName": "Раушская набережная",
+      "streetId": "street-776399015850",
+      "datasetName": "Раушская набережная"
+    },
+    {
+      "referenceName": "Раушский 1-й, переулок",
+      "streetId": "street-b24e4e032919",
+      "datasetName": "1-й Раушский переулок"
+    },
+    {
+      "referenceName": "Раушский 2-й, переулок",
+      "streetId": "street-cd3d29eb780b",
+      "datasetName": "2-й Раушский переулок"
+    },
+    {
+      "referenceName": "Рахмановский переулок",
+      "streetId": "street-8c610571a9c5",
+      "datasetName": "Рахмановский переулок"
+    },
+    {
+      "referenceName": "Революции, площадь",
+      "streetId": "street-ee20f3a454ed",
+      "datasetName": "площадь Революции"
+    },
+    {
+      "referenceName": "Рижская площадь",
+      "streetId": "street-ba07aadee617",
+      "datasetName": "Рижская площадь"
+    },
+    {
+      "referenceName": "Рогожская Застава, площадь",
+      "streetId": "street-dbe664167795",
+      "datasetName": "площадь Рогожская Застава"
+    },
+    {
+      "referenceName": "Рогожский Вал, улица",
+      "streetId": "street-ff9be25d02ab",
+      "datasetName": "улица Рогожский Вал"
+    },
+    {
+      "referenceName": "Рождественка, улица",
+      "streetId": "street-da10add7089a",
+      "datasetName": "улица Рождественка"
+    },
+    {
+      "referenceName": "Рождественский бульвар",
+      "streetId": "street-5359562d69f5",
+      "datasetName": "Рождественский бульвар"
+    },
+    {
+      "referenceName": "Романов переулок",
+      "streetId": "street-f7e4890a8ea6",
+      "datasetName": "Романов переулок"
+    },
+    {
+      "referenceName": "России Свободной, площадь",
+      "streetId": "street-2b373d65a45b",
+      "datasetName": "площадь Свободной России"
+    },
+    {
+      "referenceName": "Россолимо, улица",
+      "streetId": "street-0fca3ba7a915",
+      "datasetName": "улица Россолимо"
+    },
+    {
+      "referenceName": "Ростовская набережная",
+      "streetId": "street-878549fcf1e2",
+      "datasetName": "Ростовская набережная"
+    },
+    {
+      "referenceName": "Ростовский 2-й, переулок",
+      "streetId": "street-525fedd2b532",
+      "datasetName": "2-й Ростовский переулок"
+    },
+    {
+      "referenceName": "Ростовский 4-й, переулок",
+      "streetId": "street-5b5b82340a19",
+      "datasetName": "4-й Ростовский переулок"
+    },
+    {
+      "referenceName": "Ростовский 6-й, переулок",
+      "streetId": "street-1f9beab2c546",
+      "datasetName": "6-й Ростовский переулок"
+    },
+    {
+      "referenceName": "Ростовский 7-й, переулок",
+      "streetId": "street-504d5c13e719",
+      "datasetName": "7-й Ростовский переулок"
+    },
+    {
+      "referenceName": "Рочдельская улица",
+      "streetId": "street-7999b9f8e416",
+      "datasetName": "Рочдельская улица"
+    },
+    {
+      "referenceName": "Рубцов переулок",
+      "streetId": "street-41ba341ce26c",
+      "datasetName": "Рубцов переулок"
+    },
+    {
+      "referenceName": "Рубцовская набережная",
+      "streetId": "street-dbcb499ab63f",
+      "datasetName": "Рубцовская набережная"
+    },
+    {
+      "referenceName": "Ружейный переулок",
+      "streetId": "street-0ebc0d39d3e5",
+      "datasetName": "Ружейный переулок"
+    },
+    {
+      "referenceName": "Руновский переулок",
+      "streetId": "street-ba6cc3c0caa8",
+      "datasetName": "Руновский переулок"
+    },
+    {
+      "referenceName": "Русаковская улица",
+      "streetId": "street-28daa156067f",
+      "datasetName": "Русаковская улица"
+    },
+    {
+      "referenceName": "Рыбников переулок",
+      "streetId": "street-1f615a20f0de",
+      "datasetName": "Рыбников переулок"
+    },
+    {
+      "referenceName": "Рыбный переулок",
+      "streetId": "street-79873d57a307",
+      "datasetName": "Рыбный переулок"
+    },
+    {
+      "referenceName": "Рюмин переулок",
+      "streetId": "street-362d862d5e92",
+      "datasetName": "Рюмин переулок"
+    },
+    {
+      "referenceName": "Рязанский переулок",
+      "streetId": "street-02cf48a4f185",
+      "datasetName": "Рязанский переулок"
+    },
+    {
+      "referenceName": "Рязанский проезд",
+      "streetId": "street-49e5f2a4dceb",
+      "datasetName": "Рязанский проезд"
+    },
+    {
+      "referenceName": "Саввинская набережная",
+      "streetId": "street-0214c1c7d8ee",
+      "datasetName": "Саввинская набережная"
+    },
+    {
+      "referenceName": "Савельева, улица",
+      "streetId": "street-9d51952d1da3",
+      "datasetName": "улица Савельева"
+    },
+    {
+      "referenceName": "Садовая-Каретная улица",
+      "streetId": "street-70d3faa8866b",
+      "datasetName": "Садовая-Каретная улица"
+    },
+    {
+      "referenceName": "Садовая-Кудринская улица",
+      "streetId": "street-faf681dca2dc",
+      "datasetName": "Садовая-Кудринская улица"
+    },
+    {
+      "referenceName": "Садовая-Самотёчная улица",
+      "streetId": "street-b1f4e8637c31",
+      "datasetName": "Садовая-Самотёчная улица"
+    },
+    {
+      "referenceName": "Садовая-Спасская улица",
+      "streetId": "street-973530a9321d",
+      "datasetName": "Садовая-Спасская улица"
+    },
+    {
+      "referenceName": "Садовая-Сухаревская улица",
+      "streetId": "street-c7f66f5bad8c",
+      "datasetName": "Садовая-Сухаревская улица"
+    },
+    {
+      "referenceName": "Садовая-Триумфальная улица",
+      "streetId": "street-76b11572c590",
+      "datasetName": "Садовая-Триумфальная улица"
+    },
+    {
+      "referenceName": "Садовая-Черногрязская улица",
+      "streetId": "street-710b7e3fa1d3",
+      "datasetName": "Садовая-Черногрязская улица"
+    },
+    {
+      "referenceName": "Садовническая набережная",
+      "streetId": "street-27bb3f1d2100",
+      "datasetName": "Садовническая набережная"
+    },
+    {
+      "referenceName": "Садовническая улица",
+      "streetId": "street-2900393e3709",
+      "datasetName": "Садовническая улица"
+    },
+    {
+      "referenceName": "Садовнический мост",
+      "streetId": "street-d209d0f15429",
+      "datasetName": "Садовнический мост"
+    },
+    {
+      "referenceName": "Садовнический переулок",
+      "streetId": "street-b9270f1a8a55",
+      "datasetName": "Садовнический переулок"
+    },
+    {
+      "referenceName": "Садовнический проезд",
+      "streetId": "street-f52059c8f530",
+      "datasetName": "Садовнический проезд"
+    },
+    {
+      "referenceName": "Садовый тупик",
+      "streetId": "street-64c22f1e73e4",
+      "datasetName": "Садовый тупик"
+    },
+    {
+      "referenceName": "Самарская улица",
+      "streetId": "street-39328b772cc2",
+      "datasetName": "Самарская улица"
+    },
+    {
+      "referenceName": "Самотёчная площадь",
+      "streetId": "street-b6188e2412c7",
+      "datasetName": "Самотёчная площадь"
+    },
+    {
+      "referenceName": "Самотёчная улица",
+      "streetId": "street-3001d969c145",
+      "datasetName": "Самотёчная улица"
+    },
+    {
+      "referenceName": "Самотёчный 1-й, переулок",
+      "streetId": "street-e499a7ffb41d",
+      "datasetName": "1-й Самотёчный переулок"
+    },
+    {
+      "referenceName": "Самотёчный 2-й, переулок",
+      "streetId": "street-680ef549e29c",
+      "datasetName": "2-й Самотёчный переулок"
+    },
+    {
+      "referenceName": "Самотёчный 3-й, переулок",
+      "streetId": "street-226dc4cb76fa",
+      "datasetName": "3-й Самотёчный переулок"
+    },
+    {
+      "referenceName": "Самотёчный 4-й, переулок",
+      "streetId": "street-6565780e21c5",
+      "datasetName": "4-й Самотёчный переулок"
+    },
+    {
+      "referenceName": "Сандуновский переулок",
+      "streetId": "street-b964b3e30527",
+      "datasetName": "Сандуновский переулок"
+    },
+    {
+      "referenceName": "Саринский проезд",
+      "streetId": "street-86a31103cbb5",
+      "datasetName": "Саринский проезд"
+    },
+    {
+      "referenceName": "Сверчков переулок",
+      "streetId": "street-7a963b88e0ed",
+      "datasetName": "Сверчков переулок"
+    },
+    {
+      "referenceName": "Селезнёвская улица",
+      "streetId": "street-8dc9cc2c53aa",
+      "datasetName": "Селезнёвская улица"
+    },
+    {
+      "referenceName": "Селивёрстов переулок",
+      "streetId": "street-246a91f46b07",
+      "datasetName": "Селивёрстов переулок"
+    },
+    {
+      "referenceName": "Семинарский тупик",
+      "streetId": "street-83d8192aa02b",
+      "datasetName": "Семинарский тупик"
+    },
+    {
+      "referenceName": "Семёновская набережная",
+      "streetId": "street-257094861fb8",
+      "datasetName": "Семёновская набережная"
+    },
+    {
+      "referenceName": "Серафимовича, улица",
+      "streetId": "street-108a2d80539a",
+      "datasetName": "улица Серафимовича"
+    },
+    {
+      "referenceName": "Сергея Макеева, улица",
+      "streetId": "street-822e22adefc0",
+      "datasetName": "улица Сергея Макеева"
+    },
+    {
+      "referenceName": "Сергия Радонежского, улица",
+      "streetId": "street-08b6405ad497",
+      "datasetName": "улица Сергия Радонежского"
+    },
+    {
+      "referenceName": "Серебряническая набережная",
+      "streetId": "street-92825f8e93fb",
+      "datasetName": "Серебряническая набережная"
+    },
+    {
+      "referenceName": "Серебрянический переулок",
+      "streetId": "street-3367156ca168",
+      "datasetName": "Серебрянический переулок"
+    },
+    {
+      "referenceName": "Серебряный переулок",
+      "streetId": "street-4063eab85832",
+      "datasetName": "Серебряный переулок"
+    },
+    {
+      "referenceName": "Серпов переулок",
+      "streetId": "street-9baad57a63bf",
+      "datasetName": "Серпов переулок"
+    },
+    {
+      "referenceName": "Серпуховская площадь",
+      "streetId": "street-e0140c3d31f0",
+      "datasetName": "Серпуховская площадь"
+    },
+    {
+      "referenceName": "Серпуховский переулок",
+      "streetId": "street-3a80d21e9a5f",
+      "datasetName": "Серпуховский переулок"
+    },
+    {
+      "referenceName": "Сеченовский переулок",
+      "streetId": "street-3493a94b6576",
+      "datasetName": "Сеченовский переулок"
+    },
+    {
+      "referenceName": "Сибирский проезд",
+      "streetId": "street-3f7b11d0f84d",
+      "datasetName": "Сибирский проезд"
+    },
+    {
+      "referenceName": "Сивцев Вражек, переулок",
+      "streetId": "street-c1d8848ec748",
+      "datasetName": "переулок Сивцев Вражек"
+    },
+    {
+      "referenceName": "Сивяков переулок",
+      "streetId": "street-9aeac02a0ff2",
+      "datasetName": "Сивяков переулок"
+    },
+    {
+      "referenceName": "Симоновский Вал, улица",
+      "streetId": "street-9fe59596a632",
+      "datasetName": "улица Симоновский Вал"
+    },
+    {
+      "referenceName": "Скарятинский переулок",
+      "streetId": "street-05547721d267",
+      "datasetName": "Скарятинский переулок"
+    },
+    {
+      "referenceName": "Скатертный переулок",
+      "streetId": "street-588ca83247fd",
+      "datasetName": "Скатертный переулок"
+    },
+    {
+      "referenceName": "Скорняжный переулок",
+      "streetId": "street-d136383a9f7b",
+      "datasetName": "Скорняжный переулок"
+    },
+    {
+      "referenceName": "Скотопрогонная улица",
+      "streetId": "street-e1e448d98717",
+      "datasetName": "Скотопрогонная улица"
+    },
+    {
+      "referenceName": "Скрябинский переулок",
+      "streetId": "street-463f23e9f4dd",
+      "datasetName": "Скрябинский переулок"
+    },
+    {
+      "referenceName": "Славянская площадь",
+      "streetId": "street-efbcb1016458",
+      "datasetName": "Славянская площадь"
+    },
+    {
+      "referenceName": "Слесарный переулок",
+      "streetId": "street-c240b5cd43d3",
+      "datasetName": "Слесарный переулок"
+    },
+    {
+      "referenceName": "Смоленская набережная",
+      "streetId": "street-a53c4ff1db9b",
+      "datasetName": "Смоленская набережная"
+    },
+    {
+      "referenceName": "Смоленская площадь",
+      "streetId": "street-a9c65df0de33",
+      "datasetName": "Смоленская площадь"
+    },
+    {
+      "referenceName": "Смоленская улица",
+      "streetId": "street-b1ca49bcf8e2",
+      "datasetName": "Смоленская улица"
+    },
+    {
+      "referenceName": "Смоленская-Сенная площадь",
+      "streetId": "street-0afe08237351",
+      "datasetName": "Смоленская-Сенная площадь"
+    },
+    {
+      "referenceName": "Смоленский 1-й, переулок",
+      "streetId": "street-22ba3e6f6985",
+      "datasetName": "1-й Смоленский переулок"
+    },
+    {
+      "referenceName": "Смоленский 2-й, переулок",
+      "streetId": "street-37f5d70653d1",
+      "datasetName": "2-й Смоленский переулок"
+    },
+    {
+      "referenceName": "Смоленский 3-й, переулок",
+      "streetId": "street-1607286463a3",
+      "datasetName": "3-й Смоленский переулок"
+    },
+    {
+      "referenceName": "Смоленский бульвар",
+      "streetId": "street-514111ca47c4",
+      "datasetName": "Смоленский бульвар"
+    },
+    {
+      "referenceName": "Советской Армии, улица",
+      "streetId": "street-4a67e3d7da06",
+      "datasetName": "улица Советской Армии"
+    },
+    {
+      "referenceName": "Соймоновский проезд",
+      "streetId": "street-c42c9ed8172a",
+      "datasetName": "Соймоновский проезд"
+    },
+    {
+      "referenceName": "Солянка, улица",
+      "streetId": "street-57331aca748b",
+      "datasetName": "улица Солянка"
+    },
+    {
+      "referenceName": "Солянский проезд",
+      "streetId": "street-61acdf0b6341",
+      "datasetName": "Солянский проезд"
+    },
+    {
+      "referenceName": "Солянский тупик",
+      "streetId": "street-42f1450e662d",
+      "datasetName": "Солянский тупик"
+    },
+    {
+      "referenceName": "Сосинская улица",
+      "streetId": "street-6a1049e0b25a",
+      "datasetName": "Сосинская улица"
+    },
+    {
+      "referenceName": "Сосинский проезд",
+      "streetId": "street-a92fd02d0808",
+      "datasetName": "Сосинский проезд"
+    },
+    {
+      "referenceName": "Софийская набережная",
+      "streetId": "street-09404c493216",
+      "datasetName": "Софийская набережная"
+    },
+    {
+      "referenceName": "Спартаковская площадь",
+      "streetId": "street-999d10326dfc",
+      "datasetName": "Спартаковская площадь"
+    },
+    {
+      "referenceName": "Спартаковская улица",
+      "streetId": "street-080ec8146985",
+      "datasetName": "Спартаковская улица"
+    },
+    {
+      "referenceName": "Спартаковский переулок",
+      "streetId": "street-3869ca91bf70",
+      "datasetName": "Спартаковский переулок"
+    },
+    {
+      "referenceName": "Спасоналивковский 1-й, переулок",
+      "streetId": "street-28c7957fc92b",
+      "datasetName": "1-й Спасоналивковский переулок"
+    },
+    {
+      "referenceName": "Спасоналивковский 2-й, переулок",
+      "streetId": "street-ae58805c5745",
+      "datasetName": "2-й Спасоналивковский переулок"
+    },
+    {
+      "referenceName": "Спасопесковская площадь",
+      "streetId": "street-b17a201b6362",
+      "datasetName": "Спасопесковская площадь"
+    },
+    {
+      "referenceName": "Спасопесковский переулок",
+      "streetId": "street-71567a4ca5ff",
+      "datasetName": "Спасопесковский переулок"
+    },
+    {
+      "referenceName": "Спасский тупик",
+      "streetId": "street-2a82de0be395",
+      "datasetName": "Спасский тупик"
+    },
+    {
+      "referenceName": "Спиридоновка, улица",
+      "streetId": "street-23ea0a18e451",
+      "datasetName": "улица Спиридоновка"
+    },
+    {
+      "referenceName": "Спиридоньевский переулок",
+      "streetId": "street-89886e0ff326",
+      "datasetName": "Спиридоньевский переулок"
+    },
+    {
+      "referenceName": "Средний Каретный переулок",
+      "streetId": "street-883f392bf0b9",
+      "datasetName": "Средний Каретный переулок"
+    },
+    {
+      "referenceName": "Средний Кисловский переулок",
+      "streetId": "street-d076658ecc1e",
+      "datasetName": "Средний Кисловский переулок"
+    },
+    {
+      "referenceName": "Средний Кондратьевский переулок",
+      "streetId": "street-5b44b07e0737",
+      "datasetName": "Средний Кондратьевский переулок"
+    },
+    {
+      "referenceName": "Средний Международный переулок",
+      "streetId": "street-2ee2163a1c89",
+      "datasetName": "Средний Международный переулок"
+    },
+    {
+      "referenceName": "Средний Наставнический переулок",
+      "streetId": "street-ed5d241b40be",
+      "datasetName": "Средний Наставнический переулок"
+    },
+    {
+      "referenceName": "Средний Николопесковский переулок",
+      "streetId": "street-5fd4d499163a",
+      "datasetName": "Средний Николопесковский переулок"
+    },
+    {
+      "referenceName": "Средний Овчинниковский переулок",
+      "streetId": "street-409ac810bca1",
+      "datasetName": "Средний Овчинниковский переулок"
+    },
+    {
+      "referenceName": "Средний Тишинский переулок",
+      "streetId": "street-b15cc217c271",
+      "datasetName": "Средний Тишинский переулок"
+    },
+    {
+      "referenceName": "Средний Трёхгорный переулок",
+      "streetId": "street-89f139701875",
+      "datasetName": "Средний Трёхгорный переулок"
+    },
+    {
+      "referenceName": "Средняя Калитниковская улица",
+      "streetId": "street-16f6d25f4b8e",
+      "datasetName": "Средняя Калитниковская улица"
+    },
+    {
+      "referenceName": "Средняя Переяславская улица",
+      "streetId": "street-bf3680a6e04b",
+      "datasetName": "Средняя Переяславская улица"
+    },
+    {
+      "referenceName": "Сретенка, улица",
+      "streetId": "street-1de516098712",
+      "datasetName": "улица Сретенка"
+    },
+    {
+      "referenceName": "Сретенские Ворота, площадь",
+      "streetId": "street-239cca0f9d80",
+      "datasetName": "площадь Сретенские Ворота"
+    },
+    {
+      "referenceName": "Сретенский бульвар",
+      "streetId": "street-bef69ff471f0",
+      "datasetName": "Сретенский бульвар"
+    },
+    {
+      "referenceName": "Сретенский переулок",
+      "streetId": "street-b2290127b021",
+      "datasetName": "Сретенский переулок"
+    },
+    {
+      "referenceName": "Сретенский тупик",
+      "streetId": "street-46a638a22717",
+      "datasetName": "Сретенский тупик"
+    },
+    {
+      "referenceName": "Станиславского, улица",
+      "streetId": "street-aa15f14c582c",
+      "datasetName": "улица Станиславского"
+    },
+    {
+      "referenceName": "Старая Басманная улица",
+      "streetId": "street-85fa01d2bc28",
+      "datasetName": "Старая Басманная улица"
+    },
+    {
+      "referenceName": "Старая площадь",
+      "streetId": "street-39d8f44ca5dc",
+      "datasetName": "Старая площадь"
+    },
+    {
+      "referenceName": "Староваганьковский переулок",
+      "streetId": "street-8ae0a1954667",
+      "datasetName": "Староваганьковский переулок"
+    },
+    {
+      "referenceName": "Старокирочный переулок",
+      "streetId": "street-a73676519888",
+      "datasetName": "Старокирочный переулок"
+    },
+    {
+      "referenceName": "Староконюшенный переулок",
+      "streetId": "street-53fb513c82a7",
+      "datasetName": "Староконюшенный переулок"
+    },
+    {
+      "referenceName": "Старомонетный переулок",
+      "streetId": "street-ff4bae8fa5de",
+      "datasetName": "Старомонетный переулок"
+    },
+    {
+      "referenceName": "Старопанский переулок",
+      "streetId": "street-bbce6f84cca5",
+      "datasetName": "Старопанский переулок"
+    },
+    {
+      "referenceName": "Старопименовский переулок",
+      "streetId": "street-54e5eb26e8a4",
+      "datasetName": "Старопименовский переулок"
+    },
+    {
+      "referenceName": "Старосадский переулок",
+      "streetId": "street-3b2c8a7a00f3",
+      "datasetName": "Старосадский переулок"
+    },
+    {
+      "referenceName": "Старый Толмачёвский переулок",
+      "streetId": "street-36504f733eef",
+      "datasetName": "Старый Толмачёвский переулок"
+    },
+    {
+      "referenceName": "Столешников переулок",
+      "streetId": "street-37350756c732",
+      "datasetName": "Столешников переулок"
+    },
+    {
+      "referenceName": "Столовый переулок",
+      "streetId": "street-f9c03b384bc3",
+      "datasetName": "Столовый переулок"
+    },
+    {
+      "referenceName": "Столярный переулок",
+      "streetId": "street-14982102c8e0",
+      "datasetName": "Столярный переулок"
+    },
+    {
+      "referenceName": "Страстной бульвар",
+      "streetId": "street-c1a9d0edbd2e",
+      "datasetName": "Страстной бульвар"
+    },
+    {
+      "referenceName": "Стрельбищенский переулок",
+      "streetId": "street-91c883dddc24",
+      "datasetName": "Стрельбищенский переулок"
+    },
+    {
+      "referenceName": "Стремянный переулок",
+      "streetId": "street-6e64846f829b",
+      "datasetName": "Стремянный переулок"
+    },
+    {
+      "referenceName": "Стройковская улица",
+      "streetId": "street-157781635d09",
+      "datasetName": "Стройковская улица"
+    },
+    {
+      "referenceName": "Студенецкий переулок",
+      "streetId": "street-8b3ca75f0e6d",
+      "datasetName": "Студенецкий переулок"
+    },
+    {
+      "referenceName": "Суворовская площадь",
+      "streetId": "street-7bc6eff2166a",
+      "datasetName": "Суворовская площадь"
+    },
+    {
+      "referenceName": "Сущёвская улица",
+      "streetId": "street-511af3668c14",
+      "datasetName": "Сущёвская улица"
+    },
+    {
+      "referenceName": "Сущёвский Вал, улица",
+      "streetId": "street-b9b38d1f81a4",
+      "datasetName": "улица Сущёвский Вал"
+    },
+    {
+      "referenceName": "Сущёвский тупик",
+      "streetId": "street-447f63107378",
+      "datasetName": "Сущёвский тупик"
+    },
+    {
+      "referenceName": "Съезжинский переулок",
+      "streetId": "street-9bbf0a7a1101",
+      "datasetName": "Съезжинский переулок"
+    },
+    {
+      "referenceName": "Сыромятническая набережная",
+      "streetId": "street-5ea0fdbeeb77",
+      "datasetName": "Сыромятническая набережная"
+    },
+    {
+      "referenceName": "Сыромятнический 1-й, переулок",
+      "streetId": "street-5b711922426a",
+      "datasetName": "1-й Сыромятнический переулок"
+    },
+    {
+      "referenceName": "Сыромятнический 2-й, переулок",
+      "streetId": "street-5a69a8a47e85",
+      "datasetName": "2-й Сыромятнический переулок"
+    },
+    {
+      "referenceName": "Сыромятнический 3-й, переулок",
+      "streetId": "street-7100062f9ab4",
+      "datasetName": "3-й Сыромятнический переулок"
+    },
+    {
+      "referenceName": "Сыромятнический 4-й, переулок",
+      "streetId": "street-c116f760a388",
+      "datasetName": "4-й Сыромятнический переулок"
+    },
+    {
+      "referenceName": "Сыромятнический проезд",
+      "streetId": "street-c7d8f708d8a8",
+      "datasetName": "Сыромятнический проезд"
+    },
+    {
+      "referenceName": "Сытинский переулок",
+      "streetId": "street-93a0eea85ab5",
+      "datasetName": "Сытинский переулок"
+    },
+    {
+      "referenceName": "Сытинский тупик",
+      "streetId": "street-1b963315deae",
+      "datasetName": "Сытинский тупик"
+    },
+    {
+      "referenceName": "Таганская площадь",
+      "streetId": "street-1c4a0f5ab929",
+      "datasetName": "Таганская площадь"
+    },
+    {
+      "referenceName": "Таганская улица",
+      "streetId": "street-3ac1ed48b676",
+      "datasetName": "Таганская улица"
+    },
+    {
+      "referenceName": "Талалихина, улица",
+      "streetId": "street-3d55370fadd6",
+      "datasetName": "улица Талалихина"
+    },
+    {
+      "referenceName": "Таможенный мост",
+      "streetId": "street-bd0a240e8c97",
+      "datasetName": "Таможенный мост"
+    },
+    {
+      "referenceName": "Татарская улица",
+      "streetId": "street-f93b4a3e7cd7",
+      "datasetName": "Татарская улица"
+    },
+    {
+      "referenceName": "Тверская Застава, площадь",
+      "streetId": "street-6171194cf89c",
+      "datasetName": "площадь Тверская Застава"
+    },
+    {
+      "referenceName": "Тверская площадь",
+      "streetId": "street-4eb6749aba38",
+      "datasetName": "Тверская площадь"
+    },
+    {
+      "referenceName": "Тверская улица",
+      "streetId": "street-ce17949e0a66",
+      "datasetName": "Тверская улица"
+    },
+    {
+      "referenceName": "Тверская-Ямская 1-я, улица",
+      "streetId": "street-fcab9b04ebc4",
+      "datasetName": "1-я Тверская-Ямская улица"
+    },
+    {
+      "referenceName": "Тверская-Ямская 2-я, улица",
+      "streetId": "street-7d7bbcc6af4e",
+      "datasetName": "2-я Тверская-Ямская улица"
+    },
+    {
+      "referenceName": "Тверская-Ямская 3-я, улица",
+      "streetId": "street-324c6c59e5c1",
+      "datasetName": "3-я Тверская-Ямская улица"
+    },
+    {
+      "referenceName": "Тверская-Ямская 4-я, улица",
+      "streetId": "street-54da802d0e1a",
+      "datasetName": "4-я Тверская-Ямская улица"
+    },
+    {
+      "referenceName": "Тверской бульвар",
+      "streetId": "street-f9b55396fff8",
+      "datasetName": "Тверской бульвар"
+    },
+    {
+      "referenceName": "Тверской проезд",
+      "streetId": "street-ca7dbcf1ed82",
+      "datasetName": "Тверской проезд"
+    },
+    {
+      "referenceName": "Тверской-Ямской 1-й, переулок",
+      "streetId": "street-a4cfa3e317a4",
+      "datasetName": "1-й Тверской-Ямской переулок"
+    },
+    {
+      "referenceName": "Тверской-Ямской 2-й, переулок",
+      "streetId": "street-913040e3c3e0",
+      "datasetName": "2-й Тверской-Ямской переулок"
+    },
+    {
+      "referenceName": "Театральная площадь",
+      "streetId": "street-04fd9443bb0d",
+      "datasetName": "Театральная площадь"
+    },
+    {
+      "referenceName": "Театральный проезд",
+      "streetId": "street-a2fef5170792",
+      "datasetName": "Театральный проезд"
+    },
+    {
+      "referenceName": "Тессинский переулок",
+      "streetId": "street-9a1bbd071a6e",
+      "datasetName": "Тессинский переулок"
+    },
+    {
+      "referenceName": "Тестовская улица",
+      "streetId": "street-94d78f489710",
+      "datasetName": "Тестовская улица"
+    },
+    {
+      "referenceName": "Тетеринский переулок",
+      "streetId": "street-c971151f562b",
+      "datasetName": "Тетеринский переулок"
+    },
+    {
+      "referenceName": "Технический переулок",
+      "streetId": "street-6f61e08c05bd",
+      "datasetName": "Технический переулок"
+    },
+    {
+      "referenceName": "Тимура Фрунзе, улица",
+      "streetId": "street-91e7ea0ac808",
+      "datasetName": "улица Тимура Фрунзе"
+    },
+    {
+      "referenceName": "Титовский проезд",
+      "streetId": "street-b37d41b527e5",
+      "datasetName": "Титовский проезд"
+    },
+    {
+      "referenceName": "Тихвинская улица",
+      "streetId": "street-a00083445ac9",
+      "datasetName": "Тихвинская улица"
+    },
+    {
+      "referenceName": "Тихвинский 1-й, тупик",
+      "streetId": "street-90d7e4f1abe4",
+      "datasetName": "1-й Тихвинский тупик"
+    },
+    {
+      "referenceName": "Тихвинский переулок",
+      "streetId": "street-5aa30cb087e1",
+      "datasetName": "Тихвинский переулок"
+    },
+    {
+      "referenceName": "Тихий тупик",
+      "streetId": "street-d0007192b438",
+      "datasetName": "Тихий тупик"
+    },
+    {
+      "referenceName": "Тишинская площадь",
+      "streetId": "street-1c044bb3e9c0",
+      "datasetName": "Тишинская площадь"
+    },
+    {
+      "referenceName": "Товарищеский переулок",
+      "streetId": "street-7120a8f81250",
+      "datasetName": "Товарищеский переулок"
+    },
+    {
+      "referenceName": "Токмаков переулок",
+      "streetId": "street-8983b8e88ff1",
+      "datasetName": "Токмаков переулок"
+    },
+    {
+      "referenceName": "Третьяковский проезд",
+      "streetId": "street-8584d66c1704",
+      "datasetName": "Третьяковский проезд"
+    },
+    {
+      "referenceName": "Триумфальная площадь",
+      "streetId": "street-b0529e454d52",
+      "datasetName": "Триумфальная площадь"
+    },
+    {
+      "referenceName": "Трифоновская улица",
+      "streetId": "street-64332d131e48",
+      "datasetName": "Трифоновская улица"
+    },
+    {
+      "referenceName": "Трифоновский тупик",
+      "streetId": "street-56e83a7082f4",
+      "datasetName": "Трифоновский тупик"
+    },
+    {
+      "referenceName": "Троилинский переулок",
+      "streetId": "street-ba1ac1d9c5d0",
+      "datasetName": "Троилинский переулок"
+    },
+    {
+      "referenceName": "Троицкая улица",
+      "streetId": "street-176fde41f7d5",
+      "datasetName": "Троицкая улица"
+    },
+    {
+      "referenceName": "Троицкий 1-й, переулок",
+      "streetId": "street-2f7bfa497d06",
+      "datasetName": "1-й Троицкий переулок"
+    },
+    {
+      "referenceName": "Троицкий 2-й, переулок",
+      "streetId": "street-161178c1c934",
+      "datasetName": "2-й Троицкий переулок"
+    },
+    {
+      "referenceName": "Трубецкая улица",
+      "streetId": "street-c51d1ab47a5d",
+      "datasetName": "Трубецкая улица"
+    },
+    {
+      "referenceName": "Трубная площадь",
+      "streetId": "street-7fdfbfaeb5f3",
+      "datasetName": "Трубная площадь"
+    },
+    {
+      "referenceName": "Трубная улица",
+      "streetId": "street-6621c19f043e",
+      "datasetName": "Трубная улица"
+    },
+    {
+      "referenceName": "Трубниковский переулок",
+      "streetId": "street-b7379cc48431",
+      "datasetName": "Трубниковский переулок"
+    },
+    {
+      "referenceName": "Трудовая улица",
+      "streetId": "street-3d821528d22f",
+      "datasetName": "Трудовая улица"
+    },
+    {
+      "referenceName": "Тружеников 1-й, переулок",
+      "streetId": "street-74724f199bcd",
+      "datasetName": "1-й переулок Тружеников"
+    },
+    {
+      "referenceName": "Тружеников 2-й, переулок",
+      "streetId": "street-b99ca7765d99",
+      "datasetName": "2-й переулок Тружеников"
+    },
+    {
+      "referenceName": "Тружеников 3-й, переулок",
+      "streetId": "street-354ad3f95aad",
+      "datasetName": "3-й переулок Тружеников"
+    },
+    {
+      "referenceName": "Трёхгорный Вал, улица",
+      "streetId": "street-18787f6cbaa9",
+      "datasetName": "улица Трёхгорный Вал"
+    },
+    {
+      "referenceName": "Трёхпрудный переулок",
+      "streetId": "street-17342ba8e102",
+      "datasetName": "Трёхпрудный переулок"
+    },
+    {
+      "referenceName": "Тургеневская площадь",
+      "streetId": "street-1a1dc88c66fc",
+      "datasetName": "Тургеневская площадь"
+    },
+    {
+      "referenceName": "Турчанинов переулок",
+      "streetId": "street-9ce0e570be05",
+      "datasetName": "Турчанинов переулок"
+    },
+    {
+      "referenceName": "Угловой переулок",
+      "streetId": "street-ed42ecdfed63",
+      "datasetName": "Угловой переулок"
+    },
+    {
+      "referenceName": "Уланский переулок",
+      "streetId": "street-7872c75fcd38",
+      "datasetName": "Уланский переулок"
+    },
+    {
+      "referenceName": "Усачёва улица",
+      "streetId": "street-052293704371",
+      "datasetName": "Усачёва улица"
+    },
+    {
+      "referenceName": "Успенский переулок",
+      "streetId": "street-992f80a99f7d",
+      "datasetName": "Успенский переулок"
+    },
+    {
+      "referenceName": "Устьинская набережная",
+      "streetId": "street-c161d57c31b0",
+      "datasetName": "Устьинская набережная"
+    },
+    {
+      "referenceName": "Устьинский проезд",
+      "streetId": "street-68596a5e825d",
+      "datasetName": "Устьинский проезд"
+    },
+    {
+      "referenceName": "Учебный переулок",
+      "streetId": "street-eac861f97bb6",
+      "datasetName": "Учебный переулок"
+    },
+    {
+      "referenceName": "Фадеева, улица",
+      "streetId": "street-ac8fa8ed2fc6",
+      "datasetName": "улица Фадеева"
+    },
+    {
+      "referenceName": "Фалеевский переулок",
+      "streetId": "street-ce131862208f",
+      "datasetName": "Фалеевский переулок"
+    },
+    {
+      "referenceName": "Филипповский переулок",
+      "streetId": "street-b7870b7da147",
+      "datasetName": "Филипповский переулок"
+    },
+    {
+      "referenceName": "Фридриха Энгельса, улица",
+      "streetId": "street-5c6a7aa462a6",
+      "datasetName": "улица Фридриха Энгельса"
+    },
+    {
+      "referenceName": "Фролов переулок",
+      "streetId": "street-2ad9e60adc14",
+      "datasetName": "Фролов переулок"
+    },
+    {
+      "referenceName": "Фрунзенская 1-я, улица",
+      "streetId": "street-8c7db3bc95a2",
+      "datasetName": "1-я Фрунзенская улица"
+    },
+    {
+      "referenceName": "Фрунзенская 2-я, улица",
+      "streetId": "street-e4c5214805e8",
+      "datasetName": "2-я Фрунзенская улица"
+    },
+    {
+      "referenceName": "Фрунзенская 3-я, улица",
+      "streetId": "street-541f5886aa8e",
+      "datasetName": "3-я Фрунзенская улица"
+    },
+    {
+      "referenceName": "Фрунзенская набережная",
+      "streetId": "street-eaa2d1b14e06",
+      "datasetName": "Фрунзенская набережная"
+    },
+    {
+      "referenceName": "Фуркасовский переулок",
+      "streetId": "street-770fba795f82",
+      "datasetName": "Фуркасовский переулок"
+    },
+    {
+      "referenceName": "Фурманный переулок",
+      "streetId": "street-65153cf62c14",
+      "datasetName": "Фурманный переулок"
+    },
+    {
+      "referenceName": "Хавская улица",
+      "streetId": "street-ace1b7f8defe",
+      "datasetName": "Хавская улица"
+    },
+    {
+      "referenceName": "Хамовнический Вал, улица",
+      "streetId": "street-0ba01b176931",
+      "datasetName": "улица Хамовнический Вал"
+    },
+    {
+      "referenceName": "Хвостов 1-й, переулок",
+      "streetId": "street-21b6151b5b8b",
+      "datasetName": "1-й Хвостов переулок"
+    },
+    {
+      "referenceName": "Хвостов 2-й, переулок",
+      "streetId": "street-6fefd35307a2",
+      "datasetName": "2-й Хвостов переулок"
+    },
+    {
+      "referenceName": "Хилков переулок",
+      "streetId": "street-7c50c17e2971",
+      "datasetName": "Хилков переулок"
+    },
+    {
+      "referenceName": "Хитровский переулок",
+      "streetId": "street-0b8ac256f964",
+      "datasetName": "Хитровский переулок"
+    },
+    {
+      "referenceName": "Хлебников переулок",
+      "streetId": "street-40de6f6fa629",
+      "datasetName": "Хлебников переулок"
+    },
+    {
+      "referenceName": "Хлебный переулок",
+      "streetId": "street-1158ed794aa2",
+      "datasetName": "Хлебный переулок"
+    },
+    {
+      "referenceName": "Хлыновский тупик",
+      "streetId": "street-79e6c40db2c6",
+      "datasetName": "Хлыновский тупик"
+    },
+    {
+      "referenceName": "Хмельницкого, мост",
+      "streetId": "street-2c33a5cf370f",
+      "datasetName": "мост Богдана Хмельницкого"
+    },
+    {
+      "referenceName": "Ходынская улица",
+      "streetId": "street-32eca58f0b50",
+      "datasetName": "Ходынская улица"
+    },
+    {
+      "referenceName": "Хользунова, переулок",
+      "streetId": "street-24e15a312de8",
+      "datasetName": "переулок Хользунова"
+    },
+    {
+      "referenceName": "Хомутовский тупик",
+      "streetId": "street-4626500e27cf",
+      "datasetName": "Хомутовский тупик"
+    },
+    {
+      "referenceName": "Хоромный тупик",
+      "streetId": "street-64a2f79e4711",
+      "datasetName": "Хоромный тупик"
+    },
+    {
+      "referenceName": "Хохловская площадь",
+      "streetId": "street-34e9d0374a91",
+      "datasetName": "Хохловская площадь"
+    },
+    {
+      "referenceName": "Хохловский переулок",
+      "streetId": "street-a7df6e940bd6",
+      "datasetName": "Хохловский переулок"
+    },
+    {
+      "referenceName": "Хрустальный переулок",
+      "streetId": "street-33952780c04d",
+      "datasetName": "Хрустальный переулок"
+    },
+    {
+      "referenceName": "Хрущёвский переулок",
+      "streetId": "street-20b48de0fa2e",
+      "datasetName": "Хрущёвский переулок"
+    },
+    {
+      "referenceName": "Цветной бульвар",
+      "streetId": "street-d5d5df5ac7d9",
+      "datasetName": "Цветной бульвар"
+    },
+    {
+      "referenceName": "Цветной переулок",
+      "streetId": "street-d0c13ce1390b",
+      "datasetName": "Цветной переулок"
+    },
+    {
+      "referenceName": "Цезаря Куникова, площадь",
+      "streetId": "street-937029d58580",
+      "datasetName": "площадь Цезаря Куникова"
+    },
+    {
+      "referenceName": "Центросоюзный переулок",
+      "streetId": "street-6b145b6b26c9",
+      "datasetName": "Центросоюзный переулок"
+    },
+    {
+      "referenceName": "Чаплыгина, улица",
+      "streetId": "street-16286e92d118",
+      "datasetName": "улица Чаплыгина"
+    },
+    {
+      "referenceName": "Чаянова, улица",
+      "streetId": "street-220b90078df2",
+      "datasetName": "улица Чаянова"
+    },
+    {
+      "referenceName": "Черниговский переулок",
+      "streetId": "street-32daa619abd3",
+      "datasetName": "Черниговский переулок"
+    },
+    {
+      "referenceName": "Черногрязская 2-я, улица",
+      "streetId": "street-9030becbbcb8",
+      "datasetName": "2-я Черногрязская улица"
+    },
+    {
+      "referenceName": "Чернышевского, переулок",
+      "streetId": "street-c05390ee06a1",
+      "datasetName": "переулок Чернышевского"
+    },
+    {
+      "referenceName": "Чертольский переулок",
+      "streetId": "street-18e8b8c5dcba",
+      "datasetName": "Чертольский переулок"
+    },
+    {
+      "referenceName": "Чесменская улица",
+      "streetId": "street-e773e7754192",
+      "datasetName": "Чесменская улица"
+    },
+    {
+      "referenceName": "Чешихинский проезд",
+      "streetId": "street-a8870ca0ef0b",
+      "datasetName": "Чешихинский проезд"
+    },
+    {
+      "referenceName": "Чистопрудный бульвар",
+      "streetId": "street-35c82216c10f",
+      "datasetName": "Чистопрудный бульвар"
+    },
+    {
+      "referenceName": "Чистый переулок",
+      "streetId": "street-4c45c5c8141e",
+      "datasetName": "Чистый переулок"
+    },
+    {
+      "referenceName": "Чугунный мост",
+      "streetId": "street-b8859659bd17",
+      "datasetName": "Чугунный мост"
+    },
+    {
+      "referenceName": "Шаболовка, улица",
+      "streetId": "street-a723177d8aab",
+      "datasetName": "улица Шаболовка"
+    },
+    {
+      "referenceName": "Шведский тупик",
+      "streetId": "street-0a17eb1e1349",
+      "datasetName": "Шведский тупик"
+    },
+    {
+      "referenceName": "Шелапутинский переулок",
+      "streetId": "street-af4117b52d75",
+      "datasetName": "Шелапутинский переулок"
+    },
+    {
+      "referenceName": "Шелепихи 1-я, улица",
+      "streetId": "street-8983813245fb",
+      "datasetName": "1-я улица Шелепихи"
+    },
+    {
+      "referenceName": "Шелепихинская набережная",
+      "streetId": "street-32d89857d8ae",
+      "datasetName": "Шелепихинская набережная"
+    },
+    {
+      "referenceName": "Шелепихинский мост",
+      "streetId": "street-26d0f650d65d",
+      "datasetName": "Шелепихинский мост"
+    },
+    {
+      "referenceName": "Шелепихинский тупик",
+      "streetId": "street-ebfdce41fd16",
+      "datasetName": "Шелепихинский тупик"
+    },
+    {
+      "referenceName": "Шелепихинское шоссе",
+      "streetId": "street-be59ef127f41",
+      "datasetName": "Шелепихинское шоссе"
+    },
+    {
+      "referenceName": "Шибаевский 1-й, переулок",
+      "streetId": "street-f21e169b7e85",
+      "datasetName": "1-й Шибаевский переулок"
+    },
+    {
+      "referenceName": "Школьная улица",
+      "streetId": "street-a13be05f40be",
+      "datasetName": "Школьная улица"
+    },
+    {
+      "referenceName": "Шломина, проезд",
+      "streetId": "street-9e9ac5ff117b",
+      "datasetName": "проезд Шломина"
+    },
+    {
+      "referenceName": "Шлюзовая набережная",
+      "streetId": "street-88e10897647d",
+      "datasetName": "Шлюзовая набережная"
+    },
+    {
+      "referenceName": "Шмитовский проезд",
+      "streetId": "street-72d31d816c7c",
+      "datasetName": "Шмитовский проезд"
+    },
+    {
+      "referenceName": "Шубинский переулок",
+      "streetId": "street-727b6c94f876",
+      "datasetName": "Шубинский переулок"
+    },
+    {
+      "referenceName": "Щемиловский 1-й, переулок",
+      "streetId": "street-77364b5311f7",
+      "datasetName": "1-й Щемиловский переулок"
+    },
+    {
+      "referenceName": "Щемиловский 2-й, переулок",
+      "streetId": "street-17ce2ac1858a",
+      "datasetName": "2-й Щемиловский переулок"
+    },
+    {
+      "referenceName": "Щепкина, улица",
+      "streetId": "street-23aa47d58f1d",
+      "datasetName": "улица Щепкина"
+    },
+    {
+      "referenceName": "Щетининский переулок",
+      "streetId": "street-81f4fff77645",
+      "datasetName": "Щетининский переулок"
+    },
+    {
+      "referenceName": "Щипковский 1-й, переулок",
+      "streetId": "street-5d3bf4b397b4",
+      "datasetName": "1-й Щипковский переулок"
+    },
+    {
+      "referenceName": "Щипковский 2-й, переулок",
+      "streetId": "street-ee4410d2eac2",
+      "datasetName": "2-й Щипковский переулок"
+    },
+    {
+      "referenceName": "Щипковский 4-й, переулок",
+      "streetId": "street-70317289c610",
+      "datasetName": "4-й Щипковский переулок"
+    },
+    {
+      "referenceName": "Щипок, улица",
+      "streetId": "street-750911b6f7f3",
+      "datasetName": "улица Щипок"
+    },
+    {
+      "referenceName": "Электрический переулок",
+      "streetId": "street-366b22cff4e0",
+      "datasetName": "Электрический переулок"
+    },
+    {
+      "referenceName": "Энтузиастов, бульвар",
+      "streetId": "street-7e5a627aa93e",
+      "datasetName": "бульвар Энтузиастов"
+    },
+    {
+      "referenceName": "Южный проезд",
+      "streetId": "street-43b31578c600",
+      "datasetName": "Южный проезд"
+    },
+    {
+      "referenceName": "Юлиуса Фучика, улица",
+      "streetId": "street-398def707a80",
+      "datasetName": "улица Юлиуса Фучика"
+    },
+    {
+      "referenceName": "Яблонный переулок",
+      "streetId": "street-8bddfc064dd3",
+      "datasetName": "Яблонный переулок"
+    },
+    {
+      "referenceName": "Языковский переулок",
+      "streetId": "street-6b74c8ce63f2",
+      "datasetName": "Языковский переулок"
+    },
+    {
+      "referenceName": "Якиманская набережная",
+      "streetId": "street-3682bb3dccde",
+      "datasetName": "Якиманская набережная"
+    },
+    {
+      "referenceName": "Якиманский переулок",
+      "streetId": "street-8c75ae09b92b",
+      "datasetName": "Якиманский переулок"
+    },
+    {
+      "referenceName": "Якиманский проезд",
+      "streetId": "street-4b984435c197",
+      "datasetName": "Якиманский проезд"
+    },
+    {
+      "referenceName": "Яковоапостольский переулок",
+      "streetId": "street-c484d5c20a53",
+      "datasetName": "Яковоапостольский переулок"
+    },
+    {
+      "referenceName": "Яузская улица",
+      "streetId": "street-aa14802c829e",
+      "datasetName": "Яузская улица"
+    },
+    {
+      "referenceName": "Яузские Ворота, площадь",
+      "streetId": "street-e720fb7a7a69",
+      "datasetName": "площадь Яузские Ворота"
+    },
+    {
+      "referenceName": "Яузский бульвар",
+      "streetId": "street-8612d3afc01a",
+      "datasetName": "Яузский бульвар"
+    }
+  ],
+  "referenceOnly": [
+    {
+      "referenceName": "Беленовский проезд",
+      "kind": "проезд",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Верхний Таганский тупик",
+      "kind": "тупик",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Вознесенский проезд",
+      "kind": "проезд",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Волочаевская улица",
+      "kind": "улица",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Гончарный 1-й, переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Заставный переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Звёзд Эстрады, площадь",
+      "kind": "площадь",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Золоторожский Вал, улица",
+      "kind": "улица",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Иерусалимский проезд",
+      "kind": "проезд",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Косой переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Красина, переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Нижний Таганский тупик",
+      "kind": "тупик",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Новая Сыромятническая улица",
+      "kind": "улица",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Новоконная площадь",
+      "kind": "площадь",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Новолужнецкий проезд",
+      "kind": "проезд",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Озерковский переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Переведеновский тупик",
+      "kind": "тупик",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Политехнический проезд",
+      "kind": "проезд",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Пушкинская набережная",
+      "kind": "набережная",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Рабочий 1-й, переулок",
+      "kind": "переулок",
+      "status": "no-current-osm-linear-geometry"
+    },
+    {
+      "referenceName": "Салтыковский мост",
+      "kind": "мост",
+      "status": "bridge-without-current-osm-cao-geometry"
+    }
+  ],
+  "datasetOnly": [
+    {
+      "streetId": "street-e0360314a968",
+      "datasetName": "4-й Ирининский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-cce0ad0b3d08",
+      "datasetName": "аллея Славы",
+      "kind": "аллея",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-530592444b89",
+      "datasetName": "Андреевский железнодорожный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-66155e7f7a3a",
+      "datasetName": "Безымянный переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-705ee1aef517",
+      "datasetName": "Белорусский железнодорожный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-833675882b16",
+      "datasetName": "Берсеневский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-2205ce67fc5d",
+      "datasetName": "Большой мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-4ceeda9f540e",
+      "datasetName": "Бутырская улица",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-fb7172abb4f6",
+      "datasetName": "Воспитательный проезд",
+      "kind": "проезд",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-1f3ea08cab4b",
+      "datasetName": "Горбатый мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-add8de6dba4b",
+      "datasetName": "Домниковский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-2ff2f26ca058",
+      "datasetName": "Дорогомиловский автодорожный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-241cbba22300",
+      "datasetName": "Дорогомиловский железнодорожный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-6d8b3e630f82",
+      "datasetName": "Дорогомиловский мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-b51dec42283d",
+      "datasetName": "Институтский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-9a81c15f8232",
+      "datasetName": "Крестовский мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-08b42c9611c3",
+      "datasetName": "Лепёхинский тупик",
+      "kind": "тупик",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-e47d4010f70a",
+      "datasetName": "Лужков мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-ae7c73bdcc7c",
+      "datasetName": "Новолефортовский мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-fba7d29223d2",
+      "datasetName": "Парящий мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-460f0ef9eef0",
+      "datasetName": "Пекуновский тупик",
+      "kind": "тупик",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-c9caf61074fb",
+      "datasetName": "переулок Льва Выготского",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-618679c3c255",
+      "datasetName": "Площадь Пушкина",
+      "kind": "площадь",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-0e7224f0bd18",
+      "datasetName": "проспект Багратиона",
+      "kind": "проспект",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-d27cefcf1f93",
+      "datasetName": "Рубцов мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-ef413467b334",
+      "datasetName": "Самарский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-70196afe3b1e",
+      "datasetName": "Средний каменный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-27fc8a9c4f2d",
+      "datasetName": "Тессинский мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-1ad418906ab8",
+      "datasetName": "Третьяковский мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-9f16624f808d",
+      "datasetName": "Троицкий мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-9ba1ff6fedd1",
+      "datasetName": "улица Архитектора Великовского",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-be6ed42ae48f",
+      "datasetName": "улица Архитектора Рочегова",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-779e11ea1b35",
+      "datasetName": "улица Высоцкого",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-73a5398bbfe5",
+      "datasetName": "улица Кривошеева",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-83fed93f57e6",
+      "datasetName": "улица Образцова",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-2d24f1daef44",
+      "datasetName": "улица Эрисмана",
+      "kind": "улица",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-0ff80b25ece2",
+      "datasetName": "Усачёвский переулок",
+      "kind": "переулок",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-864381ea3868",
+      "datasetName": "Хитровская площадь",
+      "kind": "площадь",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-a7c0e118b148",
+      "datasetName": "Шлюзовой мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    },
+    {
+      "streetId": "street-400bca6dd124",
+      "datasetName": "Шлюзовой пешеходный мост",
+      "kind": "мост",
+      "status": "not-present-in-reference-snapshot"
+    }
+  ]
+}
