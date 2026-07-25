@@ -59,6 +59,11 @@ test('createMatcher requires a street type and accepts typed abbreviations', () 
             id: 'bolotnaya-square',
             name: 'Болотная площадь',
             aliases: []
+        },
+        {
+            id: 'krymsky-bridge',
+            name: 'Крымский мост',
+            aliases: []
         }
     ]);
 
@@ -73,8 +78,25 @@ test('createMatcher requires a street type and accepts typed abbreviations', () 
     assert.equal(matcher.match('Болотная площадь').streetId, 'bolotnaya-square');
 
     assert.equal(matcher.match('Болотная').status, 'incomplete');
+    assert.equal(matcher.match('Крымский').status, 'incomplete');
+    assert.equal(matcher.match('Крымский мост').streetId, 'krymsky-bridge');
     assert.equal(matcher.match('неизвестная улица').status, 'unknown');
     assert.equal(matcher.match('   ').status, 'empty');
+});
+
+test('formatPercentage uses one decimal only when needed', () => {
+    assert.equal(core.formatPercentage(0, 1098), '0%');
+    assert.equal(core.formatPercentage(38, 1070), '3,6%');
+    assert.equal(core.formatPercentage(57, 57), '100%');
+    assert.equal(core.formatPercentage(1, 0), '0%');
+});
+
+test('inspectability follows quiz and learning mode rules', () => {
+    assert.equal(core.isStreetInspectable('quiz', false, false, true), false);
+    assert.equal(core.isStreetInspectable('quiz', false, true, false), true);
+    assert.equal(core.isStreetInspectable('quiz', true, false, false), true);
+    assert.equal(core.isStreetInspectable('learning', false, false, true), true);
+    assert.equal(core.isStreetInspectable('learning', true, true, false), false);
 });
 
 test('loadProgress rejects corrupt and incompatible saved state', async (t) => {

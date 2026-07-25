@@ -11,6 +11,7 @@ Contains:
 <h2>General</h2>
 
 - [Memory training, such as memorizing the numbers after the decimal point in the number pi](https://kirilldikalin.github.io/kirilldikalin.io/brain/main_brain.html)
+- [Moscow CAO street and bridge trainer](https://kirilldikalin.github.io/kirilldikalin.io/brain/map_msk/map_msk.html)
 
 <br><br>
 
@@ -25,13 +26,15 @@ Contains:
 <h2>Общее</h2>
 
 - [Тренировка памяти](https://kirilldikalin.github.io/kirilldikalin.io/brain/main_brain.html)
+- [Тренажёр улиц и мостов ЦАО Москвы](https://kirilldikalin.github.io/kirilldikalin.io/brain/map_msk/map_msk.html)
 
 ## Browser dependencies
 
 - Highlight.js is loaded only by the knowledge base, where it highlights Python code examples.
 - MathJax is loaded only by Euler pages that contain TeX formulas.
 - The Moscow streets trainer uses a local copy of Leaflet 1.9.4 and a local GeoJSON dataset derived
-  from OpenStreetMap. It does not request map tiles or a map API at runtime.
+  from OpenStreetMap. It does not request map tiles or a map API at runtime. The regular mode
+  tracks answers; learning mode reveals names on the map for all or selected CAO districts.
 
 ## Yandex Maps API key
 

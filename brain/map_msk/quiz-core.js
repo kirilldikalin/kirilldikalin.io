@@ -310,6 +310,25 @@
         });
     }
 
+    function isStreetInspectable(mode, complete, guessed, learningAvailable) {
+        if (normalizeMode(mode) === 'learning') {
+            return Boolean(learningAvailable);
+        }
+        return Boolean(complete || guessed);
+    }
+
+    function formatPercentage(value, total) {
+        if (!total) {
+            return '0%';
+        }
+
+        var percentage = value / total * 100;
+        return percentage.toLocaleString('ru-RU', {
+            minimumFractionDigits: Number.isInteger(percentage) ? 0 : 1,
+            maximumFractionDigits: 1
+        }) + '%';
+    }
+
     root.MoscowStreetQuizCore = Object.freeze({
         STORAGE_KEY: STORAGE_KEY,
         normalizeAnswer: normalizeAnswer,
@@ -319,6 +338,8 @@
         loadProgress: loadProgress,
         saveProgress: saveProgress,
         clearProgress: clearProgress,
-        streetMatchesDistrictSelection: streetMatchesDistrictSelection
+        streetMatchesDistrictSelection: streetMatchesDistrictSelection,
+        isStreetInspectable: isStreetInspectable,
+        formatPercentage: formatPercentage
     });
 }(typeof window === 'undefined' ? globalThis : window));

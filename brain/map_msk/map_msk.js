@@ -569,10 +569,12 @@
         if (!state.loaded) {
             return false;
         }
-        if (state.mode === 'learning') {
-            return isLearningStreetAvailable(streetId);
-        }
-        return state.complete || state.guessedIds.has(streetId);
+        return core.isStreetInspectable(
+            state.mode,
+            state.complete,
+            state.guessedIds.has(streetId),
+            isLearningStreetAvailable(streetId)
+        );
     }
 
     function streetStyle(streetId) {
@@ -1062,21 +1064,10 @@
         state.streetPickerBuilt = true;
     }
 
-    function formatPercentage(value, total) {
-        if (!total) {
-            return '0%';
-        }
-        var percentage = value / total * 100;
-        return percentage.toLocaleString('ru-RU', {
-            minimumFractionDigits: Number.isInteger(percentage) ? 0 : 1,
-            maximumFractionDigits: 1
-        }) + '%';
-    }
-
     function renderInterface(options) {
         var guessedCount = state.guessedIds.size;
         var total = state.streets.length;
-        var percentage = formatPercentage(guessedCount, total);
+        var percentage = core.formatPercentage(guessedCount, total);
         var isLearning = state.mode === 'learning';
 
         elements.progress.max = Math.max(total, 1);
@@ -1134,7 +1125,7 @@
         var guessedCount = guessedStreets.length;
         var showAll = state.complete;
         var visibleStreets = showAll ? streets : guessedStreets;
-        var percentage = formatPercentage(guessedCount, streets.length);
+        var percentage = core.formatPercentage(guessedCount, streets.length);
 
         card.count.textContent =
             guessedCount + ' / ' + streets.length + ' · ' + percentage;
@@ -1230,7 +1221,8 @@
         elements.error.hidden = true;
         elements.retry.disabled = isLoading;
         elements.mapSection.hidden = false;
-        elements.districtsSection.hidden = isLoading;
+        elements.districtsSection.hidden =
+            isLoading || !state.loaded || state.mode === 'learning';
 
         if (isLoading) {
             elements.input.disabled = true;
