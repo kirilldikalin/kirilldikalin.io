@@ -27,7 +27,9 @@ class MemoryStorage {
 
 const emptyProgress = {
     guessedIds: [],
-    showMissing: false
+    showMissing: false,
+    mode: 'quiz',
+    learningDistrictIds: []
 };
 
 test('normalizeAnswer normalizes Russian street names and common abbreviations', () => {
@@ -41,12 +43,12 @@ test('normalizeAnswer normalizes Russian street names and common abbreviations',
     assert.equal(core.normalizeAnswer(null), '');
 });
 
-test('createMatcher accepts unique aliases and reports ambiguous type-free aliases', () => {
+test('createMatcher requires a street type and accepts typed abbreviations', () => {
     const matcher = core.createMatcher([
         {
             id: 'nikitskaya',
             name: 'Большая Никитская улица',
-            aliases: ['ул. Большая Никитская', 'Большая Никитская']
+            aliases: ['ул. Большая Никитская']
         },
         {
             id: 'bolotnaya-street',
@@ -65,21 +67,17 @@ test('createMatcher accepts unique aliases and reports ambiguous type-free alias
         streetId: 'nikitskaya',
         normalizedValue: 'большая никитская улица'
     });
-    assert.equal(matcher.match('большая никитская').streetId, 'nikitskaya');
+    assert.equal(matcher.match('большая никитская').status, 'incomplete');
+    assert.equal(matcher.match('Большая Никитская ул.').streetId, 'nikitskaya');
     assert.equal(matcher.match('Болотная улица').streetId, 'bolotnaya-street');
     assert.equal(matcher.match('Болотная площадь').streetId, 'bolotnaya-square');
 
-    const ambiguous = matcher.match('Болотная');
-    assert.equal(ambiguous.status, 'ambiguous');
-    assert.deepEqual(
-        ambiguous.streetIds.slice().sort(),
-        ['bolotnaya-square', 'bolotnaya-street']
-    );
+    assert.equal(matcher.match('Болотная').status, 'incomplete');
     assert.equal(matcher.match('неизвестная улица').status, 'unknown');
     assert.equal(matcher.match('   ').status, 'empty');
 });
 
-test('loadProgress rejects corrupt, incompatible and stale saved state', async (t) => {
+test('loadProgress rejects corrupt and incompatible saved state', async (t) => {
     const validStreetIds = new Set(['street-1', 'street-2']);
 
     await t.test('without storage', () => {
@@ -102,14 +100,22 @@ test('loadProgress rejects corrupt, incompatible and stale saved state', async (
         assert.deepEqual(core.loadProgress(storage, 'dataset-v1', validStreetIds), emptyProgress);
     });
 
-    await t.test('with another dataset version', () => {
+    await t.test('migrates schema 1 across a dataset update', () => {
         const storage = new MemoryStorage();
         storage.setItem(core.STORAGE_KEY, JSON.stringify({
             schemaVersion: 1,
             datasetVersion: 'dataset-v0',
             guessedIds: ['street-1']
         }));
-        assert.deepEqual(core.loadProgress(storage, 'dataset-v1', validStreetIds), emptyProgress);
+        assert.deepEqual(
+            core.loadProgress(storage, 'dataset-v1', validStreetIds),
+            {
+                guessedIds: ['street-1'],
+                showMissing: false,
+                mode: 'quiz',
+                learningDistrictIds: []
+            }
+        );
     });
 
     await t.test('with a non-array list of guesses', () => {
@@ -135,17 +141,26 @@ test('loadProgress rejects corrupt, incompatible and stale saved state', async (
 test('loadProgress restores only unique street IDs from the current dataset', () => {
     const storage = new MemoryStorage();
     storage.setItem(core.STORAGE_KEY, JSON.stringify({
-        schemaVersion: 1,
+        schemaVersion: 2,
         datasetVersion: 'dataset-v1',
         guessedIds: ['street-2', 'deleted-street', 'street-1', 'street-2'],
-        showMissing: true
+        showMissing: true,
+        mode: 'learning',
+        learningDistrictIds: ['arbat', 'deleted-district', 'arbat']
     }));
 
     assert.deepEqual(
-        core.loadProgress(storage, 'dataset-v1', new Set(['street-1', 'street-2'])),
+        core.loadProgress(
+            storage,
+            'dataset-v1',
+            new Set(['street-1', 'street-2']),
+            new Set(['arbat', 'basmanny'])
+        ),
         {
             guessedIds: ['street-2', 'street-1'],
-            showMissing: true
+            showMissing: true,
+            mode: 'learning',
+            learningDistrictIds: ['arbat']
         }
     );
 });
@@ -158,16 +173,20 @@ test('saveProgress writes versioned state and clearProgress removes it', () => {
             storage,
             'dataset-v2',
             new Set(['street-1', 'street-3']),
-            true
+            true,
+            'learning',
+            new Set(['arbat', 'khamovniki'])
         ),
         true
     );
 
     const stored = JSON.parse(storage.getItem(core.STORAGE_KEY));
-    assert.equal(stored.schemaVersion, 1);
+    assert.equal(stored.schemaVersion, 2);
     assert.equal(stored.datasetVersion, 'dataset-v2');
     assert.deepEqual(stored.guessedIds, ['street-1', 'street-3']);
     assert.equal(stored.showMissing, true);
+    assert.equal(stored.mode, 'learning');
+    assert.deepEqual(stored.learningDistrictIds, ['arbat', 'khamovniki']);
     assert.equal(Number.isNaN(Date.parse(stored.updatedAt)), false);
 
     assert.equal(core.clearProgress(storage), true);
@@ -184,8 +203,20 @@ test('saveProgress and clearProgress handle unavailable storage', () => {
         }
     };
 
-    assert.equal(core.saveProgress(null, 'dataset-v1', [], false), false);
+    assert.equal(core.saveProgress(null, 'dataset-v1', [], false, 'quiz', []), false);
     assert.equal(core.clearProgress(null), false);
-    assert.equal(core.saveProgress(storage, 'dataset-v1', [], false), false);
+    assert.equal(core.saveProgress(storage, 'dataset-v1', [], false, 'quiz', []), false);
     assert.equal(core.clearProgress(storage), false);
+});
+
+test('streetMatchesDistrictSelection uses every intersected district', () => {
+    const street = {
+        districtIds: ['arbat', 'presnensky'],
+        quizDistrictId: 'arbat'
+    };
+
+    assert.equal(core.streetMatchesDistrictSelection(street, new Set()), true);
+    assert.equal(core.streetMatchesDistrictSelection(street, new Set(['arbat'])), true);
+    assert.equal(core.streetMatchesDistrictSelection(street, new Set(['presnensky'])), true);
+    assert.equal(core.streetMatchesDistrictSelection(street, new Set(['tverskoy'])), false);
 });

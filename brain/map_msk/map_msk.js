@@ -28,6 +28,8 @@
         pulsingIds: new Set(),
         pulseTimers: new Map(),
         matcher: null,
+        mode: 'quiz',
+        learningDistrictIds: new Set(),
         showMissing: false,
         complete: false,
         selectedStreetId: null,
@@ -37,7 +39,9 @@
         storageWarningShown: false,
         contextLayer: null,
         districtLayer: null,
-        streetLayer: null
+        districtLayers: new Map(),
+        streetLayer: null,
+        fullBounds: null
     };
 
     function init() {
@@ -60,12 +64,17 @@
 
     function cacheElements() {
         elements.panel = document.getElementById('quiz-panel');
+        elements.modeQuiz = document.getElementById('mode-quiz');
+        elements.modeLearning = document.getElementById('mode-learning');
+        elements.learningControls = document.getElementById('learning-controls');
+        elements.learningDistrictFilter = document.getElementById('learning-district-filter');
         elements.input = document.getElementById('street-answer');
         elements.feedback = document.getElementById('answer-feedback');
         elements.progress = document.getElementById('quiz-progress');
         elements.progressText = document.getElementById('progress-text');
         elements.toggleMissing = document.getElementById('toggle-missing');
         elements.reset = document.getElementById('reset-quiz');
+        elements.actions = document.getElementById('quiz-actions');
         elements.error = document.getElementById('quiz-error');
         elements.errorMessage = document.getElementById('quiz-error-message');
         elements.retry = document.getElementById('retry-load');
@@ -82,6 +91,18 @@
 
     function bindPageEvents() {
         elements.input.addEventListener('input', scheduleAnswerCheck);
+        elements.modeQuiz.addEventListener('click', function () {
+            setMode('quiz');
+        });
+        elements.modeLearning.addEventListener('click', function () {
+            setMode('learning');
+        });
+        elements.learningDistrictFilter.addEventListener('change', function (event) {
+            if (!event.target.matches('input[type="checkbox"][data-district-id]')) {
+                return;
+            }
+            updateLearningDistrictSelection();
+        });
         elements.input.addEventListener('keydown', function (event) {
             if (event.key !== 'Enter' || event.isComposing || isComposing) {
                 return;
@@ -157,7 +178,7 @@
         );
 
         map.on('click', function () {
-            if (!state.complete || !state.selectedStreetId) {
+            if (!state.selectedStreetId) {
                 return;
             }
             clearSelectedStreet();
@@ -236,7 +257,7 @@
             throw new Error('Ожидалось 10 районов ЦАО, найдено: ' + districts.length + '.');
         }
         if (!streets.length) {
-            throw new Error('Список улиц пуст.');
+            throw new Error('Список объектов пуст.');
         }
 
         var districtIds = new Set();
@@ -272,8 +293,8 @@
                 street.districtIds.map(String) :
                 [];
 
-            if (!id || !name || !hasGeometry(street, ['LineString', 'MultiLineString'])) {
-                throw new Error('У одной из улиц отсутствует id, название или линейная геометрия.');
+            if (!id || !name || !hasGeometry(street, ['Point', 'LineString', 'MultiLineString'])) {
+                throw new Error('У одного из объектов отсутствует id, название или геометрия.');
             }
             if (streetIds.has(id)) {
                 throw new Error('Повторяющийся id улицы: ' + id + '.');
@@ -340,10 +361,13 @@
         var restored = core.loadProgress(
             state.storage,
             state.datasetVersion,
-            new Set(state.streetById.keys())
+            new Set(state.streetById.keys()),
+            new Set(state.districtById.keys())
         );
         state.guessedIds = new Set(restored.guessedIds);
         state.showMissing = restored.showMissing;
+        state.mode = restored.mode;
+        state.learningDistrictIds = new Set(restored.learningDistrictIds);
         state.complete = state.guessedIds.size === state.streets.length;
         state.selectedStreetId = null;
         state.hoveredStreetId = null;
@@ -351,24 +375,27 @@
         state.loaded = true;
 
         renderMapData();
+        buildLearningDistrictFilter();
         buildDistrictCards();
         renderInterface();
         setLoadingState(false);
 
         if (state.complete) {
-            setFeedback('Прогресс восстановлен: все улицы уже названы.', 'success');
+            setFeedback('Прогресс восстановлен: все объекты уже названы.', 'success');
         } else if (state.guessedIds.size) {
             setFeedback(
                 'Прогресс восстановлен: ' + state.guessedIds.size + ' из ' + state.streets.length + '.',
                 'neutral'
             );
         } else {
-            setFeedback('Карта готова. Начинайте вводить названия.', 'neutral');
+            setFeedback('Карта готова.', 'neutral');
         }
 
         window.requestAnimationFrame(function () {
             map.invalidateSize({ animate: false });
-            if (!state.complete) {
+            if (state.mode === 'learning') {
+                fitLearningSelection();
+            } else if (!state.complete) {
                 elements.input.focus({ preventScroll: true });
             }
         });
@@ -392,6 +419,7 @@
     function renderMapData() {
         removeExistingMapLayers();
         state.streetLayers = new Map();
+        state.districtLayers = new Map();
 
         state.contextLayer = window.L.geoJSON(state.context.map(featureFromEntity), {
             pane: 'quiz-context-pane',
@@ -411,6 +439,7 @@
 
         state.districtLayer = window.L.geoJSON(state.districts.map(featureFromEntity), {
             pane: 'quiz-district-pane',
+            interactive: false,
             style: {
                 pane: 'quiz-district-pane',
                 color: '#8f8f89',
@@ -420,13 +449,7 @@
                 fillOpacity: 0.06
             },
             onEachFeature: function (feature, layer) {
-                var tooltipContent = document.createElement('span');
-                tooltipContent.textContent = feature.properties.name;
-                layer.bindTooltip(tooltipContent, {
-                    sticky: true,
-                    direction: 'top',
-                    opacity: 1
-                });
+                state.districtLayers.set(feature.properties.id, layer);
             }
         }).addTo(map);
 
@@ -435,6 +458,12 @@
             bubblingMouseEvents: false,
             style: function (feature) {
                 return streetStyle(feature.properties.id);
+            },
+            pointToLayer: function (feature, latlng) {
+                return window.L.circleMarker(
+                    latlng,
+                    streetStyle(feature.properties.id)
+                );
             },
             onEachFeature: bindStreetLayer
         }).addTo(map);
@@ -448,6 +477,7 @@
             bounds = state.streetLayer.getBounds();
         }
         if (bounds.isValid()) {
+            state.fullBounds = bounds;
             map.fitBounds(bounds, {
                 padding: [12, 12],
                 animate: false
@@ -494,10 +524,16 @@
 
     function bindStreetLayer(feature, layer) {
         var streetId = feature.properties.id;
+        var streetName = feature.properties.name;
         state.streetLayers.set(streetId, layer);
+        layer.bindTooltip(streetName, {
+            sticky: true,
+            direction: 'top',
+            opacity: 1
+        });
 
         layer.on('mouseover', function () {
-            if (!state.complete) {
+            if (!canInspectStreet(streetId)) {
                 return;
             }
             state.hoveredStreetId = streetId;
@@ -505,7 +541,7 @@
             updateMapStreetLabel();
         });
         layer.on('mouseout', function () {
-            if (!state.complete || state.hoveredStreetId !== streetId) {
+            if (state.hoveredStreetId !== streetId) {
                 return;
             }
             state.hoveredStreetId = null;
@@ -513,7 +549,7 @@
             updateMapStreetLabel();
         });
         layer.on('click', function (event) {
-            if (!state.complete) {
+            if (!canInspectStreet(streetId)) {
                 return;
             }
             window.L.DomEvent.stopPropagation(event.originalEvent);
@@ -521,55 +557,112 @@
         });
     }
 
+    function isLearningStreetAvailable(streetId) {
+        var street = state.streetById.get(streetId);
+        return Boolean(
+            street &&
+            core.streetMatchesDistrictSelection(street, state.learningDistrictIds)
+        );
+    }
+
+    function canInspectStreet(streetId) {
+        if (!state.loaded) {
+            return false;
+        }
+        if (state.mode === 'learning') {
+            return isLearningStreetAvailable(streetId);
+        }
+        return state.complete || state.guessedIds.has(streetId);
+    }
+
     function streetStyle(streetId) {
         var emphasized = state.selectedStreetId === streetId ||
             state.hoveredStreetId === streetId;
+        var street = state.streetById.get(streetId);
+        var isPoint = Boolean(street && street.geometry.type === 'Point');
+        var baseStyle = {
+            pane: 'quiz-street-pane',
+            className: 'quiz-map-street',
+            lineCap: 'round',
+            lineJoin: 'round',
+            dashArray: null,
+            fill: isPoint
+        };
 
         if (state.pulsingIds.has(streetId)) {
-            return {
-                pane: 'quiz-street-pane',
-                className: 'quiz-map-street',
+            return Object.assign({}, baseStyle, {
                 color: '#000000',
                 weight: 7,
                 opacity: 1,
-                lineCap: 'round',
-                lineJoin: 'round'
-            };
+                radius: 7,
+                fillColor: '#000000',
+                fillOpacity: 1
+            });
         }
 
         if (emphasized) {
-            return {
-                pane: 'quiz-street-pane',
-                className: 'quiz-map-street',
+            return Object.assign({}, baseStyle, {
                 color: '#000000',
                 weight: 5,
                 opacity: 1,
-                lineCap: 'round',
-                lineJoin: 'round'
-            };
+                radius: 7,
+                fillColor: '#000000',
+                fillOpacity: 1
+            });
+        }
+
+        if (state.mode === 'learning') {
+            if (isLearningStreetAvailable(streetId)) {
+                return Object.assign({}, baseStyle, {
+                    color: '#b6b6b0',
+                    weight: 1.6,
+                    opacity: 0.95,
+                    radius: 3.5,
+                    fillColor: '#b6b6b0',
+                    fillOpacity: 0.95
+                });
+            }
+            return Object.assign({}, baseStyle, {
+                color: '#e1e1dc',
+                weight: 0.9,
+                opacity: 0.38,
+                radius: 2.5,
+                fillColor: '#e1e1dc',
+                fillOpacity: 0.38
+            });
         }
 
         if (state.guessedIds.has(streetId)) {
-            return {
-                pane: 'quiz-street-pane',
-                className: 'quiz-map-street',
+            return Object.assign({}, baseStyle, {
                 color: '#262626',
                 weight: 3.1,
                 opacity: 1,
-                lineCap: 'round',
-                lineJoin: 'round'
-            };
+                radius: 4.5,
+                fillColor: '#262626',
+                fillOpacity: 1
+            });
         }
 
-        return {
-            pane: 'quiz-street-pane',
-            className: 'quiz-map-street',
+        if (state.showMissing) {
+            return Object.assign({}, baseStyle, {
+                color: '#74746e',
+                weight: 2.15,
+                opacity: 0.95,
+                dashArray: '6 5',
+                radius: 4,
+                fillColor: '#74746e',
+                fillOpacity: 0.95
+            });
+        }
+
+        return Object.assign({}, baseStyle, {
             color: '#d4d4cf',
             weight: 1.25,
             opacity: 0.88,
-            lineCap: 'round',
-            lineJoin: 'round'
-        };
+            radius: 2.7,
+            fillColor: '#d4d4cf',
+            fillOpacity: 0.88
+        });
     }
 
     function configureStreetPath(streetId, layer) {
@@ -578,14 +671,52 @@
             return;
         }
 
-        path.setAttribute('aria-hidden', 'true');
-        path.removeAttribute('tabindex');
-        path.removeAttribute('role');
-        path.removeAttribute('aria-label');
+        var inspectable = canInspectStreet(streetId);
+        path.classList.toggle('is-interactive', inspectable);
+        if (!inspectable) {
+            path.setAttribute('aria-hidden', 'true');
+            path.removeAttribute('tabindex');
+            path.removeAttribute('role');
+            path.removeAttribute('aria-label');
+            return;
+        }
+
+        var street = state.streetById.get(streetId);
+        path.removeAttribute('aria-hidden');
+        path.setAttribute('tabindex', '0');
+        path.setAttribute('role', 'button');
+        path.setAttribute('aria-label', street.name);
+        if (path.dataset.quizKeyboardBound) {
+            return;
+        }
+        path.dataset.quizKeyboardBound = 'true';
+        path.addEventListener('focus', function () {
+            if (!canInspectStreet(streetId)) {
+                return;
+            }
+            state.hoveredStreetId = streetId;
+            refreshStreetStyle(streetId);
+            updateMapStreetLabel();
+        });
+        path.addEventListener('blur', function () {
+            if (state.hoveredStreetId !== streetId) {
+                return;
+            }
+            state.hoveredStreetId = null;
+            refreshStreetStyle(streetId);
+            updateMapStreetLabel();
+        });
+        path.addEventListener('keydown', function (event) {
+            if ((event.key === 'Enter' || event.key === ' ') &&
+                canInspectStreet(streetId)) {
+                event.preventDefault();
+                selectStreet(streetId);
+            }
+        });
     }
 
     function scheduleAnswerCheck() {
-        if (isComposing || !state.loaded || state.complete) {
+        if (isComposing || !state.loaded || state.complete || state.mode !== 'quiz') {
             return;
         }
 
@@ -606,7 +737,7 @@
 
     function checkAnswer() {
         clearAnswerTimer();
-        if (!state.loaded || state.complete) {
+        if (!state.loaded || state.complete || state.mode !== 'quiz') {
             return;
         }
 
@@ -614,8 +745,11 @@
         if (result.status === 'empty') {
             return;
         }
+        if (result.status === 'incomplete') {
+            return;
+        }
         if (result.status === 'ambiguous') {
-            setFeedback('Название неоднозначно — допишите тип улицы полностью.', 'warning');
+            setFeedback('Название неоднозначно.', 'warning');
             return;
         }
         if (result.status === 'unknown') {
@@ -677,8 +811,8 @@
         var progressSaved = persistProgress();
         setFeedback(
             progressSaved ?
-                'Готово: названы все улицы.' :
-                'Все улицы названы, но браузер не разрешил сохранить результат.',
+                'Готово: названы все объекты.' :
+                'Все объекты названы, но браузер не разрешил сохранить результат.',
             progressSaved ? 'success' : 'warning'
         );
         renderInterface();
@@ -707,7 +841,7 @@
             return;
         }
 
-        if (!window.confirm('Сбросить весь прогресс по улицам ЦАО?')) {
+        if (!window.confirm('Сбросить весь прогресс по ЦАО?')) {
             return;
         }
 
@@ -724,7 +858,7 @@
         state.hoveredStreetId = null;
         elements.input.value = '';
         elements.mapStreetSelect.value = '';
-        var progressCleared = core.clearProgress(state.storage);
+        var progressCleared = persistProgress();
         setFeedback(
             progressCleared ?
                 'Прогресс сброшен. Можно начать заново.' :
@@ -742,14 +876,18 @@
             refreshStreetStyle(previousId);
         }
         refreshStreetStyle(streetId);
-        elements.mapStreetSelect.value = streetId;
+        if (state.mode === 'quiz' && state.complete) {
+            elements.mapStreetSelect.value = streetId;
+        }
         updateMapStreetLabel();
     }
 
     function clearSelectedStreet() {
         var previousId = state.selectedStreetId;
         state.selectedStreetId = null;
-        elements.mapStreetSelect.value = '';
+        if (elements.mapStreetSelect) {
+            elements.mapStreetSelect.value = '';
+        }
         if (previousId) {
             refreshStreetStyle(previousId);
         }
@@ -759,15 +897,114 @@
     function refreshStreetStyle(streetId) {
         var layer = state.streetLayers.get(streetId);
         if (layer) {
-            layer.setStyle(streetStyle(streetId));
+            var style = streetStyle(streetId);
+            layer.setStyle(style);
+            if (typeof layer.setRadius === 'function' && style.radius) {
+                layer.setRadius(style.radius);
+            }
             configureStreetPath(streetId, layer);
         }
     }
 
     function refreshAllStreetStyles() {
         state.streetLayers.forEach(function (layer, streetId) {
-            layer.setStyle(streetStyle(streetId));
+            var style = streetStyle(streetId);
+            layer.setStyle(style);
+            if (typeof layer.setRadius === 'function' && style.radius) {
+                layer.setRadius(style.radius);
+            }
             configureStreetPath(streetId, layer);
+        });
+    }
+
+    function buildLearningDistrictFilter() {
+        elements.learningDistrictFilter.replaceChildren();
+        state.districts.forEach(function (district) {
+            var label = document.createElement('label');
+            var input = document.createElement('input');
+            var text = document.createElement('span');
+
+            label.className = 'quiz-district-choice';
+            input.type = 'checkbox';
+            input.dataset.districtId = district.id;
+            input.checked = state.learningDistrictIds.has(district.id);
+            text.textContent = district.name;
+            label.append(input, text);
+            elements.learningDistrictFilter.append(label);
+        });
+    }
+
+    function updateLearningDistrictSelection() {
+        var selectedIds = new Set();
+        elements.learningDistrictFilter
+            .querySelectorAll('input[data-district-id]:checked')
+            .forEach(function (input) {
+                selectedIds.add(input.dataset.districtId);
+            });
+        state.learningDistrictIds = selectedIds;
+        closeStreetTooltips();
+        state.selectedStreetId = null;
+        state.hoveredStreetId = null;
+        persistProgress();
+        renderInterface();
+        fitLearningSelection();
+    }
+
+    function setMode(mode) {
+        var nextMode = mode === 'learning' ? 'learning' : 'quiz';
+        if (state.mode === nextMode && state.loaded) {
+            return;
+        }
+        clearAnswerTimer();
+        closeStreetTooltips();
+        state.mode = nextMode;
+        state.selectedStreetId = null;
+        state.hoveredStreetId = null;
+        if (state.loaded) {
+            persistProgress();
+            renderInterface();
+            window.requestAnimationFrame(function () {
+                map.invalidateSize({ animate: false });
+                if (state.mode === 'learning') {
+                    fitLearningSelection();
+                } else if (state.fullBounds && state.fullBounds.isValid()) {
+                    map.fitBounds(state.fullBounds, {
+                        padding: [12, 12],
+                        animate: false
+                    });
+                }
+            });
+        }
+    }
+
+    function fitLearningSelection() {
+        if (!state.loaded || state.mode !== 'learning') {
+            return;
+        }
+        var bounds = window.L.latLngBounds([]);
+        if (state.learningDistrictIds.size === 0) {
+            bounds = state.fullBounds;
+        } else {
+            state.learningDistrictIds.forEach(function (districtId) {
+                var layer = state.districtLayers.get(districtId);
+                if (layer && typeof layer.getBounds === 'function') {
+                    bounds.extend(layer.getBounds());
+                }
+            });
+        }
+        if (bounds && bounds.isValid()) {
+            map.fitBounds(bounds, {
+                padding: [18, 18],
+                animate: false
+            });
+        }
+    }
+
+    function closeStreetTooltips() {
+        state.streetLayers.forEach(function (layer) {
+            if (typeof layer.closeTooltip === 'function') {
+                layer.closeTooltip();
+            }
         });
     }
 
@@ -813,7 +1050,7 @@
         elements.mapStreetSelect.replaceChildren();
         var emptyOption = document.createElement('option');
         emptyOption.value = '';
-        emptyOption.textContent = 'Выберите улицу';
+        emptyOption.textContent = 'Выберите объект';
         elements.mapStreetSelect.append(emptyOption);
 
         state.streets.forEach(function (street) {
@@ -825,36 +1062,59 @@
         state.streetPickerBuilt = true;
     }
 
+    function formatPercentage(value, total) {
+        if (!total) {
+            return '0%';
+        }
+        var percentage = value / total * 100;
+        return percentage.toLocaleString('ru-RU', {
+            minimumFractionDigits: Number.isInteger(percentage) ? 0 : 1,
+            maximumFractionDigits: 1
+        }) + '%';
+    }
+
     function renderInterface(options) {
         var guessedCount = state.guessedIds.size;
         var total = state.streets.length;
-        var percentage = total ? Math.round(guessedCount / total * 100) : 0;
+        var percentage = formatPercentage(guessedCount, total);
+        var isLearning = state.mode === 'learning';
 
         elements.progress.max = Math.max(total, 1);
         elements.progress.value = guessedCount;
-        elements.progress.textContent = percentage + '%';
-        elements.progressText.textContent = guessedCount + ' / ' + total;
+        elements.progress.textContent = percentage;
+        elements.progressText.textContent =
+            guessedCount + ' / ' + total + ' · ' + percentage;
 
-        elements.input.disabled = !state.loaded || state.complete;
-        elements.toggleMissing.disabled = !state.loaded || state.complete;
+        elements.panel.hidden = isLearning;
+        elements.actions.hidden = isLearning;
+        elements.learningControls.hidden = !isLearning;
+        elements.districtsSection.hidden = isLearning || !state.loaded;
+        elements.modeQuiz.classList.toggle('is-active', !isLearning);
+        elements.modeLearning.classList.toggle('is-active', isLearning);
+        elements.modeQuiz.setAttribute('aria-pressed', String(!isLearning));
+        elements.modeLearning.setAttribute('aria-pressed', String(isLearning));
+
+        elements.input.disabled = !state.loaded || state.complete || isLearning;
+        elements.toggleMissing.disabled = !state.loaded || state.complete || isLearning;
         elements.toggleMissing.setAttribute('aria-pressed', String(state.showMissing));
         elements.toggleMissing.textContent = state.showMissing ?
             'Скрыть оставшиеся' :
             'Показать оставшиеся';
-        elements.reset.disabled = !state.loaded || guessedCount === 0;
-        elements.complete.hidden = !state.complete;
+        elements.reset.disabled = !state.loaded || guessedCount === 0 || isLearning;
+        elements.complete.hidden = !state.complete || isLearning;
         if (state.complete && !state.streetPickerBuilt) {
             buildStreetPicker();
         }
-        elements.mapStreetPicker.hidden = !state.complete;
-        elements.map.classList.toggle('is-complete', state.complete);
+        elements.mapStreetPicker.hidden = !state.complete || isLearning;
+        elements.map.classList.toggle('is-complete', state.complete && !isLearning);
+        elements.map.classList.toggle('is-learning', isLearning);
 
-        if (options && options.streetId) {
+        if (!isLearning && options && options.streetId) {
             renderDistrictCard(state.streetById.get(options.streetId).quizDistrictId);
-        } else {
+        } else if (!isLearning) {
             renderDistrictCards();
-            refreshAllStreetStyles();
         }
+        refreshAllStreetStyles();
         updateMapStreetLabel();
     }
 
@@ -872,15 +1132,18 @@
             return state.guessedIds.has(street.id);
         });
         var guessedCount = guessedStreets.length;
-        var showAll = state.showMissing || state.complete;
+        var showAll = state.complete;
         var visibleStreets = showAll ? streets : guessedStreets;
+        var percentage = formatPercentage(guessedCount, streets.length);
 
-        card.count.textContent = guessedCount + ' / ' + streets.length;
+        card.count.textContent =
+            guessedCount + ' / ' + streets.length + ' · ' + percentage;
         card.progress.max = Math.max(streets.length, 1);
         card.progress.value = guessedCount;
         card.root.setAttribute(
             'aria-label',
-            district.name + ': ' + guessedCount + ' из ' + streets.length
+            district.name + ': ' + guessedCount + ' из ' + streets.length +
+            ', ' + percentage
         );
         card.list.replaceChildren();
 
@@ -906,7 +1169,9 @@
 
     function updateMapStreetLabel() {
         var activeStreetId = state.hoveredStreetId || state.selectedStreetId;
-        if (state.complete && activeStreetId && state.streetById.has(activeStreetId)) {
+        if (activeStreetId &&
+            state.streetById.has(activeStreetId) &&
+            canInspectStreet(activeStreetId)) {
             var street = state.streetById.get(activeStreetId);
             var districtNames = street.districtIds.map(function (districtId) {
                 var district = state.districtById.get(districtId);
@@ -916,12 +1181,23 @@
                 (districtNames.length ? ' — ' + districtNames.join(', ') : '');
             return;
         }
-        if (state.complete) {
+        if (state.mode === 'learning') {
             elements.mapStreetLabel.textContent =
-                'Наведите курсор на улицу, нажмите на неё или выберите с клавиатуры.';
+                'Наведите курсор на объект, чтобы увидеть его название.';
             return;
         }
-        elements.mapStreetLabel.textContent = 'Угаданные улицы будут выделены чёрным.';
+        if (state.showMissing && !state.complete) {
+            elements.mapStreetLabel.textContent =
+                'Оставшиеся объекты выделены пунктиром; названия по-прежнему скрыты.';
+            return;
+        }
+        if (state.complete || state.guessedIds.size) {
+            elements.mapStreetLabel.textContent =
+                'Наведите курсор на угаданный объект, чтобы увидеть его название.';
+            return;
+        }
+        elements.mapStreetLabel.textContent =
+            'Угаданные улицы и мосты будут выделены чёрным.';
     }
 
     function persistProgress() {
@@ -929,7 +1205,9 @@
             state.storage,
             state.datasetVersion,
             state.guessedIds,
-            state.showMissing
+            state.showMissing,
+            state.mode,
+            state.learningDistrictIds
         );
 
         if (!saved && !state.storageWarningShown) {
@@ -958,7 +1236,7 @@
             elements.input.disabled = true;
             elements.toggleMissing.disabled = true;
             elements.reset.disabled = true;
-            setFeedback('Загружаю карту и список улиц…', 'neutral');
+            setFeedback('Загружаю карту и список объектов…', 'neutral');
         }
     }
 
@@ -971,7 +1249,7 @@
         elements.mapSection.hidden = true;
         elements.districtsSection.hidden = true;
         elements.errorMessage.textContent = message ||
-            'Не удалось прочитать локальный набор улиц. Проверьте соединение и попробуйте ещё раз.';
+            'Не удалось прочитать локальный набор объектов. Проверьте соединение и попробуйте ещё раз.';
         elements.retry.disabled = false;
         elements.input.disabled = true;
         elements.toggleMissing.disabled = true;

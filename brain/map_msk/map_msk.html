@@ -39,17 +39,31 @@
 
     <main class="street-quiz">
         <header class="quiz-intro">
-            <p class="quiz-kicker">тренировка памяти</p>
             <h1>Улицы Москвы: ЦАО</h1>
-            <p>
-                Пишите названия улиц без подтверждения кнопкой. Когда ответ совпадёт с одним из
-                допустимых вариантов, улица загорится на карте, а прогресс обновится автоматически.
-            </p>
         </header>
+
+        <div class="quiz-mode-switch" role="group" aria-label="Режим тренажёра">
+            <button class="quiz-mode-button is-active" id="mode-quiz" type="button" aria-pressed="true">
+                Обычный режим
+            </button>
+            <button class="quiz-mode-button" id="mode-learning" type="button" aria-pressed="false">
+                Обучение
+            </button>
+        </div>
+
+        <section class="quiz-learning-controls" id="learning-controls" hidden>
+            <div>
+                <h2>Районы для обучения</h2>
+                <p>Ничего не выбрано — доступен весь ЦАО.</p>
+            </div>
+            <fieldset class="quiz-district-filter" id="learning-district-filter">
+                <legend class="visually-hidden">Выберите районы</legend>
+            </fieldset>
+        </section>
 
         <section class="quiz-panel" id="quiz-panel" aria-busy="true">
             <div class="quiz-answer-block">
-                <label for="street-answer">Название улицы</label>
+                <label for="street-answer">Название улицы или моста</label>
                 <input
                     id="street-answer"
                     name="street-answer"
@@ -58,14 +72,11 @@
                     autocapitalize="sentences"
                     spellcheck="false"
                     enterkeyhint="done"
-                    aria-describedby="answer-help answer-feedback"
+                    aria-describedby="answer-feedback"
                     disabled
                 >
-                <p id="answer-help" class="quiz-help">
-                    Регистр, «ё/е», дефисы и сокращения вроде «ул.» не важны. Нажимать Enter необязательно.
-                </p>
                 <p id="answer-feedback" class="quiz-feedback" aria-live="polite" aria-atomic="true">
-                    Загружаю карту и список улиц…
+                    Загружаю карту и список объектов…
                 </p>
             </div>
 
@@ -74,22 +85,7 @@
                     <span>Прогресс</span>
                     <strong id="progress-text">0 / 0</strong>
                 </div>
-                <progress id="quiz-progress" max="1" value="0" aria-label="Общий прогресс по улицам ЦАО">0%</progress>
-            </div>
-
-            <div class="quiz-actions">
-                <button
-                    class="quiz-button"
-                    id="toggle-missing"
-                    type="button"
-                    aria-pressed="false"
-                    disabled
-                >
-                    Показать оставшиеся
-                </button>
-                <button class="quiz-button quiz-button-secondary" id="reset-quiz" type="button" disabled>
-                    Сбросить прогресс
-                </button>
+                <progress id="quiz-progress" max="1" value="0" aria-label="Общий прогресс по объектам ЦАО">0%</progress>
             </div>
         </section>
 
@@ -104,34 +100,49 @@
         <section class="quiz-complete" id="quiz-complete" aria-live="polite" hidden>
             <p class="quiz-complete-mark" aria-hidden="true">✓</p>
             <div>
-                <h2>Все улицы названы</h2>
-                <p>Теперь наведите курсор на улицу, нажмите на неё или выберите с клавиатуры — название появится под картой.</p>
+                <h2>Все объекты названы</h2>
+                <p>Теперь названия всех улиц и мостов доступны прямо на карте.</p>
             </div>
         </section>
 
         <section class="quiz-map-section" aria-labelledby="map-heading">
-            <h2 class="visually-hidden" id="map-heading">Карта улиц Центрального административного округа</h2>
+            <h2 class="visually-hidden" id="map-heading">Карта улиц и мостов Центрального административного округа</h2>
             <div class="quiz-map-frame">
                 <div
                     class="quiz-map"
                     id="quiz-map"
                     role="region"
-                    aria-label="Интерактивная карта улиц Центрального административного округа Москвы"
+                    aria-label="Интерактивная карта улиц и мостов Центрального административного округа Москвы"
                 ></div>
                 <div class="quiz-loading" id="quiz-loading" role="status">
                     Загружаю геометрию…
                 </div>
             </div>
             <div class="quiz-map-picker" id="map-street-picker" hidden>
-                <label for="map-street-select">Найти названную улицу на карте</label>
+                <label for="map-street-select">Найти названный объект на карте</label>
                 <select id="map-street-select">
-                    <option value="">Выберите улицу</option>
+                    <option value="">Выберите объект</option>
                 </select>
             </div>
             <p class="quiz-map-caption" id="map-street-label" aria-live="polite" aria-atomic="true">
-                Угаданные улицы будут выделены чёрным.
+                Угаданные улицы и мосты будут выделены чёрным.
             </p>
         </section>
+
+        <div class="quiz-actions" id="quiz-actions">
+            <button
+                class="quiz-button"
+                id="toggle-missing"
+                type="button"
+                aria-pressed="false"
+                disabled
+            >
+                Показать оставшиеся
+            </button>
+            <button class="quiz-button quiz-button-secondary" id="reset-quiz" type="button" disabled>
+                Начать заново
+            </button>
+        </div>
 
         <section class="quiz-districts" id="quiz-districts" aria-labelledby="districts-heading" hidden>
             <div class="quiz-section-heading">
@@ -139,7 +150,7 @@
                     <p class="quiz-kicker">районы ЦАО</p>
                     <h2 id="districts-heading">Прогресс по районам</h2>
                 </div>
-                <p>Одна улица учитывается только в одном районе, даже если проходит через несколько.</p>
+                <p>Каждый объект учитывается в одном основном районе.</p>
             </div>
             <div class="quiz-district-grid" id="district-grid"></div>
         </section>

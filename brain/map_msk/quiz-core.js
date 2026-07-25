@@ -2,7 +2,7 @@
     'use strict';
 
     var STORAGE_KEY = 'kirilldikalin.map_msk.progress';
-    var STORAGE_SCHEMA_VERSION = 1;
+    var STORAGE_SCHEMA_VERSION = 2;
 
     var TYPE_FORMS = {
         'ал': 'аллея',
@@ -91,16 +91,15 @@
         return tokens.join(' ');
     }
 
-    function withoutStreetType(normalizedValue) {
+    function hasStreetType(normalizedValue) {
         if (!normalizedValue) {
-            return '';
+            return false;
         }
 
         var tokens = normalizedValue.split(' ');
-        if (tokens.length > 1 && STREET_TYPES[tokens[tokens.length - 1]]) {
-            tokens.pop();
-        }
-        return tokens.join(' ');
+        return tokens.length > 1 && tokens.some(function (token) {
+            return Boolean(STREET_TYPES[token]);
+        });
     }
 
     function addOwner(owners, alias, streetId) {
@@ -116,7 +115,6 @@
 
     function createMatcher(streets) {
         var owners = new Map();
-        var derivedAliases = [];
 
         streets.forEach(function (street) {
             var rawAliases = [street.name].concat(
@@ -128,21 +126,10 @@
                 if (!normalizedAlias) {
                     return;
                 }
-
-                addOwner(owners, normalizedAlias, street.id);
-
-                var shortAlias = withoutStreetType(normalizedAlias);
-                if (shortAlias && shortAlias !== normalizedAlias) {
-                    derivedAliases.push({
-                        alias: shortAlias,
-                        streetId: street.id
-                    });
+                if (hasStreetType(normalizedAlias)) {
+                    addOwner(owners, normalizedAlias, street.id);
                 }
             });
-        });
-
-        derivedAliases.forEach(function (candidate) {
-            addOwner(owners, candidate.alias, candidate.streetId);
         });
 
         var index = new Map();
@@ -164,6 +151,13 @@
                     return {
                         status: 'empty',
                         normalizedValue: ''
+                    };
+                }
+
+                if (!hasStreetType(normalizedValue)) {
+                    return {
+                        status: 'incomplete',
+                        normalizedValue: normalizedValue
                     };
                 }
 
@@ -205,10 +199,16 @@
         return String(version);
     }
 
-    function loadProgress(storage, datasetVersion, validStreetIds) {
+    function normalizeMode(value) {
+        return value === 'learning' ? 'learning' : 'quiz';
+    }
+
+    function loadProgress(storage, datasetVersion, validStreetIds, validDistrictIds) {
         var emptyProgress = {
             guessedIds: [],
-            showMissing: false
+            showMissing: false,
+            mode: 'quiz',
+            learningDistrictIds: []
         };
 
         if (!storage) {
@@ -223,8 +223,8 @@
 
             var stored = JSON.parse(rawValue);
             if (
-                stored.schemaVersion !== STORAGE_SCHEMA_VERSION ||
-                stored.datasetVersion !== datasetVersion ||
+                (stored.schemaVersion !== 1 &&
+                    stored.schemaVersion !== STORAGE_SCHEMA_VERSION) ||
                 !Array.isArray(stored.guessedIds)
             ) {
                 return emptyProgress;
@@ -237,16 +237,37 @@
                 }
             });
 
+            var districtIds = new Set();
+            if (stored.schemaVersion === STORAGE_SCHEMA_VERSION &&
+                Array.isArray(stored.learningDistrictIds)) {
+                stored.learningDistrictIds.forEach(function (districtId) {
+                    if (!validDistrictIds || validDistrictIds.has(districtId)) {
+                        districtIds.add(districtId);
+                    }
+                });
+            }
+
             return {
                 guessedIds: Array.from(uniqueIds),
-                showMissing: Boolean(stored.showMissing)
+                showMissing: Boolean(stored.showMissing),
+                mode: stored.schemaVersion === STORAGE_SCHEMA_VERSION ?
+                    normalizeMode(stored.mode) :
+                    'quiz',
+                learningDistrictIds: Array.from(districtIds)
             };
         } catch (error) {
             return emptyProgress;
         }
     }
 
-    function saveProgress(storage, datasetVersion, guessedIds, showMissing) {
+    function saveProgress(
+        storage,
+        datasetVersion,
+        guessedIds,
+        showMissing,
+        mode,
+        learningDistrictIds
+    ) {
         if (!storage) {
             return false;
         }
@@ -257,6 +278,8 @@
                 datasetVersion: datasetVersion,
                 guessedIds: Array.from(guessedIds),
                 showMissing: Boolean(showMissing),
+                mode: normalizeMode(mode),
+                learningDistrictIds: Array.from(learningDistrictIds || []),
                 updatedAt: new Date().toISOString()
             }));
             return true;
@@ -278,14 +301,24 @@
         }
     }
 
+    function streetMatchesDistrictSelection(street, selectedDistrictIds) {
+        if (!selectedDistrictIds || selectedDistrictIds.size === 0) {
+            return true;
+        }
+        return Array.isArray(street.districtIds) && street.districtIds.some(function (districtId) {
+            return selectedDistrictIds.has(districtId);
+        });
+    }
+
     root.MoscowStreetQuizCore = Object.freeze({
         STORAGE_KEY: STORAGE_KEY,
         normalizeAnswer: normalizeAnswer,
-        withoutStreetType: withoutStreetType,
+        hasStreetType: hasStreetType,
         createMatcher: createMatcher,
         getDatasetVersion: getDatasetVersion,
         loadProgress: loadProgress,
         saveProgress: saveProgress,
-        clearProgress: clearProgress
+        clearProgress: clearProgress,
+        streetMatchesDistrictSelection: streetMatchesDistrictSelection
     });
 }(typeof window === 'undefined' ? globalThis : window));
