@@ -1,0 +1,761 @@
+{
+  "schemaVersion": 1,
+  "datasetVersion": "osm-20260725111701-e4291ab624e1",
+  "generatedAt": "2026-07-25T11:17:01Z",
+  "description": "Ambiguous aliases are intentionally omitted from cao-map.json.",
+  "collisions": [
+    {
+      "alias": "александра невского",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-6192e7743da4",
+          "name": "улица Александра Невского",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-a7c2bd2b5f76",
+          "name": "переулок Александра Невского",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "андроньевская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-24a11eb600aa",
+          "name": "Андроньевская площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-4b32435fd6cf",
+          "name": "Андроньевская набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "банный",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-34f511f62fc8",
+          "name": "Банный переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-df8a7e97aa15",
+          "name": "Банный проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "басманный",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-5b2df48b8c4a",
+          "name": "Басманный переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-e92373e1338c",
+          "name": "Басманный тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "безымянный",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-66155e7f7a3a",
+          "name": "Безымянный переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-b1b930e9dbc7",
+          "name": "Безымянный проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "болотная",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-04d3081c4b53",
+          "name": "Болотная площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-34f3db3310c3",
+          "name": "Болотная улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-924e322e59b2",
+          "name": "Болотная набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "весковский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-49bc95131e9c",
+          "name": "Весковский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-d869d97ed616",
+          "name": "Весковский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "гончарная",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-02903b9e2465",
+          "name": "Гончарная набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-97bcfe5c5318",
+          "name": "Гончарная улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "госпитальная",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-1641d255d76d",
+          "name": "Госпитальная набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-378c4df502a1",
+          "name": "Госпитальная улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-3d5534469071",
+          "name": "Госпитальная площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "достоевского",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-8754a5f675bd",
+          "name": "переулок Достоевского",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-9438bc0697d9",
+          "name": "улица Достоевского",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "земляной вал",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-376754c1267a",
+          "name": "улица Земляной Вал",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-9c1288531215",
+          "name": "площадь Земляной Вал",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "зубовская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-46df669950e7",
+          "name": "Зубовская улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-fb0afe31e333",
+          "name": "Зубовская площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "зубовский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-ab1f58ca7aa6",
+          "name": "Зубовский бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-cc38fc64def3",
+          "name": "Зубовский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "крутицкая",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-287fef13fcc5",
+          "name": "Крутицкая набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-a32eaa5ff391",
+          "name": "Крутицкая улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "крымский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-76b0ea67d8e4",
+          "name": "Крымский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-8ed05102bf11",
+          "name": "Крымский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "москворецкая",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-47ad94d6322e",
+          "name": "Москворецкая улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-d71cdde75506",
+          "name": "Москворецкая набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "никитский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-a6ce188620fa",
+          "name": "Никитский бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-efc9e7792138",
+          "name": "Никитский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "николоямская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-da5fe69d6d59",
+          "name": "Николоямская набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-e873749579fe",
+          "name": "Николоямская улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "новинский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-b6a1778dd09c",
+          "name": "Новинский бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-e2343a211241",
+          "name": "Новинский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "новоспасский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-a879263a3768",
+          "name": "Новоспасский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-b6480d414f2f",
+          "name": "Новоспасский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "ольховский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-414be050d3af",
+          "name": "Ольховский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-8048f620d27a",
+          "name": "Ольховский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "петровский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-4a96de0ad0d6",
+          "name": "Петровский бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-ff20b77a9152",
+          "name": "Петровский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "рязанский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-02cf48a4f185",
+          "name": "Рязанский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-49e5f2a4dceb",
+          "name": "Рязанский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "садовническая",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-27bb3f1d2100",
+          "name": "Садовническая набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-2900393e3709",
+          "name": "Садовническая улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "садовнический",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-b9270f1a8a55",
+          "name": "Садовнический переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-f52059c8f530",
+          "name": "Садовнический проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "самотечная",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-3001d969c145",
+          "name": "Самотёчная улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-b6188e2412c7",
+          "name": "Самотёчная площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "смоленская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-a53c4ff1db9b",
+          "name": "Смоленская набережная",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-a9c65df0de33",
+          "name": "Смоленская площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-b1ca49bcf8e2",
+          "name": "Смоленская улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "солянский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-42f1450e662d",
+          "name": "Солянский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-61acdf0b6341",
+          "name": "Солянский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "спартаковская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-080ec8146985",
+          "name": "Спартаковская улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-999d10326dfc",
+          "name": "Спартаковская площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "сретенский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-46a638a22717",
+          "name": "Сретенский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-b2290127b021",
+          "name": "Сретенский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-bef69ff471f0",
+          "name": "Сретенский бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "сытинский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-1b963315deae",
+          "name": "Сытинский тупик",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-93a0eea85ab5",
+          "name": "Сытинский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "таганская",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-1c4a0f5ab929",
+          "name": "Таганская площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-3ac1ed48b676",
+          "name": "Таганская улица",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "тверской",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-ca7dbcf1ed82",
+          "name": "Тверской проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-f9b55396fff8",
+          "name": "Тверской бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "трубная",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-6621c19f043e",
+          "name": "Трубная улица",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-7fdfbfaeb5f3",
+          "name": "Трубная площадь",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "цветной",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-d0c13ce1390b",
+          "name": "Цветной переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-d5d5df5ac7d9",
+          "name": "Цветной бульвар",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    },
+    {
+      "alias": "якиманский",
+      "omitted": true,
+      "streets": [
+        {
+          "id": "street-4b984435c197",
+          "name": "Якиманский проезд",
+          "origins": [
+            "type-stripped"
+          ]
+        },
+        {
+          "id": "street-8c75ae09b92b",
+          "name": "Якиманский переулок",
+          "origins": [
+            "type-stripped"
+          ]
+        }
+      ]
+    }
+  ],
+  "droppedShortStreets": [
+    "2-й Воспитательный проезд",
+    "Лефортовская площадь",
+    "шоссе Энтузиастов"
+  ]
+}
