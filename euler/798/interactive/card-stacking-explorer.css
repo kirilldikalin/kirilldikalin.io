@@ -1,0 +1,338 @@
+html,
+body {
+  min-width: 0;
+  margin: 0;
+  background: #fbfbfd;
+}
+
+body > main {
+  width: 100%;
+}
+
+.e798-explorer,
+.e798-explorer * {
+  box-sizing: border-box;
+}
+
+.e798-explorer {
+  --e798-ink: #202126;
+  --e798-muted: #6c6e77;
+  --e798-line: #a9abb3;
+  --e798-soft: #eceef3;
+  --e798-paper: #fbfbfd;
+  --e798-accent: #c9653b;
+  width: 100%;
+  min-width: 0;
+  padding: 1rem;
+  color: var(--e798-ink);
+  background: var(--e798-paper);
+  font-family: "Courier Prime", monospace;
+}
+
+.e798-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.e798-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.e798-tabs button,
+.e798-card-row button,
+.e798-child-list button {
+  min-height: 2.4rem;
+  border: 1px solid var(--e798-line);
+  background: var(--e798-paper);
+  color: var(--e798-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.e798-tabs button {
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+}
+
+.e798-tabs button[aria-selected="true"],
+.e798-card-row button[aria-pressed="true"],
+.e798-child-list button[aria-pressed="true"] {
+  border-color: var(--e798-ink);
+  background: var(--e798-ink);
+  color: var(--e798-paper);
+}
+
+.e798-tabs button:focus-visible,
+.e798-card-row button:focus-visible,
+.e798-child-list button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--e798-accent) 45%, transparent);
+  outline-offset: 2px;
+}
+
+.e798-controls {
+  display: grid;
+  grid-template-columns: minmax(13rem, auto) minmax(10rem, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.e798-controls label {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+
+.e798-controls input {
+  width: 100%;
+  accent-color: var(--e798-ink);
+}
+
+.e798-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem 1.2rem;
+}
+
+.e798-control-grid .e798-controls {
+  grid-template-columns: 1fr;
+  gap: 0.35rem;
+}
+
+.e798-instruction {
+  margin: 0.8rem 0 0.55rem;
+  color: var(--e798-muted);
+  text-align: center;
+}
+
+.e798-card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(3.2rem, 1fr));
+  gap: 0.45rem;
+  margin-bottom: 0.8rem;
+}
+
+.e798-card-row button {
+  padding: 0.6rem 0.4rem;
+  border-radius: 0.45rem;
+}
+
+.e798-card-row button::after {
+  display: block;
+  margin-top: 0.1rem;
+  color: var(--e798-muted);
+  content: "в колоде";
+  font-size: 0.72rem;
+}
+
+.e798-card-row button[aria-pressed="true"]::after {
+  color: var(--e798-paper);
+  content: "на столе";
+}
+
+.e798-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0.7rem 0;
+}
+
+.e798-metrics span {
+  display: flex;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: var(--e798-soft);
+}
+
+.e798-metrics small {
+  color: var(--e798-muted);
+}
+
+.e798-metrics strong {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.e798-position-map,
+.e798-distribution-chart,
+.e798-hadamard-network {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.e798-position-map text,
+.e798-distribution-chart text,
+.e798-hadamard-network text {
+  fill: var(--e798-ink);
+  font-family: inherit;
+}
+
+.e798-position-map .e798-axis,
+.e798-distribution-chart .e798-axis {
+  stroke: var(--e798-line);
+  stroke-width: 2;
+}
+
+.e798-position-map .e798-open {
+  fill: var(--e798-ink);
+  stroke: var(--e798-ink);
+  stroke-width: 2;
+}
+
+.e798-position-map .e798-free {
+  fill: var(--e798-paper);
+  stroke: var(--e798-line);
+  stroke-width: 2;
+}
+
+.e798-position-map .e798-blocker {
+  fill: var(--e798-accent);
+  stroke: var(--e798-accent);
+}
+
+.e798-position-map .e798-label,
+.e798-distribution-chart .e798-label,
+.e798-hadamard-network .e798-label {
+  fill: var(--e798-muted);
+  font-size: 15px;
+}
+
+.e798-position-map .e798-row-title,
+.e798-distribution-chart .e798-value,
+.e798-hadamard-network .e798-value {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.e798-mex {
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--e798-line);
+}
+
+.e798-mex > p,
+.e798-detail {
+  min-height: 1.4em;
+  margin: 0 0 0.55rem;
+  text-align: center;
+}
+
+.e798-child-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.e798-child-list button {
+  min-height: 2rem;
+  padding: 0.35rem 0.55rem;
+}
+
+.e798-distribution-chart .e798-grid {
+  stroke: var(--e798-soft);
+  stroke-width: 1;
+}
+
+.e798-distribution-chart .e798-bar {
+  fill: var(--e798-ink);
+}
+
+.e798-distribution-chart .e798-bar-zero {
+  fill: var(--e798-accent);
+}
+
+.e798-hadamard-network .e798-edge {
+  fill: none;
+  stroke: var(--e798-line);
+  stroke-width: 1.6;
+}
+
+.e798-hadamard-network .e798-edge-minus {
+  stroke-dasharray: 6 5;
+}
+
+.e798-hadamard-network .e798-edge-active {
+  stroke: var(--e798-ink);
+  stroke-width: 2.6;
+}
+
+.e798-hadamard-network .e798-node {
+  fill: var(--e798-paper);
+  stroke: var(--e798-line);
+  stroke-width: 2;
+}
+
+.e798-hadamard-network .e798-node-active {
+  fill: var(--e798-ink);
+  stroke: var(--e798-ink);
+}
+
+.e798-hadamard-network .e798-value-active {
+  fill: var(--e798-paper);
+}
+
+@media (max-width: 620px) {
+  .e798-explorer {
+    padding: 0.75rem;
+  }
+
+  .e798-tabs {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .e798-tabs button {
+    width: 100%;
+  }
+
+  .e798-controls,
+  .e798-control-grid {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .e798-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e798-metrics span {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .e798-card-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .e798-position-map .e798-label,
+  .e798-distribution-chart .e798-label,
+  .e798-hadamard-network .e798-label {
+    font-size: 18px;
+  }
+
+  .e798-position-map .e798-row-title,
+  .e798-distribution-chart .e798-value,
+  .e798-hadamard-network .e798-value {
+    font-size: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .e798-explorer * {
+    scroll-behavior: auto !important;
+  }
+}

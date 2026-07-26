@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 798 — числа Гранди и преобразование Адамара</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./card-stacking-explorer.css">
+  <script src="./card-stacking-core.js" defer></script>
+  <script src="./card-stacking-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e798-explorer" id="euler798-explorer" aria-labelledby="e798-title">
+      <h1 class="e798-sr-only" id="e798-title">От карточной позиции к XOR-свёртке</h1>
+
+      <div class="e798-tabs" role="tablist" aria-label="Этапы решения">
+        <button type="button" role="tab" aria-selected="true" aria-controls="e798-position-panel" id="e798-position-tab" data-e798-tab="position">
+          1. Одна масть
+        </button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e798-distribution-panel" id="e798-distribution-tab" data-e798-tab="distribution">
+          2. Распределение
+        </button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e798-hadamard-panel" id="e798-hadamard-tab" data-e798-tab="hadamard">
+          3. Адамар
+        </button>
+      </div>
+
+      <section role="tabpanel" aria-labelledby="e798-position-tab" id="e798-position-panel" data-e798-panel="position">
+        <div class="e798-controls">
+          <label for="e798-position-n">
+            Карт в масти <strong data-e798-position-n-value>5</strong>
+          </label>
+          <input id="e798-position-n" type="range" min="1" max="8" value="5" step="1">
+        </div>
+
+        <p class="e798-instruction">Выберите карты, которые изначально лежат на столе.</p>
+        <div class="e798-card-row" data-e798-cards aria-label="Открытые карты одной масти"></div>
+
+        <div class="e798-metrics" aria-live="polite">
+          <span>
+            <small>Координаты</small>
+            <strong data-e798-state>X = (0, 2, 4)</strong>
+          </span>
+          <span>
+            <small>Пропуски и блок</small>
+            <strong data-e798-characteristics>d = 2, h = ∞</strong>
+          </span>
+          <span>
+            <small>Число Гранди</small>
+            <strong data-e798-grundy>g = 2</strong>
+          </span>
+        </div>
+
+        <svg class="e798-position-map" viewBox="0 0 860 250" role="img" aria-labelledby="e798-position-title e798-position-description">
+          <title id="e798-position-title">Каноническая позиция и выбранный ход</title>
+          <desc id="e798-position-description">Заполненные точки обозначают открытые карты, пустые — свободные позиции. Нижняя строка показывает выбранного потомка.</desc>
+          <g data-e798-position-map></g>
+        </svg>
+
+        <div class="e798-mex">
+          <p data-e798-mex></p>
+          <div class="e798-child-list" data-e798-children aria-label="Допустимые ходы"></div>
+        </div>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e798-distribution-tab" id="e798-distribution-panel" data-e798-panel="distribution" hidden>
+        <div class="e798-control-grid">
+          <div class="e798-controls">
+            <label for="e798-distribution-n">
+              Карт в масти <strong data-e798-distribution-n-value>5</strong>
+            </label>
+            <input id="e798-distribution-n" type="range" min="1" max="8" value="5" step="1">
+          </div>
+          <div class="e798-controls">
+            <label for="e798-suits">
+              Мастей <strong data-e798-suits-value>2</strong>
+            </label>
+            <input id="e798-suits" type="range" min="1" max="4" value="2" step="1">
+          </div>
+        </div>
+
+        <div class="e798-metrics" aria-live="polite">
+          <span>
+            <small>Подмножеств</small>
+            <strong data-e798-subsets>32</strong>
+          </span>
+          <span>
+            <small>Проигрышных в одной масти</small>
+            <strong data-e798-zero-frequency>10</strong>
+          </span>
+          <span>
+            <small>Нулевая ним-сумма</small>
+            <strong data-e798-xor-zero>278</strong>
+          </span>
+        </div>
+
+        <svg class="e798-distribution-chart" viewBox="0 0 860 390" role="img" aria-labelledby="e798-distribution-title e798-distribution-description">
+          <title id="e798-distribution-title">Распределение подмножеств по числам Гранди</title>
+          <desc id="e798-distribution-description">Высота каждого столбца равна количеству начальных подмножеств с соответствующим числом Гранди.</desc>
+          <g data-e798-distribution-chart></g>
+        </svg>
+
+        <p class="e798-detail" data-e798-distribution-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e798-hadamard-tab" id="e798-hadamard-panel" data-e798-panel="hadamard" hidden>
+        <div class="e798-control-grid">
+          <div class="e798-controls">
+            <label for="e798-hadamard-n">
+              Карт в масти <strong data-e798-hadamard-n-value>5</strong>
+            </label>
+            <input id="e798-hadamard-n" type="range" min="2" max="8" value="5" step="1">
+          </div>
+          <div class="e798-controls">
+            <label for="e798-stage">
+              Этап <strong data-e798-stage-value>0</strong>
+            </label>
+            <input id="e798-stage" type="range" min="0" max="3" value="0" step="1">
+          </div>
+        </div>
+
+        <div class="e798-metrics" aria-live="polite">
+          <span>
+            <small>Длина массива</small>
+            <strong data-e798-length>L = 8</strong>
+          </span>
+          <span>
+            <small>Операция этапа</small>
+            <strong data-e798-operation>Исходные частоты</strong>
+          </span>
+          <span>
+            <small>Первый коэффициент</small>
+            <strong data-e798-first>32</strong>
+          </span>
+        </div>
+
+        <svg class="e798-hadamard-network" viewBox="0 0 900 470" role="img" aria-labelledby="e798-hadamard-title e798-hadamard-description">
+          <title id="e798-hadamard-title">Бабочки быстрого преобразования Уолша—Адамара</title>
+          <desc id="e798-hadamard-description">На каждом этапе пары значений u и v заменяются на u плюс v и u минус v.</desc>
+          <g data-e798-hadamard-network></g>
+        </svg>
+
+        <p class="e798-detail" data-e798-hadamard-detail></p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
