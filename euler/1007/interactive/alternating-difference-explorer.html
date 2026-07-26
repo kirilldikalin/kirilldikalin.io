@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 1007 — деревья скобок</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./alternating-difference-explorer.css">
+  <script src="./alternating-difference-core.js" defer></script>
+  <script src="./alternating-difference-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section
+      class="e1007-explorer"
+      id="euler1007-explorer"
+      aria-labelledby="e1007-title">
+      <div class="e1007-controls">
+        <label for="e1007-n">
+          <span id="e1007-title">Число знаков минус <i>n</i></span>
+          <strong id="e1007-n-value">3</strong>
+        </label>
+        <input id="e1007-n" type="range" min="1" max="7" value="3" step="1">
+      </div>
+
+      <div class="e1007-tree-nav">
+        <button id="e1007-previous" type="button" aria-label="Предыдущее дерево">←</button>
+        <p>
+          Расстановка <strong id="e1007-tree-index">3</strong>
+          из <strong id="e1007-tree-total">5</strong>
+        </p>
+        <button id="e1007-next" type="button" aria-label="Следующее дерево">→</button>
+      </div>
+
+      <p class="e1007-expression" id="e1007-expression" aria-live="polite">
+        (F₀ − F₁) − (F₂ − F₃)
+      </p>
+
+      <div class="e1007-metrics" aria-live="polite">
+        <span>
+          <small>Деревьев C<sub>n</sub></small>
+          <strong id="e1007-catalan">5</strong>
+        </span>
+        <span>
+          <small>Значение дерева</small>
+          <strong id="e1007-tree-value">0</strong>
+        </span>
+        <span>
+          <small>Сумма A(n)</small>
+          <strong id="e1007-total-value">−6</strong>
+        </span>
+      </div>
+
+      <svg
+        class="e1007-tree"
+        id="e1007-tree"
+        viewBox="0 0 900 390"
+        role="img"
+        aria-labelledby="e1007-tree-title e1007-tree-description">
+        <title id="e1007-tree-title">Бинарное дерево выбранной расстановки скобок</title>
+        <desc id="e1007-tree-description">
+          Сплошные рёбра ведут влево, штриховые — вправо и меняют знак всех листьев под ними.
+        </desc>
+        <g id="e1007-tree-canvas"></g>
+      </svg>
+
+      <p class="e1007-legend">
+        <span><i class="e1007-left-sample" aria-hidden="true"></i> левое ребро</span>
+        <span><i class="e1007-right-sample" aria-hidden="true"></i> правое ребро меняет знак</span>
+      </p>
+
+      <div class="e1007-summary">
+        <p id="e1007-polynomial">P₃(y) = 5 − 5y + y² − y³</p>
+        <div
+          class="e1007-coefficients"
+          id="e1007-coefficients"
+          aria-label="Суммарные коэффициенты листьев">
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

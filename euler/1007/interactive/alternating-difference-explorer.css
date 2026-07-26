@@ -1,0 +1,249 @@
+html,
+body {
+  min-width: 0;
+  margin: 0;
+  background: #fbfbfd;
+}
+
+body > main {
+  width: 100%;
+}
+
+.e1007-explorer,
+.e1007-explorer * {
+  box-sizing: border-box;
+}
+
+.e1007-explorer {
+  --e1007-ink: #202126;
+  --e1007-muted: #6c6e77;
+  --e1007-line: #a9abb3;
+  --e1007-soft: #eceef3;
+  --e1007-paper: #fbfbfd;
+  --e1007-accent: #343840;
+  width: 100%;
+  padding: 1rem;
+  color: var(--e1007-ink);
+  background: var(--e1007-paper);
+  font-family: "Courier Prime", monospace;
+}
+
+.e1007-controls {
+  display: grid;
+  grid-template-columns: minmax(13rem, auto) minmax(12rem, 1fr);
+  gap: 1rem;
+  align-items: center;
+}
+
+.e1007-controls label {
+  display: flex;
+  gap: 0.7rem;
+  align-items: baseline;
+}
+
+.e1007-controls input {
+  width: 100%;
+  accent-color: var(--e1007-accent);
+}
+
+.e1007-tree-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  align-items: center;
+  margin: 0.8rem 0 0;
+}
+
+.e1007-tree-nav p {
+  min-width: 14rem;
+  margin: 0;
+  text-align: center;
+}
+
+.e1007-tree-nav button {
+  width: 2.5rem;
+  min-height: 2.25rem;
+  border: 1px solid var(--e1007-ink);
+  border-radius: 0;
+  background: var(--e1007-paper);
+  color: var(--e1007-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.e1007-tree-nav button:hover,
+.e1007-tree-nav button:focus-visible {
+  background: var(--e1007-ink);
+  color: var(--e1007-paper);
+}
+
+.e1007-expression {
+  min-height: 1.5em;
+  margin: 0.8rem 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: 1.08rem;
+}
+
+.e1007-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.e1007-metrics span {
+  display: flex;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  flex-direction: column;
+  gap: 0.15rem;
+  background: var(--e1007-soft);
+}
+
+.e1007-metrics small {
+  color: var(--e1007-muted);
+}
+
+.e1007-metrics strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.e1007-tree {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 0.3rem;
+  overflow: visible;
+}
+
+.e1007-tree .e1007-edge {
+  fill: none;
+  stroke: var(--e1007-line);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.e1007-tree .e1007-edge-right {
+  stroke: var(--e1007-ink);
+  stroke-dasharray: 9 7;
+}
+
+.e1007-tree .e1007-node {
+  fill: var(--e1007-paper);
+  stroke: var(--e1007-ink);
+  stroke-width: 2;
+}
+
+.e1007-tree .e1007-leaf-positive {
+  fill: var(--e1007-ink);
+}
+
+.e1007-tree .e1007-leaf-negative {
+  fill: var(--e1007-paper);
+  stroke: var(--e1007-ink);
+  stroke-width: 3;
+}
+
+.e1007-tree text {
+  fill: var(--e1007-ink);
+  font-family: inherit;
+  font-size: 20px;
+  text-anchor: middle;
+}
+
+.e1007-tree .e1007-leaf-positive-label {
+  fill: var(--e1007-paper);
+}
+
+.e1007-legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.5rem;
+  margin: -0.2rem 0 0.75rem;
+  color: var(--e1007-muted);
+  font-size: 0.85rem;
+}
+
+.e1007-legend span {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.e1007-legend i {
+  display: inline-block;
+  width: 2.5rem;
+  border-top: 3px solid var(--e1007-line);
+}
+
+.e1007-legend .e1007-right-sample {
+  border-color: var(--e1007-ink);
+  border-top-style: dashed;
+}
+
+.e1007-summary {
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--e1007-line);
+}
+
+.e1007-summary > p {
+  margin: 0 0 0.7rem;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.e1007-coefficients {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(5.2rem, 1fr));
+  gap: 0.45rem;
+}
+
+.e1007-coefficient {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.45rem 0.55rem;
+  background: var(--e1007-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.e1007-coefficient strong {
+  color: var(--e1007-ink);
+}
+
+@media (max-width: 560px) {
+  .e1007-explorer {
+    padding: 0.75rem;
+  }
+
+  .e1007-controls {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+  }
+
+  .e1007-tree-nav p {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .e1007-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e1007-metrics span {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .e1007-tree text {
+    font-size: 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .e1007-explorer * {
+    scroll-behavior: auto !important;
+  }
+}

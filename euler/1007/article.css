@@ -1,0 +1,25 @@
+.euler1007-visualization-frame {
+  display: block;
+  width: 100%;
+  height: 750px;
+  margin: 0 0 2em;
+  border: 1px solid var(--color-border-variation-1);
+  border-radius: 0.7ex;
+  background: #fbfbfd;
+}
+
+.euler1007-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.euler1007-wide-formula {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media screen and (max-width: 50em) {
+  .euler1007-visualization-frame {
+    height: 900px;
+  }
+}

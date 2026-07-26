@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <title>1007. Чередующаяся разность — Kirill Dikalin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 1007: бинарные деревья, числа Каталана, производящие функции и точные вычисления в квадратичной алгебре.">
+  <meta property="og:title" content="1007. Чередующаяся разность — Kirill Dikalin">
+  <meta property="og:description" content="Разбор Project Euler 1007 с интерактивными деревьями скобок и полиномами суммарных знаков.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/1007.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/1007.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./1007/article.css">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+  <ul class="breadcrumb">
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    1007
+  </ul>
+
+  <div class="our_framework">
+    <div class="section_content">
+      <div id="toc_container" class="euler_article">
+        <h2 id="1007">Чередующаяся разность</h2>
+
+        <h3>1. Условие задачи</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Выпишем числа Фибоначчи
+          $F_0,F_1,\ldots,F_n$ и поставим между соседними числами знаки минус.
+          Затем добавим $n$ пар скобок так, чтобы каждая пара соответствовала ровно одной
+          операции вычитания. Иначе говоря, нужно перебрать все полные расстановки скобок
+          в выражении
+        </p>
+
+        <p align="center">
+          $$F_0-F_1-\cdots-F_n.$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для $n=3$ получается пять выражений. Их значения равны
+          $-4,-2,0,2,-2$, поэтому их сумма равна $-6$.
+          Обозначим через $A(n)$ сумму значений всех разных выражений.
+          Из условия также известны
+        </p>
+
+        <div class="euler1007-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Расстановка скобок</th>
+                <th>Значение</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>$(((F_0-F_1)-F_2)-F_3)$</td>
+                <td>$-4$</td>
+              </tr>
+              <tr>
+                <td>$((F_0-(F_1-F_2))-F_3)$</td>
+                <td>$-2$</td>
+              </tr>
+              <tr>
+                <td>$((F_0-F_1)-(F_2-F_3))$</td>
+                <td>$0$</td>
+              </tr>
+              <tr>
+                <td>$(F_0-((F_1-F_2)-F_3))$</td>
+                <td>$2$</td>
+              </tr>
+              <tr>
+                <td>$(F_0-(F_1-(F_2-F_3)))$</td>
+                <td>$-2$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p align="center">
+          $$
+          A(3)=-6,\qquad
+          A(10)=-177666,
+          $$
+        </p>
+
+        <p align="center">
+          $$
+          A(100)\equiv71792794\pmod{10^9+9}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Требуется найти $A(10^7)$ по тому же модулю.
+          Полное условие находится на
+          <a class="intext" href="https://projecteuler.net/problem=1007" target="_blank" rel="noopener noreferrer">странице Project Euler 1007</a>.
+          Численный ответ ниже намеренно не раскрывается.
+        </p>
+
+        <h3>2. Первая ловушка: считать выражения по одному</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Для малого $n$ хочется просто сгенерировать все варианты скобок, вычислить каждый
+          и сложить результаты. Проблема обнаруживается сразу после подсчёта вариантов.
+          Полная расстановка скобок — это
+          <a class="intext" href="https://en.wikipedia.org/wiki/Full_binary_tree" target="_blank" rel="noopener noreferrer">полное упорядоченное бинарное дерево</a>:
+          листья идут слева направо в порядке $F_0,\ldots,F_n$, а каждая внутренняя вершина
+          означает вычитание левого подвыражения и правого.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Таких деревьев ровно
+        </p>
+
+        <p align="center">
+          $$
+          C_n=\frac{1}{n+1}\binom{2n}{n},
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          где $C_n$ — $n$-е число Каталана. Последовательность начинается как
+          $1,1,2,5,14,42,\ldots$, а асимптотически
+        </p>
+
+        <p align="center">
+          $$
+          C_n\sim\frac{4^n}{\sqrt{\pi}\,n^{3/2}}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          При $n=10^7$ речь уже не идёт ни о каком переборе. Но сами значения Фибоначчи
+          пока тоже не помогают. Сначала нужно понять, что именно скобки делают со знаками.
+        </p>
+
+        <h3>3. Знак листа определяется дорогой в дереве</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          В любом конкретном дереве результат остаётся линейной комбинацией исходных чисел:
+        </p>
+
+        <p align="center">
+          $$
+          \varepsilon_0F_0+\varepsilon_1F_1+\cdots+\varepsilon_nF_n,
+          \qquad \varepsilon_k\in\{-1,1\}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть $r_T(k)$ — число правых рёбер на пути от корня дерева $T$ к листу $F_k$.
+          Каждый переход в правое поддерево добавляет внешний минус и переворачивает знаки
+          всех листьев внутри. Поэтому
+        </p>
+
+        <p align="center">
+          $$
+          \boxed{\varepsilon_T(k)=(-1)^{r_T(k)}}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Это и есть первый настоящий поворот решения: вместо огромных числовых выражений
+          можно считать только знаки листьев. На схеме ниже сплошное ребро ведёт влево,
+          а штриховое — вправо и меняет знак. Ползунок меняет $n$, стрелки перебирают
+          расстановки скобок. Нижняя строка показывает уже не одно дерево, а сумму знаков
+          по всем деревьям выбранного размера.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Формулу для знака можно строго доказать индукцией по дереву. У одиночного
+          листа знак равен $+1$. Если корень имеет вид $T=L-R$, то листья $L$
+          сохраняют локальные знаки, а каждый лист $R$ получает ещё один внешний
+          множитель $-1$. Это ровно соответствует добавлению одного правого ребра
+          на пути от корня. Никаких других способов изменить знак в дереве нет.
+        </p>
+
+        <iframe
+          class="euler1007-visualization-frame"
+          src="./1007/interactive/alternating-difference-explorer.html"
+          title="Деревья расстановок скобок и суммарные коэффициенты листьев"
+          loading="lazy">
+        </iframe>
+
+        <h3>4. Полином суммарных знаков</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Обозначим через $\mathcal T_n$ множество всех полных упорядоченных бинарных
+          деревьев с $n+1$ листьями и определим суммарный коэффициент листа
+        </p>
+
+        <p align="center">
+          $$
+          s_{n,k}=\sum_{T\in\mathcal T_n}\varepsilon_T(k).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Тогда искомая сумма выражений равна
+        </p>
+
+        <p align="center">
+          $$
+          A(n)=\sum_{k=0}^{n}s_{n,k}F_k.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Хранить всю таблицу $s_{n,k}$ до $n=10^7$ нельзя: она имеет квадратичный размер.
+          Поэтому упакуем одну строку в полином
+        </p>
+
+        <p align="center">
+          $$
+          P_n(y)=\sum_{k=0}^{n}s_{n,k}y^k.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Первые случаи легко проверить вручную:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          P_0(y)=1,\qquad
+          P_1(y)=1-y,\qquad
+          P_2(y)=2-2y,
+          $$
+        </p>
+
+        <p align="center">
+          $$
+          P_3(y)=5-5y+y^2-y^3.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Есть ещё один полезный смысл той же конструкции. Если вместо
+          $F_0,F_1,\ldots$ поставить в листья
+          $1,y,y^2,\ldots$, то значение каждого дерева станет полиномом от $y$,
+          а сумма значений всех деревьев будет ровно $P_n(y)$. Поэтому полином
+          одновременно хранит коэффициенты листьев и решает задачу для любой
+          геометрической последовательности.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Подстановка чисел Фибоначчи в коэффициенты последнего полинома даёт
+        </p>
+
+        <p align="center">
+          $$
+          A(3)=5F_0-5F_1+F_2-F_3=-6.
+          $$
+        </p>
+
+        <h3>5. Разрезаем дерево по корню</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть внешняя операция отделяет листья $0,\ldots,k$ от листьев
+          $k+1,\ldots,n$. Слева находится дерево с $k$ операциями, справа —
+          дерево с $n-1-k$ операциями.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Левый полином $P_k(y)$ повторяется для каждого из
+          $C_{n-1-k}$ правых деревьев. В правой части локальные индексы нужно
+          сдвинуть на $k+1$, то есть умножить на $y^{k+1}$, а внешний минус
+          меняет все её знаки. Получается
+        </p>
+
+        <ul>
+          <li>вклад левых листьев равен $C_{n-1-k}P_k(y)$;</li>
+          <li>
+            правое поддерево сначала даёт
+            $y^{k+1}P_{n-1-k}(y)$, а затем получает внешний минус;
+          </li>
+          <li>
+            каждое правое дерево соединяется с любым из $C_k$ левых деревьев.
+          </li>
+        </ul>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \boxed{
+          P_n(y)=
+          \sum_{k=0}^{n-1}
+          \left(
+          C_{n-1-k}P_k(y)
+          -
+          C_ky^{k+1}P_{n-1-k}(y)
+          \right)
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Рекуррентность правильная, но пока бесполезная для большого индекса:
+          внутри каждого шага остаётся свёртка по всем $k$. Прямой расчёт снова
+          требует порядка $n^2$ операций.
+        </p>
+
+        <h3>6. Производящая функция убирает свёртку</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Производящая функция чисел Каталана
+        </p>
+
+        <p align="center">
+          $$
+          C(x)=\sum_{n\ge0}C_nx^n
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          удовлетворяет уравнению $C(x)=1+xC(x)^2$. Нужная ветвь с постоянным
+          членом $1$ равна
+        </p>
+
+        <p align="center">
+          $$
+          C(x)=\frac{1-\sqrt{1-4x}}{2x}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Теперь введём двумерную производящую функцию
+        </p>
+
+        <p align="center">
+          $$
+          P(x,y)=\sum_{n\ge0}P_n(y)x^n.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После умножения корневой рекуррентности на $x^n$ и суммирования
+          две свёртки превращаются в обычные произведения:
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для первой части достаточно положить $m=n-1-k$:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \sum_{n\ge1}\sum_{k=0}^{n-1}
+          C_{n-1-k}P_k(y)x^n
+          =
+          xP(x,y)C(x).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Во второй части степень $y^{k+1}$ объединяется с $x^{k+1}$,
+          поэтому каталановский ряд получает аргумент $xy$:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \sum_{n\ge1}\sum_{k=0}^{n-1}
+          C_ky^{k+1}P_{n-1-k}(y)x^n
+          =
+          xyC(xy)P(x,y).
+          $$
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          P(x,y)-1=xC(x)P(x,y)-xyC(xy)P(x,y).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Отсюда
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \boxed{
+          P(x,y)=
+          \frac{1}{1-xC(x)+xyC(xy)}
+          =
+          \frac{2}
+          {2+\sqrt{1-4x}-\sqrt{1-4xy}}
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Вся комбинаторика скобок сжалась в одну алгебраическую функцию с двумя
+          квадратными корнями. Но числа Фибоначчи в выводе пока почти не участвовали.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Квадратные корни здесь понимаются как формальные степенные ряды.
+          Для $\sqrt{1-4x}$ выбирается ветвь с постоянным членом $1$:
+          $1-2x-2x^2-4x^3-\cdots$. Поэтому не нужно обсуждать сходимость,
+          разрезы комплексной плоскости или приближённые значения — все равенства
+          являются равенствами коэффициентов.
+        </p>
+
+        <h3>7. Формула Бине диагонализует сдвиг</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Полином $P_n(y)$ можно понимать как сумму всех выражений, если вместо
+          Фибоначчи подставить геометрическую последовательность
+          $1,y,y^2,\ldots$. Такая замена удобна потому, что сдвиг индекса просто
+          умножает хвост на степень $y$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для произвольной последовательности сдвинутый хвост
+          $x_{k+1},x_{k+2},\ldots$ обычно становится новым объектом, зависящим
+          от $k$. Для степеней всё иначе:
+          $a^{k+1},a^{k+2},\ldots=a^{k+1}(1,a,a^2,\ldots)$.
+          Именно поэтому корневое разбиение не потребовало дополнительного
+          состояния.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для Фибоначчи этот приём работает благодаря корням характеристического
+          уравнения $z^2-z-1=0$:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \varphi=\frac{1+\sqrt5}{2},\qquad
+          \psi=\frac{1-\sqrt5}{2},\qquad
+          F_k=\frac{\varphi^k-\psi^k}{\sqrt5}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Линейность сразу даёт
+        </p>
+
+        <p align="center">
+          $$
+          \boxed{
+          A(n)=\frac{P_n(\varphi)-P_n(\psi)}{\sqrt5}
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Поэтому производящая функция искомой последовательности равна
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          A(x)=
+          \frac{1}{\sqrt5}
+          \left(
+          \frac{2}{2+\sqrt{1-4x}-\sqrt{1-4\varphi x}}
+          -
+          \frac{2}{2+\sqrt{1-4x}-\sqrt{1-4\psi x}}
+          \right).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Это красивый замкнутый ответ для всей последовательности. Однако красивой
+          формулы недостаточно: нам нужен коэффициент при $x^{10^7}$, и раскрывать
+          миллионы членов обычным умножением рядов всё ещё слишком дорого.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Здесь виден общий принцип: формула Бине диагонализует оператор сдвига.
+          Тот же путь можно повторить для другой последовательности, заданной
+          линейной рекуррентностью с постоянными коэффициентами, подставляя в
+          $P(x,y)$ корни её характеристического многочлена.
+        </p>
+
+        <h3>8. Рационализуем радикалы</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Зафиксируем геометрическое основание $a$ и обозначим
+        </p>
+
+        <p align="center">
+          $$
+          G_a(x)=P(x,a)=
+          \frac{2}{2+\sqrt{1-4x}-\sqrt{1-4ax}}
+          =
+          \sum_{n\ge0}g_n(a)x^n.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Введём
+        </p>
+
+        <p align="center">
+          $$
+          U=\sqrt{1-4x},\qquad V=\sqrt{1-4ax}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Дважды домножая на сопряжённые выражения, получаем
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Сначала домножим на $2+U+V$. Разность квадратов убирает $V$ из
+          знаменателя:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          G_a(x)=
+          \frac{2+U+V}
+          {2\left(1+U+(a-1)x\right)}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Затем домножим на $1-U+(a-1)x$. Теперь исчезает и $U$, потому что
+          $U^2=1-4x$. После раскрытия скобок получается
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          G_a(x)=
+          \frac{
+          1+2(a+1)x
+          +\left(-1+(a-1)x\right)U
+          +\left(1+(a-1)x\right)V
+          -UV
+          }{
+          4(a+1)x+2(a-1)^2x^2
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          При $x=0$ и числитель, и знаменатель обращаются в ноль. Это не полюс:
+          исходная функция имеет $G_a(0)=1$. У числителя есть общий множитель $x$.
+          Если назвать числитель $N_a(x)$ и положить
+          $H_a(x)=N_a(x)/x$, то
+        </p>
+
+        <p align="center">
+          $$
+          \boxed{
+          G_a(x)=
+          \frac{H_a(x)}
+          {4(a+1)+2(a-1)^2x}
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          После удаления устранимой особенности знаменатель стал линейным.
+          В числителе остались только три базовых ряда:
+          $U$, $V$ и их произведение $W=UV$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          На этом месте особенно легко принять ноль в знаменателе при $x=0$
+          за настоящую проблему. Но постоянный член исходного ряда известен
+          заранее: единственное дерево с одним листом даёт $G_a(0)=1$.
+          Значит, рационализация лишь создала общий множитель $x$, который
+          обязан сократиться.
+        </p>
+
+        <h3>9. Три короткие рекуррентности вместо длинной свёртки</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Пусть
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          U(x)=\sum_{n\ge0}u_nx^n,\qquad
+          V(x)=\sum_{n\ge0}v_nx^n,\qquad
+          W(x)=\sum_{n\ge0}w_nx^n.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Из $U^2=1-4x$ после дифференцирования следует
+          $(1-4x)U'+2U=0$. Сравнение коэффициентов даёт
+        </p>
+
+        <p align="center">
+          $$
+          u_0=1,\qquad
+          \boxed{
+          u_n=\frac{4n-6}{n}u_{n-1}
+          }\quad(n\ge1).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Для второго корня аналогично
+        </p>
+
+        <p align="center">
+          $$
+          v_0=1,\qquad
+          \boxed{
+          v_n=a\frac{4n-6}{n}v_{n-1}
+          }.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Наконец,
+        </p>
+
+        <p align="center">
+          $$
+          W(x)^2=(1-4x)(1-4ax)
+          =1-4(a+1)x+16ax^2.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Дифференцирование и сравнение коэффициентов дают рекуррентность второго порядка
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Если обозначить подкоренной многочлен через
+          $Q_a(x)=1-4(a+1)x+16ax^2$, то из $W^2=Q_a$ следует
+          $2WW'=Q_a'$. Умножение на $W$ заменяет оставшийся корень на $W^2$:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          2Q_a(x)W'(x)-Q_a'(x)W(x)=0.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Коэффициент при $x^{n-1}$ в этом дифференциальном уравнении и даёт
+          следующую формулу:
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          w_0=1,\qquad w_1=-2(a+1),
+          $$
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \boxed{
+          w_n=
+          \frac{
+          2(a+1)(2n-3)w_{n-1}
+          -
+          16a(n-3)w_{n-2}
+          }{n}
+          }\quad(n\ge2).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Запишем $H_a(x)=\sum_{n\ge0}h_n(a)x^n$. После сдвига индекса,
+          вызванного делением $N_a(x)$ на $x$, получаем
+        </p>
+
+        <p align="center">
+          $$
+          h_0(a)=4(a+1),
+          $$
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \boxed{
+          h_n(a)=
+          -u_{n+1}+(a-1)u_n
+          +v_{n+1}+(a-1)v_n
+          -w_{n+1}
+          }\quad(n\ge1).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Поскольку
+          $\left(4(a+1)+2(a-1)^2x\right)G_a(x)=H_a(x)$,
+          коэффициенты $g_n(a)=P_n(a)$ восстанавливаются ещё одной
+          рекуррентностью первого порядка:
+        </p>
+
+        <p align="center">
+          $$
+          g_0(a)=1,
+          $$
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \boxed{
+          g_n(a)=
+          \frac{
+          h_n(a)-2(a-1)^2g_{n-1}(a)
+          }{4(a+1)}
+          }\quad(n\ge1).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          На каждом шаге обновляется фиксированное число величин. Поэтому нужный
+          коэффициент можно получить за $O(n)$ арифметических операций и
+          $O(1)$ дополнительной памяти. Это уже подходящий масштаб для $10^7$.
+        </p>
+
+        <h3>10. Как не потерять точность на $\sqrt5$</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Подставлять вещественные приближения $\varphi$ и $\psi$ нельзя:
+          миллионы операций полностью разрушат точность. Вместо этого работаем
+          сразу по модулю
+        </p>
+
+        <p align="center">
+          $$p=10^9+9$$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          в квадратичной алгебре
+        </p>
+
+        <p align="center">
+          $$
+          K=\mathbb F_p[s]/(s^2-5).
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Каждый элемент имеет вид $r+ts$, где $r,t\in\mathbb F_p$, а умножение
+          выполняется по правилу $s^2=5$. В этой алгебре можно точно положить
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          (r_1+t_1s)(r_2+t_2s)
+          =
+          (r_1r_2+5t_1t_2)
+          +(r_1t_2+t_1r_2)s.
+          $$
+        </p>
+
+        <p align="center" class="euler1007-wide-formula">
+          $$
+          \varphi=\frac{1+s}{2},\qquad
+          \psi=\frac{1-s}{2}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Сопряжение $r+ts\mapsto r-ts$ переводит $\varphi$ в $\psi$.
+          Коэффициенты $P_n(y)$ целые, поэтому достаточно вычислить только
+          $P_n(\varphi)$. Если
+        </p>
+
+        <p align="center">
+          $$
+          P_n(\varphi)=r_n+t_ns,
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          то $P_n(\psi)=r_n-t_ns$, и формула Бине сокращается до
+        </p>
+
+        <p align="center">
+          $$
+          \boxed{A(n)=2t_n\pmod p}.
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Все деления в рекуррентностях корректны. Индексы не превосходят
+          $10^7+1&lt;p$, поэтому $n$ обратим по модулю $p$; число $2$ также обратимо.
+          Наконец,
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Формального элемента $s$ тоже не нужно бояться:
+          $s^{-1}=s/5$, поскольку $s^2=5$ и $5$ обратимо по модулю $p$.
+          Для деления на $a+1$ достаточно проверить норму этого элемента.
+        </p>
+
+        <p align="center">
+          $$
+          (\varphi+1)(\psi+1)
+          =
+          \frac{(3+s)(3-s)}{4}
+          =
+          \frac{9-5}{4}=1,
+          $$
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          так что знаменатель $4(a+1)$ не создаёт особого случая ни для
+          $a=\varphi$, ни для $a=\psi$.
+        </p>
+
+        <h3>11. Проверки, на которых легко поймать ошибку</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          В этом выводе опасны не сложные теоремы, а маленькие сдвиги и знаки.
+          Полезно отдельно проверить:
+        </p>
+
+        <ul>
+          <li>индекс $C_n$: он считает деревья с $n+1$ листьями;</li>
+          <li>минус перед всем правым поддеревом;</li>
+          <li>сдвиг $y^{k+1}$, а не $y^k$;</li>
+          <li>ветви квадратных корней с постоянным членом $1$;</li>
+          <li>сдвиг на единицу после деления $N_a(x)$ на $x$;</li>
+          <li>кратность: разные деревья считаются отдельно, даже если их значения совпали.</li>
+        </ul>
+
+        <p align="justify" class="p_on_project_pages">
+          Рекуррентности воспроизводят
+          $P_1(a)=1-a$, $P_2(a)=2-2a$ и
+          $P_3(a)=5-5a+a^2-a^3$. После подстановки $\varphi$ они дают все три
+          контрольных значения из условия: для $n=3$, $10$ и $100$.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Более общий теоретический фон здесь тоже хорошо виден:
+          алгебраическая производящая функция является D-конечной, а её
+          коэффициенты P-рекурсивны. Но выводить одну большую рекуррентность
+          автоматическим исключением радикалов не требуется. Три коротких ряда
+          $U,V,W$ дают гораздо прозрачнее тот же результат. Связь D-конечных
+          функций и P-рекурсивных последовательностей подробно разобрана в работе
+          Ричарда Стэнли
+          <a class="intext" href="https://math.mit.edu/~rstan/pubs/pubfiles/45.pdf" target="_blank" rel="noopener noreferrer">Differentiably Finite Power Series</a>.
+        </p>
+
+        <h3>12. Логика поиска решения</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Если смотреть только на последнюю формулу, путь к ней кажется почти
+          неизбежным. На деле у каждого шага была своя причина:
+        </p>
+
+        <ol>
+          <li>
+            скобки естественно нарисовать как бинарные деревья — отсюда появляются
+            числа Каталана и разбиение по корню;
+          </li>
+          <li>
+            операции состоят только из вычитаний — значит, вместо значений деревьев
+            можно сначала суммировать знаки листьев;
+          </li>
+          <li>
+            отдельная таблица знаков слишком велика — полином превращает сдвиг
+            индексов в умножение на степень $y$;
+          </li>
+          <li>
+            в корневой рекуррентности возникла свёртка — это прямой сигнал перейти
+            к производящей функции;
+          </li>
+          <li>
+            геометрическая последовательность хорошо переносит сдвиг, а формула
+            Бине раскладывает Фибоначчи ровно на две такие последовательности;
+          </li>
+          <li>
+            алгебраическая функция гарантирует короткое описание коэффициентов,
+            но рационализация даёт его в явном и проверяемом виде;
+          </li>
+          <li>
+            квадратичная алгебра сохраняет точность и одновременно позволяет
+            вычислять только одну из двух сопряжённых подстановок.
+          </li>
+        </ol>
+
+        <p align="justify" class="p_on_project_pages">
+          Важный практический урок здесь в том, что компактная производящая функция
+          ещё не завершает решение. Для индекса $10^7$ нужно сразу спрашивать,
+          как извлечь её коэффициент без длинных свёрток и без хранения всего ряда.
+        </p>
+
+        <h3>13. Что в итоге произошло с задачей</h3>
+
+        <p align="justify" class="p_on_project_pages">
+          Исходно требовалось просуммировать экспоненциально много выражений.
+          Бинарные деревья превратили скобки в комбинаторный объект, чётность
+          правых рёбер — в знаки листьев, а полином $P_n(y)$ собрал все знаки
+          одной строки. Производящая функция убрала каталановскую свёртку,
+          формула Бине свела Фибоначчи к двум геометрическим последовательностям,
+          а рационализация оставила три ряда с короткими рекуррентностями.
+        </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В результате вместо перебора $C_{10^7}$ деревьев остаётся линейный
+          проход по индексам в точной квадратичной алгебре. Программная реализация
+          и итоговый численный остаток здесь не приводятся.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
