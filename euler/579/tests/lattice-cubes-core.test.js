@@ -70,6 +70,16 @@ test("point formula gives 64 axial and 40 tilted points", () => {
   assert.equal(core.pointCount(tilted.map((edge) => core.scale(edge, 2))), 259);
 });
 
+test("enumerated lattice points match the formula and classification", () => {
+  const axialPoints = core.latticePoints(axial);
+  const tiltedPoints = core.latticePoints(tilted);
+  assert.equal(axialPoints.length, core.pointCount(axial));
+  assert.equal(tiltedPoints.length, core.pointCount(tilted));
+  assert.equal(axialPoints.filter(({ kind }) => kind === "vertex").length, 8);
+  assert.equal(tiltedPoints.filter(({ kind }) => kind === "vertex").length, 8);
+  assert.equal(tiltedPoints.filter(({ kind }) => kind === "interior").length, 20);
+});
+
 test("small C(n) and S(n) checks are reproduced exactly", () => {
   const orientations = core.enumerateQuaternionOrientations(10);
   const checks = new Map([

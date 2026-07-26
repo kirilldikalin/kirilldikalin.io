@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 579 — решётчатый куб в 3D</title>
+  <link rel="stylesheet" href="./lattice-cube-explorer.css">
+  <script src="../math/lattice-cubes-core.js" defer></script>
+  <script src="./lattice-cube-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e579-explorer" aria-labelledby="e579-title">
+      <h1 class="e579-sr-only" id="e579-title">Осевой и наклонный решётчатые кубы</h1>
+
+      <div class="e579-top-controls">
+        <div class="e579-choice" role="group" aria-label="Ориентация куба">
+          <button type="button" class="is-active" data-e579-cube="axis">Осевой</button>
+          <button type="button" data-e579-cube="tilted">Наклонный</button>
+        </div>
+        <div class="e579-controls">
+          <label for="e579-scale">Масштаб <strong data-e579-scale-value>1</strong></label>
+          <input id="e579-scale" type="range" min="1" max="3" value="1" step="1">
+        </div>
+        <div class="e579-controls">
+          <label for="e579-box">Внешний бокс n <strong data-e579-box-value>5</strong></label>
+          <input id="e579-box" type="range" min="3" max="20" value="5" step="1">
+        </div>
+      </div>
+
+      <div class="e579-modes" role="group" aria-label="Режим отображения">
+        <button type="button" class="is-active" data-e579-mode="vertices">Вершины</button>
+        <button type="button" data-e579-mode="edges">Рёбра</button>
+        <button type="button" data-e579-mode="faces">Грани</button>
+        <button type="button" data-e579-mode="interior">Внутренние точки</button>
+        <button type="button" data-e579-mode="all">Все точки</button>
+      </div>
+
+      <div class="e579-layout">
+        <div class="e579-canvas-wrap">
+          <canvas
+            id="e579-canvas"
+            width="720"
+            height="620"
+            tabindex="0"
+            aria-label="Трёхмерная модель решётчатого куба. Вращайте мышью, касанием или стрелками клавиатуры.">
+          </canvas>
+          <p class="e579-canvas-help">Вращение: мышь, касание или стрелки · сброс ракурса: R</p>
+          <div class="e579-legend" data-e579-legend hidden>
+            <span><i class="is-vertex"></i>вершины</span>
+            <span><i class="is-edge"></i>рёбра</span>
+            <span><i class="is-face"></i>грани</span>
+            <span><i class="is-interior"></i>внутренние</span>
+          </div>
+        </div>
+
+        <dl class="e579-metrics" aria-live="polite">
+          <div><dt>Рёбра</dt><dd data-e579-vectors></dd></div>
+          <div><dt>Скалярные произведения</dt><dd data-e579-dots></dd></div>
+          <div><dt>Длина</dt><dd data-e579-length></dd></div>
+          <div><dt>НОД рёбер</dt><dd data-e579-gcd></dd></div>
+          <div><dt>Размахи</dt><dd data-e579-spans></dd></div>
+          <div><dt>Размещений в боксе</dt><dd data-e579-placements></dd></div>
+          <div><dt>Решётчатых точек</dt><dd data-e579-points></dd></div>
+          <div><dt>Разбиение точек</dt><dd data-e579-breakdown></dd></div>
+        </dl>
+      </div>
+
+      <p class="e579-detail" data-e579-detail></p>
+    </section>
+  </main>
+</body>
+</html>

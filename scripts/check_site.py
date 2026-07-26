@@ -18,6 +18,7 @@ PUBLIC_PAGES = (
     "euler/euler.html",
     "euler/439.html",
     "euler/579.html",
+    "euler/579/interactive/lattice-cube-explorer.html",
     "euler/763.html",
     "euler/763/interactive/amoeba-layers-explorer.html",
     "euler/780.html",

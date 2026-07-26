@@ -119,6 +119,46 @@
     return length ** 3 + (length + 1) * edgeGcdSum + 1;
   }
 
+  function latticePoints(edges) {
+    if (!validateEdges(edges)) throw new Error("invalid cube edges");
+    const vertices = verticesFromEdges(edges);
+    const minima = [0, 1, 2].map((coordinate) =>
+      Math.min(...vertices.map((vertex) => vertex[coordinate]))
+    );
+    const maxima = [0, 1, 2].map((coordinate) =>
+      Math.max(...vertices.map((vertex) => vertex[coordinate]))
+    );
+    const normSquared = squaredNorm(edges[0]);
+    const points = [];
+
+    for (let x = minima[0]; x <= maxima[0]; x += 1) {
+      for (let y = minima[1]; y <= maxima[1]; y += 1) {
+        for (let z = minima[2]; z <= maxima[2]; z += 1) {
+          const point = [x, y, z];
+          const numerators = edges.map((edge) => dot(point, edge));
+          if (numerators.some((value) => value < 0 || value > normSquared)) continue;
+          const boundaryCoordinates = numerators.filter(
+            (value) => value === 0 || value === normSquared
+          ).length;
+          const kind = boundaryCoordinates === 3
+            ? "vertex"
+            : boundaryCoordinates === 2
+              ? "edge"
+              : boundaryCoordinates === 1
+                ? "face"
+                : "interior";
+          points.push({
+            point,
+            kind,
+            numerators,
+            coefficients: numerators.map((value) => value / normSquared),
+          });
+        }
+      }
+    }
+    return points;
+  }
+
   function placementCount(edges, boxSize) {
     const spans = coordinateSpans(edges);
     return spans.reduce((product, span) =>
@@ -289,6 +329,7 @@
     gcdPair,
     gcdValues,
     integerSquareRoot,
+    latticePoints,
     orientationRecord,
     placementCount,
     pointCount,
