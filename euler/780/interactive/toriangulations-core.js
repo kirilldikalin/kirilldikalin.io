@@ -118,6 +118,26 @@
     };
   }
 
+  function stripDiagramModel(a, b, k, m) {
+    const values = [a, b, k, m].map(Number);
+    if (values.some((value) => !Number.isInteger(value) || value < 1)) {
+      throw new Error("Параметры схемы полос должны быть положительными целыми");
+    }
+    const [horizontalTurns, verticalTurns, stripCount, pairsPerStrip] = values;
+    return {
+      start: [0, 0],
+      end: [horizontalTurns, verticalTurns],
+      offsets: Array.from(
+        { length: stripCount },
+        (_, index) => index - (stripCount - 1) / 2,
+      ),
+      pairFractions: Array.from(
+        { length: pairsPerStrip },
+        (_, index) => (index + 1) / (pairsPerStrip + 1),
+      ),
+    };
+  }
+
   function distinctPrimeFactorWeights(limit) {
     const values = new Array(limit + 1).fill(1);
     if (limit >= 0) values[0] = 0;
@@ -214,6 +234,7 @@
     isInclinedStripValid,
     isPrimitiveDirection,
     maxInclinedProduct,
+    stripDiagramModel,
     stripDirectionCount,
     stripParameters,
   };

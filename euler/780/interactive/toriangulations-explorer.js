@@ -65,21 +65,57 @@
   }
 
   function drawTorus() {
-    const value = Number(document.querySelector("#e780-glue").value);
-    const t = value / 100;
+    const stage = Number(document.querySelector("#e780-glue").value);
     const scene = document.querySelector("[data-e780-torus-scene]");
     clear(scene);
 
-    drawTriangulatedRectangle(scene, 50, 85, 360, 220, 6, 4, 1 - 0.55 * t);
-    line(scene, 50, 70, 410, 70, "e780-seam");
-    line(scene, 50, 320, 410, 320, "e780-seam");
-    text(scene, 230, 48, "сначала склеиваются верх и низ", "e780-note", "middle");
+    const stageClass = (index) => [
+      "e780-glue-stage",
+      index === stage ? "is-active" : "",
+      index < stage ? "is-done" : "",
+    ].filter(Boolean).join(" ");
 
-    const bandX = 585;
-    const outerRx = 140 - 20 * t;
-    const outerRy = 105 - 12 * t;
-    const innerRx = 58 + 18 * t;
-    const innerRy = 37 + 8 * t;
+    const rectangle = svgElement("g", { class: stageClass(0) });
+    drawTriangulatedRectangle(rectangle, 40, 105, 220, 180, 4, 3);
+    line(rectangle, 40, 105, 260, 105, "e780-edge-a");
+    line(rectangle, 40, 285, 260, 285, "e780-edge-a");
+    line(rectangle, 40, 105, 40, 285, "e780-edge-b");
+    line(rectangle, 260, 105, 260, 285, "e780-edge-b");
+    text(rectangle, 150, 88, "A", "e780-edge-label", "middle");
+    text(rectangle, 150, 310, "A", "e780-edge-label", "middle");
+    text(rectangle, 25, 200, "B", "e780-edge-label", "middle");
+    text(rectangle, 275, 200, "B", "e780-edge-label", "middle");
+    text(rectangle, 150, 45, "1. развёртка", "e780-label", "middle");
+    scene.append(rectangle);
+
+    const cylinder = svgElement("g", { class: stageClass(1) });
+    cylinder.append(svgElement("ellipse", {
+      cx: 450, cy: 115, rx: 92, ry: 24, class: "e780-edge-a",
+    }));
+    cylinder.append(svgElement("ellipse", {
+      cx: 450, cy: 275, rx: 92, ry: 24, class: "e780-edge-a",
+    }));
+    line(cylinder, 358, 115, 358, 275, "e780-surface-edge");
+    line(cylinder, 542, 115, 542, 275, "e780-surface-edge");
+    cylinder.append(svgElement("path", {
+      d: "M450 91 C425 135 425 255 450 299",
+      class: "e780-edge-b",
+    }));
+    [155, 195, 235].forEach((y) => {
+      cylinder.append(svgElement("ellipse", {
+        cx: 450, cy: y, rx: 92, ry: 20, class: "e780-grid",
+      }));
+    });
+    text(cylinder, 450, 45, "2. склеены B → цилиндр", "e780-label", "middle");
+    text(cylinder, 450, 330, "две границы A ещё открыты", "e780-note", "middle");
+    scene.append(cylinder);
+
+    const torus = svgElement("g", { class: stageClass(2) });
+    const bandX = 735;
+    const outerRx = 120;
+    const outerRy = 84;
+    const innerRx = 51;
+    const innerRy = 33;
     const torusPath = [
       `M ${bandX - outerRx} 195`,
       `A ${outerRx} ${outerRy} 0 1 0 ${bandX + outerRx} 195`,
@@ -88,51 +124,63 @@
       `A ${innerRx} ${innerRy} 0 1 1 ${bandX + innerRx} 195`,
       `A ${innerRx} ${innerRy} 0 1 1 ${bandX - innerRx} 195`,
     ].join(" ");
-    scene.append(svgElement("path", {
+    torus.append(svgElement("path", {
       d: torusPath,
-      fill: "none",
-      stroke: "#303033",
-      "stroke-width": 2.5,
+      class: "e780-torus-outline",
     }));
 
-    for (let angle = 0; angle < 360; angle += 30) {
+    for (let angle = 0; angle < 360; angle += 45) {
       const radians = angle * Math.PI / 180;
       const x1 = bandX + innerRx * Math.cos(radians);
       const y1 = 195 + innerRy * Math.sin(radians);
       const x2 = bandX + outerRx * Math.cos(radians);
       const y2 = 195 + outerRy * Math.sin(radians);
-      line(scene, x1, y1, x2, y2, "e780-grid");
+      line(torus, x1, y1, x2, y2, "e780-grid");
     }
-
-    const arrowEnd = 440 + 60 * t;
-    scene.append(svgElement("path", {
-      d: `M 420 195 C ${arrowEnd} 145, ${arrowEnd} 245, 465 195`,
-      class: "e780-arrow",
+    torus.append(svgElement("ellipse", {
+      cx: bandX, cy: 195, rx: outerRx, ry: outerRy, class: "e780-edge-a",
     }));
-    text(scene, bandX, 340, "после второй склейки получается тор", "e780-note", "middle");
+    torus.append(svgElement("path", {
+      d: `M ${bandX} ${195 - innerRy} C ${bandX + 28} 135, ${bandX + 28} 255, ${bandX} ${195 + innerRy}`,
+      class: "e780-edge-b",
+    }));
+    text(torus, bandX, 45, "3. склеены A → тор", "e780-label", "middle");
+    text(torus, bandX, 330, "границы больше нет", "e780-note", "middle");
+    scene.append(torus);
 
-    document.querySelector("[data-e780-glue-value]").textContent = value;
-    document.querySelector("[data-e780-seams]").textContent =
-      value < 35 ? "раздельны" : value < 90 ? "сближаются" : "совпали";
-    document.querySelector("[data-e780-torus-detail]").textContent =
-      value < 100
-        ? "Ползунок показывает топологическую склейку: длины и углы треугольников при этом не меняются."
-        : "Разрез можно провести в другом месте, поэтому хранить конкретную картинку замощения бессмысленно; сохраняются направления замкнутых полос.";
+    text(scene, 310, 205, "→", "e780-glue-arrow", "middle");
+    text(scene, 590, 205, "→", "e780-glue-arrow", "middle");
+
+    const labels = ["развёртка", "цилиндр", "тор"];
+    const seams = ["ничего", "пара B", "пары B и A"];
+    const boundaries = ["4 ребра", "2 окружности", "нет"];
+    const details = [
+      "Одинаковые буквы стоят на рёбрах, которые надо отождествить: сначала два пунктирных ребра B.",
+      "После склейки B получился цилиндр. Его верхняя и нижняя окружности — это оставшаяся пара A.",
+      "После склейки A граница исчезла. Замкнутый путь на торе в развёртке продолжается через копии прямоугольника.",
+    ];
+    document.querySelector("[data-e780-glue-value]").textContent = labels[stage];
+    document.querySelector("[data-e780-seams]").textContent = seams[stage];
+    document.querySelector("[data-e780-boundary]").textContent = boundaries[stage];
+    document.querySelector("[data-e780-torus-detail]").textContent = details[stage];
   }
 
-  function drawStripCopies(scene) {
-    for (let row = 0; row < 2; row += 1) {
-      for (let column = 0; column < 3; column += 1) {
-        drawTriangulatedRectangle(
-          scene,
-          70 + column * 250,
-          55 + row * 145,
-          250,
-          145,
-          5,
-          3,
-          0.7
-        );
+  function drawStripCover(scene) {
+    const left = 95;
+    const bottom = 335;
+    const cellWidth = 125;
+    const cellHeight = 52;
+    for (let column = 0; column <= 5; column += 1) {
+      line(scene, left + column * cellWidth, 75, left + column * cellWidth, bottom, "e780-grid");
+    }
+    for (let row = 0; row <= 5; row += 1) {
+      line(scene, left, bottom - row * cellHeight, 720, bottom - row * cellHeight, "e780-grid");
+    }
+    for (let column = 0; column < 5; column += 1) {
+      for (let row = 0; row < 5; row += 1) {
+        const x = left + column * cellWidth;
+        const y = bottom - row * cellHeight;
+        line(scene, x, y, x + cellWidth, y - cellHeight, "e780-grid");
       }
     }
   }
@@ -143,39 +191,63 @@
     const k = Number(document.querySelector("#e780-k").value);
     const m = Number(document.querySelector("#e780-m").value);
     const params = core.stripParameters(a, b, k, m);
+    const diagram = core.stripDiagramModel(a, b, k, m);
     const scene = document.querySelector("[data-e780-strips-scene]");
     clear(scene);
-    drawStripCopies(scene);
+    drawStripCover(scene);
 
     const startX = 95;
-    const startY = 325;
-    const endX = startX + 250 * a;
-    const endY = startY - 145 * b;
-    const clippedEndX = Math.min(820, endX);
-    const clippedEndY = Math.max(45, endY);
-    const dx = clippedEndX - startX;
-    const dy = clippedEndY - startY;
+    const startY = 335;
+    const endX = startX + 125 * diagram.end[0];
+    const endY = startY - 52 * diagram.end[1];
+    const dx = endX - startX;
+    const dy = endY - startY;
     const normalLength = Math.hypot(dx, dy) || 1;
     const nx = -dy / normalLength;
     const ny = dx / normalLength;
     const stripClass = params.valid ? "e780-strip" : "e780-strip e780-strip-invalid";
-    const visibleStrips = Math.min(k, 4);
 
-    for (let index = 0; index < visibleStrips; index += 1) {
-      const offset = (index - (visibleStrips - 1) / 2) * 23;
+    const defs = svgElement("defs");
+    const clipPath = svgElement("clipPath", { id: "e780-strip-clip" });
+    clipPath.append(svgElement("rect", { x: 95, y: 75, width: 625, height: 260 }));
+    defs.append(clipPath);
+    scene.append(defs);
+    const stripGroup = svgElement("g", { "clip-path": "url(#e780-strip-clip)" });
+
+    const referenceStrip = Math.floor((diagram.offsets.length - 1) / 2);
+    diagram.offsets.forEach((stripOffset, stripIndex) => {
+      const offset = stripOffset * 18;
       line(
-        scene,
+        stripGroup,
         startX + nx * offset,
         startY + ny * offset,
-        clippedEndX + nx * offset,
-        clippedEndY + ny * offset,
-        stripClass
+        endX + nx * offset,
+        endY + ny * offset,
+        `${stripClass}${stripIndex === referenceStrip ? " is-reference" : ""}`
       );
-    }
+      if (stripIndex !== referenceStrip) return;
+      diagram.pairFractions.forEach((fraction) => {
+        const cx = startX + dx * fraction + nx * offset;
+        const cy = startY + dy * fraction + ny * offset;
+        [-4, 4].forEach((pairOffset) => {
+          stripGroup.append(svgElement("circle", {
+            cx: cx + nx * pairOffset,
+            cy: cy + ny * pairOffset,
+            r: 2.8,
+            class: params.valid ? "e780-pair-dot" : "e780-pair-dot is-invalid",
+          }));
+        });
+      });
+    });
+    scene.append(stripGroup);
+    line(scene, startX, startY, endX, startY, "e780-turn-guide");
+    line(scene, endX, startY, endX, endY, "e780-turn-guide");
     scene.append(svgElement("circle", { cx: startX, cy: startY, r: 7, fill: "#303033" }));
-    scene.append(svgElement("circle", { cx: clippedEndX, cy: clippedEndY, r: 7, fill: "#303033" }));
+    scene.append(svgElement("circle", { cx: endX, cy: endY, r: 7, fill: "#303033" }));
     text(scene, startX + 8, startY + 28, "(0,0)", "e780-note");
-    text(scene, clippedEndX - 8, clippedEndY - 14, `(${a}u, ${b}v)`, "e780-note", "end");
+    text(scene, endX - 8, endY - 14, `(${a}u, ${b}v)`, "e780-note", "end");
+    text(scene, (startX + endX) / 2, startY + 22, `${a} оборотов`, "e780-note", "middle");
+    text(scene, endX + 12, (startY + endY) / 2, `${b} оборотов`, "e780-note");
 
     const product = a * b * k;
     const exactLeft = m * m;
@@ -198,7 +270,7 @@
         `Для этих параметров m² = ${exactLeft}, а 3(abk)² = ${exactRight}. Положительной ширины прямоугольника не получается.`;
     } else {
       document.querySelector("[data-e780-strips-detail]").textContent =
-        `Проверка выполнена целыми числами. Получается ${params.n} треугольников; длина обхода ${params.pathLength.toFixed(3)} совпадает с m = ${m}.`;
+        `На выделенной полосе отмечено ${m} пар; всего таких полос ${k}. Проверка выполнена целыми числами: получается ${params.n} треугольников, а длина обхода ${params.pathLength.toFixed(3)} совпадает с m = ${m}.`;
     }
   }
 

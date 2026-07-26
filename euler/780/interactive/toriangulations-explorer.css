@@ -137,6 +137,7 @@ input:focus-visible {
 }
 
 .e780-grid {
+  fill: none;
   stroke: #d3d3d7;
   stroke-width: 1.2;
 }
@@ -145,6 +146,52 @@ input:focus-visible {
   fill: none;
   stroke: #303033;
   stroke-width: 3;
+}
+
+.e780-glue-stage {
+  opacity: 0.2;
+  transition: opacity 180ms ease;
+}
+
+.e780-glue-stage.is-done {
+  opacity: 0.48;
+}
+
+.e780-glue-stage.is-active {
+  opacity: 1;
+}
+
+.e780-edge-a,
+.e780-edge-b,
+.e780-surface-edge,
+.e780-torus-outline {
+  fill: none;
+  stroke: #303033;
+}
+
+.e780-edge-a {
+  stroke-width: 4;
+}
+
+.e780-edge-b {
+  stroke-width: 4;
+  stroke-dasharray: 8 6;
+}
+
+.e780-surface-edge,
+.e780-torus-outline {
+  stroke-width: 2.5;
+}
+
+.e780-edge-label {
+  font-size: 17px;
+  font-weight: bold;
+  fill: #303033;
+}
+
+.e780-glue-arrow {
+  font-size: 34px;
+  fill: #77777d;
 }
 
 .e780-arrow {
@@ -157,14 +204,35 @@ input:focus-visible {
 .e780-strip {
   fill: none;
   stroke: #303033;
-  stroke-width: 10;
+  stroke-width: 6;
   stroke-linecap: round;
-  opacity: 0.78;
+  opacity: 0.62;
+}
+
+.e780-strip.is-reference {
+  stroke-width: 10;
+  opacity: 0.9;
 }
 
 .e780-strip-invalid {
   stroke: #a63f36;
   stroke-dasharray: 10 8;
+}
+
+.e780-turn-guide {
+  stroke: #77777d;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+
+.e780-pair-dot {
+  fill: #fff;
+  stroke: #303033;
+  stroke-width: 1.4;
+}
+
+.e780-pair-dot.is-invalid {
+  stroke: #a63f36;
 }
 
 .e780-direction-one {

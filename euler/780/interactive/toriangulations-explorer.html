@@ -21,13 +21,13 @@
 
       <section role="tabpanel" aria-labelledby="e780-torus-tab" id="e780-torus-panel" data-e780-panel="torus">
         <div class="e780-controls">
-          <label for="e780-glue">Степень склейки <strong data-e780-glue-value>0</strong>%</label>
-          <input id="e780-glue" type="range" min="0" max="100" value="0" step="1">
+          <label for="e780-glue">Этап склейки <strong data-e780-glue-value>развёртка</strong></label>
+          <input id="e780-glue" type="range" min="0" max="2" value="0" step="1">
         </div>
         <div class="e780-metrics" aria-live="polite">
-          <span><small>Противоположные стороны</small><strong data-e780-seams>раздельны</strong></span>
+          <span><small>Уже склеено</small><strong data-e780-seams>ничего</strong></span>
           <span><small>Локальная структура</small><strong>6 углов по 60°</strong></span>
-          <span><small>После развёртки</small><strong>параллельные полосы</strong></span>
+          <span><small>Граница поверхности</small><strong data-e780-boundary>4 ребра</strong></span>
         </div>
         <svg class="e780-stage" viewBox="0 0 900 390" role="img" aria-labelledby="e780-torus-title e780-torus-desc">
           <title id="e780-torus-title">Склейка прямоугольника в тор</title>

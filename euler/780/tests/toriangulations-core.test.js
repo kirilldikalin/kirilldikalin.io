@@ -32,6 +32,18 @@ test("strip geometry satisfies both area and length equations", () => {
   assert.equal(strip.n, 10);
 });
 
+test("every strip control changes the diagram model", () => {
+  const base = core.stripDiagramModel(1, 1, 1, 2);
+  assert.deepEqual(base.end, [1, 1]);
+  assert.deepEqual(base.offsets, [0]);
+  assert.deepEqual(base.pairFractions, [1 / 3, 2 / 3]);
+
+  assert.deepEqual(core.stripDiagramModel(4, 1, 1, 2).end, [4, 1]);
+  assert.deepEqual(core.stripDiagramModel(1, 5, 1, 2).end, [1, 5]);
+  assert.equal(core.stripDiagramModel(1, 1, 4, 2).offsets.length, 4);
+  assert.equal(core.stripDiagramModel(1, 1, 1, 18).pairFractions.length, 18);
+});
+
 test("regular triangular grids have three strip directions", () => {
   assert.equal(core.stripDirectionCount(false), 1);
   assert.equal(core.stripDirectionCount(true), 3);
