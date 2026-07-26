@@ -14,8 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=20260726">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./780/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <script>
     window.MathJax = {
@@ -57,15 +58,6 @@
           если одно можно непрерывно превратить в другое без разрывов и наложений.
         </p>
 
-        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:1em; padding-bottom:2em;">
-          <img src="https://projecteuler.net/project/images/p780_sample-small-1.png"
-               alt="Тор с замощением из двух треугольников" loading="lazy" style="max-width:100%; height:auto;">
-          <img src="https://projecteuler.net/project/images/p780_sample-small-2.png"
-               alt="Тор с замощением из четырёх треугольников" loading="lazy" style="max-width:100%; height:auto;">
-          <img src="https://projecteuler.net/project/images/p780_sample-small-3.png"
-               alt="Тор с замощением из четырнадцати треугольников" loading="lazy" style="max-width:100%; height:auto;">
-        </div>
-
         <p align="justify" class="p_on_project_pages">
           Пусть $F(n)$ — число классов замощений всех возможных торов ровно $n$ треугольниками, а
         </p>
@@ -78,15 +70,9 @@
           Известно, что $G(6)=14$, $G(100)=8090$ и
           $G(10^5)\equiv645124048\pmod{1\,000\,000\,007}$.
           Требуется найти $G(10^9)$ по тому же модулю.
-          Полное условие и исходные иллюстрации находятся на
+          Полное условие находится на
           <a class="intext" href="https://projecteuler.net/problem=780" target="_blank" rel="noopener noreferrer">странице Project Euler 780</a>.
         </p>
-
-        <div style="text-align:center; padding-bottom:2em;">
-          <img src="https://projecteuler.net/project/images/p780_animation.gif"
-               alt="Анимация непрерывного перехода между эквивалентными замощениями"
-               loading="lazy" style="max-width:100%; height:auto;">
-        </div>
 
         <h3>Почему я на этой задаче застрял</h3>
 
@@ -108,11 +94,22 @@
         </ol>
 
         <p align="justify" class="p_on_project_pages">
-          Первая действительно полезная зацепка нашлась в
-          <a class="intext" href="https://projecteuler.net/thread=780" target="_blank" rel="noopener noreferrer">обсуждении решивших задачу</a>:
-          ecnerwala предложил перестать классифицировать картинки и считать направления полос.
-          После этого геометрия наконец начала сжиматься до арифметики.
+          Первая действительно полезная зацепка появилась, когда я перестал классифицировать картинки
+          и вместо них начал считать направления полос. После этого геометрия наконец стала сжиматься до арифметики.
         </p>
+
+        <p align="justify" class="p_on_project_pages">
+          В интерактиве ниже этот переход разделён на три шага. Сначала прямоугольник склеивается в тор,
+          затем тор разворачивается в копии фундаментальной области, а в конце видно, почему регулярная
+          треугольная решётка попадает в полосовой подсчёт трижды.
+        </p>
+
+        <iframe
+          class="euler780-visualization-frame"
+          src="./780/interactive/toriangulations-explorer.html"
+          title="Склейка тора, параллельные полосы и тройной подсчёт"
+          loading="lazy">
+        </iframe>
 
         <h3>Первая рабочая идея: развернуть тор</h3>
 
@@ -356,18 +353,13 @@
           $$G(N)=S(N)-2\sum_{n\leq N}E(n).$$
         </p>
 
-        <div style="text-align:center; padding-bottom:2em;">
-          <img src="https://projecteuler.net/project/images/p780_t6-all.png"
-               alt="Восемь неэквивалентных замощений торов шестью треугольниками"
-               loading="lazy" style="max-width:100%; height:auto;">
-        </div>
-
         <h3>Целые Эйзенштейна: недостающий кусок</h3>
 
         <p align="justify" class="p_on_project_pages">
-          Самостоятельно догадаться до целых Эйзенштейна на этом месте мне не удалось.
-          Подсказка снова нашлась в том же обсуждении: вершины регулярной треугольной решётки образуют именно
-          решётку целых Эйзенштейна. После этого странная геометрическая поправка стала обычной задачей о делителях.
+          Самостоятельно догадаться до целых Эйзенштейна на этом месте мне долго не удавалось.
+          Нужный поворот состоял в том, чтобы посмотреть не на треугольники, а на их вершины:
+          они образуют решётку целых Эйзенштейна. После этого странная геометрическая поправка стала
+          обычной задачей о делителях.
         </p>
 
         <p align="justify" class="p_on_project_pages">
@@ -521,10 +513,9 @@
         <h4>Ловушка с $\sqrt3$</h4>
 
         <p align="justify" class="p_on_project_pages">
-          Здесь я едва не сделал обычный вариант через <code class="inline">double</code>.
-          В обсуждении несколько участников отдельно предупреждают, что такой код проходит маленькие проверки,
-          но ломается именно на $N=10^9$ из-за округления числа, почти совпавшего с целым.
-          Один из них потратил на поиск этой причины около восьми часов — это чужой опыт, но очень полезное предупреждение.
+          Здесь я сначала сделал обычный вариант через <code class="inline">double</code>.
+          На маленьких проверках он выглядел надёжно, однако граница определяется числом, которое может оказаться
+          очень близко к целому. Значит, редкая ошибка округления способна сдвинуть предел суммы ровно на единицу.
         </p>
 
         <p align="justify" class="p_on_project_pages">
@@ -579,9 +570,9 @@
         </p>
 
         <p align="justify" class="p_on_project_pages">
-          Для требуемого $N=10^9$ остаётся подставить $M=500000000$ и $L=250000000$ в итоговую формулу,
-          выполнить сравнения с $\sqrt3$ через целочисленный корень и взять остаток по заданному модулю.
-          Готовый код и итоговый численный остаток здесь не привожу.
+          Для требуемого $N=10^9$ алгоритм остаётся тем же: границы с $\sqrt3$ вычисляются
+          целочисленным корнем, функции $2^{\omega(x)}$ и $H(x)$ строятся решетом,
+          а каждое слагаемое сразу приводится по заданному модулю.
         </p>
 
       </div>

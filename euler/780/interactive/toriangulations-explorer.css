@@ -1,0 +1,214 @@
+:root {
+  color-scheme: light;
+  font-family: "Courier Prime", "Courier New", monospace;
+  color: #303033;
+  background: #fbfbfd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 2.8rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #c9c9ce;
+  border-radius: 0.45rem;
+  color: #303033;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: #303033;
+}
+
+button[aria-selected="true"],
+button.is-active {
+  color: #fff;
+  border-color: #303033;
+  background: #303033;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #b46a00;
+  outline-offset: 2px;
+}
+
+.e780-explorer {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.e780-tabs,
+.e780-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.e780-tabs button {
+  flex: 0 1 auto;
+}
+
+.e780-controls {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.e780-controls label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.e780-strip-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.e780-count-controls {
+  display: grid;
+  grid-template-columns: 1fr minmax(14rem, 2fr);
+  gap: 1rem;
+  align-items: end;
+}
+
+.e780-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 1rem 0;
+}
+
+.e780-metrics span {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 4.4rem;
+  padding: 0.7rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.e780-metrics small {
+  color: #6b6b70;
+}
+
+.e780-stage {
+  display: block;
+  width: 100%;
+  min-height: 20rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.55rem;
+  background: linear-gradient(#fff, #f6f6f8);
+}
+
+.e780-detail {
+  min-height: 3rem;
+  margin: 0.75rem 0 0;
+  line-height: 1.4;
+}
+
+.e780-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.e780-grid {
+  stroke: #d3d3d7;
+  stroke-width: 1.2;
+}
+
+.e780-seam {
+  fill: none;
+  stroke: #303033;
+  stroke-width: 3;
+}
+
+.e780-arrow {
+  fill: none;
+  stroke: #77777d;
+  stroke-width: 2;
+  stroke-dasharray: 7 7;
+}
+
+.e780-strip {
+  fill: none;
+  stroke: #303033;
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0.78;
+}
+
+.e780-strip-invalid {
+  stroke: #a63f36;
+  stroke-dasharray: 10 8;
+}
+
+.e780-direction-one {
+  stroke: #303033;
+  stroke-width: 5;
+}
+
+.e780-direction-extra {
+  stroke: #a63f36;
+  stroke-width: 4;
+}
+
+.e780-label {
+  font-size: 17px;
+  fill: #303033;
+}
+
+.e780-note {
+  font-size: 15px;
+  fill: #66666c;
+}
+
+@media (max-width: 46rem) {
+  .e780-explorer {
+    padding: 0.75rem;
+  }
+
+  .e780-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .e780-tabs button {
+    min-width: 0;
+    padding-inline: 0.35rem;
+  }
+
+  .e780-strip-controls,
+  .e780-count-controls,
+  .e780-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e780-stage {
+    min-height: 13rem;
+  }
+}

@@ -1,0 +1,15 @@
+.euler780-visualization-frame {
+  display: block;
+  width: 100%;
+  height: 750px;
+  margin: 0 0 2em;
+  border: 1px solid var(--color-border-variation-1);
+  border-radius: 0.7ex;
+  background: #fbfbfd;
+}
+
+@media screen and (max-width: 50em) {
+  .euler780-visualization-frame {
+    height: 1060px;
+  }
+}

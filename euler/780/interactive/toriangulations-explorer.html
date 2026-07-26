@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 780 — полосы на торе</title>
+  <link rel="stylesheet" href="./toriangulations-explorer.css">
+  <script src="./toriangulations-core.js" defer></script>
+  <script src="./toriangulations-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e780-explorer" aria-labelledby="e780-title">
+      <h1 class="e780-sr-only" id="e780-title">От склейки тора к подсчёту направлений</h1>
+
+      <div class="e780-tabs" role="tablist" aria-label="Этапы решения">
+        <button type="button" role="tab" aria-selected="true" aria-controls="e780-torus-panel" id="e780-torus-tab" data-e780-tab="torus">1. Склейка</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e780-strips-panel" id="e780-strips-tab" data-e780-tab="strips">2. Полосы</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e780-count-panel" id="e780-count-tab" data-e780-tab="count">3. Подсчёт</button>
+      </div>
+
+      <section role="tabpanel" aria-labelledby="e780-torus-tab" id="e780-torus-panel" data-e780-panel="torus">
+        <div class="e780-controls">
+          <label for="e780-glue">Степень склейки <strong data-e780-glue-value>0</strong>%</label>
+          <input id="e780-glue" type="range" min="0" max="100" value="0" step="1">
+        </div>
+        <div class="e780-metrics" aria-live="polite">
+          <span><small>Противоположные стороны</small><strong data-e780-seams>раздельны</strong></span>
+          <span><small>Локальная структура</small><strong>6 углов по 60°</strong></span>
+          <span><small>После развёртки</small><strong>параллельные полосы</strong></span>
+        </div>
+        <svg class="e780-stage" viewBox="0 0 900 390" role="img" aria-labelledby="e780-torus-title e780-torus-desc">
+          <title id="e780-torus-title">Склейка прямоугольника в тор</title>
+          <desc id="e780-torus-desc">Противоположные стороны триангулированного прямоугольника сближаются и превращаются в два шва тора.</desc>
+          <g data-e780-torus-scene></g>
+        </svg>
+        <p class="e780-detail" data-e780-torus-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e780-strips-tab" id="e780-strips-panel" data-e780-panel="strips" hidden>
+        <div class="e780-strip-controls">
+          <div class="e780-controls">
+            <label for="e780-a">Оборотов a <strong data-e780-a-value>1</strong></label>
+            <input id="e780-a" type="range" min="1" max="5" value="1" step="1">
+          </div>
+          <div class="e780-controls">
+            <label for="e780-b">Оборотов b <strong data-e780-b-value>1</strong></label>
+            <input id="e780-b" type="range" min="1" max="5" value="1" step="1">
+          </div>
+          <div class="e780-controls">
+            <label for="e780-k">Полос k <strong data-e780-k-value>1</strong></label>
+            <input id="e780-k" type="range" min="1" max="4" value="1" step="1">
+          </div>
+          <div class="e780-controls">
+            <label for="e780-m">Пар в полосе m <strong data-e780-m-value>4</strong></label>
+            <input id="e780-m" type="range" min="1" max="18" value="4" step="1">
+          </div>
+        </div>
+        <div class="e780-metrics" aria-live="polite">
+          <span><small>Примитивность</small><strong data-e780-primitive>gcd(a,b) = 1</strong></span>
+          <span><small>Точная граница</small><strong data-e780-inequality>m² &gt; 3(abk)²</strong></span>
+          <span><small>Треугольников</small><strong data-e780-n>n = 8</strong></span>
+        </div>
+        <svg class="e780-stage" viewBox="0 0 900 390" role="img" aria-labelledby="e780-strips-title e780-strips-desc">
+          <title id="e780-strips-title">Развёртка тора в параллельные полосы</title>
+          <desc id="e780-strips-desc">На копиях фундаментального прямоугольника показана замкнутая направляющая и параллельные полосы.</desc>
+          <g data-e780-strips-scene></g>
+        </svg>
+        <p class="e780-detail" data-e780-strips-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e780-count-tab" id="e780-count-panel" data-e780-panel="count" hidden>
+        <div class="e780-count-controls">
+          <div class="e780-choice" role="group" aria-label="Тип решётки">
+            <button type="button" class="is-active" data-e780-grid="ordinary">Обычная</button>
+            <button type="button" data-e780-grid="regular">Регулярная</button>
+          </div>
+          <div class="e780-controls">
+            <label for="e780-limit">Малое N <strong data-e780-limit-value>6</strong></label>
+            <input id="e780-limit" type="range" min="2" max="100" value="6" step="2">
+          </div>
+        </div>
+        <div class="e780-metrics" aria-live="polite">
+          <span><small>Направлений полос</small><strong data-e780-directions>1</strong></span>
+          <span><small>Сырой подсчёт S(N)</small><strong data-e780-raw>18</strong></span>
+          <span><small>После поправки G(N)</small><strong data-e780-total>14</strong></span>
+        </div>
+        <svg class="e780-stage" viewBox="0 0 900 390" role="img" aria-labelledby="e780-count-title e780-count-desc">
+          <title id="e780-count-title">Одинарный и тройной подсчёт направлений</title>
+          <desc id="e780-count-desc">Обычное замощение имеет одно семейство полос, а регулярная треугольная решётка допускает три.</desc>
+          <g data-e780-count-scene></g>
+        </svg>
+        <p class="e780-detail" data-e780-count-detail></p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

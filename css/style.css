@@ -609,9 +609,24 @@ div.examples_text {
 /* Removed arrow sizing override - let original images display naturally */
 
 @media screen and (max-width: 768px) {
-  .buttonup, .buttondown {
-    bottom: 10px;
+  .buttonup,
+  .buttondown {
+    width: 52px;
+    height: 42px;
     right: 10px;
+  }
+
+  .buttonup {
+    bottom: 54px;
+  }
+
+  .buttondown {
+    bottom: 8px;
+  }
+
+  .buttonup img,
+  .buttondown img {
+    width: 32px;
   }
 }
 
