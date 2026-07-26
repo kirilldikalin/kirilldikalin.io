@@ -53,6 +53,16 @@ test("meet-in-the-middle keeps enough boundary information", () => {
   assert.deepEqual(summary.combinedResidue, { u: 0, v: 68 });
 });
 
+test("an arbitrary singleton set can be repartitioned without changing its residue", () => {
+  const positions = [0, 3, 7, 12];
+  const expected = core.residueForSet(positions);
+  for (let split = 3; split <= 11; split += 1) {
+    const summary = core.meetInTheMiddleSummary(positions, split);
+    assert.deepEqual([...summary.left.positions, ...summary.right.positions], positions);
+    assert.deepEqual(summary.combinedResidue, expected);
+  }
+});
+
 test("incompatible masks and non-constant residues are rejected", () => {
   assert.equal(core.boundaryCompatible([5], [7], 7), false);
   const candidate = core.candidateForSet([2, 6]);

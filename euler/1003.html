@@ -49,7 +49,7 @@
       <div id="toc_container" class="euler_article">
         <h2 id="1003">Грустные числа</h2>
 <h3 id="problem">Условие задачи</h3>
-<p align="justify" class="p_on_project_pages">В задаче <a href="https://projecteuler.net/problem=1003" target="_blank" rel="noopener noreferrer">Project
+<p align="justify" class="p_on_project_pages">В задаче <a class="intext" href="https://projecteuler.net/problem=1003" target="_blank" rel="noopener noreferrer">Project
 Euler 1003</a> рассматривается процесс с камнями на целочисленных
 позициях прямой. В позиции \(0\) изначально лежит положительное
 число камней \(n\). Дальше позиции обрабатываются слева
@@ -120,7 +120,7 @@ a_i = b_i + 2q_i.
 a_i = n[i=0] + q_{i-1} + q_{i-3},
 \]</span></p>
 <p align="justify" class="p_on_project_pages">где \(q_j = 0\) для отрицательных индексов, а
-\([i=0]\) — <a href="https://en.wikipedia.org/wiki/Indicator_function" target="_blank" rel="noopener noreferrer">индикаторная
+\([i=0]\) — <a class="intext" href="https://en.wikipedia.org/wiki/Indicator_function" target="_blank" rel="noopener noreferrer">индикаторная
 функция</a>.</p>
 <p align="justify" class="p_on_project_pages">Совмещая две формулы, получаем основную рекурсию:</p>
 <p align="center"><span class="math display">\[
@@ -130,7 +130,7 @@ b_i + 2q_i = n[i=0] + q_{i-1} + q_{i-3}.
 рекурсии удобное условие на множество позиций, где
 \(b_i = 1\).</p>
 <h3 id="производящие-функции">Производящие функции</h3>
-<p align="justify" class="p_on_project_pages">Для работы с такой рекурсией удобно использовать <a href="https://en.wikipedia.org/wiki/Generating_function" target="_blank" rel="noopener noreferrer">производящие
+<p align="justify" class="p_on_project_pages">Для работы с такой рекурсией удобно использовать <a class="intext" href="https://en.wikipedia.org/wiki/Generating_function" target="_blank" rel="noopener noreferrer">производящие
 функции</a>. Введём два формальных степенных ряда:</p>
 <p align="center"><span class="math display">\[
 B(x)=\sum_i b_i x^i,\qquad Q(x)=\sum_i q_i x^i.
@@ -179,7 +179,7 @@ B(x)\equiv n \pmod{x^2+x+2}.
 для каждого \(n\). Вместо этого можно смотреть на возможные
 множества позиций singletons и проверять, какой остаток даёт
 соответствующий многочлен.</p>
-<p align="justify" class="p_on_project_pages">Такой подход близок к стандартной идее работы в <a href="https://en.wikipedia.org/wiki/Quotient_ring" target="_blank" rel="noopener noreferrer">фактор-кольце
+<p align="justify" class="p_on_project_pages">Такой подход близок к стандартной идее работы в <a class="intext" href="https://en.wikipedia.org/wiki/Quotient_ring" target="_blank" rel="noopener noreferrer">фактор-кольце
 многочленов</a>: мы считаем многочлены не буквально, а с точностью до
 кратности выбранного многочлена \(x^2+x+2\).</p>
 <h3 id="переход-к-множествам-singleton-позиций">Переход к множествам
@@ -305,7 +305,7 @@ meet-in-the-middle</h3>
 независимых множеств в графе-пути с дополнительными рёбрами между
 вершинами на расстоянии \(2\).</p>
 <p align="justify" class="p_on_project_pages">Для \(k=80\) полный перебор всех допустимых \(T\)
-уже неприятен. Но структура условия хорошо подходит для <a href="https://en.wikipedia.org/wiki/Meet-in-the-middle_attack" target="_blank" rel="noopener noreferrer">meet-in-the-middle</a>.
+уже неприятен. Но структура условия хорошо подходит для <a class="intext" href="https://en.wikipedia.org/wiki/Meet-in-the-middle_attack" target="_blank" rel="noopener noreferrer">meet-in-the-middle</a>.
 Идея стандартная: вместо одного большого перебора по \(80\)
 позициям делим задачу на две половины по \(40\) позиций.</p>
 <p align="justify" class="p_on_project_pages">Левая половина: позиции \(0\ldots39\). Правая половина: позиции

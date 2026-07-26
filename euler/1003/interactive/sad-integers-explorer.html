@@ -62,9 +62,18 @@
       </section>
 
       <section role="tabpanel" aria-labelledby="e1003-meet-tab" id="e1003-meet-panel" data-e1003-panel="meet" hidden>
-        <div class="e1003-choice" role="group" aria-label="Контрольное множество singleton-позиций">
-          <button type="button" class="is-active" data-e1003-example="68">{2, 5, 8, 13}</button>
-          <button type="button" data-e1003-example="90">{1, 13}</button>
+        <div class="e1003-choice" role="group" aria-label="Готовые контрольные множества">
+          <button type="button" class="is-active" data-e1003-preset="2,5,8,13">n=68: {2, 5, 8, 13}</button>
+          <button type="button" data-e1003-preset="1,13">n=90: {1, 13}</button>
+          <button type="button" data-e1003-clear>Очистить</button>
+        </div>
+        <p class="e1003-picker-intro">
+          Это singleton-позиции двух контрольных грустных чисел из условия. Любое другое множество можно собрать по позициям ниже.
+        </p>
+        <div class="e1003-position-picker" data-e1003-position-picker role="group" aria-label="Singleton-позиции от 0 до 13"></div>
+        <div class="e1003-controls e1003-split-control">
+          <label for="e1003-split">Граница половин <strong data-e1003-split-value>7</strong></label>
+          <input id="e1003-split" type="range" min="3" max="11" value="7" step="1">
         </div>
         <div class="e1003-metrics" aria-live="polite">
           <span><small>Склейка коэффициентов</small><strong data-e1003-combined-u>Σuᵢ = 0</strong></span>

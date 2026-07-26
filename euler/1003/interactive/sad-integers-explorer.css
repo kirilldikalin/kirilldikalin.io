@@ -34,6 +34,7 @@ button:focus-visible {
 }
 
 button[aria-selected="true"],
+button[aria-pressed="true"],
 button.is-active {
   color: #fff;
   border-color: #303033;
@@ -64,6 +65,27 @@ input:focus-visible {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.e1003-picker-intro {
+  margin: -0.25rem 0 0.75rem;
+  line-height: 1.4;
+}
+
+.e1003-position-picker {
+  display: grid;
+  grid-template-columns: repeat(14, minmax(2.4rem, 1fr));
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.e1003-position-picker button {
+  min-width: 0;
+  padding-inline: 0.25rem;
+}
+
+.e1003-split-control {
+  margin-bottom: 0.25rem;
 }
 
 .e1003-controls {
@@ -175,6 +197,10 @@ input:focus-visible {
   fill: #77777d;
 }
 
+.e1003-q-bar.is-invalid {
+  fill: #a63f36;
+}
+
 .e1003-label {
   font-size: 16px;
   fill: #303033;
@@ -207,6 +233,10 @@ input:focus-visible {
   .e1003-control-grid,
   .e1003-metrics {
     grid-template-columns: 1fr;
+  }
+
+  .e1003-position-picker {
+    grid-template-columns: repeat(7, minmax(2.4rem, 1fr));
   }
 
   .e1003-stage {

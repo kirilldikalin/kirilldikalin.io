@@ -3,7 +3,7 @@
 
   const core = window.Euler1003Core;
   const svgNamespace = "http://www.w3.org/2000/svg";
-  let selectedExample = [2, 5, 8, 13];
+  let selectedPositions = [2, 5, 8, 13];
 
   function svgElement(name, attributes = {}, text = "") {
     const element = document.createElementNS(svgNamespace, name);
@@ -179,8 +179,8 @@
   }
 
   function drawMeet() {
-    const split = 7;
-    const summary = core.meetInTheMiddleSummary(selectedExample, split);
+    const split = Number(document.querySelector("#e1003-split").value);
+    const summary = core.meetInTheMiddleSummary(selectedPositions, split);
     const scene = document.querySelector("[data-e1003-meet-scene]");
     clear(scene);
 
@@ -195,7 +195,7 @@
 
     for (let index = 0; index <= 13; index += 1) {
       const x = startX + index * spacing;
-      const selected = selectedExample.includes(index);
+      const selected = selectedPositions.includes(index);
       scene.append(svgElement("circle", {
         cx: x,
         cy: axisY,
@@ -214,32 +214,106 @@
     text(scene, 245, 135, `граничная маска ${summary.left.mask}`, "e1003-note", "middle");
     text(scene, 675, 135, `граничная маска ${summary.right.mask}`, "e1003-note", "middle");
 
-    const rows = summary.candidate.reconstruction.rows.slice(0, 14);
-    const maxQ = Math.max(...rows.map((row) => row.q));
     const baseY = 405;
-    rows.forEach((row) => {
-      const x = startX + row.index * spacing;
-      const height = 105 * row.q / maxQ;
-      scene.append(svgElement("rect", {
-        x: x - 12,
-        y: baseY - height,
-        width: 24,
-        height,
-        rx: 3,
-        class: "e1003-q-bar",
-      }));
-      text(scene, x, baseY + 22, `q${subscript(row.index)}`, "e1003-note", "middle");
-    });
     text(scene, 460, 278, "восстановленные переносы qᵢ", "e1003-label", "middle");
+    const reconstruction = summary.candidate.reconstruction;
+    if (reconstruction) {
+      const rows = reconstruction.rows.slice(0, 14);
+      const finiteValues = rows
+        .map((row) => row.q)
+        .filter(Number.isFinite)
+        .map(Math.abs);
+      const maxQ = Math.max(1, ...finiteValues);
+      rows.forEach((row) => {
+        const x = startX + row.index * spacing;
+        const height = Number.isFinite(row.q) ? 105 * Math.abs(row.q) / maxQ : 4;
+        scene.append(svgElement("rect", {
+          x: x - 12,
+          y: baseY - height,
+          width: 24,
+          height,
+          rx: 3,
+          class: row.valid ? "e1003-q-bar" : "e1003-q-bar is-invalid",
+        }));
+        text(scene, x, baseY + 22, `q${subscript(row.index)}`, "e1003-note", "middle");
+      });
+    } else {
+      text(
+        scene,
+        460,
+        350,
+        "сначала нужны Σuᵢ=0 и положительный свободный член",
+        "e1003-note",
+        "middle"
+      );
+    }
 
+    document.querySelector("[data-e1003-split-value]").textContent = split;
     document.querySelector("[data-e1003-combined-u]").textContent =
       `Σuᵢ = ${formatInteger(summary.combinedResidue.u)}`;
     document.querySelector("[data-e1003-candidate]").textContent =
-      `n = ${summary.candidate.n}`;
-    document.querySelector("[data-e1003-q-check]").textContent =
-      `min qᵢ = ${summary.candidate.reconstruction.minQ}`;
-    document.querySelector("[data-e1003-meet-detail]").textContent =
-      `Маски ${summary.left.mask} и ${summary.right.mask} совместимы; суммы u взаимно уничтожаются, а все восстановленные qᵢ неотрицательны. Хвост стабилизируется на ${summary.candidate.reconstruction.tailValue}.`;
+      `n = ${summary.candidate.n ?? "—"}`;
+    document.querySelector("[data-e1003-q-check]").textContent = reconstruction
+      ? reconstruction.valid
+        ? `min qᵢ = ${reconstruction.minQ}`
+        : "проверка не пройдена"
+      : "не вычисляются";
+
+    let detail;
+    if (selectedPositions.length === 0) {
+      detail = "Выберите singleton-позиции: две единицы не должны стоять ближе чем через три места.";
+    } else if (!summary.compatible) {
+      detail = "Набор не проходит условие одиночности: две выбранные позиции находятся слишком близко.";
+    } else if (summary.combinedResidue.u !== 0) {
+      detail = `Маски ${summary.left.mask} и ${summary.right.mask} совместимы, но Σuᵢ=${formatInteger(summary.combinedResidue.u)}: коэффициенты двух половин не уничтожились.`;
+    } else if (summary.candidate.n === null) {
+      detail = `Коэффициент при x уничтожился, но свободный член ${formatInteger(summary.combinedResidue.v)} не даёт положительного кандидата.`;
+    } else if (!reconstruction.valid) {
+      detail = `Получился кандидат n=${summary.candidate.n}, но восстановление нашло недопустимые переносы qᵢ.`;
+    } else {
+      detail = `Маски ${summary.left.mask} и ${summary.right.mask} совместимы; суммы u уничтожаются, все qᵢ неотрицательны, хвост стабилизируется на ${reconstruction.tailValue}.`;
+    }
+    document.querySelector("[data-e1003-meet-detail]").textContent = detail;
+  }
+
+  function syncMeetControls() {
+    const selected = new Set(selectedPositions);
+    document.querySelectorAll("[data-e1003-position]").forEach((button) => {
+      button.setAttribute(
+        "aria-pressed",
+        String(selected.has(Number(button.dataset.e1003Position)))
+      );
+    });
+    const key = selectedPositions.join(",");
+    document.querySelectorAll("[data-e1003-preset]").forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.e1003Preset === key);
+    });
+  }
+
+  function setSelectedPositions(positions) {
+    selectedPositions = core.normalizePositions(positions)
+      .filter((position) => position >= 0 && position <= 13);
+    syncMeetControls();
+    drawMeet();
+  }
+
+  function initializePositionPicker() {
+    const picker = document.querySelector("[data-e1003-position-picker]");
+    for (let position = 0; position <= 13; position += 1) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.dataset.e1003Position = position;
+      button.textContent = String(position);
+      button.setAttribute("aria-label", `Позиция ${position}`);
+      button.addEventListener("click", () => {
+        const next = new Set(selectedPositions);
+        if (next.has(position)) next.delete(position);
+        else next.add(position);
+        setSelectedPositions([...next]);
+      });
+      picker.append(button);
+    }
+    syncMeetControls();
   }
 
   function selectTab(name) {
@@ -269,18 +343,17 @@
     document.querySelector(selector).addEventListener("input", drawStones);
   });
   document.querySelector("#e1003-index").addEventListener("input", drawResidues);
-  document.querySelectorAll("[data-e1003-example]").forEach((button) => {
+  document.querySelectorAll("[data-e1003-preset]").forEach((button) => {
     button.addEventListener("click", () => {
-      selectedExample = button.dataset.e1003Example === "68"
-        ? [2, 5, 8, 13]
-        : [1, 13];
-      document.querySelectorAll("[data-e1003-example]").forEach((candidate) => {
-        candidate.classList.toggle("is-active", candidate === button);
-      });
-      drawMeet();
+      setSelectedPositions(button.dataset.e1003Preset.split(",").map(Number));
     });
   });
+  document.querySelector("[data-e1003-clear]").addEventListener("click", () => {
+    setSelectedPositions([]);
+  });
+  document.querySelector("#e1003-split").addEventListener("input", drawMeet);
 
+  initializePositionPicker();
   drawStones();
   drawResidues();
   drawMeet();
