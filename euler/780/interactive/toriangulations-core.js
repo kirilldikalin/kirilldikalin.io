@@ -222,7 +222,24 @@
     return regular ? 3 : 1;
   }
 
+  function countDiagramModel(limit, regular) {
+    const value = Number(limit);
+    if (!Number.isInteger(value) || value < 2 || value > 100) {
+      throw new Error("Размер схемы подсчёта должен быть целым от 2 до 100");
+    }
+    const counts = countToriangulations(value);
+    return {
+      limit: value,
+      regular: Boolean(regular),
+      directionAngles: regular ? [0, 60, -60] : [0],
+      bandCount: Math.min(7, 1 + Math.floor(Math.log2(value))),
+      latticeRadius: Math.min(8, 2 + Math.floor(Math.sqrt(value) / 2)),
+      counts,
+    };
+  }
+
   return {
+    countDiagramModel,
     countToriangulations,
     distinctPrimeFactorWeights,
     divisorSummatory,

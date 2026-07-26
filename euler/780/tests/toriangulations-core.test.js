@@ -47,6 +47,15 @@ test("every strip control changes the diagram model", () => {
 test("regular triangular grids have three strip directions", () => {
   assert.equal(core.stripDirectionCount(false), 1);
   assert.equal(core.stripDirectionCount(true), 3);
+
+  const ordinary = core.countDiagramModel(6, false);
+  const regular = core.countDiagramModel(6, true);
+  const large = core.countDiagramModel(100, false);
+  assert.deepEqual(ordinary.directionAngles, [0]);
+  assert.deepEqual(regular.directionAngles, [0, 60, -60]);
+  assert.equal(ordinary.counts.total, 14);
+  assert.ok(large.bandCount > ordinary.bandCount);
+  assert.ok(large.latticeRadius > ordinary.latticeRadius);
 });
 
 test("the arithmetic count reproduces all published checks", () => {

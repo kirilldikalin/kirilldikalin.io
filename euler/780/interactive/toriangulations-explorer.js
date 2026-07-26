@@ -274,40 +274,117 @@
     }
   }
 
-  function drawTriangularDirections(scene) {
+  function drawTriangularDirections(scene, model) {
     const centerX = 450;
-    const centerY = 200;
-    for (let row = -4; row <= 4; row += 1) {
-      for (let column = -6; column <= 6; column += 1) {
-        const x = centerX + column * 48 + row * 24;
-        const y = centerY + row * 41.5;
-        line(scene, x, y, x + 48, y, "e780-grid");
-        line(scene, x, y, x + 24, y - 41.5, "e780-grid");
-        line(scene, x, y, x + 24, y + 41.5, "e780-grid");
+    const centerY = 155;
+    const spacing = Math.max(32, 48 - model.latticeRadius * 2);
+    const rowHeight = spacing * Math.sqrt(3) / 2;
+    const radius = model.latticeRadius;
+    const latticeGroup = svgElement("g", { class: "e780-count-lattice" });
+    for (let row = -radius; row <= radius; row += 1) {
+      for (let column = -radius; column <= radius; column += 1) {
+        const x = centerX + column * spacing + row * spacing / 2;
+        const y = centerY + row * rowHeight;
+        line(latticeGroup, x, y, x + spacing, y, "e780-grid");
+        line(latticeGroup, x, y, x + spacing / 2, y - rowHeight, "e780-grid");
+        line(latticeGroup, x, y, x + spacing / 2, y + rowHeight, "e780-grid");
       }
     }
+    scene.append(latticeGroup);
 
-    line(scene, 150, centerY, 750, centerY, "e780-direction-one");
-    if (gridType === "regular") {
-      line(scene, 275, 345, 625, 55, "e780-direction-extra");
-      line(scene, 275, 55, 625, 345, "e780-direction-extra");
+    const defs = svgElement("defs");
+    const clip = svgElement("clipPath", { id: "e780-count-clip" });
+    clip.append(svgElement("rect", { x: 70, y: 48, width: 760, height: 214, rx: 8 }));
+    defs.append(clip);
+    scene.append(defs);
+    const directions = svgElement("g", { "clip-path": "url(#e780-count-clip)" });
+    model.directionAngles.forEach((angle, directionIndex) => {
+      const radians = angle * Math.PI / 180;
+      const dx = Math.cos(radians);
+      const dy = Math.sin(radians);
+      const nx = -dy;
+      const ny = dx;
+      for (let index = 0; index < model.bandCount; index += 1) {
+        const offset = (index - (model.bandCount - 1) / 2) * 24;
+        line(
+          directions,
+          centerX - dx * 520 + nx * offset,
+          centerY - dy * 520 + ny * offset,
+          centerX + dx * 520 + nx * offset,
+          centerY + dy * 520 + ny * offset,
+          `e780-count-strip${directionIndex === 0 ? "" : " is-extra"}`,
+        );
+      }
+    });
+    scene.append(directions);
+    scene.append(svgElement("circle", {
+      cx: centerX,
+      cy: centerY,
+      r: 7,
+      class: "e780-count-origin",
+    }));
+  }
+
+  function drawCountBar(scene, model) {
+    const { axial, inclined, raw, correction, total } = model.counts;
+    const left = 135;
+    const top = 302;
+    const width = 630;
+    const height = 22;
+    const denominator = Math.max(1, raw);
+    const axialWidth = width * axial / denominator;
+    const correctionWidth = width * correction / denominator;
+
+    scene.append(svgElement("rect", {
+      x: left,
+      y: top,
+      width: axialWidth,
+      height,
+      class: "e780-count-bar e780-count-bar-axial",
+    }));
+    scene.append(svgElement("rect", {
+      x: left + axialWidth,
+      y: top,
+      width: width - axialWidth,
+      height,
+      class: "e780-count-bar e780-count-bar-inclined",
+    }));
+    if (model.regular && correctionWidth > 0) {
+      scene.append(svgElement("rect", {
+        x: left + width - correctionWidth,
+        y: top - 5,
+        width: correctionWidth,
+        height: height + 10,
+        class: "e780-count-correction",
+      }));
     }
+    text(scene, left, top - 10, `осевые ${axial}`, "e780-note");
+    text(scene, left + width, top - 10, `наклонные ${inclined}`, "e780-note", "end");
+    text(
+      scene,
+      450,
+      356,
+      model.regular
+        ? `сырой счёт ${raw} − лишние копии ${correction} = ${total}`
+        : `сырой счёт ${raw}: одна полоса задаёт одно направление`,
+      "e780-label",
+      "middle",
+    );
   }
 
   function drawCount() {
     const limit = Number(document.querySelector("#e780-limit").value);
     const regular = gridType === "regular";
-    const counts = core.countToriangulations(limit);
+    const model = core.countDiagramModel(limit, regular);
+    const counts = model.counts;
     const scene = document.querySelector("[data-e780-count-scene]");
     clear(scene);
-    drawTriangularDirections(scene);
+    drawTriangularDirections(scene, model);
+    drawCountBar(scene, model);
 
-    text(scene, 450, 33, regular
-      ? "одна решётка попала в полосовой подсчёт три раза"
-      : "направление полос определяется однозначно", "e780-label", "middle");
-    text(scene, 450, 375, regular
-      ? "из сырого счёта нужно удалить две лишние копии"
-      : "дополнительной поправки для этой конфигурации нет", "e780-note", "middle");
+    text(scene, 450, 30, regular
+      ? `${model.bandCount} полос в каждом из трёх направлений`
+      : `${model.bandCount} полос одного направления`, "e780-label", "middle");
 
     document.querySelector("[data-e780-limit-value]").textContent = limit;
     document.querySelector("[data-e780-directions]").textContent =
@@ -315,7 +392,9 @@
     document.querySelector("[data-e780-raw]").textContent = counts.raw;
     document.querySelector("[data-e780-total]").textContent = counts.total;
     document.querySelector("[data-e780-count-detail]").textContent =
-      `При N = ${limit}: осевые полосы дают ${counts.axial}, наклонные — ${counts.inclined}, а поправка за регулярные решётки равна ${counts.correction}.`;
+      regular
+        ? `При N = ${limit} регулярная решётка видна сразу в трёх направлениях. Красная рамка на полосе подсчёта показывает ${counts.correction} лишних копий, которые надо вычесть.`
+        : `При N = ${limit} показано одно семейство полос. Плотность сетки и число видимых полос растут вместе с N; осевая часть даёт ${counts.axial}, наклонная — ${counts.inclined}.`;
   }
 
   function selectTab(name) {
@@ -351,6 +430,7 @@
       gridType = button.dataset.e780Grid;
       document.querySelectorAll("[data-e780-grid]").forEach((candidate) => {
         candidate.classList.toggle("is-active", candidate === button);
+        candidate.setAttribute("aria-pressed", String(candidate === button));
       });
       drawCount();
     });
