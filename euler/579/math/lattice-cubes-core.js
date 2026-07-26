@@ -119,6 +119,22 @@
     return length ** 3 + (length + 1) * edgeGcdSum + 1;
   }
 
+  function pointCountBreakdown(edges) {
+    if (!validateEdges(edges)) throw new Error("invalid cube edges");
+    const length = edgeLength(edges);
+    const edgeGcdSum = edges.reduce((sum, edge) => sum + gcdValues(edge), 0);
+    const volume = length ** 3;
+    const boundary = (length + 1) * edgeGcdSum;
+    return {
+      length,
+      edgeGcdSum,
+      volume,
+      boundary,
+      correction: 1,
+      total: volume + boundary + 1,
+    };
+  }
+
   function latticePoints(edges) {
     if (!validateEdges(edges)) throw new Error("invalid cube edges");
     const vertices = verticesFromEdges(edges);
@@ -157,6 +173,19 @@
       }
     }
     return points;
+  }
+
+  function coordinateSlice(points, axis, coordinate) {
+    if (!Number.isInteger(axis) || axis < 0 || axis > 2) {
+      throw new Error("slice axis must be 0, 1 or 2");
+    }
+    if (!Number.isInteger(coordinate)) {
+      throw new Error("slice coordinate must be integral");
+    }
+    return points.filter((entry) => {
+      const point = Array.isArray(entry) ? entry : entry.point;
+      return point[axis] === coordinate;
+    });
   }
 
   function placementCount(edges, boxSize) {
@@ -317,6 +346,7 @@
     add,
     canonicalKey,
     componentSpanSums,
+    coordinateSlice,
     coordinateSpans,
     cross,
     cubeTotals,
@@ -333,6 +363,7 @@
     orientationRecord,
     placementCount,
     pointCount,
+    pointCountBreakdown,
     primitiveScale,
     quaternionDivisor,
     quaternionNorm,

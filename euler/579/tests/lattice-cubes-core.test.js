@@ -68,6 +68,22 @@ test("point formula gives 64 axial and 40 tilted points", () => {
   assert.equal(core.pointCount(axial), 64);
   assert.equal(core.pointCount(tilted), 40);
   assert.equal(core.pointCount(tilted.map((edge) => core.scale(edge, 2))), 259);
+  assert.deepEqual(core.pointCountBreakdown(axial), {
+    length: 3,
+    edgeGcdSum: 9,
+    volume: 27,
+    boundary: 36,
+    correction: 1,
+    total: 64,
+  });
+  assert.deepEqual(core.pointCountBreakdown(tilted), {
+    length: 3,
+    edgeGcdSum: 3,
+    volume: 27,
+    boundary: 12,
+    correction: 1,
+    total: 40,
+  });
 });
 
 test("enumerated lattice points match the formula and classification", () => {
@@ -78,6 +94,14 @@ test("enumerated lattice points match the formula and classification", () => {
   assert.equal(axialPoints.filter(({ kind }) => kind === "vertex").length, 8);
   assert.equal(tiltedPoints.filter(({ kind }) => kind === "vertex").length, 8);
   assert.equal(tiltedPoints.filter(({ kind }) => kind === "interior").length, 20);
+  const zValues = [...new Set(tiltedPoints.map(({ point }) => point[2]))];
+  assert.equal(
+    zValues.reduce(
+      (sum, z) => sum + core.coordinateSlice(tiltedPoints, 2, z).length,
+      0
+    ),
+    tiltedPoints.length
+  );
 });
 
 test("small C(n) and S(n) checks are reproduced exactly", () => {

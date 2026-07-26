@@ -37,12 +37,20 @@
     face: "#9a9da4",
     interior: "#a63f36",
   };
+  const pointKindLabels = {
+    vertex: "вершина",
+    edge: "точка ребра",
+    face: "точка грани",
+    interior: "внутренняя точка",
+  };
   let cubeType = "axis";
   let mode = "vertices";
   let yaw = -0.72;
   let pitch = 0.55;
   let pointer = null;
   let model = null;
+  let renderedPoints = [];
+  let selectedPointKey = null;
 
   function add(left, right) {
     return left.map((value, index) => value + right[index]);
@@ -140,22 +148,61 @@
     context.restore();
   }
 
+  function pointKey(point) {
+    return point.join(",");
+  }
+
+  function drawSlicePlane(width, height) {
+    const coordinate = Number(document.querySelector("#e579-slice").value);
+    const projected = [
+      [0, 0, coordinate],
+      [model.boxSize, 0, coordinate],
+      [model.boxSize, model.boxSize, coordinate],
+      [0, model.boxSize, coordinate],
+    ].map((point) => project(point, width, height, model.boxSize));
+
+    context.save();
+    context.beginPath();
+    context.moveTo(projected[0].x, projected[0].y);
+    for (let index = 1; index < projected.length; index += 1) {
+      context.lineTo(projected[index].x, projected[index].y);
+    }
+    context.closePath();
+    context.fillStyle = "rgba(166, 63, 54, 0.1)";
+    context.fill();
+    context.strokeStyle = "rgba(166, 63, 54, 0.75)";
+    context.lineWidth = 1.5;
+    context.setLineDash([6, 5]);
+    context.stroke();
+    context.restore();
+  }
+
   function drawPoints(width, height) {
     let selected = [];
     if (mode === "all") {
       selected = model.points;
+    } else if (mode === "slice") {
+      selected = core.coordinateSlice(
+        model.points,
+        2,
+        Number(document.querySelector("#e579-slice").value)
+      );
     } else if (mode === "interior") {
       selected = model.points.filter(({ kind }) => kind === "interior");
     } else if (mode === "vertices") {
       selected = model.points.filter(({ kind }) => kind === "vertex");
+    } else if (mode === "edges") {
+      selected = model.points.filter(({ kind }) => kind === "edge");
+    } else if (mode === "faces") {
+      selected = model.points.filter(({ kind }) => kind === "face");
     }
 
-    const projected = selected.map((entry) => ({
+    renderedPoints = selected.map((entry) => ({
       ...entry,
       projected: project(entry.point, width, height, model.boxSize),
     })).sort((left, right) => left.projected.depth - right.projected.depth);
 
-    for (const entry of projected) {
+    for (const entry of renderedPoints) {
       const radius = (entry.kind === "vertex" ? 5.2 : 3.2) * entry.projected.perspective;
       context.beginPath();
       context.arc(entry.projected.x, entry.projected.y, Math.max(1.7, radius), 0, Math.PI * 2);
@@ -165,6 +212,22 @@
         context.strokeStyle = "#fff";
         context.lineWidth = 1;
         context.stroke();
+      }
+      if (pointKey(entry.point) === selectedPointKey) {
+        context.beginPath();
+        context.arc(
+          entry.projected.x,
+          entry.projected.y,
+          Math.max(7, radius + 4),
+          0,
+          Math.PI * 2
+        );
+        context.strokeStyle = "#a63f36";
+        context.lineWidth = 2.5;
+        context.stroke();
+        context.font = "14px Courier Prime, monospace";
+        context.fillStyle = "#303033";
+        context.fillText(formatVector(entry.point), entry.projected.x + 11, entry.projected.y - 10);
       }
     }
   }
@@ -182,6 +245,7 @@
     );
 
     strokeSegments(projectedBox, cubeEdges, "rgba(80, 80, 86, 0.25)", 1.2, [5, 5]);
+    if (mode === "slice") drawSlicePlane(width, height);
 
     if (mode === "faces") fillFaces(projectedCube, 0.58);
     if (mode === "all") fillFaces(projectedCube, 0.12);
@@ -197,6 +261,7 @@
 
   function updateMetrics() {
     const { edges, length, spans, placements, pointCount, breakdown } = model;
+    const formula = core.pointCountBreakdown(edges);
     document.querySelector("[data-e579-vectors]").innerHTML =
       edges.map((edge, index) => `${["u", "v", "w"][index]}=${formatVector(edge)}`).join("<br>");
     document.querySelector("[data-e579-dots]").textContent =
@@ -211,13 +276,48 @@
       String(placements);
     document.querySelector("[data-e579-points]").textContent =
       `${pointCount} (перечислено ${model.points.length})`;
+    document.querySelector("[data-e579-formula]").textContent =
+      `${formula.volume} + ${formula.boundary} + ${formula.correction} = ${formula.total}`;
     document.querySelector("[data-e579-breakdown]").textContent =
       `вершины ${breakdown.vertex}, рёбра ${breakdown.edge}, грани ${breakdown.face}, внутри ${breakdown.interior}`;
     document.querySelector("[data-e579-detail]").textContent =
       cubeType === "axis"
         ? `В осевом кубе длины ${length} решётчатых точек ${pointCount}: НОД каждого ребра равен длине, поэтому грани и рёбра богаты узлами решётки.`
         : `В наклонном кубе длины ${length} решётчатых точек ${pointCount}: при том же объёме НОД каждого базового ребра равен масштабу ${Number(document.querySelector("#e579-scale").value)}.`;
-    document.querySelector("[data-e579-legend]").hidden = mode !== "all";
+    document.querySelector("[data-e579-legend]").hidden =
+      mode !== "all" && mode !== "slice";
+    updateSliceMetrics();
+    updateSelectedMetric();
+  }
+
+  function formatCoefficient(numerator, denominator) {
+    if (numerator === 0) return "0";
+    if (numerator === denominator) return "1";
+    const divisor = core.gcdPair(numerator, denominator);
+    return `${numerator / divisor}/${denominator / divisor}`;
+  }
+
+  function updateSelectedMetric() {
+    const output = document.querySelector("[data-e579-selected]");
+    const selected = model?.points.find(({ point }) => pointKey(point) === selectedPointKey);
+    if (!selected) {
+      output.textContent = "Нажмите на видимую точку";
+      return;
+    }
+    const denominator = core.squaredNorm(model.edges[0]);
+    const coefficients = selected.numerators
+      .map((value) => formatCoefficient(value, denominator))
+      .join(", ");
+    output.textContent =
+      `${formatVector(selected.point)} · ${pointKindLabels[selected.kind]} · (α, β, γ)=(${coefficients})`;
+  }
+
+  function updateSliceMetrics() {
+    const input = document.querySelector("#e579-slice");
+    const coordinate = Number(input.value);
+    const count = model ? core.coordinateSlice(model.points, 2, coordinate).length : 0;
+    document.querySelector("[data-e579-slice-value]").textContent = coordinate;
+    document.querySelector("[data-e579-slice-count]").textContent = count;
   }
 
   function rebuildModel() {
@@ -229,6 +329,9 @@
     boxInput.min = minimumBox;
     if (Number(boxInput.value) < minimumBox) boxInput.value = minimumBox;
     const boxSize = Number(boxInput.value);
+    const sliceInput = document.querySelector("#e579-slice");
+    sliceInput.max = boxSize;
+    if (Number(sliceInput.value) > boxSize) sliceInput.value = boxSize;
     const rawVertices = core.verticesFromEdges(edges);
     const minima = [0, 1, 2].map((coordinate) =>
       Math.min(...rawVertices.map((vertex) => vertex[coordinate]))
@@ -263,6 +366,9 @@
       pointCount: core.pointCount(edges),
       breakdown,
     };
+    if (!model.points.some(({ point }) => pointKey(point) === selectedPointKey)) {
+      selectedPointKey = null;
+    }
     document.querySelector("[data-e579-scale-value]").textContent = factor;
     document.querySelector("[data-e579-box-value]").textContent = boxSize;
     updateMetrics();
@@ -285,33 +391,71 @@
       document.querySelectorAll("[data-e579-mode]").forEach((candidate) => {
         candidate.classList.toggle("is-active", candidate === button);
       });
-      document.querySelector("[data-e579-legend]").hidden = mode !== "all";
+      document.querySelector("[data-e579-slice-controls]").hidden = mode !== "slice";
+      document.querySelector("[data-e579-legend]").hidden =
+        mode !== "all" && mode !== "slice";
       render();
     });
   });
 
   document.querySelector("#e579-scale").addEventListener("input", rebuildModel);
   document.querySelector("#e579-box").addEventListener("input", rebuildModel);
+  document.querySelector("#e579-slice").addEventListener("input", () => {
+    updateSliceMetrics();
+    render();
+  });
 
   canvas.addEventListener("pointerdown", (event) => {
-    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    pointer = {
+      id: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      startX: event.clientX,
+      startY: event.clientY,
+      moved: false,
+    };
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add("is-dragging");
   });
   canvas.addEventListener("pointermove", (event) => {
     if (!pointer || pointer.id !== event.pointerId) return;
+    if (Math.hypot(event.clientX - pointer.startX, event.clientY - pointer.startY) > 4) {
+      pointer.moved = true;
+    }
     yaw += (event.clientX - pointer.x) * 0.012;
     pitch = Math.max(-1.35, Math.min(1.35, pitch + (event.clientY - pointer.y) * 0.012));
-    pointer = { id: event.pointerId, x: event.clientX, y: event.clientY };
+    pointer.x = event.clientX;
+    pointer.y = event.clientY;
     render();
   });
-  function releasePointer(event) {
+
+  function selectPointAt(clientX, clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    let nearest = null;
+    let nearestDistance = 13;
+    renderedPoints.forEach((entry) => {
+      const distance = Math.hypot(entry.projected.x - x, entry.projected.y - y);
+      if (distance < nearestDistance) {
+        nearest = entry;
+        nearestDistance = distance;
+      }
+    });
+    selectedPointKey = nearest ? pointKey(nearest.point) : null;
+    updateSelectedMetric();
+    render();
+  }
+
+  function releasePointer(event, allowSelection) {
     if (!pointer || pointer.id !== event.pointerId) return;
+    const clicked = allowSelection && !pointer.moved;
     pointer = null;
     canvas.classList.remove("is-dragging");
+    if (clicked) selectPointAt(event.clientX, event.clientY);
   }
-  canvas.addEventListener("pointerup", releasePointer);
-  canvas.addEventListener("pointercancel", releasePointer);
+  canvas.addEventListener("pointerup", (event) => releasePointer(event, true));
+  canvas.addEventListener("pointercancel", (event) => releasePointer(event, false));
 
   canvas.addEventListener("keydown", (event) => {
     const rotations = {

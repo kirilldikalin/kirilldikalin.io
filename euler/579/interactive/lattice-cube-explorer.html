@@ -34,6 +34,15 @@
         <button type="button" data-e579-mode="faces">Грани</button>
         <button type="button" data-e579-mode="interior">Внутренние точки</button>
         <button type="button" data-e579-mode="all">Все точки</button>
+        <button type="button" data-e579-mode="slice">Сечение z</button>
+      </div>
+
+      <div class="e579-slice-controls" data-e579-slice-controls hidden>
+        <div class="e579-controls">
+          <label for="e579-slice">Плоскость z <strong data-e579-slice-value>2</strong></label>
+          <input id="e579-slice" type="range" min="0" max="5" value="2" step="1">
+        </div>
+        <p>В сечении: <strong data-e579-slice-count>0</strong> решётчатых точек</p>
       </div>
 
       <div class="e579-layout">
@@ -45,7 +54,7 @@
             tabindex="0"
             aria-label="Трёхмерная модель решётчатого куба. Вращайте мышью, касанием или стрелками клавиатуры.">
           </canvas>
-          <p class="e579-canvas-help">Вращение: мышь, касание или стрелки · сброс ракурса: R</p>
+          <p class="e579-canvas-help">Вращение: мышь, касание или стрелки · клик по точке: координаты и коэффициенты · сброс: R</p>
           <div class="e579-legend" data-e579-legend hidden>
             <span><i class="is-vertex"></i>вершины</span>
             <span><i class="is-edge"></i>рёбра</span>
@@ -62,7 +71,9 @@
           <div><dt>Размахи</dt><dd data-e579-spans></dd></div>
           <div><dt>Размещений в боксе</dt><dd data-e579-placements></dd></div>
           <div><dt>Решётчатых точек</dt><dd data-e579-points></dd></div>
+          <div><dt>Проверка формулы</dt><dd data-e579-formula></dd></div>
           <div><dt>Разбиение точек</dt><dd data-e579-breakdown></dd></div>
+          <div><dt>Выбранная точка</dt><dd data-e579-selected>Нажмите на видимую точку</dd></div>
         </dl>
       </div>
 

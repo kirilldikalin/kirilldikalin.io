@@ -81,6 +81,23 @@ canvas:focus-visible {
   margin: 1rem 0;
 }
 
+.e579-slice-controls {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+  margin: -0.25rem 0 1rem;
+}
+
+.e579-slice-controls[hidden] {
+  display: none;
+}
+
+.e579-slice-controls p {
+  margin: 0;
+  padding-bottom: 0.2rem;
+}
+
 .e579-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 0.85fr);
@@ -209,6 +226,7 @@ canvas.is-dragging {
 
 @media (max-width: 44rem) {
   .e579-top-controls,
+  .e579-slice-controls,
   .e579-layout {
     grid-template-columns: 1fr;
   }
