@@ -1,0 +1,215 @@
+:root {
+  color-scheme: light;
+  font-family: "Courier Prime", "Courier New", monospace;
+  color: #303033;
+  background: #fbfbfd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 2.8rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #c9c9ce;
+  border-radius: 0.45rem;
+  color: #303033;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: #303033;
+}
+
+button[aria-selected="true"],
+button.is-active {
+  color: #fff;
+  border-color: #303033;
+  background: #303033;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #b46a00;
+  outline-offset: 2px;
+}
+
+.e1003-explorer {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.e1003-tabs,
+.e1003-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.e1003-control-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.e1003-controls {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.e1003-controls label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.e1003-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 1rem 0;
+}
+
+.e1003-metrics span {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 4.4rem;
+  padding: 0.7rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.e1003-metrics small {
+  color: #6b6b70;
+}
+
+.e1003-stage {
+  display: block;
+  width: 100%;
+  min-height: 20rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.55rem;
+  background: linear-gradient(#fff, #f6f6f8);
+}
+
+.e1003-detail {
+  min-height: 3rem;
+  margin: 0.75rem 0 0;
+  line-height: 1.4;
+}
+
+.e1003-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.e1003-axis,
+.e1003-guide {
+  stroke: #d0d0d5;
+  stroke-width: 1.5;
+}
+
+.e1003-transfer {
+  fill: none;
+  stroke: #77777d;
+  stroke-width: 2;
+  stroke-dasharray: 7 6;
+}
+
+.e1003-node {
+  fill: #fff;
+  stroke: #303033;
+  stroke-width: 2;
+}
+
+.e1003-node-active {
+  fill: #303033;
+  stroke: #303033;
+}
+
+.e1003-node-singleton {
+  fill: #a63f36;
+  stroke: #6f2b25;
+}
+
+.e1003-card {
+  fill: #fff;
+  stroke: #bdbdc2;
+  stroke-width: 1.5;
+}
+
+.e1003-card-active {
+  fill: #303033;
+  stroke: #303033;
+}
+
+.e1003-split {
+  stroke: #a63f36;
+  stroke-width: 2;
+  stroke-dasharray: 8 7;
+}
+
+.e1003-q-bar {
+  fill: #77777d;
+}
+
+.e1003-label {
+  font-size: 16px;
+  fill: #303033;
+}
+
+.e1003-note {
+  font-size: 14px;
+  fill: #66666c;
+}
+
+.e1003-inverse {
+  fill: #fff;
+}
+
+@media (max-width: 46rem) {
+  .e1003-explorer {
+    padding: 0.75rem;
+  }
+
+  .e1003-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .e1003-tabs button {
+    min-width: 0;
+    padding-inline: 0.35rem;
+  }
+
+  .e1003-control-grid,
+  .e1003-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e1003-stage {
+    min-height: 13rem;
+  }
+}

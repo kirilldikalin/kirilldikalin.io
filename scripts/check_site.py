@@ -27,6 +27,7 @@ PUBLIC_PAGES = (
     "euler/798.html",
     "euler/798/interactive/card-stacking-explorer.html",
     "euler/1003.html",
+    "euler/1003/interactive/sad-integers-explorer.html",
     "euler/1007.html",
     "euler/1007/interactive/alternating-difference-explorer.html",
     "knowlege_base/iKnowledge_base.html",

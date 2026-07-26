@@ -14,8 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=20260726">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./1003/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <script>
     window.MathJax = {
@@ -233,6 +234,16 @@ B_T(x)\equiv
 n=\sum_{i\in T}v_i.
 \]</span></p>
 <p align="justify" class="p_on_project_pages">Это и есть главный критерий для генерации кандидатов.</p>
+<p align="justify" class="p_on_project_pages">Ниже весь переход можно разобрать по шагам. На первой вкладке видно само
+движение камней, на второй — пары остатков \(x^i\), а на третьей две половины множества склеиваются по
+граничным маскам и противоположным коэффициентам \(u_i\). Там же восстанавливаются \(n\) и переносы
+\(q_i\).</p>
+<iframe
+  class="euler1003-visualization-frame"
+  src="./1003/interactive/sad-integers-explorer.html"
+  title="Движение камней, остатки степеней и meet-in-the-middle"
+  loading="lazy">
+</iframe>
 <h3 id="почему-одной-проверки-остатка-недостаточно">Почему одной
 проверки остатка недостаточно</h3>
 <p align="justify" class="p_on_project_pages">На этом месте легко ошибиться и решить, что любое множество
@@ -344,10 +355,8 @@ meet-in-the-middle</h3>
 <p align="justify" class="p_on_project_pages">После этого meet-in-the-middle — естественная инженерная оптимизация.
 Она не меняет математику решения, а только делает перебор достаточно
 быстрым.</p>
-<h3 id="эскиз-алгоритма-без-готового-кода">Эскиз алгоритма без готового
-кода</h3>
-<p align="justify" class="p_on_project_pages">Публично я не привожу готовую реализацию, но алгоритм можно описать
-так:</p>
+<h3 id="эскиз-алгоритма">Эскиз алгоритма</h3>
+<p align="justify" class="p_on_project_pages">Порядок вычислений получается таким:</p>
 <ol type="1">
 <li>Для всех \(i < k\) вычислить пары
 \((u_i, v_i)\) из сравнения
@@ -366,9 +375,6 @@ meet-in-the-middle</h3>
 что все \(q_i\) неотрицательны.</li>
 <li>Просуммировать все прошедшие кандидаты.</li>
 </ol>
-<p align="justify" class="p_on_project_pages">В моей реализации такой подход работает примерно за 15 секунд в
-обычном интерпретируемом окружении. Конкретное время, конечно, зависит
-от машины, версии интерпретатора и деталей реализации.</p>
 <h3 id="итог">Итог</h3>
 <p align="justify" class="p_on_project_pages">Главная идея решения — не моделировать камни напрямую, а смотреть на
 позиции одиночных остатков. Производящие функции переводят процесс в

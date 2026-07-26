@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 1003 — грустные числа</title>
+  <link rel="stylesheet" href="./sad-integers-explorer.css">
+  <script src="./sad-integers-core.js" defer></script>
+  <script src="./sad-integers-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e1003-explorer" aria-labelledby="e1003-title">
+      <h1 class="e1003-sr-only" id="e1003-title">От движения камней к meet-in-the-middle</h1>
+
+      <div class="e1003-tabs" role="tablist" aria-label="Этапы решения">
+        <button type="button" role="tab" aria-selected="true" aria-controls="e1003-stones-panel" id="e1003-stones-tab" data-e1003-tab="stones">1. Камни</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e1003-residues-panel" id="e1003-residues-tab" data-e1003-tab="residues">2. Остатки</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e1003-meet-panel" id="e1003-meet-tab" data-e1003-tab="meet">3. Склейка</button>
+      </div>
+
+      <section role="tabpanel" aria-labelledby="e1003-stones-tab" id="e1003-stones-panel" data-e1003-panel="stones">
+        <div class="e1003-control-grid">
+          <div class="e1003-controls">
+            <label for="e1003-n">Начальная куча n <strong data-e1003-n-value>10</strong></label>
+            <input id="e1003-n" type="range" min="1" max="20" value="10" step="1">
+          </div>
+          <div class="e1003-controls">
+            <label for="e1003-step">Обработано позиций <strong data-e1003-step-value>3</strong></label>
+            <input id="e1003-step" type="range" min="0" max="8" value="3" step="1">
+          </div>
+        </div>
+        <div class="e1003-metrics" aria-live="polite">
+          <span><small>Последняя куча</small><strong data-e1003-pile>позиция 2: 2</strong></span>
+          <span><small>Перенос в i+1 и i+3</small><strong data-e1003-moved>по 1</strong></span>
+          <span><small>Одиночный остаток</small><strong data-e1003-singleton>нет</strong></span>
+        </div>
+        <svg class="e1003-stage" viewBox="0 0 920 360" role="img" aria-labelledby="e1003-stones-title e1003-stones-desc">
+          <title id="e1003-stones-title">Пошаговое движение камней</title>
+          <desc id="e1003-stones-desc">Кучи обрабатываются слева направо, половины уходят на одну и три позиции вправо, а нечётный остаток остаётся на месте.</desc>
+          <g data-e1003-stones-scene></g>
+        </svg>
+        <p class="e1003-detail" data-e1003-stones-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e1003-residues-tab" id="e1003-residues-panel" data-e1003-panel="residues" hidden>
+        <div class="e1003-controls">
+          <label for="e1003-index">Степень i <strong data-e1003-index-value>5</strong></label>
+          <input id="e1003-index" type="range" min="0" max="13" value="5" step="1">
+        </div>
+        <div class="e1003-metrics" aria-live="polite">
+          <span><small>Остаток xⁱ</small><strong data-e1003-pair>(−1, −6)</strong></span>
+          <span><small>Коэффициент при x</small><strong data-e1003-u>u₅ = −1</strong></span>
+          <span><small>Свободный член</small><strong data-e1003-v>v₅ = −6</strong></span>
+        </div>
+        <svg class="e1003-stage" viewBox="0 0 920 410" role="img" aria-labelledby="e1003-residues-title e1003-residues-desc">
+          <title id="e1003-residues-title">Остатки степеней по модулю квадратного многочлена</title>
+          <desc id="e1003-residues-desc">Для каждой степени показана пара коэффициентов остатка ux+v и выделен выбранный шаг рекурсии.</desc>
+          <g data-e1003-residues-scene></g>
+        </svg>
+        <p class="e1003-detail" data-e1003-residues-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e1003-meet-tab" id="e1003-meet-panel" data-e1003-panel="meet" hidden>
+        <div class="e1003-choice" role="group" aria-label="Контрольное множество singleton-позиций">
+          <button type="button" class="is-active" data-e1003-example="68">{2, 5, 8, 13}</button>
+          <button type="button" data-e1003-example="90">{1, 13}</button>
+        </div>
+        <div class="e1003-metrics" aria-live="polite">
+          <span><small>Склейка коэффициентов</small><strong data-e1003-combined-u>Σuᵢ = 0</strong></span>
+          <span><small>Восстановленный кандидат</small><strong data-e1003-candidate>n = 68</strong></span>
+          <span><small>Проверка переносов</small><strong data-e1003-q-check>min qᵢ = 8</strong></span>
+        </div>
+        <svg class="e1003-stage" viewBox="0 0 920 440" role="img" aria-labelledby="e1003-meet-title e1003-meet-desc">
+          <title id="e1003-meet-title">Склейка двух половин meet-in-the-middle</title>
+          <desc id="e1003-meet-desc">Позиции разделены на две половины, рядом показаны граничные маски, суммы пар и восстановленные неотрицательные переносы.</desc>
+          <g data-e1003-meet-scene></g>
+        </svg>
+        <p class="e1003-detail" data-e1003-meet-detail></p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>
