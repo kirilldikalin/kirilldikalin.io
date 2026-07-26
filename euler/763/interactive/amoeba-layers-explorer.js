@@ -95,12 +95,38 @@
       : `Деление в (${newest.join(", ")}) удаляет родителя и добавляет три клетки слоя L${core.layerIndex(newest) + 1}.`;
   }
 
-  function drawTriangularGrid(scene) {
-    for (let q = -4; q <= 5; q += 1) {
-      for (let r = -3; r <= 4; r += 1) {
-        const [x, y] = projectTriangular([q, r]);
+  function createTriangularProjection(cells, bounds) {
+    const rawPoints = cells.map((cell) => projectTriangular(cell, 0, 0, 1));
+    const xs = rawPoints.map((point) => point[0]);
+    const ys = rawPoints.map((point) => point[1]);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const sourceWidth = Math.max(1, maxX - minX);
+    const sourceHeight = Math.max(1, maxY - minY);
+    const scale = Math.min(
+      58,
+      bounds.width / sourceWidth,
+      bounds.height / sourceHeight,
+    );
+    const offsetX = bounds.x + (bounds.width - sourceWidth * scale) / 2;
+    const offsetY = bounds.y + (bounds.height - sourceHeight * scale) / 2;
+    return (cell) => {
+      const [x, y] = projectTriangular(cell, 0, 0, 1);
+      return [
+        offsetX + (x - minX) * scale,
+        offsetY + (y - minY) * scale,
+      ];
+    };
+  }
+
+  function drawTriangularGrid(scene, project) {
+    for (let q = -8; q <= 8; q += 1) {
+      for (let r = -8; r <= 8; r += 1) {
+        const [x, y] = project([q, r]);
         [[q + 1, r], [q, r + 1], [q + 1, r - 1]].forEach((next) => {
-          const [nx, ny] = projectTriangular(next);
+          const [nx, ny] = project(next);
           scene.append(svgElement("line", {
             x1: x,
             y1: y,
@@ -117,9 +143,9 @@
     const stepInput = document.querySelector("#e763-pattern-step");
     const turnInput = document.querySelector("#e763-pattern-turn");
     const basePattern = core.forbiddenPattern(name);
-    stepInput.max = basePattern.forcedSteps;
-    if (Number(stepInput.value) > basePattern.forcedSteps) {
-      stepInput.value = basePattern.forcedSteps;
+    stepInput.max = basePattern.animationSteps;
+    if (Number(stepInput.value) > basePattern.animationSteps) {
+      stepInput.value = basePattern.animationSteps;
     }
     const pattern = core.forbiddenPatternStage(
       name,
@@ -128,10 +154,14 @@
     );
     const scene = document.querySelector("[data-e763-pattern-scene]");
     clear(scene);
-    drawTriangularGrid(scene);
+    const project = createTriangularProjection(
+      [...pattern.cells, pattern.collision],
+      { x: 65, y: 55, width: 730, height: 280 },
+    );
+    drawTriangularGrid(scene, project);
 
     pattern.cells.forEach((cell) => {
-      const [cx, cy] = projectTriangular(cell);
+      const [cx, cy] = project(cell);
       scene.append(svgElement("circle", {
         cx,
         cy,
@@ -147,9 +177,9 @@
       }, "2"));
     });
 
-    const [collisionX, collisionY] = projectTriangular(pattern.collision);
+    const [collisionX, collisionY] = project(pattern.collision);
     pattern.feeders.forEach((cell) => {
-      const [x, y] = projectTriangular(cell);
+      const [x, y] = project(cell);
       const currentX = x + (collisionX - x) * pattern.progress;
       const currentY = y + (collisionY - y) * pattern.progress;
       scene.insertBefore(svgElement("line", {
@@ -193,16 +223,16 @@
 
     document.querySelector("[data-e763-pattern-size]").textContent = pattern.cells.length;
     document.querySelector("[data-e763-pattern-step-value]").textContent =
-      `${pattern.step} / ${pattern.forcedSteps}`;
+      `${pattern.step} / ${pattern.animationSteps}`;
     document.querySelector("[data-e763-pattern-turn-value]").textContent =
       `${Number(turnInput.value) * 60}°`;
     document.querySelector("[data-e763-pattern-steps]").textContent =
-      String(pattern.forcedSteps - pattern.step);
+      String(pattern.remainingForcedSteps);
     document.querySelector("[data-e763-pattern-result]").textContent =
       pattern.collided ? "кратность 3" : "потоки разделены";
     document.querySelector("[data-e763-pattern-detail]").textContent = pattern.collided
-      ? `${pattern.label}: после ${pattern.forcedSteps} вынужденных шагов три потока сошлись в одной клетке.`
-      : `${pattern.label}: передвиньте шаг продолжения — три потока пока идут отдельно к отмеченной клетке.`;
+      ? `${pattern.label}: число вынужденных шагов — ${pattern.forcedSteps}; три потока сошлись в одной клетке.`
+      : `${pattern.label}: продолжение показано на шаге ${pattern.step} из ${pattern.animationSteps}; три потока пока идут отдельно к отмеченной клетке.`;
   }
 
   function fitPoints(points, bounds) {

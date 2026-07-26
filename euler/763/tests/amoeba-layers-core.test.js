@@ -43,11 +43,15 @@ test("all forbidden patterns have a distinct collision marker", () => {
 test("forbidden patterns can be rotated and advanced to the collision", () => {
   for (const name of ["triangle", "y", "stapler"]) {
     const base = core.forbiddenPattern(name);
+    assert.ok(base.animationSteps > 1);
     for (let turns = 0; turns < 6; turns += 1) {
       const start = core.forbiddenPatternStage(name, 0, turns);
-      const finish = core.forbiddenPatternStage(name, base.forcedSteps, turns);
+      const middle = core.forbiddenPatternStage(name, 3, turns);
+      const finish = core.forbiddenPatternStage(name, base.animationSteps, turns);
       assert.equal(start.progress, 0);
       assert.equal(start.collided, false);
+      assert.equal(middle.progress, 0.5);
+      assert.equal(middle.collided, false);
       assert.equal(finish.progress, 1);
       assert.equal(finish.collided, true);
       assert.equal(new Set(finish.cells.map((cell) => cell.join(","))).size, base.cells.length);

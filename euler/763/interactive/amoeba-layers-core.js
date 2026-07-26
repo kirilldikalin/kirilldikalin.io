@@ -7,18 +7,21 @@
       cells: Object.freeze([[0, 0], [1, 0], [0, 1]]),
       collision: Object.freeze([1, 1]),
       forcedSteps: 1,
+      animationSteps: 6,
     }),
     y: Object.freeze({
       label: "Y-ветвление",
       cells: Object.freeze([[0, 0], [1, 0], [2, 0], [1, 1], [1, -1]]),
       collision: Object.freeze([2, 1]),
       forcedSteps: 2,
+      animationSteps: 6,
     }),
     stapler: Object.freeze({
       label: "Степлер",
       cells: Object.freeze([[0, 0], [1, 0], [2, 0], [0, 2], [1, 2], [2, 2], [0, 1]]),
       collision: Object.freeze([2, 1]),
       forcedSteps: 3,
+      animationSteps: 6,
     }),
   });
 
@@ -110,10 +113,11 @@
 
   function forbiddenPatternStage(name, step, turns = 0) {
     const pattern = forbiddenPattern(name);
-    if (!Number.isInteger(step) || step < 0 || step > pattern.forcedSteps) {
-      throw new Error(`Шаг фигуры ${name} должен быть от 0 до ${pattern.forcedSteps}`);
+    if (!Number.isInteger(step) || step < 0 || step > pattern.animationSteps) {
+      throw new Error(`Шаг фигуры ${name} должен быть от 0 до ${pattern.animationSteps}`);
     }
     const rotate = (cell) => rotateTriangularCell(cell, turns);
+    const progress = step / pattern.animationSteps;
     return {
       label: pattern.label,
       cells: pattern.cells.map(rotate),
@@ -121,8 +125,10 @@
       feeders: pattern.cells.slice(-3).map(rotate),
       step,
       forcedSteps: pattern.forcedSteps,
-      progress: step / pattern.forcedSteps,
-      collided: step === pattern.forcedSteps,
+      animationSteps: pattern.animationSteps,
+      remainingForcedSteps: Math.ceil(pattern.forcedSteps * (1 - progress)),
+      progress,
+      collided: step === pattern.animationSteps,
     };
   }
 
