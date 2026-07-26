@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 439 — тождество и quotient blocks</title>
+  <link rel="stylesheet" href="./divisor-sum-explorer.css">
+  <script src="../math/sum-of-divisors-core.js" defer></script>
+  <script src="./divisor-sum-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e439-explorer" aria-labelledby="e439-title">
+      <h1 class="e439-sr-only" id="e439-title">Проверка тождества и блоков одинакового частного</h1>
+
+      <div class="e439-tabs" role="tablist" aria-label="Этапы вычисления">
+        <button type="button" role="tab" aria-selected="true" aria-controls="e439-identity-panel" data-e439-tab="identity">1. Тождество</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e439-blocks-panel" data-e439-tab="blocks">2. Плато</button>
+      </div>
+
+      <section id="e439-identity-panel" role="tabpanel" data-e439-panel="identity">
+        <div class="e439-control-grid">
+          <div class="e439-controls">
+            <label for="e439-grid-limit">Размер таблицы N <strong data-e439-grid-limit-value>2</strong></label>
+            <input id="e439-grid-limit" type="range" min="2" max="8" value="2" step="1">
+          </div>
+          <div class="e439-choice" role="group" aria-label="Вариант тождества">
+            <button type="button" class="is-active" data-e439-weight="correct">С множителем d</button>
+            <button type="button" data-e439-weight="wrong">Без множителя d</button>
+          </div>
+        </div>
+        <div class="e439-metrics" aria-live="polite">
+          <span><small>Прямая сумма</small><strong data-e439-direct-total>14</strong></span>
+          <span><small>Через тождество</small><strong data-e439-identity-total>14</strong></span>
+          <span><small>Несовпавших ячеек</small><strong data-e439-mismatches>0</strong></span>
+        </div>
+        <svg class="e439-stage" viewBox="0 0 900 500" role="img" aria-labelledby="e439-grid-title e439-grid-desc">
+          <title id="e439-grid-title">Сравнение прямых значений сигма от произведения с тождеством</title>
+          <desc id="e439-grid-desc">Красным отмечаются ячейки, где формула без множителя d расходится с прямым вычислением.</desc>
+          <g data-e439-grid-scene></g>
+        </svg>
+        <p class="e439-detail" data-e439-grid-detail></p>
+      </section>
+
+      <section id="e439-blocks-panel" role="tabpanel" data-e439-panel="blocks" hidden>
+        <div class="e439-controls">
+          <label for="e439-block-limit">Число N <strong data-e439-block-limit-value>20</strong></label>
+          <input id="e439-block-limit" type="range" min="5" max="60" value="20" step="1">
+        </div>
+        <div class="e439-metrics" aria-live="polite">
+          <span><small>Индексов d</small><strong data-e439-index-count>20</strong></span>
+          <span><small>Quotient blocks</small><strong data-e439-block-count>8</strong></span>
+          <span><small>Сэкономлено шагов</small><strong data-e439-saved-count>12</strong></span>
+        </div>
+        <svg class="e439-stage" viewBox="0 0 900 430" role="img" aria-labelledby="e439-block-title e439-block-desc">
+          <title id="e439-block-title">Плато функции целой части N делённого на d</title>
+          <desc id="e439-block-desc">Каждый горизонтальный участок обрабатывается одной операцией вместо обхода всех его индексов.</desc>
+          <g data-e439-block-scene></g>
+        </svg>
+        <p class="e439-detail" data-e439-block-detail></p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

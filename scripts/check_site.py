@@ -17,6 +17,7 @@ PUBLIC_PAGES = (
     "brain/pisano.html",
     "euler/euler.html",
     "euler/439.html",
+    "euler/439/interactive/divisor-sum-explorer.html",
     "euler/579.html",
     "euler/579/interactive/lattice-cube-explorer.html",
     "euler/763.html",

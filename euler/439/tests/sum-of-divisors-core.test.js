@@ -10,19 +10,32 @@ test("the sigma product identity needs the factor d", () => {
     }
   }
 
-  let wrongAt2 = 0n;
-  for (let left = 1; left <= 2; left += 1) {
-    for (let right = 1; right <= 2; right += 1) {
-      wrongAt2 += core.divisors(core.gcd(left, right)).reduce((sum, divisor) => {
-        return sum
-          + BigInt(core.mobius(divisor))
-          * core.sigma(left / divisor)
-          * core.sigma(right / divisor);
-      }, 0n);
-    }
+  for (let limit = 1; limit <= 10; limit += 1) {
+    const comparison = core.compareIdentityGrid(limit);
+    assert.equal(comparison.mismatchCount, 0);
+    assert.equal(comparison.directTotal, core.doubleSigmaSumDirect(limit));
+    assert.equal(comparison.identityTotal, comparison.directTotal);
   }
-  assert.equal(wrongAt2, 15n);
-  assert.equal(core.doubleSigmaSumDirect(2), 14n);
+
+  const wrongAt2 = core.compareIdentityGrid(2, false);
+  assert.equal(wrongAt2.directTotal, 14n);
+  assert.equal(wrongAt2.identityTotal, 15n);
+  assert.equal(wrongAt2.mismatchCount, 1);
+});
+
+test("quotient blocks cover every index exactly once", () => {
+  for (let limit = 1; limit <= 200; limit += 1) {
+    const blocks = core.quotientBlocks(limit);
+    let next = 1;
+    for (const block of blocks) {
+      assert.equal(block.left, next);
+      assert.equal(block.length, block.right - block.left + 1);
+      assert.equal(block.quotient, Math.floor(limit / block.left));
+      assert.equal(block.quotient, Math.floor(limit / block.right));
+      next = block.right + 1;
+    }
+    assert.equal(next, limit + 1);
+  }
 });
 
 test("all three forms of A(M) agree", () => {

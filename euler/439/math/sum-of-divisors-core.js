@@ -56,6 +56,69 @@
     }, 0n);
   }
 
+  function sigmaProductIdentityUnweighted(left, right) {
+    return divisors(gcd(left, right)).reduce((sum, divisor) => {
+      return sum
+        + BigInt(mobius(divisor))
+        * sigma(left / divisor)
+        * sigma(right / divisor);
+    }, 0n);
+  }
+
+  function compareIdentityGrid(limit, weighted = true) {
+    if (!Number.isInteger(limit) || limit < 1 || limit > 50) {
+      throw new Error("grid limit must be an integer from 1 to 50");
+    }
+    const identity = weighted
+      ? sigmaProductIdentity
+      : sigmaProductIdentityUnweighted;
+    const cells = [];
+    let directTotal = 0n;
+    let identityTotal = 0n;
+    for (let left = 1; left <= limit; left += 1) {
+      for (let right = 1; right <= limit; right += 1) {
+        const direct = sigma(left * right);
+        const transformed = identity(left, right);
+        directTotal += direct;
+        identityTotal += transformed;
+        cells.push({
+          left,
+          right,
+          direct,
+          transformed,
+          matches: direct === transformed,
+        });
+      }
+    }
+    return {
+      limit,
+      weighted,
+      cells,
+      directTotal,
+      identityTotal,
+      mismatchCount: cells.filter(({ matches }) => !matches).length,
+    };
+  }
+
+  function quotientBlocks(limit) {
+    if (!Number.isInteger(limit) || limit < 1) {
+      throw new Error("block limit must be a positive integer");
+    }
+    const blocks = [];
+    for (let left = 1; left <= limit;) {
+      const quotient = Math.floor(limit / left);
+      const right = Math.floor(limit / quotient);
+      blocks.push({
+        left,
+        right,
+        quotient,
+        length: right - left + 1,
+      });
+      left = right + 1;
+    }
+    return blocks;
+  }
+
   function summatorySigmaDirect(limit) {
     let total = 0n;
     for (let value = 1; value <= limit; value += 1) total += sigma(value);
@@ -177,14 +240,17 @@
 
   return {
     createWeightedMobiusSummatory,
+    compareIdentityGrid,
     divisors,
     doubleSigmaSumDirect,
     euler439Sum,
     gcd,
     mobius,
     mobiusSieve,
+    quotientBlocks,
     sigma,
     sigmaProductIdentity,
+    sigmaProductIdentityUnweighted,
     summatorySigmaBlocks,
     summatorySigmaByDivisors,
     summatorySigmaDirect,

@@ -1,0 +1,191 @@
+:root {
+  color-scheme: light;
+  font-family: "Courier Prime", "Courier New", monospace;
+  color: #303033;
+  background: #fbfbfd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  min-height: 2.8rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #c9c9ce;
+  border-radius: 0.45rem;
+  color: #303033;
+  background: #fff;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: #303033;
+}
+
+button[aria-selected="true"],
+button.is-active {
+  color: #fff;
+  border-color: #303033;
+  background: #303033;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #b46a00;
+  outline-offset: 2px;
+}
+
+.e439-explorer {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.e439-tabs,
+.e439-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.e439-tabs {
+  margin-bottom: 1rem;
+}
+
+.e439-control-grid {
+  display: grid;
+  grid-template-columns: minmax(14rem, 1fr) auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.e439-controls {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.e439-controls label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.e439-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 1rem 0;
+}
+
+.e439-metrics span {
+  display: grid;
+  gap: 0.35rem;
+  min-height: 4.4rem;
+  padding: 0.7rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.e439-metrics small {
+  color: #6b6b70;
+}
+
+.e439-stage {
+  display: block;
+  width: 100%;
+  min-height: 20rem;
+  border: 1px solid #d8d8dc;
+  border-radius: 0.55rem;
+  background: linear-gradient(#fff, #f6f6f8);
+}
+
+.e439-grid-cell {
+  fill: #fff;
+  stroke: #c5c6ca;
+  stroke-width: 1.5;
+}
+
+.e439-grid-cell.is-mismatch {
+  fill: #f8e5e3;
+  stroke: #a63f36;
+  stroke-width: 2.5;
+}
+
+.e439-grid-value,
+.e439-axis-label,
+.e439-block-label {
+  font-size: 15px;
+  fill: #303033;
+}
+
+.e439-grid-comparison {
+  font-size: 12px;
+  fill: #a63f36;
+}
+
+.e439-block-step {
+  fill: rgba(48, 48, 51, 0.08);
+  stroke: #303033;
+  stroke-width: 2;
+}
+
+.e439-block-axis,
+.e439-block-guide {
+  fill: none;
+  stroke: #c9c9ce;
+  stroke-width: 1.5;
+}
+
+.e439-block-guide {
+  stroke-dasharray: 5 5;
+}
+
+.e439-detail {
+  min-height: 3rem;
+  margin: 0.75rem 0 0;
+  line-height: 1.45;
+}
+
+.e439-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 46rem) {
+  .e439-explorer {
+    padding: 0.75rem;
+  }
+
+  .e439-control-grid,
+  .e439-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e439-tabs button,
+  .e439-choice button {
+    flex: 1 1 40%;
+  }
+
+  .e439-stage {
+    min-height: 13rem;
+  }
+}
