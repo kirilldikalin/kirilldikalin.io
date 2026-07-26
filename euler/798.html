@@ -3,168 +3,1139 @@
 
 <head>
   <meta charset="utf-8">
-  <title>projecteuler solutions - Kirill Dikalin</title>
+  <title>798. Игра со стопками карт — Kirill Dikalin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Разбор решения задачи Project Euler 798: числа Шпрага—Гранди, распределение нимберов, XOR-свёртка и преобразование Уолша—Адамара.">
+  <meta property="og:title" content="798. Игра со стопками карт — Kirill Dikalin">
+  <meta property="og:description" content="Project Euler 798: от карточной игры к числам Гранди и быстрому преобразованию Уолша—Адамара.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/euler/798.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/euler/798.html">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./798/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [[String.fromCharCode(36), String.fromCharCode(36)], ['\\(', '\\)']],
+        displayMath: [[String.fromCharCode(36, 36), String.fromCharCode(36, 36)], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 
 <body>
   <ul class="breadcrumb">
-      <a class="bread_crumb" href="../index.html">Kirill Dikalin</a> 
-      / 
-      <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
-      / 
-      798 
+    <a class="bread_crumb" href="../index.html">Kirill Dikalin</a>
+    /
+    <a class="bread_crumb" href="./euler.html">Решение задач Эйлера</a>
+    /
+    798
   </ul>
 
   <div class="our_framework">
     <div class="section_content">
-      <div id="toc_container" class="euler_article">
-            
-        <h2 id="798">Игра на раскладывание карт в стопки</h2>
+      <div id="toc_container" class="euler_article euler798-article">
+<h2 id="798">Игра со стопками карт</h2>
+<h3 id="аннотация">Аннотация</h3>
+<p>В <a class="intext" href="https://projecteuler.net/problem=798" target="_blank" rel="noopener noreferrer">задаче Project Euler 798</a> требуется подсчитать начальные наборы открытых карт, проигрышные для первого игрока. В колоде есть <span class="math inline">\(s\)</span> мастей, в каждой масти лежат карты со значениями от <span class="math inline">\(1\)</span> до <span class="math inline">\(n\)</span>. За ход разрешено накрыть открытую карту картой той же масти с большим значением. Игрок, которому некуда ходить, проигрывает.</p>
+<p>Прямой перебор здесь бесполезен: начальных наборов <span class="math inline">\(2^{ns}\)</span>, а для каждого набора пришлось бы исследовать дерево игры. Решение строится в три содержательных этапа:</p>
+<ol type="1">
+<li>каждая масть рассматривается как отдельная конечная беспристрастная игра;</li>
+<li>для одной масти выводится распределение начальных подмножеств по числам Шпрага—Гранди;</li>
+<li>независимые масти объединяются ним-суммой, а число наборов с нулевой ним-суммой вычисляется через XOR-свёртку и быстрое преобразование Уолша—Адамара.</li>
+</ol>
+<p>Самая трудная часть — не само преобразование, а точная классификация позиций одной масти. В ранних обсуждениях задачи встречается неполная формулировка этой классификации. Ниже используется исправленное условие, отдельно разбирается причина дополнительного ограничения и после этого проводится комбинаторный подсчёт.</p>
+<h3 id="формализация-условия">1. Формализация условия</h3>
+<p>В одной масти имеются карты</p>
+<p><span class="math display">\[
+1,2,\ldots,n.
+\]</span></p>
+<p>Перед началом игры выбирается произвольное подмножество карт, в том числе пустое. Выбранные карты кладутся на стол лицом вверх и образуют начальные стопки высоты <span class="math inline">\(1\)</span>.</p>
+<p>Ход выбирает:</p>
+<ul>
+<li>открытую карту <span class="math inline">\(Y\)</span>;</li>
+<li>ещё не использованную карту <span class="math inline">\(X\)</span> той же масти;</li>
+<li>при этом <span class="math inline">\(X&gt;Y\)</span>.</li>
+</ul>
+<p>Карта <span class="math inline">\(X\)</span> кладётся на <span class="math inline">\(Y\)</span>. После этого <span class="math inline">\(Y\)</span> закрыта навсегда, а <span class="math inline">\(X\)</span> становится верхней картой соответствующей стопки.</p>
+<p>Игра конечна: каждый ход забирает из неиспользованной части колоды ровно одну карту. Правила одинаковы для обоих игроков, случайности и скрытой информации нет, а проигрывает игрок без допустимого хода. Следовательно, перед нами конечная беспристрастная игра с нормальным условием окончания.</p>
+<p>Обозначим через <span class="math inline">\(C(n,s)\)</span> число начальных наборов, проигрышных для первого игрока при оптимальной игре обоих участников.</p>
+<h3 id="почему-масти-являются-независимыми-подиграми">2. Почему масти являются независимыми подиграми</h3>
+<p>Карта одной масти никогда не накрывает карту другой масти. Поэтому любой ход изменяет состояние ровно одной масти и не затрагивает остальные.</p>
+<p>Полная позиция имеет вид</p>
+<p><span class="math display">\[
+P=P_1+P_2+\cdots+P_s,
+\]</span></p>
+<p>где <span class="math inline">\(P_j\)</span> — позиция внутри <span class="math inline">\(j\)</span>-й масти, а знак <span class="math inline">\(+\)</span> означает дизъюнктную сумму игр: игрок выбирает одну компоненту и делает ход только в ней.</p>
+<p>Для таких игр применима <a class="intext" href="https://web.mit.edu/sp.268/www/nim.pdf" target="_blank" rel="noopener noreferrer">теорема Шпрага—Гранди</a>. Каждой позиции <span class="math inline">\(P\)</span> сопоставляется неотрицательное целое число</p>
+<p><span class="math display">\[
+g(P)=\operatorname{mex}\{g(Q):P\to Q\},
+\]</span></p>
+<p>где <span class="math inline">\(\operatorname{mex}\)</span> — наименьшее неотрицательное число, отсутствующее в заданном множестве, а <span class="math inline">\(P\to Q\)</span> означает допустимый ход из <span class="math inline">\(P\)</span> в <span class="math inline">\(Q\)</span>.</p>
+<p>Для дизъюнктной суммы выполняется</p>
+<p><span class="math display">\[
+g(P_1+\cdots+P_s)
+=
+g(P_1)\oplus\cdots\oplus g(P_s),
+\]</span></p>
+<p>где <span class="math inline">\(\oplus\)</span> — побитовое исключающее «или».</p>
+<p>Позиция проигрышна для игрока, которому предстоит ход, тогда и только тогда, когда её число Гранди равно нулю. Поэтому исходная задача эквивалентна подсчёту наборов мастей, для которых</p>
+<p><span class="math display">\[
+g(P_1)\oplus g(P_2)\oplus\cdots\oplus g(P_s)=0.
+\]</span></p>
+<p>Отсюда видно, почему недостаточно отдельно посчитать проигрышные состояния каждой масти и перемножить результаты. Общая позиция может быть проигрышной и тогда, когда все отдельные нимберы ненулевые. Например,</p>
+<p><span class="math display">\[
+5\oplus5=0.
+\]</span></p>
+<p>Сначала необходимо узнать полное распределение нимберов одной масти.</p>
+<h3 id="каноническая-модель-одной-масти">3. Каноническая модель одной масти</h3>
+<h4 id="почему-закрытые-карты-можно-удалить">3.1. Почему закрытые карты можно удалить</h4>
+<p>После того как карта оказалась накрыта, она больше никогда не участвует в игре. Её числовое значение не влияет на будущие допустимые ходы. Поэтому после каждого хода закрытую карту можно мысленно удалить.</p>
+<p>Более того, правила используют только сравнение значений. Если из оставшихся карт удалить одну карту и сохранить взаимный порядок остальных, их можно заново пронумеровать последовательными целыми числами. Дерево будущих ходов от этого не изменится.</p>
+<p>Неиспользованные карты, которые меньше всех текущих верхних карт, также можно отбросить: ни на одну открытую карту их положить нельзя, а новые верхние карты в ходе игры только увеличиваются. В обращённой нумерации это означает, что свободный хвост справа от последней занятой координаты не хранится.</p>
+<p>Это позволяет описывать позицию не всей историей стопок, а только относительным расположением текущих верхних карт среди ещё активных карт.</p>
+<h4 id="обращение-порядка">3.2. Обращение порядка</h4>
+<p>Пусть в одной масти открыты карты</p>
+<p><span class="math display">\[
+r_1&lt;r_2&lt;\cdots&lt;r_k.
+\]</span></p>
+<p>Введём обращённые координаты</p>
+<p><span class="math display">\[
+x_i=n-r_{k-i},
+\qquad 0\le i&lt;k.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+0\le x_0&lt;x_1&lt;\cdots&lt;x_{k-1}.
+\]</span></p>
+<p>Большая исходная карта получает меньшую обращённую координату. Поэтому требование «положить большую карту» превращается в движение влево, к меньшему числу.</p>
+<p>Начальное подмножество одной масти однозначно задаёт подмножество множества</p>
+<p><span class="math display">\[
+\{0,1,\ldots,n-1\}.
+\]</span></p>
+<p>Пустому начальному набору соответствует пустой кортеж.</p>
+<h4 id="ход-в-обращённых-координатах">3.3. Ход в обращённых координатах</h4>
+<p>Пусть текущее состояние равно</p>
+<p><span class="math display">\[
+X=(x_0,x_1,\ldots,x_{k-1}).
+\]</span></p>
+<p>Выберем <span class="math inline">\(x_i\)</span> и свободную позицию <span class="math inline">\(y\)</span>, для которой</p>
+<p><span class="math display">\[
+0\le y&lt;x_i,
+\qquad
+y\notin\{x_0,\ldots,x_{i-1}\}.
+\]</span></p>
+<p>После хода старая верхняя карта <span class="math inline">\(x_i\)</span> удаляется. Все координаты справа от неё уменьшаются на единицу из-за перенумерации оставшихся активных карт. Новое состояние имеет вид</p>
+<p><span class="math display">\[
+X&#39;
+=
+\operatorname{sort}
+\bigl(
+x_0,\ldots,x_{i-1},
+y,
+x_{i+1}-1,\ldots,x_{k-1}-1
+\bigr).
+\]</span></p>
+<p>Количество открытых стопок <span class="math inline">\(k\)</span> не меняется. Терминальной является позиция</p>
+<p><span class="math display">\[
+(0,1,\ldots,k-1),
+\]</span></p>
+<p>поскольку левее каждой открытой карты уже нет свободной позиции. Пустое состояние также терминально.</p>
+<p>Такое описание удобно по двум причинам:</p>
+<ol type="1">
+<li>оно не хранит историю сделанных ходов;</li>
+<li>начальные наборы и канонические состояния связаны взаимно однозначно.</li>
+</ol>
+<h3 id="число-гранди-для-одной-масти">4. Число Гранди для одной масти</h3>
+<h4 id="две-характеристики-позиции">4.1. Две характеристики позиции</h4>
+<p>Рассмотрим непустое состояние</p>
+<p><span class="math display">\[
+X=(x_0,\ldots,x_{k-1}).
+\]</span></p>
+<p>Определим</p>
+<p><span class="math display">\[
+d=x_{k-1}-(k-1).
+\]</span></p>
+<p>В отрезке от <span class="math inline">\(0\)</span> до <span class="math inline">\(x_{k-1}\)</span> находится <span class="math inline">\(x_{k-1}+1\)</span> позиций и <span class="math inline">\(k\)</span> открытых карт. Поэтому <span class="math inline">\(d\)</span> — количество свободных позиций среди них.</p>
+<p>Теперь найдём последний индекс, в котором чётность отличается от чётности крайней правой координаты:</p>
+<p><span class="math display">\[
+j
+=
+\max\{i&lt;k-1:x_i\not\equiv x_{k-1}\pmod 2\}.
+\]</span></p>
+<p>Если такого индекса нет, положим <span class="math inline">\(h=+\infty\)</span>. Иначе положим</p>
+<p><span class="math display">\[
+h=x_{k-1}-x_j.
+\]</span></p>
+<p>Поскольку <span class="math inline">\(x_j\)</span> и <span class="math inline">\(x_{k-1}\)</span> имеют разную чётность, конечное <span class="math inline">\(h\)</span> всегда нечётно.</p>
+<h4 id="исправленная-формула">4.2. Исправленная формула</h4>
+<p>Для непустой позиции её число Гранди равно</p>
+<p><span class="math display">\[
+\boxed{
+g(X)
+=
+\max
+\left\{
+q\ge0:
+q\le d,\;
+q\le h,\;
+q\equiv d\pmod2
+\right\}.
+}
+\]</span></p>
+<p>Для пустой позиции</p>
+<p><span class="math display">\[
+g(\varnothing)=0.
+\]</span></p>
+<p>Если все <span class="math inline">\(x_i\)</span> имеют ту же чётность, что и <span class="math inline">\(x_{k-1}\)</span>, то <span class="math inline">\(h=+\infty\)</span> и формула упрощается:</p>
+<p><span class="math display">\[
+g(X)=d=x_{k-1}-(k-1).
+\]</span></p>
+<p>Если координата противоположной чётности существует, то <span class="math inline">\(h\)</span> ограничивает возможный нимбер, но ограничение</p>
+<p><span class="math display">\[
+g(X)\le d
+\]</span></p>
+<p>сохраняется. Его нельзя выбрасывать.</p>
+<p>Например, для</p>
+<p><span class="math display">\[
+X=(0,1,3)
+\]</span></p>
+<p>получаем</p>
+<p><span class="math display">\[
+d=3-2=1,\qquad j=0,\qquad h=3.
+\]</span></p>
+<p>Следовательно,</p>
+<p><span class="math display">\[
+g(X)=1.
+\]</span></p>
+<p>Если оставить только условие <span class="math inline">\(g\le h\)</span> и условие на чётность, можно ошибочно получить <span class="math inline">\(3\)</span>. Именно такой тип позиции показывает, почему ранняя краткая формулировка из обсуждения задачи нуждается в дополнительной границе <span class="math inline">\(g\le d\)</span>.</p>
+<h4 id="та-же-формула-в-исходной-нумерации">4.3. Та же формула в исходной нумерации</h4>
+<p>Для комбинаторного подсчёта удобнее вернуться к обычному порядку карт.</p>
+<p>Пусть среди активных карт минимальная открытая карта имеет значение <span class="math inline">\(a\)</span>. Обозначим через <span class="math inline">\(d\)</span> число неоткрытых карт в интервале</p>
+<p><span class="math display">\[
+\{a,a+1,\ldots,m\},
+\]</span></p>
+<p>где <span class="math inline">\(m\)</span> — текущее число активных карт. Сама карта <span class="math inline">\(a\)</span> открыта, поэтому эквивалентно можно считать пропуски только выше неё.</p>
+<p>Пусть</p>
+<p><span class="math display">\[
+h
+=
+\min\{r\ge1:r\text{ нечётно и }a+r\text{ открыта}\},
+\]</span></p>
+<p>а при отсутствии такой карты <span class="math inline">\(h=+\infty\)</span>.</p>
+<p>Тогда</p>
+<p><span class="math display">\[
+g
+=
+\max
+\left\{
+q\ge0:
+q\le d,\;
+q\le h,\;
+q\equiv d\pmod2
+\right\}.
+\]</span></p>
+<p>Эквивалентная формулировка не использует <span class="math inline">\(h\)</span>:</p>
+<p><span class="math display">\[
+\boxed{
+g
+=
+\max
+\left\{
+q:
+0\le q\le d,\;
+q\equiv d\pmod2,\;
+\{a+r:1\le r&lt;q,\ r\text{ нечётно}\}
+\cap V
+=\varnothing
+\right\},
+}
+\]</span></p>
+<p>где <span class="math inline">\(V\)</span> — множество открытых карт.</p>
+<p>Иными словами, возможные кандидаты имеют ту же чётность, что и число пропусков <span class="math inline">\(d\)</span>. Кандидат <span class="math inline">\(q\)</span> допустим, пока среди нечётных смещений</p>
+<p><span class="math display">\[
+1,3,5,\ldots,q-1
+\]</span></p>
+<p>не встретилась открытая карта.</p>
+<h4 id="почему-формула-действительно-задаёт-mex">4.4. Почему формула действительно задаёт mex</h4>
+<p>Доказательство проводится индукцией по числу активных карт. После каждого хода оно уменьшается, поэтому все позиции-потомки меньше исходной в параметре индукции.</p>
+<p>Рассмотрим позицию с минимальной открытой картой <span class="math inline">\(a\)</span>, числом пропусков <span class="math inline">\(d\)</span> и первым нечётным открытым смещением <span class="math inline">\(h\)</span>.</p>
+<p>Если игрок накрывает открытую карту <span class="math inline">\(y&gt;a\)</span>, минимальная открытая карта остаётся равной <span class="math inline">\(a\)</span>. Одна отсутствовавшая карта становится открытой, а накрытая карта удаляется из активного порядка. Поэтому</p>
+<p><span class="math display">\[
+d&#39;=d-1.
+\]</span></p>
+<p>Чётность числа пропусков меняется. Такие ходы создают потомков с нимберами чётности, противоположной <span class="math inline">\(d\)</span>.</p>
+<p>Если игрок накрывает минимальную открытую карту <span class="math inline">\(a\)</span>, пусть <span class="math inline">\(b\)</span> — новая минимальная открытая карта до перенумерации, а</p>
+<p><span class="math display">\[
+t=b-a.
+\]</span></p>
+<p>Карты между <span class="math inline">\(a\)</span> и <span class="math inline">\(b\)</span> больше не влияют на игру, и после перенумерации</p>
+<p><span class="math display">\[
+d&#39;=d-t.
+\]</span></p>
+<p>Эти ходы позволяют переходить между кандидатами той же чётности, пропуская начальный участок позиции.</p>
+<p>Остаётся проследить, когда такая последовательность переходов блокируется. До первого открытого нечётного смещения <span class="math inline">\(h\)</span> все нечётные места свободны. Поэтому для каждого</p>
+<p><span class="math display">\[
+0\le r&lt;g(X)
+\]</span></p>
+<p>можно выбрать ход одного из двух описанных типов так, чтобы у потомка выполнялось</p>
+<p><span class="math display">\[
+g(X&#39;)=r.
+\]</span></p>
+<p>Чётность <span class="math inline">\(r\)</span>, отличная от чётности <span class="math inline">\(d\)</span>, достигается ходом, не меняющим минимум <span class="math inline">\(a\)</span>; совпадающая чётность достигается ходом из минимальной карты. При движении вправо по возможным значениям эта конструкция заканчивается ровно в одной из двух точек:</p>
+<ul>
+<li>исчерпаны все <span class="math inline">\(d\)</span> пропусков;</li>
+<li>встретилась первая открытая карта на нечётном смещении <span class="math inline">\(h\)</span>.</li>
+</ul>
+<p>Поэтому верхний достижимый кандидат ограничен одновременно числами <span class="math inline">\(d\)</span> и <span class="math inline">\(h\)</span>.</p>
+<p>Обратное утверждение проверяется теми же двумя типами ходов. Ход выше минимума меняет чётность <span class="math inline">\(d\)</span>, а ход из минимума либо уменьшает допустимую границу, либо переносит первый нечётный блокирующий элемент левее. Ни один ход не оставляет потомку одновременно:</p>
+<p><span class="math display">\[
+q\equiv d\pmod2,\qquad q\le d,\qquad q\le h
+\]</span></p>
+<p>при <span class="math inline">\(q=g(X)\)</span>.</p>
+<p>Следовательно,</p>
+<p><span class="math display">\[
+\{0,1,\ldots,g(X)-1\}
+\subseteq
+\{g(X&#39;):X\to X&#39;\},
+\]</span></p>
+<p>но</p>
+<p><span class="math display">\[
+g(X)\notin\{g(X&#39;):X\to X&#39;\}.
+\]</span></p>
+<p>По определению минимального исключённого значения это и означает</p>
+<p><span class="math display">\[
+g(X)
+=
+\operatorname{mex}\{g(X&#39;):X\to X&#39;\}.
+\]</span></p>
+<p>Содержательно формула говорит следующее: почти весь нимбер определяется числом свободных мест <span class="math inline">\(d\)</span>, а первая открытая карта на нечётном расстоянии от минимума может преждевременно оборвать последовательность достижимых значений.</p>
+<p>На небольшой колоде этот переход удобно проверить напрямую. Можно выбрать открытые карты, посмотреть канонические координаты и нимберы всех допустимых потомков. Следующие вкладки показывают, как частоты нимберов объединяются XOR-свёрткой и проходят через преобразование Уолша—Адамара.</p>
+<iframe class="euler798-explorer-frame" src="./798/interactive/card-stacking-explorer.html" title="От карточной позиции к XOR-свёртке и преобразованию Уолша—Адамара" loading="lazy">
+</iframe>
+<h3 id="распределение-нимберов-одной-масти">5. Распределение нимберов одной масти</h3>
+<p>Обозначим через</p>
+<p><span class="math display">\[
+F_N(v)
+\]</span></p>
+<p>число подмножеств карт одной масти из <span class="math inline">\(N\)</span> карт, имеющих число Гранди <span class="math inline">\(v\)</span>.</p>
+<p>Всего подмножеств <span class="math inline">\(2^N\)</span>, поэтому обязательна контрольная сумма</p>
+<p><span class="math display">\[
+\sum_{v\ge0}F_N(v)=2^N.
+\]</span></p>
+<p>Максимально возможный нимбер равен <span class="math inline">\(N-1\)</span>, следовательно,</p>
+<p><span class="math display">\[
+F_N(v)=0
+\qquad\text{при }v\ge N.
+\]</span></p>
+<h4 id="параметризация-по-минимальной-открытой-карте">5.1. Параметризация по минимальной открытой карте</h4>
+<p>Рассмотрим непустое начальное подмножество. Пусть <span class="math inline">\(a\)</span> — его минимальная карта и</p>
+<p><span class="math display">\[
+L=N-a
+\]</span></p>
+<p>— число карт выше неё.</p>
+<p>Каждое такое подмножество однозначно задаётся множеством отсутствующих смещений</p>
+<p><span class="math display">\[
+H\subseteq\{1,2,\ldots,L\}.
+\]</span></p>
+<p>Положим</p>
+<p><span class="math display">\[
+d=|H|.
+\]</span></p>
+<p>По классификации из предыдущего раздела нимбер зависит от:</p>
+<ul>
+<li>чётности <span class="math inline">\(d\)</span>;</li>
+<li>наличия в <span class="math inline">\(H\)</span> начальных нечётных смещений;</li>
+<li>первого нечётного смещения, которое не входит в <span class="math inline">\(H\)</span>, то есть соответствует открытой карте.</li>
+</ul>
+<p>Это превращает задачу из анализа дерева игры в обычный подсчёт подмножеств.</p>
+<h3 id="число-позиций-с-нимбером-ноль">6. Число позиций с нимбером ноль</h3>
+<p>Сначала рассмотрим <span class="math inline">\(v=0\)</span>.</p>
+<p>Пустое начальное подмножество даёт одну проигрышную позицию.</p>
+<p>Для непустого подмножества нимбер равен нулю в двух случаях.</p>
+<h4 id="пропусков-нет">6.1. Пропусков нет</h4>
+<p>Если</p>
+<p><span class="math display">\[
+d=0,
+\]</span></p>
+<p>то вместе с минимальной картой <span class="math inline">\(a\)</span> открыты все карты от <span class="math inline">\(a\)</span> до <span class="math inline">\(N\)</span>. Для каждого <span class="math inline">\(a\)</span> существует ровно одно такое подмножество. Всего их <span class="math inline">\(N\)</span>.</p>
+<h4 id="есть-положительное-чётное-число-пропусков">6.2. Есть положительное чётное число пропусков</h4>
+<p>Если <span class="math inline">\(d\ge2\)</span> чётно, следующий кандидат после нуля равен <span class="math inline">\(2\)</span>. Чтобы он был заблокирован, карта <span class="math inline">\(a+1\)</span> должна быть открыта.</p>
+<p>После фиксации <span class="math inline">\(a\)</span> и <span class="math inline">\(d\)</span> отсутствующие карты выбираются среди остальных <span class="math inline">\(L-1\)</span> смещений:</p>
+<p><span class="math display">\[
+\binom{L-1}{d}.
+\]</span></p>
+<p>Поэтому при <span class="math inline">\(N\ge2\)</span></p>
+<p><span class="math display">\[
+F_N(0)
+=
+1+N
++
+\sum_{\substack{d\ge2\\d\text{ чётно}}}
+\sum_{L=d}^{N-1}
+\binom{L-1}{d}.
+\]</span></p>
+<p>Используем «клюшечную» биномиальную формулу</p>
+<p><span class="math display">\[
+\sum_{L=d}^{N-1}\binom{L-1}{d}
+=
+\binom{N-1}{d+1}.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+F_N(0)
+=
+1+N
++
+\sum_{\substack{j\ge3\\j\text{ нечётно}}}
+\binom{N-1}{j}.
+\]</span></p>
+<p>Сумма биномиальных коэффициентов с нечётными индексами равна половине полной суммы строки:</p>
+<p><span class="math display">\[
+\sum_{\substack{j\ge0\\j\text{ нечётно}}}
+\binom{N-1}{j}
+=
+2^{N-2}.
+\]</span></p>
+<p>Из неё нужно удалить член</p>
+<p><span class="math display">\[
+\binom{N-1}{1}=N-1.
+\]</span></p>
+<p>В результате</p>
+<p><span class="math display">\[
+\boxed{
+F_N(0)=2^{N-2}+2
+}
+\qquad(N\ge2).
+\]</span></p>
+<p>При <span class="math inline">\(N=1\)</span> оба подмножества — пустое и состоящее из единственной карты — терминальны, поэтому</p>
+<p><span class="math display">\[
+F_1(0)=2.
+\]</span></p>
+<h3 id="положительные-нимберы">7. Положительные нимберы</h3>
+<p>Для <span class="math inline">\(k\ge1\)</span> отдельно выпишем чётные и нечётные значения.</p>
+<h4 id="чётный-нимбер-v2k">7.1. Чётный нимбер <span class="math inline">\(v=2k\)</span></h4>
+<p>Чтобы нимбер был равен <span class="math inline">\(2k\)</span>, необходимо:</p>
+<ol type="1">
+<li><p><span class="math inline">\(d\)</span> чётно;</p></li>
+<li><p><span class="math inline">\(d\ge2k\)</span>;</p></li>
+<li><p>смещения</p>
+<p><span class="math display">\[
+1,3,\ldots,2k-1
+\]</span></p>
+<p>отсутствуют, то есть входят в <span class="math inline">\(H\)</span>;</p></li>
+<li><p>если <span class="math inline">\(d&gt;2k\)</span>, то смещение <span class="math inline">\(2k+1\)</span> должно присутствовать среди открытых карт, иначе был бы допустим следующий кандидат <span class="math inline">\(2k+2\)</span>.</p></li>
+</ol>
+<p>Первые <span class="math inline">\(k\)</span> нечётных смещений принудительно отсутствуют.</p>
+<p>Если <span class="math inline">\(d=2k\)</span>, остаётся выбрать ещё <span class="math inline">\(k\)</span> отсутствующих смещений среди <span class="math inline">\(L-k\)</span> свободно выбираемых мест:</p>
+<p><span class="math display">\[
+\binom{L-k}{k}.
+\]</span></p>
+<p>Если <span class="math inline">\(d\ge2k+2\)</span>, смещение <span class="math inline">\(2k+1\)</span> принудительно открыто. После учёта <span class="math inline">\(k\)</span> принудительных пропусков и одной принудительно открытой позиции остаётся</p>
+<p><span class="math display">\[
+\binom{L-k-1}{d-k}
+\]</span></p>
+<p>вариантов.</p>
+<p>Суммирование сначала по <span class="math inline">\(L\)</span>, затем по допустимым <span class="math inline">\(d\)</span>, даёт удобную форму. Положим</p>
+<p><span class="math display">\[
+R=N-k-2.
+\]</span></p>
+<p>После применения клюшечной формулы получаем</p>
+<p><span class="math display">\[
+F_N(2k)
+=
+\binom{R+2}{k+1}
++
+\sum_{\substack{q=k+2\\q\equiv k\pmod2}}^R
+\binom{R+1}{q+1}.
+\]</span></p>
+<p>Заменим <span class="math inline">\(j=q+1\)</span>:</p>
+<p><span class="math display">\[
+F_N(2k)
+=
+\binom{R+2}{k+1}
++
+\sum_{\substack{j=k+3\\j\equiv k+1\pmod2}}^{R+1}
+\binom{R+1}{j}.
+\]</span></p>
+<p>Сумма коэффициентов заданной чётности в строке <span class="math inline">\(R+1\)</span> равна <span class="math inline">\(2^R\)</span>. Поэтому</p>
+<p><span class="math display">\[
+F_N(2k)
+=
+2^R
++
+\binom{R+2}{k+1}
+-
+\sum_{\substack{0\le j\le k+1\\j\equiv k+1\pmod2}}
+\binom{R+1}{j}.
+\]</span></p>
+<p>По формуле Паскаля</p>
+<p><span class="math display">\[
+\binom{R+1}{j}
+=
+\binom{R}{j}
++
+\binom{R}{j-1}.
+\]</span></p>
+<p>В последней сумме первый член покрывает индексы одной чётности, второй — индексы другой. Вместе они покрывают все индексы от <span class="math inline">\(0\)</span> до <span class="math inline">\(k+1\)</span> ровно по одному разу:</p>
+<p><span class="math display">\[
+\sum_{\substack{0\le j\le k+1\\j\equiv k+1\pmod2}}
+\binom{R+1}{j}
+=
+\sum_{i=0}^{k+1}\binom{R}{i}.
+\]</span></p>
+<p>Кроме того,</p>
+<p><span class="math display">\[
+\binom{R+2}{k+1}
+=
+\binom{R}{k-1}
++2\binom{R}{k}
++\binom{R}{k+1}.
+\]</span></p>
+<p>После сокращения остаётся</p>
+<p><span class="math display">\[
+\boxed{
+F_N(2k)
+=
+2^{N-k-2}
++
+\binom{N-k-2}{k}
+-
+\sum_{i=0}^{k-2}
+\binom{N-k-2}{i}.
+}
+\]</span></p>
+<h4 id="нечётный-нимбер-v2k-1">7.2. Нечётный нимбер <span class="math inline">\(v=2k-1\)</span></h4>
+<p>Теперь чётность <span class="math inline">\(d\)</span> нечётна.</p>
+<p>Для кандидата <span class="math inline">\(2k-1\)</span> должны отсутствовать нечётные смещения</p>
+<p><span class="math display">\[
+1,3,\ldots,2k-3.
+\]</span></p>
+<p>Их <span class="math inline">\(k-1\)</span>.</p>
+<p>Если</p>
+<p><span class="math display">\[
+d=2k-1,
+\]</span></p>
+<p>граница по числу пропусков сама останавливает рост нимбера.</p>
+<p>Если</p>
+<p><span class="math display">\[
+d\ge2k+1,
+\]</span></p>
+<p>смещение <span class="math inline">\(2k-1\)</span> должно соответствовать открытой карте, иначе был бы допустим кандидат <span class="math inline">\(2k+1\)</span>.</p>
+<p>Подсчёт полностью повторяет чётный случай, но теперь</p>
+<p><span class="math display">\[
+R=N-k-1.
+\]</span></p>
+<p>В результате</p>
+<p><span class="math display">\[
+\boxed{
+F_N(2k-1)
+=
+2^{N-k-1}
++
+\binom{N-k-1}{k}
+-
+\sum_{i=0}^{k-2}
+\binom{N-k-1}{i}.
+}
+\]</span></p>
+<h4 id="единая-запись">7.3. Единая запись</h4>
+<p>Для положительного нимбера <span class="math inline">\(v\)</span> положим</p>
+<p><span class="math display">\[
+k=\left\lceil\frac v2\right\rceil
+\]</span></p>
+<p>и</p>
+<p><span class="math display">\[
+R_v
+=
+N-k-1-\mathbf 1_{\{v\text{ чётно}\}}.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+\boxed{
+F_N(v)
+=
+2^{R_v}
++
+\binom{R_v}{k}
+-
+\sum_{i=0}^{k-2}\binom{R_v}{i},
+\qquad v&gt;0.
+}
+\]</span></p>
+<p>Здесь используется стандартное соглашение</p>
+<p><span class="math display">\[
+\binom ab=0
+\]</span></p>
+<p>при <span class="math inline">\(b&lt;0\)</span> или <span class="math inline">\(b&gt;a\)</span>, а сумма с верхней границей меньше нижней считается пустой.</p>
+<p>Биномиальные тождества, использованные в выводе, собраны, например, в <a class="intext" href="https://dlmf.nist.gov/26.3" target="_blank" rel="noopener noreferrer">разделе 26.3 Digital Library of Mathematical Functions</a>.</p>
+<h3 id="проверка-формул-на-малых-n">8. Проверка формул на малых <span class="math inline">\(N\)</span></h3>
+<p>Для первых значений <span class="math inline">\(N\)</span> распределения имеют вид:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;"><span class="math inline">\(N\)</span></th>
+<th><span class="math inline">\((F_N(0),F_N(1),\ldots,F_N(N-1))\)</span></th>
+<th style="text-align: right;">Сумма</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(1\)</span></td>
+<td><span class="math inline">\((2)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(2\)</span></td>
+</tr>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(2\)</span></td>
+<td><span class="math inline">\((3,1)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(4\)</span></td>
+</tr>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(3\)</span></td>
+<td><span class="math inline">\((4,3,1)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(8\)</span></td>
+</tr>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(4\)</span></td>
+<td><span class="math inline">\((6,6,3,1)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(16\)</span></td>
+</tr>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(5\)</span></td>
+<td><span class="math inline">\((10,11,6,4,1)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(32\)</span></td>
+</tr>
+<tr>
+<td style="text-align: right;"><span class="math inline">\(6\)</span></td>
+<td><span class="math inline">\((18,20,11,10,4,1)\)</span></td>
+<td style="text-align: right;"><span class="math inline">\(64\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>В каждой строке сумма равна <span class="math inline">\(2^N\)</span>, как и должна.</p>
+<p>Для <span class="math inline">\(N\le12\)</span> можно независимо:</p>
+<ol type="1">
+<li>перебрать все <span class="math inline">\(2^N\)</span> начальных подмножеств;</li>
+<li>рекурсивно вычислить mex для каждого канонического состояния;</li>
+<li>сравнить полученные нимберы с исправленной формулой;</li>
+<li>сравнить частоты с биномиальными выражениями.</li>
+</ol>
+<p>Все четыре проверки дают одинаковые распределения.</p>
+<h3 id="как-вычислить-все-частоты-за-линейное-время">9. Как вычислить все частоты за линейное время</h3>
+<p>Закрытые формулы ещё не означают быстрый алгоритм. Если для каждого <span class="math inline">\(k\)</span> отдельно считать сумму</p>
+<p><span class="math display">\[
+\sum_{i=0}^{k-2}\binom{N-k-2}{i},
+\]</span></p>
+<p>общая сложность станет квадратичной.</p>
+<p>Нужно использовать связь соседних биномиальных хвостов.</p>
+<h4 id="суммы-для-чётных-нимберов">9.1. Суммы для чётных нимберов</h4>
+<p>Определим</p>
+<p><span class="math display">\[
+A_k
+=
+\sum_{i=0}^{k-2}
+\binom{N-k-2}{i}.
+\]</span></p>
+<p>Положим</p>
+<p><span class="math display">\[
+R_k=N-k-2.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+A_k
+=
+\sum_{i=0}^{k-2}\binom{R_k}{i}.
+\]</span></p>
+<p>Для предыдущего индекса</p>
+<p><span class="math display">\[
+A_{k-1}
+=
+\sum_{i=0}^{k-3}\binom{R_k+1}{i}.
+\]</span></p>
+<p>Применим формулу Паскаля:</p>
+<p><span class="math display">\[
+\begin{aligned}
+A_{k-1}
+&amp;=
+\sum_{i=0}^{k-3}
+\left(
+\binom{R_k}{i}
++
+\binom{R_k}{i-1}
+\right)\\
+&amp;=
+2\sum_{i=0}^{k-3}\binom{R_k}{i}
+-
+\binom{R_k}{k-3}.
+\end{aligned}
+\]</span></p>
+<p>Так как</p>
+<p><span class="math display">\[
+A_k
+=
+\sum_{i=0}^{k-3}\binom{R_k}{i}
++
+\binom{R_k}{k-2},
+\]</span></p>
+<p>получаем рекуррентность</p>
+<p><span class="math display">\[
+\boxed{
+2A_k
+=
+A_{k-1}
++2\binom{N-k-2}{k-2}
++\binom{N-k-2}{k-3}.
+}
+\]</span></p>
+<p>Начальное значение:</p>
+<p><span class="math display">\[
+A_1=0.
+\]</span></p>
+<h4 id="суммы-для-нечётных-нимберов">9.2. Суммы для нечётных нимберов</h4>
+<p>Определим</p>
+<p><span class="math display">\[
+B_k
+=
+\sum_{i=0}^{k-2}
+\binom{N-k-1}{i}.
+\]</span></p>
+<p>Снова применяя формулу Паскаля, получаем</p>
+<p><span class="math display">\[
+\begin{aligned}
+B_k
+&amp;=
+\sum_{i=0}^{k-2}
+\left(
+\binom{N-k-2}{i}
++
+\binom{N-k-2}{i-1}
+\right)\\
+&amp;=
+2A_k-\binom{N-k-2}{k-2}.
+\end{aligned}
+\]</span></p>
+<p>Следовательно,</p>
+<p><span class="math display">\[
+\boxed{
+B_k
+=
+2A_k-\binom{N-k-2}{k-2}.
+}
+\]</span></p>
+<p>После обновления одного значения <span class="math inline">\(A_k\)</span> обе частоты вычисляются за постоянное число арифметических операций:</p>
+<p><span class="math display">\[
+F_N(2k)
+=
+2^{N-k-2}
++
+\binom{N-k-2}{k}
+-
+A_k,
+\]</span></p>
+<p><span class="math display">\[
+F_N(2k-1)
+=
+2^{N-k-1}
++
+\binom{N-k-1}{k}
+-
+B_k.
+\]</span></p>
+<h4 id="вычисления-по-модулю">9.3. Вычисления по модулю</h4>
+<p>Пусть</p>
+<p><span class="math display">\[
+p=1\,000\,000\,007.
+\]</span></p>
+<p>Это простое число, а в задаче</p>
+<p><span class="math display">\[
+N&lt;p.
+\]</span></p>
+<p>Поэтому биномиальные коэффициенты можно вычислять как</p>
+<p><span class="math display">\[
+\binom ab
+\equiv
+a!\,(b!)^{-1}\,((a-b)!)^{-1}
+\pmod p.
+\]</span></p>
+<p>Факториалы и обратные факториалы предварительно считаются за <span class="math inline">\(O(N)\)</span> времени. Деление на <span class="math inline">\(2\)</span> в рекуррентности для <span class="math inline">\(A_k\)</span> заменяется умножением на</p>
+<p><span class="math display">\[
+2^{-1}\equiv\frac{p+1}{2}\pmod p.
+\]</span></p>
+<p>Степени двойки также обновляются за <span class="math inline">\(O(1)\)</span>:</p>
+<p><span class="math display">\[
+2^{r-1}\equiv2^r\cdot2^{-1}\pmod p.
+\]</span></p>
+<p>В результате весь массив</p>
+<p><span class="math display">\[
+f_v=F_N(v),
+\qquad
+0\le v&lt;N,
+\]</span></p>
+<p>строится за <span class="math inline">\(O(N)\)</span> времени.</p>
+<h3 id="от-одной-масти-к-s-мастям">10. От одной масти к <span class="math inline">\(s\)</span> мастям</h3>
+<p>Пусть</p>
+<p><span class="math display">\[
+f=(f_0,f_1,\ldots)
+\]</span></p>
+<p>— распределение нимберов одной масти.</p>
+<p>Для двух мастей число пар с общей ним-суммой <span class="math inline">\(z\)</span> равно</p>
+<p><span class="math display">\[
+(f*_{\oplus}f)_z
+=
+\sum_{x\oplus y=z}f_xf_y.
+\]</span></p>
+<p>Операция <span class="math inline">\(*_{\oplus}\)</span> называется XOR-свёрткой.</p>
+<p>Для <span class="math inline">\(s\)</span> мастей требуется <span class="math inline">\(s\)</span>-я XOR-свёрточная степень:</p>
+<p><span class="math display">\[
+f^{*_{\oplus}s}.
+\]</span></p>
+<p>Искомое число проигрышных начальных наборов — её нулевая компонента:</p>
+<p><span class="math display">\[
+C(N,s)
+=
+\left(f^{*_{\oplus}s}\right)_0.
+\]</span></p>
+<p>Прямое вычисление одной XOR-свёртки требует квадратичного времени. При <span class="math inline">\(N=10^7\)</span> это неприемлемо.</p>
+<h3 id="преобразование-уолшаадамара">11. Преобразование Уолша—Адамара</h3>
+<h4 id="дополнение-до-степени-двойки">11.1. Дополнение до степени двойки</h4>
+<p>Выберем</p>
+<p><span class="math display">\[
+L=2^\ell\ge N
+\]</span></p>
+<p>— минимальную степень двойки, не меньшую <span class="math inline">\(N\)</span>.</p>
+<p>Массив частот дополняется нулями:</p>
+<p><span class="math display">\[
+f_v=0,
+\qquad N\le v&lt;L.
+\]</span></p>
+<p>Индексы от <span class="math inline">\(0\)</span> до <span class="math inline">\(L-1\)</span> рассматриваются как элементы группы</p>
+<p><span class="math display">\[
+(\mathbb Z/2\mathbb Z)^\ell.
+\]</span></p>
+<p>Групповая операция в ней — побитовый XOR.</p>
+<h4 id="характеры-булевой-группы">11.2. Характеры булевой группы</h4>
+<p>Для индексов <span class="math inline">\(t\)</span> и <span class="math inline">\(x\)</span> определим</p>
+<p><span class="math display">\[
+\chi_t(x)
+=
+(-1)^{\operatorname{popcount}(t\mathbin{\&amp;}x)}.
+\]</span></p>
+<p>Здесь <span class="math inline">\(\operatorname{popcount}\)</span> — число единичных битов.</p>
+<p>Преобразование Уолша—Адамара задаётся формулой</p>
+<p><span class="math display">\[
+\widehat f(t)
+=
+\sum_{x=0}^{L-1}
+f(x)\chi_t(x).
+\]</span></p>
+<p>Это дискретное преобразование Фурье на булевой группе. Его матрица состоит только из <span class="math inline">\(1\)</span> и <span class="math inline">\(-1\)</span> и удовлетворяет</p>
+<p><span class="math display">\[
+H_L^2=L I.
+\]</span></p>
+<p>Следовательно, обратное преобразование имеет вид</p>
+<p><span class="math display">\[
+f
+=
+L^{-1}H_L\widehat f.
+\]</span></p>
+<p>Подробнее определение и рекурсивное устройство матрицы приведены в статье о <a class="intext" href="https://en.wikipedia.org/wiki/Hadamard_transform" target="_blank" rel="noopener noreferrer">преобразовании Адамара</a>.</p>
+<h4 id="почему-xor-свёртка-превращается-в-произведение">11.3. Почему XOR-свёртка превращается в произведение</h4>
+<p>Пусть</p>
+<p><span class="math display">\[
+c=a*_{\oplus}b.
+\]</span></p>
+<p>Тогда</p>
+<p><span class="math display">\[
+c(z)
+=
+\sum_{x\oplus y=z}a(x)b(y).
+\]</span></p>
+<p>Преобразуем:</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat c(t)
+&amp;=
+\sum_z c(z)\chi_t(z)\\
+&amp;=
+\sum_x\sum_y
+a(x)b(y)\chi_t(x\oplus y).
+\end{aligned}
+\]</span></p>
+<p>Для характеров булевой группы</p>
+<p><span class="math display">\[
+\chi_t(x\oplus y)
+=
+\chi_t(x)\chi_t(y).
+\]</span></p>
+<p>Поэтому</p>
+<p><span class="math display">\[
+\begin{aligned}
+\widehat c(t)
+&amp;=
+\left(\sum_xa(x)\chi_t(x)\right)
+\left(\sum_yb(y)\chi_t(y)\right)\\
+&amp;=
+\widehat a(t)\widehat b(t).
+\end{aligned}
+\]</span></p>
+<p>Значит,</p>
+<p><span class="math display">\[
+\widehat{f^{*_{\oplus}s}}(t)
+=
+\widehat f(t)^s.
+\]</span></p>
+<h4 id="нужна-только-нулевая-компонента">11.4. Нужна только нулевая компонента</h4>
+<p>Полное обратное преобразование выполнять не требуется. Для <span class="math inline">\(x=0\)</span></p>
+<p><span class="math display">\[
+\chi_t(0)=1
+\]</span></p>
+<p>при любом <span class="math inline">\(t\)</span>. Поэтому</p>
+<p><span class="math display">\[
+\boxed{
+C(N,s)
+\equiv
+L^{-1}
+\sum_{t=0}^{L-1}
+\widehat f(t)^s
+\pmod p.
+}
+\]</span></p>
+<p>Это окончательная вычислительная формула.</p>
+<p>Она особенно удобна потому, что после прямого преобразования достаточно:</p>
+<ol type="1">
+<li>возвести каждый преобразованный коэффициент в степень <span class="math inline">\(s\)</span> по модулю <span class="math inline">\(p\)</span>;</li>
+<li>сложить результаты;</li>
+<li>умножить сумму на <span class="math inline">\(L^{-1}\pmod p\)</span>.</li>
+</ol>
+<p>Обратный проход преобразования не нужен.</p>
+<h4 id="быстрое-преобразование">11.5. Быстрое преобразование</h4>
+<p>Рекурсивная структура матрицы Адамара использует блок</p>
+<p><span class="math display">\[
+\begin{pmatrix}
+1&amp;1\\
+1&amp;-1
+\end{pmatrix}.
+\]</span></p>
+<p>На каждом уровне пары значений</p>
+<p><span class="math display">\[
+(u,v)
+\]</span></p>
+<p>заменяются на</p>
+<p><span class="math display">\[
+(u+v,u-v).
+\]</span></p>
+<p>Всего уровней <span class="math inline">\(\ell=\log_2L\)</span>, на каждом обрабатываются <span class="math inline">\(L\)</span> элементов. Поэтому сложность равна</p>
+<p><span class="math display">\[
+O(L\log L),
+\]</span></p>
+<p>а дополнительная память сверх самого массива может быть постоянной.</p>
+<p>Все сложения и вычитания выполняются по модулю <span class="math inline">\(p\)</span>. Отрицательные остатки нужно нормализовать в диапазон</p>
+<p><span class="math display">\[
+0,1,\ldots,p-1.
+\]</span></p>
+<h3 id="полный-алгоритм">12. Полный алгоритм</h3>
+<p>Вычислительная схема выглядит так.</p>
+<ol type="1">
+<li><p>Построить частоты <span class="math inline">\(F_N(v)\)</span> для <span class="math inline">\(0\le v&lt;N\)</span>.</p></li>
+<li><p>Проверить контрольную сумму</p>
+<p><span class="math display">\[
+\sum_{v=0}^{N-1}F_N(v)\equiv2^N\pmod p.
+\]</span></p></li>
+<li><p>Выбрать минимальную степень двойки <span class="math inline">\(L\ge N\)</span>.</p></li>
+<li><p>Дополнить массив частот нулями до длины <span class="math inline">\(L\)</span>.</p></li>
+<li><p>Выполнить прямое быстрое преобразование Уолша—Адамара.</p></li>
+<li><p>Для каждого преобразованного коэффициента вычислить</p>
+<p><span class="math display">\[
+\widehat f(t)^s\bmod p.
+\]</span></p></li>
+<li><p>Сложить степени и умножить сумму на</p>
+<p><span class="math display">\[
+L^{-1}\bmod p.
+\]</span></p></li>
+</ol>
+<p>Полученное значение является <span class="math inline">\(C(N,s)\bmod p\)</span>.</p>
+<h3 id="оценка-сложности">13. Оценка сложности</h3>
+<p>Построение распределения одной масти занимает</p>
+<p><span class="math display">\[
+O(N)
+\]</span></p>
+<p>арифметических операций.</p>
+<p>Преобразование Уолша—Адамара занимает</p>
+<p><span class="math display">\[
+O(L\log L).
+\]</span></p>
+<p>Возведение всех коэффициентов в степень бинарным методом требует</p>
+<p><span class="math display">\[
+O(L\log s).
+\]</span></p>
+<p>Поскольку минимальная степень двойки удовлетворяет</p>
+<p><span class="math display">\[
+N\le L&lt;2N,
+\]</span></p>
+<p>общая сложность равна</p>
+<p><span class="math display">\[
+\boxed{
+O(N\log N+N\log s).
+}
+\]</span></p>
+<p>При <span class="math inline">\(N=s\)</span> её можно записать как</p>
+<p><span class="math display">\[
+O(N\log N).
+\]</span></p>
+<p>Память определяется массивом длины <span class="math inline">\(L\)</span> и таблицами для биномиальных коэффициентов:</p>
+<p><span class="math display">\[
+O(N).
+\]</span></p>
+<h3 id="проверка-на-примерах-из-условия">14. Проверка на примерах из условия</h3>
+<h4 id="случай-c32">14.1. Случай <span class="math inline">\(C(3,2)\)</span></h4>
+<p>Для одной масти из трёх карт</p>
+<p><span class="math display">\[
+(F_3(0),F_3(1),F_3(2))
+=(4,3,1).
+\]</span></p>
+<p>При двух мастях XOR равен нулю тогда и только тогда, когда нимберы мастей совпадают. Поэтому</p>
+<p><span class="math display">\[
+C(3,2)
+=
+4^2+3^2+1^2
+=
+26.
+\]</span></p>
+<p>Это совпадает с первым примером из условия.</p>
+<h4 id="случай-c134">14.2. Случай <span class="math inline">\(C(13,4)\)</span></h4>
+<p>Для <span class="math inline">\(N=13\)</span> строится массив из тринадцати ненулевых частот, после чего он дополняется до длины</p>
+<p><span class="math display">\[
+L=16.
+\]</span></p>
+<p>Четвёртая XOR-свёрточная степень, вычисленная через преобразование Уолша—Адамара, даёт опубликованный в условии остаток</p>
+<p><span class="math display">\[
+C(13,4)\equiv540318329\pmod{1\,000\,000\,007}.
+\]</span></p>
+<h4 id="основной-набор-параметров">14.3. Основной набор параметров</h4>
+<p>Для основного случая</p>
+<p><span class="math display">\[
+N=s=10^7
+\]</span></p>
+<p>используется длина</p>
+<p><span class="math display">\[
+L=2^{24}=16\,777\,216.
+\]</span></p>
+<p>Независимый расчёт прошёл следующие проверки:</p>
+<ul>
+<li>формула нимбера сравнена с рекурсивным mex на всех подмножествах при малых <span class="math inline">\(N\)</span>;</li>
+<li>закрытые формулы частот сравнены с полным перебором;</li>
+<li>сумма частот проверена против <span class="math inline">\(2^N\)</span>;</li>
+<li>обычная динамика XOR-свёртки для малых <span class="math inline">\(N\)</span> и <span class="math inline">\(s\)</span> сравнена с преобразованием;</li>
+<li>оба открытых примера из условия воспроизведены.</li>
+</ul>
+<h3 id="ошибочные-и-слишком-медленные-подходы">15. Ошибочные и слишком медленные подходы</h3>
+<h4 id="перебирать-начальные-наборы">15.1. Перебирать начальные наборы</h4>
+<p>Число наборов равно</p>
+<p><span class="math display">\[
+2^{Ns}.
+\]</span></p>
+<p>Даже для одной масти при <span class="math inline">\(N=10^7\)</span> перебор невозможен.</p>
+<h4 id="считать-только-выигрышные-и-проигрышные-состояния-одной-масти">15.2. Считать только выигрышные и проигрышные состояния одной масти</h4>
+<p>Одного бита «выигрыш/проигрыш» недостаточно. При сложении мастей нужен полный нимбер, поскольку условие общей проигрышности имеет вид</p>
+<p><span class="math display">\[
+g_1\oplus\cdots\oplus g_s=0.
+\]</span></p>
+<h4 id="предполагать-фиксированную-чётность-числа-ходов">15.3. Предполагать фиксированную чётность числа ходов</h4>
+<p>Длина партии зависит от выбора карт. Разные ходы могут закрывать возможность использования разных частей колоды, поэтому исход не определяется простой чётностью количества ещё доступных карт.</p>
+<h4 id="использовать-неполную-формулу-нимбера">15.4. Использовать неполную формулу нимбера</h4>
+<p>Ограничения первым нечётным блокирующим смещением недостаточно. Обязательно сохраняется граница</p>
+<p><span class="math display">\[
+g\le d.
+\]</span></p>
+<p>Позиция <span class="math inline">\((0,1,3)\)</span> является короткой проверкой этого условия.</p>
+<h4 id="считать-каждый-биномиальный-хвост-отдельно">15.5. Считать каждый биномиальный хвост отдельно</h4>
+<p>Формула частоты содержит сумму</p>
+<p><span class="math display">\[
+\sum_{i=0}^{k-2}\binom{R}{i}.
+\]</span></p>
+<p>Её повторный подсчёт для каждого <span class="math inline">\(k\)</span> приводит к <span class="math inline">\(O(N^2)\)</span>. Линейная рекуррентность между соседними хвостами является обязательной частью решения.</p>
+<h4 id="использовать-обычную-свёртку">15.6. Использовать обычную свёртку</h4>
+<p>Обычная свёртка соответствует сложению индексов:</p>
+<p><span class="math display">\[
+x+y=z.
+\]</span></p>
+<p>Здесь индексы объединяются операцией</p>
+<p><span class="math display">\[
+x\oplus y=z.
+\]</span></p>
+<p>Поэтому обычное дискретное преобразование Фурье не диагонализует нужную операцию. Требуется преобразование Фурье на булевой группе, то есть преобразование Уолша—Адамара.</p>
+<h4 id="не-дополнять-массив-до-степени-двойки">15.7. Не дополнять массив до степени двойки</h4>
+<p>Нимберы лежат в диапазоне <span class="math inline">\(0,\ldots,N-1\)</span>, но XOR двух таких чисел может иметь индекс, не меньший <span class="math inline">\(N\)</span>. Пространство индексов должно быть замкнуто относительно XOR. Поэтому длина массива выбирается равной степени двойки <span class="math inline">\(L\ge N\)</span>.</p>
+<h4 id="выполнять-полное-обратное-преобразование">15.8. Выполнять полное обратное преобразование</h4>
+<p>Задаче нужна только компонента с индексом <span class="math inline">\(0\)</span>. Для неё все характеры равны единице, поэтому достаточно усреднить возведённые в степень преобразованные коэффициенты. Обратное преобразование целого массива добавило бы ещё один проход <span class="math inline">\(O(L\log L)\)</span> без пользы.</p>
+<h3 id="итог">16. Итог</h3>
+<p>Основная цепочка преобразований выглядит так:</p>
+<p><span class="math display">\[
+\text{карточная игра}
+\longrightarrow
+\text{независимые масти}
+\longrightarrow
+\text{числа Шпрага—Гранди}
+\longrightarrow
+\text{биномиальное распределение одной масти}
+\longrightarrow
+\text{XOR-свёртка}
+\longrightarrow
+\text{преобразование Уолша—Адамара}.
+\]</span></p>
+<p>Ключевой результат для одной масти — точная частота каждого положительного нимбера:</p>
+<p><span class="math display">\[
+F_N(v)
+=
+2^{R_v}
++
+\binom{R_v}{\lceil v/2\rceil}
+-
+\sum_{i=0}^{\lceil v/2\rceil-2}
+\binom{R_v}{i},
+\]</span></p>
+<p>где</p>
+<p><span class="math display">\[
+R_v
+=
+N-\left\lceil\frac v2\right\rceil-1
+-\mathbf 1_{\{v\text{ чётно}\}}.
+\]</span></p>
+<p>Для нулевого нимбера</p>
+<p><span class="math display">\[
+F_N(0)=2^{N-2}+2
+\qquad(N\ge2).
+\]</span></p>
+<p>После построения частот число проигрышных наборов для <span class="math inline">\(s\)</span> мастей выражается одной формулой:</p>
+<p><span class="math display">\[
+C(N,s)
+\equiv
+L^{-1}
+\sum_{t=0}^{L-1}
+\widehat f(t)^s
+\pmod{1\,000\,000\,007}.
+\]</span></p>
+<p>Таким образом, задача с астрономическим числом начальных состояний сводится к линейному построению массива и одному преобразованию размера ближайшей степени двойки.</p>
+      </div>
 
-            <div align="justify" class="problem_content">
-                <p> Два игрока играют с колодой карт, содержащей
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>s</mi>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> мастей, где каждая масть содержит
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>n</mi>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> карт, пронумерованных от
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mn>1</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> to
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>n</mi>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>.</p>
-                <p> До начала игры из колоды извлекается множество карт (может быть пустым), которые раскладываются лицом вверх на столе не перекрывая друг друга. Они называются видимыми картами.</p>
-                <p> Игроки ходят по очереди.
-                  <br> Ход заключается в том, что игрок выбирает карту X из оставшейся колоды и кладет ее лицом вверх поверх видимой карты Y, учитывая следующие ограничения:</p>
-                <ul>
-                  <li>* X и Y должны быть одной масти;</li>
-                  <li>* достоинство X должно превышать достоинство Y.</li>
-                </ul>
-                <p> Затем карта X покрывает карту Y и заменяет ее в качестве видимой карты.
-                  <br> Игрок, который не может совершить разрешенный ход, проигрывает, и игра прекращается.</p>
-                <p> Пусть
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>C</mi>
-                        <mo stretchy="false">(</mo>
-                        <mi>n</mi>
-                        <mo>,</mo>
-                        <mi>s</mi>
-                        <mo stretchy="false">)</mo>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> будет количеством различных начальных множеств карт, для которых первый игрок проиграет, если оба игрока придерживаются самой оптимальной стратегии.</p>
-                <p> Например,
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="5" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>C</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>3</mn>
-                        <mo>,</mo>
-                        <mn>2</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>=</mo>
-                        <mn>26</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container> и
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="6" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>C</mi>
-                        <mo stretchy="false">(</mo>
-                        <mn>13</mn>
-                        <mo>,</mo>
-                        <mn>4</mn>
-                        <mo stretchy="false">)</mo>
-                        <mo>≡</mo>
-                        <mn>540318329</mn>
-                        <mspace width="0.444em"></mspace>
-                        <mo stretchy="false">(</mo>
-                        <mi>mod</mi>
-                        <mspace width="0.333em"></mspace>
-                        <mn>1</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>000</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>000</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>007</mn>
-                        <mo stretchy="false">)</mo>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>.</p>
-                <p> Найдите
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="7" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mi>C</mi>
-                        <mo stretchy="false">(</mo>
-                        <msup>
-                          <mn>10</mn>
-                          <mn>7</mn>
-                        </msup>
-                        <mo>,</mo>
-                        <msup>
-                          <mn>10</mn>
-                          <mn>7</mn>
-                        </msup>
-                        <mo stretchy="false">)</mo>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>. В качестве ответа приведите остаток от деления полученного результата на
-                  <mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="8" style="font-size: 117.3%; position: relative;">
-                    <mjx-assistive-mml unselectable="on" display="inline">
-                      <math xmlns="http://www.w3.org/1998/Math/MathML">
-                        <mn>1</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>000</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>000</mn>
-                        <mstyle scriptlevel="0">
-                          <mspace width="0.167em"></mspace>
-                        </mstyle>
-                        <mn>007</mn>
-                      </math>
-                    </mjx-assistive-mml>
-                  </mjx-container>.</p>
-              </div>
+      <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>
+      <a href="#" title="Промотать вниз" class="buttondown"><img src="../images/down-arrow.png" alt="Вниз"></a>
+    </div>
+  </div>
 
-        <h2>Решение</h2>
+  <script src="../scripts/scrollToTop.js"></script>
+  <script src="../scripts/scrollToBottom.js"></script>
+</body>
+</html>

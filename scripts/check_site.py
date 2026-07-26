@@ -23,6 +23,7 @@ PUBLIC_PAGES = (
     "euler/786.html",
     "euler/792.html",
     "euler/798.html",
+    "euler/798/interactive/card-stacking-explorer.html",
     "euler/1003.html",
     "euler/1007.html",
     "euler/1007/interactive/alternating-difference-explorer.html",
