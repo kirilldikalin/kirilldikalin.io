@@ -40,6 +40,25 @@ test("all forbidden patterns have a distinct collision marker", () => {
   }
 });
 
+test("forbidden patterns can be rotated and advanced to the collision", () => {
+  for (const name of ["triangle", "y", "stapler"]) {
+    const base = core.forbiddenPattern(name);
+    for (let turns = 0; turns < 6; turns += 1) {
+      const start = core.forbiddenPatternStage(name, 0, turns);
+      const finish = core.forbiddenPatternStage(name, base.forcedSteps, turns);
+      assert.equal(start.progress, 0);
+      assert.equal(start.collided, false);
+      assert.equal(finish.progress, 1);
+      assert.equal(finish.collided, true);
+      assert.equal(new Set(finish.cells.map((cell) => cell.join(","))).size, base.cells.length);
+    }
+    assert.deepEqual(
+      core.forbiddenPatternStage(name, 0, 6).cells,
+      core.forbiddenPatternStage(name, 0, 0).cells,
+    );
+  }
+});
+
 test("snake state contains a+b+1 cells and has triangular lower bound", () => {
   for (let a = 0; a <= 6; a += 1) {
     for (let b = 0; b <= 6; b += 1) {
@@ -48,6 +67,15 @@ test("snake state contains a+b+1 cells and has triangular lower bound", () => {
       assert.ok(core.transitionTerms(a, b).length >= 2);
     }
   }
+});
+
+test("the visible budget changes which snake transitions are viable", () => {
+  const low = core.transitionBudget(2, 2, 3);
+  const high = core.transitionBudget(2, 2, 20);
+  assert.equal(low.filter((term) => term.viable).length, 0);
+  assert.ok(high.filter((term) => term.viable).length > 0);
+  assert.ok(high.some((term) => !term.viable));
+  assert.ok(high.every((term) => term.remaining === 19 - term.a - term.b));
 });
 
 test("the recurrence reproduces direct and published checks", () => {

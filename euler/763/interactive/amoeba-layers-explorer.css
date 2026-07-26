@@ -88,6 +88,12 @@ button {
   gap: 1rem;
 }
 
+.e763-pattern-controls {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
 .e763-metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -158,6 +164,19 @@ button {
   stroke-width: 3;
 }
 
+.e763-collision-target {
+  fill: #fff;
+  stroke: #bb3b35;
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.e763-flow-point {
+  fill: #252525;
+  stroke: #fff;
+  stroke-width: 2;
+}
+
 .e763-snake-line {
   fill: none;
   stroke: #252525;
@@ -172,12 +191,30 @@ button {
   stroke-width: 3;
 }
 
+.e763-transition-card {
+  fill: #fff;
+  stroke: #252525;
+  stroke-width: 2;
+}
+
+.e763-transition-card.is-unavailable {
+  fill: #ededf0;
+  stroke: #aaa;
+  stroke-dasharray: 5 4;
+}
+
+.e763-budget-label {
+  fill: #666;
+  font-size: 12px;
+}
+
 @media (max-width: 680px) {
   .e763-explorer {
     padding: 0.75rem;
   }
 
   .e763-control-grid,
+  .e763-pattern-controls,
   .e763-metrics {
     grid-template-columns: 1fr;
   }

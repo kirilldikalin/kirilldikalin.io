@@ -91,6 +91,41 @@
     return pattern;
   }
 
+  function rotateTriangularCell(cell, turns) {
+    if (
+      !Array.isArray(cell)
+      || cell.length !== 2
+      || cell.some((value) => !Number.isInteger(value))
+      || !Number.isInteger(turns)
+    ) {
+      throw new Error("Поворот задаётся целым числом для клетки треугольной сетки");
+    }
+    let [q, r] = cell;
+    const normalizedTurns = ((turns % 6) + 6) % 6;
+    for (let turn = 0; turn < normalizedTurns; turn += 1) {
+      [q, r] = [-r, q + r];
+    }
+    return [q, r];
+  }
+
+  function forbiddenPatternStage(name, step, turns = 0) {
+    const pattern = forbiddenPattern(name);
+    if (!Number.isInteger(step) || step < 0 || step > pattern.forcedSteps) {
+      throw new Error(`Шаг фигуры ${name} должен быть от 0 до ${pattern.forcedSteps}`);
+    }
+    const rotate = (cell) => rotateTriangularCell(cell, turns);
+    return {
+      label: pattern.label,
+      cells: pattern.cells.map(rotate),
+      collision: rotate(pattern.collision),
+      feeders: pattern.cells.slice(-3).map(rotate),
+      step,
+      forcedSteps: pattern.forcedSteps,
+      progress: step / pattern.forcedSteps,
+      collided: step === pattern.forcedSteps,
+    };
+  }
+
   function triangularCost(a, b) {
     if (!Number.isInteger(a) || !Number.isInteger(b) || a < 0 || b < 0) {
       throw new Error("Параметры змейки должны быть неотрицательными целыми");
@@ -161,6 +196,21 @@
     ];
   }
 
+  function transitionBudget(a, b, budget) {
+    triangularCost(a, b);
+    if (!Number.isInteger(budget) || budget < 0) {
+      throw new Error("Бюджет перехода должен быть неотрицательным целым");
+    }
+    return transitionTerms(a, b).map((term) => {
+      const remaining = budget - term.a - term.b - 1;
+      return {
+        ...term,
+        remaining,
+        viable: remaining >= triangularCost(term.a, term.b),
+      };
+    });
+  }
+
   function countConfigurations(maxN, modulus = null) {
     if (!Number.isInteger(maxN) || maxN < 0 || maxN > 100) {
       throw new Error("Для интерактива N должно быть целым от 0 до 100");
@@ -202,9 +252,12 @@
     layerCoordinates,
     applySplits,
     forbiddenPattern,
+    forbiddenPatternStage,
+    rotateTriangularCell,
     triangularCost,
     snakeCells,
     transitionTerms,
+    transitionBudget,
     countConfigurations,
   });
 }(typeof window === "undefined" ? globalThis : window));

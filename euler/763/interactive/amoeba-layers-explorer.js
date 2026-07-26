@@ -18,7 +18,7 @@
   }
 
   function project3d([x, y, z]) {
-    return [165 + (x - y) * 78, 300 - z * 68 - (x + y) * 27];
+    return [430 + (x - y) * 68, 48 + (x + y) * 18 + z * 80];
   }
 
   function projectTriangular([q, r], originX = 310, originY = 250, scale = 58) {
@@ -32,28 +32,31 @@
     const cells = core.applySplits(splits);
 
     for (let layer = 0; layer <= Math.max(step, 1); layer += 1) {
-      const y = 330 - layer * 68;
-      scene.append(svgElement("line", {
-        x1: 65,
-        y1: y,
-        x2: 795,
-        y2: y,
-        class: "e763-grid-line",
+      const x = 65 + layer * 105;
+      scene.append(svgElement("circle", {
+        cx: x,
+        cy: 30,
+        r: 9,
+        fill: palette[Math.min(layer, palette.length - 1)],
+        class: "e763-cell",
       }));
       scene.append(svgElement("text", {
-        x: 805,
-        y: y + 5,
+        x: x + 17,
+        y: 35,
         class: "e763-layer-label",
       }, `L${layer}`));
     }
 
-    cells.forEach(({ cell, count }) => {
-      const [cx, cy] = project3d(cell);
+    cells
+      .map((item) => ({ ...item, point: project3d(item.cell) }))
+      .sort((left, right) => left.point[1] - right.point[1])
+      .forEach(({ cell, count, point }) => {
+      const [cx, cy] = point;
       const layer = core.layerIndex(cell);
       scene.append(svgElement("circle", {
         cx,
         cy,
-        r: 23,
+        r: 20,
         fill: palette[Math.min(layer, palette.length - 1)],
         class: "e763-cell",
       }));
@@ -63,7 +66,7 @@
         "text-anchor": "middle",
         class: "e763-node-label",
       }, count > 1 ? String(count) : cell.join(",")));
-    });
+      });
 
     const newest = step === 0 ? [0, 0, 0] : splitSequence[step - 1];
     const children = step === 0 ? [] : core.splitCell(newest);
@@ -111,7 +114,18 @@
   }
 
   function drawPattern(name) {
-    const pattern = core.forbiddenPattern(name);
+    const stepInput = document.querySelector("#e763-pattern-step");
+    const turnInput = document.querySelector("#e763-pattern-turn");
+    const basePattern = core.forbiddenPattern(name);
+    stepInput.max = basePattern.forcedSteps;
+    if (Number(stepInput.value) > basePattern.forcedSteps) {
+      stepInput.value = basePattern.forcedSteps;
+    }
+    const pattern = core.forbiddenPatternStage(
+      name,
+      Number(stepInput.value),
+      Number(turnInput.value),
+    );
     const scene = document.querySelector("[data-e763-pattern-scene]");
     clear(scene);
     drawTriangularGrid(scene);
@@ -134,35 +148,79 @@
     });
 
     const [collisionX, collisionY] = projectTriangular(pattern.collision);
-    pattern.cells.slice(-3).forEach((cell) => {
+    pattern.feeders.forEach((cell) => {
       const [x, y] = projectTriangular(cell);
+      const currentX = x + (collisionX - x) * pattern.progress;
+      const currentY = y + (collisionY - y) * pattern.progress;
       scene.insertBefore(svgElement("line", {
         x1: x,
         y1: y,
-        x2: collisionX,
-        y2: collisionY,
+        x2: currentX,
+        y2: currentY,
         class: "e763-connector",
       }), scene.firstChild);
+      if (!pattern.collided && pattern.step > 0) {
+        scene.append(svgElement("circle", {
+          cx: currentX,
+          cy: currentY,
+          r: 10,
+          class: "e763-flow-point",
+        }));
+      }
     });
-    scene.append(svgElement("circle", {
-      cx: collisionX,
-      cy: collisionY,
-      r: 29,
-      class: "e763-collision",
-    }));
-    scene.append(svgElement("text", {
-      x: collisionX,
-      y: collisionY + 7,
-      "text-anchor": "middle",
-      fill: "#fff",
-      class: "e763-node-label",
-    }, "3"));
+    if (pattern.collided) {
+      scene.append(svgElement("circle", {
+        cx: collisionX,
+        cy: collisionY,
+        r: 29,
+        class: "e763-collision",
+      }));
+      scene.append(svgElement("text", {
+        x: collisionX,
+        y: collisionY + 7,
+        "text-anchor": "middle",
+        fill: "#fff",
+        class: "e763-node-label",
+      }, "3"));
+    } else {
+      scene.append(svgElement("circle", {
+        cx: collisionX,
+        cy: collisionY,
+        r: 13,
+        class: "e763-collision-target",
+      }));
+    }
 
     document.querySelector("[data-e763-pattern-size]").textContent = pattern.cells.length;
+    document.querySelector("[data-e763-pattern-step-value]").textContent =
+      `${pattern.step} / ${pattern.forcedSteps}`;
+    document.querySelector("[data-e763-pattern-turn-value]").textContent =
+      `${Number(turnInput.value) * 60}°`;
     document.querySelector("[data-e763-pattern-steps]").textContent =
-      `${pattern.forcedSteps} ${pattern.forcedSteps === 1 ? "слой" : "слоя"}`;
-    document.querySelector("[data-e763-pattern-detail]").textContent =
-      `${pattern.label}: если продолжать освобождать двойные клетки, три потока неизбежно сходятся в красной клетке.`;
+      String(pattern.forcedSteps - pattern.step);
+    document.querySelector("[data-e763-pattern-result]").textContent =
+      pattern.collided ? "кратность 3" : "потоки разделены";
+    document.querySelector("[data-e763-pattern-detail]").textContent = pattern.collided
+      ? `${pattern.label}: после ${pattern.forcedSteps} вынужденных шагов три потока сошлись в одной клетке.`
+      : `${pattern.label}: передвиньте шаг продолжения — три потока пока идут отдельно к отмеченной клетке.`;
+  }
+
+  function fitPoints(points, bounds) {
+    const xs = points.map((point) => point[0]);
+    const ys = points.map((point) => point[1]);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const sourceWidth = Math.max(1, maxX - minX);
+    const sourceHeight = Math.max(1, maxY - minY);
+    const scale = Math.min(bounds.width / sourceWidth, bounds.height / sourceHeight);
+    const offsetX = bounds.x + (bounds.width - sourceWidth * scale) / 2;
+    const offsetY = bounds.y + (bounds.height - sourceHeight * scale) / 2;
+    return points.map(([x, y]) => [
+      offsetX + (x - minX) * scale,
+      offsetY + (y - minY) * scale,
+    ]);
   }
 
   function drawSnake() {
@@ -173,7 +231,8 @@
     clear(scene);
 
     const cells = core.snakeCells(a, b);
-    const points = cells.map((cell) => projectTriangular(cell, 115, 250, 45));
+    const rawPoints = cells.map((cell) => projectTriangular(cell, 0, 0, 1));
+    const points = fitPoints(rawPoints, { x: 65, y: 55, width: 300, height: 205 });
     if (points.length > 1) {
       scene.append(svgElement("polyline", {
         points: points.map((point) => point.join(",")).join(" "),
@@ -201,7 +260,11 @@
       class: "e763-transition-label",
     }, `состояние (${a},${b})`));
 
-    const terms = core.transitionTerms(a, b);
+    const currentReachable = n >= core.triangularCost(a, b);
+    const terms = core.transitionBudget(a, b, n).map((term) => ({
+      ...term,
+      viable: currentReachable && term.viable,
+    }));
     terms.forEach((term, index) => {
       const column = index % 3;
       const row = Math.floor(index / 3);
@@ -209,35 +272,50 @@
       const y = 95 + row * 105;
       scene.append(svgElement("rect", {
         x: x - 44,
-        y: y - 27,
+        y: y - 31,
         width: 88,
-        height: 54,
+        height: 62,
         rx: 8,
-        fill: "#fff",
-        stroke: "#555",
+        class: `e763-transition-card${term.viable ? "" : " is-unavailable"}`,
       }));
       scene.append(svgElement("text", {
         x,
-        y: y + 5,
+        y: y,
         "text-anchor": "middle",
         class: "e763-transition-label",
       }, `${term.multiplicity > 1 ? `${term.multiplicity}× ` : ""}(${term.a},${term.b})`));
+      scene.append(svgElement("text", {
+        x,
+        y: y + 19,
+        "text-anchor": "middle",
+        class: "e763-budget-label",
+      }, `m′=${term.remaining}`));
     });
     scene.append(svgElement("path", {
       d: "M365 175 C410 175 415 150 445 150",
       class: "e763-connector",
     }));
 
-    const values = core.countConfigurations(n, 1_000_000_000);
+    const values = core.countConfigurations(n);
     const cost = core.triangularCost(a, b);
     document.querySelector("[data-e763-a-value]").textContent = a;
     document.querySelector("[data-e763-b-value]").textContent = b;
     document.querySelector("[data-e763-n-value]").textContent = n;
     document.querySelector("[data-e763-snake-length]").textContent = cells.length;
     document.querySelector("[data-e763-snake-cost]").textContent = cost;
-    document.querySelector("[data-e763-d-value]").textContent = `D(${n}) = ${values[n]}`;
+    const viableCount = terms.filter((term) => term.viable).length;
+    const transitionWord = viableCount % 10 === 1 && viableCount % 100 !== 11
+      ? "переход"
+      : viableCount % 10 >= 2 && viableCount % 10 <= 4
+        && (viableCount % 100 < 12 || viableCount % 100 > 14)
+        ? "перехода"
+        : "переходов";
+    document.querySelector("[data-e763-viable-value]").textContent =
+      `${viableCount} / ${terms.length}`;
     document.querySelector("[data-e763-snake-detail]").textContent =
-      `Из (${a},${b}) получается ${terms.length} канонических направлений. Коэффициенты учитывают совпавшие после симметрии продолжения.`;
+      currentReachable
+        ? `При N=${n} доступно ${viableCount} ${transitionWord}. После каждого чёрного перехода хватает бюджета на следующую змейку. Независимая проверка: D(${n})=${values[n]}.`
+        : `Состояние (${a},${b}) требует как минимум ${cost}, поэтому при N=${n} оно ещё недостижимо. Независимая проверка: D(${n})=${values[n]}.`;
   }
 
   function selectTab(tabName) {
@@ -272,7 +350,14 @@
       document.querySelectorAll("[data-e763-pattern]").forEach((item) => {
         item.classList.toggle("is-active", item === button);
       });
+      document.querySelector("#e763-pattern-step").value = 0;
       drawPattern(button.dataset.e763Pattern);
+    });
+  });
+
+  ["#e763-pattern-step", "#e763-pattern-turn"].forEach((selector) => {
+    document.querySelector(selector).addEventListener("input", () => {
+      drawPattern(document.querySelector("[data-e763-pattern].is-active").dataset.e763Pattern);
     });
   });
 

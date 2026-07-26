@@ -46,10 +46,20 @@
           <button type="button" data-e763-pattern="y">Y-ветвление</button>
           <button type="button" data-e763-pattern="stapler">Степлер</button>
         </div>
+        <div class="e763-pattern-controls">
+          <div class="e763-controls">
+            <label for="e763-pattern-step">Шаг продолжения <strong data-e763-pattern-step-value>0 / 1</strong></label>
+            <input id="e763-pattern-step" type="range" min="0" max="1" value="0" step="1">
+          </div>
+          <div class="e763-controls">
+            <label for="e763-pattern-turn">Поворот фигуры <strong data-e763-pattern-turn-value>0°</strong></label>
+            <input id="e763-pattern-turn" type="range" min="0" max="5" value="0" step="1">
+          </div>
+        </div>
         <div class="e763-metrics" aria-live="polite">
           <span><small>Клеток кратности 2</small><strong data-e763-pattern-size>3</strong></span>
-          <span><small>До столкновения</small><strong data-e763-pattern-steps>1 слой</strong></span>
-          <span><small>Результат</small><strong>кратность 3</strong></span>
+          <span><small>Осталось шагов</small><strong data-e763-pattern-steps>1</strong></span>
+          <span><small>Текущий результат</small><strong data-e763-pattern-result>потоки разделены</strong></span>
         </div>
         <svg class="e763-stage" viewBox="0 0 860 390" role="img" aria-labelledby="e763-pattern-title e763-pattern-desc">
           <title id="e763-pattern-title">Запрещённые фигуры на треугольной сетке</title>
@@ -70,14 +80,14 @@
             <input id="e763-b" type="range" min="0" max="5" value="2" step="1">
           </div>
           <div class="e763-controls">
-            <label for="e763-n">Малое N <strong data-e763-n-value>8</strong></label>
+            <label for="e763-n">Бюджет N <strong data-e763-n-value>8</strong></label>
             <input id="e763-n" type="range" min="0" max="20" value="8" step="1">
           </div>
         </div>
         <div class="e763-metrics" aria-live="polite">
           <span><small>Активных клеток</small><strong data-e763-snake-length>5</strong></span>
           <span><small>Минимальная стоимость</small><strong data-e763-snake-cost>10</strong></span>
-          <span><small>Проверка динамики</small><strong data-e763-d-value>D(8) = 3855</strong></span>
+          <span><small>Допустимых переходов</small><strong data-e763-viable-value>0 / 6</strong></span>
         </div>
         <svg class="e763-stage" viewBox="0 0 860 340" role="img" aria-labelledby="e763-snake-title e763-snake-desc">
           <title id="e763-snake-title">Каноническая змейка и её следующие состояния</title>
