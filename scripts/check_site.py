@@ -24,6 +24,8 @@ PUBLIC_PAGES = (
     "euler/792.html",
     "euler/798.html",
     "euler/1003.html",
+    "euler/1007.html",
+    "euler/1007/interactive/alternating-difference-explorer.html",
     "knowlege_base/iKnowledge_base.html",
     "translation_of_articles/translation_of_articles.html",
     "translation_of_articles/part_1/chapter_1/CFSFT.html",
@@ -33,6 +35,7 @@ PUBLIC_PAGES = (
 REFERENCE_ATTRIBUTES = {
     "a": ("href",),
     "img": ("src",),
+    "iframe": ("src",),
     "link": ("href",),
     "script": ("src",),
     "source": ("src", "srcset"),

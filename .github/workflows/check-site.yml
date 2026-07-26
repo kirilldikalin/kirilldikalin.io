@@ -34,5 +34,8 @@ jobs:
       - name: Test Moscow streets trainer
         run: node --test brain/map_msk/tests/*.test.js
 
+      - name: Test interactive Euler articles
+        run: node --test euler/*/tests/*.test.js
+
       - name: Validate Moscow streets dataset
         run: python3 brain/map_msk/tools/build_cao_map.py --validate-only brain/map_msk/data/cao-map.json
