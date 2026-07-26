@@ -201,6 +201,12 @@ input:focus-visible {
   fill: #a63f36;
 }
 
+.e1003-q-bar.is-preview {
+  fill: #b8b8bd;
+  stroke: #77777d;
+  stroke-width: 1;
+}
+
 .e1003-label {
   font-size: 16px;
   fill: #303033;

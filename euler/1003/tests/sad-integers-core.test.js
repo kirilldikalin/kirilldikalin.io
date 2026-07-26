@@ -63,6 +63,23 @@ test("an arbitrary singleton set can be repartitioned without changing its resid
   }
 });
 
+test("transfer preview stays dynamic even without a valid candidate", () => {
+  const valid = core.transferPreview([2, 5, 8, 13]);
+  const firstInvalid = core.transferPreview([0, 3]);
+  const secondInvalid = core.transferPreview([0, 4]);
+
+  assert.equal(valid.exactCandidate, true);
+  assert.equal(valid.trialN, 68);
+  assert.equal(valid.rows.length, 14);
+  assert.equal(firstInvalid.exactCandidate, false);
+  assert.equal(secondInvalid.exactCandidate, false);
+  assert.notDeepEqual(
+    firstInvalid.rows.map((row) => row.q),
+    secondInvalid.rows.map((row) => row.q),
+  );
+  assert.ok(firstInvalid.rows.some((row) => !row.valid));
+});
+
 test("incompatible masks and non-constant residues are rejected", () => {
   assert.equal(core.boundaryCompatible([5], [7], 7), false);
   const candidate = core.candidateForSet([2, 6]);

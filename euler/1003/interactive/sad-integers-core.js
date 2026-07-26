@@ -106,6 +106,44 @@
     };
   }
 
+  function transferPreview(positions, maxIndex = 13) {
+    if (!Number.isInteger(maxIndex) || maxIndex < 0 || maxIndex > 100) {
+      throw new Error("Граница пробного восстановления должна быть целым числом от 0 до 100");
+    }
+    const sorted = normalizePositions(positions);
+    const singletonSet = new Set(sorted);
+    const residue = residueForSet(sorted);
+    const trialN = Math.max(0, residue.v);
+    const rows = [];
+
+    for (let index = 0; index <= maxIndex; index += 1) {
+      const incoming = (index === 0 ? trialN : 0)
+        + (rows[index - 1]?.q ?? 0)
+        + (rows[index - 3]?.q ?? 0);
+      const singleton = singletonSet.has(index) ? 1 : 0;
+      const q = (incoming - singleton) / 2;
+      rows.push({
+        index,
+        incoming,
+        singleton,
+        q,
+        valid: Number.isInteger(q) && q >= 0,
+      });
+    }
+
+    return {
+      positions: sorted,
+      residue,
+      trialN,
+      exactCandidate:
+        sorted.length > 0
+        && isLonelySet(sorted)
+        && residue.u === 0
+        && residue.v > 0,
+      rows,
+    };
+  }
+
   function simulateSteps(n, processedCount) {
     const positions = new Array(processedCount + 5).fill(0);
     positions[0] = n;
@@ -184,5 +222,6 @@
     residueForSet,
     residuePairs,
     simulateSteps,
+    transferPreview,
   };
 });

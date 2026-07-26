@@ -181,6 +181,7 @@
   function drawMeet() {
     const split = Number(document.querySelector("#e1003-split").value);
     const summary = core.meetInTheMiddleSummary(selectedPositions, split);
+    const preview = core.transferPreview(selectedPositions, 13);
     const scene = document.querySelector("[data-e1003-meet-scene]");
     clear(scene);
 
@@ -214,39 +215,39 @@
     text(scene, 245, 135, `граничная маска ${summary.left.mask}`, "e1003-note", "middle");
     text(scene, 675, 135, `граничная маска ${summary.right.mask}`, "e1003-note", "middle");
 
-    const baseY = 405;
-    text(scene, 460, 278, "восстановленные переносы qᵢ", "e1003-label", "middle");
+    const baseY = 345;
+    const barRange = 55;
+    text(
+      scene,
+      460,
+      278,
+      preview.exactCandidate
+        ? `восстановленные переносы qᵢ для n=${preview.trialN}`
+        : `пробные переносы qᵢ для n*=${preview.trialN}`,
+      "e1003-label",
+      "middle",
+    );
+    line(scene, startX - 18, baseY, startX + spacing * 13 + 18, baseY, "e1003-guide");
     const reconstruction = summary.candidate.reconstruction;
-    if (reconstruction) {
-      const rows = reconstruction.rows.slice(0, 14);
-      const finiteValues = rows
-        .map((row) => row.q)
-        .filter(Number.isFinite)
-        .map(Math.abs);
-      const maxQ = Math.max(1, ...finiteValues);
-      rows.forEach((row) => {
-        const x = startX + row.index * spacing;
-        const height = Number.isFinite(row.q) ? 105 * Math.abs(row.q) / maxQ : 4;
-        scene.append(svgElement("rect", {
-          x: x - 12,
-          y: baseY - height,
-          width: 24,
-          height,
-          rx: 3,
-          class: row.valid ? "e1003-q-bar" : "e1003-q-bar is-invalid",
-        }));
-        text(scene, x, baseY + 22, `q${subscript(row.index)}`, "e1003-note", "middle");
-      });
-    } else {
-      text(
-        scene,
-        460,
-        350,
-        "сначала нужны Σuᵢ=0 и положительный свободный член",
-        "e1003-note",
-        "middle"
-      );
-    }
+    const maxQ = Math.max(1, ...preview.rows.map((row) => Math.abs(row.q)));
+    preview.rows.forEach((row) => {
+      const x = startX + row.index * spacing;
+      const height = Math.max(3, barRange * Math.abs(row.q) / maxQ);
+      const className = !row.valid
+        ? "e1003-q-bar is-invalid"
+        : preview.exactCandidate
+          ? "e1003-q-bar"
+          : "e1003-q-bar is-preview";
+      scene.append(svgElement("rect", {
+        x: x - 12,
+        y: row.q > 0 ? baseY - height : row.q < 0 ? baseY : baseY - 1.5,
+        width: 24,
+        height,
+        rx: 3,
+        class: className,
+      }));
+      text(scene, x, 425, `q${subscript(row.index)}`, "e1003-note", "middle");
+    });
 
     document.querySelector("[data-e1003-split-value]").textContent = split;
     document.querySelector("[data-e1003-combined-u]").textContent =
@@ -257,15 +258,15 @@
       ? reconstruction.valid
         ? `min qᵢ = ${reconstruction.minQ}`
         : "проверка не пройдена"
-      : "не вычисляются";
+      : `проба n* = ${preview.trialN}`;
 
     let detail;
     if (selectedPositions.length === 0) {
-      detail = "Выберите singleton-позиции: две единицы не должны стоять ближе чем через три места.";
+      detail = "Выберите singleton-позиции: диаграмма пробных переносов перестраивается после каждого нажатия.";
     } else if (!summary.compatible) {
-      detail = "Набор не проходит условие одиночности: две выбранные позиции находятся слишком близко.";
+      detail = `Набор не проходит условие одиночности. Нижняя диаграмма всё равно продолжает пробную рекурсию от n*=${preview.trialN}; красные столбцы отмечают недопустимые qᵢ.`;
     } else if (summary.combinedResidue.u !== 0) {
-      detail = `Маски ${summary.left.mask} и ${summary.right.mask} совместимы, но Σuᵢ=${formatInteger(summary.combinedResidue.u)}: коэффициенты двух половин не уничтожились.`;
+      detail = `Маски ${summary.left.mask} и ${summary.right.mask} совместимы, но Σuᵢ=${formatInteger(summary.combinedResidue.u)}. Столбцы показывают, что дала бы пробная рекурсия от n*=${preview.trialN}.`;
     } else if (summary.candidate.n === null) {
       detail = `Коэффициент при x уничтожился, но свободный член ${formatInteger(summary.combinedResidue.v)} не даёт положительного кандидата.`;
     } else if (!reconstruction.valid) {
