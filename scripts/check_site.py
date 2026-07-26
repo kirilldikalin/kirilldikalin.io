@@ -19,6 +19,7 @@ PUBLIC_PAGES = (
     "euler/439.html",
     "euler/579.html",
     "euler/763.html",
+    "euler/763/interactive/amoeba-layers-explorer.html",
     "euler/780.html",
     "euler/786.html",
     "euler/792.html",

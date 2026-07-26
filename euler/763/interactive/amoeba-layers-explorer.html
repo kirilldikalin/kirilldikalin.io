@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Euler 763 — слои и змейки</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./amoeba-layers-explorer.css">
+  <script src="./amoeba-layers-core.js" defer></script>
+  <script src="./amoeba-layers-explorer.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="e763-explorer" aria-labelledby="e763-title">
+      <h1 class="e763-sr-only" id="e763-title">От деления амёбы к состоянию змейки</h1>
+
+      <div class="e763-tabs" role="tablist" aria-label="Этапы решения">
+        <button type="button" role="tab" aria-selected="true" aria-controls="e763-split-panel" id="e763-split-tab" data-e763-tab="split">1. Слои</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e763-pattern-panel" id="e763-pattern-tab" data-e763-tab="pattern">2. Запреты</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="e763-snake-panel" id="e763-snake-tab" data-e763-tab="snake">3. Змейка</button>
+      </div>
+
+      <section role="tabpanel" aria-labelledby="e763-split-tab" id="e763-split-panel" data-e763-panel="split">
+        <div class="e763-controls">
+          <label for="e763-split-step">Выполнено делений <strong data-e763-split-value>1</strong></label>
+          <input id="e763-split-step" type="range" min="0" max="4" step="1" value="1">
+        </div>
+        <div class="e763-metrics" aria-live="polite">
+          <span><small>Амёб</small><strong data-e763-amoeba-count>3</strong></span>
+          <span><small>Последний слой</small><strong data-e763-layer>L₁</strong></span>
+          <span><small>Баланс</small><strong data-e763-balance>2N+1 = 3</strong></span>
+        </div>
+        <svg class="e763-stage" viewBox="0 0 860 390" role="img" aria-labelledby="e763-split-title e763-split-desc">
+          <title id="e763-split-title">Амёбы в диагональных слоях</title>
+          <desc id="e763-split-desc">Клетки показаны в изометрической проекции, цветом выделяется номер диагонального слоя.</desc>
+          <g data-e763-split-scene></g>
+        </svg>
+        <p class="e763-detail" data-e763-split-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e763-pattern-tab" id="e763-pattern-panel" data-e763-panel="pattern" hidden>
+        <div class="e763-choice" role="group" aria-label="Запрещённая фигура">
+          <button type="button" class="is-active" data-e763-pattern="triangle">Треугольник</button>
+          <button type="button" data-e763-pattern="y">Y-ветвление</button>
+          <button type="button" data-e763-pattern="stapler">Степлер</button>
+        </div>
+        <div class="e763-metrics" aria-live="polite">
+          <span><small>Клеток кратности 2</small><strong data-e763-pattern-size>3</strong></span>
+          <span><small>До столкновения</small><strong data-e763-pattern-steps>1 слой</strong></span>
+          <span><small>Результат</small><strong>кратность 3</strong></span>
+        </div>
+        <svg class="e763-stage" viewBox="0 0 860 390" role="img" aria-labelledby="e763-pattern-title e763-pattern-desc">
+          <title id="e763-pattern-title">Запрещённые фигуры на треугольной сетке</title>
+          <desc id="e763-pattern-desc">Клетки с двойной кратностью образуют фигуру, которая при вынужденном продолжении приводит к тройному столкновению.</desc>
+          <g data-e763-pattern-scene></g>
+        </svg>
+        <p class="e763-detail" data-e763-pattern-detail></p>
+      </section>
+
+      <section role="tabpanel" aria-labelledby="e763-snake-tab" id="e763-snake-panel" data-e763-panel="snake" hidden>
+        <div class="e763-control-grid">
+          <div class="e763-controls">
+            <label for="e763-a">Параметр a <strong data-e763-a-value>2</strong></label>
+            <input id="e763-a" type="range" min="0" max="5" value="2" step="1">
+          </div>
+          <div class="e763-controls">
+            <label for="e763-b">Параметр b <strong data-e763-b-value>2</strong></label>
+            <input id="e763-b" type="range" min="0" max="5" value="2" step="1">
+          </div>
+          <div class="e763-controls">
+            <label for="e763-n">Малое N <strong data-e763-n-value>8</strong></label>
+            <input id="e763-n" type="range" min="0" max="20" value="8" step="1">
+          </div>
+        </div>
+        <div class="e763-metrics" aria-live="polite">
+          <span><small>Активных клеток</small><strong data-e763-snake-length>5</strong></span>
+          <span><small>Минимальная стоимость</small><strong data-e763-snake-cost>10</strong></span>
+          <span><small>Проверка динамики</small><strong data-e763-d-value>D(8) = 3855</strong></span>
+        </div>
+        <svg class="e763-stage" viewBox="0 0 860 340" role="img" aria-labelledby="e763-snake-title e763-snake-desc">
+          <title id="e763-snake-title">Каноническая змейка и её следующие состояния</title>
+          <desc id="e763-snake-desc">Слева показана змейка с параметрами a и b, справа перечислены допустимые состояния следующего слоя.</desc>
+          <g data-e763-snake-scene></g>
+        </svg>
+        <p class="e763-detail" data-e763-snake-detail></p>
+      </section>
+    </section>
+  </main>
+</body>
+</html>

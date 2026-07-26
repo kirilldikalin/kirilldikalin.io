@@ -16,6 +16,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../euler/euler_css.css?v=20260717">
+  <link rel="stylesheet" href="./763/article.css">
   <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
   <script>
     window.MathJax = {
@@ -175,6 +176,19 @@
         <p align="justify" class="p_on_project_pages">
           Это ключевое сжатие задачи: вместо хранения произвольного рисунка целого слоя достаточно хранить пару $(a,b)$.
         </p>
+
+        <p align="justify" class="p_on_project_pages">
+          Ниже можно последовательно посмотреть сам переход между слоями, три локальных запрета и то,
+          как допустимая фигура сжимается до пары параметров. На последней вкладке динамика считается только
+          для небольших $N$, чтобы можно было сопоставить формулы с прямыми контрольными значениями.
+        </p>
+
+        <iframe
+          class="euler763-visualization-frame"
+          src="./763/interactive/amoeba-layers-explorer.html"
+          title="Диагональные слои, запрещённые фигуры и состояния змейки"
+          loading="lazy">
+        </iframe>
 
         <h3>Двухпараметрическая рекуррентность</h3>
 
@@ -342,10 +356,10 @@
           вычислять по модулю $10^9$: сложение и умножение на небольшие коэффициенты совместимы с взятием остатка.
         </p>
 
-        <h3>Эскиз алгоритма без готового кода</h3>
+        <h3>Эскиз алгоритма</h3>
 
         <p align="justify" class="p_on_project_pages">
-          Публично я не привожу готовую реализацию, но порядок вычислений можно описать так:
+          Порядок вычислений выглядит так:
         </p>
 
         <ol>
@@ -393,13 +407,6 @@
           Треугольная нижняя граница оставляет лишь небольшое число состояний, а кольцевые буферы делают расчёт практичным по памяти.
         </p>
 
-        <p align="justify" class="p_on_project_pages">
-          В результате последние девять цифр числа конфигураций после $10000$ делений равны
-        </p>
-
-        <p align="center">
-          $$\boxed{D(10000)\equiv798443574\pmod{10^9}}.$$
-        </p>
       </div>
 
       <a href="#" title="Вернуться вверх" class="buttonup"><img src="../images/up-arrow.png" alt="Вверх"></a>

@@ -1,0 +1,193 @@
+:root {
+  color-scheme: light;
+  font-family: "Courier Prime", monospace;
+  color: #252525;
+  background: #fbfbfd;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+.e763-explorer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.1rem;
+}
+
+.e763-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.e763-tabs,
+.e763-choice {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.e763-tabs button,
+.e763-choice button {
+  min-height: 2.7rem;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #bfc1c7;
+  border-radius: 0.45rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.e763-tabs button[aria-selected="true"],
+.e763-choice button.is-active {
+  color: #fff;
+  border-color: #282828;
+  background: #282828;
+}
+
+.e763-controls {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.e763-controls label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.e763-controls input {
+  width: 100%;
+  accent-color: #292929;
+}
+
+.e763-control-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.e763-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.e763-metrics span {
+  min-height: 4.4rem;
+  padding: 0.75rem;
+  border: 1px solid #d5d6da;
+  border-radius: 0.45rem;
+  background: #fff;
+}
+
+.e763-metrics small,
+.e763-metrics strong {
+  display: block;
+}
+
+.e763-metrics small {
+  margin-bottom: 0.35rem;
+  color: #666;
+}
+
+.e763-stage {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid #d5d6da;
+  border-radius: 0.55rem;
+  background: linear-gradient(#fff, #f4f4f6);
+}
+
+.e763-detail {
+  min-height: 3.4rem;
+  margin: 0.8rem 0 0;
+  line-height: 1.45;
+}
+
+.e763-grid-line {
+  stroke: #dedfe3;
+  stroke-width: 1;
+}
+
+.e763-layer-label,
+.e763-node-label,
+.e763-transition-label {
+  font-size: 15px;
+  fill: #333;
+}
+
+.e763-cell {
+  stroke: #333;
+  stroke-width: 2;
+}
+
+.e763-connector {
+  fill: none;
+  stroke: #777;
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+}
+
+.e763-collision {
+  fill: #bb3b35;
+  stroke: #76221f;
+  stroke-width: 3;
+}
+
+.e763-snake-line {
+  fill: none;
+  stroke: #252525;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.e763-snake-point {
+  fill: #fff;
+  stroke: #252525;
+  stroke-width: 3;
+}
+
+@media (max-width: 680px) {
+  .e763-explorer {
+    padding: 0.75rem;
+  }
+
+  .e763-control-grid,
+  .e763-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .e763-tabs button {
+    flex: 1 1 30%;
+    padding-inline: 0.4rem;
+  }
+
+  .e763-metrics span {
+    min-height: auto;
+  }
+}
