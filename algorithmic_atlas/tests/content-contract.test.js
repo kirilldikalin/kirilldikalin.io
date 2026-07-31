@@ -333,6 +333,15 @@ test("chapter TOC has a guarded contiguous desktop panel and wide-only pinning",
   );
 });
 
+test("wide chapter titles stay inside the content column beside the TOC", () => {
+  const chapterStyles = fs.readFileSync(path.join(atlasRoot, "chapter.css"), "utf8");
+
+  assert.match(
+    chapterStyles,
+    /\.atlas-chapter-header h1\s*\{[\s\S]*?max-width:\s*52rem;[\s\S]*?margin:\s*0\.2em auto 0\.35em;/
+  );
+});
+
 test("page boundaries and adjacent sections have distinct keyboard buttons", () => {
   const chapterScript = fs.readFileSync(path.join(atlasRoot, "chapter.js"), "utf8");
 
