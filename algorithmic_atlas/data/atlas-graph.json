@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.07.31-2",
+  "datasetVersion": "2026.07.31-3",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -75,6 +75,88 @@
           "position": 50
         }
       ]
+    },
+    {
+      "id": "mathematical-tools-main",
+      "title": "Математические инструменты и анализ",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "mathematical-tools",
+      "entries": [
+        {
+          "nodeId": "growth-rates",
+          "position": 10
+        },
+        {
+          "nodeId": "sums-products-recurrences",
+          "position": 20
+        },
+        {
+          "nodeId": "sets-relations-functions-logic",
+          "position": 30
+        },
+        {
+          "nodeId": "proof-methods-induction",
+          "position": 40
+        },
+        {
+          "nodeId": "correctness-invariants-termination",
+          "position": 50
+        },
+        {
+          "nodeId": "computation-models",
+          "position": 60
+        },
+        {
+          "nodeId": "analysis-cases",
+          "position": 70
+        },
+        {
+          "nodeId": "polynomial-efficiency",
+          "position": 80
+        }
+      ],
+      "continuation": {
+        "curriculumId": "3.1",
+        "title": "Абстрактные типы данных и линейные структуры",
+        "targetContinentId": "data-structures",
+        "kind": "route",
+        "position": {
+          "x": 1380,
+          "y": 700
+        }
+      }
+    },
+    {
+      "id": "mathematical-tools-probability",
+      "title": "Вероятностная ветвь",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "mathematical-tools",
+      "entries": [
+        {
+          "nodeId": "combinatorics-counting",
+          "position": 10
+        },
+        {
+          "nodeId": "probability-spaces",
+          "position": 20
+        },
+        {
+          "nodeId": "random-variables-concentration",
+          "position": 30
+        }
+      ],
+      "continuation": {
+        "curriculumId": "7.1",
+        "title": "Модели рандомизированных алгоритмов",
+        "targetContinentId": "randomization-approximation",
+        "kind": "related",
+        "position": {
+          "x": 1030,
+          "y": 760
+        }
+      }
     }
   ],
   "continents": [
@@ -118,15 +200,18 @@
     },
     {
       "id": "mathematical-tools",
-      "name": "Математические инструменты",
-      "description": "Дискретная математика, вероятность и алгебра как рабочий язык алгоритмов",
-      "publication": "planned",
+      "name": "Математические инструменты и анализ",
+      "shortName": "Математические инструменты",
+      "description": "Функции роста, доказательства, вероятность и модели стоимости как рабочий язык анализа алгоритмов",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "origins-efficiency"
       ],
       "related": [
-        "strings-geometry-numerics"
+        "graphs-networks-optimization",
+        "randomization-approximation",
+        "big-data-modern-models"
       ],
       "worldPosition": {
         "x": 278,
@@ -137,8 +222,28 @@
         "height": 106
       },
       "shapeVariant": 1,
-      "localMap": null,
-      "regions": []
+      "localMap": {
+        "viewBox": "0 0 1500 900",
+        "landPath": "M58 380 C41 246 105 103 245 57 C365 18 470 70 575 54 C700 34 792 72 906 53 C1038 31 1188 63 1312 138 C1428 207 1480 337 1445 451 C1424 520 1454 602 1389 680 C1314 770 1164 764 1047 748 C920 731 836 805 702 773 C587 746 505 800 390 750 C285 704 174 731 105 642 C44 562 73 487 58 380 Z"
+      },
+      "regions": [
+        {
+          "id": "growth-recurrences",
+          "name": "Рост и рекуррентности"
+        },
+        {
+          "id": "formal-methods",
+          "name": "Формальный язык и доказательства"
+        },
+        {
+          "id": "counting-probability",
+          "name": "Подсчёт и вероятность"
+        },
+        {
+          "id": "models-efficiency",
+          "name": "Модели и эффективность"
+        }
+      ]
     },
     {
       "id": "data-structures",
@@ -221,9 +326,7 @@
       "prerequisites": [
         "graphs-networks-optimization"
       ],
-      "related": [
-        "mathematical-tools"
-      ],
+      "related": [],
       "worldPosition": {
         "x": 858,
         "y": 154
@@ -313,6 +416,7 @@
   "nodes": [
     {
       "id": "before-computers",
+      "curriculumId": "1.1",
       "title": "Что люди называли алгоритмами до появления компьютеров",
       "description": "Как точная процедура отделилась от формулы, рецепта и догадки — и как описать вычисление через состояния и переходы",
       "continentId": "origins-efficiency",
@@ -338,6 +442,7 @@
     },
     {
       "id": "euclidean-algorithm",
+      "curriculumId": "1.2",
       "title": "Алгоритм Евклида",
       "description": "Один инвариант, два варианта процедуры и первый содержательный разговор о числе шагов",
       "continentId": "origins-efficiency",
@@ -365,6 +470,7 @@
     },
     {
       "id": "turing-machine-transition",
+      "curriculumId": "1.3",
       "title": "От ручного вычисления к машине Тьюринга",
       "description": "Почему анализ действий человека с бумагой оказался математической моделью вычислимости",
       "continentId": "origins-efficiency",
@@ -392,6 +498,7 @@
     },
     {
       "id": "input-size-and-cost",
+      "curriculumId": "1.4",
       "title": "Размер входа и стоимость вычисления",
       "description": "Почему значение числа и длина его записи — разные величины и что именно считают при анализе алгоритма",
       "continentId": "origins-efficiency",
@@ -419,6 +526,7 @@
     },
     {
       "id": "asymptotic-estimates",
+      "curriculumId": "1.5",
       "title": "Асимптотические оценки",
       "description": "Как сравнивать рост функций и что именно утверждают O, Ω и Θ",
       "continentId": "origins-efficiency",
@@ -440,6 +548,292 @@
       "position": {
         "x": 910,
         "y": 205
+      }
+    },
+    {
+      "id": "growth-rates",
+      "curriculumId": "2.1",
+      "title": "Скорости роста функций",
+      "description": "Как практически сравнивать логарифмы, степени, экспоненты и факториалы на разных диапазонах входа",
+      "continentId": "mathematical-tools",
+      "regionId": "growth-recurrences",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "asymptotic-estimates"
+      ],
+      "related": [],
+      "route": "./chapters/growth-rates.html",
+      "minutes": 75,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 130,
+        "y": 170
+      }
+    },
+    {
+      "id": "sums-products-recurrences",
+      "curriculumId": "2.2",
+      "title": "Суммы, произведения и рекуррентности",
+      "description": "Как сворачивать суммы и превращать рекурсивное описание стоимости в явную оценку",
+      "continentId": "mathematical-tools",
+      "regionId": "growth-recurrences",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "growth-rates"
+      ],
+      "related": [],
+      "route": "./chapters/sums-products-recurrences.html",
+      "minutes": 85,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 330,
+        "y": 95
+      }
+    },
+    {
+      "id": "sets-relations-functions-logic",
+      "curriculumId": "2.3",
+      "title": "Множества, отношения, функции и логический язык",
+      "description": "Формальный язык для объектов, связей, отображений и утверждений об алгоритмах",
+      "continentId": "mathematical-tools",
+      "regionId": "formal-methods",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "sums-products-recurrences"
+      ],
+      "related": [],
+      "route": "./chapters/sets-relations-functions-logic.html",
+      "minutes": 85,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 530,
+        "y": 185
+      }
+    },
+    {
+      "id": "proof-methods-induction",
+      "curriculumId": "2.4",
+      "title": "Методы доказательства и математическая индукция",
+      "description": "Как строить прямые и косвенные доказательства и правильно использовать индукционный переход",
+      "continentId": "mathematical-tools",
+      "regionId": "formal-methods",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "sets-relations-functions-logic"
+      ],
+      "related": [],
+      "route": "./chapters/proof-methods-induction.html",
+      "minutes": 80,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 730,
+        "y": 95
+      }
+    },
+    {
+      "id": "correctness-invariants-termination",
+      "curriculumId": "2.5",
+      "title": "Корректность, инварианты и завершение",
+      "description": "Как связать предусловие, инвариант, вариант и постусловие в полное доказательство алгоритма",
+      "continentId": "mathematical-tools",
+      "regionId": "formal-methods",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "proof-methods-induction"
+      ],
+      "related": [],
+      "route": "./chapters/correctness-invariants-termination.html",
+      "minutes": 90,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 920,
+        "y": 195
+      }
+    },
+    {
+      "id": "combinatorics-counting",
+      "curriculumId": "2.6",
+      "title": "Комбинаторика и методы подсчёта",
+      "description": "Как считать конфигурации, пути и объединения случаев без полного перечисления",
+      "continentId": "mathematical-tools",
+      "regionId": "counting-probability",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "sets-relations-functions-logic"
+      ],
+      "related": [],
+      "route": "./chapters/combinatorics-counting.html",
+      "minutes": 80,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 520,
+        "y": 445
+      }
+    },
+    {
+      "id": "probability-spaces",
+      "curriculumId": "2.7",
+      "title": "Вероятностные пространства и условная вероятность",
+      "description": "Как описывать случайный эксперимент, условие и независимость без интуитивных ловушек",
+      "continentId": "mathematical-tools",
+      "regionId": "counting-probability",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "combinatorics-counting"
+      ],
+      "related": [],
+      "route": "./chapters/probability-spaces.html",
+      "minutes": 90,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 735,
+        "y": 570
+      }
+    },
+    {
+      "id": "random-variables-concentration",
+      "curriculumId": "2.8",
+      "title": "Случайные величины и концентрация",
+      "description": "Как ожидание, дисперсия и хвостовые границы описывают разброс случайной величины",
+      "continentId": "mathematical-tools",
+      "regionId": "counting-probability",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "probability-spaces"
+      ],
+      "related": [],
+      "route": "./chapters/random-variables-concentration.html",
+      "minutes": 95,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 965,
+        "y": 500
+      }
+    },
+    {
+      "id": "computation-models",
+      "curriculumId": "2.9",
+      "title": "Модели вычислений: RAM, word-RAM и битовая сложность",
+      "description": "Почему стоимость одной операции зависит от модели памяти, длины слова и размера чисел",
+      "continentId": "mathematical-tools",
+      "regionId": "models-efficiency",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "correctness-invariants-termination"
+      ],
+      "related": [],
+      "route": "./chapters/computation-models.html",
+      "minutes": 85,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1110,
+        "y": 100
+      }
+    },
+    {
+      "id": "analysis-cases",
+      "curriculumId": "2.10",
+      "title": "Сложность в худшем, среднем и амортизированном случаях",
+      "description": "Как различать противника, распределение входов и усреднение стоимости последовательности операций",
+      "continentId": "mathematical-tools",
+      "regionId": "models-efficiency",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "computation-models"
+      ],
+      "related": [],
+      "route": "./chapters/analysis-cases.html",
+      "minutes": 95,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1300,
+        "y": 195
+      }
+    },
+    {
+      "id": "polynomial-efficiency",
+      "curriculumId": "2.11",
+      "title": "Полиномиальные алгоритмы и практическая эффективность",
+      "description": "Где заканчивается формальная полиномиальность и начинаются константы, память и реальные измерения",
+      "continentId": "mathematical-tools",
+      "regionId": "models-efficiency",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "analysis-cases"
+      ],
+      "related": [],
+      "route": "./chapters/polynomial-efficiency.html",
+      "minutes": 90,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1260,
+        "y": 405
       }
     }
   ]

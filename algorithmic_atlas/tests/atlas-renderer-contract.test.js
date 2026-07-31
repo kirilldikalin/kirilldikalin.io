@@ -47,6 +47,8 @@ test("the last chapter returns to the world map and names the next continent", (
   assert.match(chapterScript, /mapLink\.href = "\.\.\/index\.html"/);
   assert.match(chapterScript, /mapLink\.textContent = "Общая карта"/);
   assert.match(chapterScript, /"Следующий материк: " \+ continent\.name/);
+  assert.match(chapterScript, /atlasCore\.routeContinuation\(graph, nodeId\)/);
+  assert.match(chapterScript, /continuation\.curriculumId \+ " · "/);
 });
 
 test("feature metadata has no chip UI on the map page", () => {
@@ -89,7 +91,7 @@ test("free exploration removes route fog but never development fog", () => {
     published.filter((node) =>
       core.nodeAccessState(graph, node, completed, false) === "published-gated"
     ).length,
-    4
+    15
   );
   assert.ok(published.every((node) =>
     core.nodeAccessState(graph, node, completed, true) === "published-unlocked"
@@ -97,8 +99,25 @@ test("free exploration removes route fog but never development fog", () => {
   assert.ok(planned.every((node) =>
     core.nodeAccessState(graph, node, completed, true) === "planned"
   ));
+  assert.equal(planned.length, 0);
+  assert.deepEqual(
+    core.continentContinuations(graph, "mathematical-tools")
+      .map(({ continuation }) => continuation.curriculumId),
+    ["3.1", "7.1"]
+  );
   assert.match(
     atlasScript,
     /Все опубликованные главы уже доступны\. Запланированные материки останутся в тумане/
   );
+});
+
+test("local map renders canonical labels, branch edges and planned exits", () => {
+  assert.match(atlasScript, /number\.textContent = completed \? "✓" : node\.curriculumId/);
+  assert.match(atlasScript, /kind === "branch" \? " is-branch"/);
+  assert.match(atlasScript, /core\.continentContinuations\(graph, continentId\)/);
+  assert.match(atlasScript, /renderContinuationFog\(item\.continuation\)/);
+  assert.match(atlasScript, /continentProgressSummary/);
+  assert.match(atlasHtml, /id="atlas-continent-progress"/);
+  assert.match(atlasStyles, /\.atlas-edge\.is-branch/);
+  assert.match(atlasStyles, /\.atlas-route-exit__marker/);
 });

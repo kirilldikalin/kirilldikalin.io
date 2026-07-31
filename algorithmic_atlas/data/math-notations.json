@@ -420,6 +420,282 @@
         "chapterId": "asymptotic-estimates",
         "anchor": "big-o-definition"
       }
+    },
+    {
+      "id": "growth-ratio",
+      "displayNotation": "f(n)/g(n)",
+      "shortName": "отношение скоростей роста",
+      "explanation": "Отношение двух положительных функций: его предел часто позволяет установить строгий или одинаковый порядок роста",
+      "scope": "local",
+      "chapterId": "growth-rates",
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "ratio"
+      }
+    },
+    {
+      "id": "recurrence-function",
+      "displayNotation": "T(n)",
+      "shortName": "стоимость задачи размера n",
+      "explanation": "Функция стоимости, заданная через стоимости меньших подзадач и работу текущего уровня",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "recurrences"
+      }
+    },
+    {
+      "id": "relation-r",
+      "displayNotation": "R",
+      "shortName": "бинарное отношение",
+      "explanation": "Подмножество декартова произведения, определяющее, какие упорядоченные пары элементов связаны",
+      "scope": "local",
+      "chapterId": "sets-relations-functions-logic",
+      "firstDefinition": {
+        "chapterId": "sets-relations-functions-logic",
+        "anchor": "relations"
+      }
+    },
+    {
+      "id": "induction-proposition",
+      "displayNotation": "P(n)",
+      "shortName": "индукционное утверждение",
+      "explanation": "Утверждение о натуральном индексе, для которого доказываются база и переход к следующему значению",
+      "scope": "local",
+      "chapterId": "proof-methods-induction",
+      "firstDefinition": {
+        "chapterId": "proof-methods-induction",
+        "anchor": "induction"
+      }
+    },
+    {
+      "id": "hoare-triple",
+      "displayNotation": "{P} C {Q}",
+      "shortName": "тройка Хоара",
+      "explanation": "Контракт частичной корректности: из предусловия P завершающаяся команда C приводит к постусловию Q",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "hoare"
+      }
+    },
+    {
+      "id": "loop-invariant",
+      "displayNotation": "I",
+      "shortName": "инвариант цикла",
+      "explanation": "Утверждение о состоянии, истинное перед каждой проверкой условия цикла",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "invariant"
+      }
+    },
+    {
+      "id": "loop-variant",
+      "displayNotation": "V",
+      "shortName": "функция-вариант",
+      "explanation": "Неотрицательная мера состояния, строго уменьшающаяся на каждом продолжающем цикл шаге",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "variant"
+      }
+    },
+    {
+      "id": "binomial-coefficient",
+      "displayNotation": "\\binom nk",
+      "shortName": "биномиальный коэффициент",
+      "explanation": "Число способов выбрать k элементов из n без учёта порядка",
+      "scope": "local",
+      "chapterId": "combinatorics-counting",
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "arrangements"
+      }
+    },
+    {
+      "id": "sample-space",
+      "displayNotation": "\\Omega",
+      "shortName": "пространство элементарных исходов",
+      "explanation": "Множество всех взаимно исключающих исходов рассматриваемого случайного опыта",
+      "scope": "local",
+      "chapterId": "probability-spaces",
+      "firstDefinition": {
+        "chapterId": "probability-spaces",
+        "anchor": "finite-space"
+      }
+    },
+    {
+      "id": "conditional-probability",
+      "displayNotation": "P(A\\mid B)",
+      "shortName": "условная вероятность",
+      "explanation": "Вероятность события A после ограничения пространства исходов событием B положительной вероятности",
+      "scope": "local",
+      "chapterId": "probability-spaces",
+      "firstDefinition": {
+        "chapterId": "probability-spaces",
+        "anchor": "conditional"
+      }
+    },
+    {
+      "id": "random-variable",
+      "displayNotation": "X",
+      "shortName": "случайная величина",
+      "explanation": "Функция, сопоставляющая каждому элементарному исходу числовое значение",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "random-variable"
+      }
+    },
+    {
+      "id": "expectation",
+      "displayNotation": "\\mathbb E[X]",
+      "shortName": "математическое ожидание",
+      "explanation": "Среднее значение случайной величины, взвешенное вероятностями её значений",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "expectation"
+      }
+    },
+    {
+      "id": "variance",
+      "displayNotation": "\\operatorname{Var}(X)",
+      "shortName": "дисперсия",
+      "explanation": "Ожидаемый квадрат отклонения случайной величины от её математического ожидания",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "variance"
+      }
+    },
+    {
+      "id": "model-cost",
+      "displayNotation": "C_{\\mathcal M}",
+      "shortName": "стоимость в модели M",
+      "explanation": "Суммарная цена трассы команд согласно выбранной вычислительной модели",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "why-model"
+      }
+    },
+    {
+      "id": "operation-cost",
+      "displayNotation": "C(e)",
+      "shortName": "цена элементарной операции",
+      "explanation": "Назначенная моделью стоимость конкретной разрешённой операции e",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "why-model"
+      }
+    },
+    {
+      "id": "unit-cost",
+      "displayNotation": "C_{\\mathrm{unit}}(e)",
+      "shortName": "единичная цена команды",
+      "explanation": "В unit-cost RAM каждая разрешённая команда получает постоянную цену один",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "ram"
+      }
+    },
+    {
+      "id": "word-size-w",
+      "displayNotation": "w",
+      "shortName": "размер машинного слова",
+      "explanation": "Число бит в одном слове word-RAM; слово должно быть достаточно длинным для адреса входа",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "word-ram"
+      }
+    },
+    {
+      "id": "worst-case",
+      "displayNotation": "T_{\\mathrm{worst}}(n)",
+      "shortName": "стоимость худшего входа",
+      "explanation": "Максимальная стоимость алгоритма среди всех допустимых входов размера n",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "worst"
+      }
+    },
+    {
+      "id": "average-case",
+      "displayNotation": "T_{\\mathrm{avg},D}(n)",
+      "shortName": "средняя стоимость по распределению",
+      "explanation": "Математическое ожидание стоимости по явно заданному распределению D на входах размера n",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "average"
+      }
+    },
+    {
+      "id": "amortized-bound",
+      "displayNotation": "\\widehat c",
+      "shortName": "амортизированная граница",
+      "explanation": "Средняя верхняя плата на операцию, ограничивающая суммарную цену любой допустимой последовательности",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "amortized"
+      }
+    },
+    {
+      "id": "potential-function",
+      "displayNotation": "\\Phi(D)",
+      "shortName": "потенциал состояния",
+      "explanation": "Неотрицательная мера накопленной работы в состоянии структуры данных",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "amortized-cost",
+      "displayNotation": "\\widehat c_i",
+      "shortName": "амортизированная цена шага",
+      "explanation": "Фактическая цена шага с учётом изменения потенциала структуры",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "polynomial-time",
+      "displayNotation": "T(n)\\le Cn^k",
+      "shortName": "полиномиальная граница времени",
+      "explanation": "Стоимость ограничена фиксированной степенью размера входа с постоянным множителем",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "boundary"
+      }
     }
   ]
 }

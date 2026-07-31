@@ -437,14 +437,27 @@ body {
   opacity: 0.45;
 }
 
+.atlas-edge.is-branch {
+  stroke: var(--atlas-accent);
+  stroke-width: 2.4;
+  stroke-dasharray: 9 8;
+  opacity: 0.66;
+}
+
 .atlas-continent,
 .atlas-node {
   cursor: pointer;
   outline: none;
 }
 
+.atlas-route-exit {
+  cursor: help;
+  outline: none;
+}
+
 .atlas-continent__marker,
-.atlas-node__halo {
+.atlas-node__halo,
+.atlas-route-exit__marker {
   fill: var(--atlas-paper);
   stroke: var(--atlas-ink);
   stroke-width: 2.4;
@@ -458,14 +471,17 @@ body {
 .atlas-continent.is-selected .atlas-continent__marker,
 .atlas-node:hover .atlas-node__halo,
 .atlas-node:focus-visible .atlas-node__halo,
-.atlas-node.is-selected .atlas-node__halo {
+.atlas-node.is-selected .atlas-node__halo,
+.atlas-route-exit:hover .atlas-route-exit__marker,
+.atlas-route-exit:focus-visible .atlas-route-exit__marker {
   transform: scale(1.09);
   stroke: var(--atlas-accent);
   stroke-width: 4;
 }
 
 .atlas-continent:focus-visible .atlas-continent__marker,
-.atlas-node:focus-visible .atlas-node__halo {
+.atlas-node:focus-visible .atlas-node__halo,
+.atlas-route-exit:focus-visible .atlas-route-exit__marker {
   stroke: var(--atlas-focus);
 }
 
@@ -492,14 +508,18 @@ body {
 .atlas-continent__status,
 .atlas-node__number,
 .atlas-node__title,
-.atlas-node__status {
+.atlas-node__status,
+.atlas-route-exit__number,
+.atlas-route-exit__title,
+.atlas-route-exit__status {
   pointer-events: none;
   fill: var(--atlas-ink);
   text-anchor: middle;
 }
 
 .atlas-continent__number,
-.atlas-node__number {
+.atlas-node__number,
+.atlas-route-exit__number {
   font-size: 20px;
   font-weight: 700;
 }
@@ -510,14 +530,16 @@ body {
 }
 
 .atlas-continent__title,
-.atlas-node__title {
+.atlas-node__title,
+.atlas-route-exit__title {
   font-family: "Courier Prime", monospace;
   font-size: 15px;
   font-weight: 700;
 }
 
 .atlas-continent__status,
-.atlas-node__status {
+.atlas-node__status,
+.atlas-route-exit__status {
   font-family: "Courier Prime", monospace;
   font-size: 12px;
   fill: var(--atlas-muted);
@@ -531,11 +553,42 @@ body {
   font-size: 11px;
 }
 
+.atlas-route-exit__marker {
+  fill: var(--atlas-soft);
+  stroke: var(--atlas-muted);
+  stroke-width: 2;
+}
+
+.atlas-route-exit__number {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.atlas-route-exit__title {
+  font-size: 14px;
+}
+
+.atlas-route-exit__status {
+  font-size: 11px;
+}
+
 .atlas-map-help {
   margin: 0.8rem 0 0;
   color: var(--atlas-muted);
   font-size: 0.82rem;
   line-height: 1.4;
+}
+
+.atlas-continent-progress {
+  margin: 0.85rem 0 0;
+  color: var(--atlas-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.atlas-continent-progress[hidden] {
+  display: none;
 }
 
 .atlas-mobile-continent-list {
@@ -794,6 +847,7 @@ body {
 
   .atlas-continent__marker,
   .atlas-node__halo,
+  .atlas-route-exit__marker,
   .atlas-world-land {
     transition: none;
   }

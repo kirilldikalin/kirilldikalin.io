@@ -75,6 +75,7 @@
     elements.mapKicker = document.getElementById("atlas-map-kicker");
     elements.mapTitle = document.getElementById("atlas-map-title");
     elements.mapHelp = document.getElementById("atlas-map-help");
+    elements.continentProgress = document.getElementById("atlas-continent-progress");
     elements.worldBack = document.getElementById("atlas-world-back");
     elements.viewStatus = document.getElementById("atlas-view-status");
     elements.continentList = document.getElementById("atlas-continent-list");
@@ -217,6 +218,7 @@
     elements.frame.dataset.mapView = "world";
     elements.mapKicker.textContent = "Карта мира";
     elements.mapTitle.textContent = "Все материки";
+    elements.continentProgress.hidden = true;
     elements.worldBack.hidden = true;
     elements.continentList.hidden = false;
     elements.mapHelp.textContent =
@@ -356,7 +358,8 @@
       x: "0",
       y: String(continent.worldSize.height / 2 + 25),
     });
-    splitTitle(continent.name, 22, 3).forEach(function (line, lineIndex) {
+    const displayName = continent.shortName || continent.name;
+    splitTitle(displayName, 22, 3).forEach(function (line, lineIndex) {
       const span = createSvg("tspan", {
         x: "0",
         dy: lineIndex === 0 ? "0" : "16",
@@ -370,7 +373,7 @@
       class: "atlas-continent__status",
       x: "0",
       y: String(continent.worldSize.height / 2 + 35 +
-        splitTitle(continent.name, 22, 3).length * 16),
+        splitTitle(displayName, 22, 3).length * 16),
     });
     status.textContent = completed ? "пройдено" : shortAccessLabel(state);
     group.appendChild(status);
@@ -564,6 +567,19 @@
     elements.frame.dataset.mapView = "continent";
     elements.mapKicker.textContent = "Локальная карта";
     elements.mapTitle.textContent = continent.name;
+    const continentProgress = core.continentProgressSummary(
+      graph,
+      continentId,
+      progress.completedNodeIds
+    );
+    elements.continentProgress.hidden = false;
+    elements.continentProgress.textContent =
+      "Ядро: " + continentProgress.coreCompleted + " / " +
+      continentProgress.coreTotal + " · Ветвь: " +
+      continentProgress.branchCompleted + " / " +
+      continentProgress.branchTotal + " · Всего: " +
+      continentProgress.completed + " / " + continentProgress.total +
+      " · " + continentProgress.percent + "%";
     elements.worldBack.hidden = false;
     elements.continentList.hidden = true;
     elements.mapHelp.textContent =
@@ -592,6 +608,16 @@
       const source = byId.get(edge.sourceId);
       const target = byId.get(edge.targetId);
       elements.edges.appendChild(renderEdge(source.position, target.position, edge.kind));
+    });
+
+    core.continentContinuations(graph, continentId).forEach(function (item) {
+      elements.edges.appendChild(renderEdge(
+        item.source.position,
+        item.continuation.position,
+        item.continuation.kind
+      ));
+      elements.nodes.appendChild(renderContinuation(item.continuation));
+      elements.fog.appendChild(renderContinuationFog(item.continuation));
     });
 
     const nodes = core.visibleNodes(graph, continentId);
@@ -625,11 +651,6 @@
       progress.freeExplore
     );
     const completed = progress.completedNodeIds.has(node.id);
-    const route = core.routeForNode(graph, node.id);
-    const routeNodes = route ? core.routeOrder(graph, route.id) : [];
-    const index = routeNodes.findIndex(function (item) {
-      return item.id === node.id;
-    });
     const group = createSvg("g", {
       class: stateClasses("atlas-node", state, completed),
       transform: "translate(" + node.position.x + " " + node.position.y + ")",
@@ -664,7 +685,7 @@
       x: "0",
       y: "7",
     });
-    number.textContent = completed ? "✓" : String(index + 1).padStart(2, "0");
+    number.textContent = completed ? "✓" : node.curriculumId;
     group.appendChild(number);
 
     const title = createSvg("text", {
@@ -727,6 +748,69 @@
       cx: node.position.x,
       cy: node.position.y,
       r: state === "planned" ? "70" : "64",
+      "aria-hidden": "true",
+    });
+  }
+
+  function renderContinuation(continuation) {
+    const group = createSvg("g", {
+      class: "atlas-route-exit is-planned",
+      transform: "translate(" + continuation.position.x + " " +
+        continuation.position.y + ")",
+      tabindex: "0",
+      role: "img",
+      "aria-label": continuation.title + ". Будущий переход " +
+        (continuation.kind === "related" ? "по дополнительной ветви" :
+          "основного маршрута") + ". Материал готовится.",
+    });
+    group.appendChild(createSvg("rect", {
+      class: "atlas-route-exit__marker",
+      x: "-36",
+      y: "-36",
+      width: "72",
+      height: "72",
+      rx: "8",
+    }));
+    const number = createSvg("text", {
+      class: "atlas-route-exit__number",
+      x: "0",
+      y: "7",
+    });
+    number.textContent = continuation.curriculumId;
+    group.appendChild(number);
+
+    const title = createSvg("text", {
+      class: "atlas-route-exit__title",
+      x: "0",
+      y: "61",
+    });
+    const lines = splitTitle(continuation.title, 23, 3);
+    lines.forEach(function (line, lineIndex) {
+      const span = createSvg("tspan", {
+        x: "0",
+        dy: lineIndex === 0 ? "0" : "17",
+      });
+      span.textContent = line;
+      title.appendChild(span);
+    });
+    group.appendChild(title);
+
+    const status = createSvg("text", {
+      class: "atlas-route-exit__status",
+      x: "0",
+      y: String(71 + lines.length * 17),
+    });
+    status.textContent = "будущий переход";
+    group.appendChild(status);
+    return group;
+  }
+
+  function renderContinuationFog(continuation) {
+    return createSvg("circle", {
+      class: "atlas-fog atlas-node-fog is-development-fog",
+      cx: continuation.position.x,
+      cy: continuation.position.y,
+      r: "72",
       "aria-hidden": "true",
     });
   }
@@ -837,7 +921,9 @@
   function renderEdge(source, target, kind) {
     return createSvg("path", {
       d: edgePath(source, target, kind),
-      class: "atlas-edge" + (kind === "related" ? " is-related" : ""),
+      class: "atlas-edge" +
+        (kind === "related" ? " is-related" : "") +
+        (kind === "branch" ? " is-branch" : ""),
     });
   }
 
@@ -863,7 +949,9 @@
   function edgePath(source, target, kind) {
     const dx = target.x - source.x;
     const direction = dx >= 0 ? -1 : 1;
-    const curve = kind === "related" ? 52 * direction : 25 * direction;
+    const curve = kind === "related" || kind === "branch"
+      ? 52 * direction
+      : 25 * direction;
     return [
       "M", source.x, source.y,
       "C", source.x + dx * 0.35, source.y + curve,

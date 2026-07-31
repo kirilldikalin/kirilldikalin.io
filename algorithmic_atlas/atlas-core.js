@@ -30,6 +30,7 @@
   ]);
   const ROUTE_SCOPES = new Set(["continents", "nodes"]);
   const ROUTE_KINDS = new Set(["main", "branch"]);
+  const CONTINUATION_KINDS = new Set(["route", "related"]);
   const FEATURE_DEFINITIONS = [
     { id: "proof", label: "доказательство" },
     { id: "interactive", label: "интерактив" },
@@ -156,10 +157,17 @@
     assertAcyclic(graph.continents, "continent prerequisite");
 
     const nodeIds = new Set();
+    const curriculumIds = new Set();
     graph.nodes.forEach(function (node) {
       assertString(node.id, "node id is required");
       assert(!nodeIds.has(node.id), "duplicate node id: " + node.id);
       nodeIds.add(node.id);
+      assertString(node.curriculumId, "curriculumId is required: " + node.id);
+      assert(/^\d+\.\d+$/.test(node.curriculumId),
+        "invalid curriculumId: " + node.id);
+      assert(!curriculumIds.has(node.curriculumId),
+        "duplicate curriculumId: " + node.curriculumId);
+      curriculumIds.add(node.curriculumId);
     });
 
     const pageRoutes = new Set();
@@ -229,11 +237,11 @@
     });
     assertAcyclic(graph.nodes, "prerequisite");
 
-    validateRoutes(graph, continentIds, nodeIds);
+    validateRoutes(graph, continentIds, nodeIds, curriculumIds);
     return graph;
   }
 
-  function validateRoutes(graph, continentIds, nodeIds) {
+  function validateRoutes(graph, continentIds, nodeIds, curriculumIds) {
     const routeIds = new Set();
     const continentMemberships = new Map();
     const nodeMemberships = new Map();
@@ -254,6 +262,36 @@
       } else {
         assert(route.continentId === undefined,
           "continent route must not declare continentId: " + route.id);
+      }
+
+      if (route.continuation !== undefined) {
+        const continuation = route.continuation;
+        assert(route.scope === "nodes",
+          "only a node route can have a continuation: " + route.id);
+        assert(continuation && typeof continuation === "object",
+          "route continuation must be an object: " + route.id);
+        assertString(continuation.curriculumId,
+          "route continuation curriculumId is required: " + route.id);
+        assert(/^\d+\.\d+$/.test(continuation.curriculumId),
+          "invalid route continuation curriculumId: " + route.id);
+        assert(!curriculumIds.has(continuation.curriculumId),
+          "route continuation duplicates a published node: " +
+            continuation.curriculumId);
+        curriculumIds.add(continuation.curriculumId);
+        assertString(continuation.title,
+          "route continuation title is required: " + route.id);
+        assert(continentIds.has(continuation.targetContinentId),
+          "unknown route continuation continent: " + route.id);
+        assert(continuation.targetContinentId !== route.continentId,
+          "route continuation must leave its continent: " + route.id);
+        assert(CONTINUATION_KINDS.has(continuation.kind),
+          "unknown route continuation kind: " + route.id);
+        assert(
+          continuation.position &&
+            Number.isFinite(continuation.position.x) &&
+            Number.isFinite(continuation.position.y),
+          "route continuation needs a map position: " + route.id
+        );
       }
 
       const positions = new Set();
@@ -505,6 +543,37 @@
     };
   }
 
+  function routeContinuation(graph, nodeId) {
+    const route = routeForNode(graph, nodeId);
+    if (!route || !route.continuation) {
+      return null;
+    }
+    const ordered = routeOrder(graph, route.id);
+    return ordered.length && ordered[ordered.length - 1].id === nodeId
+      ? route.continuation
+      : null;
+  }
+
+  function continentContinuations(graph, continentId) {
+    return graph.routes.filter(function (route) {
+      return route.scope === "nodes" &&
+        route.continentId === continentId &&
+        route.continuation;
+    }).sort(function (left, right) {
+      if (left.kind !== right.kind) {
+        return left.kind === "main" ? -1 : 1;
+      }
+      return left.id.localeCompare(right.id);
+    }).map(function (route) {
+      const ordered = routeOrder(graph, route.id);
+      return {
+        route: route,
+        source: ordered[ordered.length - 1],
+        continuation: route.continuation,
+      };
+    });
+  }
+
   function visibleNodes(graph, continentId) {
     return graph.nodes.filter(function (node) {
       return !continentId || node.continentId === continentId;
@@ -522,10 +591,19 @@
     visibleNodes(graph, continentId).forEach(function (node) {
       node.prerequisites.forEach(function (sourceId) {
         if (visibleIds.has(sourceId)) {
+          const sourceRoute = routeForNode(graph, sourceId);
+          const targetRoute = routeForNode(graph, node.id);
+          const targetRouteOrder = targetRoute
+            ? routeOrder(graph, targetRoute.id)
+            : [];
+          const branchEntry = targetRoute &&
+            targetRoute.kind === "branch" &&
+            targetRouteOrder[0] === node &&
+            (!sourceRoute || sourceRoute.id !== targetRoute.id);
           prerequisiteEdges.push({
             sourceId: sourceId,
             targetId: node.id,
-            kind: "route",
+            kind: branchEntry ? "branch" : "route",
           });
         }
       });
@@ -594,6 +672,58 @@
     });
   }
 
+  function continentCoreNodeIds(graph, continentId) {
+    const route = mainRoute(graph, "nodes", continentId);
+    return route ? routeOrder(graph, route.id).map(function (node) {
+      return node.id;
+    }) : [];
+  }
+
+  function continentCoreCompleted(graph, continentId, completedNodeIds) {
+    const coreIds = continentCoreNodeIds(graph, continentId);
+    return coreIds.length > 0 && coreIds.every(function (id) {
+      return completedNodeIds.has(id);
+    });
+  }
+
+  function continentProgressSummary(graph, continentId, completedNodeIds) {
+    const published = graph.nodes.filter(function (node) {
+      return node.continentId === continentId && node.publication === "published";
+    });
+    const publishedIds = new Set(published.map(function (node) {
+      return node.id;
+    }));
+    const coreIds = continentCoreNodeIds(graph, continentId).filter(function (id) {
+      return publishedIds.has(id);
+    });
+    const coreSet = new Set(coreIds);
+    const branchIds = published.filter(function (node) {
+      return !coreSet.has(node.id);
+    }).map(function (node) {
+      return node.id;
+    });
+    const completed = Array.from(completedNodeIds).filter(function (id) {
+      return publishedIds.has(id);
+    }).length;
+    const coreCompleted = coreIds.filter(function (id) {
+      return completedNodeIds.has(id);
+    }).length;
+    const branchCompleted = branchIds.filter(function (id) {
+      return completedNodeIds.has(id);
+    }).length;
+    return {
+      completed: completed,
+      total: published.length,
+      percent: published.length ? Math.round(completed * 100 / published.length) : 0,
+      coreCompleted: coreCompleted,
+      coreTotal: coreIds.length,
+      branchCompleted: branchCompleted,
+      branchTotal: branchIds.length,
+      coreReady: coreIds.length > 0 && coreCompleted === coreIds.length,
+      complete: published.length > 0 && completed === published.length,
+    };
+  }
+
   function continentAccessState(graph, continent, completedNodeIds, freeExplore) {
     if (continent.publication === "planned") {
       return "planned";
@@ -602,7 +732,7 @@
       return "published-unlocked";
     }
     const prerequisitesComplete = continent.prerequisites.every(function (id) {
-      return continentCompleted(graph, id, completedNodeIds);
+      return continentCoreCompleted(graph, id, completedNodeIds);
     });
     if (prerequisitesComplete) {
       return "published-unlocked";
@@ -814,6 +944,7 @@
     ACCESS_STATES: ACCESS_STATES,
     ROUTE_SCOPES: ROUTE_SCOPES,
     ROUTE_KINDS: ROUTE_KINDS,
+    CONTINUATION_KINDS: CONTINUATION_KINDS,
     FEATURE_DEFINITIONS: FEATURE_DEFINITIONS,
     validateGraph: validateGraph,
     continentMap: continentMap,
@@ -828,8 +959,13 @@
     continentEdges: continentEdges,
     topologicalOrder: topologicalOrder,
     routeNeighbors: routeNeighbors,
+    routeContinuation: routeContinuation,
+    continentContinuations: continentContinuations,
     contentFeatures: contentFeatures,
     continentCompleted: continentCompleted,
+    continentCoreNodeIds: continentCoreNodeIds,
+    continentCoreCompleted: continentCoreCompleted,
+    continentProgressSummary: continentProgressSummary,
     continentAccessState: continentAccessState,
     nodeAccessState: nodeAccessState,
     loadProgress: loadProgress,

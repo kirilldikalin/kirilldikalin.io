@@ -17,6 +17,17 @@ PUBLIC_PAGES = (
     "algorithmic_atlas/chapters/turing-machine-transition.html",
     "algorithmic_atlas/chapters/input-size-and-cost.html",
     "algorithmic_atlas/chapters/asymptotic-estimates.html",
+    "algorithmic_atlas/chapters/growth-rates.html",
+    "algorithmic_atlas/chapters/sums-products-recurrences.html",
+    "algorithmic_atlas/chapters/sets-relations-functions-logic.html",
+    "algorithmic_atlas/chapters/proof-methods-induction.html",
+    "algorithmic_atlas/chapters/correctness-invariants-termination.html",
+    "algorithmic_atlas/chapters/combinatorics-counting.html",
+    "algorithmic_atlas/chapters/probability-spaces.html",
+    "algorithmic_atlas/chapters/random-variables-concentration.html",
+    "algorithmic_atlas/chapters/computation-models.html",
+    "algorithmic_atlas/chapters/analysis-cases.html",
+    "algorithmic_atlas/chapters/polynomial-efficiency.html",
     "articles/myths_DE.html",
     "brain/main_brain.html",
     "brain/map_msk/map_msk.html",
@@ -125,7 +136,7 @@ class PageParser(HTMLParser):
 
 def math_delimiter_errors(text):
     errors = []
-    delimiter_pattern = re.compile(r"\\\(|\\\)|\\\[|\\\]")
+    delimiter_pattern = re.compile(r"\\\(|\\\)|\\\[|\\\]|(?<!\\)\$\$|(?<!\\)\$")
     raw_command_pattern = re.compile(r"\\[A-Za-z]+")
     mode = None
     previous_end = 0
@@ -142,26 +153,31 @@ def math_delimiter_errors(text):
         if mode is None:
             add_raw_commands(text[previous_end:delimiter.start()], previous_end)
             if token == r"\(":
-                mode = "inline"
+                mode = ("inline", r"\)")
             elif token == r"\[":
-                mode = "display"
+                mode = ("display", r"\]")
+            elif token == "$":
+                mode = ("inline", "$")
+            elif token == "$$":
+                mode = ("display", "$$")
             else:
                 errors.append(
                     f"closing delimiter without opener at character {delimiter.start()}"
                 )
         else:
-            expected = r"\)" if mode == "inline" else r"\]"
+            expected = mode[1]
             if token != expected:
                 errors.append(
                     f"expected {expected} before {token} at character {delimiter.start()}"
                 )
-            mode = None
-            previous_end = delimiter.end()
+            else:
+                mode = None
+                previous_end = delimiter.end()
 
     if mode is None:
         add_raw_commands(text[previous_end:], previous_end)
     else:
-        errors.append(f"unclosed {mode} math delimiter")
+        errors.append(f"unclosed {mode[0]} math delimiter")
     return errors
 
 

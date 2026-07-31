@@ -30,7 +30,7 @@ function visibleSource(html) {
 
 function mathDelimiterErrors(source) {
   const errors = [];
-  const delimiters = /\\\(|\\\)|\\\[|\\\]/g;
+  const delimiters = /\\\(|\\\)|\\\[|\\\]|\$\$|(?<!\\)\$/g;
   const rawCommand = /\\[A-Za-z]+/g;
   let mode = null;
   let previousEnd = 0;
@@ -51,27 +51,32 @@ function mathDelimiterErrors(source) {
     if (mode === null) {
       findRawCommands(source.slice(previousEnd, match.index), previousEnd);
       if (match[0] === "\\(") {
-        mode = "inline";
+        mode = { name: "inline", expected: "\\)" };
       } else if (match[0] === "\\[") {
-        mode = "display";
+        mode = { name: "display", expected: "\\]" };
+      } else if (match[0] === "$") {
+        mode = { name: "inline", expected: "$" };
+      } else if (match[0] === "$$") {
+        mode = { name: "display", expected: "$$" };
       } else {
         errors.push("closing delimiter without opener at character " + match.index);
       }
     } else {
-      const expected = mode === "inline" ? "\\)" : "\\]";
+      const expected = mode.expected;
       if (match[0] !== expected) {
         errors.push(
           "expected " + expected + " before " + match[0] +
           " at character " + match.index
         );
+      } else {
+        mode = null;
+        previousEnd = delimiters.lastIndex;
       }
-      mode = null;
-      previousEnd = delimiters.lastIndex;
     }
   }
 
   if (mode !== null) {
-    errors.push("unclosed " + mode + " math delimiter");
+    errors.push("unclosed " + mode.name + " math delimiter");
   } else {
     findRawCommands(source.slice(previousEnd), previousEnd);
   }
@@ -169,6 +174,29 @@ test("the notation registry has stable unique entries and valid definitions", ()
     "exists-quantifier",
     "forall-positive-constant",
     "forall-tail-quantifier",
+    "growth-ratio",
+    "recurrence-function",
+    "relation-r",
+    "induction-proposition",
+    "hoare-triple",
+    "loop-invariant",
+    "loop-variant",
+    "binomial-coefficient",
+    "sample-space",
+    "conditional-probability",
+    "random-variable",
+    "expectation",
+    "variance",
+    "model-cost",
+    "operation-cost",
+    "unit-cost",
+    "word-size-w",
+    "worst-case",
+    "average-case",
+    "amortized-bound",
+    "potential-function",
+    "amortized-cost",
+    "polynomial-time",
   ].forEach((id) => assert.ok(ids.has(id), "missing required notation " + id));
 });
 
@@ -254,6 +282,11 @@ test("notation references are MathJax tokens with keyboard popover controls", ()
   assert.match(chapterScript, /setAttribute\("role", "button"\)/);
   assert.match(chapterScript, /tabIndex = 0/);
   assert.match(chapterScript, /event\.key === "Enter"/);
+  assert.match(
+    chapterScript,
+    /trigger\.closest\("mjx-assistive-mml"\)/,
+    "assistive MathML copies must not become duplicate keyboard controls"
+  );
 });
 
 test("asymptotic formulas and verdicts preserve their quantifiers", () => {

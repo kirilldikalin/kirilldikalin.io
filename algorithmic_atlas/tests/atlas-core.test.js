@@ -37,13 +37,13 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   assert.equal(core.validateGraph(graph), graph);
   assert.equal(graph.schemaVersion, 2);
   assert.equal(graph.continents.length, 9);
-  assert.equal(graph.nodes.length, 5);
-  assert.equal(graph.routes.length, 2);
+  assert.equal(graph.nodes.length, 16);
+  assert.equal(graph.routes.length, 4);
   assert.deepEqual(
     graph.continents.map(({ name }) => name),
     [
       "Истоки и эффективность",
-      "Математические инструменты",
+      "Математические инструменты и анализ",
       "Структуры данных",
       "Методы построения алгоритмов",
       "Графы, сети и оптимизация",
@@ -55,7 +55,7 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   );
   assert.equal(
     graph.continents.filter(({ publication }) => publication === "published").length,
-    1
+    2
   );
 });
 
@@ -78,6 +78,21 @@ test("route order is explicit and independent of every JSON array order", () => 
     "input-size-and-cost",
     "asymptotic-estimates",
   ];
+  const expectedMathematicalCore = [
+    "growth-rates",
+    "sums-products-recurrences",
+    "sets-relations-functions-logic",
+    "proof-methods-induction",
+    "correctness-invariants-termination",
+    "computation-models",
+    "analysis-cases",
+    "polynomial-efficiency",
+  ];
+  const expectedProbabilityBranch = [
+    "combinatorics-counting",
+    "probability-spaces",
+    "random-variables-concentration",
+  ];
   assert.deepEqual(
     core.routeOrder(graph, "world-main").map(({ id }) => id),
     expectedWorld
@@ -85,6 +100,14 @@ test("route order is explicit and independent of every JSON array order", () => 
   assert.deepEqual(
     core.routeOrder(graph, "origins-main").map(({ id }) => id),
     expectedOrigins
+  );
+  assert.deepEqual(
+    core.routeOrder(graph, "mathematical-tools-main").map(({ id }) => id),
+    expectedMathematicalCore
+  );
+  assert.deepEqual(
+    core.routeOrder(graph, "mathematical-tools-probability").map(({ id }) => id),
+    expectedProbabilityBranch
   );
 
   const shuffled = cloneGraph();
@@ -101,10 +124,11 @@ test("route order is explicit and independent of every JSON array order", () => 
     core.routeOrder(shuffled, "origins-main").map(({ id }) => id),
     expectedOrigins
   );
-  assert.deepEqual(
-    core.topologicalOrder(shuffled).map(({ id }) => id),
-    expectedOrigins
-  );
+  assert.deepEqual(core.topologicalOrder(shuffled).map(({ id }) => id), [
+    ...expectedOrigins,
+    ...expectedMathematicalCore,
+    ...expectedProbabilityBranch,
+  ]);
 });
 
 test("main routes are discovered by model fields rather than hardcoded ids", () => {
@@ -120,6 +144,10 @@ test("main routes are discovered by model fields rather than hardcoded ids", () 
   assert.equal(
     core.mainRoute(renamed, "nodes", "origins-efficiency").id,
     "renamed-origins"
+  );
+  assert.equal(
+    core.mainRoute(renamed, "nodes", "mathematical-tools").id,
+    "mathematical-tools-main"
   );
   assert.equal(
     core.routeForContinent(renamed, "origins-efficiency").id,
@@ -143,8 +171,25 @@ test("chapter neighbors come from route positions rather than node order", () =>
 
   const fifth = core.routeNeighbors(graph, "asymptotic-estimates");
   assert.equal(fifth.previous.id, "input-size-and-cost");
-  assert.equal(fifth.next, null);
-  assert.deepEqual(fifth.nextAll, []);
+  assert.equal(fifth.next.id, "growth-rates");
+  assert.deepEqual(fifth.nextAll.map(({ id }) => id), ["growth-rates"]);
+
+  const branchPoint = core.routeNeighbors(graph, "sets-relations-functions-logic");
+  assert.equal(branchPoint.next.id, "proof-methods-induction");
+  assert.deepEqual(branchPoint.nextAll.map(({ id }) => id), [
+    "proof-methods-induction",
+    "combinatorics-counting",
+  ]);
+
+  const probabilityEnd = core.routeNeighbors(
+    graph,
+    "random-variables-concentration"
+  );
+  assert.equal(probabilityEnd.next, null);
+  assert.equal(
+    core.routeContinuation(graph, "random-variables-concentration").curriculumId,
+    "7.1"
+  );
 
   const continentRoute = core.routeForContinent(graph, "origins-efficiency");
   const continents = core.routeOrder(graph, continentRoute.id);
@@ -206,9 +251,11 @@ test("node and continent prerequisite cycles are rejected", () => {
 test("separate routes can branch and merge through the prerequisite DAG", () => {
   const branched = cloneGraph();
   const template = branched.nodes[0];
+  let nextCurriculumId = 1;
   const makeNode = (id, prerequisites, route) => ({
     ...structuredClone(template),
     id,
+    curriculumId: `99.${nextCurriculumId++}`,
     title: id,
     description: `Описание ${id}`,
     prerequisites,
@@ -266,9 +313,11 @@ test("separate routes can branch and merge through the prerequisite DAG", () => 
 test("internal route neighbors retain every branch and merge edge", () => {
   const branched = cloneGraph();
   const template = branched.nodes[0];
+  let nextCurriculumId = 1;
   const makeNode = (id, prerequisites, route) => ({
     ...structuredClone(template),
     id,
+    curriculumId: `98.${nextCurriculumId++}`,
     title: id,
     description: `Описание ${id}`,
     prerequisites,
@@ -382,7 +431,7 @@ test("completed chapters remain unlocked and free exploration never completes th
   assert.deepEqual(Array.from(untouched), []);
 });
 
-test("the fifth chapter gates on chapter four and ends the first continent route", () => {
+test("the fifth chapter gates on chapter four and continues to continent two", () => {
   const completedBeforeFourth = new Set([
     "before-computers",
     "euclidean-algorithm",
@@ -398,10 +447,13 @@ test("the fifth chapter gates on chapter four and ends the first continent route
     core.nodeAccessState(graph, fifth, completedBeforeFourth, true),
     "published-unlocked"
   );
-  assert.equal(core.routeNeighbors(graph, fifth.id).next, null);
-  assert.equal(core.nodeMap(graph).has("growth-rates"), false);
-  assert.equal(core.nodeMap(graph).has("analysis-cases"), false);
-  assert.equal(core.nodeMap(graph).has("polynomial-efficiency"), false);
+  assert.equal(core.routeNeighbors(graph, fifth.id).next.id, "growth-rates");
+  assert.equal(core.nodeMap(graph).get("growth-rates").curriculumId, "2.1");
+  assert.equal(core.nodeMap(graph).get("analysis-cases").curriculumId, "2.10");
+  assert.equal(
+    core.nodeMap(graph).get("polynomial-efficiency").curriculumId,
+    "2.11"
+  );
   assert.deepEqual(Array.from(completedBeforeFourth), [
     "before-computers",
     "euclidean-algorithm",
@@ -417,18 +469,20 @@ test("continent access uses publication, prerequisites and free exploration", ()
     "published-unlocked"
   );
   assert.equal(
-    core.continentAccessState(graph, math, new Set(), true),
-    "planned"
-  );
-
-  const publishedMath = structuredClone(math);
-  publishedMath.publication = "published";
-  assert.equal(
-    core.continentAccessState(graph, publishedMath, new Set(), false),
+    core.continentAccessState(graph, math, new Set(), false),
     "published-gated"
   );
   assert.equal(
-    core.continentAccessState(graph, publishedMath, new Set(), true),
+    core.continentAccessState(graph, math, new Set(), true),
+    "published-unlocked"
+  );
+
+  const completedOrigins = new Set(core.continentCoreNodeIds(
+    graph,
+    "origins-efficiency"
+  ));
+  assert.equal(
+    core.continentAccessState(graph, math, completedOrigins, false),
     "published-unlocked"
   );
 });
@@ -588,6 +642,166 @@ test("the first continent is complete after exactly five published chapters", ()
   );
   assert.deepEqual(
     core.progressSummary(graph, completed),
-    { completed: 5, total: 5, percent: 100 }
+    { completed: 5, total: 16, percent: 31 }
   );
+  assert.deepEqual(
+    core.continentProgressSummary(graph, "origins-efficiency", completed),
+    {
+      completed: 5,
+      total: 5,
+      percent: 100,
+      coreCompleted: 5,
+      coreTotal: 5,
+      branchCompleted: 0,
+      branchTotal: 0,
+      coreReady: true,
+      complete: true,
+    }
+  );
+});
+
+test("continent two has eleven unique canonical curriculum ids", () => {
+  const nodes = core.visibleNodes(graph, "mathematical-tools");
+  const ids = nodes.map(({ curriculumId }) => curriculumId);
+  assert.equal(nodes.length, 11);
+  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 16);
+  assert.deepEqual(ids.slice().sort((left, right) => {
+    const leftNumber = Number(left.split(".")[1]);
+    const rightNumber = Number(right.split(".")[1]);
+    return leftNumber - rightNumber;
+  }), [
+    "2.1", "2.2", "2.3", "2.4", "2.5", "2.6",
+    "2.7", "2.8", "2.9", "2.10", "2.11",
+  ]);
+});
+
+test("eight core chapters unlock the next continent but eleven make 100 percent", () => {
+  const coreIds = core.continentCoreNodeIds(graph, "mathematical-tools");
+  const completedCore = new Set(coreIds);
+  const coreOnly = core.continentProgressSummary(
+    graph,
+    "mathematical-tools",
+    completedCore
+  );
+  assert.equal(coreIds.length, 8);
+  assert.equal(core.continentCoreCompleted(
+    graph,
+    "mathematical-tools",
+    completedCore
+  ), true);
+  assert.equal(core.continentCompleted(
+    graph,
+    "mathematical-tools",
+    completedCore
+  ), false);
+  assert.deepEqual(coreOnly, {
+    completed: 8,
+    total: 11,
+    percent: 73,
+    coreCompleted: 8,
+    coreTotal: 8,
+    branchCompleted: 0,
+    branchTotal: 3,
+    coreReady: true,
+    complete: false,
+  });
+
+  const all = new Set(core.visibleNodes(graph, "mathematical-tools").map(({ id }) => id));
+  assert.equal(core.continentCompleted(graph, "mathematical-tools", all), true);
+  assert.equal(
+    core.continentProgressSummary(graph, "mathematical-tools", all).percent,
+    100
+  );
+
+  const next = structuredClone(core.continentMap(graph).get("data-structures"));
+  next.publication = "published";
+  assert.equal(
+    core.continentAccessState(graph, next, completedCore, false),
+    "published-unlocked"
+  );
+});
+
+test("probability branch entry is dotted while its internal edges are required", () => {
+  const edges = core.graphEdges(graph, "mathematical-tools");
+  const edge = (sourceId, targetId) => edges.find((item) =>
+    item.sourceId === sourceId && item.targetId === targetId
+  );
+  assert.equal(edge(
+    "sets-relations-functions-logic",
+    "combinatorics-counting"
+  ).kind, "branch");
+  assert.equal(edge("combinatorics-counting", "probability-spaces").kind, "route");
+  assert.equal(edge(
+    "probability-spaces",
+    "random-variables-concentration"
+  ).kind, "route");
+
+  const continentReady = new Set(core.continentCoreNodeIds(
+    graph,
+    "origins-efficiency"
+  ));
+  const branchStart = core.nodeMap(graph).get("combinatorics-counting");
+  assert.equal(
+    core.nodeAccessState(graph, branchStart, continentReady, false),
+    "published-gated"
+  );
+  continentReady.add("sets-relations-functions-logic");
+  assert.equal(
+    core.nodeAccessState(graph, branchStart, continentReady, false),
+    "published-unlocked"
+  );
+});
+
+test("future continuations are metadata and never fake published nodes", () => {
+  assert.deepEqual(
+    core.continentContinuations(graph, "mathematical-tools")
+      .map(({ continuation }) => continuation.curriculumId),
+    ["3.1", "7.1"]
+  );
+  assert.equal(core.routeContinuation(graph, "analysis-cases"), null);
+  assert.equal(
+    core.routeContinuation(graph, "polynomial-efficiency").curriculumId,
+    "3.1"
+  );
+  assert.ok(graph.nodes.every(({ curriculumId }) =>
+    curriculumId !== "3.1" && curriculumId !== "7.1"
+  ));
+
+  const duplicate = cloneGraph();
+  duplicate.routes.find(({ id }) => id === "mathematical-tools-main")
+    .continuation.curriculumId = "2.11";
+  assert.throws(
+    () => core.validateGraph(duplicate),
+    /continuation duplicates a published node/
+  );
+
+  const unknownTarget = cloneGraph();
+  unknownTarget.routes.find(({ id }) => id === "mathematical-tools-main")
+    .continuation.targetContinentId = "missing-continent";
+  assert.throws(
+    () => core.validateGraph(unknownTarget),
+    /unknown route continuation continent/
+  );
+});
+
+test("dataset migration preserves stable progress ids across both continents", () => {
+  const completed = [
+    "before-computers",
+    "asymptotic-estimates",
+    "growth-rates",
+    "analysis-cases",
+    "random-variables-concentration",
+  ];
+  const storage = memoryStorage({
+    [core.STORAGE_KEY]: JSON.stringify({
+      schemaVersion: 2,
+      datasetVersion: "2026.07.31-2",
+      completedNodeIds: completed,
+      freeExplore: true,
+    }),
+  });
+  const loaded = core.loadProgress(storage, graph);
+  assert.deepEqual(Array.from(loaded.completedNodeIds), completed);
+  assert.equal(loaded.freeExplore, true);
+  assert.equal(loaded.migrated, true);
 });
