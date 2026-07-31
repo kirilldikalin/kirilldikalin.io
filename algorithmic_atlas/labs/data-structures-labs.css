@@ -1,0 +1,142 @@
+.structure-cell,
+.hash-slot {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.structure-cell.is-empty {
+  fill: var(--chapter-soft);
+  opacity: 0.65;
+}
+
+.structure-cell.is-active,
+.hash-slot.is-probed {
+  fill: var(--chapter-theorem);
+  stroke: var(--chapter-accent);
+  stroke-width: 2.5;
+}
+
+.structure-cell.is-moved,
+.structure-node.is-traversed {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.structure-copy-arrow,
+.structure-pointer,
+.tree-edge {
+  fill: none;
+  stroke: var(--chapter-line);
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.structure-copy-arrow,
+.structure-pointer {
+  stroke: var(--chapter-accent);
+  stroke-dasharray: 6 4;
+}
+
+.structure-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+}
+
+.structure-node.is-active,
+.structure-node.is-new {
+  fill: var(--chapter-theorem);
+  stroke: var(--chapter-accent);
+  stroke-width: 2.5;
+}
+
+.structure-cost-bar,
+.hash-load-track {
+  fill: var(--chapter-soft);
+  stroke: var(--chapter-line);
+}
+
+.structure-cost-bar.is-actual,
+.hash-load-fill {
+  fill: var(--chapter-accent);
+}
+
+.structure-cost-bar.is-budget {
+  fill: var(--chapter-focus);
+}
+
+.hash-slot.is-swapped {
+  fill: var(--chapter-warning);
+  stroke: var(--lab-bad);
+  stroke-width: 2.5;
+}
+
+.tree-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.7;
+  vector-effect: non-scaling-stroke;
+}
+
+.tree-node.is-red {
+  fill: var(--chapter-warning);
+  stroke: var(--chapter-accent);
+}
+
+.tree-node.is-black {
+  fill: var(--chapter-ink);
+}
+
+.tree-node.is-black + text,
+.tree-key {
+  fill: var(--chapter-paper);
+}
+
+.tree-node.is-path,
+.augmented-node.is-path {
+  stroke: var(--chapter-focus);
+  stroke-width: 3;
+  stroke-dasharray: 5 3;
+}
+
+.tree-node.is-active,
+.augmented-node.is-active {
+  filter: drop-shadow(0 0 4px var(--chapter-focus));
+}
+
+.tree-node.is-violation {
+  stroke: var(--lab-bad);
+  stroke-width: 4;
+}
+
+.augmented-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.augmented-node.is-recomputed {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-accent);
+  stroke-width: 2.5;
+}
+
+@media (max-width: 720px) {
+  .atlas-lab[data-atlas-lab="hash-tables"] .atlas-lab__visual,
+  .atlas-lab[data-atlas-lab="balanced-search-trees"] .atlas-lab__visual,
+  .atlas-lab[data-atlas-lab="augmented-search-trees"] .atlas-lab__visual {
+    min-height: 15rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .structure-cell,
+  .hash-slot,
+  .tree-node,
+  .augmented-node {
+    transition: none;
+  }
+}
