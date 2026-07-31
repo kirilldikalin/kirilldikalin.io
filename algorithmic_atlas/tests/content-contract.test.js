@@ -83,6 +83,27 @@ function mathDelimiterErrors(source) {
   return errors;
 }
 
+function malformedMathCommands(source) {
+  const errors = [];
+  const fragments =
+    /\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)|\$\$([\s\S]*?)\$\$|(?<!\\)\$(?!\$)([\s\S]*?)(?<!\\)\$(?!\$)/g;
+  const missingSlash =
+    /(?<![\\A-Za-z])(class|operatorname|lfloor|rfloor|lceil|rceil|frac|Theta|Omega|nleq|leq|geq|times|cdot|sqrt|infty|mathbb|mathcal|varepsilon|Pr|Phi)(?=[{_\s\\0-9A-Z(])/g;
+  let fragment;
+  while ((fragment = fragments.exec(source)) !== null) {
+    const tex = fragment.slice(1).find((value) => value !== undefined);
+    let command;
+    missingSlash.lastIndex = 0;
+    while ((command = missingSlash.exec(tex)) !== null) {
+      errors.push(
+        "possible TeX command without backslash at character " +
+        (fragment.index + command.index) + ": " + command[1]
+      );
+    }
+  }
+  return errors;
+}
+
 test("all visible chapter TeX has balanced delimiters and no raw commands", () => {
   publishedChapterFiles().forEach(({ node, file }) => {
     const source = visibleSource(fs.readFileSync(file, "utf8"));
@@ -90,6 +111,11 @@ test("all visible chapter TeX has balanced delimiters and no raw commands", () =
       mathDelimiterErrors(source),
       [],
       node.id + " contains malformed visible TeX"
+    );
+    assert.deepEqual(
+      malformedMathCommands(source),
+      [],
+      node.id + " contains a likely TeX command without its backslash"
     );
   });
 
@@ -254,8 +280,11 @@ test("notation references are MathJax tokens with keyboard popover controls", ()
       /class="atlas-notation-ref"/,
       node.id + " still renders a separate notation button"
     );
-    assert.match(html, /load: \['\[tex\]\/html'\]/);
-    assert.match(html, /packages: \{'\[\+\]': \['html'\]\}/);
+    assert.match(html, /load\s*:\s*\[\s*'\[tex\]\/html'\s*\]/);
+    assert.match(
+      html,
+      /packages\s*:\s*\{\s*'\[\+\]'\s*:\s*\[\s*'html'\s*\]\s*\}/
+    );
   });
 
   const firstChapter = fs.readFileSync(
