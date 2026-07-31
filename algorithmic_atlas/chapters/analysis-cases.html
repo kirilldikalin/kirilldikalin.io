@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сложность в худшем, среднем и амортизированном случаях — Алгоритмический атлас</title>
+  <meta name="description" content="Как различать худший случай, среднее по входам, ожидание по случайным битам и амортизированную гарантию">
+  <meta property="og:title" content="Сложность в худшем, среднем и амортизированном случаях — Алгоритмический атлас">
+  <meta property="og:description" content="Распределения входов, противник и потенциал динамического массива в одной строгой картине">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/analysis-cases.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/analysis-cases.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/analysis-cases-core.js" defer></script>
+  <script src="../labs/analysis-cases.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="analysis-cases">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Случаи анализа</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.10</p>
+      <h1>Сложность в худшем, среднем и амортизированном случаях</h1>
+      <p class="atlas-chapter-intro">
+        Четыре похожих слова отвечают на разные вопросы: максимум по входам,
+        среднее по распределению, ожидание по случайным битам и цена длинной
+        последовательности операций
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 85 минут</span><span>4 вида гарантии</span>
+        <span>3 режима лаборатории</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#one-size">Входы одного размера</a></li>
+          <li><a href="#worst">Худший случай</a></li>
+          <li><a href="#best">Лучший случай</a></li>
+          <li><a href="#average">Средний случай</a></li>
+          <li><a href="#randomized">Случайные биты алгоритма</a></li>
+          <li><a href="#amortized">Амортизированный анализ</a></li>
+          <li><a href="#aggregate">Метод суммарной стоимости</a></li>
+          <li><a href="#accounting">Бухгалтерский метод</a></li>
+          <li><a href="#potential">Метод потенциалов</a></li>
+          <li><a href="#dynamic-array">Динамический массив</a></li>
+          <li><a href="#distinctions">Что нельзя смешивать</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="one-size">
+          <h2>Один размер — много разных входов</h2>
+          <p>
+            После выбора кодировки и модели стоимости алгоритм $A$ задаёт
+            конкретное число шагов
+            $\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}$
+            для каждого входа $x$. Но одинаковая длина не означает одинаковую
+            трассу. Поиск в массиве может остановиться на первой позиции, пройти
+            весь массив или встретить элемент посередине.
+          </p>
+          <p>
+            Пусть $X_n=\{x:|x|=n\}$ — множество допустимых входов размера $n$.
+            Чтобы получить функцию одного аргумента, нужно явно сказать, как
+            агрегируются значения $T_A(x)$ по $X_n$. Разные способы агрегации
+            дают разные математические объекты.
+          </p>
+        </section>
+
+        <section id="worst">
+          <h2>Худший случай: гарантия для каждого входа</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Максимальная стоимость</h3>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-worst-case}{T_{\mathrm{worst}}(n)}
+                =\max_{x\in X_n} T_A(x).
+              \]
+            </div>
+            <p>
+              Если максимум не достигается, используют супремум. Верхняя
+              граница на $T_{\mathrm{worst}}(n)$ автоматически ограничивает
+              каждый вход размера $n$.
+            </p>
+          </section>
+          <p>
+            Худший случай не утверждает, что противник физически существует.
+            Это способ дать гарантию без предположений о происхождении данных.
+            Для линейного поиска вход, где искомый элемент отсутствует, заставляет
+            проверить все $n$ позиций, поэтому худшая стоимость равна
+            $\Theta(n)$ сравнений.
+          </p>
+        </section>
+
+        <section id="best">
+          <h2>Лучший случай редко характеризует алгоритм</h2>
+          <div class="atlas-math">
+            \[
+              T_{\mathrm{best}}(n)=\min_{x\in X_n}T_A(x).
+            \]
+          </div>
+          <p>
+            Для линейного поиска лучший случай постоянен: элемент находится
+            сразу. Эта оценка корректна, но почти ничего не обещает следующему
+            пользователю. Лучший случай полезен как нижняя граница конкретной
+            реализации или для описания раннего выхода, но его нельзя выдавать
+            за типичное поведение.
+          </p>
+        </section>
+
+        <section id="average">
+          <h2>Средний случай начинается с распределения</h2>
+          <p>
+            Среднее не определено, пока не задана вероятность каждого входа.
+            Для распределения $D_n$ на $X_n$:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-average-case}{T_{\mathrm{avg},D}(n)}
+              =\mathbb E_{x\sim D_n}[T_A(x)]
+              =\sum_{x\in X_n}D_n(x)T_A(x).
+            \]
+          </div>
+          <p>
+            «Все входы равновероятны» — уже сильное предположение и иногда
+            бессмысленное: множество входов может быть бесконечным либо реальные
+            данные сильно смещены. Изменение $D_n$ способно изменить не только
+            константу, но и порядок роста среднего времени.
+          </p>
+          <section class="atlas-block" data-atlas-block="counterexample">
+            <h3>Один алгоритм, два средних</h3>
+            <p>
+              Пусть стоимость равна $1$ на одном специальном входе и $n^2$ на
+              остальных. Если специальный вход имеет вероятность
+              $1-1/n$, ожидание порядка $n$; при равномерном распределении на
+              двух входах — порядка $n^2$. Слова «в среднем» без распределения
+              не определяют ни одно из этих утверждений.
+            </p>
+          </section>
+        </section>
+
+        <section id="randomized">
+          <h2>Ожидание по случайным битам — другой квантор</h2>
+          <p>
+            Рандомизированный алгоритм использует внутреннюю случайность $R$.
+            Можно зафиксировать вход $x$ и усреднить только по монетам
+            алгоритма:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              T_{\mathrm{rand}}(n)
+              =\max_{x\in X_n}\mathbb E_R[T_A(x;R)].
+            \]
+          </div>
+          <p>
+            Здесь вход по-прежнему худший, а ожидание относится к выбору
+            алгоритма. В average-case анализе алгоритм может быть полностью
+            детерминированным, а случайность находится в $x\sim D_n$. Эти два
+            источника вероятности можно сочетать, но нельзя называть одним и тем
+            же средним.
+          </p>
+        </section>
+
+        <section id="amortized">
+          <h2>Амортизированная цена не является вероятностью</h2>
+          <p>
+            Амортизированный анализ рассматривает произвольную
+            последовательность $m$ операций и ограничивает её суммарную
+            фактическую цену. Если для любой допустимой последовательности
+            $\sigma=(o_1,\ldots,o_m)$ выполнено
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \sum_{i=1}^{m}c_i\le m\,\class{atlas-notation-token notation-id-amortized-bound}{\widehat c},
+            \]
+          </div>
+          <p>
+            то $\widehat c$ — амортизированная верхняя граница на операцию.
+            Распределения нет: гарантия действует даже на худшую
+            последовательность. Отдельная операция может стоить намного дороже
+            $\widehat c$, если редкие дорогие шаги оплачиваются множеством
+            дешёвых.
+          </p>
+        </section>
+
+        <section id="aggregate">
+          <h2>Метод суммарной стоимости</h2>
+          <p>
+            Самый прямой метод сначала ограничивает полную цену $m$ операций,
+            затем делит её на $m$. У двоичного счётчика младший бит меняется на
+            каждом увеличении, следующий — раз в два шага, затем раз в четыре:
+          </p>
+          <div class="atlas-math">
+            \[
+              m+\left\lfloor\frac m2\right\rfloor+
+              \left\lfloor\frac m4\right\rfloor+\cdots&lt;2m.
+            \]
+          </div>
+          <p>
+            Значит, хотя одно увеличение может перевернуть $\Theta(\log m)$
+            битов, амортизированная цена одного увеличения меньше двух
+            переворотов.
+          </p>
+        </section>
+
+        <section id="accounting">
+          <h2>Бухгалтерский метод: сохраняем кредит</h2>
+          <p>
+            Назначим каждой операции искусственную плату $\widehat c_i$.
+            Разница $\widehat c_i-c_i$ сохраняется как кредит на объектах
+            структуры. Если кредит никогда не становится отрицательным, то
+            накопленная амортизированная плата всегда покрывает фактическую:
+          </p>
+          <div class="atlas-math">
+            \[
+              \sum_{i=1}^{m}c_i\le\sum_{i=1}^{m}\widehat c_i.
+            \]
+          </div>
+          <p>
+            Кредит — доказательный приём, а не реальная валюта или среднее
+            время. Его размещение должно объяснять, какая будущая дорогая
+            операция уже оплачена.
+          </p>
+        </section>
+
+        <section id="potential">
+          <h2>Метод потенциалов: энергия состояния</h2>
+          <p>
+            Потенциал
+            $\class{atlas-notation-token notation-id-potential-function}{\Phi(D_i)}$
+            — неотрицательная функция состояния структуры после $i$ операций.
+            Амортизированную цену определяют как
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-amortized-cost}{\widehat c_i}
+              =c_i+\class{atlas-notation-token notation-id-potential-function}{\Phi(D_i)}
+              -\class{atlas-notation-token notation-id-potential-function}{\Phi(D_{i-1})}.
+            \]
+          </div>
+          <p>
+            Сумма телескопируется:
+            $\sum\widehat c_i=\sum c_i+\Phi(D_m)-\Phi(D_0)$.
+            При $\Phi(D_0)=0$ и $\Phi(D_m)\ge0$ амортизированная сумма не меньше
+            фактической. Потенциал формально выражает запас уже выполненной
+            работы.
+          </p>
+        </section>
+
+        <section id="dynamic-array">
+          <h2>Динамический массив: редкое дорогое расширение</h2>
+          <p>
+            Пусть заполненный массив ёмкости $k$ при вставке выделяет $2k$ ячеек
+            и копирует $k$ элементов. Расширения происходят при размерах
+            $1,2,4,8,\ldots$. До $m$ вставок суммарное число копирований меньше
+            $2m$, а сами записи стоят ещё $m$. Следовательно, вся
+            последовательность стоит $O(m)$, то есть $O(1)$ амортизированно на
+            вставку.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Потенциал для удваивающегося массива</h3>
+            <p>
+              Начнём с пустого массива ёмкости 0; первая вставка выделяет одну
+              ячейку и имеет постоянную цену. После неё каждое достижимое
+              состояние заполнено хотя бы наполовину, поэтому для числа элементов
+              $n_i$ и ёмкости $k_i$ подходит неотрицательный потенциал
+              $\Phi_i=2n_i-k_i$. Обычная вставка увеличивает фактическую цену на 1
+              и потенциал на 2. При расширении высокая цена копирования
+              компенсируется падением потенциала. Во всех случаях
+              амортизированная цена ограничена константой.
+            </p>
+          </section>
+        </section>
+
+        <section id="distinctions" class="atlas-block" data-atlas-block="warning">
+          <h2>Четыре вопроса, которые нельзя склеить</h2>
+          <ul>
+            <li><strong>Худший случай:</strong> что гарантировано каждому входу размера $n$</li>
+            <li><strong>Средний случай:</strong> что ожидается при явно заданном распределении входов</li>
+            <li><strong>Рандомизированное время:</strong> что ожидается по внутренним монетам при фиксированном или худшем входе</li>
+            <li><strong>Амортизация:</strong> сколько стоит любая длинная последовательность без вероятностных допущений</li>
+          </ul>
+          <p>
+            $O$-нотация не выбирает один из этих случаев. Она лишь ограничивает
+            уже определённую функцию. Поэтому запись $O(n\log n)$ должна идти
+            после слов о том, какая именно функция оценивается.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: противник, распределение и потенциал</h2>
+          <p>
+            Три режима используют согласованную шкалу стоимости. В первом
+            противник строит тяжёлый вход, во втором меняется распределение
+            входов, в третьем вставки в динамический массив показывают
+            фактическую цену, амортизированную плату и потенциал. Ни один режим
+            не переименовывает среднее в амортизированное.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="analysis-cases"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Разделите кванторы</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Линейный поиск находит элемент в первой ячейке. Какой случай наблюдался?</p><details><summary>Показать решение</summary><p>Один конкретный лучший вход. Он не определяет ни среднюю, ни худшую сложность.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Запишите худшее число сравнений линейного поиска в массиве длины $n$.</p><details><summary>Показать решение</summary><p>$n$ сравнений при отсутствии элемента или его нахождении в последней позиции, то есть $\Theta(n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Почему «среднее по всем строкам» требует уточнения?</p><details><summary>Показать решение</summary><p>Нужно распределение вероятностей; на бесконечном множестве нет равномерного распределения с положительной массой каждой строки.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Сформулируйте ожидание рандомизированного алгоритма на худшем входе.</p><details><summary>Показать решение</summary><p>$\max_{|x|=n}\mathbb E_R[T(x;R)]$: максимум берётся по входам, ожидание — по случайным битам.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Может ли амортизированно постоянная операция иногда стоить $\Theta(n)$?</p><details><summary>Показать решение</summary><p>Да. Расширение динамического массива копирует все элементы, но такие шаги редки и суммарно стоят линейно.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Докажите границу $&lt;2m$ для числа переворотов двоичного счётчика.</p><details><summary>Показать подсказку</summary><p>Сложите геометрический ряд частот изменения битов.</p></details><details><summary>Показать решение</summary><p>$m+m/2+m/4+\cdots&lt;2m$; целые части только уменьшают сумму.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Что нужно проверить у бухгалтерского кредита?</p><details><summary>Показать решение</summary><p>Он не должен становиться отрицательным, а его назначение должно покрывать фактическую цену каждой будущей операции.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Выведите телескопическую сумму метода потенциалов.</p><details><summary>Показать решение</summary><p>При суммировании разностей $\Phi(D_i)-\Phi(D_{i-1})$ промежуточные члены сокращаются, остаётся $\Phi(D_m)-\Phi(D_0)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Найдите ошибку: «Вставка стоит в среднем $O(1)$, потому что массив иногда расширяется».</p><details><summary>Показать решение</summary><p>Не задано распределение, поэтому это не average case. Верное утверждение — амортизированная $O(1)$ для любой последовательности вставок.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Может ли средний случай быть хуже худшего?</p><details><summary>Показать решение</summary><p>Нет для одного и того же множества входов и распределения на нём: взвешенное среднее не превосходит максимума.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Robert E. Tarjan, <a href="https://doi.org/10.1137/0606031" target="_blank" rel="noopener noreferrer">Amortized Computational Complexity</a>, 1985 — каноническая формализация амортизированного анализа.</li>
+            <li>MIT OpenCourseWare 6.046J, <a href="https://live.ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/13e2c7d165259712327af0af312a068e_MIT6_046JS15_lec05.pdf" target="_blank" rel="noopener noreferrer">Amortized Analysis</a> — aggregate, accounting и potential methods.</li>
+            <li>CMU 15-451, <a href="https://www.cs.cmu.edu/afs/cs/academic/class/15451-s07/www/lecture_notes/lect0123.pdf" target="_blank" rel="noopener noreferrer">Probabilistic Analysis and Randomized Algorithms</a> — различие распределения входов и случайности алгоритма.</li>
+            <li>Mor Harchol-Balter, <a href="https://www.cs.cmu.edu/~harchol/Probability/chapters/chpt21.pdf" target="_blank" rel="noopener noreferrer">Randomized Algorithms</a> — ожидание по случайным монетам и гарантии на худшем входе.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

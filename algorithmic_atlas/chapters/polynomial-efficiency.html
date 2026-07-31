@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Полиномиальные алгоритмы и практическая эффективность — Алгоритмический атлас</title>
+  <meta name="description" content="Почему полиномиальное время стало границей теоретической разрешимости и почему оно не гарантирует быструю программу">
+  <meta property="og:title" content="Полиномиальные алгоритмы и практическая эффективность — Алгоритмический атлас">
+  <meta property="og:description" content="Кобэм — Эдмондс, псевдополиномиальность, точки пересечения и честная методика измерений">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/polynomial-efficiency.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/polynomial-efficiency.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/polynomial-efficiency-core.js" defer></script>
+  <script src="../labs/polynomial-efficiency.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="polynomial-efficiency">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Полиномиальность и практика</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.11</p>
+      <h1>Полиномиальные алгоритмы и практическая эффективность</h1>
+      <p class="atlas-chapter-intro">
+        Полиномиальная граница отделяет устойчивое масштабирование от
+        комбинаторного взрыва, но степень, константы, память и данные решают,
+        какой алгоритм победит сегодня
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 80 минут</span><span>теория и измерение</span>
+        <span>1 лаборатория пересечений</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#boundary">Почему именно полином</a></li>
+          <li><a href="#history">Кобэм и Эдмондс</a></li>
+          <li><a href="#hierarchy">Иерархия роста</a></li>
+          <li><a href="#degree">Степень и константы</a></li>
+          <li><a href="#pseudo">Псевдополиномиальность</a></li>
+          <li><a href="#strong">Сильная полиномиальность</a></li>
+          <li><a href="#parameters">Параметризация</a></li>
+          <li><a href="#hardware">Память и процессор</a></li>
+          <li><a href="#benchmarks">Как измерять честно</a></li>
+          <li><a href="#crossover">Точка пересечения</a></li>
+          <li><a href="#two-evidences">Два вида знания</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="boundary">
+          <h2>Почему полином оказался устойчивой границей</h2>
+          <p>
+            Пусть длина входа равна $n$. Полиномиальное время ограничено
+            $n^k$ для некоторой фиксированной степени $k$. Типичный алгоритм с
+            экспоненциальным ростом имеет стоимость $\Theta(c^n)$ при $c>1$.
+            Если доступный размер входа
+            удвоить, полином увеличивается не более чем в постоянное число
+            $2^k$ раз, а экспонента — в $c^n$ раз. Это качественно разные
+            реакции на масштабирование.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-polynomial-time}{T_{\mathrm{poly}}(n)\le Cn^k}
+              \qquad\text{против}\qquad
+              T_{\mathrm{exp}}(n)=\Theta(c^n).
+            \]
+          </div>
+          <p>
+            Граница не говорит, что каждый полином практически быстр, а каждая
+            экспонента бесполезна. Она даёт модельно устойчивый класс: разумные
+            кодировки и последовательные вычислительные модели обычно меняют
+            полином на другой полином, а не превращают его в экспоненту.
+          </p>
+        </section>
+
+        <section id="history">
+          <h2>Тезис Кобэма — Эдмондса</h2>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>«Хороший алгоритм» как полиномиальная гарантия</h3>
+            <p>
+              В 1965 году Алан Кобэм исследовал внутреннюю вычислительную
+              трудность функций и выделил полиномиальное время как
+              машинно-устойчивое понятие. В том же году Джек Эдмондс в работе о
+              паросочетаниях назвал хорошим алгоритмом такой, число шагов
+              которого ограничено полиномом от размера графа. Эти параллельные
+              формулировки образуют тезис Кобэма — Эдмондса: полиномиально
+              вычислимые задачи служат теоретической моделью эффективно
+              разрешимых.
+            </p>
+          </section>
+          <p>
+            Это методологический тезис, а не теорема о скорости любой программы.
+            Алгоритм $n^{100}$ полиномиален и почти наверняка непригоден. Алгоритм
+            $1.01^n$ экспоненциален, но может работать на небольших входах.
+            Ценность границы проявляется в поведении при неограниченном росте и
+            в устойчивости к смене разумной модели.
+          </p>
+        </section>
+
+        <section id="hierarchy" class="atlas-block" data-atlas-block="proof">
+          <h2>Иерархия функций — карта, а не секундомер</h2>
+          <p>
+            При $n\to\infty$, фиксированных $\varepsilon>0$ и $c>1$ действует
+            порядок
+          </p>
+          <div class="atlas-math">
+            \[
+              \log n \prec n \prec n\log n \prec n^{1+\varepsilon}
+              \prec c^n \prec n! \prec n^n,
+            \]
+          </div>
+          <p>
+            где $\prec$ означает строго меньший порядок роста. Любой полином
+            $n^k$ с фиксированным $k>0$ также строго медленнее любой экспоненты
+            $c^n$. Формула описывает бесконечный хвост, но не сообщает, где именно
+            началось превосходство. На доступном диапазоне константа и
+            реализация могут переставить алгоритмы местами.
+          </p>
+          <p>
+            Логарифмы разных фиксированных оснований отличаются постоянным
+            множителем. Факториал удобно сравнивать через формулу Стирлинга
+            $n!\sim\sqrt{2\pi n}(n/e)^n$: он обгоняет $c^n$ для каждого
+            фиксированного $c$, но остаётся меньше $n^n$.
+          </p>
+        </section>
+
+        <section id="degree">
+          <h2>Степень и константы не исчезают из программы</h2>
+          <p>
+            Асимптотический класс отбрасывает положительный постоянный
+            множитель, но практическая стоимость имеет вид, например,
+            $T(n)=a n\log n+b n+d$. Большое $a$, дорогая подготовка $d$ и
+            дополнительная память могут долго скрывать асимптотическое
+            преимущество.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Линейный алгоритм, который пока проигрывает</h3>
+            <p>
+              Сравним $A(n)=1000n$ и $B(n)=n^2$. Формально $A$ растёт медленнее.
+              Но при $n=100$ имеем $A=100000$, $B=10000$. Пересечение происходит
+              при $n=1000$; только дальше линейная функция становится меньше.
+              Класс роста и точка пересечения отвечают на разные вопросы.
+            </p>
+          </section>
+          <p>
+            Высокая степень тоже важна. $n^6$ полиномиален, но удвоение размера
+            увеличивает ведущий член в 64 раза. Поэтому «полиномиальный» —
+            начало оценки, а не её конец.
+          </p>
+        </section>
+
+        <section id="pseudo">
+          <h2>Псевдополиномиальность снова проверяет кодировку</h2>
+          <p>
+            Если число $W$ записано двоично, его длина равна
+            $\Theta(\log W)$. Алгоритм со стоимостью $O(nW)$ полиномиален по
+            числовому значению $W$, но экспоненциален по длине его записи. Такие
+            зависимости называют псевдополиномиальными. Из определения битовой
+            длины следует $2^{|W|-1}\le W&lt;2^{|W|}$, поэтому
+            $W=\Theta(2^{|W|})$.
+          </p>
+          <div class="atlas-math">
+            \[
+              nW=\Theta\!\left(n\,2^{|W|}\right).
+            \]
+          </div>
+          <p>
+            Термин не означает «почти полиномиальный» и не является упрёком
+            алгоритму. Для умеренных $W$ динамическая программа может быть
+            лучшим практическим методом. Нужно лишь честно назвать параметр.
+          </p>
+        </section>
+
+        <section id="strong">
+          <h2>Сильно полиномиальные алгоритмы</h2>
+          <p>
+            В задачах с числовыми данными алгоритм называют strongly polynomial,
+            если число арифметических операций ограничено полиномом от
+            комбинаторных размеров (например, числа переменных и ограничений),
+            а размеры промежуточных чисел остаются полиномиально ограниченными
+            длиной входа. Граница не должна зависеть от величин коэффициентов.
+          </p>
+          <p>
+            Это более сильное требование, чем просто полиномиальная битовая
+            сложность. Оно не означает «быстро на любом компьютере» и не даёт
+            права переносить результат Тардоса для комбинаторных линейных
+            программ на произвольную линейную оптимизацию.
+          </p>
+        </section>
+
+        <section id="parameters">
+          <h2>Параметризация раскрывает структуру трудных входов</h2>
+          <p>
+            Одна переменная $n$ может скрывать полезную малую величину $k$:
+            ширину дерева, число ошибок, размер решения. Оценка
+            $f(k)n^c$ отделяет произвольную зависимость от параметра и
+            полиномиальную зависимость от общего размера. Если $k$ мал в
+            реальных данных, такой алгоритм может быть практичен, даже когда
+            зависимость $f(k)$ экспоненциальна.
+          </p>
+          <p>
+            Параметр нужно определять до измерения. Выбор $k$ после просмотра
+            результатов превращает объяснение в подгонку и не даёт новой
+            гарантии.
+          </p>
+        </section>
+
+        <section id="hardware">
+          <h2>Кэш, локальность и векторизация меняют константы</h2>
+          <p>
+            Два алгоритма одного класса могут по-разному обращаться к памяти.
+            Последовательный проход использует строки кэша и предвыборку,
+            случайные обращения ждут более медленные уровни памяти. Векторная
+            команда обрабатывает несколько элементов за раз, а плохо
+            предсказуемые ветвления останавливают конвейер.
+          </p>
+          <p>
+            Эти эффекты не отменяют асимптотику, но входят в коэффициенты и
+            точки пересечения. Если рабочий набор перестаёт помещаться в кэш,
+            экспериментальная кривая может иметь ступеньку, которой нет в
+            формуле числа сравнений.
+          </p>
+        </section>
+
+        <section id="benchmarks">
+          <h2>Как измерять, чтобы результат можно было проверить</h2>
+          <p>
+            Бенчмарк начинается с утверждения: какую реализацию, на каких данных,
+            в какой среде и какую величину сравниваем. Следует фиксировать версии
+            кода, компилятор и флаги, оборудование, подготовку данных, число
+            прогревов и повторов, а также сохранять сырые измерения.
+          </p>
+          <ul>
+            <li>Выбирайте наборы данных до просмотра победителя</li>
+            <li>Отделяйте построение входа от измеряемой операции</li>
+            <li>Показывайте разброс, а не только одно среднее</li>
+            <li>Проверяйте корректность результатов обеих реализаций</li>
+            <li>Не экстраполируйте аппаратно-зависимую кривую без оговорок</li>
+          </ul>
+          <p>
+            Измерение подтверждает наблюдаемую производительность в описанной
+            среде. Оно не доказывает асимптотическую границу для всех входов.
+          </p>
+        </section>
+
+        <section id="crossover">
+          <h2>Точка пересечения — свойство модели и реализации</h2>
+          <p>
+            Для $A(n)=a n\log_2n+\alpha$ и $B(n)=b n^2+\beta$ точка пересечения
+            решает уравнение $A(n)=B(n)$. Закрытой простой формулы может не быть,
+            но монотонный поиск по безопасному диапазону находит её численно.
+          </p>
+          <p>
+            Если добавить модель памяти, коэффициенты могут зависеть от размера
+            рабочего набора. Тогда пересечений бывает несколько. Поэтому
+            корректная визуализация показывает формулу допущений рядом с
+            графиком и не называет численный результат универсальной истиной.
+          </p>
+        </section>
+
+        <section id="two-evidences" class="atlas-block" data-atlas-block="theorem">
+          <h2>Доказательство и эксперимент дополняют друг друга</h2>
+          <p>
+            Доказанная worst-case граница переносится на все допустимые входы в
+            выбранной модели, но может быть грубой для конкретных данных.
+            Бенчмарк показывает реальные константы и системные эффекты, но
+            охватывает конечный набор входов и одну среду. Практический выбор
+            сильнее, когда у него есть оба основания: теоретическая гарантия и
+            воспроизводимое измерение.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: теория встречается с измерительной моделью</h2>
+          <p>
+            Настройте коэффициенты линейного, квазилинейного и квадратичного
+            алгоритмов, диапазон входов и штраф за выход рабочего набора из
+            кэша. График отдельно показывает математическое число операций и
+            синтетическую наблюдаемую стоимость, отмечает все точки пересечения
+            и не выдаёт экспериментальную модель за физическое измерение.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="polynomial-efficiency"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>От класса роста к инженерному решению</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Во сколько раз растёт $n^5$ при удвоении $n$?</p><details><summary>Показать решение</summary><p>В $2^5=32$ раза по ведущему члену.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Какой алгоритм асимптотически лучше: $50n\log_2n$ или $n^2$?</p><details><summary>Показать решение</summary><p>Первый, поскольку $\log n=o(n)$. Это не определяет победителя на малых $n$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Найдите точку пересечения $100n$ и $n^2$ для положительного $n$.</p><details><summary>Показать решение</summary><p>$100n=n^2$, поэтому нетривиальное пересечение $n=100$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Почему $O(nW)$ для двоичного $W$ не доказывает полиномиальное время?</p><details><summary>Показать решение</summary><p>Размер записи $W$ равен $\Theta(\log W)$, поэтому множитель $W$ экспоненциален по длине этого поля.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Является ли всякий strongly polynomial алгоритм полиномиальным в битовой модели?</p><details><summary>Показать решение</summary><p>При стандартном определении да: число операций и длины промежуточных чисел полиномиально ограничены, поэтому их битовая реализация тоже полиномиальна.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Приведите параметр, полезный для поиска пути в графе.</p><details><summary>Показать решение</summary><p>Например, ширина дерева, длина искомого пути или число особых вершин; нужно затем явно дать зависимость времени от выбранного параметра.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Почему два алгоритма с $\Theta(n)$ могут иметь разные скачки времени?</p><details><summary>Показать решение</summary><p>Кэш, шаблон обращений, векторизация и константы не видны в классе $\Theta(n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Найдите дефект бенчмарка: для каждого алгоритма выбран его лучший набор данных.</p><details><summary>Показать решение</summary><p>Наборы несопоставимы и выбраны после результата; нужен заранее определённый общий корпус или обоснованные отдельные сценарии.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Может ли экспоненциальный алгоритм быть разумным?</p><details><summary>Показать решение</summary><p>Да, при малом ограниченном размере, хорошей параметризации или когда требуется точный ответ и лучшего метода нет. Ограничение нужно назвать.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Какие два свидетельства нужны для сильного практического вывода?</p><details><summary>Показать решение</summary><p>Теоретическая гарантия в явной модели и воспроизводимые измерения на заранее описанных данных и среде.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Alan Cobham, <a href="https://philpapers.org/rec/COBTIC" target="_blank" rel="noopener noreferrer">The Intrinsic Computational Difficulty of Functions</a>, 1965 — первичная формулировка полиномиальной машинной устойчивости.</li>
+            <li>Jack Edmonds, <a href="https://doi.org/10.4153/CJM-1965-045-4" target="_blank" rel="noopener noreferrer">Paths, Trees, and Flowers</a>, 1965 — «good algorithm» и полиномиальная граница.</li>
+            <li>Dušan Tardos, <a href="https://doi.org/10.1287/opre.34.2.250" target="_blank" rel="noopener noreferrer">A Strongly Polynomial Algorithm to Solve Combinatorial Linear Programs</a>, 1986 — точная область сильно полиномиального результата.</li>
+            <li>Michael R. Garey, David S. Johnson, <a href="https://doi.org/10.1145/322077.322090" target="_blank" rel="noopener noreferrer">Strong NP-Completeness Results</a>, 1978 — сильная и слабая NP-полнота, роль псевдополиномиальных алгоритмов.</li>
+            <li>Cornell CS5220, <a href="https://www.cs.cornell.edu/courses/cs5220/2024fa/notes/01-perf-basics.html" target="_blank" rel="noopener noreferrer">Performance Basics</a> — связь асимптотики с памятью, константами и измерением.</li>
+            <li>ACM SIGPLAN, <a href="https://www.sigplan-pages.sigplan.hosting.acm.org/Resources/EmpiricalEvaluation/" target="_blank" rel="noopener noreferrer">Empirical Evaluation Guidelines</a> — воспроизводимая постановка экспериментальных утверждений.</li>
+            <li>ACM SIGMOD, <a href="https://reproducibility.sigmodconf.hosting.acm.org/index.html" target="_blank" rel="noopener noreferrer">Reproducibility</a> — требования к данным, конфигурации и артефактам эксперимента.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

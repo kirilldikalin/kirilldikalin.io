@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модели вычислений: RAM, word-RAM и битовая сложность — Алгоритмический атлас</title>
+  <meta name="description" content="Почему одна арифметическая операция может стоить по-разному: RAM, word-RAM, логарифмическая и битовая модели вычислений">
+  <meta property="og:title" content="Модели вычислений: RAM, word-RAM и битовая сложность — Алгоритмический атлас">
+  <meta property="og:description" content="Как выбрать элементарную операцию, посчитать память и не принять абстрактную машину за реальный процессор">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/computation-models.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/computation-models.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/computation-models-core.js" defer></script>
+  <script src="../labs/computation-models.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="computation-models">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Модели вычислений</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.9</p>
+      <h1>Модели вычислений: RAM, word-RAM и битовая сложность</h1>
+      <p class="atlas-chapter-intro">
+        Одинаковая строка псевдокода может иметь постоянную, логарифмическую или
+        зависящую от длины числа цену — всё решает выбранная модель вычислений
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 75 минут</span><span>4 модели стоимости</span>
+        <span>1 пошаговая лаборатория</span><span>9 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#why-model">Зачем нужна модель</a></li>
+          <li><a href="#ram">Unit-cost RAM</a></li>
+          <li><a href="#word-ram">Word-RAM</a></li>
+          <li><a href="#log-cost">Логарифмическая цена</a></li>
+          <li><a href="#bit-complexity">Битовая сложность</a></li>
+          <li><a href="#memory">Память и адреса</a></li>
+          <li><a href="#pseudo">Псевдополиномиальность</a></li>
+          <li><a href="#processors">Абстракция и процессор</a></li>
+          <li><a href="#comparison">Один алгоритм, разные счета</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="why-model">
+          <h2>Цена шага не существует сама по себе</h2>
+          <p>
+            Фраза «алгоритм сделал сто операций» неполна. Сложение двух
+            32-битных слов, сложение двух чисел по миллиону бит и чтение блока с
+            диска — три разных действия, хотя в псевдокоде каждое может занимать
+            одну строку. Модель вычислений фиксирует доступные состояния,
+            элементарные команды и цену каждой команды. Только после этого
+            число шагов становится математической величиной.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Модель стоимости</h3>
+            <p>
+              Для выполнения $e_1,e_2,\ldots,e_t$ выберем функцию цены
+              $C(e_i)\ge0$. Полная модельная стоимость равна
+            </p>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-model-cost}{C_{\mathcal M}}
+                =\sum_{i=1}^{t}\class{atlas-notation-token notation-id-operation-cost}{C(e_i)}.
+              \]
+            </div>
+            <p>
+              Индекс \(\mathcal M\) напоминает: при другой модели та же трасса
+              команд получает другую сумму. Это не погрешность измерения, а
+              другое строго сформулированное утверждение.
+            </p>
+          </section>
+        </section>
+
+        <section id="ram">
+          <h2>Unit-cost RAM: удобная идеализация</h2>
+          <p>
+            RAM-машина хранит целые числа в пронумерованных регистрах, умеет за
+            один шаг читать регистр по адресу, записывать значение, выполнять
+            арифметическую или логическую команду и менять счётчик команд.
+            В простейшей unit-cost версии каждая разрешённая команда стоит
+            единицу независимо от величины операндов.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-unit-cost}{C_{\mathrm{unit}}(e)}=1.
+            \]
+          </div>
+          <p>
+            Модель хорошо описывает контрольный поток и число обращений к
+            произвольной памяти. Но без ограничения размера регистра она даёт
+            машине нереалистическую силу: число с экспоненциально многими битами
+            можно умножить за тот же один шаг, что и байт.
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Граница применимости</h3>
+            <p>
+              Unit-cost RAM допустима, когда все обрабатываемые числа помещаются
+              в машинное слово оговорённой длины. Если числа растут вместе со
+              входом, это условие нужно доказать или перейти к другой модели.
+            </p>
+          </section>
+        </section>
+
+        <section id="word-ram">
+          <h2>Word-RAM: слово должно адресовать вход</h2>
+          <p>
+            В word-RAM один регистр содержит ровно
+            $\class{atlas-notation-token notation-id-word-size-w}{w}$ бит.
+            Обычно предполагают $w\ge\lceil\log_2 n\rceil$, чтобы одним словом
+            можно было назвать любую ячейку входа размера $n$. Сложение,
+            сравнение, сдвиг и побитовые операции над словами стоят постоянно;
+            результат снова обрезан до $w$ бит либо переполнение оговорено.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              2^w\ge n
+              \quad\Longleftrightarrow\quad
+              \class{atlas-notation-token notation-id-word-size-w}{w}
+              \ge\lceil\log_2 n\rceil.
+            \]
+          </div>
+          <p>
+            Конкретный набор постоянных команд важен. Если разрешить за один
+            шаг произвольную операцию над всеми $2^w$ битовыми строками,
+            сравнение алгоритмов потеряет смысл. Поэтому результат в word-RAM
+            всегда читается вместе со списком допустимых операций и условием на
+            $w$.
+          </p>
+        </section>
+
+        <section id="log-cost">
+          <h2>Логарифмическая стоимость</h2>
+          <p>
+            Один способ не ограничивать значения регистров — назначить команде
+            цену, зависящую от длины участвующих чисел и адресов. Для
+            неотрицательного целого $z$ положим
+            $\ell(0)=1$, а при $z\ge 1$ —
+            $\ell(z)=\lfloor\log_2 z\rfloor+1$. Тогда чтение регистра с
+            адресом $a$ и обработка операндов $x,y$ могут стоить порядка
+            $\ell(a)+\ell(x)+\ell(y)$.
+          </p>
+          <p>
+            Именно различие между constant-cost и logarithmic-cost RAM было
+            формализовано в ранних исследованиях RAM. Логарифмическая цена
+            устраняет возможность бесплатно переносить и комбинировать
+            неограниченно длинные целые, сохраняя удобную регистровую картину.
+          </p>
+        </section>
+
+        <section id="bit-complexity">
+          <h2>Битовая модель раскрывает арифметику</h2>
+          <p>
+            В битовой модели элементарны действия над отдельными битами или
+            небольшими символами. Сложение $b$-битных чисел требует
+            $\Theta(b)$ битовых действий: перенос может пройти через всю запись.
+            Школьное умножение требует $\Theta(b^2)$, хотя более быстрые
+            алгоритмы дают меньшую асимптотику.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              C_{+}(b)\in\Theta(b),
+              \qquad
+              C_{\times}^{\mathrm{school}}(b)\in\Theta(b^2).
+            \]
+          </div>
+          <p>
+            Поэтому оценка алгоритма Евклида числом делений — полезный верхний
+            слой анализа, но не полная битовая стоимость. Размеры остатков
+            меняются, а каждое деление длинных чисел само является алгоритмом.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Возведение в квадрат</h3>
+            <p>
+              Цикл из $t$ возведений $x\leftarrow x^2$ стоит $t$ операций
+              в неограниченной unit-cost RAM. Но длина $x$ примерно удваивается
+              на каждом шаге. В битовой модели последняя операция может быть
+              дороже суммы многих первых. Число строк псевдокода осталось тем
+              же, изменился предмет измерения.
+            </p>
+          </section>
+        </section>
+
+        <section id="memory">
+          <h2>Адреса и память тоже имеют размер</h2>
+          <p>
+            Произвольный доступ не означает бесконечную память за постоянное
+            число бит. Чтобы обратиться к одной из $m$ ячеек, нужен адрес
+            длины не меньше $\lceil\log_2 m\rceil$. Word-RAM скрывает эту цену
+            внутри слова; битовая модель учитывает её явно.
+          </p>
+          <p>
+            Пространственная сложность также зависит от единицы: $s$ слов по
+            $w$ бит занимают $sw$ бит. Запись «$O(n)$ памяти» неоднозначна,
+            пока не сказано, речь идёт о битах, словах, объектах или ячейках
+            фиксированного размера.
+          </p>
+        </section>
+
+        <section id="pseudo" class="atlas-block" data-atlas-block="proof">
+          <h2>Откуда берётся псевдополиномиальность</h2>
+          <p>
+            Пусть вход содержит целое $N$ в двоичной записи. Его длина равна
+            $\Theta(\log N)$. Динамическая программа, создающая таблицу из
+            $N+1$ ячеек, полиномиальна по числовому значению $N$, но использует
+            $2^{\Theta(|N|)}$ ячеек как функцию длины записи. Такую оценку
+            называют псевдополиномиальной.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              T(N)=\Theta(N)
+              =2^{\Theta(\class{atlas-notation-token notation-id-input-length}{|N|})}.
+            \]
+          </div>
+          <p>
+            В унарной кодировке длина входа уже $\Theta(N)$, и тот же цикл
+            становится обычным линейным. Алгоритм не изменился; изменилась
+            кодировка, а вместе с ней — корректный параметр размера.
+          </p>
+        </section>
+
+        <section id="processors">
+          <h2>Word-RAM — не схема современного CPU</h2>
+          <p>
+            Реальный процессор имеет конвейер, уровни кэша, векторные команды,
+            предсказание переходов и конечную пропускную способность памяти.
+            Word-RAM намеренно отбрасывает эти детали, чтобы выделить структуру
+            алгоритма. Поэтому модель может предсказать класс роста и при этом
+            ошибиться в сравнении двух реализаций на конкретном диапазоне.
+          </p>
+          <p>
+            Это не делает модель бесполезной. Доказательство в чётко заданной
+            модели даёт переносимую гарантию; измерение на оборудовании отвечает
+            на другой вопрос. Хороший инженерный вывод называет оба слоя и не
+            подменяет один другим.
+          </p>
+        </section>
+
+        <section id="comparison">
+          <h2>Одна трасса, четыре честных ответа</h2>
+          <p>
+            Рассмотрим вычисление суммы массива больших целых. В unit-cost RAM
+            получаем $n$ сложений и $n$ чтений. В word-RAM каждое число
+            занимает $\lceil b/w\rceil$ слов, если его длина $b>w$. В
+            логарифмической модели цена растёт с длиной текущей суммы. В битовой
+            — подсчитываются переносы и все прочитанные биты.
+          </p>
+          <table class="atlas-table">
+            <thead><tr><th>Модель</th><th>Единица</th><th>Что необходимо оговорить</th></tr></thead>
+            <tbody>
+              <tr><td>unit-cost RAM</td><td>команда регистра</td><td>ограничение величины операндов</td></tr>
+              <tr><td>word-RAM</td><td>команда над $w$ битами</td><td>размер слова и набор команд</td></tr>
+              <tr><td>log-cost RAM</td><td>длина адресов и чисел</td><td>точная функция цены</td></tr>
+              <tr><td>битовая</td><td>битовая операция</td><td>алгоритм длинной арифметики</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Что чаще всего ломает оценку</h2>
+          <ul>
+            <li>Считать арифметику постоянной, не ограничив длину чисел</li>
+            <li>Сказать «word-RAM», но не назвать $w$ и разрешённые операции</li>
+            <li>Смешать число слов и число бит при оценке памяти</li>
+            <li>Назвать алгоритм полиномиальным по значению числа, забыв длину его записи</li>
+            <li>Выдать модельную стоимость за время на конкретном процессоре</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: одна программа в разных моделях</h2>
+          <p>
+            Выполните одну и ту же трассу над целыми числами. Схема показывает
+            слова памяти, активные биты, обращения и накопленную стоимость сразу
+            в четырёх моделях. Пошаговый режим позволяет увидеть, на какой
+            операции оценки начинают расходиться.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="computation-models"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте модель, прежде чем считать</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Сколько бит нужно, чтобы адресовать массив из $10^6$ ячеек?</p><details><summary>Показать подсказку</summary><p>Возьмите потолок двоичного логарифма.</p></details><details><summary>Показать решение</summary><p>$\lceil\log_2 10^6\rceil=20$, поскольку $2^{19}&lt;10^6&lt;2^{20}$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> При $w=64$ сколько слов занимает 1000-битное число?</p><details><summary>Показать подсказку</summary><p>Последнее слово может быть заполнено не полностью.</p></details><details><summary>Показать решение</summary><p>$\lceil1000/64\rceil=16$ слов.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Почему unit-cost умножение неограниченных целых искажает анализ?</p><details><summary>Показать решение</summary><p>Одна команда может обработать экспоненциально растущее число бит бесплатно; физический объём данных и битовая работа исчезают из оценки.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Оцените битовую цену сложения $n$ чисел длины не более $b$ бит.</p><details><summary>Показать подсказку</summary><p>Длина суммы может вырасти на $\lceil\log_2 n\rceil$ бит.</p></details><details><summary>Показать решение</summary><p>Последовательное сложение даёт $O(n(b+\log n))$ битовых операций.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Таблица размера $N^2$ строится по двоичному $N$. Полиномиальна ли она по входу?</p><details><summary>Показать решение</summary><p>Нет: $N^2=2^{\Theta(|N|)}$. Это псевдополиномиальная зависимость.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> В какой модели операция XOR двух 1024-битных строк постоянна?</p><details><summary>Показать решение</summary><p>В word-RAM только при $w\ge1024$ и если XOR входит в набор единичных команд. При фиксированном $w=64$ нужно 16 слов.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Найдите ошибку: «Бинарный поиск работает за $O(\log n)$ наносекунд».</p><details><summary>Показать решение</summary><p>Асимптотика считает модельные операции, а не задаёт единицу физического времени. Нужны модель сравнения/доступа и измерение реализации.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Почему $O(n)$ слов и $O(n)$ бит — разные гарантии?</p><details><summary>Показать решение</summary><p>Слово содержит $w$ бит, обычно $w=\Omega(\log n)$. Поэтому $n$ слов занимают $O(nw)$, а не обязательно $O(n)$ бит.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Предложите честную модель для сравнения алгоритмов длинного умножения.</p><details><summary>Показать решение</summary><p>Битовая модель или word-RAM с фиксированным $w$, где цена считается по числу операций над словами; нужно также определить представление чисел.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>S. A. Cook, R. A. Reckhow, <a href="https://doi.org/10.1016/S0022-0000(73)80029-7" target="_blank" rel="noopener noreferrer">Time Bounded Random Access Machines</a>, 1973 — формализация RAM и двух вариантов цены команд.</li>
+            <li>Torben Hagerup, <a href="https://doi.org/10.1007/BFb0028575" target="_blank" rel="noopener noreferrer">Sorting and Searching on the Word RAM</a>, 1998 — модель word-RAM и алгоритмы над машинными словами.</li>
+            <li>Michael L. Fredman, Dan E. Willard, <a href="https://doi.org/10.1016/S0022-0000(05)80064-9" target="_blank" rel="noopener noreferrer">Surpassing the Information Theoretic Bound with Fusion Trees</a>, 1994 — явные trans-dichotomous допущения о слове.</li>
+            <li>MIT OpenCourseWare, <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/pages/readings/" target="_blank" rel="noopener noreferrer">Mathematics for Computer Science</a> — академические материалы о моделях стоимости и длине записи.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
