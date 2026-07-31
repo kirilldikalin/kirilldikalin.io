@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Методы доказательства и математическая индукция — Алгоритмический атлас</title>
+  <meta name="description" content="Прямое доказательство, контрапозиция, противоречие, индукция, минимальный контрпример и структурная индукция">
+  <meta property="og:title" content="Методы доказательства и математическая индукция — Алгоритмический атлас">
+  <meta property="og:description" content="Как выбрать форму доказательства и связать каждый вывод с его предпосылками">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/proof-methods-induction.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/proof-methods-induction.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {packages: {'[+]': ['html']}, inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true, processEnvironments: true},
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/proof-methods-induction-core.js" defer></script>
+  <script src="../labs/proof-methods-induction.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="proof-methods-induction">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Методы доказательства</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.4</p>
+      <h1>Методы доказательства и математическая индукция</h1>
+      <p class="atlas-chapter-intro">
+        Доказательство — не убедительный пример, а цепочка выводов, в которой
+        область утверждения, предпосылки и причина каждого шага остаются видимы
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 85 минут</span><span>8 методов</span>
+        <span>1 граф доказательства</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#proof-object">Что делает доказательство</a></li>
+          <li><a href="#direct">Прямой метод</a></li>
+          <li><a href="#contrapositive">Контрапозиция</a></li>
+          <li><a href="#contradiction">Противоречие</a></li>
+          <li><a href="#cases">Разбор случаев</a></li>
+          <li><a href="#induction">Обычная индукция</a></li>
+          <li><a href="#strong">Сильная индукция</a></li>
+          <li><a href="#structural">Структурная индукция</a></li>
+          <li><a href="#minimal">Минимальный контрпример</a></li>
+          <li><a href="#counterexample">Роль контрпримера</a></li>
+          <li><a href="#experiment">Пример, эксперимент, доказательство</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="proof-object">
+          <h2>Утверждение определяет форму проверки</h2>
+          <p>
+            Доказательство начинается не с вычислений, а с точной логической
+            формы. Для $\forall x\in X:P(x)$ нужно охватить произвольный элемент
+            области. Для $\exists x:P(x)$ достаточно предъявить один свидетель.
+            Для импликации $P\Rightarrow Q$ нельзя начинать с предположения, что
+            $Q$ уже верно.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Локальная обязанность</h3>
+            <p>
+              Каждый шаг графа доказательства имеет входные факты и вывод.
+              Шаг допустим, если его правило вывода применимо ко всем входным
+              фактам. Порядок изложения может меняться, но зависимость вывода от
+              ещё не установленной леммы делает цепочку незамкнутой.
+            </p>
+          </section>
+        </section>
+
+        <section id="direct">
+          <h2>Прямое доказательство раскрывает определения</h2>
+          <p>
+            Чтобы доказать $P\Rightarrow Q$, предположим $P$ и посредством
+            известных равенств, неравенств и определений получим $Q$. Например,
+            сумма двух чётных чисел чётна: $a=2k$, $b=2\ell$, поэтому
+            $a+b=2(k+\ell)$.
+          </p>
+          <p>
+            Сила примера не в арифметике, а в произвольности $k,\ell\in\mathbb Z$.
+            Проверка $2+4=6$ показывает только один экземпляр; разложение
+            $2(k+\ell)$ охватывает всю область.
+          </p>
+        </section>
+
+        <section id="contrapositive">
+          <h2>Контрапозиция меняет направление, но не смысл</h2>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              (P\Rightarrow Q)\iff(\neg Q\Rightarrow\neg P).
+            \]
+          </div>
+          <p>
+            Утверждение «если $n^2$ чётно, то $n$ чётно» неудобно доказывать
+            прямым извлечением корня. Контрапозиция проста: если $n=2k+1$, то
+            $n^2=4k(k+1)+1$ нечётно. Мы доказали логически эквивалентную
+            импликацию, а не «обратное утверждение» $Q\Rightarrow P$.
+          </p>
+        </section>
+
+        <section id="contradiction">
+          <h2>Противоречие временно допускает отрицание цели</h2>
+          <p>
+            Для доказательства $P$ предположим $\neg P$ и выведем невозможность:
+            одновременно $R$ и $\neg R$, нарушение установленной границы либо
+            отсутствие элемента, который обязан существовать. Тогда отрицание
+            отвергается.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Простых чисел бесконечно много</h3>
+            <p>
+              Допустим, все простые равны $p_1,\ldots,p_k$. Число
+              $N=p_1\cdots p_k+1$ не делится ни на одно $p_i$, поскольку остаток
+              равен единице. Но $N>1$ имеет простой делитель. Этот делитель не
+              входит в полный список — противоречие.
+            </p>
+          </section>
+          <p>
+            Противоречие должно возникнуть из отрицания цели вместе с уже
+            доказанными фактами. Фраза «результат выглядит странно» не является
+            логическим противоречием.
+          </p>
+        </section>
+
+        <section id="cases">
+          <h2>Разбор случаев требует полного покрытия</h2>
+          <p>
+            Если область разбита на $C_1,\ldots,C_m$, докажем утверждение в
+            каждом случае и отдельно убедимся, что
+            $C_1\cup\cdots\cup C_m=X$. Случаи могут пересекаться — это не
+            ошибка; опасен пропуск части области.
+          </p>
+          <p>
+            Например, для любого целого $n$ число $n(n+1)$ чётно. Если $n$
+            чётно, готов первый множитель; если нечётно, $n+1$ чётно. Чётность
+            даёт полное разбиение целых.
+          </p>
+        </section>
+
+        <section id="induction">
+          <h2>Индукция переносит факт на следующий индекс</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Принцип математической индукции</h3>
+            <p>
+              Если
+              $\class{atlas-notation-token notation-id-induction-proposition}{P(n_0)}$
+              истинно и для каждого $k\ge n_0$ из
+              $\class{atlas-notation-token notation-id-induction-proposition}{P(k)}$
+              следует
+              $\class{atlas-notation-token notation-id-induction-proposition}{P(k+1)}$,
+              то
+              $\class{atlas-notation-token notation-id-induction-proposition}{P(n)}$
+              истинно для всех $n\ge n_0$.
+            </p>
+          </section>
+          <p>
+            Для суммы первых натуральных чисел база $n=1$ даёт $1=1\cdot2/2$.
+            В переходе предполагаем
+            $\sum_{i=1}^{k}i=k(k+1)/2$ и добавляем $k+1$:
+          </p>
+          <div class="atlas-math">
+            \[
+              \sum_{i=1}^{k+1}i
+              =\frac{k(k+1)}2+(k+1)
+              =\frac{(k+1)(k+2)}2.
+            \]
+          </div>
+          <p>
+            Индукционное предположение не утверждает результат без доказательства:
+            оно используется внутри условного шага $P(k)\Rightarrow P(k+1)$.
+            База запускает эту цепочку.
+          </p>
+        </section>
+
+        <section id="strong">
+          <h2>Сильная индукция разрешает весь меньший префикс</h2>
+          <p>
+            В сильной форме переход использует
+            $P(n_0),P(n_0+1),\ldots,P(k)$ для доказательства $P(k+1)$. Она
+            логически эквивалентна обычной, но естественнее для рекуррентных
+            объектов, которые распадаются на части разных размеров.
+          </p>
+          <p>
+            Например, каждое целое $n\ge2$ раскладывается в произведение простых.
+            Если $n$ простое, всё готово. Если составное, $n=ab$ с
+            $2\le a,b&lt;n$; сильное предположение применимо к обоим множителям.
+          </p>
+        </section>
+
+        <section id="structural">
+          <h2>Структурная индукция следует конструктору объекта</h2>
+          <p>
+            Натуральный индекс не всегда виден. Списки строятся из пустого
+            списка и операции добавления, деревья — из листа и узла с
+            поддеревьями, формулы — из атомов и грамматических конструкторов.
+            Структурная индукция доказывает свойство для базовых объектов и
+            показывает, что каждый конструктор сохраняет его.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Число рёбер дерева выражений</h3>
+            <p>
+              В полном бинарном дереве с $L$ листьями число внутренних вершин
+              равно $L-1$. Для листа $L=1$, внутренних вершин нет. Если корень
+              соединяет деревья с $L_1,L_2$ листьями, внутренних вершин
+              $(L_1-1)+(L_2-1)+1=L_1+L_2-1$.
+            </p>
+          </section>
+        </section>
+
+        <section id="minimal">
+          <h2>Минимальный контрпример превращается в меньший</h2>
+          <p>
+            Предположим, утверждение ложно, и выберем наименьший по
+            well-founded порядку контрпример $x$. Если из $x$ можно построить
+            меньший контрпример, минимальность нарушена. Метод использует тот же
+            фундамент, что и сильная индукция: в непустом множестве натуральных
+            есть минимальный элемент.
+          </p>
+          <p>
+            Минимальность нужно задавать по порядку без бесконечного спуска.
+            «Возьмём самый простой контрпример» не работает, пока простота не
+            определена и не доказано существование минимума.
+          </p>
+        </section>
+
+        <section id="counterexample">
+          <h2>Контрпример опровергает универсальное утверждение</h2>
+          <p>
+            Для опровержения $\forall x:P(x)$ достаточно одного $x$ с
+            $\neg P(x)$. Например, «любое отношение транзитивно» опровергается
+            отношением $\{(1,2),(2,3)\}$ без пары $(1,3)$. Контрпример не
+            доказывает исправленную версию; он точно показывает, где исходная
+            формулировка слишком широка.
+          </p>
+        </section>
+
+        <section id="experiment" class="atlas-block" data-atlas-block="warning">
+          <h2>Пример, эксперимент и доказательство делают разную работу</h2>
+          <ul>
+            <li>Пример помогает понять определение и проверить вычисление</li>
+            <li>Эксперимент ищет закономерность или контрпример на конечном наборе</li>
+            <li>Доказательство охватывает всю область кванторов</li>
+          </ul>
+          <p>
+            Миллион успешных тестов универсального утверждения остаётся
+            конечным набором. Один неуспешный тест может его опровергнуть, но
+            отсутствие найденного контрпримера не доказывает истинность.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: соберите граф доказательства</h2>
+          <p>
+            Выберите утверждение и добавляйте шаги. Вершина становится доступной
+            только после всех логических предпосылок; попытка нарушить порядок
+            показывает, какая именно лемма отсутствует и почему вывод пока не
+            следует. Граф можно проходить шагами или автоматически.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="proof-methods-induction"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Выберите метод и замкните цепочку</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Докажите напрямую: сумма двух нечётных чисел чётна.</p><details><summary>Показать решение</summary><p>$(2a+1)+(2b+1)=2(a+b+1)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Докажите контрапозицией: если $ab$ нечётно, то $a$ и $b$ нечётны.</p><details><summary>Показать решение</summary><p>Если хотя бы один множитель чётен, произведение чётно. Это отрицание заключения влечёт отрицание предпосылки.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Почему пример $3^2+4^2=5^2$ не доказывает, что сумма квадратов любых двух целых чисел является квадратом?</p><details><summary>Показать решение</summary><p>Проверен один набор значений, а универсальный квантор по всем числам не охвачен.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Докажите индукцией $\sum_{i=1}^{n}(2i-1)=n^2$.</p><details><summary>Показать подсказку</summary><p>К $k^2$ добавьте $2k+1$.</p></details><details><summary>Показать решение</summary><p>База $1=1$. Переход: $k^2+(2k+1)=(k+1)^2$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Почему в предыдущем доказательстве нужна база?</p><details><summary>Показать решение</summary><p>Переход лишь переносит истинность; без начального истинного случая цепочка может не начаться.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Когда сильная индукция удобнее обычной?</p><details><summary>Показать решение</summary><p>Когда объект размера $n$ использует несколько меньших размеров, не только $n-1$, например при факторизации или рекурсии.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Сформулируйте структурную индукцию для списков.</p><details><summary>Показать решение</summary><p>Доказать свойство пустого списка и показать: если оно верно для списка $L$, то верно после добавления элемента конструктором.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Найдите контрпример: «если $a\mid bc$, то $a\mid b$ или $a\mid c$».</p><details><summary>Показать решение</summary><p>$a=6$, $b=2$, $c=3$: $6\mid6$, но 6 не делит ни 2, ни 3.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Чем минимальный контрпример связан с завершимостью?</p><details><summary>Показать решение</summary><p>Оба используют well-founded порядок: нельзя бесконечно переходить к строго меньшим элементам.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Разбейте доказательство $n^2\equiv0$ или $1\pmod4$ на полные случаи.</p><details><summary>Показать решение</summary><p>Если $n=2k$, квадрат кратен 4; если $n=2k+1$, $n^2=4k(k+1)+1$.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>MIT OpenCourseWare 18.100A, <a href="https://ocw.mit.edu/courses/18-100a-real-analysis-fall-2020/mit18_100af20_lec_full2.pdf" target="_blank" rel="noopener noreferrer">Complete Lecture Notes</a> — прямые доказательства, противоречие и индукция.</li>
+            <li>Carnegie Mellon University, <a href="https://www.cs.cmu.edu/afs/cs/academic/class/15671-f95/www/handouts/induction/node1.html" target="_blank" rel="noopener noreferrer">Structural Induction</a> — индукция по рекурсивно определённым объектам.</li>
+            <li>Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD819/EWD819.html" target="_blank" rel="noopener noreferrer">Mathematical induction and well-foundedness</a> — первичный текст о связи индукции и well-founded порядка.</li>
+            <li>Stanford Encyclopedia of Philosophy, <a href="https://plato.stanford.edu/entries/induction-problem/#MatInd" target="_blank" rel="noopener noreferrer">Mathematical Induction</a> — различие дедуктивной математической и эмпирической индукции.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

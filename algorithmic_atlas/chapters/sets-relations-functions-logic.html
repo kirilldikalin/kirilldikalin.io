@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Множества, отношения, функции и логика — Алгоритмический атлас</title>
+  <meta name="description" content="Язык дискретной математики для алгоритмов: множества, отношения, порядки, функции, предикаты и кванторы">
+  <meta property="og:title" content="Множества, отношения, функции и логика — Алгоритмический атлас">
+  <meta property="og:description" content="Как точно описывать объекты, связи и требования алгоритма, доказывать свойства и строить контрпримеры">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/sets-relations-functions-logic.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/sets-relations-functions-logic.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/sets-relations-functions-logic-core.js" defer></script>
+  <script src="../labs/sets-relations-functions-logic.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="sets-relations-functions-logic">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Множества, отношения, функции и логика</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.3</p>
+      <h1>Множества, отношения, функции и логика</h1>
+      <p class="atlas-chapter-intro">
+        Единый язык для описания данных, допустимых связей, преобразований и
+        утверждений, которые алгоритм обязан выполнять
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 90 минут</span><span>4 типа отношений</span>
+        <span>3 свойства функций</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#language">Зачем нужен формальный язык</a></li>
+          <li><a href="#sets">Множества и принадлежность</a></li>
+          <li><a href="#operations">Операции над множествами</a></li>
+          <li><a href="#cartesian">Декартово произведение</a></li>
+          <li><a href="#relations">Отношения и их свойства</a></li>
+          <li><a href="#equivalence">Эквивалентность</a></li>
+          <li><a href="#orders">Частичный и линейный порядок</a></li>
+          <li><a href="#functions">Функции</a></li>
+          <li><a href="#mapping-properties">Инъекции, сюръекции и биекции</a></li>
+          <li><a href="#predicates">Предикаты и кванторы</a></li>
+          <li><a href="#negation">Отрицание кванторов</a></li>
+          <li><a href="#algorithms">Применения в алгоритмах</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="language">
+          <h2>Формальный язык отделяет объект от его описания</h2>
+          <p>
+            Алгоритм работает не с «примерно похожими» объектами. Ему нужны
+            точная область допустимых входов, проверяемые связи и однозначные
+            правила преобразования. Множества отвечают на вопрос «какие объекты
+            рассматриваются», отношения — «какие пары связаны», функции —
+            «какой результат сопоставлен каждому входу», а логика — «какое
+            утверждение об этих объектах истинно».
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Одна задача в четырёх слоях</h3>
+            <p>
+              При сортировке множество $X$ может состоять из всех массивов
+              длины $n$; отношение $\preceq$ сравнивает элементы; функция
+              $\operatorname{sort}:X\to X$ возвращает перестановку входа;
+              спецификация утверждает, что для всех соседних позиций результата
+              выполнено $a_i\preceq a_{i+1}$. Смешать эти роли — значит получить
+              требование, которое невозможно ни выполнить, ни доказать.
+            </p>
+          </section>
+        </section>
+
+        <section id="sets">
+          <h2>Множество определяется своими элементами</h2>
+          <p>
+            Запись $x\in A$ означает, что объект $x$ принадлежит множеству $A$;
+            $x\notin A$ — что не принадлежит. Порядок перечисления и повторы не
+            важны: $\{1,2,2\}=\{2,1\}$. Два множества равны тогда и только тогда,
+            когда у них совпадают все элементы.
+          </p>
+          <div class="atlas-math">
+            \[
+              A=B\quad\Longleftrightarrow\quad
+              \forall x\,(x\in A\Longleftrightarrow x\in B).
+            \]
+          </div>
+          <p>
+            Включение $A\subseteq B$ означает
+            $\forall x\,(x\in A\Rightarrow x\in B)$. Оно допускает равенство.
+            Строгое включение требует дополнительно $A\ne B$. Пустое множество
+            $\varnothing$ включено в любое множество: условие о каждом его
+            элементе истинно, потому что элементов для контрпримера нет.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Задание по свойству</h3>
+            <p>
+              Конструкция $\{x\in U:P(x)\}$ выбирает из заранее указанного
+              универсума $U$ те и только те объекты, для которых истинен предикат
+              $P$. Указание $U$ важно: выражение «множество всех $x$» без области
+              рассуждения может быть неоднозначным или вовсе некорректным.
+            </p>
+          </section>
+        </section>
+
+        <section id="operations">
+          <h2>Операции переводятся в логические связки</h2>
+          <ul>
+            <li>$A\cup B$: элементы, принадлежащие $A$ или $B$</li>
+            <li>$A\cap B$: элементы, принадлежащие одновременно $A$ и $B$</li>
+            <li>$A\setminus B$: элементы $A$, не принадлежащие $B$</li>
+            <li>$\overline A=U\setminus A$: дополнение относительно универсума $U$</li>
+            <li>$\mathcal P(A)$: множество всех подмножеств $A$</li>
+          </ul>
+          <p>
+            Если $|A|=n$ и $A$ конечно, то $|\mathcal P(A)|=2^n$: для каждого
+            элемента независимо выбирается один из двух вариантов — включить
+            или не включить. Это не просто формула: полный перебор подмножеств
+            уже содержит $2^n$ различных кандидатов.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Первый закон де Моргана</h3>
+            <div class="atlas-math">
+              \[
+                \overline{A\cup B}=\overline A\cap\overline B.
+              \]
+            </div>
+            <p>
+              Возьмём произвольный $x$ из универсума. Он находится слева тогда
+              и только тогда, когда $x\notin A\cup B$, то есть одновременно
+              $x\notin A$ и $x\notin B$. Это в точности условие принадлежности
+              правой части. Эквивалентность верна для каждого $x$, следовательно,
+              множества равны по принципу экстенсиональности.
+            </p>
+          </section>
+        </section>
+
+        <section id="cartesian">
+          <h2>Декартово произведение хранит порядок компонентов</h2>
+          <div class="atlas-math">
+            \[
+              A\times B=\{(a,b):a\in A,\ b\in B\}.
+            \]
+          </div>
+          <p>
+            В общем случае $(a,b)\ne(b,a)$. Если множества конечны, то
+            $|A\times B|=|A|\,|B|$: для каждого первого компонента доступны все
+            варианты второго. Таблица базы данных с двумя столбцами, множество
+            рёбер ориентированного графа и пространство пар входных параметров
+            естественно живут внутри декартова произведения.
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Пара не является двухэлементным множеством</h3>
+            <p>
+              Множества $\{a,b\}$ и $\{b,a\}$ равны, а пары $(a,b)$ и $(b,a)$
+              могут различаться. Замена пары множеством уничтожает направление
+              ребра и роли «ключ — значение».
+            </p>
+          </section>
+        </section>
+
+        <section id="relations">
+          <h2>Отношение — выбранные пары</h2>
+          <p>
+            Бинарное отношение между $A$ и $B$ — любое подмножество
+            $\class{atlas-notation-token notation-id-relation-r}{R}
+            \subseteq A\times B$. Для отношения на $A$ пишут $aRb$ вместо
+            $(a,b)\in R$. Свойства ниже имеют разные кванторы и не следуют друг
+            из друга.
+          </p>
+          <dl>
+            <dt>Рефлексивность</dt><dd>$\forall a\in A\colon aRa$</dd>
+            <dt>Симметричность</dt><dd>$\forall a,b\colon aRb\Rightarrow bRa$</dd>
+            <dt>Антисимметричность</dt><dd>$\forall a,b\colon aRb\land bRa\Rightarrow a=b$</dd>
+            <dt>Транзитивность</dt><dd>$\forall a,b,c\colon aRb\land bRc\Rightarrow aRc$</dd>
+          </dl>
+          <section class="atlas-block" data-atlas-block="counterexample">
+            <h3>Антисимметричность не означает «никогда в обе стороны»</h3>
+            <p>
+              Отношение $\subseteq$ антисимметрично, хотя $A\subseteq A$ верно
+              в обе стороны с самим собой. Оно запрещает двустороннюю связь
+              только для различных объектов. Отношение «не равно», напротив,
+              симметрично, но не антисимметрично и не транзитивно.
+            </p>
+          </section>
+        </section>
+
+        <section id="equivalence">
+          <h2>Эквивалентность разбивает множество на классы</h2>
+          <p>
+            Отношение эквивалентности рефлексивно, симметрично и транзитивно.
+            Класс элемента $a$ — множество $[a]=\{x\in A:xRa\}$. Например,
+            равенство остатков по модулю $m$ объединяет все целые числа в $m$
+            классов.
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Классы либо совпадают, либо не пересекаются</h3>
+            <p>
+              Для любых $a,b$ классы $[a]$ и $[b]$ равны или не имеют общих
+              элементов. Поэтому классы эквивалентности образуют разбиение $A$.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство</h3>
+            <p>
+              Пусть нашёлся $z\in[a]\cap[b]$. Тогда $zRa$ и $zRb$.
+              Симметричность даёт $aRz$, а транзитивность — $aRb$. Если
+              $x\in[a]$, то $xRa$ и $aRb$, значит, $xRb$ и $x\in[b]$.
+              Получили $[a]\subseteq[b]$; симметричный аргумент даёт обратное
+              включение. Если общего $z$ нет, классы не пересекаются.
+            </p>
+          </section>
+          <p>
+            Структура непересекающихся множеств хранит именно такое разбиение:
+            операция объединения добавляет эквивалентность, а поиск возвращает
+            представителя класса.
+          </p>
+        </section>
+
+        <section id="orders">
+          <h2>Порядок допускает несравнимые элементы</h2>
+          <p>
+            Частичный порядок рефлексивен, антисимметричен и транзитивен.
+            В линейном порядке дополнительно любые $a,b$ сравнимы: $aRb$ или
+            $bRa$. Обычное $\le$ на числах линейно; включение $\subseteq$ на
+            подмножествах частично, но не линейно — множества $\{1\}$ и $\{2\}$
+            несравнимы.
+          </p>
+          <p>
+            На диаграмме Хассе рефлексивные петли и транзитивные рёбра не рисуют:
+            оставляют только непосредственные переходы вверх. Минимальный элемент
+            не обязан быть наименьшим. Минимальных может быть несколько, а
+            наименьший, если существует, сравним со всеми и единственен.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Зависимости задач</h3>
+            <p>
+              Отношение «должна быть выполнена раньше» задаёт частичный порядок,
+              если циклов нет. Топологическая сортировка выбирает один из
+              возможных линейных порядков, согласованных с ним. Она не утверждает,
+              что исходные независимые задачи внезапно стали сравнимыми.
+            </p>
+          </section>
+        </section>
+
+        <section id="functions">
+          <h2>Функция выбирает ровно один результат для каждого входа</h2>
+          <p>
+            Функция $f:A\to B$ обязана сопоставить каждому $a\in A$ ровно один
+            элемент $f(a)\in B$. Множество $A$ — область определения, $B$ —
+            кодомен, а $f(A)=\{f(a):a\in A\}$ — образ. Образ может быть строго
+            меньше кодомена.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              f:\class{atlas-notation-token notation-id-input-set-x}{X}
+              \longrightarrow
+              \class{atlas-notation-token notation-id-output-set-y}{Y}.
+            \]
+          </div>
+          <p>
+            Формально функцию можно рассматривать как специальное отношение:
+            для каждого входа существует единственная связанная выходная точка.
+            Частичная функция допускает входы без результата; это отдельное
+            понятие и должно быть обозначено явно.
+          </p>
+          <p>
+            Композиция $(g\circ f)(a)=g(f(a))$ определена, когда выходы $f$
+            подходят как входы $g$. Она ассоциативна, но обычно не коммутативна:
+            порядок преобразований важен.
+          </p>
+        </section>
+
+        <section id="mapping-properties">
+          <h2>Инъекция, сюръекция и биекция отвечают на разные вопросы</h2>
+          <ul>
+            <li>Инъекция: $f(a_1)=f(a_2)\Rightarrow a_1=a_2$ — разные входы не склеиваются</li>
+            <li>Сюръекция: $\forall b\in B\ \exists a\in A\colon f(a)=b$ — весь кодомен покрыт</li>
+            <li>Биекция: функция одновременно инъективна и сюръективна</li>
+          </ul>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Обратимы ровно биекции</h3>
+            <p>
+              Существует функция $f^{-1}:B\to A$ с
+              $f^{-1}\circ f=\operatorname{id}_A$ и
+              $f\circ f^{-1}=\operatorname{id}_B$ тогда и только тогда, когда
+              $f$ биективна.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему нужны оба свойства</h3>
+            <p>
+              Если обратная существует и $f(a_1)=f(a_2)$, применение $f^{-1}$
+              даёт $a_1=a_2$, значит, $f$ инъективна. Для любого $b\in B$
+              элемент $a=f^{-1}(b)$ удовлетворяет $f(a)=b$, значит, $f$
+              сюръективна. Обратно, у биекции каждый $b$ имеет ровно один
+              прообраз; назначение этого прообраза и определяет $f^{-1}$.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="counterexample">
+            <h3>Кодомен меняет ответ</h3>
+            <p>
+              Функция $f(n)=n^2$ из $\mathbb Z$ в $\mathbb Z$ не инъективна и
+              не сюръективна. Та же формула из $\mathbb N_0$ в множество
+              квадратов неотрицательных чисел — биекция. Свойства принадлежат
+              не формуле в одиночку, а функции вместе с областью и кодоменом.
+            </p>
+          </section>
+        </section>
+
+        <section id="predicates">
+          <h2>Предикат становится утверждением после подстановки или квантора</h2>
+          <p>
+            Предикат $P(x)$ — выражение, истинность которого зависит от $x$.
+            В $\forall x\in A\ P(x)$ утверждается истинность для каждого элемента
+            области; в $\exists x\in A\ P(x)$ — существование хотя бы одного
+            свидетеля. Переменная внутри области действия квантора связана;
+            свободная переменная оставляет формулу открытой.
+          </p>
+          <div class="atlas-math">
+            \[
+              \forall x\in A\ \exists y\in B\ P(x,y)
+            \]
+          </div>
+          <p>
+            Здесь свидетель $y$ может зависеть от $x$. Перестановка кванторов
+            требует одного общего $y$ для всех $x$ и обычно меняет смысл.
+            Например, над целыми $\forall x\ \exists y\colon y&gt;x$ истинно,
+            а $\exists y\ \forall x\colon y&gt;x$ ложно.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Спецификация поиска</h3>
+            <p>
+              Корректный поиск индекса можно записать так: если алгоритм вернул
+              $i$, то $0\le i&lt;n$ и $a_i=v$; если вернул «не найдено», то
+              $\forall j\in\{0,\ldots,n-1\}\colon a_j\ne v$. Вторая ветвь
+              требует универсального утверждения, а не отсутствия совпадений в
+              нескольких проверенных позициях.
+            </p>
+          </section>
+        </section>
+
+        <section id="negation">
+          <h2>Отрицание проходит сквозь квантор и меняет его тип</h2>
+          <div class="atlas-math">
+            \[
+              \neg\forall x\,P(x)\Longleftrightarrow\exists x\,\neg P(x),
+              \qquad
+              \neg\exists x\,P(x)\Longleftrightarrow\forall x\,\neg P(x).
+            \]
+          </div>
+          <p>
+            Поэтому отрицание нескольких кванторов выполняется по одному слою,
+            сохраняя их порядок:
+          </p>
+          <div class="atlas-math">
+            \[
+              \neg\bigl(\forall x\ \exists y\ P(x,y)\bigr)
+              \Longleftrightarrow
+              \exists x\ \forall y\ \neg P(x,y).
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Смысл контрпримера</h3>
+            <p>
+              Чтобы опровергнуть «для каждого входа существует подходящий
+              ответ», недостаточно назвать вход и один неудачный ответ. Нужно
+              предъявить вход, для которого не подходит ни один ответ. Именно
+              это выражают кванторы $\exists x\forall y$ после отрицания.
+            </p>
+          </section>
+        </section>
+
+        <section id="algorithms">
+          <h2>Где этот язык появляется в алгоритмах</h2>
+          <ul>
+            <li>Множество состояний задаёт все допустимые конфигурации вычисления</li>
+            <li>Отношение перехода соединяет текущую конфигурацию со следующей</li>
+            <li>Эквивалентность позволяет хранить компоненты и фактор-множества</li>
+            <li>Частичный порядок описывает зависимости и допустимые расписания</li>
+            <li>Функция хеширования сопоставляет ключу ячейку, но не обязана быть инъективной</li>
+            <li>Кванторы формулируют предусловия, постусловия и инварианты</li>
+          </ul>
+          <p>
+            Даже простой цикл над массивом использует все четыре слоя: индексы
+            образуют множество, порядок индексов определяет обход, чтение
+            массива — функция от индекса к значению, а условие цикла — предикат.
+            Формализация полезна не ради символов, а чтобы увидеть скрытые
+            предположения до написания кода.
+          </p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что часто путают</h2>
+          <ul>
+            <li>$x\in A$ связывает элемент с множеством, а $A\subseteq B$ — два множества</li>
+            <li>Пара $(a,b)$ хранит порядок, множество $\{a,b\}$ — нет</li>
+            <li>Симметричность и антисимметричность не являются отрицаниями друг друга</li>
+            <li>Частичный порядок не обязан сравнивать каждую пару</li>
+            <li>Образ функции и её кодомен могут различаться</li>
+            <li>«Есть для каждого» и «есть один для всех» — разные утверждения</li>
+            <li>Для опровержения универсального утверждения нужен настоящий контрпример</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: конструктор связей</h2>
+          <p>
+            Соединяйте элементы стрелками, переключайте режим отношения,
+            функции и порядка. Лаборатория выделяет нарушенные свойства,
+            строит классы эквивалентности и показывает, когда отображение
+            является инъекцией, сюръекцией или биекцией
+          </p>
+          <div class="atlas-lab" data-atlas-lab="sets-relations-functions-logic"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Пусть $A=\{1,2,3\}$ и $B=\{2,3,4\}$. Найдите $A\cup B$, $A\cap B$ и $A\setminus B$.</p><details><summary>Подсказка</summary><p>Для каждой операции переведите знак в условие принадлежности.</p></details><details><summary>Решение</summary><p>$A\cup B=\{1,2,3,4\}$, $A\cap B=\{2,3\}$, $A\setminus B=\{1\}$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Докажите $A\setminus(B\cup C)=(A\setminus B)\cap(A\setminus C)$.</p><details><summary>Подсказка</summary><p>Возьмите произвольный $x$ и раскройте определения.</p></details><details><summary>Решение</summary><p>$x$ слева означает $x\in A$, $x\notin B$ и $x\notin C$, что в точности означает принадлежность правой части.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Сколько элементов в $A\times B$, если $|A|=4$ и $|B|=7$? Почему?</p><details><summary>Подсказка</summary><p>Для каждого первого компонента посчитайте варианты второго.</p></details><details><summary>Решение</summary><p>$28$: четыре независимых выбора первого компонента и семь второго дают $4\cdot7$ пар.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Какие свойства имеет отношение $aRb\Longleftrightarrow a-b$ чётно на $\mathbb Z$?</p><details><summary>Подсказка</summary><p>Проверьте ноль, смену знака и сумму двух чётных разностей.</p></details><details><summary>Решение</summary><p>Оно рефлексивно, симметрично и транзитивно, следовательно, является эквивалентностью. Класса два: чётные и нечётные числа.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Приведите отношение, которое одновременно симметрично и антисимметрично.</p><details><summary>Подсказка</summary><p>Двусторонние связи между различными элементами должны отсутствовать.</p></details><details><summary>Решение</summary><p>Равенство: $a=b$ симметрично, а из $a=b$ и $b=a$ следует $a=b$. Подойдёт и пустое отношение.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Докажите, что наименьший элемент частичного порядка единственен.</p><details><summary>Подсказка</summary><p>Пусть наименьших элемента два и сравните их в обе стороны.</p></details><details><summary>Решение</summary><p>Если $a$ и $b$ оба наименьшие, то $aRb$ и $bRa$; антисимметричность даёт $a=b$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Является ли $f:\mathbb Z\to\mathbb Z$, $f(x)=2x+1$, инъекцией и сюръекцией?</p><details><summary>Подсказка</summary><p>Равенство выходов решает вопрос об инъекции; чётный выход проверяет сюръекцию.</p></details><details><summary>Решение</summary><p>Функция инъективна: $2x+1=2y+1$ даёт $x=y$. Она не сюръективна на $\mathbb Z$, потому что не принимает чётных значений.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Отрицайте утверждение $\forall x\in A\ \exists y\in B\ \forall z\in C\ P(x,y,z)$.</p><details><summary>Подсказка</summary><p>Проведите отрицание через кванторы по одному.</p></details><details><summary>Решение</summary><p>$\exists x\in A\ \forall y\in B\ \exists z\in C\ \neg P(x,y,z)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Найдите контрпример к утверждению: если отношение рефлексивно и симметрично, то оно транзитивно.</p><details><summary>Подсказка</summary><p>Возьмите три элемента, соедините первый со вторым и второй с третьим.</p></details><details><summary>Решение</summary><p>На $\{1,2,3\}$ добавьте все петли и пары $1R2,2R1,2R3,3R2$, но не $1R3$. Отношение рефлексивно и симметрично, однако не транзитивно.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Запишите полную спецификацию функции, возвращающей максимум непустого массива.</p><details><summary>Подсказка</summary><p>Нужны принадлежность результата массиву и сравнение со всеми элементами.</p></details><details><summary>Решение</summary><p>Для входа $a$ длины $n&gt;0$ результат $m$ должен удовлетворять $\exists i&lt;n\colon m=a_i$ и $\forall j&lt;n\colon a_j\le m$. Первое условие запрещает вернуть постороннюю слишком большую величину.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>MIT OpenCourseWare 6.1200J, <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/mit6_1200j_s24_lec01.pdf" target="_blank" rel="noopener noreferrer">Lecture 01: Predicates, Sets, and Proofs</a> — формальный язык предикатов, множеств и доказательств.</li>
+            <li>Stanford CS103, <a href="https://web.stanford.edu/class/archive/cs/cs103/cs103.1152/reference/" target="_blank" rel="noopener noreferrer">Theorems &amp; Definitions Reference</a> — определения отношений и функций с переходами к исходным лекциям.</li>
+            <li>Stanford Encyclopedia of Philosophy, <a href="https://plato.stanford.edu/entries/quantification/" target="_blank" rel="noopener noreferrer">Quantifiers and Quantification</a> — область действия, интерпретация и исторический контекст кванторов.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

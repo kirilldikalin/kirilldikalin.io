@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Скорости роста функций — Алгоритмический атлас</title>
+  <meta name="description" content="Геометрия постоянного, логарифмического, полиномиального, экспоненциального и факториального роста">
+  <meta property="og:title" content="Скорости роста функций — Алгоритмический атлас">
+  <meta property="og:description" content="Как сравнивать функции пределом отношения, логарифмированием и честно учитывать практический диапазон">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/growth-rates.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/growth-rates.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/growth-rates-core.js" defer></script>
+  <script src="../labs/growth-rates.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="growth-rates">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Скорости роста функций</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.1</p>
+      <h1>Скорости роста функций</h1>
+      <p class="atlas-chapter-intro">
+        От горизонтальной прямой до факториального взрыва: как увидеть
+        качественную разницу между функциями и не потерять реальный диапазон
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 75 минут</span><span>8 семейств роста</span>
+        <span>1 визуальная гонка</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#after-asymptotics">После обозначений</a></li>
+          <li><a href="#families">Семейства роста</a></li>
+          <li><a href="#logs">Логарифмы и полилогарифмы</a></li>
+          <li><a href="#powers">Степени и полиномы</a></li>
+          <li><a href="#quasilinear">Квазилинейный рост</a></li>
+          <li><a href="#explosion">Экспонента и факториал</a></li>
+          <li><a href="#ratio">Предел отношения</a></li>
+          <li><a href="#log-transform">Логарифмирование</a></li>
+          <li><a href="#crossovers">Практические пересечения</a></li>
+          <li><a href="#notation">Класс и обозначение</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="after-asymptotics">
+          <h2>Сначала отношение, затем каталог функций</h2>
+          <p>
+            В предыдущей главе материка 01 определения
+            $\class{atlas-notation-token notation-id-big-o-class}{O}$,
+            $\class{atlas-notation-token notation-id-big-omega-class}{\Omega}$
+            и $\class{atlas-notation-token notation-id-big-theta-class}{\Theta}$
+            превратили слова «не быстрее», «не медленнее» и «того же порядка» в
+            утверждения с кванторами. Теперь нужен материал для сравнения:
+            функции, которые регулярно возникают в алгоритмах.
+          </p>
+          <p>
+            Скорость роста — свойство функции на бесконечном хвосте. Она не
+            является самой $O$-нотацией: функция $n^2$ имеет квадратичный рост,
+            а утверждения $n^2\in O(n^3)$ и $n^2\in\Theta(n^2)$ описывают разные
+            корректные границы этой функции.
+          </p>
+        </section>
+
+        <section id="families">
+          <h2>Восемь ориентиров</h2>
+          <table class="atlas-table">
+            <thead><tr><th>Семейство</th><th>Пример</th><th>Как меняется при удвоении $n$</th></tr></thead>
+            <tbody>
+              <tr><td>постоянное</td><td>$1$</td><td>не меняется</td></tr>
+              <tr><td>логарифмическое</td><td>$\log n$</td><td>добавляется константа</td></tr>
+              <tr><td>полилогарифмическое</td><td>$(\log n)^k$</td><td>почти не меняется</td></tr>
+              <tr><td>степенное</td><td>$n^\alpha$</td><td>умножается на $2^\alpha$</td></tr>
+              <tr><td>квазилинейное</td><td>$n\log n$</td><td>примерно удваивается</td></tr>
+              <tr><td>полиномиальное</td><td>$n^k$</td><td>умножается на $2^k$</td></tr>
+              <tr><td>экспоненциальное</td><td>$c^n$</td><td>умножается на $c^n$</td></tr>
+              <tr><td>факториальное</td><td>$n!$</td><td>добавляет произведение $n+1,\ldots,2n$</td></tr>
+            </tbody>
+          </table>
+          <p>
+            Таблица даёт геометрическую интуицию, но не заменяет доказательства:
+            слова «почти» и «примерно» зависят от диапазона. Ниже каждое
+            сравнение получает формальное основание.
+          </p>
+        </section>
+
+        <section id="logs">
+          <h2>Логарифмы растут добавлением</h2>
+          <p>
+            Логарифм отвечает на вопрос, сколько раз величину нужно умножить на
+            основание, чтобы получить $n$. Поэтому
+            $\log_b(2n)=\log_b n+\log_b2$: удвоение аргумента добавляет
+            постоянную. Любые два фиксированных основания дают тот же класс:
+          </p>
+          <div class="atlas-math">
+            \[
+              \log_a n=\frac{\log_b n}{\log_b a}.
+            \]
+          </div>
+          <p>
+            Полилогарифм $(\log n)^k$ при фиксированном $k$ быстрее логарифма,
+            но медленнее любой положительной степени $n^\alpha$. Это следует,
+            например, из замены $n=e^t$: отношение превращается в
+            $t^k/e^{\alpha t}$, где экспонента побеждает любой фиксированный
+            полином по $t$.
+          </p>
+        </section>
+
+        <section id="powers">
+          <h2>Степенная функция фиксирует реакцию на масштаб</h2>
+          <p>
+            Для $f(n)=n^\alpha$, $\alpha>0$, удвоение аргумента точно умножает
+            значение на $2^\alpha$. При $0&lt;\alpha&lt;1$ рост сублинейный, при
+            $\alpha=1$ — линейный, при $\alpha>1$ — сверхлинейный.
+          </p>
+          <p>
+            Полином $a_kn^k+\cdots+a_0$ с $a_k>0$ имеет порядок $\Theta(n^k)$:
+            после деления на $n^k$ получаем
+            $a_k+a_{k-1}/n+\cdots+a_0/n^k\to a_k$. Младшие члены не исчезают из
+            значений, но перестают влиять на отношение на бесконечном хвосте.
+          </p>
+        </section>
+
+        <section id="quasilinear">
+          <h2>Почему $n\log n$ называют квазилинейным</h2>
+          <p>
+            Функция $n\log n$ чуть быстрее линейной: на каждый из $n$ объектов
+            приходится логарифмическое число уровней. Так возникают сортировка
+            слиянием, многие деревья рекурсии и обработка всех элементов на
+            каждом уровне сбалансированного разбиения.
+          </p>
+          <div class="atlas-math">
+            \[
+              \frac{n\log n}{n}=\log n\to\infty,
+              \qquad
+              \frac{n\log n}{n^{1+\varepsilon}}
+              =\frac{\log n}{n^\varepsilon}\to0.
+            \]
+          </div>
+          <p>
+            Следовательно, $n\log n$ строго быстрее $n$, но строго медленнее
+            $n^{1+\varepsilon}$ для любого фиксированного $\varepsilon>0$.
+          </p>
+        </section>
+
+        <section id="explosion">
+          <h2>Экспонента, факториал и $n^n$</h2>
+          <p>
+            Для фиксированного $c>1$ экспонента $c^n$ умножается на $c$ при
+            каждом увеличении аргумента на единицу. Любой фиксированный полином
+            $n^k$ проигрывает ей: отношение соседних значений
+            $c^n/n^k$ стремится к $c>1$, поэтому после некоторого места оно
+            устойчиво растёт.
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Формула Стирлинга</h3>
+            <div class="atlas-math">
+              \[
+                n!\sim\sqrt{2\pi n}\left(\frac ne\right)^n.
+              \]
+            </div>
+            <p>
+              Для натурального логарифма
+              $\ln(n!)=n\ln n-n+O(\log n)$. Поэтому $n!$ быстрее любого $c^n$ с
+              фиксированным основанием, но медленнее $n^n$ примерно в
+              экспоненциальный множитель $e^n$.
+            </p>
+          </section>
+        </section>
+
+        <section id="ratio" class="atlas-block" data-atlas-block="proof">
+          <h2>Предел отношения сравнивает масштаб</h2>
+          <p>
+            Для положительных начиная с некоторого места функций рассмотрим
+            $\class{atlas-notation-token notation-id-growth-ratio}{f(n)/g(n)}$.
+            Если предел равен нулю, $f$ строго меньше по порядку; если конечной
+            положительной константе — функции одного порядка; если бесконечности
+            — $f$ строго больше.
+          </p>
+          <div class="atlas-math">
+            \[
+              \lim_{n\to\infty}\frac{f(n)}{g(n)}
+              =
+              \begin{cases}
+                0,&f\in o(g),\\
+                L\in(0,\infty),&f\in\Theta(g),\\
+                \infty,&f\in\omega(g).
+              \end{cases}
+            \]
+          </div>
+          <p>
+            Это удобный достаточный метод при существовании предела и
+            выполнении условий. Для колеблющихся функций предел может не
+            существовать, хотя верхние и нижние асимптотические границы всё
+            равно можно доказать напрямую.
+          </p>
+        </section>
+
+        <section id="log-transform">
+          <h2>Логарифмирование раскрывает быстрый рост</h2>
+          <p>
+            Значения $2^n$, $n!$ и $n^n$ быстро переполняют числовые типы.
+            Сравнивать их безопаснее по логарифмам, поскольку логарифм строго
+            возрастает:
+          </p>
+          <div class="atlas-math">
+            \[
+              \log(2^n)=n\log2,\qquad
+              \log(n!)=\sum_{k=1}^{n}\log k,\qquad
+              \log(n^n)=n\log n.
+            \]
+          </div>
+          <p>
+            На log-log графике степенная функция становится прямой:
+            $\log(n^\alpha)=\alpha\log n$; наклон равен степени. На semilog
+            графике прямой становится экспонента. Выбор шкалы не меняет данные,
+            но делает видимой нужную геометрию.
+          </p>
+        </section>
+
+        <section id="crossovers">
+          <h2>Асимптотический победитель может опоздать</h2>
+          <p>
+            Сравним $A(n)=10^6n$ и $B(n)=n^2$. Линейная функция растёт
+            медленнее, но выигрывает только после $n=10^6$. Если реальные входы
+            меньше, квадратичная реализация дешевле в принятой модели.
+          </p>
+          <p>
+            Точка пересечения зависит от коэффициентов, младших членов и
+            аппаратной цены операций. Поэтому честный вывод состоит из двух
+            частей: асимптотическое отношение функций и конкретный диапазон,
+            где измерена либо смоделирована стоимость.
+          </p>
+        </section>
+
+        <section id="notation" class="atlas-block" data-atlas-block="warning">
+          <h2>Скорость роста не равна букве $O$</h2>
+          <p>
+            Квадратичная функция принадлежит не только $O(n^2)$, но и
+            $O(n^3)$, $O(2^n)$ и множеству других верхних границ. Точный класс
+            задаёт $\Theta(n^2)$. Слова «алгоритм имеет $O(n^2)$» сообщают лишь
+            верхнюю оценку, пока отдельно не доказана соответствующая нижняя.
+          </p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Ошибки чтения графиков</h2>
+          <ul>
+            <li>Делать вывод по нескольким точкам вместо бесконечного хвоста</li>
+            <li>Сравнивать функции на линейной шкале, где малые значения сжаты</li>
+            <li>Вычислять факториал напрямую и принимать переполнение за спад</li>
+            <li>Забывать, что степень и основание должны быть фиксированы</li>
+            <li>Называть точку пересечения доказательством асимптотического класса</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: визуальная гонка функций</h2>
+          <p>
+            Выберите несколько семейств, изменяйте диапазон и переключайте
+            линейную, semilog и log-log шкалы. График отмечает точки пересечения,
+            отображает логарифмы слишком больших значений и объясняет, почему
+            текущий лидер может отличаться от асимптотического.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="growth-rates"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Сравните без таблицы готовых ответов</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Во сколько раз меняется $n^{3/2}$ при удвоении $n$?</p><details><summary>Показать решение</summary><p>В $2^{3/2}=2\sqrt2$ раза.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Докажите независимость класса $\Theta(\log n)$ от основания логарифма.</p><details><summary>Показать решение</summary><p>Формула смены основания умножает логарифм на положительную константу.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Сравните $(\log n)^7$ и $n^{0.01}$.</p><details><summary>Показать подсказку</summary><p>Положите $n=e^t$.</p></details><details><summary>Показать решение</summary><p>Получаем $t^7/e^{0.01t}\to0$, значит, полилогарифм растёт строго медленнее.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Докажите $n\log n=o(n^{4/3})$.</p><details><summary>Показать решение</summary><p>Отношение равно $\log n/n^{1/3}\to0$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Почему $2^n$ обгоняет $n^{100}$, хотя это может случиться поздно?</p><details><summary>Показать решение</summary><p>Отношение $2^n/n^{100}$ неограниченно растёт; большие константы лишь сдвигают порог.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Сравните $n!$ и $3^n$ через Стирлинга.</p><details><summary>Показать решение</summary><p>$(n!/3^n)^{1/n}\sim n/(3e)\to\infty$, значит, факториал растёт быстрее.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> На какой шкале $n^5$ выглядит прямой и каков наклон?</p><details><summary>Показать решение</summary><p>На log-log шкале; $\log(n^5)=5\log n$, наклон равен 5.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Найдите пересечение $1000n$ и $n^2$ при $n>0$.</p><details><summary>Показать решение</summary><p>$n=1000$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Верно ли $n^2\in O(n!)$?</p><details><summary>Показать решение</summary><p>Да, факториал растёт быстрее; например, для достаточно больших $n$ отношение $n^2/n!$ стремится к нулю. Но оценка очень неточна.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Приведите функцию, колебания которой мешают пределу отношения, но не мешают верхней границе.</p><details><summary>Показать решение</summary><p>Например, $f(n)=n$ для чётных и $2n$ для нечётных: $f(n)/n$ не имеет предела, но $f\in\Theta(n)$.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>MIT OpenCourseWare 6.1200J, <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/mit6_1200j_s24_lec06.pdf" target="_blank" rel="noopener noreferrer">Asymptotics</a> — формальные отношения и сравнение функций.</li>
+            <li>MIT OpenCourseWare, <a href="https://ocw.mit.edu/courses/res-18-005-highlights-of-calculus-spring-2010/resources/growth-rate-and-log-graphs/" target="_blank" rel="noopener noreferrer">Growth Rate and Log Graphs</a> — геометрический смысл логарифмических шкал.</li>
+            <li>NIST Digital Library of Mathematical Functions, <a href="https://dlmf.nist.gov/5.11" target="_blank" rel="noopener noreferrer">Asymptotic Expansions of the Gamma Function</a> — строгая форма разложения Стирлинга.</li>
+            <li>Donald E. Knuth, <a href="https://doi.org/10.1145/1008328.1008329" target="_blank" rel="noopener noreferrer">Big Omicron and Big Omega and Big Theta</a>, 1976 — различие функции и асимптотического множества.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Суммы, произведения и рекуррентности — Алгоритмический атлас</title>
+  <meta name="description" content="Как сворачивать суммы, оценивать их интегралом и решать рекуррентности разворачиванием, подстановкой и деревом рекурсии">
+  <meta property="og:title" content="Суммы, произведения и рекуррентности — Алгоритмический атлас">
+  <meta property="og:description" content="От арифметической прогрессии до точных условий основной теоремы и метода Акры — Бацци">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/sums-products-recurrences.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/sums-products-recurrences.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/sums-products-recurrences-core.js" defer></script>
+  <script src="../labs/sums-products-recurrences.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="sums-products-recurrences">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Суммы, произведения и рекуррентности</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.2</p>
+      <h1>Суммы, произведения и рекуррентности</h1>
+      <p class="atlas-chapter-intro">
+        Как превратить длинный счёт операций в короткую формулу и понять,
+        сколько работы скрыто внутри рекурсивного алгоритма
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 85 минут</span><span>4 семейства сумм</span>
+        <span>3 метода решения рекуррентностей</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#why-sums">От цикла к сумме</a></li>
+          <li><a href="#arithmetic">Арифметические суммы</a></li>
+          <li><a href="#geometric">Геометрические суммы</a></li>
+          <li><a href="#harmonic">Гармонические суммы</a></li>
+          <li><a href="#telescoping">Телескопирование</a></li>
+          <li><a href="#integral">Оценка интегралом</a></li>
+          <li><a href="#recurrences">Рекуррентности алгоритмов</a></li>
+          <li><a href="#unfolding">Разворачивание</a></li>
+          <li><a href="#substitution">Подстановка</a></li>
+          <li><a href="#tree">Дерево рекурсии</a></li>
+          <li><a href="#master">Основная теорема</a></li>
+          <li><a href="#not-master">Когда она не работает</a></li>
+          <li><a href="#akra-bazzi">Метод Акры — Бацци</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="why-sums">
+          <h2>От цикла к сумме</h2>
+          <p>
+            Если $k$-я итерация цикла стоит $c_k$, полная стоимость равна
+            $\sum_{k=1}^{n}c_k$. Эта запись не решает задачу сама, зато отделяет
+            устройство алгоритма от арифметики. После неё можно искать точную
+            формулу, верхнюю и нижнюю границы или хотя бы ведущий порядок роста.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Треугольный цикл</h3>
+            <p>
+              Во вложенном цикле, где внутренняя переменная принимает значения
+              от $1$ до $i$, строка выполняется $1+2+\cdots+n$ раз. Ошибка
+              «два цикла означают $n^2$» здесь даёт правильный порядок, но
+              скрывает точную стоимость и легко ломается при других границах.
+            </p>
+          </section>
+        </section>
+
+        <section id="arithmetic">
+          <h2>Арифметическая прогрессия: сложить с обратной копией</h2>
+          <div class="atlas-math">
+            \[
+              1+2+\cdots+n=\sum_{k=1}^{n}k=\frac{n(n+1)}2.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство попарным сложением</h3>
+            <p>
+              Запишем сумму дважды: во второй строке — в обратном порядке.
+              Каждый столбец даёт $n+1$, столбцов ровно $n$. Поэтому удвоенная
+              сумма равна $n(n+1)$, а исходная — половине этого произведения.
+              Тот же аргумент даёт для арифметической прогрессии
+              $a,a+d,\ldots,a+(n-1)d$ формулу
+              $na+d\,n(n-1)/2$.
+            </p>
+          </section>
+          <p>
+            Произведение положительных множителей тоже часто удобно переводить
+            в сумму: при $a_k>0$ логарифм
+            превращает $\prod_{k=1}^{n}a_k$ в $\sum_{k=1}^{n}\log a_k$.
+            Так, $\log(n!)=\sum_{k=1}^{n}\log k$; интегральная оценка ниже
+            уже показывает порядок $n\log n$.
+          </p>
+        </section>
+
+        <section id="geometric">
+          <h2>Геометрическая сумма: масштабировать и вычесть</h2>
+          <p>Для $q\ne1$ конечная сумма имеет точную форму</p>
+          <div class="atlas-math">
+            \[
+              \sum_{k=0}^{m}q^k=\frac{q^{m+1}-1}{q-1}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему формула верна</h3>
+            <p>
+              Обозначим сумму через $S$. В выражениях
+              $qS=q+q^2+\cdots+q^{m+1}$ и
+              $S=1+q+\cdots+q^m$ все внутренние члены сокращаются. Получаем
+              $(q-1)S=q^{m+1}-1$. Деление допустимо именно при $q\ne1$.
+            </p>
+          </section>
+          <p>
+            При $0\le q&lt;1$ бесконечный хвост сходится к $1/(1-q)$. При
+            $q&gt;1$ сумма имеет тот же порядок, что последний член: сумма
+            уровней удваивающегося дерева определяется нижними уровнями.
+            При $q=1$ все $m+1$ членов равны единице.
+          </p>
+        </section>
+
+        <section id="harmonic">
+          <h2>Гармоническая сумма растёт медленно, но не ограничена</h2>
+          <p>
+            Гармоническое число $H_n=1+1/2+\cdots+1/n$ встречается, когда
+            вероятность или доля оставшейся работы обратно пропорциональна
+            номеру шага. Группировка по степеням двойки показывает
+            $H_n\in\Theta(\log n)$: в блоке от $2^j+1$ до $2^{j+1}$ примерно
+            $2^j$ слагаемых порядка $2^{-j}$, то есть постоянный вклад.
+          </p>
+          <div class="atlas-math">
+            \[
+              \ln(n+1)\le H_n\le1+\ln n.
+            \]
+          </div>
+          <p>
+            Эти неравенства сильнее слов о порядке: они дают конкретный зазор
+            меньше единицы между суммой и удобной непрерывной моделью.
+          </p>
+        </section>
+
+        <section id="telescoping">
+          <h2>Телескопическая сумма: искать разность соседей</h2>
+          <p>
+            Иногда длинная сумма почти целиком сокращается после разложения
+            каждого члена. Например,
+          </p>
+          <div class="atlas-math">
+            \[
+              \sum_{k=1}^{n}\frac1{k(k+1)}
+              =\sum_{k=1}^{n}\left(\frac1k-\frac1{k+1}\right)
+              =1-\frac1{n+1}.
+            \]
+          </div>
+          <p>
+            В развёртке остаются только границы. Такой же приём скрыт в анализе
+            потенциалов: если цена шага содержит $\Phi_{i}-\Phi_{i-1}$, сумма
+            изменений потенциала сворачивается в $\Phi_n-\Phi_0$.
+          </p>
+        </section>
+
+        <section id="integral">
+          <h2>Интеграл оценивает площадь ступенек</h2>
+          <p>
+            Пусть $f$ неотрицательна и не возрастает на $[1,n]$. Прямоугольники
+            ширины один дают
+          </p>
+          <div class="atlas-math">
+            \[
+              \int_1^{n+1}f(x)\,dx
+              \le\sum_{k=1}^{n}f(k)
+              \le f(1)+\int_1^n f(x)\,dx.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Геометрическое обоснование</h3>
+            <p>
+              На отрезке $[k,k+1]$ убывающая функция не превосходит $f(k)$,
+              поэтому левый интеграл помещается под ступеньками. На
+              $[k-1,k]$ при $k\ge2$ она не меньше $f(k)$, поэтому все ступеньки,
+              кроме первой, помещаются под правым интегралом. Без монотонности
+              эти конкретные неравенства могут стать неверными.
+            </p>
+          </section>
+          <p>
+            Для возрастающей функции прямоугольники располагаются иначе, но
+            идея остаётся той же. Интегральная оценка — доказательство через
+            сравнение площадей, а не замена дискретной суммы «похожим» объектом.
+          </p>
+        </section>
+
+        <section id="recurrences">
+          <h2>Рекуррентность описывает работу через меньшие входы</h2>
+          <p>
+            Разделяющий алгоритм порождает несколько подзадач и собственную
+            работу текущего вызова. Например,
+            $\class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+            =2T(n/2)+n$ означает две подзадачи половинного размера и
+            линейное слияние. Чтобы запись определяла функцию, нужны базовый
+            случай и соглашение об округлении, например $T(1)=\Theta(1)$ и
+            размеры — степени двойки.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Три разных задачи</h3>
+            <p>
+              Разворачивание строит гипотезу, дерево рекурсии показывает, откуда
+              берутся вклады уровней, а подстановка доказывает найденную границу.
+              Основная теорема быстро классифицирует лишь рекуррентности
+              специального вида и не заменяет эти рассуждения.
+            </p>
+          </section>
+        </section>
+
+        <section id="unfolding">
+          <h2>Разворачивание: увидеть повторяющийся уровень</h2>
+          <p>Для $n=2^h$ последовательно подставим рекуррентность саму в себя:</p>
+          <div class="atlas-math">
+            \[
+              T(n)=2^jT(n/2^j)+jn.
+            \]
+          </div>
+          <p>
+            При $j=h=\log_2n$ подзадачи имеют размер один, поэтому
+            $T(n)=nT(1)+n\log_2n=\Theta(n\log n)$. Равенство на промежуточном
+            шаге легко проверяется индукцией по $j$; без такой проверки узор
+            разворачивания остаётся только гипотезой.
+          </p>
+        </section>
+
+        <section id="substitution">
+          <h2>Подстановка: превратить догадку в доказательство</h2>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Верхняя граница для $2T(n/2)+n$</h3>
+            <p>
+              Предположим по индукции, что $T(m)\le C m\log_2m+D m$ для меньших
+              степеней двойки. Тогда
+            </p>
+            <div class="atlas-math">
+              \[
+                T(n)\le2\left(C\frac n2\log_2\frac n2+D\frac n2\right)+n
+                =Cn\log_2n+(D-C+1)n.
+              \]
+            </div>
+            <p>
+              При $C\ge1$ правая часть не превосходит требуемой границы.
+              Константу $D$ выбирают так, чтобы покрыть базовый случай. Нижняя
+              граница получается аналогично из $T(n)\ge2T(n/2)+cn$ при
+              положительной цене слияния. Вместе они дают
+              $T(n)\in\class{atlas-notation-token notation-id-big-theta-class}{\Theta}(n\log n)$.
+            </p>
+          </section>
+          <p>
+            Частая неудача — пытаться доказать слишком тесную гипотезу
+            $T(n)\le Cn\log n$ без линейного запаса. Младший член не меняет
+            класс, но даёт индукции пространство для поглощения констант и
+            округлений.
+          </p>
+        </section>
+
+        <section id="tree">
+          <h2>Дерево рекурсии: посчитать ширину и глубину</h2>
+          <p>
+            На уровне $j$ рекуррентности $aT(n/b)+f(n)$ находится $a^j$ узлов
+            размера $n/b^j$. Их суммарная локальная работа равна
+            $a^j f(n/b^j)$, а число листьев около
+            $a^{\log_b n}=n^{\log_ba}$. Сравнение стоимости верхних уровней,
+            листьев и всего промежуточного хвоста и приводит к трём случаям
+            основной теоремы.
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Дерево объясняет, но ещё не всегда доказывает</h3>
+            <p>
+              Рисунок конечной глубины помогает найти сумму, но нужно отдельно
+              обосновать число уровней, вклад листьев и влияние округлений.
+              Особенно опасно судить о бесконечном семействе входов по одному
+              красиво нарисованному дереву.
+            </p>
+          </section>
+        </section>
+
+        <section id="master">
+          <h2>Основная теорема: три проверяемых случая</h2>
+          <p>
+            Рассмотрим $T(n)=aT(n/b)+f(n)$, где $a\ge1$, $b&gt;1$, $f$ неотрицательна,
+            базовые значения ограничены, а округление размеров не меняет
+            асимптотику. Порог сравнения равен $n^{\log_ba}$ — стоимости листьев.
+          </p>
+          <ol>
+            <li>
+              Если существует $\varepsilon&gt;0$ и
+              $f(n)\in O(n^{\log_ba-\varepsilon})$, то
+              $T(n)\in\Theta(n^{\log_ba})$.
+            </li>
+            <li>
+              Если $f(n)\in\Theta(n^{\log_ba}\log^k n)$ для фиксированного
+              $k\ge0$, то
+              $T(n)\in\Theta(n^{\log_ba}\log^{k+1}n)$.
+            </li>
+            <li>
+              Если существует $\varepsilon&gt;0$ и
+              $f(n)\in\Omega(n^{\log_ba+\varepsilon})$, а также для некоторого
+              $c&lt;1$ выполняется регулярность $a f(n/b)\le c f(n)$ при всех
+              достаточно больших $n$, то $T(n)\in\Theta(f(n))$.
+            </li>
+          </ol>
+          <p>
+            Полиномиальный зазор $n^\varepsilon$ в первом и третьем случаях —
+            часть условия. Например, $f(n)=n\log\log n$ при $a=b=2$ не попадает
+            в эту простую формулировку второго случая с целой степенью логарифма.
+            Условие регулярности в третьем случае не разрешено молча опускать.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Три быстрые классификации</h3>
+            <p>
+              $4T(n/2)+n$ определяется листьями и имеет порядок $n^2$;
+              $2T(n/2)+n$ набирает одинаковую цену на каждом уровне и имеет
+              порядок $n\log n$; $2T(n/2)+n^2$ определяется верхней работой и
+              имеет порядок $n^2$, причём $2(n/2)^2=n^2/2$ даёт регулярность.
+            </p>
+          </section>
+        </section>
+
+        <section id="not-master">
+          <h2>Когда основная теорема неприменима</h2>
+          <ul>
+            <li>$T(n)=T(n-1)+n$: уменьшение не делит размер на постоянный множитель</li>
+            <li>$T(n)=T(n/3)+T(2n/3)+n$: подзадачи имеют разные масштабы</li>
+            <li>$T(n)=2T(n/2)+n\log\log n$: функция лежит между стандартными случаями</li>
+            <li>Сильно колеблющаяся $f$: может нарушиться регулярность третьего случая</li>
+          </ul>
+          <p>
+            «Теорема не применима» не означает, что рекуррентность не имеет
+            оценки. Первую можно просуммировать разворачиванием, вторую —
+            разобрать деревом или методом Акры — Бацци, а для третьей — точнее
+            суммировать уровни. Нельзя выбирать ближайший внешне похожий случай.
+          </p>
+        </section>
+
+        <section id="akra-bazzi">
+          <h2>Акра — Бацци: не магическая формула, а обобщённое дерево</h2>
+          <p>
+            Для рекуррентности с разными долями подзадач
+            $T(x)=g(x)+\sum_{i=1}^{k}a_iT(b_ix+h_i(x))$ сначала находят
+            единственное $p$, удовлетворяющее балансу
+            $\sum_i a_i b_i^p=1$. При условиях теоремы на коэффициенты,
+            неотрицательную $g$ и достаточно малые возмущения $h_i$ получается
+          </p>
+          <div class="atlas-math">
+            \[
+              T(x)\in\Theta\left(
+                x^p\left(1+\int_1^x\frac{g(u)}{u^{p+1}}\,du\right)
+              \right).
+            \]
+          </div>
+          <p>
+            Степень $p$ уравновешивает суммарный «размер» дочернего уровня, а
+            интеграл собирает локальную работу по масштабам. Для
+            $T(n)=T(n/3)+T(2n/3)+n$ уравнение
+            $(1/3)^p+(2/3)^p=1$ даёт $p=1$, а интеграл $\int_1^n du/u$ —
+            логарифм. Следовательно, $T(n)\in\Theta(n\log n)$.
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Условия всё равно нужно проверить</h3>
+            <p>
+              Формула не является калькулятором для произвольной рекуррентности.
+              Знак коэффициентов, диапазон $b_i$, регулярность $g$, базовая
+              область и ограничения на возмущения входят в теорему. Здесь нам
+              важна идея баланса и интеграла; полный технический вариант дан в
+              оригинальной работе.
+            </p>
+          </section>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что чаще всего ломает расчёт</h2>
+          <ul>
+            <li>Забыть базовый случай и считать, что рекуррентность уже определила $T$</li>
+            <li>Сложить цену одного узла вместо цены всего уровня</li>
+            <li>Не учесть листья, когда внутренняя работа быстро убывает</li>
+            <li>Выдать узор разворачивания за доказательство без индукции</li>
+            <li>Применить основную теорему к разным размерам подзадач</li>
+            <li>Перепутать точную сумму, верхнюю границу и класс $\Theta$</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: дерево рекурсии</h2>
+          <p>
+            Изменяйте ветвление, коэффициент уменьшения и локальную работу.
+            Визуализация синхронно показывает узлы, цену каждого уровня,
+            листья и итоговую сумму, чтобы формула не отрывалась от дерева
+          </p>
+          <div class="atlas-lab" data-atlas-lab="sums-products-recurrences"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Найдите $\sum_{k=1}^{n}(3k-2)$.</p><details><summary>Подсказка</summary><p>Разделите сумму на две стандартные.</p></details><details><summary>Решение</summary><p>$3n(n+1)/2-2n=n(3n-1)/2$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Вычислите $\sum_{k=0}^{m}3\cdot2^k$.</p><details><summary>Подсказка</summary><p>Вынесите тройку и примените конечную геометрическую сумму.</p></details><details><summary>Решение</summary><p>Получается $3(2^{m+1}-1)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Докажите $H_{2n}-H_n\ge1/2$.</p><details><summary>Подсказка</summary><p>Сколько слагаемых в хвосте и каково каждое из них?</p></details><details><summary>Решение</summary><p>В хвосте $n$ слагаемых, каждое не меньше $1/(2n)$, поэтому сумма не меньше $1/2$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Сверните $\sum_{k=1}^{n}1/(k(k+2))$.</p><details><summary>Подсказка</summary><p>$1/(k(k+2))=(1/2)(1/k-1/(k+2))$.</p></details><details><summary>Решение</summary><p>Остаются два первых и два последних члена: $3/4-1/(2(n+1))-1/(2(n+2))$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Оцените $\sum_{k=1}^{n}k^{-1/2}$ интегралом.</p><details><summary>Подсказка</summary><p>Интеграл от $x^{-1/2}$ равен $2\sqrt x$.</p></details><details><summary>Решение</summary><p>Сумма заключена между величинами порядка $2\sqrt n$, следовательно, принадлежит $\Theta(\sqrt n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Разверните $T(n)=T(n/2)+1$ при $T(1)=1$ и $n=2^h$.</p><details><summary>Подсказка</summary><p>После $j$ шагов остаётся $T(n/2^j)+j$.</p></details><details><summary>Решение</summary><p>При $j=\log_2n$ получаем $T(n)=1+\log_2n$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Решите $T(n)=3T(n/2)+n$ основной теоремой.</p><details><summary>Подсказка</summary><p>Сравните $n$ с $n^{\log_2 3}$.</p></details><details><summary>Решение</summary><p>$n$ полиномиально меньше $n^{\log_2 3}$, поэтому $T(n)\in\Theta(n^{\log_2 3})$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Докажите подстановкой, что $T(n)=2T(n/2)+n^2$ имеет верхнюю границу $Cn^2$.</p><details><summary>Подсказка</summary><p>После подстановки получится $(C/2+1)n^2$.</p></details><details><summary>Решение</summary><p>Нужно $C/2+1\le C$, то есть достаточно $C\ge2$; затем константу согласуют с базой.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Почему основная теорема не классифицирует $T(n)=T(n/4)+T(3n/4)+n$?</p><details><summary>Подсказка</summary><p>Сравните размеры двух дочерних задач.</p></details><details><summary>Решение</summary><p>Они не имеют общего вида $n/b$, поэтому единственных параметров $a,b$ нет. Метод Акры — Бацци даёт $p=1$ и итог $\Theta(n\log n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Найдите ошибку: «$T(n)=2T(n/2)+n\log\log n$, значит, это второй случай и $T(n)=\Theta(n\log n\log\log n)$».</p><details><summary>Подсказка</summary><p>Сверьте $f(n)$ с требуемой формой $n^{\log_ba}\log^k n$.</p></details><details><summary>Решение</summary><p>$\log\log n$ не является фиксированной степенью $\log n$, поэтому указанная версия основной теоремы неприменима. Нужно отдельно суммировать уровни или использовать более сильную теорему.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>MIT OpenCourseWare 6.1200J, <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/mit6_1200j_s24_lec07.pdf" target="_blank" rel="noopener noreferrer">Lecture 07: Recurrences</a> — суммы уровней и методы решения рекуррентностей.</li>
+            <li>MIT OpenCourseWare 6.006, <a href="https://live.ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/1869dbf640ded6b31f1bd369d2001ef5_MIT6_006S20_r03.pdf" target="_blank" rel="noopener noreferrer">Recitation 3: Solving Recurrences</a> — разворачивание, подстановка и дерево рекурсии.</li>
+            <li>Jon Louis Bentley, Dorothea Haken, James B. Saxe, <a href="https://doi.org/10.1145/1008861.1008865" target="_blank" rel="noopener noreferrer">A General Method for Solving Divide-and-Conquer Recurrences</a>, 1980 — обобщённый подход к неравным подзадачам.</li>
+            <li>Mohamad Akra, Louay Bazzi, <a href="https://doi.org/10.1023/A:1018373005182" target="_blank" rel="noopener noreferrer">On the Solution of Linear Recurrence Equations</a>, 1998 — исходная теорема Акры — Бацци и её условия.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

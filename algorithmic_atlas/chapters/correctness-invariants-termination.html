@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Корректность, инварианты и завершение — Алгоритмический атлас</title>
+  <meta name="description" content="Предусловия, постусловия, инварианты, функции-варианты и доказательство полной корректности алгоритма">
+  <meta property="og:title" content="Корректность, инварианты и завершение — Алгоритмический атлас">
+  <meta property="og:description" content="Почему правильный результат при остановке и гарантия остановки — две самостоятельные обязанности">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/correctness-invariants-termination.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/correctness-invariants-termination.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {packages: {'[+]': ['html']}, inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true, processEnvironments: true},
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/correctness-invariants-termination-core.js" defer></script>
+  <script src="../labs/correctness-invariants-termination.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="correctness-invariants-termination">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Корректность и завершение</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · точка 2.5</p>
+      <h1>Корректность, инварианты и завершение</h1>
+      <p class="atlas-chapter-intro">
+        Тест показывает один запуск, а доказательство связывает все допустимые
+        состояния: что истинно до шага, что сохраняется и почему шаги закончатся
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 90 минут</span><span>частичная и полная корректность</span>
+        <span>1 лаборатория бинарного поиска</span><span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#specification">Спецификация</a></li>
+          <li><a href="#partial-total">Две корректности</a></li>
+          <li><a href="#hoare">Тройка Хоара</a></li>
+          <li><a href="#invariant">Инвариант цикла</a></li>
+          <li><a href="#three-duties">Три обязанности</a></li>
+          <li><a href="#binary-search">Бинарный поиск</a></li>
+          <li><a href="#variant">Функция-вариант</a></li>
+          <li><a href="#recursion">Рекурсивные алгоритмы</a></li>
+          <li><a href="#false-proofs">Ложные доказательства</a></li>
+          <li><a href="#tests">Доказательство и тесты</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="specification">
+          <h2>Корректность относится к спецификации</h2>
+          <p>
+            Алгоритм нельзя назвать правильным без требования к входу и
+            результату. Предусловие $P$ описывает допустимые начальные состояния,
+            постусловие $Q$ — требование к состоянию после успешного завершения.
+            Для бинарного поиска предусловие включает отсортированность массива;
+            без неё тот же код не обязан находить элемент.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Предусловие и постусловие</h3>
+            <p>
+              $P(s_0)$ — факты, обещанные вызывающей стороной. $Q(s_f)$ —
+              факты, которые алгоритм обещает при завершении. Чем слабее
+              предусловие и сильнее постусловие, тем содержательнее контракт.
+            </p>
+          </section>
+        </section>
+
+        <section id="partial-total">
+          <h2>Правильный ответ и остановка — разные теоремы</h2>
+          <p>
+            Частичная корректность утверждает: если выполнение началось в
+            состоянии, удовлетворяющем $P$, и завершилось, то финальное состояние
+            удовлетворяет $Q$. Она ничего не говорит о том, завершится ли
+            выполнение.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              P(s_0)\land\operatorname{halts}(s_0)
+              \Longrightarrow Q(s_f).
+            \]
+          </div>
+          <p>
+            Полная корректность добавляет завершимость для каждого допустимого
+            начального состояния. Бесконечный цикл без неверного ответа
+            частично корректен относительно любого постусловия в пустом смысле,
+            но не полностью корректен.
+          </p>
+        </section>
+
+        <section id="hoare">
+          <h2>Тройка Хоара фиксирует локальный контракт</h2>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-hoare-triple}
+              {\{P\}\;C\;\{Q\}}.
+            \]
+          </div>
+          <p>
+            Запись означает частичную корректность команды $C$: из состояния
+            с $P$ любое завершающееся выполнение $C$ приходит в состояние с $Q$.
+            Например,
+            $\{x=a\}\;x\leftarrow x+1\;\{x=a+1\}$. Для присваивания удобно
+            подставить выражение в желаемое постусловие и получить достаточное
+            предусловие.
+          </p>
+          <p>
+            Полная корректность требует дополнительного аргумента о завершении;
+            одна тройка частичной корректности его не содержит.
+          </p>
+        </section>
+
+        <section id="invariant">
+          <h2>Инвариант связывает все итерации</h2>
+          <p>
+            Инвариант $I$ — утверждение о состоянии, истинное перед каждой
+            проверкой условия цикла. Он не обязан описывать всё состояние и не
+            означает, что значения переменных неизменны. Сохраняется истинность
+            отношения между ними.
+          </p>
+          <p>
+            Для суммирования массива после обработки первых $i$ элементов
+            естественен инвариант
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-loop-invariant}
+              {0\le i\le n\quad\land\quad s=\sum_{j=0}^{i-1}a_j}.
+            \]
+          </div>
+          <p>
+            Он одновременно говорит, какая часть входа уже обработана и что
+            означает накопитель $s$.
+          </p>
+        </section>
+
+        <section id="three-duties">
+          <h2>Инициализация, сохранение, использование</h2>
+          <ol>
+            <li><strong>Инициализация:</strong> доказать $P\Rightarrow I$ перед первым входом в цикл</li>
+            <li><strong>Сохранение:</strong> из $I$ и истинности условия цикла вывести $I$ после тела</li>
+            <li><strong>Использование:</strong> из $I$ и ложности условия вывести постусловие $Q$</li>
+          </ol>
+          <p>
+            Пропуск любого звена оставляет дыру. Инвариант, истинный только в
+            начале и конце, не даёт права считать его истинным между ними.
+            Инвариант, который сохраняется, но слишком слаб для вывода $Q$,
+            формально верен и практически бесполезен.
+          </p>
+        </section>
+
+        <section id="binary-search" class="atlas-block" data-atlas-block="proof">
+          <h2>Бинарный поиск сохраняет область возможного ответа</h2>
+          <p>
+            Пусть отсортирован массив $a[0..n-1]$, а полуинтервал $[L,R)$ —
+            ещё не исключённая область. Инвариант:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              0\le L\le R\le n
+              \quad\land\quad
+              \bigl(x\text{ присутствует}\Rightarrow
+              \exists i\in[L,R):a_i=x\bigr).
+            \]
+          </div>
+          <p>
+            Берём $M=L+\lfloor(R-L)/2\rfloor$. Если $a_M&lt;x$, сортировка
+            исключает все индексы до $M$ включительно, поэтому ставим $L=M+1$.
+            Иначе оставляем левую часть, устанавливая $R=M$. Оба перехода
+            сохраняют инвариант.
+          </p>
+          <p>
+            При $L=R$ область пуста. Из инварианта следует, что $x$ отсутствует.
+            В варианте поиска первой позиции постусловие формулируется иначе:
+            $L$ — первый индекс, где значение не меньше $x$.
+          </p>
+        </section>
+
+        <section id="variant">
+          <h2>Вариант не позволяет циклу продолжаться бесконечно</h2>
+          <p>
+            Функция-вариант $V$ принимает значения в well-founded множестве,
+            обычно в неотрицательных целых, и строго уменьшается на каждой
+            итерации, пока условие цикла истинно:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-loop-variant}{V=R-L}
+              \in\mathbb N,
+              \qquad V_{\mathrm{next}}&lt;V.
+            \]
+          </div>
+          <p>
+            В бинарном поиске непустой полуинтервал заменяется строго меньшим.
+            Бесконечной строго убывающей последовательности натуральных нет,
+            значит, цикл завершится. Недостаточно показать $V_{\mathrm{next}}\le
+            V$: постоянный вариант допускает бесконечный цикл.
+          </p>
+        </section>
+
+        <section id="recursion">
+          <h2>Для рекурсии нужны корректность подзадач и убывание меры</h2>
+          <p>
+            Индукционное предположение говорит: рекурсивные вызовы на меньших
+            входах удовлетворяют своему контракту. Затем доказывается, что
+            текущий вызов корректно объединяет результаты. Для завершимости
+            каждый вызов обязан уменьшать well-founded меру — размер списка,
+            высоту дерева или неотрицательный числовой параметр.
+          </p>
+          <section class="atlas-block" data-atlas-block="counterexample">
+            <h3>Почти уменьшающийся аргумент</h3>
+            <p>
+              Вызов $F(n)\to F(\lceil n/2\rceil)$ не уменьшается при $n=1$.
+              Без отдельного базового случая рекурсия зациклится. Фраза
+              «аргумент делится пополам» должна быть проверена на границе.
+            </p>
+          </section>
+        </section>
+
+        <section id="false-proofs" class="atlas-block" data-atlas-block="warning">
+          <h2>Как выглядят ложные доказательства корректности</h2>
+          <ul>
+            <li>Инвариант предполагает факт, который тело цикла ещё не установило</li>
+            <li>Сохранение проверено только на одном примере</li>
+            <li>При выходе из цикла инвариант не влечёт постусловие</li>
+            <li>Вариант иногда остаётся равным или становится отрицательным</li>
+            <li>Рекурсивное предположение применено к входу не меньшего размера</li>
+            <li>Доказана программа для более сильного предусловия, чем обещано</li>
+          </ul>
+        </section>
+
+        <section id="tests">
+          <h2>Доказательство не отменяет тесты</h2>
+          <p>
+            Доказательство относится к математической модели программы.
+            Реализация может содержать опечатку, переполнение, неверное
+            сравнение или нарушить предусловие внешним вызовом. Тесты проверяют
+            связь реализации с моделью и особенно полезны на границах.
+          </p>
+          <p>
+            С другой стороны, конечные тесты не охватывают все состояния.
+            Инвариант объясняет, почему целое семейство переходов безопасно.
+            Практически сильный процесс соединяет спецификацию, доказательный
+            аргумент и автоматические проверки.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: область поиска как доказательство</h2>
+          <p>
+            Пошаговый бинарный поиск выделяет исключённые и ещё возможные
+            позиции, синхронно показывает $L$, $M$, $R$, истинность инварианта и
+            значение варианта $R-L$. Можно запустить корректный и намеренно
+            сломанный переход и увидеть точное обязательство, которое нарушено.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="correctness-invariants-termination"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Докажите не только ответ, но и остановку</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Сформулируйте контракт функции, возвращающей максимум непустого массива.</p><details><summary>Показать решение</summary><p>Предусловие: массив непуст. Постусловие: результат принадлежит массиву и не меньше каждого его элемента.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Чем частичная корректность отличается от полной?</p><details><summary>Показать решение</summary><p>Частичная гарантирует постусловие при остановке; полная дополнительно доказывает остановку на всех допустимых входах.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Дайте инвариант цикла, вычисляющего произведение первых $i$ элементов.</p><details><summary>Показать решение</summary><p>$0\le i\le n$ и $p=\prod_{j=0}^{i-1}a_j$, с пустым произведением 1.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Почему утверждение $0\le i\le n$ слишком слабо для доказательства суммы?</p><details><summary>Показать решение</summary><p>Оно не связывает накопитель с уже обработанными элементами, поэтому при выходе не выводит правильную сумму.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Проверьте инициализацию инварианта бинарного поиска при $L=0,R=n$.</p><details><summary>Показать решение</summary><p>Границы допустимы, а любой индекс массива лежит в $[0,n)$, поэтому возможный ответ ещё не исключён.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Почему $R-L$ строго уменьшается в обеих ветвях?</p><details><summary>Показать решение</summary><p>$M$ лежит внутри непустого интервала. Новая правая граница $M&lt;R$ либо новая левая $M+1&gt;L$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Найдите дефект варианта $V=|x|$ для цикла, меняющего символы строки без сокращения.</p><details><summary>Показать решение</summary><p>Длина не уменьшается, поэтому вариант не доказывает завершение.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Докажите завершимость рекурсивного обхода конечного дерева.</p><details><summary>Показать решение</summary><p>Мерой служит число вершин текущего поддерева; каждый вызов получает строго меньшее поддерево, листья — база.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Может ли истинный инвариант быть бесполезным?</p><details><summary>Показать решение</summary><p>Да. Например, $0=0$ сохраняется, но не помогает вывести постусловие.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Как тестом проверить доказательный контракт бинарного поиска?</p><details><summary>Показать решение</summary><p>Генерировать отсортированные массивы, проверять найденный индекс или корректное отсутствие, отдельно тестировать пустой массив, дубликаты и границы.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>C. A. R. Hoare, <a href="https://doi.org/10.1145/363235.363259" target="_blank" rel="noopener noreferrer">An Axiomatic Basis for Computer Programming</a>, 1969 — первичная система утверждений и троек Хоара.</li>
+            <li>Robert W. Floyd, <a href="https://www.lem12.uksw.edu.pl/images/1/15/AssigningMeanings1967.pdf" target="_blank" rel="noopener noreferrer">Assigning Meanings to Programs</a>, 1967 — assertions и инварианты программ.</li>
+            <li>Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD04xx/EWD472.html" target="_blank" rel="noopener noreferrer">Guarded commands, nondeterminacy and formal derivation of programs</a> — weakest preconditions и связь корректности с построением программы.</li>
+            <li>Edsger W. Dijkstra, <a href="https://www.cs.utexas.edu/~EWD/transcriptions/EWD04xx/EWD418.html" target="_blank" rel="noopener noreferrer">A Discipline of Programming</a> — условия инварианта и функции-варианта.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
