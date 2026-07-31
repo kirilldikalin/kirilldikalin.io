@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trie, radix tree и префиксные индексы — Алгоритмический атлас</title>
+  <meta name="description" content="Префиксные деревья, path compression, Patricia trie, longest prefix match и способы хранения потомков">
+  <meta property="og:title" content="Trie, radix tree и префиксные индексы — Алгоритмический атлас"><meta property="og:description" content="Почему стоимость поиска по строке зависит от длины ключа, а не от числа слов"><meta property="og:type" content="article"><meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/tries-radix-trees.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/tries-radix-trees.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css"><link rel="stylesheet" href="../chapter.css"><link rel="stylesheet" href="../labs/lab-common.css"><link rel="stylesheet" href="../labs/data-structures-labs.css"><link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>window.MathJax={loader:{load:['[tex]/html']},tex:{packages:{'[+]':['html']},inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true},options:{ignoreHtmlClass:'tex2jax_ignore',processHtmlClass:'tex2jax_process'}};</script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script><script src="../chapter-core.js" defer></script><script src="../labs/lab-controls-core.js" defer></script><script src="../labs/mathematical-tools-core.js" defer></script><script src="../labs/lab-runtime.js" defer></script><script src="../labs/lab-svg.js" defer></script><script src="../labs/tries-radix-trees-core.js" defer></script><script src="../labs/tries-radix-trees.js" defer></script><script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="tries-radix-trees" data-atlas-lab-minutes="8">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки"><a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span><a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span><span>Trie и radix tree</span></nav>
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header"><p class="atlas-chapter-kicker">Структуры данных · ветвь 3.10</p><h1>Trie, radix tree и префиксные индексы</h1><p class="atlas-chapter-intro">Строковый ключ можно искать не как неделимое значение, а как путь, на котором общие префиксы хранятся только один раз</p><div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается</span><span data-atlas-lab-time>Лаборатория ≈ 8 мин</span><span>вставка и path compression</span><span>10 упражнений</span></div></header>
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title"><h2 id="chapter-toc-title">В этой главе</h2><ol><li><a href="#keys-as-paths">Ключ как путь</a></li><li><a href="#trie">Инвариант trie</a></li><li><a href="#operations">Поиск и update</a></li><li><a href="#cost">Стоимость по длине</a></li><li><a href="#memory">Алфавит и память</a></li><li><a href="#radix">Path compression</a></li><li><a href="#patricia">Patricia trie</a></li><li><a href="#prefix-search">Поиск по префиксу</a></li><li><a href="#lpm">Longest prefix match</a></li><li><a href="#children">Хранение потомков</a></li><li><a href="#variants">Другие варианты</a></li><li><a href="#comparison">Сравнение структур</a></li><li><a href="#practice">Практические ограничения</a></li><li><a href="#mistakes">Типичные ошибки</a></li><li><a href="#laboratory">Лаборатория</a></li><li><a href="#exercises">Упражнения</a></li><li><a href="#sources">Источники</a></li></ol></aside>
+      <article class="atlas-chapter-content">
+        <section id="keys-as-paths">
+          <h2>Строка раскрывается в последовательность решений</h2>
+          <p>
+            Словарь обычно сравнивает ключи целиком: хеш-таблица вычисляет hash всей строки, дерево многократно выполняет лексикографическое сравнение. Trie рассматривает ключ $c_1c_2\dots c_m$ как путь по рёбрам $c_1,c_2,\dots,c_m$. Все слова с общим префиксом проходят через одну вершину. Поэтому поиск зависит прежде всего от длины ключа, а prefix query превращается в обычный спуск к вершине.
+          </p>
+          <p>
+            Пусть в словаре есть «дом», «дома» и «домен». Путь `д→о→м` общий. Вершина после «м» одновременно отмечает конец «дом» и имеет потомков. Отдельный terminal flag принципиален: наличие пути доказывает существование префикса, но не полного ключа. Без флага структура ошибочно объявит «до» словом или не сможет хранить ключ, являющийся префиксом другого.
+          </p>
+          <section class="atlas-block" data-atlas-block="history"><h3>Цифровой поиск</h3><p>Эдвард Фредкин в статье «Trie Memory» описал память, адресуемую последовательными частями аргумента. Название trie связано с retrieval и обычно произносится так, чтобы отличать его от tree. Позднее PATRICIA Дональда Моррисона сжала неразветвляющиеся пути.</p></section>
+        </section>
+
+        <section id="trie" class="atlas-block" data-atlas-block="definition">
+          <h2>Инвариант: путь однозначно кодирует префикс</h2>
+          <p>
+            Корень соответствует пустой строке $\varepsilon$. Из каждой вершины выходит не более одного ребра с данным символом. Строка, прочитанная вдоль пути от корня к вершине $v$, — её префикс $pref(v)$. Вершина terminal тогда и только тогда, когда $pref(v)$ принадлежит хранимому множеству ключей. Этот инвариант определяет семантику независимо от способа хранения детей.
+          </p>
+          <div class="atlas-math">\[
+            pref(root)=\varepsilon,
+            \qquad pref(child)=pref(parent)\cdot label(parent,child).
+          \]</div>
+          <p>
+            В обычном trie label — один символ. Под «символом» реализация должна понимать конкретную единицу: byte, Unicode code point, grapheme cluster, token или bit. Оценка длины и равенство зависят от этого решения. Нормализация NFC/NFD, регистр и локаль относятся к контракту ключа до вставки; два визуально одинаковых текста могут иметь разные code points.
+          </p>
+          <p>
+            Из инварианта следует корректность membership. Если на очередном символе нет ребра, ни один сохранённый ключ с уже совпавшим префиксом не может продолжаться нужным символом. Если весь input прочитан, ответом служит terminal flag достигнутой вершины.
+          </p>
+        </section>
+
+        <section id="operations" class="atlas-block" data-atlas-block="proof">
+          <h2>Вставка создаёт только отсутствующий suffix</h2>
+          <p>
+            Вставка проходит существующий longest common prefix. При первом отсутствующем ребре создаётся цепочка для оставшегося suffix, а последняя вершина помечается terminal. Все прежние пути сохраняются; новый путь читает ровно вставленный ключ. Если путь существовал целиком, меняется только terminal: это отличает добавление «дом» после «дома» от дубликата.
+          </p>
+          <p>
+            Удаление сначала снимает terminal. Затем можно подниматься к корню и удалять вершины, которые не terminal и не имеют детей. Остановиться нужно при первом branching или terminal: такая вершина участвует в другом ключе. Корректность prune следует из того, что удаляемый suffix больше не лежит ни на одном пути сохранённого слова.
+          </p>
+          <p>
+            В radix tree после prune может возникнуть нетерминальная вершина с единственным ребёнком. Её labels склеивают повторно. Если удалённый key находился внутри общего пути, terminal снимается, но вершина сохраняется, пока имеет несколько детей. Таким образом, deletion состоит из трёх отдельных обязательств: удалить ровно membership mark, убрать недостижимые листья и восстановить maximal path compression, не проходя через terminal boundary.
+          </p>
+          <p>
+            Enumeration выполняет DFS от нужной вершины, дописывая labels. Вывод $k$ слов общей длины $L$ требует как минимум $\Omega(L)$ времени на создание результата. Заявление «autocomplete за $O(m)$» описывает только нахождение вершины prefix, но скрывает стоимость выдачи. Top-k подсказки можно аугментировать рейтингами, однако update обязан поддерживать их по всему пути.
+          </p>
+        </section>
+
+        <section id="cost">
+          <h2>Время выражается через длину ключа</h2>
+          <p>
+            Если переход к ребёнку стоит $C_{child}$, поиск ключа длины $m$ занимает $O(mC_{child})$. При dense array потомков $C_{child}=O(1)$ в RAM-модели; при sorted vector — $O(\log d)$ сравнений для степени $d$; при хеш-таблице — ожидаемое $O(1)$ с её предположениями. Поэтому короткая запись «trie lookup $O(m)$» включает модель хранения детей.
+          </p>
+          <div class="atlas-math atlas-notation-formula">\[
+            T_{find}(x)=O\!\left(
+              \class{atlas-notation-token notation-id-trie-key-length}{|x|}
+              \cdot C_{child}
+            \right).
+          \]</div>
+          <p>
+            Эта оценка не зависит явно от числа ключей $n$, что выгодно при множестве коротких strings. Но $m$ может быть большим; BST выполняет $O(\log n)$ сравнений, каждое потенциально читает общий префикс заново. Реальная граница зависит от distribution префиксов, cache и representation. Нельзя сравнивать $O(m)$ с $O(\log n)$ без связи между $m$ и $n$ и стоимости string comparison.
+          </p>
+          <p>
+            В radix tree одно ребро содержит несколько символов. Сравнений вершин меньше, но суммарно успешный поиск всё равно проверяет каждый символ ключа не более постоянного числа раз, то есть $O(m)$ при прямом label comparison. Ошибочная реализация, копирующая suffix при каждом спуске, может добавить квадратичную работу; используют offsets или string views.
+          </p>
+        </section>
+
+        <section id="memory">
+          <h2>Большой алфавит делает наивный trie дорогим</h2>
+          <p>
+            Если каждая вершина хранит массив размера $\class{atlas-notation-token notation-id-trie-alphabet-size}{|\Sigma|}$, переход постоянный, но память $O(V|\Sigma|)$, где $V$ — число вершин. Для binary trie это приемлемо; для Unicode — невозможно. Большинство slots пусты, особенно около листьев. Даже массив на 256 bytes/pointers быстро доминирует над самими ключами.
+          </p>
+          <p>
+            Sparse map хранит только существующие рёбра: linked list экономит память при малой степени, sorted vector компактен и cache-friendly, hash map ускоряет большой branching ожидаемо, balanced tree сохраняет порядок. Hybrid node может менять representation при росте степени. Adaptive radix tree использует несколько размеров node, чтобы плотность и SIMD-поиск соответствовали фактическому branching.
+          </p>
+          <p>
+            Число вершин не превосходит единицы плюс сумма длин всех ключей, но при слабом sharing близко к этому пределу. Каждая объектная вершина добавляет header, allocator metadata и pointer alignment. Arena allocation и компактные integer offsets уменьшают overhead. Path compression атакует другой источник расходов — длинные unary chains.
+          </p>
+        </section>
+
+        <section id="radix" class="atlas-block" data-atlas-block="definition">
+          <h2>Radix tree сжимает неразветвляющиеся пути</h2>
+          <p>
+            Если нетерминальная вершина имеет ровно одного ребёнка, промежуточное решение ничего не различает. Её можно удалить и склеить labels двух рёбер. В compressed trie, или radix tree, label — непустая строка $\class{atlas-notation-token notation-id-radix-edge-label}{\lambda(e)}$, а первые символы исходящих labels одной вершины различны.
+          </p>
+          <div class="atlas-math atlas-notation-formula">\[
+            pref(child)=pref(parent)\cdot
+            \class{atlas-notation-token notation-id-radix-edge-label}{\lambda(parent,child)},
+            \qquad |\lambda|\ge1.
+          \]</div>
+          <p>
+            Поиск выбирает edge по первому символу, затем сравнивает весь label с соответствующим suffix input. Полное совпадение ведёт к ребёнку; расхождение внутри label доказывает отсутствие ключа. При вставке частичного совпадения edge делится: общий prefix становится label до новой branching-вершины, два различных suffix — исходящими рёбрами.
+          </p>
+          <p>
+            После удаления radix tree снова сжимает нетерминальную вершину с одним ребёнком. Terminal вершину сжимать через границу нельзя: там заканчивается сохранённый ключ. Path compression сохраняет множество путей и terminal positions, но уменьшает число nodes и pointer traversals. Объём символов labels не обязан уменьшиться, особенно если labels копируются; обычно хранят slices исходных key bytes.
+          </p>
+        </section>
+
+        <section id="patricia">
+          <h2>Patricia trie хранит только различающие позиции</h2>
+          <p>
+            Историческая PATRICIA ориентирована на binary keys. Вместо узла на каждый bit сохраняются branching positions, где ключи впервые различаются. Внутренний узел сообщает номер проверяемого bit, листья — полные keys или ссылки на records. Неразличающие последовательности bits пропускаются, поэтому число внутренних узлов для $n$ различных keys линейно по $n$.
+          </p>
+          <p>
+            Patricia часто называют binary radix tree, но конкретные representations различаются: labels могут быть implicit через bit index, а листья подтверждают полное равенство ключа после маршрута. Это важно, потому что compressed path сам по себе может хранить только позицию различия, не все пропущенные bits. Финальная проверка защищает от ложного совпадения.
+          </p>
+          <p>
+            Insert находит leaf-кандидат, вычисляет первый различающий bit нового и старого ключа, затем вставляет branching node в правильное место возрастающей последовательности bit positions. Correctness опирается на то, что до этой позиции keys равны, а в ней уходят в разные children.
+          </p>
+          <p>
+            Поиск проверяет bit positions в строго возрастающем порядке. Пропущенные bits не сравниваются на внутренних узлах, поэтому leaf-кандидат обязательно сверяют с полным ключом. Это не лишняя страховка, а часть алгоритма: набор branching tests отделяет существующие leaves друг от друга, но неизвестный ключ способен пройти к ближайшему leaf по тем же различающим позициям.
+          </p>
+        </section>
+
+        <section id="prefix-search">
+          <h2>Префиксный поиск естественен, но выдача не бесплатна</h2>
+          <p>
+            Чтобы найти все keys с prefix $p$, спускаемся по $p$. В обычном trie достигаем вершины; в radix tree input может закончиться внутри edge label, что всё равно определяет поддерево. Затем обходим terminals ниже. Стоимость нахождения $O(|p|)$, полная стоимость $O(|p|+L)$, где $L$ — объём выданных keys или records.
+          </p>
+          <p>
+            Autocomplete часто требует не все, а top-k. В каждой вершине можно хранить лучшие candidates своего поддерева: query быстрый, но insert, delete и изменение рейтинга обновляют summaries вдоль пути и расходуют память. Альтернатива — best-first traversal с upper bounds. «Trie умеет autocomplete» описывает основу, но ranking — отдельный алгоритмический слой.
+          </p>
+          <p>
+            Prefix count поддерживается полем числа terminal в поддереве. Оно увеличивается только при новой вставке, уменьшается при настоящем удалении и пересчитывается при split/merge radix edge локально. Как и любая аугментация, поле требует инварианта и tests на дубликатах.
+          </p>
+        </section>
+
+        <section id="lpm">
+          <h2>Longest prefix match запоминает последний terminal</h2>
+          <p>
+            В таблице маршрутизации несколько prefixes могут совпадать с адресом, например `10/8` и более специфичный `10.4/16`. По правилу longest prefix match выбирают совпавший prefix максимальной длины. Trie проходит bits адреса и запоминает последний terminal с route payload. Если дальнейшее ребро отсутствует, возвращается сохранённый candidate, а не failure.
+          </p>
+          <p>
+            Для IPv4 длина пути ограничена 32 bits, для IPv6 — 128. Binary trie прост, но требует много pointer accesses; path compression, multi-bit stride и bitmap nodes уменьшают их число. Больший stride увеличивает потенциальное branching и память. Hardware/software routing designs выбирают компромисс между update rate, memory bandwidth и latency.
+          </p>
+          <p>
+            LPM отличается от обычного membership: terminal на коротком prefix является допустимым fallback даже при несовпадении полного input. Ошибка «проверить terminal только в конце» потеряет default и aggregate routes. Обратный trie по компонентам используется для доменных suffix и путей, но направление обхода является частью контракта.
+          </p>
+          <p>
+            Например, таблица содержит default route `0/0`, `10/8` и `10.4/16`. Адрес `10.4.7.9` проходит все три terminal и выбирает `/16`; `10.8.1.2` останавливается после `/8`; `192.0.2.1` возвращает default. Если более специфичный путь отсутствует, длинное частичное совпадение без terminal не должно вытеснить последний настоящий route.
+          </p>
+        </section>
+
+        <section id="children">
+          <h2>Представление children определяет фактические константы</h2>
+          <p>
+            Dense array даёт прямой индекс по символу и хорош при маленьком фиксированном alphabet. Sorted small vector хранит пары `(symbol,child)` рядом и часто выигрывает до десятков children. Hash map полезна при большом branching, но добавляет load factor, hash и нестабильный порядок. Balanced map даёт worst-case logarithm и ordered enumeration.
+          </p>
+          <p>
+            Bitmap плюс compact child array — промежуточный вариант: bit сообщает наличие символа, rank среди единиц даёт позицию child. Для alphabet 256 bitmap занимает 32 bytes, а pointers хранятся только для существующих рёбер. Popcount обычно аппаратный. Adaptive node меняет форму по мере роста, но переход между representations должен быть атомарным относительно readers.
+          </p>
+          <p>
+            Radix label тоже имеет representation: owned string упрощает lifetime, но split копирует; slice `(key,offset,length)` экономит память, но требует, чтобы backing key жил достаточно долго; interned storage разделяет bytes. Complexity statement должно учитывать сравнение label и allocation policy.
+          </p>
+        </section>
+
+        <section id="variants">
+          <h2>Ternary, adaptive и минимальные автоматы меняют компромисс</h2>
+          <p>
+            Ternary search tree хранит в вершине символ и три ссылки: меньше, равно, больше. Поиск символа внутри уровня ведёт себя как BST, а переход `equal` продвигает позицию ключа. Память на вершину фиксирована, но стоимость зависит от формы дерева сравнений символов. Структура сохраняет prefix enumeration, однако требует балансировки или хорошего распределения.
+          </p>
+          <p>
+            Adaptive radix tree выбирает node capacity по фактической степени и может хранить path prefix внутри node. Он стремится уменьшить пустые pointers и число cache misses, оставаясь динамическим ordered index. Directed acyclic word graph или минимальный acyclic finite-state automaton объединяет одинаковые suffix-поддеревья, а не только prefixes. Для статического словаря это сильно экономит память, но incremental update и payload semantics сложнее.
+          </p>
+          <p>
+            Succinct tries кодируют topology битовыми последовательностями и поддерживают rank/select, приближаясь к информационному пределу. Они особенно важны для огромных read-mostly dictionaries. Все варианты сохраняют одну идею — навигацию по digits ключа, — но дают разные гарантии updates, locality и compression. Поэтому слово trie описывает семейство, а не единственный layout.
+            Перед выбором реализации нужно заранее зафиксировать набор операций, изменяемость словаря, единицу символа, допустимую память, модель угроз и требуемый порядок выдачи результатов.
+          </p>
+        </section>
+
+        <section id="comparison">
+          <h2>Trie не заменяет B-tree и хеш-таблицу</h2>
+          <p>
+            Хеш-таблица обслуживает exact match ожидаемо за время hash $O(m)$ и короткий probe, но не сохраняет порядок и не даёт prefix enumeration без дополнительного индекса. Trie тоже читает $m$ символов, разделяет prefixes и поддерживает LPM, но расходует больше metadata и pointer traversals. Для длинных случайных keys sharing мало, и hash может быть компактнее.
+          </p>
+          <p>
+            B-tree группирует много полных separators на странице, минимизирует external-memory I/O, поддерживает lexicographic range и predecessor. Trie делает шаг по digit и может иметь большую глубину в pages. В memory prefix workloads radix tree привлекателен; на диске B+‑tree или специализированный succinct trie лучше используют blocks.
+          </p>
+          <p>
+            Строковые автоматы и suffix indexes решают другие задачи. Trie индексирует множество keys от начала. Для поиска pattern внутри одного текста нужны suffix array/tree, automaton или FM-index. Переворот keys превращает suffix query в prefix query, но не делает trie полнотекстовым индексом всех substrings без огромного множества suffix.
+          </p>
+        </section>
+
+        <section id="practice">
+          <h2>Нормализация, локальность и обновления решают исход</h2>
+          <p>
+            До вставки задают canonical encoding. Case folding, Unicode normalization и locale rules могут менять длину и равенство. Если поиск нормализует иначе, путь не совпадёт. Для display сохраняют оригинальный key отдельно, а index строят по canonical form. Изменение правил требует перестройки.
+          </p>
+          <p>
+            Object-per-character trie часто медленнее ожидаемого из-за cache misses. Arena, packed arrays, breadth-first layout и path compression уменьшают разрозненность. Hot prefixes могут стать contention points при concurrent updates. Lock-free варианты должны решать publication нового edge и безопасное освобождение nodes; последовательный proof этого не покрывает.
+          </p>
+          <p>
+            Измерение включает distribution длин и общих prefixes, alphabet, долю exact/prefix queries, число результатов и память на key. Набор случайных UUID и словарь естественного языка дают противоположные формы. Одна таблица $O(m)$ не предсказывает memory footprint и cache behavior.
+          </p>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning"><h2>Типичные ошибки</h2><ul><li>Считать существующий путь доказательством terminal key</li><li>Не фиксировать, что является символом и как нормализуется Unicode</li><li>Обещать $O(m)$ при child map с более дорогим lookup и не назвать модель</li><li>Сжимать через terminal-вершину и терять короткий ключ</li><li>При split radix edge неверно выделять общий prefix</li><li>Копировать suffix на каждом шаге и получить лишнюю квадратичную работу</li><li>Забывать последний terminal в longest prefix match</li><li>Считать prefix enumeration независимым от размера результата</li><li>Использовать rank сжатой координаты как длину string label</li><li>Сравнивать trie с B-tree без модели памяти</li></ul></section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab"><h2>Лаборатория: от символов к сжатым рёбрам</h2><p>Введите от двух до девяти ключей. Пошаговая вставка выделяет уже общий prefix, создаваемое ребро и отдельную terminal-метку. Последний кадр удаляет все нетерминальные unary-вершины и переносит их символы в radix labels. Счётчики показывают число логических символов и фактически хранимых рёбер; большая геометрия агрегируется без обрезания математического состояния.</p><div class="atlas-lab" data-atlas-lab="tries-radix-trees"></div></section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises"><h2>Упражнения</h2><div class="atlas-exercises">
+          <article class="atlas-exercise"><p><strong>1.</strong> Постройте trie для «кот», «код», «ком» и укажите terminal-вершины.</p><details><summary>Подсказка</summary><p>Первые две буквы общие.</p></details><details><summary>Показать решение</summary><p>Путь `к→о` общий, затем три ребра `т`, `д`, `м`; terminal отмечены на концах трёх ветвей.</p></details></article>
+          <article class="atlas-exercise"><p><strong>2.</strong> Почему путь «до» в trie слов «дом» и «дома» не означает membership?</p><details><summary>Подсказка</summary><p>Проверьте terminal flag.</p></details><details><summary>Показать решение</summary><p>Вершина существует как общий prefix, но не terminal. Membership требует и полного пути, и отметки конца.</p></details></article>
+          <article class="atlas-exercise"><p><strong>3.</strong> Докажите, что prune после удаления не уничтожает другой ключ.</p><details><summary>Подсказка</summary><p>Когда подъём останавливается?</p></details><details><summary>Показать решение</summary><p>Удаляются только нетерминальные вершины без детей. Если вершина нужна другому ключу, она либо terminal, либо имеет child, поэтому prune остановится.</p></details></article>
+          <article class="atlas-exercise"><p><strong>4.</strong> Сожмите цепочку ключей «roman», «romane», «romanus» в radix tree.</p><details><summary>Подсказка</summary><p>Terminal `roman` нельзя удалить.</p></details><details><summary>Показать решение</summary><p>Ребро `roman` ведёт к terminal-вершине, из неё выходят labels `e` и `us` к двум terminal-листьям.</p></details></article>
+          <article class="atlas-exercise"><p><strong>5.</strong> Что происходит при вставке «romulus» в edge label `roman`?</p><details><summary>Подсказка</summary><p>Найдите longest common prefix labels.</p></details><details><summary>Показать решение</summary><p>Общий prefix `rom`; edge делится в новой вершине, старый suffix `an` и новый `ulus` становятся разными рёбрами.</p></details></article>
+          <article class="atlas-exercise"><p><strong>6.</strong> Выведите память dense-child trie для $V$ вершин и alphabet 256 при восьмибайтовом pointer.</p><details><summary>Подсказка</summary><p>Считайте только child arrays.</p></details><details><summary>Показать решение</summary><p>$V\cdot256\cdot8=2048V$ bytes, без headers и alignment.</p></details></article>
+          <article class="atlas-exercise"><p><strong>7.</strong> Почему exact hash lookup не решает longest prefix match?</p><details><summary>Подсказка</summary><p>Длина совпавшего prefix заранее неизвестна.</p></details><details><summary>Показать решение</summary><p>Нужно проверить несколько возможных длин или дополнительный индекс. Trie проходит bits один раз и запоминает последний terminal.</p></details></article>
+          <article class="atlas-exercise"><p><strong>8.</strong> Как получить longest suffix query из prefix trie?</p><details><summary>Подсказка</summary><p>Измените направление ключей.</p></details><details><summary>Показать решение</summary><p>Хранить перевёрнутые keys и переворачивать query; общий suffix станет общим prefix.</p></details></article>
+          <article class="atlas-exercise"><p><strong>9.</strong> Сравните sorted vector и hash map children для степени три.</p><details><summary>Подсказка</summary><p>Учитывайте cache и overhead.</p></details><details><summary>Показать решение</summary><p>Vector делает до двух сравнений бинарно или три линейно, хранится плотно и обычно дешевле metadata hash table. Hash становится выгоднее при большем branching и подходящей нагрузке.</p></details></article>
+          <article class="atlas-exercise"><p><strong>10.</strong> Сформулируйте тест, который ловит ошибочное сжатие terminal-вершины.</p><details><summary>Подсказка</summary><p>Один ключ должен быть префиксом другого.</p></details><details><summary>Показать решение</summary><p>Вставить «a» и «ab», сжать, затем проверить membership обоих и отсутствие пустого/«abc». Terminal на границе должен сохраниться.</p></details></article>
+        </div></section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources"><h2>Источники и дальнейшее чтение</h2><ol class="atlas-sources"><li>Edward Fredkin, <a href="https://doi.org/10.1145/367390.367400" target="_blank" rel="noopener noreferrer">Trie Memory</a>, 1960 — первичная публикация цифрового поиска.</li><li>Donald R. Morrison, <a href="https://doi.org/10.1145/321479.321481" target="_blank" rel="noopener noreferrer">PATRICIA—Practical Algorithm To Retrieve Information Coded in Alphanumeric</a>, 1968 — первичная работа по сжатому binary trie.</li><li>Pat Morin, <a href="https://opendatastructures.org/ods-python/7_1_BinaryTrie_digital_sea.html" target="_blank" rel="noopener noreferrer">Open Data Structures: BinaryTrie</a> — открытое академическое изложение цифровых деревьев.</li><li>Stefan Nilsson, Gunnar Karlsson, <a href="https://doi.org/10.1109/49.772439" target="_blank" rel="noopener noreferrer">IP-Address Lookup Using LC-Tries</a>, 1999 — compressed trie и longest prefix matching в маршрутизации.</li></ol></section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту"><div id="atlas-route-previous"></div><div id="atlas-route-next"></div></nav><section class="atlas-completion" aria-labelledby="atlas-completion-title"><h2 id="atlas-completion-title">Сохранить локальный прогресс</h2><button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button><p id="atlas-chapter-progress-status" aria-live="polite"></p></section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
