@@ -340,6 +340,10 @@ test("wide chapter titles stay inside the content column beside the TOC", () => 
     chapterStyles,
     /\.atlas-chapter-header h1\s*\{[\s\S]*?max-width:\s*52rem;[\s\S]*?margin:\s*0\.2em auto 0\.35em;/
   );
+  assert.match(
+    chapterStyles,
+    /@media \(min-width: 50\.0625rem\) and \(max-width: 60rem\) \{\s*\.atlas-chapter-header h1,\s*\.atlas-chapter-content\s*\{\s*width:\s*min\(52rem, calc\(100% - 7rem\)\);/
+  );
 });
 
 test("page boundaries and adjacent sections have distinct keyboard buttons", () => {

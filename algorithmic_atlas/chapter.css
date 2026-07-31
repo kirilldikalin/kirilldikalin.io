@@ -894,6 +894,7 @@ mjx-container .atlas-notation-token:focus-visible {
 }
 
 @media (min-width: 50.0625rem) and (max-width: 60rem) {
+  .atlas-chapter-header h1,
   .atlas-chapter-content {
     width: min(52rem, calc(100% - 7rem));
   }
