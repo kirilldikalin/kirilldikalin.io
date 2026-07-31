@@ -110,8 +110,10 @@ test("continent 02 main route, probability branch, gates and exits match curricu
   const branch = graph.routes.find(
     ({ id }) => id === "mathematical-tools-probability"
   );
-  assert.equal(main.continuation.curriculumId, "3.1");
-  assert.equal(main.continuation.kind, "route");
+  assert.equal(main.continuation, undefined);
+  assert.deepEqual(byId.get("linear-data-structures").prerequisites, [
+    "polynomial-efficiency",
+  ]);
   assert.equal(branch.continuation.curriculumId, "7.1");
   assert.equal(branch.continuation.kind, "related");
 });

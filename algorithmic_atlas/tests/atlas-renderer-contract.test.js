@@ -91,7 +91,7 @@ test("free exploration removes route fog but never development fog", () => {
     published.filter((node) =>
       core.nodeAccessState(graph, node, completed, false) === "published-gated"
     ).length,
-    15
+    28
   );
   assert.ok(published.every((node) =>
     core.nodeAccessState(graph, node, completed, true) === "published-unlocked"
@@ -103,7 +103,12 @@ test("free exploration removes route fog but never development fog", () => {
   assert.deepEqual(
     core.continentContinuations(graph, "mathematical-tools")
       .map(({ continuation }) => continuation.curriculumId),
-    ["3.1", "7.1"]
+    ["7.1"]
+  );
+  assert.deepEqual(
+    core.continentContinuations(graph, "data-structures")
+      .map(({ continuation }) => continuation.curriculumId),
+    ["4.1", "9.8", "6.3", "7.3", "9.13"]
   );
   assert.match(
     atlasScript,

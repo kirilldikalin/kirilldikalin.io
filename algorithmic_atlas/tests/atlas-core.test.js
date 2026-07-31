@@ -37,8 +37,8 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   assert.equal(core.validateGraph(graph), graph);
   assert.equal(graph.schemaVersion, 2);
   assert.equal(graph.continents.length, 9);
-  assert.equal(graph.nodes.length, 16);
-  assert.equal(graph.routes.length, 4);
+  assert.equal(graph.nodes.length, 29);
+  assert.equal(graph.routes.length, 10);
   assert.deepEqual(
     graph.continents.map(({ name }) => name),
     [
@@ -55,7 +55,7 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   );
   assert.equal(
     graph.continents.filter(({ publication }) => publication === "published").length,
-    2
+    3
   );
 });
 
@@ -93,6 +93,15 @@ test("route order is explicit and independent of every JSON array order", () => 
     "probability-spaces",
     "random-variables-concentration",
   ];
+  const expectedStructuresCore = [
+    "linear-data-structures",
+    "hash-tables",
+    "balanced-search-trees",
+    "priority-queues-heaps",
+    "disjoint-set-union",
+    "b-trees-external-memory",
+    "range-query-structures",
+  ];
   assert.deepEqual(
     core.routeOrder(graph, "world-main").map(({ id }) => id),
     expectedWorld
@@ -109,6 +118,10 @@ test("route order is explicit and independent of every JSON array order", () => 
     core.routeOrder(graph, "mathematical-tools-probability").map(({ id }) => id),
     expectedProbabilityBranch
   );
+  assert.deepEqual(
+    core.routeOrder(graph, "data-structures-main").map(({ id }) => id),
+    expectedStructuresCore
+  );
 
   const shuffled = cloneGraph();
   shuffled.continents.reverse();
@@ -124,11 +137,13 @@ test("route order is explicit and independent of every JSON array order", () => 
     core.routeOrder(shuffled, "origins-main").map(({ id }) => id),
     expectedOrigins
   );
-  assert.deepEqual(core.topologicalOrder(shuffled).map(({ id }) => id), [
-    ...expectedOrigins,
-    ...expectedMathematicalCore,
-    ...expectedProbabilityBranch,
-  ]);
+  const topological = core.topologicalOrder(shuffled).map(({ id }) => id);
+  assert.equal(topological.length, graph.nodes.length);
+  graph.nodes.forEach((node) => {
+    node.prerequisites.forEach((dependencyId) => {
+      assert.ok(topological.indexOf(dependencyId) < topological.indexOf(node.id));
+    });
+  });
 });
 
 test("main routes are discovered by model fields rather than hardcoded ids", () => {
@@ -148,6 +163,10 @@ test("main routes are discovered by model fields rather than hardcoded ids", () 
   assert.equal(
     core.mainRoute(renamed, "nodes", "mathematical-tools").id,
     "mathematical-tools-main"
+  );
+  assert.equal(
+    core.mainRoute(renamed, "nodes", "data-structures").id,
+    "data-structures-main"
   );
   assert.equal(
     core.routeForContinent(renamed, "origins-efficiency").id,
@@ -670,7 +689,7 @@ test("the first continent is complete after exactly five published chapters", ()
   );
   assert.deepEqual(
     core.progressSummary(graph, completed),
-    { completed: 5, total: 16, percent: 31 }
+    { completed: 5, total: 29, percent: 17 }
   );
   assert.deepEqual(
     core.continentProgressSummary(graph, "origins-efficiency", completed),
@@ -692,7 +711,7 @@ test("continent two has eleven unique canonical curriculum ids", () => {
   const nodes = core.visibleNodes(graph, "mathematical-tools");
   const ids = nodes.map(({ curriculumId }) => curriculumId);
   assert.equal(nodes.length, 11);
-  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 16);
+  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 29);
   assert.deepEqual(ids.slice().sort((left, right) => {
     const leftNumber = Number(left.split(".")[1]);
     const rightNumber = Number(right.split(".")[1]);
@@ -741,8 +760,7 @@ test("eight core chapters unlock the next continent but eleven make 100 percent"
     100
   );
 
-  const next = structuredClone(core.continentMap(graph).get("data-structures"));
-  next.publication = "published";
+  const next = core.continentMap(graph).get("data-structures");
   assert.equal(
     core.continentAccessState(graph, next, completedCore, false),
     "published-unlocked"
@@ -780,23 +798,28 @@ test("probability branch entry is dotted while its internal edges are required",
   );
 });
 
-test("future continuations are metadata and never fake published nodes", () => {
+test("published inter-continent steps replace continuations while future exits stay metadata", () => {
   assert.deepEqual(
     core.continentContinuations(graph, "mathematical-tools")
       .map(({ continuation }) => continuation.curriculumId),
-    ["3.1", "7.1"]
+    ["7.1"]
   );
   assert.equal(core.routeContinuation(graph, "analysis-cases"), null);
+  assert.equal(core.routeContinuation(graph, "polynomial-efficiency"), null);
   assert.equal(
-    core.routeContinuation(graph, "polynomial-efficiency").curriculumId,
-    "3.1"
+    core.routeNeighbors(graph, "polynomial-efficiency").next.id,
+    "linear-data-structures"
   );
-  assert.ok(graph.nodes.every(({ curriculumId }) =>
-    curriculumId !== "3.1" && curriculumId !== "7.1"
-  ));
+  assert.equal(core.nodeMap(graph).get("linear-data-structures").curriculumId, "3.1");
+  assert.ok(graph.nodes.every(({ curriculumId }) => curriculumId !== "7.1"));
+  assert.deepEqual(
+    core.continentContinuations(graph, "data-structures")
+      .map(({ continuation }) => continuation.curriculumId),
+    ["4.1", "9.8", "6.3", "7.3", "9.13"]
+  );
 
   const duplicate = cloneGraph();
-  duplicate.routes.find(({ id }) => id === "mathematical-tools-main")
+  duplicate.routes.find(({ id }) => id === "mathematical-tools-probability")
     .continuation.curriculumId = "2.11";
   assert.throws(
     () => core.validateGraph(duplicate),
@@ -804,7 +827,7 @@ test("future continuations are metadata and never fake published nodes", () => {
   );
 
   const unknownTarget = cloneGraph();
-  unknownTarget.routes.find(({ id }) => id === "mathematical-tools-main")
+  unknownTarget.routes.find(({ id }) => id === "data-structures-main")
     .continuation.targetContinentId = "missing-continent";
   assert.throws(
     () => core.validateGraph(unknownTarget),
@@ -832,4 +855,99 @@ test("dataset migration preserves stable progress ids across both continents", (
   assert.deepEqual(Array.from(loaded.completedNodeIds), completed);
   assert.equal(loaded.freeExplore, true);
   assert.equal(loaded.migrated, true);
+});
+
+test("continent three has thirteen canonical ids and seven core chapters", () => {
+  const nodes = core.visibleNodes(graph, "data-structures");
+  const curriculumIds = nodes.map(({ curriculumId }) => curriculumId)
+    .sort((left, right) => Number(left.split(".")[1]) - Number(right.split(".")[1]));
+  assert.equal(nodes.length, 13);
+  assert.deepEqual(curriculumIds, [
+    "3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7",
+    "3.8", "3.9", "3.10", "3.11", "3.12", "3.13",
+  ]);
+  assert.deepEqual(core.continentCoreNodeIds(graph, "data-structures"), [
+    "linear-data-structures",
+    "hash-tables",
+    "balanced-search-trees",
+    "priority-queues-heaps",
+    "disjoint-set-union",
+    "b-trees-external-memory",
+    "range-query-structures",
+  ]);
+});
+
+test("seven structures core chapters unlock the next continent while all thirteen make 100 percent", () => {
+  const coreIds = core.continentCoreNodeIds(graph, "data-structures");
+  const completedCore = new Set(coreIds);
+  assert.equal(core.continentCoreCompleted(
+    graph,
+    "data-structures",
+    completedCore
+  ), true);
+  assert.equal(core.continentCompleted(
+    graph,
+    "data-structures",
+    completedCore
+  ), false);
+  assert.deepEqual(core.continentProgressSummary(
+    graph,
+    "data-structures",
+    completedCore
+  ), {
+    completed: 7,
+    total: 13,
+    percent: 54,
+    coreCompleted: 7,
+    coreTotal: 7,
+    branchCompleted: 0,
+    branchTotal: 6,
+    coreReady: true,
+    complete: false,
+  });
+
+  const all = new Set(core.visibleNodes(graph, "data-structures").map(({ id }) => id));
+  assert.deepEqual(core.continentProgressSummary(
+    graph,
+    "data-structures",
+    all
+  ), {
+    completed: 13,
+    total: 13,
+    percent: 100,
+    coreCompleted: 7,
+    coreTotal: 7,
+    branchCompleted: 6,
+    branchTotal: 6,
+    coreReady: true,
+    complete: true,
+  });
+
+  const next = structuredClone(core.continentMap(graph).get("algorithm-design"));
+  next.publication = "published";
+  assert.equal(
+    core.continentAccessState(graph, next, completedCore, false),
+    "published-unlocked"
+  );
+});
+
+test("structures branch entries are dotted and branch interiors remain required", () => {
+  const edges = core.graphEdges(graph, "data-structures");
+  const edge = (sourceId, targetId) => edges.find((item) =>
+    item.sourceId === sourceId && item.targetId === targetId
+  );
+  assert.equal(edge("balanced-search-trees", "augmented-search-trees").kind, "branch");
+  assert.equal(edge("hash-tables", "randomized-data-structures").kind, "branch");
+  assert.equal(edge("hash-tables", "probabilistic-filters").kind, "branch");
+  assert.equal(edge("range-query-structures", "tries-radix-trees").kind, "branch");
+  assert.equal(edge("tries-radix-trees", "persistent-succinct-structures").kind, "route");
+  assert.equal(edge("b-trees-external-memory", "lsm-learned-indexes").kind, "branch");
+});
+
+test("free exploration opens published structures without mutating progress", () => {
+  const completed = new Set(core.continentCoreNodeIds(graph, "mathematical-tools"));
+  const gated = core.nodeMap(graph).get("range-query-structures");
+  assert.equal(core.nodeAccessState(graph, gated, completed, false), "published-gated");
+  assert.equal(core.nodeAccessState(graph, gated, completed, true), "published-unlocked");
+  assert.equal(completed.has(gated.id), false);
 });

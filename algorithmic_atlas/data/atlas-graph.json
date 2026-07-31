@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.07.31-3",
+  "datasetVersion": "2026.07.31-4",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -115,17 +115,7 @@
           "nodeId": "polynomial-efficiency",
           "position": 80
         }
-      ],
-      "continuation": {
-        "curriculumId": "3.1",
-        "title": "Абстрактные типы данных и линейные структуры",
-        "targetContinentId": "data-structures",
-        "kind": "route",
-        "position": {
-          "x": 1380,
-          "y": 700
-        }
-      }
+      ]
     },
     {
       "id": "mathematical-tools-probability",
@@ -155,6 +145,162 @@
         "position": {
           "x": 1030,
           "y": 760
+        }
+      }
+    },
+    {
+      "id": "data-structures-main",
+      "title": "Структуры данных",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "linear-data-structures",
+          "position": 10
+        },
+        {
+          "nodeId": "hash-tables",
+          "position": 20
+        },
+        {
+          "nodeId": "balanced-search-trees",
+          "position": 30
+        },
+        {
+          "nodeId": "priority-queues-heaps",
+          "position": 40
+        },
+        {
+          "nodeId": "disjoint-set-union",
+          "position": 50
+        },
+        {
+          "nodeId": "b-trees-external-memory",
+          "position": 60
+        },
+        {
+          "nodeId": "range-query-structures",
+          "position": 70
+        }
+      ],
+      "continuation": {
+        "curriculumId": "4.1",
+        "title": "Полный перебор, backtracking и branch and bound",
+        "targetContinentId": "algorithm-design",
+        "kind": "route",
+        "position": {
+          "x": 1430,
+          "y": 545
+        }
+      }
+    },
+    {
+      "id": "data-structures-augmented",
+      "title": "Расширенные деревья поиска",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "augmented-search-trees",
+          "position": 10
+        }
+      ]
+    },
+    {
+      "id": "data-structures-randomized",
+      "title": "Рандомизированные структуры",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "randomized-data-structures",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "7.3",
+        "title": "Рандомизированные сортировка, выбор и хеширование",
+        "targetContinentId": "randomization-approximation",
+        "kind": "related",
+        "position": {
+          "x": 300,
+          "y": 770
+        }
+      }
+    },
+    {
+      "id": "data-structures-prefix-persistence",
+      "title": "Префиксные и персистентные структуры",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "tries-radix-trees",
+          "position": 10
+        },
+        {
+          "nodeId": "persistent-succinct-structures",
+          "position": 20
+        }
+      ],
+      "continuation": {
+        "curriculumId": "6.3",
+        "title": "Суффиксные массивы, LCP, деревья и автоматы",
+        "targetContinentId": "strings-geometry-numerics",
+        "kind": "related",
+        "position": {
+          "x": 650,
+          "y": 820
+        }
+      }
+    },
+    {
+      "id": "data-structures-filters",
+      "title": "Вероятностные фильтры",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "probabilistic-filters",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "9.8",
+        "title": "Скетчи частот и числа различных элементов",
+        "targetContinentId": "big-data-modern-models",
+        "kind": "related",
+        "position": {
+          "x": 95,
+          "y": 735
+        }
+      }
+    },
+    {
+      "id": "data-structures-storage",
+      "title": "Системные индексы",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "data-structures",
+      "entries": [
+        {
+          "nodeId": "lsm-learned-indexes",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "9.13",
+        "title": "Алгоритмика распределённого хранения",
+        "targetContinentId": "big-data-modern-models",
+        "kind": "related",
+        "position": {
+          "x": 1410,
+          "y": 805
         }
       }
     }
@@ -249,12 +395,13 @@
       "id": "data-structures",
       "name": "Структуры данных",
       "description": "Как представление данных определяет доступные операции и их стоимость",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "mathematical-tools"
       ],
       "related": [
+        "strings-geometry-numerics",
         "big-data-modern-models"
       ],
       "worldPosition": {
@@ -266,8 +413,28 @@
         "height": 108
       },
       "shapeVariant": 2,
-      "localMap": null,
-      "regions": []
+      "localMap": {
+        "viewBox": "0 0 1500 900",
+        "landPath": "M52 395 C30 252 101 112 236 64 C350 23 461 73 570 51 C690 27 795 71 905 49 C1031 24 1184 58 1316 128 C1434 191 1491 315 1453 432 C1427 510 1462 604 1394 687 C1322 776 1178 775 1056 753 C930 731 843 818 705 783 C590 754 499 807 382 758 C276 714 170 739 101 647 C42 568 71 485 52 395 Z"
+      },
+      "regions": [
+        {
+          "id": "linear-hashing",
+          "name": "Линейные структуры и хеширование"
+        },
+        {
+          "id": "trees-priority",
+          "name": "Деревья и приоритеты"
+        },
+        {
+          "id": "connectivity-ranges",
+          "name": "Связность и диапазоны"
+        },
+        {
+          "id": "storage-indexes",
+          "name": "Индексы и внешняя память"
+        }
+      ]
     },
     {
       "id": "algorithm-design",
@@ -834,6 +1001,435 @@
       "position": {
         "x": 1260,
         "y": 405
+      }
+    },
+    {
+      "id": "linear-data-structures",
+      "curriculumId": "3.1",
+      "title": "Абстрактные типы данных и линейные структуры",
+      "description": "Как один интерфейс получает разные реализации в массиве, списке, очереди и кольцевом буфере",
+      "continentId": "data-structures",
+      "regionId": "linear-hashing",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "polynomial-efficiency"
+      ],
+      "related": [],
+      "route": "./chapters/linear-data-structures.html",
+      "minutes": 26,
+      "reading": {
+        "words": 2424,
+        "formulaBlocks": 5,
+        "proofBlocks": 2,
+        "theoryMinutes": 17,
+        "labMinutes": 9
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 165,
+        "y": 175
+      }
+    },
+    {
+      "id": "hash-tables",
+      "curriculumId": "3.2",
+      "title": "Хеш-таблицы и семейства хеш-функций",
+      "description": "Коллизии, пробирование и вероятностные гарантии без обещания безусловного постоянного времени",
+      "continentId": "data-structures",
+      "regionId": "linear-hashing",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "linear-data-structures"
+      ],
+      "related": [],
+      "route": "./chapters/hash-tables.html",
+      "minutes": 38,
+      "reading": {
+        "words": 3764,
+        "formulaBlocks": 7,
+        "proofBlocks": 4,
+        "theoryMinutes": 27,
+        "labMinutes": 11
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 365,
+        "y": 130
+      }
+    },
+    {
+      "id": "balanced-search-trees",
+      "curriculumId": "3.3",
+      "title": "Деревья поиска и их балансировка",
+      "description": "Как вращения и цветовые инварианты удерживают высоту поиска логарифмической",
+      "continentId": "data-structures",
+      "regionId": "trees-priority",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "hash-tables"
+      ],
+      "related": [],
+      "route": "./chapters/balanced-search-trees.html",
+      "minutes": 38,
+      "reading": {
+        "words": 4073,
+        "formulaBlocks": 5,
+        "proofBlocks": 1,
+        "theoryMinutes": 26,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 585,
+        "y": 155
+      }
+    },
+    {
+      "id": "augmented-search-trees",
+      "curriculumId": "3.4",
+      "title": "Расширенные деревья поиска",
+      "description": "Как локальные агрегаты превращают дерево поиска в индекс статистик порядка и интервалов",
+      "continentId": "data-structures",
+      "regionId": "trees-priority",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "balanced-search-trees"
+      ],
+      "related": [],
+      "route": "./chapters/augmented-search-trees.html",
+      "minutes": 26,
+      "reading": {
+        "words": 2387,
+        "formulaBlocks": 6,
+        "proofBlocks": 2,
+        "theoryMinutes": 17,
+        "labMinutes": 9
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 600,
+        "y": 370
+      }
+    },
+    {
+      "id": "priority-queues-heaps",
+      "curriculumId": "3.5",
+      "title": "Очереди с приоритетом и кучи",
+      "description": "От двоичной кучи в массиве до амортизированных операций объединяемых куч",
+      "continentId": "data-structures",
+      "regionId": "trees-priority",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "balanced-search-trees"
+      ],
+      "related": [],
+      "route": "./chapters/priority-queues-heaps.html",
+      "minutes": 38,
+      "reading": {
+        "words": 3693,
+        "formulaBlocks": 6,
+        "proofBlocks": 7,
+        "theoryMinutes": 28,
+        "labMinutes": 10
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 810,
+        "y": 165
+      }
+    },
+    {
+      "id": "disjoint-set-union",
+      "curriculumId": "3.6",
+      "title": "Система непересекающихся множеств",
+      "description": "Почему ранг и сжатие пути почти устраняют глубину леса в длинной последовательности операций",
+      "continentId": "data-structures",
+      "regionId": "connectivity-ranges",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "priority-queues-heaps"
+      ],
+      "related": [],
+      "route": "./chapters/disjoint-set-union.html",
+      "minutes": 37,
+      "reading": {
+        "words": 3570,
+        "formulaBlocks": 7,
+        "proofBlocks": 6,
+        "theoryMinutes": 27,
+        "labMinutes": 10
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1015,
+        "y": 155
+      }
+    },
+    {
+      "id": "b-trees-external-memory",
+      "curriculumId": "3.7",
+      "title": "B-деревья, B+‑деревья и внешняя память",
+      "description": "Как размер страницы и большое ветвление меняют цену поиска, вставки и диапазонного чтения",
+      "continentId": "data-structures",
+      "regionId": "storage-indexes",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "disjoint-set-union"
+      ],
+      "related": [],
+      "route": "./chapters/b-trees-external-memory.html",
+      "minutes": 34,
+      "reading": {
+        "words": 3537,
+        "formulaBlocks": 4,
+        "proofBlocks": 3,
+        "theoryMinutes": 24,
+        "labMinutes": 10
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1205,
+        "y": 275
+      }
+    },
+    {
+      "id": "randomized-data-structures",
+      "curriculumId": "3.8",
+      "title": "Рандомизированные структуры: skip list и treap",
+      "description": "Как воспроизводимая случайность заменяет жёсткий баланс ожидаемой логарифмической высотой",
+      "continentId": "data-structures",
+      "regionId": "connectivity-ranges",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "hash-tables"
+      ],
+      "related": [],
+      "route": "./chapters/randomized-data-structures.html",
+      "minutes": 23,
+      "reading": {
+        "words": 2233,
+        "formulaBlocks": 2,
+        "proofBlocks": 2,
+        "theoryMinutes": 15,
+        "labMinutes": 8
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 340,
+        "y": 425
+      }
+    },
+    {
+      "id": "range-query-structures",
+      "curriculumId": "3.9",
+      "title": "Структуры для диапазонных запросов",
+      "description": "Как разложить один интервал на префиксы, двоичные блоки и вершины дерева с отложенными метками",
+      "continentId": "data-structures",
+      "regionId": "connectivity-ranges",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "b-trees-external-memory"
+      ],
+      "related": [],
+      "route": "./chapters/range-query-structures.html",
+      "minutes": 36,
+      "reading": {
+        "words": 3618,
+        "formulaBlocks": 8,
+        "proofBlocks": 2,
+        "theoryMinutes": 25,
+        "labMinutes": 11
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1320,
+        "y": 495
+      }
+    },
+    {
+      "id": "tries-radix-trees",
+      "curriculumId": "3.10",
+      "title": "Trie, radix tree и префиксные индексы",
+      "description": "Поиск по длине ключа, общий префикс и цена большого алфавита в явном и сжатом дереве",
+      "continentId": "data-structures",
+      "regionId": "storage-indexes",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "range-query-structures"
+      ],
+      "related": [],
+      "route": "./chapters/tries-radix-trees.html",
+      "minutes": 23,
+      "reading": {
+        "words": 2202,
+        "formulaBlocks": 3,
+        "proofBlocks": 1,
+        "theoryMinutes": 15,
+        "labMinutes": 8
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1080,
+        "y": 600
+      }
+    },
+    {
+      "id": "persistent-succinct-structures",
+      "curriculumId": "3.11",
+      "title": "Персистентные и сжатые структуры",
+      "description": "Как делить неизменившиеся узлы между версиями и приближаться к информационному пределу памяти",
+      "continentId": "data-structures",
+      "regionId": "storage-indexes",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "tries-radix-trees"
+      ],
+      "related": [],
+      "route": "./chapters/persistent-succinct-structures.html",
+      "minutes": 39,
+      "reading": {
+        "words": 4140,
+        "formulaBlocks": 4,
+        "proofBlocks": 3,
+        "theoryMinutes": 27,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 845,
+        "y": 720
+      }
+    },
+    {
+      "id": "probabilistic-filters",
+      "curriculumId": "3.12",
+      "title": "Вероятностные фильтры",
+      "description": "Как экономия памяти допускает управляемые ложноположительные ответы без потери настоящих элементов",
+      "continentId": "data-structures",
+      "regionId": "storage-indexes",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "hash-tables"
+      ],
+      "related": [],
+      "route": "./chapters/probabilistic-filters.html",
+      "minutes": 37,
+      "reading": {
+        "words": 3502,
+        "formulaBlocks": 9,
+        "proofBlocks": 3,
+        "theoryMinutes": 25,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 175,
+        "y": 580
+      }
+    },
+    {
+      "id": "lsm-learned-indexes",
+      "curriculumId": "3.13",
+      "title": "LSM-tree и learned indexes",
+      "description": "Два разных способа обменять работу записи, поиска и модели данных на меньшее число дорогих обращений",
+      "continentId": "data-structures",
+      "regionId": "storage-indexes",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "b-trees-external-memory"
+      ],
+      "related": [],
+      "route": "./chapters/lsm-learned-indexes.html",
+      "minutes": 38,
+      "reading": {
+        "words": 3900,
+        "formulaBlocks": 7,
+        "proofBlocks": 2,
+        "theoryMinutes": 26,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1275,
+        "y": 710
       }
     }
   ]

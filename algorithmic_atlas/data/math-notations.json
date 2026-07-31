@@ -678,8 +678,8 @@
       "displayNotation": "\\widehat c_i",
       "shortName": "амортизированная цена шага",
       "explanation": "Фактическая цена шага с учётом изменения потенциала структуры",
-      "scope": "local",
-      "chapterId": "analysis-cases",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "analysis-cases",
         "anchor": "potential"
@@ -695,6 +695,630 @@
       "firstDefinition": {
         "chapterId": "polynomial-efficiency",
         "anchor": "boundary"
+      }
+    },
+    {
+      "id": "adt-operation",
+      "displayNotation": "op:S\\times X\\rightharpoonup S\\times Y",
+      "shortName": "операция абстрактного типа данных",
+      "explanation": "Частичная операция переводит состояние структуры и вход в новое состояние и результат",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "interface"
+      }
+    },
+    {
+      "id": "dynamic-array-capacity",
+      "displayNotation": "C",
+      "shortName": "ёмкость динамического массива",
+      "explanation": "Число элементов, помещающихся в выделенный непрерывный блок до следующего расширения",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "dynamic-array"
+      }
+    },
+    {
+      "id": "amortized-operation-cost",
+      "displayNotation": "\\widehat c_i",
+      "shortName": "амортизированная цена операции массива",
+      "explanation": "Равномерная плата за операцию, покрывающая редкие копирования при расширении",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "amortized-proof"
+      }
+    },
+    {
+      "id": "hash-family",
+      "displayNotation": "\\mathcal H",
+      "shortName": "семейство хеш-функций",
+      "explanation": "Множество допустимых отображений ключей в таблицу, из которого случайно выбирается функция",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "hash-model"
+      }
+    },
+    {
+      "id": "hash-load-factor",
+      "displayNotation": "\\alpha=n/m",
+      "shortName": "коэффициент заполнения",
+      "explanation": "Отношение числа сохранённых ключей к числу slots хеш-таблицы",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "load-factor"
+      }
+    },
+    {
+      "id": "hash-probe-sequence",
+      "displayNotation": "h(x,i)",
+      "shortName": "последовательность пробирования",
+      "explanation": "Slot, проверяемый для ключа x на i-м шаге open addressing",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "open-addressing"
+      }
+    },
+    {
+      "id": "tree-height",
+      "displayNotation": "h(T)",
+      "shortName": "высота дерева",
+      "explanation": "Максимальное число рёбер на пути от корня дерева T до листа",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "height"
+      }
+    },
+    {
+      "id": "avl-balance-factor",
+      "displayNotation": "bf(v)",
+      "shortName": "баланс-фактор AVL-вершины",
+      "explanation": "Разность высот левого и правого поддеревьев вершины v",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "avl"
+      }
+    },
+    {
+      "id": "red-black-black-height",
+      "displayNotation": "bh(v)",
+      "shortName": "чёрная высота",
+      "explanation": "Число чёрных вершин на любом нисходящем пути от v до sentinel-листа",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "red-black"
+      }
+    },
+    {
+      "id": "monoid-aggregate",
+      "displayNotation": "A(v)",
+      "shortName": "агрегат поддерева",
+      "explanation": "Значение ассоциативного агрегата, вычисленное из ключа вершины и агрегатов детей",
+      "scope": "local",
+      "chapterId": "augmented-search-trees",
+      "firstDefinition": {
+        "chapterId": "augmented-search-trees",
+        "anchor": "local-rule"
+      }
+    },
+    {
+      "id": "subtree-size",
+      "displayNotation": "size(v)",
+      "shortName": "размер поддерева",
+      "explanation": "Число вершин в поддереве с корнем v, включая саму вершину",
+      "scope": "local",
+      "chapterId": "augmented-search-trees",
+      "firstDefinition": {
+        "chapterId": "augmented-search-trees",
+        "anchor": "order-statistic"
+      }
+    },
+    {
+      "id": "interval-subtree-maximum",
+      "displayNotation": "max(v)",
+      "shortName": "максимальная правая граница",
+      "explanation": "Наибольшая правая граница интервала среди всех вершин поддерева v",
+      "scope": "local",
+      "chapterId": "augmented-search-trees",
+      "firstDefinition": {
+        "chapterId": "augmented-search-trees",
+        "anchor": "interval-max"
+      }
+    },
+    {
+      "id": "heap-parent-index",
+      "displayNotation": "parent(i)",
+      "shortName": "индекс родителя в куче",
+      "explanation": "Позиция родительской вершины полного бинарного дерева в массиве",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "array-layout"
+      }
+    },
+    {
+      "id": "heap-child-indices",
+      "displayNotation": "left(i),right(i)",
+      "shortName": "индексы детей в куче",
+      "explanation": "Позиции левого и правого ребёнка вершины i в массивном представлении",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "array-layout"
+      }
+    },
+    {
+      "id": "heap-property",
+      "displayNotation": "A[parent(i)]\\le A[i]",
+      "shortName": "инвариант min-heap",
+      "explanation": "Ключ каждой родительской вершины не превосходит ключей её детей",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "heap-invariant"
+      }
+    },
+    {
+      "id": "heap-potential",
+      "displayNotation": "\\Phi(H)=t(H)+2m(H)",
+      "shortName": "потенциал Fibonacci heap",
+      "explanation": "Число корневых деревьев плюс удвоенное число помеченных вершин",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "fibonacci"
+      }
+    },
+    {
+      "id": "dsu-parent",
+      "displayNotation": "parent[x]",
+      "shortName": "родитель DSU-вершины",
+      "explanation": "Следующая вершина на пути к представителю множества; корень указывает на себя",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "forest"
+      }
+    },
+    {
+      "id": "dsu-size",
+      "displayNotation": "size[r]",
+      "shortName": "размер DSU-компоненты",
+      "explanation": "Число элементов множества, представителем которого является корень r",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "union-size"
+      }
+    },
+    {
+      "id": "dsu-rank",
+      "displayNotation": "rank[r]",
+      "shortName": "ранг DSU-корня",
+      "explanation": "Верхняя оценка высоты, изменяемая только при объединении корней равного ранга",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "union-rank"
+      }
+    },
+    {
+      "id": "inverse-ackermann",
+      "displayNotation": "\\alpha(n)",
+      "shortName": "обратная функция Аккермана",
+      "explanation": "Крайне медленно растущая функция в амортизированной границе union-find",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "inverse-ackermann"
+      }
+    },
+    {
+      "id": "page-io",
+      "displayNotation": "\\operatorname{I/O}",
+      "shortName": "обращение к странице",
+      "explanation": "Перенос блока между внешней памятью и оперативной памятью в блочной модели",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "external-model"
+      }
+    },
+    {
+      "id": "b-tree-fanout",
+      "displayNotation": "f",
+      "shortName": "ветвление B-дерева",
+      "explanation": "Максимальное или фактическое число дочерних страниц внутреннего узла",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "fanout"
+      }
+    },
+    {
+      "id": "b-tree-height",
+      "displayNotation": "h",
+      "shortName": "высота B-дерева",
+      "explanation": "Одинаковое для всех листьев число рёбер от корня до листовой страницы",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "height-bound"
+      }
+    },
+    {
+      "id": "skip-random-level",
+      "displayNotation": "H",
+      "shortName": "случайная высота башни",
+      "explanation": "Число уровней узла skip list, получаемое независимыми продолжениями с вероятностью p",
+      "scope": "local",
+      "chapterId": "randomized-data-structures",
+      "firstDefinition": {
+        "chapterId": "randomized-data-structures",
+        "anchor": "skip-levels"
+      }
+    },
+    {
+      "id": "treap-priority",
+      "displayNotation": "\\pi(x)",
+      "shortName": "случайный приоритет treap",
+      "explanation": "Независимый приоритет ключа x, по которому treap поддерживает min-heap-инвариант",
+      "scope": "local",
+      "chapterId": "randomized-data-structures",
+      "firstDefinition": {
+        "chapterId": "randomized-data-structures",
+        "anchor": "treap"
+      }
+    },
+    {
+      "id": "range-query",
+      "displayNotation": "Q(l,r)",
+      "shortName": "запрос диапазона",
+      "explanation": "Агрегат элементов полуинтервала [l,r) в порядке ассоциативной операции",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "range-lowbit",
+      "displayNotation": "\\operatorname{lowbit}(i)",
+      "shortName": "младший установленный бит",
+      "explanation": "Значение младшего единичного бита индекса i; задаёт длину блока BIT[i]",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "fenwick"
+      }
+    },
+    {
+      "id": "lazy-tag",
+      "displayNotation": "lazy(v)",
+      "shortName": "отложенная метка",
+      "explanation": "Обновление, уже учтённое в агрегате вершины v, но ещё не переданное её детям",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "lazy"
+      }
+    },
+    {
+      "id": "trie-key-length",
+      "displayNotation": "m=|s|",
+      "shortName": "длина строкового ключа",
+      "explanation": "Число символов строки s, которое определяет длину пути поиска в trie",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "cost"
+      }
+    },
+    {
+      "id": "trie-alphabet-size",
+      "displayNotation": "|\\Sigma|",
+      "shortName": "размер алфавита trie",
+      "explanation": "Число допустимых символов, влияющее на представление переходов и расход памяти",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "memory"
+      }
+    },
+    {
+      "id": "radix-edge-label",
+      "displayNotation": "label(e)",
+      "shortName": "метка ребра radix tree",
+      "explanation": "Непустая подстрока ключа, которой подписано сжатое ребро между ветвящимися вершинами",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "radix"
+      }
+    },
+    {
+      "id": "persistence-version",
+      "displayNotation": "v",
+      "shortName": "версия структуры",
+      "explanation": "Логическое имя неизменяемого состояния структуры: корень и метаданные, по которым запросы продолжают видеть прежнее состояние после последующих обновлений",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "persistence"
+      }
+    },
+    {
+      "id": "persistence-path-copy-cost",
+      "displayNotation": "space(update)",
+      "shortName": "память обновления с копированием пути",
+      "explanation": "Число новых узлов, создаваемых одним persistent update; для изменения одной позиции оно ограничено длиной скопированного корневого пути",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "path-copying"
+      }
+    },
+    {
+      "id": "succinct-information-bound",
+      "displayNotation": "space(n)",
+      "shortName": "память succinct-представления",
+      "explanation": "Число битов представления объекта размера n, сравниваемое с информационным минимумом B(n); succinct-граница имеет вид B(n)+o(B(n))",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "succinct"
+      }
+    },
+    {
+      "id": "bitvector-rank",
+      "displayNotation": "rank_1(i)",
+      "shortName": "число единиц в префиксе",
+      "explanation": "Количество единиц битового вектора B на полуинтервале позиций [0,i); позиция i в префикс не входит",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "bitvector"
+      }
+    },
+    {
+      "id": "bitvector-select",
+      "displayNotation": "select_1(k)",
+      "shortName": "позиция k-й единицы",
+      "explanation": "Нулевая позиция k-й единицы битового вектора B, где порядковый номер k начинается с единицы",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "bitvector"
+      }
+    },
+    {
+      "id": "filter-false-positive",
+      "displayNotation": "p_{\\mathrm{fp}}",
+      "shortName": "вероятность ложного срабатывания",
+      "explanation": "Вероятность ответа maybe для ключа, отсутствующего в точном множестве, при зафиксированной модели хеширования",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "contract"
+      }
+    },
+    {
+      "id": "filter-bit-count",
+      "displayNotation": "m",
+      "shortName": "размер битового массива",
+      "explanation": "Число битовых позиций Bloom filter",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-hash-count",
+      "displayNotation": "k",
+      "shortName": "число позиций ключа",
+      "explanation": "Число вычисляемых хеш-позиций на одну вставку или проверку Bloom filter",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-item-count",
+      "displayNotation": "n",
+      "shortName": "число вставленных ключей",
+      "explanation": "Число различных ключей, для которого проектируется вероятностный фильтр",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "probability"
+      }
+    },
+    {
+      "id": "filter-optimal-k",
+      "displayNotation": "k_*",
+      "shortName": "оптимальное число хешей",
+      "explanation": "Вещественный минимум стандартной оценки false-positive rate при фиксированных m и n; на практике округляется",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "optimal-k"
+      }
+    },
+    {
+      "id": "filter-fingerprint",
+      "displayNotation": "f",
+      "shortName": "короткий отпечаток ключа",
+      "explanation": "Короткое хеш-значение, хранимое вместо полного ключа в cuckoo или xor filter",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "cuckoo"
+      }
+    },
+    {
+      "id": "lsm-merge",
+      "displayNotation": "\\operatorname{merge}(R_1,\\ldots,R_k)",
+      "shortName": "слияние отсортированных серий",
+      "explanation": "Последовательное объединение runs с выбором новейшей видимой версии каждого ключа",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "compaction"
+      }
+    },
+    {
+      "id": "lsm-levels",
+      "displayNotation": "L",
+      "shortName": "число уровней LSM-tree",
+      "explanation": "Количество геометрически растущих дисковых уровней, через которые проходит запись",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "policies"
+      }
+    },
+    {
+      "id": "lsm-ratio",
+      "displayNotation": "T",
+      "shortName": "size ratio уровней",
+      "explanation": "Во сколько раз номинальная ёмкость следующего уровня больше предыдущего",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "policies"
+      }
+    },
+    {
+      "id": "structure-size",
+      "displayNotation": "N",
+      "shortName": "число записей",
+      "explanation": "Общее число записей, для которого оцениваются уровни и стоимость структуры",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "policies"
+      }
+    },
+    {
+      "id": "write-amplification",
+      "displayNotation": "WA",
+      "shortName": "write amplification",
+      "explanation": "Отношение всех физически записанных байтов к логическим байтам пользователя",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "amplification"
+      }
+    },
+    {
+      "id": "read-amplification",
+      "displayNotation": "RA",
+      "shortName": "read amplification",
+      "explanation": "Число независимых runs или блоков, прочитанных ради одного логического запроса",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "amplification"
+      }
+    },
+    {
+      "id": "space-amplification",
+      "displayNotation": "SA",
+      "shortName": "space amplification",
+      "explanation": "Отношение физически занятого места к объёму актуальных пользовательских данных",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "amplification"
+      }
+    },
+    {
+      "id": "learned-cdf",
+      "displayNotation": "F_n(x)",
+      "shortName": "эмпирическая CDF ключей",
+      "explanation": "Доля сохранённых ключей, не превосходящих x; после масштабирования задаёт rank",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "cdf"
+      }
+    },
+    {
+      "id": "learned-prediction",
+      "displayNotation": "\\widehat p(x)",
+      "shortName": "предсказанная позиция",
+      "explanation": "Позиция ключа, предложенная моделью до точного последующего поиска",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "cdf"
+      }
+    },
+    {
+      "id": "learned-error",
+      "displayNotation": "\\varepsilon",
+      "shortName": "граница ошибки модели",
+      "explanation": "Максимальное допустимое отклонение предсказанной позиции от точного rank",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "error-window"
       }
     }
   ]
