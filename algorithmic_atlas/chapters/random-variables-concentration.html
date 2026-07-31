@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Случайные величины и концентрация — Алгоритмический атлас</title>
+  <meta name="description" content="Случайные величины, математическое ожидание, дисперсия, ковариация и неравенства Маркова, Чебышёва, Чернова и Хёффдинга.">
+  <meta property="og:title" content="Случайные величины и концентрация — Алгоритмический атлас">
+  <meta property="og:description" content="Как перейти от распределения результата к строгим оценкам вероятности больших отклонений.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/random-variables-concentration.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/random-variables-concentration.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: { load: ['[tex]/html'] },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/random-variables-concentration-core.js" defer></script>
+  <script src="../labs/random-variables-concentration.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="random-variables-concentration">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Случайные величины и концентрация</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · ветвь 08</p>
+      <h1>Случайные величины и концентрация</h1>
+      <p class="atlas-chapter-intro">
+        Как описать числовой результат случайного опыта, разложить его
+        изменчивость и доказать, что большие отклонения действительно редки
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 95 минут</span>
+        <span>4 границы хвоста</span>
+        <span>1 лаборатория</span>
+        <span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#from-events">От событий к числам</a></li>
+          <li><a href="#random-variable">Случайная величина</a></li>
+          <li><a href="#expectation">Математическое ожидание</a></li>
+          <li><a href="#indicators">Индикаторы</a></li>
+          <li><a href="#variance">Дисперсия и ковариация</a></li>
+          <li><a href="#markov">Неравенство Маркова</a></li>
+          <li><a href="#chebyshev">Неравенство Чебышёва</a></li>
+          <li><a href="#chernoff">Границы Чернова</a></li>
+          <li><a href="#hoeffding">Неравенство Хёффдинга</a></li>
+          <li><a href="#simulation">Симуляция и доказательство</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="from-events">
+          <h2>От событий к числовому результату</h2>
+          <p>
+            Вероятностное пространство отвечает, какие исходы возможны и с
+            какими весами. Алгоритмический анализ обычно спрашивает о числе:
+            сколько сравнений выполнено, каков размер очереди, сколько коллизий
+            возникло, как далеко оценка ушла от истинного значения. Одному и
+            тому же исходу нужно сопоставить измеряемый результат.
+          </p>
+          <p>
+            Затем возникают два разных вопроса. Математическое ожидание
+            описывает средний уровень при повторении модели, а концентрация —
+            насколько вероятно существенное отклонение от этого уровня. Малое
+            ожидание само по себе ещё не означает, что почти каждый запуск
+            близок к нему.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Редкий, но дорогой запуск</h3>
+            <p>
+              Пусть стоимость равна нулю с вероятностью \(0{,}999\) и миллиону
+              с вероятностью \(0{,}001\). Ожидание равно \(1000\), однако ни один
+              запуск не стоит около тысячи. Распределение и хвост содержат
+              информацию, которую одно среднее скрывает.
+            </p>
+          </section>
+        </section>
+
+        <section id="random-variable">
+          <h2>Случайная величина — функция на исходах</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Определение в конечном пространстве</h3>
+            <p>
+              Случайная величина \(X\) — функция
+              \(\class{atlas-notation-token notation-id-random-variable}{X}
+              \colon\Omega\to\mathbb R\). Случайна не сама функция: она заранее
+              фиксирована. Случаен исход \(\omega\), поэтому случайным становится
+              значение \(X(\omega)\).
+            </p>
+          </section>
+          <p>
+            Распределение \(X\) задаётся вероятностями её значений:
+          </p>
+          <div class="atlas-math">
+            \[
+              p_X(x)=\mathbb P(X=x).
+            \]
+          </div>
+          <p>
+            Разные исходы могут давать одно значение. При двух бросках монеты
+            величина «число орлов» принимает 0, 1 и 2 с вероятностями
+            \(1/4,1/2,1/4\), хотя элементарных исходов четыре. События теперь
+            можно записывать через неравенства: \(\{X\ge t\}\) означает множество
+            всех исходов, на которых значение не меньше \(t\).
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Распределение зависит от вероятностной модели</h3>
+            <p>
+              Одна и та же функция стоимости алгоритма может иметь разные
+              распределения при разных распределениях входов или случайных
+              битов. Поэтому утверждение «время работы имеет такое-то
+              ожидание» неполно без указания источника случайности.
+            </p>
+          </section>
+        </section>
+
+        <section id="expectation">
+          <h2>Математическое ожидание</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Взвешенное среднее</h3>
+            <div class="atlas-math">
+              \[
+                \class{atlas-notation-token notation-id-expectation}{\mathbb E[X]}
+                =\sum_{\omega\in\Omega}X(\omega)p(\omega)
+                =\sum_x x\,\mathbb P(X=x).
+              \]
+            </div>
+            <p>
+              Вторая сумма идёт по возможным значениям \(X\). Ожидание не
+              обязано само быть возможным результатом: среднее честного кубика
+              равно \(3{,}5\), хотя ни одна грань такого числа не содержит.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Линейность ожидания</h3>
+            <p>
+              Для любых случайных величин с конечными ожиданиями и констант
+              \(a,b\):
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb E[aX+bY]=a\mathbb E[X]+b\mathbb E[Y].
+              \]
+            </div>
+            <p>
+              Независимость не требуется. В конечном пространстве доказательство
+              получается раскрытием суммы:
+            </p>
+            <div class="atlas-math">
+              \[
+                \sum_{\omega}(aX(\omega)+bY(\omega))p(\omega)
+                =a\sum_{\omega}X(\omega)p(\omega)
+                 +b\sum_{\omega}Y(\omega)p(\omega).
+              \]
+            </div>
+          </section>
+          <p>
+            Это делает ожидание особенно удобным в анализе алгоритмов: сложную
+            стоимость можно разложить на сумму локальных вкладов, даже когда
+            вклады зависимы.
+          </p>
+        </section>
+
+        <section id="indicators">
+          <h2>Индикатор превращает событие в число</h2>
+          <p>
+            Для события \(A\) определим индикатор
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbf 1_A(\omega)=
+              \begin{cases}
+                1, &amp; \omega\in A,\\
+                0, &amp; \omega\notin A.
+              \end{cases}
+            \]
+          </div>
+          <p>
+            Тогда \(\mathbb E[\mathbf1_A]=\mathbb P(A)\). Если \(X\) считает
+            число произошедших событий \(A_1,\ldots,A_n\), то
+            \(X=\sum_i\mathbf1_{A_i}\), и линейность даёт
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb E[X]=\sum_{i=1}^{n}\mathbb P(A_i).
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Ожидаемое число коллизирующих пар</h3>
+            <p>
+              \(n\) ключей независимо и равномерно хешируются в \(m\) ячеек.
+              Для каждой неупорядоченной пары введём индикатор совпадения
+              ячеек. Его ожидание \(1/m\), а пар \(\binom n2\). Поэтому ожидаемое
+              число коллизирующих пар равно \(\binom n2/m\). Индикаторный метод
+              избегает перечисления сложных конфигураций нескольких коллизий.
+            </p>
+          </section>
+        </section>
+
+        <section id="variance">
+          <h2>Дисперсия и ковариация</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Средний квадрат отклонения</h3>
+            <div class="atlas-math">
+              \[
+                \class{atlas-notation-token notation-id-variance}
+                  {\operatorname{Var}(X)}
+                =\mathbb E\!\left[(X-\mathbb E[X])^2\right]
+                =\mathbb E[X^2]-\mathbb E[X]^2.
+              \]
+            </div>
+            <p>
+              Дисперсия неотрицательна и измеряется в квадрате единиц \(X\).
+              Стандартное отклонение
+              \(\sigma_X=\sqrt{\operatorname{Var}(X)}\) возвращает исходные
+              единицы.
+            </p>
+          </section>
+          <p>
+            Связь двух величин описывает ковариация:
+          </p>
+          <div class="atlas-math">
+            \[
+              \operatorname{Cov}(X,Y)
+              =\mathbb E[(X-\mathbb E[X])(Y-\mathbb E[Y])]
+              =\mathbb E[XY]-\mathbb E[X]\mathbb E[Y].
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Дисперсия суммы</h3>
+            <div class="atlas-math">
+              \[
+                \operatorname{Var}\!\left(\sum_{i=1}^{n}X_i\right)
+                =\sum_{i=1}^{n}\operatorname{Var}(X_i)
+                 +2\sum_{i&lt;j}\operatorname{Cov}(X_i,X_j).
+              \]
+            </div>
+            <p>
+              Для попарно независимых величин с конечными вторыми моментами
+              ковариации равны нулю, и дисперсии складываются. Обратное неверно:
+              нулевая ковариация означает отсутствие линейной связи, но не
+              гарантирует независимость.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Сумма независимых испытаний Бернулли</h3>
+            <p>
+              Если \(X_i\in\{0,1\}\),
+              \(\mathbb P(X_i=1)=p_i\), и величины независимы, то для
+              \(X=\sum_iX_i\)
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb E[X]=\sum_i p_i,
+                \qquad
+                \operatorname{Var}(X)=\sum_i p_i(1-p_i).
+              \]
+            </div>
+          </section>
+        </section>
+
+        <section id="markov">
+          <h2>Неравенство Маркова: что даёт одно ожидание</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Условия и граница</h3>
+            <p>
+              Если \(X\ge0\) и \(a&gt;0\), то
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(X\ge a)\le\frac{\mathbb E[X]}{a}.
+              \]
+            </div>
+            <p>
+              Неотрицательность обязательна. На событии \(\{X\ge a\}\) величина
+              не меньше \(a\), поэтому
+              \(X\ge a\mathbf1_{\{X\ge a\}}\). Взяв ожидания, получаем
+              \(\mathbb E[X]\ge a\mathbb P(X\ge a)\), откуда следует граница.
+            </p>
+          </section>
+          <p>
+            Если \(\mathbb E[X]=10\), то
+            \(\mathbb P(X\ge100)\le0{,}1\). Граница универсальна и потому часто
+            груба: она не использует ни дисперсию, ни независимость, ни форму
+            распределения. Но именно эта слабость делает её применимой почти
+            без дополнительной информации.
+          </p>
+        </section>
+
+        <section id="chebyshev">
+          <h2>Неравенство Чебышёва: использовать дисперсию</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Двусторонняя граница</h3>
+            <p>
+              Если \(\mu=\mathbb E[X]\) и
+              \(\sigma^2=\operatorname{Var}(X)&lt;\infty\), то для \(t&gt;0\)
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(|X-\mu|\ge t)\le\frac{\sigma^2}{t^2}.
+              \]
+            </div>
+            <p>
+              Применим Маркова к неотрицательной величине
+              \(Y=(X-\mu)^2\) с порогом \(t^2\): её ожидание равно
+              \(\sigma^2\). Никакая независимость для одной величины не нужна.
+            </p>
+          </section>
+          <p>
+            В форме стандартных отклонений
+            \(\mathbb P(|X-\mu|\ge k\sigma)\le1/k^2\). Это утверждение для любого
+            распределения с конечной дисперсией. Оно не говорит, что хвост
+            действительно убывает как \(1/k^2\); только гарантирует, что он не
+            больше этой величины.
+          </p>
+        </section>
+
+        <section id="chernoff">
+          <h2>Границы Чернова: экспоненциальный хвост суммы</h2>
+          <p>
+            Когда \(X\) является суммой независимых ограниченных вкладов,
+            можно использовать больше структуры. Пусть
+            \(X=\sum_{i=1}^{n}X_i\), где независимые
+            \(X_i\in\{0,1\}\), и \(\mu=\mathbb E[X]\).
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Мультипликативные границы</h3>
+            <p>Для любого \(\delta&gt;0\):</p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(X\ge(1+\delta)\mu)
+                \le
+                \left(\frac{e^\delta}{(1+\delta)^{1+\delta}}\right)^\mu
+                \le
+                \exp\!\left(-\frac{\delta^2\mu}{2+\delta}\right).
+              \]
+            </div>
+            <p>Для \(0&lt;\delta&lt;1\):</p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(X\le(1-\delta)\mu)
+                \le
+                \left(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\right)^\mu
+                \le
+                \exp\!\left(-\frac{\delta^2\mu}{2}\right).
+              \]
+            </div>
+            <p>
+              В частности, при \(0&lt;\delta&lt;1\)
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(|X-\mu|\ge\delta\mu)
+                \le2\exp\!\left(-\frac{\delta^2\mu}{3}\right).
+              \]
+            </div>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Откуда появляется экспонента</h3>
+            <p>
+              Для \(\lambda&gt;0\) событие \(X\ge a\) равносильно
+              \(e^{\lambda X}\ge e^{\lambda a}\). Марков даёт
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(X\ge a)
+                \le\frac{\mathbb E[e^{\lambda X}]}{e^{\lambda a}}.
+              \]
+            </div>
+            <p>
+              Независимость позволяет разложить момент производящей функции:
+              \(\mathbb E[e^{\lambda\sum_iX_i}]
+              =\prod_i\mathbb E[e^{\lambda X_i}]\). Затем выбирают \(\lambda\),
+              минимизирующую верхнюю границу. Именно произведение независимых
+              вкладов превращается в экспоненциально малую вероятность.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Тысяча честных монет</h3>
+            <p>
+              Для числа орлов \(\mu=500\). Отклонение хотя бы на 20% означает
+              \(|X-500|\ge100\). Упрощённая двусторонняя граница даёт
+              \(2e^{-0{,}2^2\cdot500/3}\approx0{,}00255\). Это гарантированная
+              верхняя оценка, а не точная вероятность.
+            </p>
+          </section>
+        </section>
+
+        <section id="hoeffding">
+          <h2>Неравенство Хёффдинга: независимые ограниченные слагаемые</h2>
+          <p>
+            Бернуллиевы величины принимают только 0 и 1. Хёффдинг позволяет
+            каждому независимому слагаемому лежать в своём интервале.
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Точные условия</h3>
+            <p>
+              Пусть \(X_1,\ldots,X_n\) независимы и
+              \(a_i\le X_i\le b_i\) с вероятностью один. Для
+              \(S=\sum_iX_i\) и \(t&gt;0\):
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(S-\mathbb E[S]\ge t)
+                \le
+                \exp\!\left(
+                  -\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}
+                \right).
+              \]
+            </div>
+            <p>Для двух сторон:</p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(|S-\mathbb E[S]|\ge t)
+                \le
+                2\exp\!\left(
+                  -\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}
+                \right).
+              \]
+            </div>
+          </section>
+          <p>
+            Для независимых \(X_i\in[0,1]\) и среднего
+            \(\overline X=S/n\) подстановка \(t=n\varepsilon\) даёт
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb P(|\overline X-\mathbb E[\overline X]|\ge\varepsilon)
+              \le2e^{-2n\varepsilon^2}.
+            \]
+          </div>
+          <p>
+            Это объясняет, почему среднее независимых ограниченных наблюдений
+            стабилизируется с ростом выборки. Если наблюдения зависимы или не
+            ограничены указанными интервалами, формулу применять нельзя без
+            другого аргумента.
+          </p>
+        </section>
+
+        <section id="simulation">
+          <h2>Конечная симуляция не равна доказательству</h2>
+          <p>
+            Симуляция полезна: показывает форму распределения, помогает
+            обнаружить ошибку в модели и сравнить грубость границ. Но любой
+            запуск исследует конечное число исходов. Редкое событие может ни
+            разу не встретиться и всё же иметь положительную вероятность.
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Что можно заключить из эксперимента</h3>
+            <ul>
+              <li>Наблюдаемая частота — оценка вероятности, а не сама вероятность.</li>
+              <li>Столбцы гистограммы зависят от числа запусков и генератора случайности.</li>
+              <li>Совпадение с теоретической кривой на экране не проверяет условия теоремы.</li>
+              <li>Марков, Чебышёв, Чернов и Хёффдинг дают верхние границы, а не предсказание точной частоты.</li>
+            </ul>
+          </section>
+          <p>
+            Доказательство начинается с модели: независимость, диапазоны,
+            существование моментов. После этого теорема охватывает все исходы,
+            включая те, которые не появились ни в одной симуляции.
+          </p>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Что часто понимают неправильно</h2>
+          <ul>
+            <li><strong>Ожидание принимают за типичный запуск.</strong> Оно может лежать между возможными значениями или скрывать тяжёлый хвост.</li>
+            <li><strong>Требуют независимость для линейности ожидания.</strong> Она не нужна; независимость появляется при произведениях и сложении дисперсий.</li>
+            <li><strong>Складывают дисперсии зависимых величин.</strong> Нужно учесть ковариации.</li>
+            <li><strong>Применяют Маркова к величине с отрицательными значениями.</strong> Теорема требует неотрицательности.</li>
+            <li><strong>Применяют Чебышёва без конечной дисперсии.</strong> Указанный вывод использует \(\operatorname{Var}(X)&lt;\infty\).</li>
+            <li><strong>Применяют Чернова или Хёффдинга к зависимым слагаемым.</strong> Представленные версии требуют независимости.</li>
+            <li><strong>Читают верхнюю границу как равенство.</strong> Реальная вероятность может быть намного меньше.</li>
+            <li><strong>Считают миллион запусков доказательством.</strong> Конечная выборка не контролирует все исходы.</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория концентрации</h2>
+          <p>
+            Сравнивайте точное распределение суммы с симуляцией и четырьмя
+            теоретическими границами, меняя число испытаний и порог отклонения
+          </p>
+          <div class="atlas-lab" data-atlas-lab="random-variables-concentration"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p><strong>1. Распределение.</strong> Для двух честных монет пусть \(X\) — число орлов. Запишите распределение и ожидание.</p>
+              <details><summary>Показать подсказку</summary><p>Значение 1 получают два исхода из четырёх.</p></details>
+              <details><summary>Показать решение</summary><p>\(\mathbb P(X=0)=1/4\), \(\mathbb P(X=1)=1/2\), \(\mathbb P(X=2)=1/4\). Поэтому \(\mathbb E[X]=0/4+1/2+2/4=1\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>2. Индикаторы.</strong> В графе каждое из \(m\) рёбер независимо сохраняется с вероятностью \(p\). Найдите ожидаемое число сохранённых рёбер.</p>
+              <details><summary>Показать подсказку</summary><p>Для каждого ребра введите индикатор.</p></details>
+              <details><summary>Показать решение</summary><p>Если \(I_e\) — индикатор сохранения ребра, то \(X=\sum_e I_e\), а \(\mathbb E[I_e]=p\). По линейности \(\mathbb E[X]=mp\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>3. Зависимость.</strong> Нужно ли предполагать независимость рёбер в предыдущем упражнении, чтобы сохранить ответ для ожидания?</p>
+              <details><summary>Показать подсказку</summary><p>Линейность ожидания не требует независимости.</p></details>
+              <details><summary>Показать решение</summary><p>Нет. Достаточно, чтобы каждое ребро отдельно сохранялось с вероятностью \(p\). Зависимость изменит дисперсию и хвост, но не сумму ожиданий.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>4. Дисперсия Бернулли.</strong> Докажите, что для \(X\in\{0,1\}\) с \(\mathbb P(X=1)=p\) дисперсия равна \(p(1-p)\).</p>
+              <details><summary>Показать подсказку</summary><p>Для индикатора \(X^2=X\).</p></details>
+              <details><summary>Показать решение</summary><p>\(\mathbb E[X]=p\) и \(\mathbb E[X^2]=p\). Поэтому \(\operatorname{Var}(X)=p-p^2=p(1-p)\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>5. Марков.</strong> Неотрицательная стоимость имеет ожидание 20. Какую универсальную границу даёт Марков для вероятности стоимости не меньше 200?</p>
+              <details><summary>Показать подсказку</summary><p>Разделите ожидание на порог.</p></details>
+              <details><summary>Показать решение</summary><p>\(\mathbb P(X\ge200)\le20/200=0{,}1\). Без дополнительной информации гарантировать меньше нельзя этой теоремой.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>6. Чебышёв.</strong> У величины ожидание 50 и дисперсия 16. Оцените вероятность выхода за интервал \([38,62]\).</p>
+              <details><summary>Показать подсказку</summary><p>Граница интервала отстоит от среднего на 12.</p></details>
+              <details><summary>Показать решение</summary><p>\(\mathbb P(|X-50|\ge12)\le16/144=1/9\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>7. Выбор теоремы.</strong> Есть сумма 100 независимых величин из \([0,1]\), но их точные распределения неизвестны. Какая из границ главы использует именно доступную информацию?</p>
+              <details><summary>Показать подсказку</summary><p>Сопоставьте независимость и известные интервалы с условиями Хёффдинга.</p></details>
+              <details><summary>Показать решение</summary><p>Подходит Хёффдинг. Чернов в приведённой форме требует Бернуллиевых слагаемых, а Марков и Чебышёв используют меньше структуры и обычно дают более слабые границы.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>8. Нарушенное условие.</strong> Почему нельзя применять формулу Чернова главы к 100 одинаковым копиям одного броска монеты \(X_1=\cdots=X_{100}\)?</p>
+              <details><summary>Показать подсказку</summary><p>Копии имеют правильные значения и ожидания, но связаны.</p></details>
+              <details><summary>Показать решение</summary><p>Слагаемые полностью зависимы. Сумма равна либо 0, либо 100 с вероятностями \(1/2\), поэтому около среднего 50 она вообще не концентрируется. Независимость в доказательстве Чернова критична.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>9. Хёффдинг для среднего.</strong> Сколько независимых наблюдений из \([0,1]\) достаточно по Хёффдингу, чтобы вероятность ошибки среднего не меньше \(0{,}05\) была не выше \(0{,}01\)?</p>
+              <details><summary>Показать подсказку</summary><p>Решите \(2e^{-2n(0{,}05)^2}\le0{,}01\).</p></details>
+              <details><summary>Показать решение</summary><p>Нужно \(n\ge\ln(200)/(2\cdot0{,}05^2)\approx1059{,}66\), поэтому достаточно \(n=1060\). Это достаточная, не обязательно минимальная выборка.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>10. Симуляция.</strong> В миллионе запусков событие не встретилось. Доказывает ли это нулевую вероятность?</p>
+              <details><summary>Показать подсказку</summary><p>Рассмотрите событие с вероятностью \(10^{-12}\).</p></details>
+              <details><summary>Показать решение</summary><p>Нет. Событие может иметь положительную, но очень малую вероятность. Чтобы превратить наблюдение в статистический вывод, нужна отдельная модель доверия; математическое доказательство нулевой вероятности должно охватить все исходы.</p></details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              A. N. Kolmogorov,
+              <a href="https://bookstore.ams.org/CHEL/23"
+                target="_blank" rel="noopener noreferrer">Foundations of the Theory of Probability</a>
+              — аксиоматическая основа случайных величин, ожидания и вероятностных событий.
+            </li>
+            <li>
+              MIT OpenCourseWare 6.1200J,
+              <a href="https://ocw.mit.edu/courses/6-1200j-mathematics-for-computer-science-spring-2024/mit6_1200j_s24_lec24.pdf"
+                target="_blank" rel="noopener noreferrer">Lecture 24: Large Deviations</a>
+              — университетский вывод неравенств Чебышёва и Чернова с условиями.
+            </li>
+            <li>
+              Herman Chernoff,
+              <a href="https://doi.org/10.1214/aoms/1177729330"
+                target="_blank" rel="noopener noreferrer">A Measure of Asymptotic Efficiency for Tests of a Hypothesis Based on the Sum of Observations</a>,
+              1952 — первичная работа, лежащая в основе экспоненциального метода границ хвоста.
+            </li>
+            <li>
+              Wassily Hoeffding,
+              <a href="https://doi.org/10.1080/01621459.1963.10500830"
+                target="_blank" rel="noopener noreferrer">Probability Inequalities for Sums of Bounded Random Variables</a>,
+              1963 — первичный источник границы для независимых ограниченных слагаемых.
+            </li>
+            <li>
+              MIT OpenCourseWare 18.310,
+              <a href="https://ocw.mit.edu/courses/18-310-principles-of-discrete-applied-mathematics-fall-2013/d43d47ff4e18566a7a64577fba543edc_MIT18_310F13_Ch4.pdf"
+                target="_blank" rel="noopener noreferrer">Chernoff Bounds</a>
+              — подробный современный вывод и сравнение экспоненциальной границы с Чебышёвым.
+            </li>
+            <li>
+              MIT OpenCourseWare 18.440,
+              <a href="https://ocw.mit.edu/courses/18-440-probability-and-random-variables-spring-2014/1fd5dd31b394718309766856afa2517c_MIT18_440S14_Lecture28.pdf"
+                target="_blank" rel="noopener noreferrer">Covariance and Correlation</a>
+              — свойства ковариации и дисперсии суммы.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div>
+          <div id="atlas-route-next"></div>
+        </nav>
+
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Вероятностные пространства и условная вероятность — Алгоритмический атлас</title>
+  <meta name="description" content="Конечные вероятностные пространства, события, условная вероятность, независимость, формулы полной вероятности и Байеса.">
+  <meta property="og:title" content="Вероятностные пространства и условная вероятность — Алгоритмический атлас">
+  <meta property="og:description" content="Строгая модель случайного опыта и способы обновлять вероятность после получения информации.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/probability-spaces.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/probability-spaces.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: { load: ['[tex]/html'] },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/probability-spaces-core.js" defer></script>
+  <script src="../labs/probability-spaces.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="probability-spaces">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Вероятностные пространства и условная вероятность</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · ветвь 07</p>
+      <h1>Вероятностные пространства и условная вероятность</h1>
+      <p class="atlas-chapter-intro">
+        Как отделить случайный опыт от его исходов, пересчитать шансы после
+        наблюдения и не спутать независимость с невозможностью произойти вместе
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 85 минут</span>
+        <span>5 основных формул</span>
+        <span>1 лаборатория</span>
+        <span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#why-model">Зачем нужна модель</a></li>
+          <li><a href="#finite-space">Конечное пространство</a></li>
+          <li><a href="#events">События и геометрия</a></li>
+          <li><a href="#conditional">Условная вероятность</a></li>
+          <li><a href="#tree">Дерево вероятностей</a></li>
+          <li><a href="#total-probability">Полная вероятность</a></li>
+          <li><a href="#bayes">Формула Байеса</a></li>
+          <li><a href="#independence">Независимость</a></li>
+          <li><a href="#algorithmic-view">Алгоритмический взгляд</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="why-model">
+          <h2>Почему «случайно» недостаточно</h2>
+          <p>
+            Фраза «алгоритм выбирает случайный элемент» ещё не задаёт
+            вычисление. Из какого множества идёт выбор? Все ли элементы
+            равновероятны? Независим ли новый выбор от предыдущих? Что именно
+            считается успехом? Без этих ответов невозможно ни доказать гарантию,
+            ни даже воспроизвести эксперимент.
+          </p>
+          <p>
+            Вероятностное пространство превращает неопределённость в
+            математический объект. Сначала перечисляются атомарные исходы,
+            затем задаются их веса, а интересующие утверждения описываются как
+            множества исходов — события. Вероятность относится не к расплывчатой
+            «возможности», а к конкретному событию в конкретной модели.
+          </p>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>От задач о шансах к аксиомам</h3>
+            <p>
+              Классическая теория долго развивалась через конечные игры и
+              отношения числа благоприятных исходов к числу равновозможных.
+              Такой подход полезен, но не покрывает неравномерные и бесконечные
+              модели. В 1933 году Андрей Колмогоров сформулировал вероятность
+              как неотрицательную нормированную меру на событиях. В этой главе
+              мы используем конечный частный случай этой аксиоматики: он уже
+              содержит условную вероятность, независимость и формулу Байеса,
+              но не требует теории меры.
+            </p>
+          </section>
+        </section>
+
+        <section id="finite-space">
+          <h2>Конечное вероятностное пространство</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Исходы и вероятности</h3>
+            <p>
+              Пусть
+              \(\class{atlas-notation-token notation-id-sample-space}{\Omega}\)
+              — непустое конечное множество элементарных
+              исходов. Каждому \(\omega\in\Omega\) сопоставлен вес
+              \(p(\omega)\ge0\), причём
+            </p>
+            <div class="atlas-math">
+              \[
+                \sum_{\omega\in\Omega}p(\omega)=1.
+              \]
+            </div>
+            <p>
+              Событие \(A\) — подмножество \(\Omega\), а его вероятность равна
+              сумме весов входящих исходов:
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(A)=\sum_{\omega\in A}p(\omega).
+              \]
+            </div>
+          </section>
+          <p>
+            Отсюда следуют \(\mathbb P(\varnothing)=0\),
+            \(\mathbb P(\Omega)=1\), неотрицательность и аддитивность на
+            непересекающихся событиях. Если \(A\cap B=\varnothing\), то
+            \(\mathbb P(A\cup B)=\mathbb P(A)+\mathbb P(B)\).
+          </p>
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>Равномерность — дополнительное условие</h3>
+            <p>
+              Формула \(\mathbb P(A)=|A|/|\Omega|\) верна только когда все
+              элементарные исходы имеют одинаковый вес. Для суммы двух честных
+              кубиков исходы удобно брать как упорядоченные пары: их 36 и они
+              равновероятны. Сами суммы \(2,3,\ldots,12\) равновероятными не
+              являются: например, сумма 7 возникает шестью парами, а сумма 2 —
+              одной.
+            </p>
+          </section>
+        </section>
+
+        <section id="events">
+          <h2>События как области</h2>
+          <p>
+            Операции над событиями совпадают с операциями над множествами.
+            \(A\cap B\) означает совместное наступление, \(A\cup B\) — хотя бы
+            одно событие, а \(A^c=\Omega\setminus A\) — ненаступление \(A\).
+            Поэтому
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb P(A^c)=1-\mathbb P(A),
+            \]
+          </div>
+          <div class="atlas-math">
+            \[
+              \mathbb P(A\cup B)
+              =\mathbb P(A)+\mathbb P(B)-\mathbb P(A\cap B).
+            \]
+          </div>
+          <p>
+            Геометрическая модель изображает \(\Omega\) прямоугольником площади
+            один, а события — областями. Она правильно показывает сложение
+            непересекающихся площадей и двойной учёт пересечения, но остаётся
+            метафорой: форма области не кодирует причинность, время или
+            независимость.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Один бросок кубика</h3>
+            <p>
+              Для честного кубика пусть \(A=\{2,4,6\}\) — чётный результат,
+              \(B=\{4,5,6\}\) — результат не меньше четырёх. Тогда
+              \(A\cap B=\{4,6\}\), поэтому
+              \(\mathbb P(A\cup B)=3/6+3/6-2/6=4/6\).
+            </p>
+          </section>
+        </section>
+
+        <section id="conditional">
+          <h2>Условная вероятность: новое пространство после наблюдения</h2>
+          <p>
+            Если стало известно, что событие \(B\) произошло, исходы вне \(B\)
+            больше не рассматриваются. Оставшиеся веса нужно нормировать так,
+            чтобы их сумма снова стала единицей.
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Определение</h3>
+            <div class="atlas-math">
+              \[
+                \class{atlas-notation-token notation-id-conditional-probability}
+                  {\mathbb P(A\mid B)}
+                =\frac{\mathbb P(A\cap B)}{\mathbb P(B)},
+                \qquad \mathbb P(B)&gt;0.
+              \]
+            </div>
+            <p>
+              Условие \(\mathbb P(B)&gt;0\) необходимо: обычное определение не
+              делит на ноль. В конечной модели условная вероятность — доля веса
+              области \(B\), которая одновременно лежит в \(A\).
+            </p>
+          </section>
+          <p>
+            Переставляя множители, получаем правило умножения:
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb P(A\cap B)
+              =\mathbb P(B)\,\mathbb P(A\mid B)
+              =\mathbb P(A)\,\mathbb P(B\mid A).
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Карта без возвращения</h3>
+            <p>
+              Из стандартной колоды последовательно берут две карты без
+              возвращения. Вероятность двух тузов равна
+              \((4/52)(3/51)=1/221\). Второй множитель условный: после первого
+              туза в колоде осталось 51 карта и три туза. Использовать снова
+              \(4/52\) означало бы незаметно заменить опыт выбором с возвращением.
+            </p>
+          </section>
+        </section>
+
+        <section id="tree">
+          <h2>Дерево вероятностей</h2>
+          <p>
+            Последовательный опыт удобно представлять деревом. Ребро содержит
+            условную вероятность следующего выбора при уже известном префиксе.
+            Вероятность листа — произведение рёбер вдоль пути; вероятность
+            события — сумма вероятностей подходящих листьев.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему произведение вдоль пути корректно</h3>
+            <p>
+              Для событий \(A_1,\ldots,A_k\), когда все знаменатели положительны,
+              повторное применение правила умножения даёт цепное правило:
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P\!\left(\bigcap_{i=1}^{k}A_i\right)
+                =\mathbb P(A_1)
+                 \prod_{i=2}^{k}
+                 \mathbb P\!\left(A_i\mid\bigcap_{j=1}^{i-1}A_j\right).
+              \]
+            </div>
+            <p>
+              Это точное равенство, а не предположение независимости. При
+              независимых шагах условные множители лишь упрощаются до
+              безусловных вероятностей.
+            </p>
+          </section>
+          <p>
+            Дерево и диаграмма областей отвечают на разные вопросы. Области
+            хорошо показывают пересечения двух-трёх событий, дерево — порядок
+            наблюдений и изменение условных вероятностей. Одно и то же
+            вычисление полезно уметь читать в обоих представлениях.
+          </p>
+        </section>
+
+        <section id="total-probability">
+          <h2>Формула полной вероятности</h2>
+          <p>
+            Пусть события \(B_1,\ldots,B_m\) попарно несовместны, покрывают всё
+            пространство и имеют положительные вероятности. Они образуют
+            разбиение \(\Omega\). Тогда части \(A\cap B_i\) не пересекаются, а их
+            объединение равно \(A\). Поэтому
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Полная вероятность</h3>
+            <div class="atlas-math">
+              \[
+                \mathbb P(A)
+                =\sum_{i=1}^{m}\mathbb P(A\cap B_i)
+                =\sum_{i=1}^{m}\mathbb P(B_i)\mathbb P(A\mid B_i).
+              \]
+            </div>
+            <p>
+              Формула разбивает сложную вероятность на случаи. Требование
+              разбиения не декоративно: при пересечении \(B_i\) одна и та же
+              часть \(A\) была бы посчитана несколько раз, а при неполном
+              покрытии — потеряна.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Два источника запросов</h3>
+            <p>
+              70% запросов идут с мобильных устройств, где ошибка возникает с
+              вероятностью 0,02; остальные 30% — с настольных, где вероятность
+              ошибки 0,01. Случайный запрос ошибочен с вероятностью
+              \(0{,}7\cdot0{,}02+0{,}3\cdot0{,}01=0{,}017\). Это взвешенная
+              сумма условных вероятностей, а не простое среднее 0,015.
+            </p>
+          </section>
+        </section>
+
+        <section id="bayes">
+          <h2>Формула Байеса: развернуть условие</h2>
+          <p>
+            Правило умножения выражает одну и ту же совместную вероятность
+            двумя способами. При \(\mathbb P(A)&gt;0\) и \(\mathbb P(B)&gt;0\):
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb P(B\mid A)
+              =\frac{\mathbb P(A\mid B)\mathbb P(B)}{\mathbb P(A)}.
+            \]
+          </div>
+          <p>
+            Если \(B_1,\ldots,B_m\) — разбиение, знаменатель раскрывается
+            формулой полной вероятности:
+          </p>
+          <div class="atlas-math">
+            \[
+              \mathbb P(B_j\mid A)
+              =\frac{\mathbb P(B_j)\mathbb P(A\mid B_j)}
+                {\sum_{i=1}^{m}\mathbb P(B_i)\mathbb P(A\mid B_i)}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Почему базовая частота важна</h3>
+            <p>
+              Пусть признак встречается у 1% объектов. Тест обнаруживает его в
+              99% положительных объектов и даёт ложный положительный результат
+              для 5% остальных. Среди 10 000 объектов ожидаем 99 истинных и 495
+              ложных положительных результатов. Поэтому после положительного
+              теста вероятность наличия признака равна
+            </p>
+            <div class="atlas-math">
+              \[
+                \frac{0{,}01\cdot0{,}99}
+                  {0{,}01\cdot0{,}99+0{,}99\cdot0{,}05}
+                =\frac{99}{594}=\frac16.
+              \]
+            </div>
+            <p>
+              Высокая чувствительность теста не отменяет редкость исходного
+              события. Формула Байеса соединяет качество наблюдения с базовой
+              вероятностью причины.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Историческая оговорка</h3>
+            <p>
+              Эссе Томаса Байеса было опубликовано Ричардом Прайсом в 1763 году
+              после смерти автора. Оно решало конкретную обратную задачу о
+              неизвестной вероятности успеха. Современная краткая формула —
+              прямое следствие определения условной вероятности; её сегодняшняя
+              область применения значительно шире исходной постановки.
+            </p>
+          </section>
+        </section>
+
+        <section id="independence">
+          <h2>Независимость не означает несовместность</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Независимые события</h3>
+            <p>
+              События \(A\) и \(B\) независимы, если
+            </p>
+            <div class="atlas-math">
+              \[
+                \mathbb P(A\cap B)=\mathbb P(A)\mathbb P(B).
+              \]
+            </div>
+            <p>
+              Если \(\mathbb P(B)&gt;0\), это равносильно
+              \(\mathbb P(A\mid B)=\mathbb P(A)\): знание \(B\) не меняет шанс
+              \(A\). Несовместные события с положительными вероятностями,
+              напротив, зависимы: после наступления \(B\) вероятность \(A\)
+              становится нулевой.
+            </p>
+          </section>
+          <p>
+            Для семейства событий попарной независимости недостаточно. Взаимная
+            независимость требует правильного произведения вероятностей для
+            пересечения каждого непустого подсемейства.
+          </p>
+          <section class="atlas-block" data-atlas-block="counterexample">
+            <h3>Попарно независимы, но не совместно</h3>
+            <p>
+              Бросим две независимые честные монеты. Пусть \(A\) означает
+              «первая — орёл», \(B\) — «вторая — орёл», \(C\) — «результаты
+              одинаковы». Каждое событие имеет вероятность \(1/2\), а каждое
+              попарное пересечение — \(1/4\), поэтому пары независимы. Но
+              \(A\cap B\cap C\) — один исход из четырёх, тогда как произведение
+              вероятностей равно \(1/8\). Три события не взаимно независимы.
+            </p>
+          </section>
+        </section>
+
+        <section id="algorithmic-view">
+          <h2>Вероятность внутри алгоритма</h2>
+          <p>
+            Источник случайности нужно указывать явно. В рандомизированном
+            алгоритме вероятность обычно берётся по внутренним случайным битам
+            при фиксированном входе. В анализе среднего случая алгоритм может
+            быть детерминированным, а вероятность задаётся распределением
+            входов. Эти модели дают разные утверждения и не взаимозаменяются.
+          </p>
+          <p>
+            При моделировании хеширования также недостаточно фразы «хеши
+            случайны». Нужно определить семейство функций, способ выбора функции
+            и вид независимости. Полная независимость, попарная независимость и
+            универсальное семейство дают разные доступные доказательства.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Односторонняя ошибка</h3>
+            <p>
+              Пусть проверка никогда не отвергает правильный объект, а неверный
+              пропускает с вероятностью не больше \(1/4\). Три независимых
+              повторения пропустят тот же неверный объект с вероятностью не
+              больше \((1/4)^3=1/64\). Умножение требует независимости повторов;
+              без неё ошибка может остаться \(1/4\).
+            </p>
+          </section>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Что часто понимают неправильно</h2>
+          <ul>
+            <li><strong>Все названные исходы считают равновероятными.</strong> Равномерность должна следовать из модели, а не из удобства подсчёта.</li>
+            <li><strong>Меняют условие местами.</strong> В общем случае \(\mathbb P(A\mid B)\ne\mathbb P(B\mid A)\).</li>
+            <li><strong>Игнорируют базовую вероятность.</strong> Качество теста не равно вероятности причины после положительного результата.</li>
+            <li><strong>Путают несовместность и независимость.</strong> Несовместные события с ненулевыми шансами максимально влияют друг на друга.</li>
+            <li><strong>Перемножают без условия.</strong> Всегда верно цепное правило с условными вероятностями; произведение без условий требует независимости.</li>
+            <li><strong>Принимают попарную независимость за взаимную.</strong> Для трёх и более событий нужны условия на все подсемейства.</li>
+            <li><strong>Условливаются на событие нулевой вероятности.</strong> Элементарная формула главы в таком случае не определена.</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория условной вероятности</h2>
+          <p>
+            Меняйте веса конечного пространства и наблюдения, сравнивайте
+            области событий с деревом и прослеживайте пересчёт по формуле Байеса
+          </p>
+          <div class="atlas-lab" data-atlas-lab="probability-spaces"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p><strong>1. Пространство исходов.</strong> Постройте равномерное пространство для двух бросков честной монеты и найдите вероятность ровно одного орла.</p>
+              <details><summary>Показать подсказку</summary><p>Порядок бросков различает исходы.</p></details>
+              <details><summary>Показать решение</summary><p>\(\Omega=\{ОО,ОР,РО,РР\}\), веса по \(1/4\). Ровно один орёл дают (ОР) и (РО), поэтому вероятность \(1/2\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>2. Неравномерные суммы.</strong> Какова вероятность суммы 8 при броске двух честных кубиков?</p>
+              <details><summary>Показать подсказку</summary><p>Считайте упорядоченные пары, а не суммы.</p></details>
+              <details><summary>Показать решение</summary><p>Подходят \((2,6),(3,5),(4,4),(5,3),(6,2)\): пять исходов из 36, то есть \(5/36\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>3. Условие.</strong> Кубик показал число не меньше четырёх. Какова условная вероятность чётного результата?</p>
+              <details><summary>Показать подсказку</summary><p>Новое пространство — \(\{4,5,6\}\).</p></details>
+              <details><summary>Показать решение</summary><p>В условном пространстве два подходящих исхода из трёх: \(\mathbb P(\{4,6\}\mid\{4,5,6\})=2/3\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>4. Без возвращения.</strong> Из урны с тремя красными и двумя синими шарами берут два без возвращения. Найдите вероятность двух красных.</p>
+              <details><summary>Показать подсказку</summary><p>После первого красного состав урны меняется.</p></details>
+              <details><summary>Показать решение</summary><p>\((3/5)(2/4)=3/10\). Тот же ответ даёт \(\binom32/\binom52=3/10\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>5. Полная вероятность.</strong> 40% задач поступают из очереди A с долей ошибок 3%, остальные — из B с долей ошибок 1%. Найдите общий шанс ошибки.</p>
+              <details><summary>Показать подсказку</summary><p>Очереди образуют разбиение.</p></details>
+              <details><summary>Показать решение</summary><p>\(0{,}4\cdot0{,}03+0{,}6\cdot0{,}01=0{,}018\), то есть 1,8%.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>6. Байес.</strong> В условии предыдущей задачи ошибка обнаружена. Какова вероятность, что запрос пришёл из A?</p>
+              <details><summary>Показать подсказку</summary><p>Числитель — совместная вероятность A и ошибки.</p></details>
+              <details><summary>Показать решение</summary><p>\(\mathbb P(A\mid E)=0{,}4\cdot0{,}03/0{,}018=2/3\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>7. Независимость.</strong> Могут ли независимые события с вероятностями \(1/3\) и \(1/2\) быть несовместными?</p>
+              <details><summary>Показать подсказку</summary><p>Сравните вероятность пересечения.</p></details>
+              <details><summary>Показать решение</summary><p>Нет. Независимость потребовала бы \(\mathbb P(A\cap B)=1/6&gt;0\), а несовместность даёт ноль.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>8. Попарная независимость.</strong> Проверьте все три пары событий \(A,B,C\) из примера с двумя монетами и покажите, где ломается взаимная независимость.</p>
+              <details><summary>Показать подсказку</summary><p>Для пары нужно \(1/4=(1/2)^2\), для тройки — сравнить \(1/4\) и \(1/8\).</p></details>
+              <details><summary>Показать решение</summary><p>Каждое попарное пересечение содержит один из четырёх исходов, поэтому пары независимы. Тройное пересечение тоже содержит один исход и имеет вероятность \(1/4\ne1/8\), значит, семейство не взаимно независимо.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>9. Найдите ошибку.</strong> «Если тест верен в 99% случаев, то после положительного результата причина присутствует с вероятностью 99%».</p>
+              <details><summary>Показать подсказку</summary><p>Каких трёх вероятностей не хватает?</p></details>
+              <details><summary>Показать решение</summary><p>Не заданы базовая частота причины, чувствительность и вероятность ложного положительного результата. Фраза «верен в 99%» сама неоднозначна и не определяет \(\mathbb P(\text{причина}\mid\text{плюс})\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>10. Повторение проверки.</strong> Одно независимое испытание ошибается с вероятностью \(0{,}1\). Какова вероятность хотя бы одной ошибки в пяти испытаниях?</p>
+              <details><summary>Показать подсказку</summary><p>Удобнее посчитать дополнение.</p></details>
+              <details><summary>Показать решение</summary><p>Вероятность отсутствия ошибок \(0{,}9^5\), поэтому искомая вероятность \(1-0{,}9^5\approx0{,}40951\). Это не \(5\cdot0{,}1\): события «ошибка в испытании i» пересекаются.</p></details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              A. N. Kolmogorov,
+              <a href="https://bookstore.ams.org/CHEL/23"
+                target="_blank" rel="noopener noreferrer">Foundations of the Theory of Probability</a>
+              — первичный источник современной аксиоматизации вероятности;
+              английское издание AMS Chelsea оригинальной работы 1933 года.
+            </li>
+            <li>
+              MIT OpenCourseWare RES.6-012,
+              <a href="https://ocw.mit.edu/courses/res-6-012-introduction-to-probability-spring-2018/resources/lecture-notes/"
+                target="_blank" rel="noopener noreferrer">Introduction to Probability: Lecture Notes</a>
+              — университетские материалы по аксиомам, условной вероятности,
+              формуле Байеса и независимости.
+            </li>
+            <li>
+              MIT OpenCourseWare 6.041,
+              <a href="https://ocw.mit.edu/courses/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/pages/unit-i/lecture-2/"
+                target="_blank" rel="noopener noreferrer">Conditioning and Bayes' Rule</a>
+              — вывод правил умножения, полной вероятности и Байеса через дерево.
+            </li>
+            <li>
+              Thomas Bayes and Richard Price,
+              <a href="https://doi.org/10.1098/rstl.1763.0053"
+                target="_blank" rel="noopener noreferrer">An Essay towards Solving a Problem in the Doctrine of Chances</a>,
+              1763 — первичная историческая работа об обратной вероятностной задаче.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div>
+          <div id="atlas-route-next"></div>
+        </nav>
+
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Комбинаторика и методы подсчёта — Алгоритмический атлас</title>
+  <meta name="description" content="Правила суммы и произведения, перестановки, сочетания, биномиальные коэффициенты, двойной подсчёт, включение–исключение и принцип Дирихле.">
+  <meta property="og:title" content="Комбинаторика и методы подсчёта — Алгоритмический атлас">
+  <meta property="og:description" content="Как считать дискретные объекты без полного перечисления и доказывать тождества двумя подсчётами одного множества.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/combinatorics-counting.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/combinatorics-counting.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/mathematical-tools-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: { load: ['[tex]/html'] },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/combinatorics-counting-core.js" defer></script>
+  <script src="../labs/combinatorics-counting.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="combinatorics-counting">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Комбинаторика и методы подсчёта</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Математические инструменты и анализ · ветвь 06</p>
+      <h1>Комбинаторика и методы подсчёта</h1>
+      <p class="atlas-chapter-intro">
+        Как заменить перебор структурным подсчётом, не потерять варианты на
+        пересечениях и превратить равенство чисел в доказательство
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 80 минут</span>
+        <span>6 методов подсчёта</span>
+        <span>1 лаборатория</span>
+        <span>10 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#motivation">Зачем считать без перебора</a></li>
+          <li><a href="#sum-product">Сумма и произведение</a></li>
+          <li><a href="#arrangements">Перестановки и сочетания</a></li>
+          <li><a href="#binomial">Биномиальные коэффициенты</a></li>
+          <li><a href="#double-counting">Двойной подсчёт</a></li>
+          <li><a href="#inclusion-exclusion">Включение–исключение</a></li>
+          <li><a href="#pigeonhole">Принцип Дирихле</a></li>
+          <li><a href="#algorithmic-view">Алгоритмический взгляд</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="motivation">
+          <h2>Зачем считать без перебора</h2>
+          <p>
+            Алгоритм часто работает не с одним объектом, а с пространством
+            вариантов: подмножествами, маршрутами, строками, расписаниями или
+            конфигурациями памяти. Если сначала породить каждый вариант, а потом
+            пересчитать их, вычисление уже проделало почти всю трудную работу.
+            Комбинаторика задаёт более сильный вопрос: какую структуру имеет
+            множество вариантов и можно ли получить его размер, не перечисляя
+            элементы?
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Пароли как первый пример</h3>
+            <p>
+              Восьмизначный пароль из десяти цифр имеет \(10^8\) вариантов,
+              если позиции независимы и повторения разрешены. Мы получили число
+              одним умножением, а не просмотром ста миллионов строк. Но стоит
+              добавить условие «хотя бы одна цифра 7», и простое произведение
+              уже нужно дополнить подсчётом дополнения. Метод зависит не от
+              внешнего вида объектов, а от логики ограничений.
+            </p>
+          </section>
+          <p>
+            Поэтому перед формулой полезно явно назвать множество, которое
+            считается, и ответить на три вопроса: различимы ли объекты, важен ли
+            порядок и разрешены ли повторения. Большинство ошибок возникает до
+            вычислений — в неверной модели вариантов.
+          </p>
+        </section>
+
+        <section id="sum-product">
+          <h2>Два базовых правила</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Правило суммы</h3>
+            <p>
+              Если конечное множество вариантов разбито на попарно
+              непересекающиеся классы \(A_1,\ldots,A_k\), то
+            </p>
+            <div class="atlas-math">
+              \[
+                \left|\bigcup_{i=1}^{k}A_i\right|
+                =\sum_{i=1}^{k}|A_i|.
+              \]
+            </div>
+            <p>
+              Непересечение существенно: каждый объект должен попасть ровно в
+              один класс. Например, число двоичных строк длины \(n\), которые
+              заканчиваются нулём или единицей, равно
+              \(2^{n-1}+2^{n-1}=2^n\).
+            </p>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Правило произведения</h3>
+            <p>
+              Если построение объекта состоит из \(k\) последовательных выборов
+              и после любого допустимого префикса на шаге \(i\) доступно ровно
+              \(m_i\) продолжений, то число результатов равно
+            </p>
+            <div class="atlas-math">
+              \[
+                m_1m_2\cdots m_k.
+              \]
+            </div>
+            <p>
+              Важно не само слово «последовательных», а постоянное число
+              продолжений для каждого уже сделанного допустимого выбора. Если
+              оно зависит от префикса, пространство нужно дополнительно разбить
+              на случаи или описать деревом решений.
+            </p>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему произведение работает</h3>
+            <p>
+              После первого шага есть \(m_1\) ветвей. Каждая имеет \(m_2\)
+              продолжений, поэтому префиксов длины два \(m_1m_2\). Повторяя
+              рассуждение, после \(i\)-го шага получаем
+              \(m_1\cdots m_i\) префиксов. При \(i=k\) это уже готовые объекты.
+              Это одновременно доказательство по индукции и подсчёт листьев
+              равномерного дерева решений.
+            </p>
+          </section>
+        </section>
+
+        <section id="arrangements">
+          <h2>Перестановки, размещения и сочетания</h2>
+          <p>
+            Пусть имеется \(n\) различимых элементов. Упорядочить все элементы
+            можно \(n!\) способами: для первой позиции есть \(n\) выборов, для
+            второй \(n-1\), и так до одного. По соглашению \(0!=1\): существует
+            ровно один пустой порядок.
+          </p>
+          <div class="atlas-math">
+            \[
+              n!=n(n-1)\cdots2\cdot1.
+            \]
+          </div>
+          <p>
+            Если заполняются только \(k\) упорядоченных позиций без повторений,
+            число размещений равно
+          </p>
+          <div class="atlas-math">
+            \[
+              n(n-1)\cdots(n-k+1)=\frac{n!}{(n-k)!}.
+            \]
+          </div>
+          <p>
+            Когда порядок выбранных \(k\) элементов не важен, каждое
+            \(k\)-элементное подмножество было посчитано \(k!\) раз — по одному
+            разу для каждой внутренней перестановки. Деление даёт число
+            сочетаний:
+          </p>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Биномиальный коэффициент</h3>
+            <div class="atlas-math">
+              \[
+                \class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk}
+                =\frac{n!}{k!(n-k)!},
+                \qquad 0\le k\le n.
+              \]
+            </div>
+            <p>
+              Это число \(k\)-элементных подмножеств \(n\)-элементного
+              множества. Формула не является безопасным способом вычисления на
+              машине: промежуточные факториалы могут переполниться задолго до
+              ответа. Рекуррентность или поочерёдное сокращение множителей часто
+              лучше соответствует точной целочисленной арифметике.
+            </p>
+          </section>
+
+          <div class="atlas-table-wrap" role="region" tabindex="0"
+            aria-label="Четыре модели выбора">
+            <table class="atlas-comparison">
+              <thead>
+                <tr>
+                  <th scope="col">Порядок</th>
+                  <th scope="col">Повторения</th>
+                  <th scope="col">Число выборов длины \(k\)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>важен</td><td>разрешены</td><td>\(n^k\)</td></tr>
+                <tr><td>важен</td><td>запрещены</td><td>\(n!/(n-k)!\)</td></tr>
+                <tr><td>не важен</td><td>запрещены</td><td>\(\binom nk\)</td></tr>
+                <tr><td>не важен</td><td>разрешены</td><td>\(\binom{n+k-1}{k}\)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Последняя строка следует из модели «звёзды и перегородки»:
+            \(k\) одинаковых выбранных единиц разделяются \(n-1\)
+            перегородками на количества для \(n\) типов. В строке длины
+            \(k+n-1\) достаточно выбрать позиции \(k\) звёзд.
+          </p>
+        </section>
+
+        <section id="binomial">
+          <h2>Биномиальные коэффициенты как структура</h2>
+          <p>
+            Формула через факториалы удобна, но тождества лучше доказывать через
+            объекты. Зафиксируем один отмеченный элемент \(v\) среди \(n\)
+            элементов. Любое \(k\)-элементное подмножество либо содержит \(v\),
+            либо нет. В первом случае остаётся выбрать \(k-1\) элемент из
+            \(n-1\), во втором — \(k\) из \(n-1\). Получаем рекуррентность Паскаля:
+          </p>
+          <div class="atlas-math">
+            \[
+              \class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk}
+              =\binom{n-1}{k-1}+\binom{n-1}{k}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Биномиальная формула</h3>
+            <div class="atlas-math">
+              \[
+                (x+y)^n=\sum_{k=0}^{n}\binom nk x^k y^{n-k}.
+              \]
+            </div>
+            <p>
+              При раскрытии \(n\) множителей \((x+y)\) член \(x^ky^{n-k}\)
+              возникает тогда, когда из ровно \(k\) множителей выбран \(x\).
+              Набор этих множителей задаётся \(k\)-элементным подмножеством,
+              поэтому коэффициент равен \(\binom nk\).
+            </p>
+          </section>
+          <p>
+            Подстановка \(x=y=1\) даёт
+            \(\sum_{k=0}^{n}\binom nk=2^n\). Слева подмножества сгруппированы
+            по размеру, справа каждый из \(n\) элементов независимо либо
+            включён, либо нет. Это уже пример двойного подсчёта.
+          </p>
+        </section>
+
+        <section id="double-counting">
+          <h2>Двойной подсчёт: одно множество, два описания</h2>
+          <p>
+            Метод начинается не с алгебры, а с конечного множества объектов
+            \(U\). Если два независимых рассуждения считают каждый элемент
+            \(U\) ровно один раз, их результаты равны. Такая конструкция часто
+            объясняет, почему тождество верно, а не только проверяет его.
+          </p>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Лемма о рукопожатиях</h3>
+            <p>
+              В конечном неориентированном графе сумма степеней вершин равна
+              удвоенному числу рёбер:
+            </p>
+            <div class="atlas-math">
+              \[
+                \sum_{v\in V}\deg(v)=2|E|.
+              \]
+            </div>
+            <p>
+              Считаем инцидентности «вершина — ребро». Группировка по вершинам
+              даёт левую часть. Группировка по рёбрам даёт правую, потому что у
+              каждого ребра два конца. Следствие: число вершин нечётной степени
+              чётно, поскольку сумма степеней чётна.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Подсчёт отмеченного подмножества</h3>
+            <p>
+              Посчитаем пары \((S,v)\), где \(S\subseteq[n]\), \(|S|=k\) и
+              \(v\in S\). Сначала выбираем \(S\), затем один из его \(k\)
+              элементов: \(k\binom nk\). Или сначала выбираем \(v\), затем
+              остальные \(k-1\) элементов: \(n\binom{n-1}{k-1}\). Поэтому
+            </p>
+            <div class="atlas-math">
+              \[
+                k\binom nk=n\binom{n-1}{k-1}.
+              \]
+            </div>
+          </section>
+        </section>
+
+        <section id="inclusion-exclusion">
+          <h2>Включение–исключение: исправление перекрытий</h2>
+          <p>
+            Для двух множеств сумма \(|A|+|B|\) дважды считает пересечение.
+            Один экземпляр нужно вычесть:
+          </p>
+          <div class="atlas-math">
+            \[
+              |A\cup B|=|A|+|B|-|A\cap B|.
+            \]
+          </div>
+          <p>
+            Для трёх множеств после вычитания попарных пересечений элемент
+            тройного пересечения сначала посчитан три раза, затем вычтен три
+            раза. Его нужно вернуть один раз:
+          </p>
+          <div class="atlas-math">
+            \[
+              |A\cup B\cup C|
+              =|A|+|B|+|C|
+              -|A\cap B|-|A\cap C|-|B\cap C|
+              +|A\cap B\cap C|.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Общая формула</h3>
+            <div class="atlas-math">
+              \[
+                \left|\bigcup_{i=1}^{m}A_i\right|
+                =\sum_{\varnothing\ne I\subseteq[m]}
+                  (-1)^{|I|+1}\left|\bigcap_{i\in I}A_i\right|.
+              \]
+            </div>
+            <p>
+              Возьмём элемент, принадлежащий ровно \(r\) множествам. Его
+              суммарный коэффициент справа равен
+              \(\binom r1-\binom r2+\cdots+(-1)^{r+1}\binom rr=1\), что следует
+              из \((1-1)^r=0\). Значит, каждый элемент объединения получает
+              коэффициент ровно один.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Строки, в которых встречаются обе цифры</h3>
+            <p>
+              Среди двоичных строк длины \(n\) исключим строки без нулей и без
+              единиц. Таких исключительных строк по одной каждого вида, а их
+              пересечение пусто при \(n&gt;0\). Поэтому строк, содержащих обе
+              цифры, \(2^n-2\). Здесь дополнение короче прямого разбиения по
+              позициям первого нуля и первой единицы.
+            </p>
+          </section>
+        </section>
+
+        <section id="pigeonhole">
+          <h2>Принцип Дирихле: существование без поиска</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Обобщённый принцип Дирихле</h3>
+            <p>
+              Если \(N\) объектов распределены по \(k&gt;0\) ящикам, то хотя бы
+              в одном ящике находится не меньше \(\lceil N/k\rceil\) объектов.
+            </p>
+            <p>
+              Иначе в каждом ящике было бы не больше
+              \(\lceil N/k\rceil-1&lt;N/k\) объектов, а всего — меньше \(N\), что
+              противоречит условию. Доказательство не говорит, какой именно
+              ящик переполнен, но гарантирует его существование.
+            </p>
+          </section>
+          <p>
+            В алгоритмах «ящиком» часто становится значение хеш-функции,
+            остаток по модулю, состояние автомата или подпись объекта. Если
+            возможных входов больше, чем подписей, коллизия неизбежна. Это не
+            недостаток конкретной реализации: никакая функция в меньшее
+            множество не может быть инъективной.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Два одинаковых остатка</h3>
+            <p>
+              Среди \(m+1\) целых чисел найдутся два с одинаковым остатком по
+              модулю \(m\), потому что остатков только \(m\). Их разность делится
+              на \(m\). Сам принцип не требует равномерного распределения и не
+              утверждает, что все ящики заполнены почти одинаково.
+            </p>
+          </section>
+        </section>
+
+        <section id="algorithmic-view">
+          <h2>Что меняется при переходе к алгоритму</h2>
+          <p>
+            Формула числа объектов не всегда сразу даёт быстрый алгоритм их
+            генерации. \(2^n\) подмножеств можно сосчитать мгновенно в модели
+            больших целых, но вывести каждое всё равно требует экспоненциального
+            объёма результата. И наоборот, динамическая программа для
+            биномиальных коэффициентов реализует рекуррентность Паскаля за
+            \(O(nk)\) сложений, не строя факториалы.
+          </p>
+          <dl class="atlas-definition-list">
+            <div>
+              <dt>Подсчёт</dt>
+              <dd>Возвращает число объектов и может быть намного короче полного списка.</dd>
+            </div>
+            <div>
+              <dt>Перечисление</dt>
+              <dd>Выводит все объекты; время не может быть меньше размера вывода.</dd>
+            </div>
+            <div>
+              <dt>Выборка</dt>
+              <dd>Порождает один объект, часто случайный, не перечисляя всё пространство.</dd>
+            </div>
+          </dl>
+          <p>
+            Ещё одно различие — точное число и его представление. Значение
+            \(\binom{1000}{500}\) огромно, но двоичная запись имеет лишь порядка
+            тысячи бит. Анализ точного алгоритма должен учитывать стоимость
+            арифметики над такими числами, а не считать каждое сложение
+            постоянным автоматически.
+          </p>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Что часто считают неверно</h2>
+          <ul>
+            <li><strong>Складывают пересекающиеся случаи.</strong> Перед правилом суммы нужно доказать, что классы не пересекаются, либо применить включение–исключение.</li>
+            <li><strong>Забывают о порядке.</strong> Команда из трёх человек и пьедестал из трёх мест — разные множества объектов.</li>
+            <li><strong>Делят на число симметрий без проверки.</strong> Это допустимо только когда каждый объект был посчитан одинаковое число раз.</li>
+            <li><strong>Считают повторения запрещёнными по умолчанию.</strong> Условие должно явно отвечать, можно ли выбирать элемент снова.</li>
+            <li><strong>Принимают принцип Дирихле за алгоритм поиска.</strong> Он доказывает существование, но не обязательно строит нужную пару эффективно.</li>
+            <li><strong>Вычисляют факториалы напрямую.</strong> Алгебраически верная формула может быть численно неудобной и переполнять машинный тип.</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория методов подсчёта</h2>
+          <p>
+            Соберите конечное пространство вариантов, переключайте ограничения
+            и сравнивайте прямое перечисление с формулами, двойным подсчётом и
+            включением–исключением
+          </p>
+          <div class="atlas-lab" data-atlas-lab="combinatorics-counting"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p><strong>1. Номерной знак.</strong> Сколько строк вида «две разные буквы, затем три цифры» можно составить из 26 латинских букв и десяти цифр, если цифры могут повторяться?</p>
+              <details><summary>Показать подсказку</summary><p>Выбор второй буквы зависит от первой, выборы цифр — нет.</p></details>
+              <details><summary>Показать решение</summary><p>Для букв \(26\cdot25\) вариантов, для цифр \(10^3\). По правилу произведения ответ \(26\cdot25\cdot10^3=650000\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>2. Команда или порядок.</strong> Из 12 человек выберите команду из четырёх и отдельно назначьте в ней капитана.</p>
+              <details><summary>Показать подсказку</summary><p>После выбора команды капитаном может стать любой её участник.</p></details>
+              <details><summary>Показать решение</summary><p>\(4\binom{12}{4}=1980\). Равносильный подсчёт: сначала капитан \(12\) способами, затем ещё трое из оставшихся \(11\): \(12\binom{11}{3}\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>3. Симметрия.</strong> Докажите комбинаторно \(\binom nk=\binom n{n-k}\).</p>
+              <details><summary>Показать подсказку</summary><p>Сопоставьте подмножеству его дополнение.</p></details>
+              <details><summary>Показать решение</summary><p>Выбор \(k\) включённых элементов однозначно задаёт \(n-k\) невключённых и наоборот. Дополнение — биекция между двумя семействами.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>4. Двойной подсчёт.</strong> Докажите \(\sum_{k=0}^{n}k\binom nk=n2^{n-1}\).</p>
+              <details><summary>Показать подсказку</summary><p>Посчитайте пары \((S,v)\), где \(v\in S\subseteq[n]\).</p></details>
+              <details><summary>Показать решение</summary><p>Группировка по размеру \(S\) даёт левую часть. Если сначала выбрать \(v\) \(n\) способами, остальные \(n-1\) элементов независимо входят или не входят в \(S\), что даёт \(n2^{n-1}\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>5. Включение–исключение.</strong> Сколько целых чисел от 1 до 100 делятся на 2 или на 5?</p>
+              <details><summary>Показать подсказку</summary><p>Числа, делящиеся на 10, посчитаны дважды.</p></details>
+              <details><summary>Показать решение</summary><p>\(\lfloor100/2\rfloor+\lfloor100/5\rfloor-\lfloor100/10\rfloor=50+20-10=60\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>6. Все символы встречаются.</strong> Сколько строк длины \(n\ge2\) над алфавитом \(\{0,1\}\) содержат оба символа?</p>
+              <details><summary>Показать подсказку</summary><p>Вычтите две постоянные строки.</p></details>
+              <details><summary>Показать решение</summary><p>Всего \(2^n\) строк. Не подходят только \(00\ldots0\) и \(11\ldots1\), поэтому ответ \(2^n-2\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>7. Звёзды и перегородки.</strong> Сколькими способами можно распределить 8 одинаковых задач между 3 серверами, разрешая пустые серверы?</p>
+              <details><summary>Показать подсказку</summary><p>Решите \(x_1+x_2+x_3=8\) в неотрицательных целых.</p></details>
+              <details><summary>Показать решение</summary><p>Строка содержит 8 звёзд и 2 перегородки. Выбираем позиции перегородок среди 10 мест: \(\binom{10}{2}=45\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>8. Дирихле.</strong> Докажите, что среди 13 целых чисел найдутся два с одинаковым остатком при делении на 12.</p>
+              <details><summary>Показать подсказку</summary><p>Остатки — ящики.</p></details>
+              <details><summary>Показать решение</summary><p>Возможны только остатки \(0,1,\ldots,11\), то есть 12 ящиков. Тринадцать чисел нельзя разложить по ним без повторения ящика.</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>9. Найдите ошибку.</strong> «Из десяти книг выбираем три: для первой 10 вариантов, для второй 9, для третьей 8, значит, ответ 720».</p>
+              <details><summary>Показать подсказку</summary><p>Сколько раз посчитана одна и та же тройка?</p></details>
+              <details><summary>Показать решение</summary><p>Если порядок не важен, каждая тройка посчитана \(3!=6\) раз. Ответ \(720/6=120=\binom{10}{3}\).</p></details>
+            </article>
+            <article class="atlas-exercise">
+              <p><strong>10. Перечисление и подсчёт.</strong> Почему формула \(2^n\) не даёт алгоритм вывода всех подмножеств за полиномиальное по \(n\) время?</p>
+              <details><summary>Показать подсказку</summary><p>Оцените хотя бы число выводимых объектов.</p></details>
+              <details><summary>Показать решение</summary><p>Сам вывод содержит \(2^n\) различных подмножеств, поэтому уже требует \(\Omega(2^n)\) действий при постоянной цене выдачи одного объекта. Быстрый подсчёт размера не сокращает размер результата перечисления.</p></details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              Eric Lehman, F. Thomson Leighton, Albert R. Meyer,
+              <a href="https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/mit6_042js15_textbook.pdf"
+                target="_blank" rel="noopener noreferrer">Mathematics for Computer Science</a>
+              — академический учебник MIT с доказательствами правил подсчёта,
+              биномиальных тождеств, принципа Дирихле и включения–исключения.
+            </li>
+            <li>
+              Jacob Fox,
+              <a href="https://math.mit.edu/~fox/MAT307-lecture02.pdf"
+                target="_blank" rel="noopener noreferrer">Pigeonhole Principle and Double Counting</a>
+              — конспект MIT о принципе Дирихле и доказательствах двойным подсчётом.
+            </li>
+            <li>
+              Stanford CS109,
+              <a href="https://web.stanford.edu/class/archive/cs/cs109/cs109.1178/lectureHandouts/030-counting.pdf"
+                target="_blank" rel="noopener noreferrer">Counting</a>
+              — университетский материал о правилах суммы и произведения,
+              перестановках, сочетаниях и включении–исключении.
+            </li>
+            <li>
+              MIT 18.05,
+              <a href="https://math.mit.edu/~dav/05.dir/class1-counting.pdf"
+                target="_blank" rel="noopener noreferrer">Counting and Sets</a>
+              — геометрическое и множественное объяснение базовых методов подсчёта.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div>
+          <div id="atlas-route-next"></div>
+        </nav>
+
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
