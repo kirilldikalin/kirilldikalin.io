@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import json
+import re
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -9,6 +11,12 @@ ROOT = Path(__file__).resolve().parent.parent
 
 PUBLIC_PAGES = (
     "index.html",
+    "algorithmic_atlas/index.html",
+    "algorithmic_atlas/chapters/before-computers.html",
+    "algorithmic_atlas/chapters/euclidean-algorithm.html",
+    "algorithmic_atlas/chapters/turing-machine-transition.html",
+    "algorithmic_atlas/chapters/input-size-and-cost.html",
+    "algorithmic_atlas/chapters/asymptotic-estimates.html",
     "articles/myths_DE.html",
     "brain/main_brain.html",
     "brain/map_msk/map_msk.html",
@@ -53,17 +61,108 @@ class PageParser(HTMLParser):
         super().__init__()
         self.ids = []
         self.references = []
+        self.atlas_node_id = None
+        self.atlas_blocks = []
+        self.notation_ids = []
+        self.visible_text = []
+        self.display_math_outside_wrapper = []
+        self._ignored_text_depth = 0
+        self._math_wrapper_depth = 0
+        self._open_tags = []
 
     def handle_starttag(self, tag, attrs):
         attributes = dict(attrs)
 
         if "id" in attributes:
             self.ids.append(attributes["id"])
+        if tag == "body" and attributes.get("data-atlas-node-id"):
+            self.atlas_node_id = attributes["data-atlas-node-id"]
+        if attributes.get("data-atlas-block"):
+            self.atlas_blocks.append(attributes["data-atlas-block"])
+        if attributes.get("data-notation-id"):
+            self.notation_ids.append(attributes["data-notation-id"])
+        if tag in {"script", "style"}:
+            self._ignored_text_depth += 1
+        is_math_wrapper = "atlas-math" in attributes.get("class", "").split()
+        self._open_tags.append((tag, is_math_wrapper))
+        if is_math_wrapper:
+            self._math_wrapper_depth += 1
 
         for attribute in REFERENCE_ATTRIBUTES.get(tag, ()):
             value = attributes.get(attribute)
             if value:
                 self.references.append((tag, attribute, value))
+
+    def handle_endtag(self, tag):
+        if tag in {"script", "style"} and self._ignored_text_depth:
+            self._ignored_text_depth -= 1
+        for index in range(len(self._open_tags) - 1, -1, -1):
+            open_tag, _ = self._open_tags[index]
+            if open_tag != tag:
+                continue
+            closed = self._open_tags[index:]
+            del self._open_tags[index:]
+            self._math_wrapper_depth -= sum(
+                1 for _, is_wrapper in closed if is_wrapper
+            )
+            break
+
+    def handle_data(self, data):
+        if not self._ignored_text_depth and data.strip():
+            self.visible_text.append(data)
+            self.notation_ids.extend(
+                re.findall(
+                    r"\\class\{atlas-notation-token notation-id-([a-z0-9-]+)\}",
+                    data,
+                )
+            )
+            if (
+                self._math_wrapper_depth == 0
+                and (r"\[" in data or r"\]" in data)
+            ):
+                self.display_math_outside_wrapper.append(data.strip()[:80])
+
+
+def math_delimiter_errors(text):
+    errors = []
+    delimiter_pattern = re.compile(r"\\\(|\\\)|\\\[|\\\]")
+    raw_command_pattern = re.compile(r"\\[A-Za-z]+")
+    mode = None
+    previous_end = 0
+
+    def add_raw_commands(fragment, offset):
+        for command in raw_command_pattern.finditer(fragment):
+            errors.append(
+                f"TeX command outside math at character "
+                f"{offset + command.start()}: {command.group(0)}"
+            )
+
+    for delimiter in delimiter_pattern.finditer(text):
+        token = delimiter.group(0)
+        if mode is None:
+            add_raw_commands(text[previous_end:delimiter.start()], previous_end)
+            if token == r"\(":
+                mode = "inline"
+            elif token == r"\[":
+                mode = "display"
+            else:
+                errors.append(
+                    f"closing delimiter without opener at character {delimiter.start()}"
+                )
+        else:
+            expected = r"\)" if mode == "inline" else r"\]"
+            if token != expected:
+                errors.append(
+                    f"expected {expected} before {token} at character {delimiter.start()}"
+                )
+            mode = None
+            previous_end = delimiter.end()
+
+    if mode is None:
+        add_raw_commands(text[previous_end:], previous_end)
+    else:
+        errors.append(f"unclosed {mode} math delimiter")
+    return errors
 
 
 def parse_page(path):
@@ -89,6 +188,152 @@ def local_target(source, value):
         target = source.parent / decoded_path
 
     return target.resolve(), unquote(parsed.fragment)
+
+
+def atlas_route_path(route):
+    if not isinstance(route, str) or not route.startswith("./"):
+        return None
+    return (ROOT / "algorithmic_atlas" / route[2:]).resolve()
+
+
+def validate_atlas(errors, parsed_pages):
+    graph_path = ROOT / "algorithmic_atlas/data/atlas-graph.json"
+    notation_path = ROOT / "algorithmic_atlas/data/math-notations.json"
+    try:
+        graph = json.loads(graph_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        errors.append(f"algorithmic_atlas/data/atlas-graph.json: {error}")
+        return
+
+    try:
+        registry = json.loads(notation_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        errors.append(f"algorithmic_atlas/data/math-notations.json: {error}")
+        return
+
+    nodes = graph.get("nodes", [])
+    node_by_id = {
+        node.get("id"): node
+        for node in nodes
+        if isinstance(node, dict) and isinstance(node.get("id"), str)
+    }
+    published_routes = set()
+    chapter_parsers = {}
+
+    for node in nodes:
+        node_id = node.get("id", "<missing>")
+        publication = node.get("publication")
+        features = node.get("features")
+        if not isinstance(features, dict):
+            errors.append(f"atlas node {node_id}: features must be an object")
+            continue
+
+        if publication == "planned":
+            if node.get("route") is not None:
+                errors.append(f"atlas node {node_id}: planned node must not have a route")
+            if any(features.get(name) for name in ("proof", "interactive", "exercises")):
+                errors.append(
+                    f"atlas node {node_id}: planned node advertises missing content"
+                )
+            continue
+
+        if publication != "published":
+            errors.append(f"atlas node {node_id}: unknown publication state {publication}")
+            continue
+
+        target = atlas_route_path(node.get("route"))
+        if target is None:
+            errors.append(f"atlas node {node_id}: published route must be local")
+            continue
+        try:
+            target.relative_to(ROOT / "algorithmic_atlas")
+        except ValueError:
+            errors.append(f"atlas node {node_id}: route escapes the atlas")
+            continue
+        if target in published_routes:
+            errors.append(f"atlas node {node_id}: duplicate published route")
+        published_routes.add(target)
+        if not target.is_file():
+            errors.append(f"atlas node {node_id}: published page does not exist")
+            continue
+
+        parser = parsed_pages.get(target)
+        if parser is None:
+            parser = parse_page(target)
+            parsed_pages[target] = parser
+        chapter_parsers[node_id] = parser
+        if parser.atlas_node_id != node_id:
+            errors.append(
+                f"{target.relative_to(ROOT)}: body data-atlas-node-id "
+                f"must be {node_id}"
+            )
+
+        actual_features = {
+            "proof": "proof" in parser.atlas_blocks,
+            "interactive": "lab" in parser.atlas_blocks,
+            "exercises": "exercises" in parser.atlas_blocks,
+        }
+        for feature, actual in actual_features.items():
+            if features.get(feature) is not actual:
+                errors.append(
+                    f"atlas node {node_id}: features.{feature}={features.get(feature)!r} "
+                    f"but page content is {actual}"
+                )
+
+        visible_text = " ".join(parser.visible_text)
+        for math_error in math_delimiter_errors(visible_text):
+            errors.append(f"{target.relative_to(ROOT)}: {math_error}")
+        for snippet in parser.display_math_outside_wrapper:
+            errors.append(
+                f"{target.relative_to(ROOT)}: display math is outside "
+                f".atlas-math: {snippet}"
+            )
+
+    entries = registry.get("entries")
+    if registry.get("schemaVersion") != 1 or not isinstance(entries, list):
+        errors.append("math notation registry: unsupported schema")
+        return
+
+    notation_by_id = {}
+    for entry in entries:
+        notation_id = entry.get("id") if isinstance(entry, dict) else None
+        if not notation_id:
+            errors.append("math notation registry: entry id is required")
+            continue
+        if notation_id in notation_by_id:
+            errors.append(f"math notation registry: duplicate id {notation_id}")
+            continue
+        notation_by_id[notation_id] = entry
+
+        if entry.get("scope") not in {"global", "local"}:
+            errors.append(f"math notation {notation_id}: invalid scope")
+        if entry.get("scope") == "local" and entry.get("chapterId") not in node_by_id:
+            errors.append(f"math notation {notation_id}: unknown local chapter")
+
+        definition = entry.get("firstDefinition")
+        if not isinstance(definition, dict):
+            errors.append(f"math notation {notation_id}: firstDefinition is required")
+            continue
+        definition_node = node_by_id.get(definition.get("chapterId"))
+        if not definition_node or definition_node.get("publication") != "published":
+            errors.append(f"math notation {notation_id}: definition chapter is unavailable")
+            continue
+        definition_parser = chapter_parsers.get(definition.get("chapterId"))
+        if (
+            definition_parser is None
+            or definition.get("anchor") not in definition_parser.ids
+        ):
+            errors.append(f"math notation {notation_id}: definition anchor is missing")
+
+    for node_id, parser in chapter_parsers.items():
+        for notation_id in parser.notation_ids:
+            entry = notation_by_id.get(notation_id)
+            if entry is None:
+                errors.append(f"atlas chapter {node_id}: unknown notation {notation_id}")
+            elif entry.get("scope") == "local" and entry.get("chapterId") != node_id:
+                errors.append(
+                    f"atlas chapter {node_id}: local notation {notation_id} is out of scope"
+                )
 
 
 def main():
@@ -148,6 +393,8 @@ def main():
                             f"{source_name}: anchor #{fragment} does not exist in "
                             f"{target.relative_to(ROOT)}"
                         )
+
+    validate_atlas(errors, parsed_pages)
 
     if errors:
         print("Site integrity check failed:")

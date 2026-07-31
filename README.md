@@ -7,6 +7,7 @@ Contains:
 - [Translation of articles from "designing data-intensive applications"](https://kirilldikalin.github.io/kirilldikalin.io/translation_of_articles/translation_of_articles.html)
 - [Self-created Knowledge Base](https://kirilldikalin.github.io/kirilldikalin.io/knowlege_base/iKnowledge_base.html)
 - [Analysis of solutions to tasks of the Euler project](https://kirilldikalin.github.io/kirilldikalin.io/euler/euler.html)
+- [Algorithmic Atlas](https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/)
 
 <h2>General</h2>
 
@@ -22,6 +23,7 @@ Contains:
 - [Перевод статей упомянутых в книге "Высоко-нагруженные приложения. Программирование масштабирование поддержка"](https://kirilldikalin.github.io/kirilldikalin.io/translation_of_articles/translation_of_articles.html)
 - [Self made база знаний](https://kirilldikalin.github.io/kirilldikalin.io/knowlege_base/iKnowledge_base.html)
 - [Разбор решений заданий проекта Эйлера](https://kirilldikalin.github.io/kirilldikalin.io/euler/euler.html)
+- [Алгоритмический атлас](https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/)
 
 <h2>Общее</h2>
 
@@ -59,6 +61,7 @@ Run the public page, link, and anchor check locally:
 ```shell
 python3 scripts/check_site.py
 node --test brain/map_msk/tests/*.test.js
+node --test algorithmic_atlas/tests/*.test.js
 python3 brain/map_msk/tools/build_cao_map.py --validate-only brain/map_msk/data/cao-map.json
 ```
 
