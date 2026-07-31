@@ -59,3 +59,25 @@ test("accessible percentage is rounded and clamped", () => {
   assert.equal(core.percentValue(8), 100);
   assert.equal(core.percentValue(Number.NaN), 0);
 });
+
+test("theory reading time follows the documented content formula", () => {
+  assert.equal(core.theoryReadingMinutes(1800, 4, 2), 13);
+  assert.equal(core.theoryReadingMinutes(3600, 4, 2), 23);
+  assert.throws(() => core.theoryReadingMinutes(-1, 0, 0), RangeError);
+  assert.throws(() => core.theoryReadingMinutes(100, 0.5, 0), RangeError);
+});
+
+test("adding displayed theory never decreases its reading estimate", () => {
+  const base = core.theoryReadingMinutes(2200, 8, 3);
+  assert.ok(core.theoryReadingMinutes(2380, 8, 3) > base);
+  assert.ok(core.theoryReadingMinutes(2200, 11, 3) > base);
+  assert.ok(core.theoryReadingMinutes(2200, 8, 5) > base);
+});
+
+test("word counting handles Russian compounds and visible numbers", () => {
+  assert.equal(
+    core.countWords("B-дерево хранит 1024 ключа во внешней памяти"),
+    7
+  );
+  assert.equal(core.countWords(null), 0);
+});

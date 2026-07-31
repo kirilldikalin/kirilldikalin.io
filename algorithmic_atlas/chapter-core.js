@@ -87,10 +87,32 @@
     return Math.round(clamp(value, 0, 1) * 100);
   }
 
+  function countWords(text) {
+    const source = typeof text === "string" ? text : "";
+    const matches = source.match(/[\p{L}\p{N}]+(?:[-‑‒–—'][\p{L}\p{N}]+)*/gu);
+    return matches ? matches.length : 0;
+  }
+
+  function theoryReadingMinutes(wordCount, formulaBlockCount, proofCount) {
+    const words = Number(wordCount);
+    const formulas = Number(formulaBlockCount);
+    const proofs = Number(proofCount);
+    if (
+      !Number.isInteger(words) || words < 0 ||
+      !Number.isInteger(formulas) || formulas < 0 ||
+      !Number.isInteger(proofs) || proofs < 0
+    ) {
+      throw new RangeError("reading metrics must be non-negative integers");
+    }
+    return Math.ceil(words / 180 + 0.35 * formulas + 0.75 * proofs);
+  }
+
   return {
     activeSectionIndex,
+    countWords,
     percentValue,
     readingProgress,
     sectionNavigation,
+    theoryReadingMinutes,
   };
 });

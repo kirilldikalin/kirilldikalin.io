@@ -28,6 +28,7 @@
 
   function init() {
     labelBlocks();
+    renderComputedStudyTime();
     initChapterInterface();
 
     if (!atlasCore || !nodeId) {
@@ -54,6 +55,55 @@
           status.textContent = "Не удалось загрузить маршрут. Текст главы доступен полностью.";
         }
       });
+  }
+
+  function renderComputedStudyTime() {
+    const theoryOutput = document.querySelector("[data-atlas-reading-time]");
+    if (!chapterCore || !theoryOutput) {
+      return;
+    }
+    const content = document.querySelector(".atlas-chapter-content");
+    if (!content) {
+      return;
+    }
+
+    const excludedSelector = [
+      '[data-atlas-block="lab"]',
+      '[data-atlas-block="exercises"]',
+      '[data-atlas-block="sources"]',
+    ].join(",");
+    const copy = content.cloneNode(true);
+    copy.querySelectorAll(
+      excludedSelector + ", .atlas-math, .atlas-block__label, script, style"
+    ).forEach(function (element) {
+      element.remove();
+    });
+
+    const includedFormulaBlocks = Array.from(
+      content.querySelectorAll(".atlas-math")
+    ).filter(function (element) {
+      return !element.closest(excludedSelector);
+    });
+    const includedProofs = Array.from(
+      content.querySelectorAll('[data-atlas-block="proof"], [data-reading-proof]')
+    ).filter(function (element) {
+      return !element.closest(excludedSelector);
+    });
+    const words = chapterCore.countWords(copy.textContent);
+    const formulas = includedFormulaBlocks.length;
+    const proofs = new Set(includedProofs).size;
+    const minutes = chapterCore.theoryReadingMinutes(words, formulas, proofs);
+
+    theoryOutput.textContent = "Теория ≈ " + minutes + " мин";
+    theoryOutput.dataset.atlasTheoryWords = String(words);
+    theoryOutput.dataset.atlasFormulaBlocks = String(formulas);
+    theoryOutput.dataset.atlasProofBlocks = String(proofs);
+
+    const labOutput = document.querySelector("[data-atlas-lab-time]");
+    const labMinutes = Number(body.dataset.atlasLabMinutes);
+    if (labOutput && Number.isInteger(labMinutes) && labMinutes > 0) {
+      labOutput.textContent = "Лаборатория ≈ " + labMinutes + " мин";
+    }
   }
 
   function labelBlocks() {
