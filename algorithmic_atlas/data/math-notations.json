@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "input-set-x",
+      "displayNotation": "X",
+      "shortName": "множество входов",
+      "explanation": "Множество всех входных объектов, для которых задана рассматриваемая процедура",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "output-set-y",
+      "displayNotation": "Y",
+      "shortName": "множество результатов",
+      "explanation": "Множество возможных результатов вычисления",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "state-space-s",
+      "displayNotation": "S",
+      "shortName": "пространство состояний",
+      "explanation": "Множество всех допустимых состояний последовательного вычисления",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "state-s-t",
+      "displayNotation": "s_t",
+      "shortName": "состояние на шаге t",
+      "explanation": "Полное состояние процедуры после t выполненных переходов",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "transition-f",
+      "displayNotation": "F",
+      "shortName": "переход",
+      "explanation": "Правило, которое по текущему незавершающему состоянию строит следующее",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "halting-set-h",
+      "displayNotation": "H",
+      "shortName": "завершающие состояния",
+      "explanation": "Подмножество состояний, в которых процедура прекращает выполнять переходы",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "partial-function-f",
+      "displayNotation": "f",
+      "shortName": "частичная вычисляемая функция",
+      "explanation": "Соответствие входа результату, которое может быть не определено для части входов, например из-за незавершения процедуры",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "partial-arrow",
+      "displayNotation": "\\rightharpoonup",
+      "shortName": "частичное отображение",
+      "explanation": "Стрелка показывает, что функция может не иметь результата для некоторых допустимых входов",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "gcd",
+      "displayNotation": "\\gcd(a,b)",
+      "shortName": "наибольший общий делитель",
+      "explanation": "Наибольший положительный целый делитель обоих чисел a и b; для нулевых аргументов используется соглашение главы",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "divisibility"
+      }
+    },
+    {
+      "id": "modulo",
+      "displayNotation": "a\\bmod b",
+      "shortName": "остаток от деления",
+      "explanation": "Единственный остаток r в разложении a=qb+r при 0≤r<b и b>0",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "quotient-q",
+      "displayNotation": "q",
+      "shortName": "неполное частное",
+      "explanation": "Целое число полных копий b, помещающихся в a при делении с остатком",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "remainder-r",
+      "displayNotation": "r",
+      "shortName": "остаток",
+      "explanation": "Неотрицательная часть a, оставшаяся после вычитания q полных копий b; всегда меньше b",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "tm-state-set-q",
+      "displayNotation": "Q",
+      "shortName": "множество состояний машины",
+      "explanation": "Конечное множество внутренних состояний машины Тьюринга",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "input-alphabet-sigma",
+      "displayNotation": "\\Sigma",
+      "shortName": "входной алфавит",
+      "explanation": "Конечный набор символов, которыми кодируется вход машины",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "tape-alphabet-gamma",
+      "displayNotation": "\\Gamma",
+      "shortName": "ленточный алфавит",
+      "explanation": "Конечный набор символов ленты, включающий входной алфавит и пустой символ",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "transition-delta",
+      "displayNotation": "\\delta",
+      "shortName": "функция переходов",
+      "explanation": "Локальное правило машины: по состоянию и прочитанному символу задаёт новое состояние, запись и направление движения",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "accept-state",
+      "displayNotation": "q_{\\mathrm{acc}}",
+      "shortName": "принимающее состояние",
+      "explanation": "Завершающее состояние, означающее принятие входа",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "reject-state",
+      "displayNotation": "q_{\\mathrm{rej}}",
+      "shortName": "отвергающее состояние",
+      "explanation": "Завершающее состояние, означающее отклонение входа",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "tm-halting-states",
+      "displayNotation": "\\{q_{\\mathrm{acc}},q_{\\mathrm{rej}}\\}",
+      "shortName": "завершающие состояния машины",
+      "explanation": "Два выделенных состояния, после входа в которые машина больше не выполняет переходов",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "input-length",
+      "displayNotation": "|x|",
+      "shortName": "размер записи входа",
+      "explanation": "Число символов в выбранной конечной кодировке входного объекта x",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "finite-input"
+      }
+    },
+    {
+      "id": "running-time-on-input",
+      "displayNotation": "T_A(x)",
+      "shortName": "стоимость запуска A на x",
+      "explanation": "Число элементарных шагов алгоритма A на конкретном закодированном входе x в выбранной модели стоимости",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "concrete-cost"
+      }
+    },
+    {
+      "id": "cost-function-fn",
+      "displayNotation": "f(n)",
+      "shortName": "оцениваемая функция",
+      "explanation": "Неотрицательная функция стоимости, рост которой мы хотим описать",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "cost-functions"
+      }
+    },
+    {
+      "id": "comparison-function-gn",
+      "displayNotation": "g(n)",
+      "shortName": "функция сравнения",
+      "explanation": "Положительная начиная с некоторого места эталонная функция, с которой сравнивают рост f",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "cost-functions"
+      }
+    },
+    {
+      "id": "asymptotic-constant-c",
+      "displayNotation": "c",
+      "shortName": "постоянный множитель",
+      "explanation": "Положительная константа, выбранная один раз и не зависящая от n",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "big-o-definition"
+      }
+    },
+    {
+      "id": "theta-lower-constant-c1",
+      "displayNotation": "c_1",
+      "shortName": "нижний постоянный множитель",
+      "explanation": "Положительная константа нижней границы в определении Θ",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "lower-theta"
+      }
+    },
+    {
+      "id": "theta-upper-constant-c2",
+      "displayNotation": "c_2",
+      "shortName": "верхний постоянный множитель",
+      "explanation": "Положительная константа верхней границы в определении Θ",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "lower-theta"
+      }
+    },
+    {
+      "id": "asymptotic-threshold-n0",
+      "displayNotation": "n_0",
+      "shortName": "порог асимптотического хвоста",
+      "explanation": "Номер, после которого требуемое неравенство должно выполняться для каждого последующего n",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "tail"
+      }
+    },
+    {
+      "id": "big-o-class",
+      "displayNotation": "O(g)",
+      "shortName": "асимптотическая верхняя граница",
+      "explanation": "Множество функций, не превосходящих постоянный множитель g на всём достаточно далёком хвосте",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "big-o-definition"
+      }
+    },
+    {
+      "id": "big-omega-class",
+      "displayNotation": "\\Omega(g)",
+      "shortName": "асимптотическая нижняя граница",
+      "explanation": "Множество функций, которые на достаточно далёком хвосте не меньше постоянного множителя g",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "lower-theta"
+      }
+    },
+    {
+      "id": "big-theta-class",
+      "displayNotation": "\\Theta(g)",
+      "shortName": "точный асимптотический порядок",
+      "explanation": "Множество функций, одновременно ограниченных сверху и снизу положительными множителями g",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "lower-theta"
+      }
+    },
+    {
+      "id": "little-o-class",
+      "displayNotation": "o(g)",
+      "shortName": "строго меньший порядок роста",
+      "explanation": "Множество функций, которые в итоге меньше любого положительного множителя g",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "strict-relations"
+      }
+    },
+    {
+      "id": "little-omega-class",
+      "displayNotation": "\\omega(g)",
+      "shortName": "строго больший порядок роста",
+      "explanation": "Множество функций, которые в итоге больше любого положительного множителя g",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "strict-relations"
+      }
+    },
+    {
+      "id": "exists-quantifier",
+      "displayNotation": "\\exists",
+      "shortName": "существует",
+      "explanation": "Нужно предъявить хотя бы одно допустимое значение следующего за квантором параметра",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "big-o-definition"
+      }
+    },
+    {
+      "id": "forall-positive-constant",
+      "displayNotation": "\\forall c>0",
+      "shortName": "для любого положительного множителя",
+      "explanation": "Малые o и ω требуют выполнить условие для каждого заранее выбранного положительного c, а не для одной удобной константы",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "strict-relations"
+      }
+    },
+    {
+      "id": "forall-tail-quantifier",
+      "displayNotation": "\\forall n\\ge n_0",
+      "shortName": "для всего асимптотического хвоста",
+      "explanation": "Неравенство обязано выполняться для каждого n начиная с порога, а не только для проверенных точек",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "big-o-definition"
+      }
+    }
+  ]
+}

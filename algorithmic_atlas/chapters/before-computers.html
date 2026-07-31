@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Что люди называли алгоритмами до появления компьютеров — Алгоритмический атлас</title>
+  <meta name="description" content="История точных вычислительных процедур, формальная модель последовательного алгоритма и интерактив древнеегипетского умножения.">
+  <meta property="og:title" content="Что люди называли алгоритмами до появления компьютеров">
+  <meta property="og:description" content="Первая глава Алгоритмического атласа: от письменных вычислительных правил к состояниям, переходам и доказательству корректности.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/before-computers.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/before-computers.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/egyptian-multiplication.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/html']
+      },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/egyptian-multiplication-core.js" defer></script>
+  <script src="../labs/egyptian-multiplication.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="before-computers">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Истоки алгоритмов</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Истоки и эффективность · точка 01</p>
+      <h1>Что люди называли алгоритмами до появления компьютеров</h1>
+      <p class="atlas-chapter-intro">
+        Компьютер не создал идею алгоритма. Он заставил нас отделить точную
+        процедуру от удачной догадки и объяснить, почему цепочка простых действий
+        вообще приводит к нужному результату
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 40 минут</span>
+        <span>1 доказательство</span>
+        <span>1 лаборатория</span>
+        <span>7 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#before-the-word">До слова «алгоритм»</a></li>
+          <li><a href="#five-differences">Пять соседних понятий</a></li>
+          <li><a href="#anatomy">Анатомия процедуры</a></li>
+          <li><a href="#state-model">Модель состояний</a></li>
+          <li><a href="#mechanical">Механическое выполнение</a></li>
+          <li><a href="#correctness">Корректность и остановка</a></li>
+          <li><a href="#same-function">Одна функция, разные пути</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#proof">Почему умножение работает</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="before-the-word">
+          <h2>До слова «алгоритм»</h2>
+          <p>
+            Представьте вычислителя без электронного устройства. Перед ним табличка
+            чисел, письменные правила и задача: повторять разрешённые действия, пока
+            не появится ответ. Именно человек, который вычисляет по инструкции, был
+            исходным исполнителем многих процедур. Машина появилась намного позже.
+          </p>
+          <p>
+            Важно не приписывать древним авторам нашу терминологию задним числом.
+            Египетский писец или вавилонский вычислитель не обязан был иметь общее
+            понятие алгоритма в современном смысле. Но в сохранившихся источниках
+            видны его необходимые предшественники: стандартные таблицы, повторяемые
+            операции, разбор типовых задач и проверяемый численный результат.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Процедуры существовали раньше их общего определения</h3>
+            <p>
+              Папирус Ринда, датируемый Британским музеем примерно 1550 годом до н. э.,
+              содержит 84 задачи: таблицы деления, умножение, действия с дробями,
+              площади и объёмы. Музей описывает его как учебный текст для писцов:
+              решение осваивалось через записанные примеры.
+              <a href="https://www.britishmuseum.org/collection/object/Y_EA10058"
+                target="_blank" rel="noopener noreferrer">Карточка папируса в Британском музее</a>.
+            </p>
+            <p>
+              Вавилонские таблички тоже хранят последовательные численные методы.
+              Дональд Кнут показал на переводах табличек, что их разумно изучать
+              именно с точки зрения истории вычисления, хотя современное слово
+              «алгоритм» здесь является аналитическим инструментом историка, а не
+              буквальным переводом древнего термина.
+              <a href="https://doi.org/10.1145/361454.361514"
+                target="_blank" rel="noopener noreferrer">D. Knuth, Ancient Babylonian Algorithms</a>.
+            </p>
+          </section>
+
+          <p>
+            В «Началах» Евклида процедура последовательного вычитания применяется
+            к целым величинам. В книге VII, предложениях 1–2, остатки уменьшаются,
+            пока не обнаружится общая мера или единица. Это узнаваемый предок
+            алгоритма нахождения наибольшего общего делителя.
+            <a href="https://www.perseus.tufts.edu/hopper/text?doc=Euc.+7&amp;fromdoc=Perseus%3Atext%3A1999.01.0086"
+              target="_blank" rel="noopener noreferrer">Греческий текст и перевод на Perseus</a>.
+          </p>
+          <p>
+            Само европейское слово прошло другой путь. Латинизированное имя
+            аль-Хорезми стало обозначать правила счёта с индийскими цифрами, а затем
+            смысл расширился до процедуры вообще. Этимология полезна, но она не даёт
+            определения: значение современного термина складывалось столетиями.
+          </p>
+          <p>
+            В XX веке вопрос стал математически острым. Логикам понадобилось понять,
+            что значит «решить задачу механическим способом». Тьюринг в 1936 году
+            анализировал действия человека, работающего с символами по локальным
+            правилам, и превратил эту интуицию в модель машины. Поэтому история идёт
+            не от компьютера к алгоритму, а от ручной точной процедуры — к её
+            формализации — и только затем к универсальной вычислительной машине.
+          </p>
+        </section>
+
+        <section id="five-differences">
+          <h2>Алгоритм и пять соседних понятий</h2>
+          <p>
+            Эти слова часто заменяют друг друга в бытовой речи, но для анализа
+            вычислений полезно различать их роли. Граница проходит не по форме
+            записи: одна и та же формула может быть частью алгоритма, а программа —
+            воплощением неточного метода.
+          </p>
+
+          <div class="atlas-block" data-atlas-block="example">
+            <table class="atlas-comparison">
+              <thead>
+                <tr>
+                  <th>Понятие</th>
+                  <th>Что оно задаёт</th>
+                  <th>Чего может не хватать</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Алгоритм</strong></td>
+                  <td>Допустимые входы, точные шаги, условие остановки и результат.</td>
+                  <td>Конкретного языка программирования или устройства.</td>
+                </tr>
+                <tr>
+                  <td><strong>Формула</strong></td>
+                  <td>Математическую связь величин, например \(A=\pi r^2\).</td>
+                  <td>Способа представить \(\pi\), порядка операций и требуемой точности.</td>
+                </tr>
+                <tr>
+                  <td><strong>Рецепт</strong></td>
+                  <td>Последовательность практических действий.</td>
+                  <td>Точных состояний: «довести до готовности» зависит от исполнителя.</td>
+                </tr>
+                <tr>
+                  <td><strong>Программа</strong></td>
+                  <td>Запись команд для конкретной вычислительной среды.</td>
+                  <td>Доказательства, что команды реализуют задуманный алгоритм.</td>
+                </tr>
+                <tr>
+                  <td><strong>Эвристика</strong></td>
+                  <td>Правило поиска правдоподобного или хорошего решения.</td>
+                  <td>Гарантии найти ответ либо найти его за заданное время.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>«Есть шаги» ещё не значит «есть алгоритм»</h3>
+            <p>
+              Инструкция «перебирайте варианты, пока не увидите красивый» содержит
+              повторение, но слова «красивый» и «увидите» не заданы операционально.
+              Два исполнителя могут разойтись уже на первом решении. Чтобы получить
+              алгоритм, нужно сделать критерий состояния и перехода проверяемым.
+            </p>
+          </section>
+        </section>
+
+        <section id="anatomy">
+          <h2>Анатомия точной процедуры</h2>
+          <p>
+            Для первой рабочей модели будем считать алгоритмом описание
+            последовательного вычисления, в котором после каждого шага известно,
+            что именно разрешено делать дальше. В нём должны быть различимы пять
+            частей.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Пять частей последовательного алгоритма</h3>
+            <dl class="atlas-definition-list">
+              <div>
+                <dt>Входные данные</dt>
+                <dd>Объект \(x\) из явно заданного множества допустимых входов \(X\).</dd>
+              </div>
+              <div>
+                <dt>Состояние</dt>
+                <dd>Вся информация, от которой зависит продолжение вычисления.</dd>
+              </div>
+              <div>
+                <dt>Элементарный шаг</dt>
+                <dd>Однозначное правило перехода от текущего состояния к следующему.</dd>
+              </div>
+              <div>
+                <dt>Остановка</dt>
+                <dd>Проверяемый признак, после которого переходы больше не нужны.</dd>
+              </div>
+              <div>
+                <dt>Результат</dt>
+                <dd>Способ прочитать ответ из завершающего состояния.</dd>
+              </div>
+            </dl>
+          </section>
+
+          <p>
+            Состояние должно быть достаточным. Если для следующего шага нужно
+            помнить зачёркнутую строку, перенос в разряде или положение указателя,
+            всё это является частью состояния, даже если автор инструкции забыл
+            назвать это переменной.
+          </p>
+          <p>
+            «Элементарный» не означает физически мгновенный. Это действие, которое
+            выбранная модель принимает за неделимое. Для школьной арифметики
+            сложение однозначных чисел может быть шагом; для схемы процессора оно
+            само распадается на более мелкие переходы. Масштаб модели надо
+            зафиксировать до подсчёта стоимости.
+          </p>
+        </section>
+
+        <section id="state-model">
+          <h2>Удобная математическая модель состояний</h2>
+          <p>
+            Теперь запишем эти части так, чтобы о процедуре можно было доказывать
+            утверждения. Это не претензия на единственное современное определение
+            алгоритма. Модель намеренно описывает детерминированное последовательное
+            вычисление; параллельные, вероятностные и интерактивные алгоритмы
+            потребуют расширений.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Система переходов с результатом</h3>
+            <p>Зададим:</p>
+            <ul>
+              <li>
+                множество входов
+                \(X\)
+                и множество возможных результатов
+                \(Y\);
+              </li>
+              <li>
+                множество допустимых состояний
+                \(S\);
+              </li>
+              <li>начальное состояние \(s_0(x)\in S\) для входа \(x\in X\);</li>
+              <li>
+                множество завершающих состояний
+                \(H\)
+                внутри \(S\);
+              </li>
+              <li>
+                переход
+                \(F\)
+                из каждого незавершающего состояния в следующее;
+              </li>
+              <li>функцию чтения результата \(R:H\to Y\).</li>
+            </ul>
+            <div class="atlas-math">
+              \[
+                s_0=s_0(x),\qquad
+                \class{atlas-notation-token notation-id-state-s-t}{s_{t+1}}
+                =
+                \class{atlas-notation-token notation-id-transition-f}{F}
+                \bigl(\class{atlas-notation-token notation-id-state-s-t}{s_t}\bigr).
+              \]
+            </div>
+            <p>
+              Обозначение
+              \(s_t\)
+              означает полное состояние после \(t\) переходов.
+              Если для некоторого \(T\) состояние \(s_T\) впервые попало в \(H\),
+              процедура возвращает \(R(s_T)\). Если этого никогда не случилось,
+              результат на данном входе не определён.
+            </p>
+          </section>
+
+          <div class="atlas-state-schema" role="img" aria-label="Схема вычисления">
+            <div><strong>\(x\)</strong>вход</div>
+            <div><strong>\(s_0(x)\)</strong>инициализация</div>
+            <div><strong>\(F\)</strong>переходы</div>
+            <div><strong>\(H\)</strong>остановка</div>
+            <div><strong>\(R\)</strong>результат</div>
+          </div>
+
+          <p>Такая процедура вычисляет <em>частичную функцию</em>:</p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-partial-function-f}{f}
+              :
+              \class{atlas-notation-token notation-id-input-set-x}{X}
+              \class{atlas-notation-token notation-id-partial-arrow}{\rightharpoonup}
+              \class{atlas-notation-token notation-id-output-set-y}{Y}.
+            \]
+          </div>
+          <p>
+            Стрелка с перечёркнутым хвостом напоминает:
+            для некоторых \(x\) значение может отсутствовать. Формально
+          </p>
+          <div class="atlas-math">
+            \[
+              f(x)=R(s_T),\quad
+              \text{если существует }T\text{ такое, что }s_T\in H.
+            \]
+          </div>
+          <p>
+            Причины неопределённости различны: процедура может войти в цикл,
+            бесконечно порождать новые состояния или иначе никогда не попасть
+            в завершающее состояние. В этой упрощённой модели переход определён
+            для каждого состояния вне \(H\). Если остановка гарантирована на каждом
+            \(x\in X\), частичная функция оказывается обычной полной функцией
+            \(f:X\to Y\).
+          </p>
+        </section>
+
+        <section id="mechanical">
+          <h2>Детерминированность и механическое выполнение</h2>
+          <p>
+            В нашей модели переход \(F\) является функцией: одному незавершающему
+            состоянию соответствует ровно одно следующее. Это
+            <strong>детерминированность</strong>. Повторный запуск с тем же входом
+            проходит ту же последовательность состояний.
+          </p>
+          <p>
+            <strong>Механическое выполнение</strong> означает не «выполнение
+            механизмом», а отсутствие содержательной догадки на каждом шаге.
+            Исполнителю достаточно распознать текущее состояние и применить
+            конечное точное правило. Он может не понимать, почему правило разумно.
+            Понимание требуется автору доказательства, а не исполнителю.
+          </p>
+          <p>
+            Это различие было центральным для формализации вычислимости. Исторический
+            анализ Тьюринга исходил из человека, который видит лишь ограниченную
+            часть записи и действует по своей текущей конфигурации. Современная
+            формулировка тезиса Чёрча—Тьюринга связывает интуитивные эффективные
+            пошаговые вычисления с формальными моделями, но сам тезис не является
+            обычной математической теоремой об уже формально заданных объектах.
+          </p>
+        </section>
+
+        <section id="correctness">
+          <h2>Корректность и завершимость — разные обязательства</h2>
+          <p>
+            Фраза «алгоритм работает» скрывает два независимых вопроса. Что будет,
+            <em>если</em> он остановится? И остановится ли он вообще?
+          </p>
+
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Частичная и полная корректность</h3>
+            <p>
+              Пусть \(P(x)\) — предусловие на вход, а \(Q(x,y)\) — требуемое
+              отношение между входом и ответом.
+            </p>
+            <ul>
+              <li>
+                <strong>Частичная корректность:</strong> если \(P(x)\) выполнено и
+                процедура остановилась с ответом \(y\), то \(Q(x,y)\) истинно.
+              </li>
+              <li>
+                <strong>Завершимость:</strong> при каждом допустимом входе с
+                \(P(x)\) процедура за конечное число шагов достигает \(H\).
+              </li>
+              <li>
+                <strong>Полная корректность:</strong> доказаны оба утверждения.
+              </li>
+            </ul>
+          </section>
+
+          <p>
+            Частичную корректность часто доказывают с помощью
+            <strong>инварианта</strong> — утверждения о состоянии, истинного до
+            первого шага и сохраняющегося каждым переходом. Для завершимости ищут
+            <strong>вариант</strong>: неотрицательную целую величину, которая строго
+            уменьшается на каждом шаге. Инвариант говорит «смысл не потерян»,
+            вариант — «двигаться вечно невозможно».
+          </p>
+          <p>
+            Логика программ получила компактную форму для таких рассуждений в
+            работе Тони Хоара 1969 года: тройка \(\{P\}\ C\ \{Q\}\) описывает
+            предусловие, программу и постусловие. Но и в ней утверждение об
+            остановке нужно отличать от утверждения о результате завершившегося
+            запуска.
+          </p>
+        </section>
+
+        <section id="same-function">
+          <h2>Разные алгоритмы могут вычислять одну функцию</h2>
+          <p>
+            Функция описывает соответствие «вход — результат», но не дорогу между
+            ними. Умножение целых чисел можно выполнить повторным сложением,
+            школьным умножением в столбик, методом удвоений или разложением на
+            машинные слова. При одинаковых допустимых входах и одинаковом результате
+            это разные алгоритмы одной функции.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Один ответ, разная стоимость</h3>
+            <p>
+              Для \(x\ge0\) произведение \(x\cdot y\) можно получить сложением
+              \(y\) ровно \(x\) раз; для отрицательного \(x\) отдельно меняется
+              знак результата. Число шагов такого метода пропорционально
+              \(|x|\). Метод последовательного деления \(|x|\) пополам требует
+              порядка числа его двоичных разрядов. Оба возвращают одно произведение,
+              но ведут себя совершенно по-разному на больших входах.
+            </p>
+          </section>
+
+          <p>
+            Поэтому исследование алгоритмов не заканчивается вопросом «правильный ли
+            ответ». Следующие точки атласа будут сравнивать, какие состояния нужны,
+            сколько переходов совершается и как стоимость зависит не от самого
+            числа, а от размера его записи.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Умножение удвоением и делением пополам</h2>
+          <p>
+            В египетских вычислениях умножение строилось через таблицу удвоений и
+            сложение выбранных строк. Ниже используется эквивалентная современная
+            форма: один множитель делится пополам, другой удваивается, а строки с
+            нечётным первым множителем попадают в сумму. Это исторически
+            обоснованная реконструкция вычислительного принципа, а не буквальная
+            имитация записи одной конкретной задачи папируса.
+          </p>
+          <p>
+            Историческая процедура работала с положительными величинами. Здесь знак
+            вынесен в отдельную современную оболочку, чтобы лаборатория принимала
+            любые целые числа; само ядро работает с модулями.
+          </p>
+
+          <div class="egyptian-lab" role="region" aria-labelledby="egyptian-lab-title">
+            <h3 id="egyptian-lab-title">Пошаговый симулятор</h3>
+            <form id="egyptian-form" class="egyptian-lab__form" novalidate>
+              <label for="egyptian-left">
+                Первый множитель \(x\)
+                <input id="egyptian-left" name="left" type="text" inputmode="numeric"
+                  autocomplete="off" spellcheck="false" value="41"
+                  aria-describedby="egyptian-input-help">
+              </label>
+              <label for="egyptian-right">
+                Второй множитель \(y\)
+                <input id="egyptian-right" name="right" type="text" inputmode="numeric"
+                  autocomplete="off" spellcheck="false" value="59"
+                  aria-describedby="egyptian-input-help">
+              </label>
+              <p id="egyptian-input-help" class="is-wide">
+                Целые числа до 80 цифр. Все переходы выполняются в точной
+                целочисленной арифметике.
+              </p>
+              <div class="egyptian-lab__actions">
+                <button id="egyptian-step" type="button">Один шаг</button>
+                <button id="egyptian-run" type="submit">Запустить</button>
+                <button id="egyptian-pause" type="button" disabled>Пауза</button>
+                <button id="egyptian-reset" type="button">К началу</button>
+              </div>
+              <div class="egyptian-speed">
+                <label for="egyptian-speed">Скорость</label>
+                <input id="egyptian-speed" type="range"
+                  min="1" max="5" step="1" value="3">
+                <output id="egyptian-speed-value"
+                  for="egyptian-speed">2 шага/с</output>
+              </div>
+            </form>
+            <p id="egyptian-error" class="egyptian-lab__error" role="alert" hidden></p>
+
+            <div class="egyptian-lab__state" aria-live="polite">
+              <article>
+                <h3>Текущее состояние</h3>
+                <p id="egyptian-current-state"></p>
+              </article>
+              <article>
+                <h3>Следующее правило</h3>
+                <p id="egyptian-current-rule"></p>
+              </article>
+              <article class="is-wide">
+                <h3>Инвариант \(c+a\cdot b=|x\cdot y|\)</h3>
+                <p id="egyptian-invariant"></p>
+              </article>
+              <article class="is-wide">
+                <h3>Результат</h3>
+                <p id="egyptian-result"></p>
+              </article>
+            </div>
+
+            <section class="egyptian-geometry-panel"
+              aria-labelledby="egyptian-geometry-heading">
+              <h3 id="egyptian-geometry-heading">Площадь до и после перехода</h3>
+              <svg id="egyptian-geometry" class="egyptian-geometry"
+                viewBox="0 0 760 430" role="img"></svg>
+              <p id="egyptian-geometry-caption"
+                class="egyptian-geometry-caption"></p>
+            </section>
+
+            <div class="egyptian-lab__table-wrap" role="region" tabindex="0"
+              aria-label="Таблица состояний алгоритма">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Шаг</th>
+                    <th scope="col">\(a\)</th>
+                    <th scope="col">\(b\)</th>
+                    <th scope="col">\(c\)</th>
+                    <th scope="col">Применённое правило</th>
+                  </tr>
+                </thead>
+                <tbody id="egyptian-trace-body"></tbody>
+              </table>
+            </div>
+            <p id="egyptian-status" class="egyptian-lab__status" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section id="proof" class="atlas-block" data-atlas-block="proof">
+          <h2>Почему процедура даёт произведение</h2>
+          <p>
+            Пусть \(a,b\ge 0\), \(c\ge 0\) — текущее состояние, а исходные
+            множители равны \(x,y\). Будем сохранять инвариант
+          </p>
+          <div class="atlas-math">
+            \[
+              c+ab=|xy|.
+            \]
+          </div>
+          <p>
+            Сначала \(a=|x|\), \(b=|y|\), \(c=0\), поэтому равенство истинно.
+          </p>
+          <p>
+            Если \(a=2q\) чётно, переход заменяет \((a,b,c)\) на
+            \((q,2b,c)\). Тогда
+          </p>
+          <div class="atlas-math">
+            \[
+              c+q(2b)=c+ab.
+            \]
+          </div>
+          <p>
+            Если \(a=2q+1\) нечётно, сначала добавляем \(b\) в накопитель:
+            новое состояние равно \((q,2b,c+b)\). Следовательно,
+          </p>
+          <div class="atlas-math">
+            \[
+              (c+b)+q(2b)=c+(2q+1)b=c+ab.
+            \]
+          </div>
+          <p>
+            В обоих случаях инвариант сохраняется. Положительное \(a\) после шага
+            становится \(\lfloor a/2\rfloor&lt;a\). Неотрицательное целое не может
+            строго уменьшаться бесконечно, значит в конце \(a=0\). Из инварианта
+            тогда следует \(c=|xy|\). Возврат сохранённого знака даёт \(xy\).
+            Доказаны и частичная корректность, и завершимость.
+          </p>
+        </section>
+
+        <section class="atlas-block" data-atlas-block="warning">
+          <h2>Что симуляция не доказывает</h2>
+          <p>
+            Тысяча удачных запусков не заменяет доказательство для всех целых
+            входов. Симулятор помогает увидеть кандидата на инвариант и найти
+            контрпример к неверной гипотезе. Общий вывод появляется только после
+            разбора всех видов перехода и отдельного доказательства остановки.
+          </p>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте модель</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p>
+                <strong>1. Распознавание.</strong> Является ли алгоритмом правило:
+                «из списка чисел выберите самое интересное»? Что нужно добавить?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Нет, пока «интересное» не задано проверяемым отношением. Например,
+                  после определения «имеющее наибольшее число различных простых
+                  делителей; при равенстве — наименьшее» выбор становится точным.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>2. Формула или алгоритм.</strong> Достаточно ли записи
+                \(x=(-b+\sqrt{b^2-4ac})/(2a)\), чтобы вычислить корень квадратного
+                уравнения на компьютере?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Нет. Нужно задать область входов, случай \(a=0\), знак
+                  дискриминанта, выбор корня, представление чисел и требуемую
+                  точность вычисления квадратного корня. Формула задаёт связь, но
+                  не все состояния и переходы вычислительной процедуры.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>3. Состояние.</strong> Процедура читает строку слева направо
+                и проверяет баланс круглых скобок. Какие данные достаточно хранить
+                в состоянии?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Позицию чтения, текущий баланс и признак уже обнаруженной ошибки.
+                  На «(» баланс увеличивается, на «)» уменьшается; отрицательный
+                  баланс означает ошибку. В конце нужен нулевой баланс и отсутствие
+                  ошибки.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>4. Частичная функция.</strong> Для натурального \(n\)
+                перебираем \(k=0,1,2,\ldots\) и останавливаемся при \(k^2=n\).
+                Какую частичную функцию вычисляет процедура?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Она возвращает \(\sqrt n\) на точных квадратах и не определена на
+                  остальных натуральных числах: после превышения корня процедура
+                  продолжает увеличивать \(k\) бесконечно. Добавление остановки при
+                  \(k^2&gt;n\) сделало бы процедуру завершающейся.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>5. Инвариант.</strong> В лаборатории перед шагом
+                \((a,b,c)=(13,27,0)\). Запишите следующие два состояния и проверьте
+                \(c+ab\).
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Так как 13 нечётно, получаем \((6,54,27)\):
+                  \(27+6\cdot54=351\). Затем 6 чётно, поэтому
+                  \((3,108,27)\): \(27+3\cdot108=351\). Исходное произведение
+                  равно \(13\cdot27=351\).
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>6. Завершимость.</strong> Почему сам инвариант
+                \(c+ab=|xy|\) не доказывает, что умножение остановится?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Инвариант допускает бесконечную последовательность состояний с
+                  тем же значением выражения. Для остановки нужна отдельная
+                  убывающая величина: здесь это натуральное \(a\), которое при
+                  \(a&gt;0\) заменяется на \(\lfloor a/2\rfloor\).
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>7. Одна функция.</strong> Сравните повторное сложение и
+                деление множителя пополам. Сколько шагов они требуют для
+                \(x=2^{100}\)?
+              </p>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Повторное сложение делает порядка \(2^{100}\) прибавлений. В
+                  лабораторной процедуре первый множитель делится пополам 101 раз,
+                  включая переход к нулю. Они вычисляют одну функцию, но число
+                  переходов различается экспоненциально относительно длины двоичной
+                  записи \(x\).
+                </p>
+              </details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              <a href="https://www.britishmuseum.org/collection/object/Y_EA10058"
+                target="_blank" rel="noopener noreferrer">The Rhind Mathematical Papyrus, British Museum EA10058</a>
+              — музейное описание, датировка и состав задач.
+            </li>
+            <li>
+              Luca Miatello,
+              <a href="https://doi.org/10.1016/j.hm.2008.06.001"
+                target="_blank" rel="noopener noreferrer">The difference 5½ in a problem of rations from the Rhind mathematical papyrus</a>,
+              Historia Mathematica 35(4), 2008 — двухколоночные операции удвоения и сложения.
+            </li>
+            <li>
+              Donald E. Knuth,
+              <a href="https://doi.org/10.1145/361454.361514"
+                target="_blank" rel="noopener noreferrer">Ancient Babylonian Algorithms</a>,
+              Communications of the ACM 15(7), 1972.
+            </li>
+            <li>
+              Евклид,
+              <a href="https://www.perseus.tufts.edu/hopper/text?doc=Euc.+7&amp;fromdoc=Perseus%3Atext%3A1999.01.0086"
+                target="_blank" rel="noopener noreferrer">«Начала», книга VII, предложения 1–2</a>,
+              электронное издание Perseus Digital Library.
+            </li>
+            <li>
+              <a href="https://academic.oup.com/book/31959/chapter/267692079"
+                target="_blank" rel="noopener noreferrer">Poems That Solve Puzzles: The History and Science of Algorithms</a>,
+              Oxford University Press — история термина от имени аль-Хорезми.
+            </li>
+            <li>
+              Alan M. Turing,
+              <a href="https://doi.org/10.1112/plms/s2-42.1.230"
+                target="_blank" rel="noopener noreferrer">On Computable Numbers, with an Application to the Entscheidungsproblem</a>,
+              Proceedings of the London Mathematical Society 42, 1936.
+            </li>
+            <li>
+              <a href="https://plato.stanford.edu/entries/church-turing/"
+                target="_blank" rel="noopener noreferrer">The Church–Turing Thesis</a>,
+              Stanford Encyclopedia of Philosophy — исторический контекст эффективных методов и границы тезиса.
+            </li>
+            <li>
+              C. A. R. Hoare,
+              <a href="https://doi.org/10.1145/363235.363259"
+                target="_blank" rel="noopener noreferrer">An Axiomatic Basis for Computer Programming</a>,
+              Communications of the ACM 12(10), 1969.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переход между точками маршрута">
+          <div id="atlas-route-previous">
+            <span class="atlas-route-nav__direction">Назад</span>
+            <span>Начало маршрута</span>
+          </div>
+          <div id="atlas-route-next">
+            <span class="atlas-route-nav__direction">Дальше</span>
+            <span>Алгоритм Евклида · готовится</span>
+          </div>
+        </nav>
+
+        <section class="atlas-completion" aria-label="Прогресс изучения">
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" role="status">
+            Прогресс хранится только в этом браузере.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

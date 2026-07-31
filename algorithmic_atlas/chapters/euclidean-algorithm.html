@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Алгоритм Евклида — Алгоритмический атлас</title>
+  <meta name="description" content="Алгоритм Евклида от повторного вычитания до деления с остатком: инвариант, корректность, числа Фибоначчи, теорема Ламе и интерактив.">
+  <meta property="og:title" content="Алгоритм Евклида — Алгоритмический атлас">
+  <meta property="og:description" content="Вторая глава Алгоритмического атласа: НОД, доказательство, эффективность и несколько представлений одного вычисления.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/euclidean-algorithm.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/euclidean-algorithm.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/euclidean-algorithm.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/html']
+      },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/euclidean-algorithm-core.js" defer></script>
+  <script src="../labs/euclidean-algorithm.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="euclidean-algorithm">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Алгоритм Евклида</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Истоки и эффективность · точка 02</p>
+      <h1>Алгоритм Евклида</h1>
+      <p class="atlas-chapter-intro">
+        Начнём с прямоугольника и медленного вычитания одинаковых отрезков.
+        Одна естественная упаковка повторяющихся действий приведёт нас к остатку
+        от деления, доказательству корректности и первому настоящему анализу
+        количества шагов
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 50 минут</span>
+        <span>3 доказательства</span>
+        <span>1 лаборатория</span>
+        <span>8 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#divisibility">Делимость и НОД</a></li>
+          <li><a href="#rectangle">Прямоугольник и квадраты</a></li>
+          <li><a href="#subtraction">Повторное вычитание</a></li>
+          <li><a href="#remainder">Остаток вместо серии шагов</a></li>
+          <li><a href="#modern-form">Современная форма</a></li>
+          <li><a href="#invariant">Инвариант и доказательство</a></li>
+          <li><a href="#termination">Завершимость</a></li>
+          <li><a href="#correctness">Полная корректность</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#fibonacci">Плохие входы</a></li>
+          <li><a href="#lame">Теорема Ламе</a></li>
+          <li><a href="#bit-cost">Битовая стоимость</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="divisibility">
+          <h2>Задача: найти самый крупный общий масштаб</h2>
+          <p>
+            Пусть \(a\) и \(b\) — целые числа. Запись \(d\mid a\) означает:
+            существует целое \(k\), для которого \(a=dk\). Положительное число
+            \(d\) называется общим делителем \(a\) и \(b\), если оно делит оба
+            числа.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Наибольший общий делитель</h3>
+            <p>
+              Для пары целых чисел, не равных нулю одновременно,
+              \(\gcd(a,b)\)
+              — наибольший положительный общий делитель. Знаки
+              не влияют на делимость, поэтому
+            </p>
+            <div class="atlas-math">
+              \[
+                \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
+                =\gcd(|a|,|b|).
+              \]
+            </div>
+            <p>
+              Мы используем соглашение \(\gcd(a,0)=|a|\) при \(a\ne0\).
+              Пара \((0,0)\) исключена: каждое положительное число делит оба
+              нуля, поэтому наибольшего положительного делителя нет.
+            </p>
+          </section>
+
+          <p>
+            Можно разложить оба числа на простые множители и взять общую часть.
+            Но это решает более трудную задачу, чем требуется. Чтобы найти НОД,
+            нам не нужны сами простые множители: достаточно уметь заменять пару
+            другой парой с тем же множеством общих делителей.
+          </p>
+        </section>
+
+        <section id="rectangle">
+          <h2>Прямоугольник, который измеряют квадратами</h2>
+          <p>
+            Возьмём прямоугольник со сторонами \(a\) и \(b\), где
+            \(a\ge b&gt;0\). Хотим разметить его одинаковыми квадратами
+            целочисленной стороны без обрезков. Сторона такого квадрата должна
+            делить и \(a\), и \(b\). Самая большая возможная сторона равна
+            \(\gcd(a,b)\).
+          </p>
+
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Прямоугольник \(48\times18\)</h3>
+            <p>
+              Вдоль длинной стороны помещаются два квадрата \(18\times18\),
+              после чего остаётся прямоугольник \(12\times18\). Квадраты,
+              которыми можно без остатка измерить исходный прямоугольник,
+              должны измерять и остаток. Поэтому задача \(48\times18\)
+              превращается в задачу \(18\times12\), затем \(12\times6\), а
+              последняя уже разбивается на квадраты \(6\times6\).
+            </p>
+          </section>
+
+          <p>
+            Это современная геометрическая модель идеи, а не описание рисунка из
+            книги VII «Начал». У Евклида там рассматриваются числа и их общая
+            мера; прямоугольное замощение помогает нам увидеть тот же переход,
+            но не должно выдаваться за буквальную форму древнего текста.
+          </p>
+        </section>
+
+        <section id="subtraction">
+          <h2>Первая процедура: вычитать меньшее из большего</h2>
+          <p>
+            Если \(a&gt;b\), заменим пару \((a,b)\) на \((a-b,b)\).
+            Любой общий делитель \(a\) и \(b\) делит разность \(a-b\).
+            Обратно, любой общий делитель \(a-b\) и \(b\) делит
+            \((a-b)+b=a\). Значит, набор общих делителей не изменился.
+          </p>
+
+          <div class="atlas-math">
+            \[
+              \gcd(a,b)=\gcd(a-b,b), \qquad a&gt;b&gt;0.
+            \]
+          </div>
+
+          <p>
+            Можно продолжать, каждый раз вычитая меньшее число из большего,
+            пока числа не сравняются. Для \(48\) и \(18\) получаем
+          </p>
+          <div class="atlas-math">
+            \[
+              (48,18)\to(30,18)\to(12,18)\to(12,6)\to(6,6).
+            \]
+          </div>
+          <p>
+            Это уже алгоритм: состояние — пара положительных чисел, переход
+            однозначен, а остановка наступает при равенстве. Но на паре
+            \((1\,000\,001,1)\) он выполнит миллион почти одинаковых шагов.
+            Здесь возникает главный вопрос главы: можно ли свернуть длинную
+            серию вычитаний в одно точное действие?
+          </p>
+        </section>
+
+        <section id="remainder">
+          <h2>Одно деление вместо серии одинаковых вычитаний</h2>
+          <p>
+            Разделим \(a\) на \(b\) с остатком
+            \(a\bmod b\):
+          </p>
+          <div class="atlas-math">
+            \[
+              a=
+              \class{atlas-notation-token notation-id-quotient-q}{q}b+
+              \class{atlas-notation-token notation-id-remainder-r}{r},
+              \qquad
+              0\le \class{atlas-notation-token notation-id-remainder-r}{r}&lt;b.
+            \]
+          </div>
+          <p>
+            Вычесть \(b\) из \(a\) ровно \(q\) раз — значит сразу перейти к
+            остатку \(r\). Если \(r&gt;0\), серия вычитаний заканчивается парой
+            \((r,b)\); если \(r=0\), достаточно \(q-1\) вычитаний, чтобы оба
+            числа стали равны \(b\). Операция остатка не меняет математическую
+            идею — она упаковывает повторение.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Та же пара \(48\) и \(18\), но крупными шагами</h3>
+            <div class="atlas-math">
+              \[
+              \begin{aligned}
+                48 &= 2\cdot18+12,\\
+                18 &= 1\cdot12+6,\\
+                12 &= 2\cdot6+0.
+              \end{aligned}
+              \]
+            </div>
+            <p>
+              Вместо четырёх вычитаний выполнено три деления. На близких числах
+              выигрыш мал, а при большом частном \(q\) становится огромным.
+            </p>
+          </section>
+        </section>
+
+        <section id="modern-form">
+          <h2>Современная форма алгоритма</h2>
+          <p>
+            Для любых допустимых целых входов сначала берём модули и ставим
+            большее число первым. Затем повторяем один переход:
+          </p>
+
+          <pre class="atlas-pseudocode" role="region" aria-label="Псевдокод алгоритма Евклида">a ← max(|x|, |y|)
+b ← min(|x|, |y|)
+пока b ≠ 0:
+    r ← a mod b
+    (a, b) ← (b, r)
+вернуть a</pre>
+
+          <p>
+            В состоянии достаточно хранить пару \((a,b)\). Частное \(q\)
+            полезно для объяснения и расширенного алгоритма, но следующий
+            переход определяется остатком \(r=a\bmod b\).
+          </p>
+
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Что здесь принадлежит Евклиду, а что — нашей записи</h3>
+            <p>
+              В книге VII «Начал» предложение 1 рассматривает взаимное
+              вычитание меньшего числа из большего для распознавания взаимной
+              простоты. Предложение 2 использует тот же процесс, чтобы найти
+              наибольшую общую меру двух не взаимно простых чисел.
+            </p>
+            <p>
+              Евклид не писал цикл, переменные \(a,b\), знак процента или
+              операцию <code>mod</code>. Термин «алгоритм» получил современный
+              широкий смысл много позже. Поэтому «алгоритм Евклида» —
+              ретроспективное имя: оно честно указывает на математический
+              процесс в «Началах», но современная программная форма и анализ
+              стоимости принадлежат последующей традиции.
+            </p>
+            <p>
+              Проверить формулировки можно непосредственно по
+              <a href="https://www.perseus.tufts.edu/hopper/text?doc=Euc.+7&amp;fromdoc=Perseus%3Atext%3A1999.01.0086"
+                target="_blank" rel="noopener noreferrer">книге VII в Perseus Digital Library</a>.
+            </p>
+          </section>
+        </section>
+
+        <section id="invariant">
+          <h2>Главный инвариант</h2>
+          <p>
+            Быстрый переход оправдан одним равенством:
+          </p>
+
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Лемма об остатке</h3>
+            <p>
+              Если \(a=qb+r\), где
+              \(q\)
+              — неполное частное, а
+              \(r\)
+              удовлетворяет \(0\le r&lt;b\), то
+            </p>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
+                =\gcd(b,r)
+                =\gcd\bigl(b,\class{atlas-notation-token notation-id-modulo}{a\bmod b}\bigr).
+              \]
+            </div>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Сохраняется не только НОД, а весь набор общих делителей</h3>
+            <p>
+              Пусть \(d\mid a\) и \(d\mid b\). Тогда \(d\) делит любую
+              целочисленную линейную комбинацию этих чисел, в частности
+            \(a-qb=r\). Значит, \(d\) — общий делитель \(b\) и \(r\).
+            Обратно, если \(d\mid b\) и \(d\mid r\), то
+              \(d\mid qb+r=a\). Поэтому
+            </p>
+            <div class="atlas-math">
+              \[
+                \{d>0:d\mid a,\ d\mid b\}=
+                \{d>0:d\mid b,\ d\mid r\}.
+              \]
+            </div>
+            <p>
+            У равных множеств положительных общих делителей одинаковый
+            наибольший элемент. Лемма доказана.
+            </p>
+          </section>
+
+          <p>
+            В терминах первой главы атласа инвариант состояния выглядит так:
+          </p>
+          <div class="atlas-math">
+            \[
+              I(a,b):\qquad \gcd(a,b)=\gcd(|x|,|y|).
+            \]
+          </div>
+          <p>
+            Он истинен в начальном состоянии и сохраняется переходом
+            \((a,b)\mapsto(b,a\bmod b)\).
+          </p>
+        </section>
+
+        <section id="termination">
+          <h2>Почему процесс обязательно закончится</h2>
+          <p>
+            Инвариант доказывает сохранение смысла, но сам по себе не запрещает
+            бесконечный цикл. Нужен вариант — неотрицательная целая величина,
+            строго уменьшающаяся после каждого незавершающего шага.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Остатки строго убывают</h3>
+            <p>
+              Пока \(b&gt;0\), новый второй компонент равен
+              \(r=a\bmod b\), причём
+            </p>
+            <div class="atlas-math">
+              \[
+                0\le r&lt;b.
+              \]
+            </div>
+            <p>
+              Значит, последовательность положительных вторых компонентов
+              строго убывает. Бесконечной строго убывающей последовательности
+              неотрицательных целых чисел не существует. Рано или поздно
+              остаток станет нулём, и алгоритм остановится.
+            </p>
+          </section>
+        </section>
+
+        <section id="correctness">
+          <h2>Частичная и полная корректность</h2>
+          <p>
+            Если алгоритм остановился в состоянии \((a,0)\), инвариант даёт
+          </p>
+          <div class="atlas-math">
+            \[
+              \gcd(|x|,|y|)=\gcd(a,0)=a.
+            \]
+          </div>
+          <p>
+            Это доказательство частичной корректности: завершившийся запуск
+            возвращает правильный ответ. Строгое уменьшение остатков отдельно
+            доказывает завершимость. Вместе они дают полную корректность на
+            области:
+          </p>
+          <div class="atlas-math">
+            \[
+              \{(x,y)\in\mathbb Z^2:(x,y)\ne(0,0)\}.
+            \]
+          </div>
+          <p>
+            Здесь хорошо видно, почему два доказательства нельзя склеивать
+            одной фразой «остатки уменьшаются, значит всё работает».
+            Уменьшение отвечает за остановку; сохранение множества делителей —
+            за правильность результата.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Одно вычисление в четырёх представлениях</h2>
+          <p>
+            Лаборатория использует точные целые числа. Таблица, прямоугольник,
+            счётчики вычитаний и инвариант читают одно состояние
+            \((a,b)\); ни одно представление не ведёт отдельный расчёт.
+          </p>
+
+          <div class="euclid-lab" role="region" aria-labelledby="euclid-lab-title">
+            <h3 id="euclid-lab-title">Пошаговый алгоритм Евклида</h3>
+            <form id="euclid-form" class="euclid-lab__form" novalidate>
+              <label for="euclid-left">
+                Первое число \(x\)
+                <input id="euclid-left" name="left" type="text" inputmode="numeric"
+                  autocomplete="off" spellcheck="false" value="1071"
+                  aria-describedby="euclid-input-help">
+              </label>
+              <label for="euclid-right">
+                Второе число \(y\)
+                <input id="euclid-right" name="right" type="text" inputmode="numeric"
+                  autocomplete="off" spellcheck="false" value="462"
+                  aria-describedby="euclid-input-help">
+              </label>
+              <p id="euclid-input-help" class="euclid-lab__input-help">
+                Целые числа до 120 цифр; допустим ноль только в одном из полей.
+                Знаки отбрасываются по правилу \(\gcd(x,y)=\gcd(|x|,|y|)\).
+              </p>
+              <div class="euclid-lab__actions">
+                <button id="euclid-apply" type="submit">Применить входы</button>
+                <button id="euclid-step" type="button">Один шаг</button>
+                <button id="euclid-auto" type="button">Запустить</button>
+                <button id="euclid-pause" type="button" disabled>Пауза</button>
+                <button id="euclid-reset" type="button">К началу</button>
+                <button id="euclid-bad-case-toggle" type="button"
+                  aria-pressed="false" aria-expanded="false"
+                  aria-controls="euclid-bad-case">
+                  Плохой случай
+                </button>
+              </div>
+            </form>
+
+            <p id="euclid-error" class="euclid-lab__error" role="alert" hidden></p>
+
+            <div class="euclid-control-strip">
+              <div class="euclid-speed">
+                <label for="euclid-speed">Скорость</label>
+                <input id="euclid-speed" type="range"
+                  min="1" max="5" step="1" value="3">
+                <output id="euclid-speed-value"
+                  for="euclid-speed">2 шага/с</output>
+              </div>
+
+              <div id="euclid-bad-case" class="euclid-bad-case" hidden>
+                <label for="euclid-fibonacci-index">
+                  Соседние числа Фибоначчи: индекс
+                  <input id="euclid-fibonacci-index" type="range"
+                    min="2" max="400" step="1" value="12">
+                </label>
+                <p id="euclid-fibonacci-label"></p>
+              </div>
+            </div>
+
+            <dl class="euclid-live-metrics" aria-live="polite">
+              <div><dt>Делений сделано</dt><dd id="euclid-division-count">0</dd></div>
+              <div><dt>Эквивалентных вычитаний</dt><dd id="euclid-subtraction-count">0</dd></div>
+              <div><dt>Бит в большем входе</dt><dd id="euclid-bit-length">—</dd></div>
+              <div><dt>Найденный НОД</dt><dd id="euclid-gcd-result">—</dd></div>
+            </dl>
+
+            <div class="euclid-visual-grid">
+              <section class="euclid-geometry-panel" aria-labelledby="euclid-geometry-title">
+                <h3 id="euclid-geometry-title">Прямоугольник и квадраты</h3>
+                <svg id="euclid-geometry" class="euclid-geometry"
+                  viewBox="0 0 720 360" role="img"
+                  aria-labelledby="euclid-geometry-svg-title euclid-geometry-svg-description">
+                  <title id="euclid-geometry-svg-title">Геометрия текущего деления</title>
+                  <desc id="euclid-geometry-svg-description">
+                    Прямоугольник со сторонами a и b разбит на q квадратов
+                    со стороной b и остаточный прямоугольник.
+                  </desc>
+                </svg>
+                <p id="euclid-geometry-caption" class="euclid-geometry-caption"></p>
+                <p id="euclid-transition-caption"
+                  class="euclid-transition-caption" aria-live="polite"></p>
+              </section>
+
+              <section class="euclid-state-panel" aria-labelledby="euclid-state-title">
+                <h3 id="euclid-state-title">Текущее состояние</h3>
+                <article>
+                  <strong>Пара</strong>
+                  <p id="euclid-current-pair"></p>
+                </article>
+                <article>
+                  <strong>Следующий переход</strong>
+                  <p id="euclid-current-rule"></p>
+                </article>
+                <article>
+                  <strong>Инвариант</strong>
+                  <p id="euclid-invariant"></p>
+                </article>
+                <article>
+                  <strong>Вычитание против остатка</strong>
+                  <p id="euclid-phase-comparison"></p>
+                </article>
+              </section>
+
+              <section class="euclid-comparison" aria-labelledby="euclid-comparison-title">
+                <h3 id="euclid-comparison-title">Полный расчёт для выбранных входов</h3>
+                <div class="euclid-comparison-row">
+                  <span class="euclid-comparison-label">
+                    Деление с остатком: <strong id="euclid-division-total">—</strong>
+                  </span>
+                  <span class="euclid-comparison-track" aria-hidden="true">
+                    <i id="euclid-division-bar"
+                      class="euclid-comparison-bar is-division"></i>
+                  </span>
+                </div>
+                <div class="euclid-comparison-row">
+                  <span class="euclid-comparison-label">
+                    Повторное вычитание: <strong id="euclid-subtraction-total">—</strong>
+                  </span>
+                  <span class="euclid-comparison-track" aria-hidden="true">
+                    <i id="euclid-subtraction-bar"
+                      class="euclid-comparison-bar"></i>
+                  </span>
+                </div>
+                <p class="euclid-comparison-note">
+                  Длины полос сравниваются по логарифмической шкале; точные числа
+                  подписаны слева.
+                </p>
+              </section>
+            </div>
+
+            <div class="euclid-trace-wrap" role="region" tabindex="0"
+              aria-label="Таблица состояний алгоритма Евклида">
+              <table class="euclid-trace">
+                <thead>
+                  <tr>
+                    <th scope="col">Шаг</th>
+                    <th scope="col">\(a\)</th>
+                    <th scope="col">\(b\)</th>
+                    <th scope="col">\(q\)</th>
+                    <th scope="col">\(r\)</th>
+                    <th scope="col">НОД</th>
+                  </tr>
+                </thead>
+                <tbody id="euclid-trace-body"></tbody>
+              </table>
+            </div>
+            <p id="euclid-status" class="euclid-lab__status"
+              role="status" aria-live="polite"></p>
+          </div>
+        </section>
+
+        <section id="fibonacci">
+          <h2>Почему соседние числа Фибоначчи мешают больше всего</h2>
+          <p>
+            Большое частное выгодно: одно деление заменяет сразу много
+            вычитаний и резко уменьшает число. Чтобы шагов было много, каждое
+            частное должно быть как можно меньше. Для положительных остатков
+            минимальное частное равно \(1\). Тогда каждый предыдущий остаток
+            почти равен сумме двух следующих:
+          </p>
+          <div class="atlas-math">
+            \[
+              r_{i-1}=r_i+r_{i+1}.
+            \]
+          </div>
+          <p>
+            Если раскрутить минимальную цепочку от конца назад, появляются
+            числа Фибоначчи
+            \(0,1,1,2,3,5,8,\ldots\). Для нашей договорённости о числе делений
+            пара \((F_{k+2},F_{k+1})\) требует ровно \(k\) делений.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Минимальный вход для заданного числа делений</h3>
+            <p>
+              Если алгоритм для \(a&gt;b&gt;0\) выполняет \(k\) делений, то
+            </p>
+            <div class="atlas-math">
+            \[
+              a\ge F_{k+2},\qquad b\ge F_{k+1}.
+            \]
+            </div>
+            <p>
+              Равенство достигается на соседних числах Фибоначчи.
+            </p>
+          </section>
+
+          <p>
+            Режим «Плохой случай» в лаборатории строит именно эти пары.
+            Двигая индекс, можно увидеть: значения растут экспоненциально, а
+            количество делений — линейно по индексу.
+          </p>
+        </section>
+
+        <section id="lame">
+          <h2>Теорема Ламе: число шагов логарифмическое</h2>
+          <p>
+            Числа Фибоначчи растут примерно как
+            \(F_n\approx\varphi^n/\sqrt5\), где
+            \(\varphi=(1+\sqrt5)/2\). Из предыдущей оценки следует:
+            если меньшее входное число равно \(b\), количество делений имеет
+            порядок \(\log b\), а не \(b\).
+          </p>
+
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Десятичная форма оценки</h3>
+            <p>
+              Если меньшее положительное число записано \(d\) десятичными
+              цифрами, алгоритму требуется не более \(5d\) делений.
+            </p>
+          </section>
+
+          <p>
+            Эту оценку традиционно связывают с заметкой Габриеля Ламе 1844
+            года. История тоньше красивой легенды: исследование Джеффри Шаллита
+            показывает более ранние оценки Рейно, Леже и Финка. Поэтому
+            корректнее говорить, что работа Ламе сделала связь алгоритма,
+            длины входа и чисел Фибоначчи классической, а не объявлять её
+            безусловно первым анализом алгоритма.
+          </p>
+        </section>
+
+        <section id="bit-cost">
+          <h2>Одно деление — не одна элементарная битовая операция</h2>
+          <p>
+            Теорема Ламе считает арифметические деления как единичные шаги.
+            Это <strong>модель арифметической стоимости</strong>. Для чисел,
+            помещающихся в машинное слово, она часто хорошо отражает практику.
+            Но большое целое хранится многими битами, и операция остатка над
+            тысячебитными числами сама требует работы.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>\(O(\log b)\) делений не означает \(O(\log b)\) битовых действий</h3>
+            <p>
+              Пусть \(L\) — длина входов в битах. Делений действительно
+              \(O(L)\), но стоимость каждого зависит от текущей длины операндов.
+              Прямолинейная реализация многословной арифметики даёт
+              квадратичную битовую оценку порядка \(O(L^2)\). Более быстрые
+              варианты НОД используют пакетную обработку частных и быстрые
+              алгоритмы умножения; это уже отдельная ветка атласа.
+            </p>
+          </section>
+
+          <p>
+            Различие принципиально: число \(2^{100000}\) и единица дают один
+            шаг Евклида, но вычислить остаток и даже прочитать первый вход
+            нельзя за константное число битовых операций.
+          </p>
+        </section>
+
+        <section class="atlas-block" data-atlas-block="example">
+          <h2>Следующая ветка: коэффициенты Безу</h2>
+          <p>
+            Если сохранять не только остатки, но и их представление через
+            исходные числа, в конце получится:
+          </p>
+          <div class="atlas-math">
+            \[
+              \gcd(a,b)=ua+vb
+            \]
+          </div>
+          <p>
+            для некоторых целых \(u,v\). Это расширенный алгоритм Евклида —
+            основа вычисления обратных элементов по модулю. Здесь достаточно
+            заметить ветку; полностью она появится отдельной точкой карты.
+          </p>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p>
+                <strong>1. Ручной прогон.</strong> Найдите
+                \(\gcd(1071,462)\), выписав все равенства \(a=qb+r\).
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Первый остаток равен \(1071-2\cdot462\).</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  \(1071=2\cdot462+147\),
+                  \(462=3\cdot147+21\),
+                  \(147=7\cdot21+0\). Поэтому НОД равен \(21\).
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>2. Инвариант.</strong> Докажите непосредственно:
+                каждый общий делитель \(b\) и \(a\bmod b\) делит \(a\).
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Используйте равенство \(a=qb+r\).</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Если \(d\mid b\) и \(d\mid r\), то \(d\mid qb\) и
+                  \(d\mid(qb+r)=a\). Вместе с обратным направлением это даёт
+                  равенство множеств общих делителей.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>3. Завершимость.</strong> Почему недостаточно сказать:
+                «остатки не увеличиваются»?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Неувеличивающаяся последовательность может быть постоянной.</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Для остановки нужна строгая убываемость положительных остатков:
+                  \(0\le r_{i+1}&lt;r_i\). Последовательность
+                  \(5,5,5,\ldots\) не увеличивается, но никогда не достигает
+                  нуля.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>4. Плохой вход.</strong> Какая пара потребует больше
+                делений: \((144,89)\) или \((144,1)\)? Объясните до вычисления.
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>\(144\) и \(89\) — соседние числа Фибоначчи.</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Пара \((144,89)=(F_{12},F_{11})\) требует десять делений.
+                  Для \((144,1)\) первое деление сразу даёт остаток ноль.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>5. Две реализации.</strong> Сколько вычитаний и сколько
+                делений требуется для пары \((1\,000\,001,1)\)?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Вычитание останавливается, когда оба числа стали равны единице.</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Повторное вычитание выполнит \(1\,000\,000\) шагов.
+                  Деление \(1\,000\,001=1\,000\,001\cdot1+0\) завершит
+                  алгоритм за один шаг.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>6. Границы области.</strong> Чему равны
+                \(\gcd(-24,0)\), \(\gcd(0,18)\) и почему лаборатория отвергает
+                \((0,0)\)?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Каждый положительный делитель нуля подходит.</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  \(\gcd(-24,0)=24\), \(\gcd(0,18)=18\). Для \((0,0)\)
+                  общими делителями являются все положительные числа, поэтому
+                  наибольшего среди них нет.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>7. Две сложности.</strong> Почему один шаг для
+                \((2^{100000},1)\) не означает константное время вычисления?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Оцените хотя бы объём записи первого числа.</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Первый операнд содержит \(100001\) бит. В арифметической
+                  модели деление считается одним шагом, но битовая модель
+                  учитывает чтение и обработку всех машинных слов большого
+                  числа.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>8. Необязательная ветка.</strong> Восстановите из
+                вычисления упражнения 1 целые \(u,v\), для которых
+                \(21=1071u+462v\).
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>
+                  Начните с \(21=462-3\cdot147\), затем подставьте
+                  \(147=1071-2\cdot462\).
+                </p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  \(21=462-3(1071-2\cdot462)
+                  =-3\cdot1071+7\cdot462\). Поэтому \(u=-3\), \(v=7\).
+                </p>
+              </details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              Евклид,
+              <a href="https://www.perseus.tufts.edu/hopper/text?doc=Euc.+7&amp;fromdoc=Perseus%3Atext%3A1999.01.0086"
+                target="_blank" rel="noopener noreferrer">«Начала», книга VII, предложения 1–2</a>
+              — первичный текст процесса взаимного вычитания и поиска общей меры.
+            </li>
+            <li>
+              David E. Joyce,
+              <a href="https://aleph0.clarku.edu/~djoyce/elements/bookVII/bookVII.html"
+                target="_blank" rel="noopener noreferrer">Euclid’s Elements, Book VII</a>
+              — академический комментарий к структуре книги VII и антанаиресису.
+            </li>
+            <li>
+              Jeffrey Shallit,
+              <a href="https://doi.org/10.1006/hmat.1994.1031"
+                target="_blank" rel="noopener noreferrer">Origins of the Analysis of the Euclidean Algorithm</a>,
+              Historia Mathematica 21(4), 1994 — история оценок до и после Ламе.
+            </li>
+            <li>
+              E. Lionnet,
+              <a href="https://www.numdam.org/article/NAM_1845_1_4__617_0.pdf"
+                target="_blank" rel="noopener noreferrer">Note sur la limite du nombre des divisions…</a>,
+              1845 — изложение десятичной границы Ламе и её обобщения на другие основания.
+            </li>
+            <li>
+              Richard P. Brent, Paul Zimmermann,
+              <a href="https://arxiv.org/abs/1004.4710"
+                target="_blank" rel="noopener noreferrer">Modern Computer Arithmetic</a>
+              — алгоритмы НОД и стоимость многословной целочисленной арифметики.
+            </li>
+            <li>
+              Brian Hopkins, Aram Tangboonduangjit,
+              <a href="https://www.mathos.unios.hr/mc/index.php/mc/article/view/3566"
+                target="_blank" rel="noopener noreferrer">Ties in Worst-Case Analysis of the Euclidean Algorithm</a>,
+              Mathematical Communications 26(1), 2021 — современный анализ худших пар.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переход между точками маршрута">
+          <div id="atlas-route-previous">
+            <span class="atlas-route-nav__direction">Назад</span>
+            <a href="./before-computers.html">Что люди называли алгоритмами до появления компьютеров</a>
+          </div>
+          <div id="atlas-route-next">
+            <span class="atlas-route-nav__direction">Дальше</span>
+            <span>От ручного вычисления к машине Тьюринга · готовится</span>
+          </div>
+        </nav>
+
+        <section class="atlas-completion" aria-label="Прогресс изучения">
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" role="status">
+            Прогресс хранится только в этом браузере.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

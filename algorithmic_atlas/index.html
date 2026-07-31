@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Алгоритмический атлас — Kirill Dikalin</title>
+  <meta name="description" content="Интерактивная карта алгоритмов: история точных процедур, модели вычисления, доказательства и эксперименты.">
+  <meta property="og:title" content="Алгоритмический атлас — Kirill Dikalin">
+  <meta property="og:description" content="Карта образовательного маршрута по алгоритмам и эффективности вычислений.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="./atlas.css">
+  <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+  <script src="./atlas-core.js" defer></script>
+  <script src="./atlas.js" defer></script>
+</head>
+<body>
+  <nav class="atlas-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <span>Алгоритмический атлас</span>
+  </nav>
+
+  <main class="atlas-shell">
+    <header class="atlas-hero">
+      <p class="atlas-eyebrow">Интерактивный образовательный маршрут</p>
+      <h1>Алгоритмический атлас</h1>
+      <p class="atlas-lead">
+        Здесь алгоритмы связаны не списком глав, а маршрутом: историческая процедура
+        приводит к формальной модели, доказательство — к вопросу о цене вычисления,
+        а интерактив позволяет проверить идею руками.
+      </p>
+    </header>
+
+    <section class="atlas-progress-panel" aria-labelledby="atlas-progress-title">
+      <div>
+        <h2 id="atlas-progress-title">Ваш маршрут</h2>
+        <p id="atlas-progress-text">Загружаю карту…</p>
+      </div>
+      <div class="atlas-progress-actions">
+        <progress id="atlas-progress" max="1" value="0">0%</progress>
+        <button
+          type="button"
+          id="atlas-free-explore"
+          class="atlas-mode-toggle"
+          aria-pressed="false"
+          aria-describedby="atlas-free-explore-help">
+          Свободное исследование: выключено
+        </button>
+        <p id="atlas-free-explore-help" class="atlas-mode-help">
+          Открывает опубликованные главы без изменения прогресса. Запланированные материалы
+          остаются недоступны.
+        </p>
+      </div>
+    </section>
+
+    <section class="atlas-map-section" aria-labelledby="atlas-map-title">
+      <div class="atlas-section-heading">
+        <div>
+          <p id="atlas-map-kicker" class="atlas-kicker">Карта мира</p>
+          <h2 id="atlas-map-title">Все материки</h2>
+        </div>
+        <div class="atlas-map-actions">
+          <button type="button" id="atlas-world-back" class="atlas-map-back" hidden>
+            ← Весь мир
+          </button>
+          <ul class="atlas-legend" aria-label="Обозначения карты">
+            <li><i class="is-unlocked" aria-hidden="true"></i>доступно</li>
+            <li><i class="is-gated" aria-hidden="true"></i>нужен предыдущий шаг</li>
+            <li><i class="is-planned" aria-hidden="true"></i>запланировано</li>
+            <li><i class="is-completed" aria-hidden="true"></i>пройдено</li>
+          </ul>
+        </div>
+      </div>
+
+      <div id="atlas-map-frame" class="atlas-map-frame" data-map-view="world">
+        <svg
+          id="atlas-map"
+          class="atlas-map"
+          viewBox="0 0 1040 620"
+          role="group"
+          aria-labelledby="atlas-map-svg-title atlas-map-svg-description">
+          <title id="atlas-map-svg-title">Карта мира алгоритмического атласа</title>
+          <desc id="atlas-map-svg-description">
+            Девять связанных материков. Первый материк опубликован, остальные показывают
+            будущие направления развития атласа.
+          </desc>
+          <defs>
+            <filter id="atlas-paper-shadow" x="-10%" y="-10%" width="120%" height="130%">
+              <feDropShadow dx="0" dy="9" stdDeviation="12" flood-opacity="0.13"/>
+            </filter>
+            <filter id="atlas-fog-soften" x="-18%" y="-18%" width="136%" height="136%">
+              <feGaussianBlur stdDeviation="2.4"/>
+            </filter>
+            <pattern id="atlas-water-pattern" width="96" height="64" patternUnits="userSpaceOnUse">
+              <rect class="atlas-water-pattern__base" width="96" height="64"/>
+              <path class="atlas-water-pattern__line"
+                d="M-12 17 C10 7 29 8 50 17 S88 27 108 16
+                   M-10 45 C13 35 32 36 53 45 S91 55 109 44"/>
+            </pattern>
+            <pattern id="atlas-contours" width="52" height="52" patternUnits="userSpaceOnUse">
+              <path d="M-8 18 C8 6 26 7 60 22 M-10 42 C12 29 35 31 64 46"
+                fill="none" stroke="currentColor" stroke-width="1"/>
+            </pattern>
+            <radialGradient id="atlas-route-cloud">
+              <stop class="atlas-route-cloud__core" offset="0"/>
+              <stop class="atlas-route-cloud__edge" offset="0.68"/>
+              <stop class="atlas-route-cloud__clear" offset="1"/>
+            </radialGradient>
+            <radialGradient id="atlas-development-cloud">
+              <stop class="atlas-development-cloud__core" offset="0"/>
+              <stop class="atlas-development-cloud__edge" offset="0.72"/>
+              <stop class="atlas-development-cloud__clear" offset="1"/>
+            </radialGradient>
+            <pattern id="atlas-route-fog-pattern" width="148" height="104"
+              patternUnits="userSpaceOnUse">
+              <circle cx="34" cy="38" r="43" fill="url(#atlas-route-cloud)"/>
+              <circle cx="94" cy="23" r="37" fill="url(#atlas-route-cloud)"/>
+              <circle cx="128" cy="73" r="46" fill="url(#atlas-route-cloud)"/>
+              <circle cx="61" cy="89" r="40" fill="url(#atlas-route-cloud)"/>
+            </pattern>
+            <pattern id="atlas-development-fog-pattern" width="126" height="92"
+              patternUnits="userSpaceOnUse">
+              <rect class="atlas-development-fog__veil" width="126" height="92"/>
+              <circle cx="25" cy="24" r="42" fill="url(#atlas-development-cloud)"/>
+              <circle cx="78" cy="17" r="40" fill="url(#atlas-development-cloud)"/>
+              <circle cx="112" cy="57" r="45" fill="url(#atlas-development-cloud)"/>
+              <circle cx="48" cy="76" r="46" fill="url(#atlas-development-cloud)"/>
+            </pattern>
+          </defs>
+          <rect class="atlas-water-texture" width="1040" height="620"
+            fill="url(#atlas-water-pattern)" aria-hidden="true"/>
+          <g id="atlas-lands" aria-hidden="true"></g>
+          <g id="atlas-edges" aria-hidden="true"></g>
+          <g id="atlas-nodes"></g>
+          <g id="atlas-fog-layer" aria-hidden="true"></g>
+        </svg>
+        <p id="atlas-view-status" class="atlas-visually-hidden" aria-live="polite" aria-atomic="true"></p>
+        <p id="atlas-map-error" class="atlas-map-error" role="alert" hidden>
+          Не удалось загрузить описание атласа.
+          <button type="button" id="atlas-retry">Попробовать снова</button>
+        </p>
+      </div>
+
+      <p id="atlas-map-help" class="atlas-map-help">
+        Выберите материк мышью или клавишей Tab. Сплошная линия показывает основной
+        маршрут, пунктирная — дополнительную связь.
+      </p>
+      <ul
+        id="atlas-continent-list"
+        class="atlas-mobile-continent-list"
+        aria-label="Материки атласа">
+      </ul>
+    </section>
+
+    <aside id="atlas-node-detail" class="atlas-node-detail" aria-live="polite" hidden>
+      <div>
+        <p id="atlas-node-region" class="atlas-kicker"></p>
+        <h2 id="atlas-node-title"></h2>
+        <p id="atlas-node-description"></p>
+      </div>
+      <dl class="atlas-node-meta">
+        <div id="atlas-node-type-row"><dt>Тип</dt><dd id="atlas-node-type"></dd></div>
+        <div id="atlas-node-minutes-row"><dt>Время</dt><dd id="atlas-node-minutes"></dd></div>
+        <div><dt>Состояние</dt><dd id="atlas-node-status"></dd></div>
+      </dl>
+      <a id="atlas-node-link" class="atlas-primary-link" href="./index.html">Открыть главу</a>
+    </aside>
+
+    <section class="atlas-principles" aria-labelledby="atlas-principles-title">
+      <h2 id="atlas-principles-title">Как читать атлас</h2>
+      <div class="atlas-principle-grid">
+        <article>
+          <span>01</span>
+          <h3>Сначала механизм</h3>
+          <p>Каждая идея начинается с конкретного состояния, шага и наблюдаемого результата</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Потом доказательство</h3>
+          <p>Интерактив помогает заметить закономерность, но не заменяет объяснение корректности</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Связи важнее порядка</h3>
+          <p>Обязательный маршрут даёт основу, дополнительные тропы связывают историю, теорию и практику</p>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

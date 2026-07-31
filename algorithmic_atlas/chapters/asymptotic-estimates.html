@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Асимптотические оценки — Алгоритмический атлас</title>
+  <meta name="description" content="Строгие определения O, Ω, Θ, o и ω, доказательства с явными константами и интерактивная лаборатория асимптотических границ.">
+  <meta property="og:title" content="Асимптотические оценки — Алгоритмический атлас">
+  <meta property="og:description" content="Пятая глава Алгоритмического атласа: как сравнивать бесконечные хвосты функций и доказывать оценки кванторами.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/asymptotic-estimates.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/asymptotic-estimates.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/asymptotics.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/html']
+      },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/asymptotics-core.js" defer></script>
+  <script src="../labs/asymptotics.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="asymptotic-estimates">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Асимптотические оценки</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Истоки и эффективность · точка 05</p>
+      <h1>Асимптотические оценки</h1>
+      <p class="atlas-chapter-intro">
+        Как превратить слова «растёт не быстрее» в утверждение с кванторами,
+        подобрать его свидетелей и не принять удачный фрагмент графика за
+        доказательство
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 90 минут</span>
+        <span>5 отношений роста</span>
+        <span>1 лаборатория · 2 режима</span>
+        <span>12 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#history">Зачем понадобился новый язык</a></li>
+          <li><a href="#cost-functions">Что именно сравниваем</a></li>
+          <li><a href="#tail">Бесконечный хвост</a></li>
+          <li><a href="#big-o-definition">Верхняя оценка O</a></li>
+          <li><a href="#lower-theta">Нижняя оценка и Θ</a></li>
+          <li><a href="#strict-relations">Строгие o и ω</a></li>
+          <li><a href="#sets">Множества, а не равенство</a></li>
+          <li><a href="#proofs">Как строить доказательство</a></li>
+          <li><a href="#oscillation">Немонотонная функция</a></li>
+          <li><a href="#properties">Свойства отношений</a></li>
+          <li><a href="#previous-chapters">Возвращение к маршруту</a></li>
+          <li><a href="#mistakes">Что часто понимают неправильно</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="history">
+          <h2>Зачем понадобился новый язык</h2>
+          <p>
+            В конце XIX века теория чисел всё чаще сталкивалась не с точным
+            значением функции, а с вопросом о размере остатка: насколько велика
+            ошибка приближения при больших аргументах? Переписывать каждый раз
+            фразу «модуль остатка не превосходит постоянного множителя такой-то
+            функции начиная с некоторого места» было неудобно. Обозначение
+            порядка роста сжало именно это утверждение, а не отменило его.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>От Бахмана и Ландау к анализу алгоритмов</h3>
+            <p>
+              В книге Пауля Бахмана <i>Die analytische Zahlentheorie</i>
+              1894 года встречается \(O\)-обозначение. Эдмунд Ландау в своём
+              двухтомном руководстве 1909 года указал на это употребление и
+              систематически использовал \(O\) вместе с введённым им малым
+              \(o\). Поэтому осторожная историческая формулировка звучит так:
+              у Бахмана находится раннее документированное употребление \(O\),
+              а работы Ландау сделали язык порядка роста стандартным
+              инструментом анализа.
+            </p>
+            <p>
+              В информатике возникла другая проблема. Верхнюю оценку \(O\)
+              нередко читали как точную характеристику и даже использовали для
+              нижних границ. В статье 1976 года Дональд Кнут предложил согласованно
+              читать \(O\) как «порядок не выше», \(\Omega\) как «порядок не ниже»,
+              а \(\Theta\) как «порядок точно такой». Он не изобрёл \(O\):
+              статья сама прослеживает его до Бахмана и Ландау. Более того,
+              символ \(\Omega\) уже применяли Харди и Литлвуд в 1914 году, но
+              с более слабым смыслом «не является малым \(o\)». Кнут сознательно
+              выбрал полезное для анализа алгоритмов требование «для всех
+              достаточно больших \(n\)». Обозначение \(\Theta\), по его словам,
+              независимо предложили Роберт Тарьян и Майкл Патерсон.
+            </p>
+          </section>
+
+          <p>
+            Эта история важна не из-за приоритета букв. Она показывает причину
+            появления нотации: отделить направление границы от точности оценки
+            и сделать длинное утверждение о бесконечном хвосте функции пригодным
+            для вычислений на бумаге.
+          </p>
+        </section>
+
+        <section id="cost-functions">
+          <h2>Что именно мы сравниваем</h2>
+          <p>
+            В предыдущей главе стоимость конкретного запуска обозначалась
+            \(\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}\).
+            После выбора способа объединить входы одинакового размера
+            получается функция одного натурального аргумента: например, худшее
+            число шагов на всех входах длины \(n\). Теперь зафиксируем две функции
+            стоимости:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-cost-function-fn}{f},
+              \class{atlas-notation-token notation-id-comparison-function-gn}{g}
+              \colon \mathbb N\to\mathbb R_{\ge 0}.
+            \]
+          </div>
+          <p>
+            Функция \(f\) — то, что оцениваем; \(g\) — выбранный масштаб
+            сравнения. Будем считать, что \(g(n)&gt;0\) начиная с некоторого
+            значения. Это позволяет умножать её на положительные константы и,
+            когда нужно, рассматривать отношение \(f(n)/g(n)\).
+          </p>
+          <p>
+            Мы сравниваем поведение при \(n\to\infty\). Значения на конечном
+            начальном отрезке могут быть какими угодно: асимптотический класс
+            от этого не меняется. Но выбор переменной и модели стоимости остаётся
+            частью утверждения. Нельзя написать \(O(n)\), не объяснив, что такое
+            \(n\) и какие действия посчитаны.
+          </p>
+        </section>
+
+        <section id="tail">
+          <h2>Бесконечный хвост после порога</h2>
+          <p>
+            Фраза «начиная с некоторого
+            \(\class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}\)»
+            разрешает отбросить конечное число ранних значений. После выбора
+            порога остаётся бесконечный хвост
+            \(n_0,n_0+1,n_0+2,\ldots\), и требуемое неравенство должно быть
+            верно в каждой его точке.
+          </p>
+          <figure class="atlas-tail-diagram" aria-labelledby="tail-diagram-caption">
+            <div class="atlas-tail-diagram__prefix">
+              <span>конечное начало</span>
+            </div>
+            <div class="atlas-tail-diagram__threshold">
+              <span>\(n_0\)</span>
+            </div>
+            <div class="atlas-tail-diagram__tail">
+              <span>весь дальнейший хвост</span>
+            </div>
+            <figcaption id="tail-diagram-caption">
+              Слева допустимы исключения; справа исключений уже быть не может
+            </figcaption>
+          </figure>
+          <p>
+            Одно удачное \(n\), тысяча проверенных точек и даже миллиард точек
+            не заменяют универсальный квантор. Конечный эксперимент помогает
+            заметить закономерность или найти контрпример, но доказательство
+            обязано охватить все последующие натуральные числа.
+          </p>
+        </section>
+
+        <section id="big-o-definition">
+          <h2>Верхняя асимптотическая оценка</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Определение \(O\)</h3>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-o-class}{O}
+                  \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+                \iff
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}>0\;
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}
+                \in\mathbb N\;
+                \class{atlas-notation-token notation-id-forall-tail-quantifier}
+                  {\forall n\ge n_0}:
+                \quad
+                0\le
+                \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}
+                \le
+                \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}\,
+                \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}.
+              \]
+            </div>
+            <p>
+              Константа \(c\) выбирается один раз и не зависит от \(n\).
+              Порог \(n_0\) разрешает неудачное конечное начало. После него
+              универсальный квантор требует неравенство для каждого \(n\).
+              Пара \((c,n_0)\) называется свидетелем верхней оценки.
+            </p>
+          </section>
+
+          <p>
+            Верхняя оценка не обязана быть точной. Если \(f(n)=n\), то при
+            \(n\ge1\) выполняется \(n\le n^2\), поэтому \(n\in O(n^2)\).
+            Утверждение верно, но оно скрывает более сильный факт
+            \(n\in\Theta(n)\). Направление \(O\) отвечает только на вопрос
+            «можно ли на всём достаточно далёком хвосте удержать \(f\) не выше
+            некоторого постоянного множителя \(g\)?».
+          </p>
+        </section>
+
+        <section id="lower-theta">
+          <h2>Нижняя граница и точный порядок</h2>
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Определения \(\Omega\) и \(\Theta\)</h3>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-omega-class}{\Omega}
+                  \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+                \iff
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}>0\;
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}
+                \in\mathbb N\;
+                \class{atlas-notation-token notation-id-forall-tail-quantifier}
+                  {\forall n\ge n_0}:
+                \quad
+                0\le c\,g(n)\le f(n).
+              \]
+            </div>
+            <p>
+              Здесь постоянный множитель \(c\,g(n)\) лежит снизу. Поэтому сразу
+              получается полезная симметрия:
+            </p>
+            <div class="atlas-math">
+              \[
+                f\in\Omega(g)\iff g\in O(f).
+              \]
+            </div>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-theta-class}{\Theta}
+                  \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+                \iff
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-theta-lower-constant-c1}{c_1},
+                \class{atlas-notation-token notation-id-theta-upper-constant-c2}{c_2}>0\;
+                \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+                \class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}
+                \in\mathbb N\;
+                \class{atlas-notation-token notation-id-forall-tail-quantifier}
+                  {\forall n\ge n_0}:
+                \quad
+                0\le
+                \class{atlas-notation-token notation-id-theta-lower-constant-c1}{c_1}
+                g(n)\le f(n)\le
+                \class{atlas-notation-token notation-id-theta-upper-constant-c2}{c_2}
+                g(n).
+              \]
+            </div>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>\(\Theta\) — это две границы одновременно</h3>
+            <p>
+              Если даны свидетели верхней и нижней оценок, берём общий порог
+              \(n_0=\max\{n_O,n_\Omega\}\). На всём хвосте после него выполняются
+              оба неравенства, значит, \(f\in\Theta(g)\). В обратную сторону
+              определение \(\Theta\) уже содержит верхнее и нижнее неравенства:
+              первое даёт \(O\), второе — \(\Omega\). Поэтому
+            </p>
+            <div class="atlas-math">
+              \[
+                f\in\Theta(g)
+                \iff
+                f\in O(g)\land f\in\Omega(g).
+              \]
+            </div>
+          </section>
+        </section>
+
+        <section id="strict-relations">
+          <h2>Строго меньший и строго больший порядок</h2>
+          <p>
+            Большие \(O\) и \(\Omega\) допускают постоянное отношение функций.
+            Малые \(o\) и \(\omega\) утверждают больше: никакой заранее выбранный
+            положительный множитель не удерживает отношение от стремления к нулю
+            или бесконечности.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-cost-function-fn}{f}
+              \in
+              \class{atlas-notation-token notation-id-little-o-class}{o}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+              \iff
+              \class{atlas-notation-token notation-id-forall-positive-constant}
+                {\forall c>0}\;
+              \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+              \class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}
+              \in\mathbb N\;
+              \class{atlas-notation-token notation-id-forall-tail-quantifier}
+                {\forall n\ge n_0}:
+              \quad 0\le f(n)&lt;c\,g(n).
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-cost-function-fn}{f}
+              \in
+              \class{atlas-notation-token notation-id-little-omega-class}{\omega}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+              \iff
+              \class{atlas-notation-token notation-id-forall-positive-constant}
+                {\forall c>0}\;
+              \class{atlas-notation-token notation-id-exists-quantifier}{\exists}
+              \class{atlas-notation-token notation-id-asymptotic-threshold-n0}{n_0}
+              \in\mathbb N\;
+              \class{atlas-notation-token notation-id-forall-tail-quantifier}
+                {\forall n\ge n_0}:
+              \quad 0\le c\,g(n)&lt;f(n).
+            \]
+          </div>
+          <p>
+            Порядок кванторов принципиален. В малом \(o\) порог может зависеть
+            от выбранного \(c\), но \(c\) нельзя подобрать после просмотра \(n\).
+            Для любого испытания масштаба должен существовать хвост, на котором
+            \(f\) уже меньше.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Когда помогает предел отношения</h3>
+            <p>
+              Если \(g(n)&gt;0\) начиная с некоторого места и отношение
+              \(f(n)/g(n)\) имеет соответствующий предел, то
+            </p>
+            <div class="atlas-math">
+              \[
+                \lim_{n\to\infty}\frac{f(n)}{g(n)}=0
+                \Longrightarrow f\in o(g),
+                \qquad
+                \lim_{n\to\infty}\frac{f(n)}{g(n)}=\infty
+                \Longrightarrow f\in\omega(g).
+              \]
+            </div>
+            <p>
+              Это удобный критерий, а не замена определения. Отношение может
+              колебаться и не иметь предела; тогда оценку всё ещё можно доказать
+              непосредственно кванторами, через верхнюю и нижнюю оболочки или
+              по подпоследовательностям.
+            </p>
+          </section>
+        </section>
+
+        <section id="sets">
+          <h2>\(O(g)\) — множество функций, а не число</h2>
+          <p>
+            Строгая запись \(f\in O(g)\) напоминает, что справа находится
+            множество всех функций, удовлетворяющих одной верхней границе.
+            Традиционное \(f=O(g)\) удобно и широко распространено, но знак
+            равенства здесь не является обычным симметричным равенством.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Почему части нельзя просто поменять местами</h3>
+            <p>
+              Для \(f(n)=n\) и \(g(n)=n^2\) имеем \(f\in O(g)\), поскольку
+              \(n\le n^2\) при \(n\ge1\). Обратное неверно:
+              \(n^2\le c n\) потребовало бы \(n\le c\) для всех достаточно
+              больших \(n\), что невозможно для фиксированного \(c\).
+            </p>
+          </section>
+          <p>
+            Поэтому цепочки с \(O\)-выражениями читаются направленно. Например,
+            если \(r\in O(1)\), то функция \(n\mapsto3n+r(n)\) принадлежит
+            \(O(n)\). Но это не разрешает интерпретировать \(O(n)\) как одну
+            конкретную функцию и выполнять с ней симметричные преобразования.
+          </p>
+        </section>
+
+        <section id="proofs">
+          <h2>Как доказывать оценки: свидетели вместо жеста рукой</h2>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Полином: \(3n^2+5n+7\in\Theta(n^2)\)</h3>
+            <p>
+              Для каждого \(n\ge1\) очевидна нижняя граница
+              \(3n^2\le3n^2+5n+7\). На том же хвосте выполняются
+              \(n\le n^2\) и \(1\le n^2\), поэтому
+            </p>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                3n^2
+                \le
+                \class{atlas-notation-token notation-id-cost-function-fn}
+                  {3n^2+5n+7}
+                \le
+                3n^2+5n^2+7n^2
+                =
+                15n^2.
+              \]
+            </div>
+            <p>
+              Конкретные свидетели: \(c_1=3\), \(c_2=15\), \(n_0=1\).
+              Фраза «отбрасываем младшие члены» — только сокращение этого
+              рассуждения.
+            </p>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Верная, но неточная граница: \(n\in O(n^2)\)</h3>
+            <p>
+              Берём \(c=1\) и \(n_0=1\). Тогда \(0\le n\le n^2\) для всего
+              хвоста. Нижняя граница того же порядка \(n^2\) не существует,
+              потому что \(n/n^2=1/n\to0\). Значит, \(O(n^2)\) верно,
+              но \(\Theta(n^2)\) — нет.
+            </p>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Логарифм: \(\log n\in o(n)\)</h3>
+            <p>
+              Основание логарифма больше единицы меняет значение лишь постоянным
+              множителем, поэтому рассмотрим \(\ln n\). При \(n\ge4\) выполняется
+              \(\ln n\le\sqrt n\): в точке \(4\) неравенство верно, а производная
+              \(\sqrt n-\ln n\) после \(4\) неотрицательна. Тогда
+            </p>
+            <div class="atlas-math">
+              \[
+                0\le\frac{\ln n}{n}\le\frac1{\sqrt n}\longrightarrow0.
+              \]
+            </div>
+            <p>
+              По критерию отношения \(\log n\in o(n)\). Для прямого доказательства
+              заданному \(c&gt;0\) достаточно выбрать
+              \(n_0\ge\max\{4,\lceil c^{-2}\rceil+1\}\).
+            </p>
+          </section>
+
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Экспонента: \(n^k\in o(2^n)\) для фиксированного \(k\ge0\)</h3>
+            <p>
+              Пусть \(k\ge0\) фиксировано и \(r_n=n^k/2^n\). Для
+              \(n\ge\max\{1,2k\}\)
+            </p>
+            <div class="atlas-math">
+              \[
+                \frac{r_{n+1}}{r_n}
+                =\frac{(1+1/n)^k}{2}
+                \le\frac{e^{k/n}}2
+                \le\frac{\sqrt e}{2}
+                =\rho&lt;1.
+              \]
+            </div>
+            <p>
+              Значит, после конечного порога последовательность \(r_n\)
+              убывает не медленнее геометрической прогрессии с множителем
+              \(\rho\), поэтому стремится к нулю. Это доказывает малое \(o\),
+              не заставляя нас строить подробную таблицу классов роста — она
+              появится в следующей главе.
+            </p>
+          </section>
+        </section>
+
+        <section id="oscillation">
+          <h2>Определения не требуют монотонности</h2>
+          <p>Рассмотрим функцию, которая прыгает между двумя масштабами:</p>
+          <div class="atlas-math">
+            \[
+              f(n)=
+              \begin{cases}
+                n, &amp; n\text{ чётно},\\
+                n^2, &amp; n\text{ нечётно}.
+              \end{cases}
+            \]
+          </div>
+          <p>
+            Для всех \(n\ge1\) выполнено \(n\le f(n)\le n^2\). Поэтому
+            \(f\in\Omega(n)\) и \(f\in O(n^2)\). Но по нечётной
+            подпоследовательности \(f(n)/n=n\) неограниченно, следовательно,
+            \(f\notin O(n)\). По чётной подпоследовательности
+            \(f(n)/n^2=1/n\to0\), поэтому \(f\notin\Omega(n^2)\).
+          </p>
+          <p>
+            Она также не принадлежит ни \(\omega(n)\), потому что на чётных
+            аргументах отношение равно \(1\), ни \(o(n^2)\), потому что на
+            нечётных оно равно \(1\). График может колебаться; кванторы всё равно
+            проверяют каждую точку хвоста.
+          </p>
+        </section>
+
+        <section id="properties">
+          <h2>Рабочие свойства асимптотических отношений</h2>
+          <dl class="atlas-definition-list">
+            <div>
+              <dt>Рефлексивность</dt>
+              <dd>
+                \(f\in O(f)\), \(f\in\Omega(f)\) и \(f\in\Theta(f)\) для
+                неотрицательной и в итоге положительной \(f\): достаточно
+                множителя \(1\). Это позволяет оставлять уже полученный главный
+                член без переоценки.
+              </dd>
+            </div>
+            <div>
+              <dt>Транзитивность \(O\)</dt>
+              <dd>
+                Если \(f\le c_1g\) после \(n_1\), а \(g\le c_2h\) после \(n_2\),
+                то после \(\max(n_1,n_2)\) имеем \(f\le c_1c_2h\).
+                Так локальные оценки собираются в оценку всего алгоритма.
+              </dd>
+            </div>
+            <div>
+              <dt>Симметрия и транзитивность \(\Theta\)</dt>
+              <dd>
+                Двусторонние положительные границы можно перевернуть и
+                перемножить. Вместе с рефлексивностью это делает \(\Theta\)
+                отношением эквивалентности: функции одного точного порядка
+                образуют классы.
+              </dd>
+            </div>
+            <div>
+              <dt>Сумма</dt>
+              <dd>
+                Для неотрицательных \(f_1\in O(g_1)\) и \(f_2\in O(g_2)\)
+                сумма принадлежит \(O(g_1+g_2)\), а значит,
+                \(O(\max\{g_1,g_2\})\). Это формализует поглощение более
+                медленной фазы последовательного алгоритма.
+              </dd>
+            </div>
+            <div>
+              <dt>Произведение</dt>
+              <dd>
+                Из \(f_1\le c_1g_1\) и \(f_2\le c_2g_2\) следует
+                \(f_1f_2\le c_1c_2g_1g_2\). Правило применяется к вложенным
+                переборам, но только после определения их диапазонов.
+              </dd>
+            </div>
+            <div>
+              <dt>Положительный постоянный множитель</dt>
+              <dd>
+                Для \(a&gt;0\) функции \(af\) и \(f\) лежат в одном
+                \(\Theta\)-классе. Константа исчезает из класса, но не из
+                реального времени и памяти.
+              </dd>
+            </div>
+            <div>
+              <dt>Младшие члены</dt>
+              <dd>
+                Если \(h\in o(g)\), то \(g+h\in\Theta(g)\) для
+                неотрицательных функций: на далёком хвосте \(h\) помещается,
+                например, между \(0\) и \(g\).
+              </dd>
+            </div>
+            <div>
+              <dt>Основание логарифма</dt>
+              <dd>
+                \(\log_a n=\log_b n/\log_b a\) при \(a,b&gt;1\), поэтому
+                основания отличаются положительным постоянным множителем и
+                задают один \(\Theta\)-класс.
+              </dd>
+            </div>
+          </dl>
+        </section>
+
+        <section id="previous-chapters">
+          <h2>Что именно оценивалось в предыдущих главах</h2>
+          <div class="atlas-table-wrap" role="region" tabindex="0"
+            aria-label="Связь асимптотических оценок с предыдущими главами">
+            <table class="atlas-comparison">
+              <thead>
+                <tr>
+                  <th scope="col">Процедура</th>
+                  <th scope="col">Размер входа</th>
+                  <th scope="col">Элементарный шаг</th>
+                  <th scope="col">Что можно утверждать</th>
+                  <th scope="col">Допущение</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Египетское умножение</td>
+                  <td>битовые длины множителей</td>
+                  <td>удвоение, деление пополам, сложение</td>
+                  <td>\(\Theta(\log |a|)\) итераций для \(a&gt;0\)</td>
+                  <td>стоимость длинной арифметики пока отделена</td>
+                </tr>
+                <tr>
+                  <td>Алгоритм Евклида</td>
+                  <td>битовые длины \(a\) и \(b\)</td>
+                  <td>одно деление с остатком</td>
+                  <td>\(O(\log\min(a,b))\) делений при \(a,b\ge1\)</td>
+                  <td>нулевой аргумент завершает вычисление сразу; деление объявлено одной крупной операцией</td>
+                </tr>
+                <tr>
+                  <td>Машина Тьюринга</td>
+                  <td>длина входной строки</td>
+                  <td>один переход \(\delta\)</td>
+                  <td>функция числа переходов зависит от машины и входов</td>
+                  <td>локальный переход имеет единичную стоимость</td>
+                </tr>
+                <tr>
+                  <td>Длина двоичной записи</td>
+                  <td>\(\ell(N)=\lfloor\log_2N\rfloor+1\) бит при \(N\ge1\)</td>
+                  <td>символ записи</td>
+                  <td>\(\lfloor\log_2N\rfloor+1\in\Theta(\log N)\)</td>
+                  <td>каноническая запись без ведущих нулей</td>
+                </tr>
+                <tr>
+                  <td>Перебор делителей до \(N\)</td>
+                  <td>\(\Theta(\log N)\) бит</td>
+                  <td>проверка одного кандидата</td>
+                  <td>\(\Theta(N)\) проверок, экспоненциально по битовой длине</td>
+                  <td>цена одной проверки вынесена отдельно</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Оценка числа делений Евклида не равна полной битовой стоимости:
+            деление длинных чисел само состоит из множества разрядных операций,
+            а длины остатков меняются по ходу вычисления. \(O\) описывает ровно
+            ту функцию и ту единицу работы, которые были объявлены.
+          </p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что часто понимают неправильно</h2>
+          <ol class="atlas-mistakes">
+            <li>
+              <strong>\(O\) не означает худший случай.</strong>
+              Худший, средний или лучший случай задаёт функцию стоимости;
+              \(O\) лишь даёт верхнюю границу уже выбранной функции.
+            </li>
+            <li>
+              <strong>\(O\) не означает точную оценку.</strong>
+              \(n\in O(n^2)\) верно, хотя точный порядок равен \(\Theta(n)\).
+            </li>
+            <li>
+              <strong>\(O(1)\) не означает одинаковые секунды.</strong>
+              Две операции с ограниченной моделью размера могут иметь разные
+              константы, задержки памяти и реализацию.
+            </li>
+            <li>
+              <strong>Константы важны на практике.</strong>
+              \(1000n\) и \(n^2\) пересекаются около \(n=1000\); до этого
+              линейная формула может быть больше.
+            </li>
+            <li>
+              <strong>Асимптотика не обещает победу на малых входах.</strong>
+              Порог \(n_0\) может оказаться далеко за реальным рабочим диапазоном.
+            </li>
+            <li>
+              <strong>Конечная проверка не является доказательством.</strong>
+              Функция может совпадать с \(n\) до миллиона, а затем стать \(2^n\).
+            </li>
+            <li>
+              <strong>Одно пересечение графиков ничего не классифицирует.</strong>
+              Важен весь бесконечный хвост и возможность постоянного масштабирования.
+            </li>
+            <li>
+              <strong>Нужно назвать переменную.</strong>
+              В \(O(n)\) должно быть ясно, означает ли \(n\) число элементов,
+              битов, вершин или числовое значение.
+            </li>
+            <li>
+              <strong>Несколько параметров требуют области роста.</strong>
+              В \(O(nm)\) нужно определить оба размера и сказать, растут ли они
+              независимо.
+            </li>
+            <li>
+              <strong>Значение числа не равно длине записи.</strong>
+              \(O(N)\) шагов для двоичного \(N\) может быть экспонентой по
+              \(n=\Theta(\log N)\).
+            </li>
+          </ol>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория «Найди асимптотическую границу»</h2>
+          <p>
+            Выберите утверждение, постоянный множитель и порог. Граф показывает
+            только конечное окно, а вычислительное ядро отдельно сообщает,
+            существует ли аналитическое доказательство для всего хвоста.
+            В режиме \(\Theta\) одна константа \(c\ge1\) задаёт симметричную
+            полосу \(g/c\le f\le c\,g\): любые свидетели \(c_1,c_2\) из
+            определения можно заменить
+            \(c=\max\{c_2,1/c_1,1\}\).
+          </p>
+
+          <div class="asymptotics-lab" id="asymptotics-lab">
+            <fieldset class="asymptotics-mode">
+              <legend>Режим работы</legend>
+              <label>
+                <input type="radio" name="asymptotics-mode" value="witness" checked>
+                Подобрать свидетеля
+              </label>
+              <label>
+                <input type="radio" name="asymptotics-mode" value="counterexample">
+                Найти контрпример
+              </label>
+            </fieldset>
+
+            <form id="asymptotics-form" class="asymptotics-controls" novalidate>
+              <label>
+                Сценарий
+                <select id="asymptotics-scenario"></select>
+              </label>
+              <label>
+                Отношение
+                <select id="asymptotics-relation">
+                  <option value="O">f ∈ O(g)</option>
+                  <option value="Omega">f ∈ Ω(g)</option>
+                  <option value="Theta">f ∈ Θ(g)</option>
+                  <option value="o">f ∈ o(g)</option>
+                  <option value="omega">f ∈ ω(g)</option>
+                </select>
+              </label>
+              <label>
+                Постоянная \(c\)
+                <input id="asymptotics-c" type="number" min="0.01" max="1000"
+                  step="0.01" value="15" inputmode="decimal">
+              </label>
+              <label>
+                Порог \(n_0\)
+                <input id="asymptotics-n0" type="number" min="1" max="1000000"
+                  step="1" value="1" inputmode="numeric">
+              </label>
+              <label>
+                Масштаб
+                <select id="asymptotics-scale">
+                  <option value="linear">Линейный</option>
+                  <option value="log">Логарифмический</option>
+                </select>
+              </label>
+              <label>
+                Правая граница \(n\)
+                <input id="asymptotics-range" type="range" min="20" max="1000000"
+                  step="10" value="120">
+              </label>
+              <output id="asymptotics-range-output"
+                for="asymptotics-range">120</output>
+              <button id="asymptotics-check" type="submit">
+                Проверить параметры
+              </button>
+            </form>
+
+            <p id="asymptotics-error" class="asymptotics-error"
+              role="alert" hidden></p>
+
+            <div class="asymptotics-legend" role="group" aria-label="Обозначения графика">
+              <span class="is-f">\(f(n)\)</span>
+              <span class="is-g">\(g(n)\)</span>
+              <span class="is-bound">\(c\,g(n)\)</span>
+              <span class="is-violation">нарушение</span>
+            </div>
+
+            <div class="asymptotics-plot-wrap">
+              <svg id="asymptotics-plot" class="asymptotics-plot"
+                viewBox="0 0 820 440" role="img"
+                aria-labelledby="asymptotics-plot-title asymptotics-plot-description">
+                <title id="asymptotics-plot-title">Сравнение функций и асимптотической границы</title>
+                <desc id="asymptotics-plot-description">График ещё не построен</desc>
+              </svg>
+            </div>
+
+            <div class="asymptotics-point-control">
+              <label for="asymptotics-point">Выбранная точка \(n\)</label>
+              <input id="asymptotics-point" type="range" min="1" max="120"
+                step="1" value="20">
+              <output id="asymptotics-point-output" for="asymptotics-point">20</output>
+            </div>
+
+            <div class="asymptotics-detail-grid">
+              <section aria-labelledby="asymptotics-ratio-title">
+                <h3 id="asymptotics-ratio-title">Отношение \(f(n)/g(n)\)</h3>
+                <svg id="asymptotics-ratio" class="asymptotics-ratio"
+                  viewBox="0 0 820 170" role="img"
+                  aria-labelledby="asymptotics-ratio-title asymptotics-ratio-description">
+                  <desc id="asymptotics-ratio-description">Отношение ещё не вычислено</desc>
+                </svg>
+              </section>
+              <section class="asymptotics-point-card"
+                aria-labelledby="asymptotics-point-title">
+                <h3 id="asymptotics-point-title">Неравенство в выбранной точке</h3>
+                <p id="asymptotics-point-values"></p>
+                <p id="asymptotics-point-inequality"></p>
+              </section>
+            </div>
+
+            <section class="asymptotics-verdict"
+              aria-labelledby="asymptotics-verdict-title">
+              <h3 id="asymptotics-verdict-title">Что установлено</h3>
+              <p id="asymptotics-status" role="status" aria-live="polite"></p>
+              <p id="asymptotics-finite-note" class="asymptotics-finite-note">
+                Проверка конечного диапазона иллюстрирует утверждение, но не
+                доказывает его для всех \(n\ge n_0\)
+              </p>
+              <ol id="asymptotics-proof-steps"
+                class="asymptotics-proof-steps"></ol>
+            </section>
+          </div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p><strong>1. Свидетели.</strong> Подберите \(c\) и \(n_0\), доказывающие \(7n+4\in O(n)\).</p>
+              <details><summary>Показать подсказку</summary><p>При \(n\ge1\) замените \(4\) на \(4n\).</p></details>
+              <details><summary>Показать решение</summary><p>\(7n+4\le11n\) при \(n\ge1\). Подходит \(c=11\), \(n_0=1\). Это лишь одна из многих пар.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>2. Верхняя граница.</strong> Докажите \(n\log n\in O(n^2)\) без правила Лопиталя.</p>
+              <details><summary>Показать подсказку</summary><p>Для достаточно больших \(n\) используйте \(\log n\le n\).</p></details>
+              <details><summary>Показать решение</summary><p>Для логарифма по основанию \(2\) при \(n\ge2\) имеем \(\log_2n\le n\), поэтому \(n\log_2n\le n^2\). Для другого фиксированного основания появляется только постоянный множитель.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>3. Нижняя граница.</strong> Докажите \(5n^3-2n\in\Omega(n^3)\).</p>
+              <details><summary>Показать подсказку</summary><p>Оцените \(2n\) сверху через \(n^3\).</p></details>
+              <details><summary>Показать решение</summary><p>При \(n\ge1\) выполняется \(2n\le2n^3\), поэтому \(5n^3-2n\ge3n^3\). Свидетели \(c=3\), \(n_0=1\).</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>4. Точная оценка.</strong> Докажите самостоятельно \(4n^2+n\in\Theta(n^2)\).</p>
+              <details><summary>Показать подсказку</summary><p>Нужны две константы, а не только верхняя.</p></details>
+              <details><summary>Показать решение</summary><p>При \(n\ge1\): \(4n^2\le4n^2+n\le5n^2\). Подходят \(c_1=4\), \(c_2=5\), \(n_0=1\).</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>5. \(O\) против \(\Theta\).</strong> Верно ли, что из \(f\in O(g)\) следует \(f\in\Theta(g)\)?</p>
+              <details><summary>Показать подсказку</summary><p>Возьмите функции разных степеней.</p></details>
+              <details><summary>Показать решение</summary><p>Нет. \(n\in O(n^2)\), но \(n\notin\Omega(n^2)\), поскольку \(n/n^2\to0\). Следовательно, \(n\notin\Theta(n^2)\).</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>6. Малые отношения.</strong> Докажите \(n^2\in o(n^3)\) и перепишите тот же факт через \(\omega\).</p>
+              <details><summary>Показать подсказку</summary><p>Рассмотрите отношение \(1/n\).</p></details>
+              <details><summary>Показать решение</summary><p>\(n^2/n^3=1/n\to0\), значит, \(n^2\in o(n^3)\). Эквивалентная запись: \(n^3\in\omega(n^2)\).</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>7. Контрпример.</strong> Опровергните \(2^n\in O(n^4)\).</p>
+              <details><summary>Показать подсказку</summary><p>Недостаточно одного числа: покажите, что отношение не ограничено.</p></details>
+              <details><summary>Показать решение</summary><p>Отношение \(2^n/n^4\) после некоторого места растёт без границы; например, отношение соседних членов равно \(2(n/(n+1))^4\) и стремится к \(2&gt;1\). Поэтому никакая фиксированная \(c\) не ограничит весь хвост.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>8. Колебания.</strong> Для функции из раздела о чётности определите, принадлежит ли она \(\Theta(n^{3/2})\).</p>
+              <details><summary>Показать подсказку</summary><p>Проверьте отдельно чётную и нечётную подпоследовательности.</p></details>
+              <details><summary>Показать решение</summary><p>Нет. На чётных \(f/n^{3/2}=1/\sqrt n\to0\), а на нечётных \(f/n^{3/2}=\sqrt n\to\infty\). Нельзя получить ни общую положительную нижнюю, ни конечную верхнюю константу.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>9. Два параметра.</strong> Что означает утверждение \(T(n,m)\in O(nm)\), если параметры растут независимо?</p>
+              <details><summary>Показать подсказку</summary><p>Нужен общий порог для обеих переменных.</p></details>
+              <details><summary>Показать решение</summary><p>Одна стандартная трактовка: существуют \(c&gt;0\), \(n_0\), \(m_0\), такие что для всех \(n\ge n_0\) и \(m\ge m_0\) выполнено \(T(n,m)\le cnm\). Другие области роста, например \(m\le n\), нужно оговаривать отдельно.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>10. Ошибка в псевдодоказательстве.</strong> «Проверка до \(n=10^6\) показала \(f(n)\le3g(n)\), значит, \(f\in O(g)\)». Что не доказано?</p>
+              <details><summary>Показать подсказку</summary><p>Сопоставьте конечный диапазон с квантором \(\forall n\ge n_0\).</p></details>
+              <details><summary>Показать решение</summary><p>Не рассмотрен бесконечный хвост после \(10^6\). Нужен аналитический аргумент, продолжающий неравенство на все дальнейшие \(n\), либо другая глобальная граница.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>11. Евклид.</strong> Что именно означает \(O(\log\min(a,b))\) для алгоритма Евклида и чего эта запись не сообщает?</p>
+              <details><summary>Показать подсказку</summary><p>Разделите число крупных операций и их битовую цену.</p></details>
+              <details><summary>Показать решение</summary><p>Это верхняя граница числа делений с остатком как функции числовых аргументов. Она не является полной битовой стоимостью: одно деление длинных чисел не имеет постоянной цены.</p></details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p><strong>12. Малые входы.</strong> Алгоритм A делает \(1000n\) шагов, B — \(n^2\). Какой асимптотически лучше и какой быстрее при \(n=100\)?</p>
+              <details><summary>Показать подсказку</summary><p>Сначала сравните классы, затем подставьте конкретное число.</p></details>
+              <details><summary>Показать решение</summary><p>A имеет порядок \(\Theta(n)\), B — \(\Theta(n^2)\), поэтому A асимптотически лучше. Но при \(n=100\): A делает \(100000\) шагов, B — \(10000\), так что в этой точке B быстрее в десять раз.</p></details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              Paul Bachmann,
+              <a href="https://archive.org/details/dieanalytischeza00bachuoft/page/n435/mode/2up"
+                target="_blank" rel="noopener noreferrer">Die analytische Zahlentheorie</a>,
+              1894 — оцифрованное первичное издание с ранним употреблением
+              \(O\)-обозначения.
+            </li>
+            <li>
+              Edmund Landau,
+              <a href="https://archive.org/details/handbuchderlehre01landuoft/page/n85/mode/2up"
+                target="_blank" rel="noopener noreferrer">Handbuch der Lehre von der Verteilung der Primzahlen</a>,
+              1909 — первичный источник систематического обсуждения \(O\) и \(o\).
+            </li>
+            <li>
+              G. H. Hardy and J. E. Littlewood,
+              <a href="https://doi.org/10.1007/BF02401834"
+                target="_blank" rel="noopener noreferrer">Some Problems of Diophantine Approximation</a>,
+              1914 — первичный пример более раннего, отличного от принятого
+              здесь употребления \(\Omega\).
+            </li>
+            <li>
+              Donald E. Knuth,
+              <a href="https://doi.org/10.1145/1008328.1008329"
+                target="_blank" rel="noopener noreferrer">Big Omicron and Big Omega and Big Theta</a>,
+              ACM SIGACT News 8(2), 1976 — история обозначений, определения
+              \(O,\Omega,\Theta\), множества функций и одностороннее равенство.
+            </li>
+            <li>
+              NIST Digital Library of Mathematical Functions,
+              <a href="https://dlmf.nist.gov/2.1"
+                target="_blank" rel="noopener noreferrer">Definitions and Elementary Properties</a>
+              — академический справочник по \(O\), \(o\), пределам отношений и
+              алгебре асимптотических выражений.
+            </li>
+            <li>
+              MIT OpenCourseWare 6.006,
+              <a href="https://live.ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/c6d8f06c6f11e3342633dec85498f551_MIT6_006S20_r01.pdf"
+                target="_blank" rel="noopener noreferrer">Recitation 1: Asymptotic Notation</a>
+              — определения через множества функций и применение в анализе
+              алгоритмов.
+            </li>
+            <li>
+              Stanford CS161,
+              <a href="https://web.stanford.edu/class/archive/cs/cs161/cs161.1236/Sections/Section1/Section1.pdf"
+                target="_blank" rel="noopener noreferrer">Asymptotic Analysis</a>
+              — определения пяти отношений и упражнения на кванторы.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div>
+          <div id="atlas-route-next"></div>
+        </nav>
+
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

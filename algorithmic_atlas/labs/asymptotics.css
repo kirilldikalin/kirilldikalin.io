@@ -1,0 +1,502 @@
+.atlas-chapter-header h1 {
+  font-size: clamp(2.15rem, 5.6vw, 4.1rem);
+}
+
+.atlas-tail-diagram {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.75fr) auto minmax(12rem, 2fr);
+  align-items: stretch;
+  margin: 1.35rem 0;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.atlas-tail-diagram > div {
+  display: grid;
+  min-height: 5.5rem;
+  place-items: center;
+  padding: 0.8rem;
+  text-align: center;
+}
+
+.atlas-tail-diagram__prefix {
+  color: var(--chapter-muted);
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0,
+      transparent 0.5rem,
+      var(--chapter-soft) 0.5rem,
+      var(--chapter-soft) 0.75rem
+    );
+}
+
+.atlas-tail-diagram__threshold {
+  position: relative;
+  min-width: 4.5rem;
+  border-inline: 0.2rem solid var(--chapter-accent);
+  color: var(--chapter-accent);
+  font-weight: 700;
+}
+
+.atlas-tail-diagram__tail {
+  background:
+    linear-gradient(90deg, var(--chapter-lab), var(--chapter-paper));
+  font-weight: 700;
+}
+
+.atlas-tail-diagram figcaption {
+  grid-column: 1 / -1;
+  padding: 0.6rem 0.8rem;
+  border-top: 1px solid var(--chapter-line);
+  color: var(--chapter-muted);
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.atlas-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--chapter-line);
+}
+
+.atlas-table-wrap .atlas-comparison {
+  min-width: 54rem;
+  margin: 0;
+}
+
+.atlas-mistakes {
+  display: grid;
+  gap: 0.7rem;
+  padding-left: 1.6rem;
+}
+
+.atlas-mistakes li {
+  padding: 0.75rem 0.9rem;
+  border-left: 0.22rem solid var(--chapter-accent);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-lab {
+  --asymptotics-f: #9a402f;
+  --asymptotics-g: #1b6e78;
+  --asymptotics-bound: #a46b16;
+  --asymptotics-violation: #b52336;
+  margin-top: 1.25rem;
+}
+
+.asymptotics-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+}
+
+.asymptotics-mode legend {
+  width: 100%;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+
+.asymptotics-mode label {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.65rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+  cursor: pointer;
+}
+
+.asymptotics-mode label:has(input:checked) {
+  border-color: var(--chapter-ink);
+  background: var(--chapter-ink);
+  color: var(--chapter-paper);
+}
+
+.asymptotics-mode label:has(input:focus-visible),
+.asymptotics-plot-wrap:focus-within,
+.asymptotics-ratio:focus-visible {
+  outline: 3px solid var(--chapter-focus);
+  outline-offset: 3px;
+}
+
+.asymptotics-mode input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.asymptotics-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-controls label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.asymptotics-controls input,
+.asymptotics-controls select,
+.asymptotics-controls button {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.7rem;
+  padding: 0.62rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+  color: var(--chapter-ink);
+  font: inherit;
+}
+
+.asymptotics-controls input[type="range"] {
+  padding: 0;
+  accent-color: var(--chapter-accent);
+}
+
+.asymptotics-controls button {
+  align-self: end;
+  border-color: var(--chapter-ink);
+  background: var(--chapter-ink);
+  color: var(--chapter-paper);
+  cursor: pointer;
+}
+
+.asymptotics-controls output {
+  align-self: end;
+  min-height: 2.7rem;
+  padding: 0.7rem;
+  border: 1px solid var(--chapter-line);
+  color: var(--chapter-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.asymptotics-error {
+  margin: 0.8rem 0 0;
+  padding: 0.75rem;
+  border: 1px solid var(--asymptotics-violation);
+  color: var(--asymptotics-violation);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-error[hidden] {
+  display: none;
+}
+
+.asymptotics-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  margin: 1rem 0 0.55rem;
+  font-size: 0.82rem;
+}
+
+.asymptotics-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.asymptotics-legend span::before {
+  width: 1.5rem;
+  height: 0.2rem;
+  content: "";
+  background: currentColor;
+}
+
+.asymptotics-legend .is-f {
+  color: var(--asymptotics-f);
+}
+
+.asymptotics-legend .is-g {
+  color: var(--asymptotics-g);
+}
+
+.asymptotics-legend .is-bound {
+  color: var(--asymptotics-bound);
+}
+
+.asymptotics-legend .is-violation {
+  color: var(--asymptotics-violation);
+}
+
+.asymptotics-legend .is-violation::before {
+  height: 0.8rem;
+  opacity: 0.25;
+}
+
+.asymptotics-plot-wrap {
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-plot,
+.asymptotics-ratio {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+}
+
+.asymptotics-plot {
+  min-height: 22rem;
+}
+
+.asymptotics-ratio {
+  min-height: 9rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-grid {
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-axis {
+  stroke: var(--chapter-muted);
+  stroke-width: 1.25;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-tail {
+  fill: var(--chapter-lab);
+  opacity: 0.62;
+}
+
+.asymptotics-threshold {
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-line.is-f {
+  stroke: var(--asymptotics-f);
+}
+
+.asymptotics-line.is-g {
+  stroke: var(--asymptotics-g);
+}
+
+.asymptotics-line.is-bound {
+  stroke: var(--asymptotics-bound);
+  stroke-dasharray: 8 5;
+}
+
+.asymptotics-line.is-lower-bound {
+  stroke-width: 2;
+  opacity: 0.7;
+}
+
+.asymptotics-violation-band {
+  fill: var(--asymptotics-violation);
+  opacity: 0.13;
+}
+
+.asymptotics-violation-point {
+  fill: var(--chapter-paper);
+  stroke: var(--asymptotics-violation);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-selected-line {
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-selected-point {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.asymptotics-label {
+  fill: var(--chapter-muted);
+  font-size: 13px;
+}
+
+.asymptotics-label.is-strong {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.asymptotics-point-control {
+  display: grid;
+  grid-template-columns: auto minmax(5rem, 1fr) auto;
+  gap: 0.7rem;
+  align-items: center;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-point-control input {
+  width: 100%;
+  accent-color: var(--chapter-accent);
+}
+
+.asymptotics-point-control output {
+  min-width: 4.5rem;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.asymptotics-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(15rem, 0.85fr);
+  gap: 0.75rem;
+}
+
+.asymptotics-detail-grid h3,
+.asymptotics-point-card h3 {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+}
+
+.asymptotics-point-card {
+  padding: 0.85rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-point-card p {
+  margin: 0.45rem 0;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
+.asymptotics-point-card .is-valid {
+  color: var(--asymptotics-g);
+  font-weight: 700;
+}
+
+.asymptotics-point-card .is-invalid {
+  color: var(--asymptotics-violation);
+  font-weight: 700;
+}
+
+.asymptotics-verdict {
+  margin-top: 0.85rem;
+  padding: 0.9rem;
+  border-left: 0.3rem solid var(--chapter-accent);
+  background: var(--chapter-paper);
+}
+
+.asymptotics-verdict h3 {
+  margin: 0 0 0.55rem;
+}
+
+.asymptotics-verdict.is-proved {
+  border-left-color: var(--asymptotics-g);
+}
+
+.asymptotics-verdict.is-counterexample {
+  border-left-color: var(--asymptotics-violation);
+}
+
+.asymptotics-finite-note {
+  padding: 0.65rem;
+  border: 1px dashed var(--chapter-line);
+  color: var(--chapter-muted);
+  font-size: 0.86rem;
+}
+
+.asymptotics-proof-steps {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .asymptotics-lab {
+    --asymptotics-f: #f1977f;
+    --asymptotics-g: #70c7cf;
+    --asymptotics-bound: #e0ad57;
+    --asymptotics-violation: #ff7483;
+  }
+}
+
+@media (max-width: 48rem) {
+  .atlas-tail-diagram {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-tail-diagram__threshold {
+    min-height: 3.5rem;
+    border: 0;
+    border-block: 0.2rem solid var(--chapter-accent);
+  }
+
+  .asymptotics-controls,
+  .asymptotics-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .asymptotics-controls output {
+    min-height: auto;
+  }
+
+  .asymptotics-plot {
+    min-height: 17rem;
+  }
+
+  .asymptotics-point-control {
+    grid-template-columns: 1fr auto;
+  }
+
+  .asymptotics-point-control input {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
+@media (max-width: 28rem) {
+  .asymptotics-mode {
+    display: grid;
+  }
+
+  .asymptotics-mode label {
+    width: 100%;
+  }
+
+  .asymptotics-plot {
+    min-height: 14rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .asymptotics-lab *,
+  .asymptotics-lab *::before,
+  .asymptotics-lab *::after {
+    scroll-behavior: auto;
+    transition: none !important;
+  }
+}

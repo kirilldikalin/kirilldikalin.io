@@ -1,0 +1,472 @@
+.turing-lab {
+  margin-top: 1.25rem;
+}
+
+.turing-lab__form {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr);
+  gap: 0.8rem;
+}
+
+.turing-lab__form > label,
+.turing-control {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.turing-lab select,
+.turing-lab input[type="text"] {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--chapter-line);
+  padding: 0.65rem;
+  background: var(--chapter-paper);
+  color: var(--chapter-ink);
+  font: inherit;
+}
+
+.turing-lab__input-help,
+.turing-lab__machine-description {
+  margin: 0 !important;
+  color: var(--chapter-muted);
+  font-size: 0.82rem !important;
+  line-height: 1.4 !important;
+}
+
+.turing-lab__machine-description,
+.turing-lab__roles,
+.turing-lab__execution,
+.turing-lab__actions {
+  grid-column: 1 / -1;
+}
+
+.turing-lab__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.2rem;
+  margin: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--chapter-line);
+}
+
+.turing-lab__roles legend {
+  padding: 0 0.35rem;
+  font-weight: 700;
+}
+
+.turing-lab__roles label {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.turing-lab__execution {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(8rem, 0.65fr);
+  gap: 0.8rem;
+}
+
+.turing-control output {
+  color: var(--chapter-muted);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.turing-control input[type="range"] {
+  width: 100%;
+}
+
+.turing-control select {
+  align-self: end;
+}
+
+.turing-lab__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.turing-lab button {
+  border: 1px solid var(--chapter-ink);
+  padding: 0.65rem 0.85rem;
+  background: var(--chapter-paper);
+  color: var(--chapter-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.turing-lab button[type="submit"],
+.turing-lab #turing-run {
+  background: var(--chapter-ink);
+  color: var(--chapter-paper);
+}
+
+.turing-lab button:disabled,
+.turing-lab input:disabled,
+.turing-lab select:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.turing-lab__error {
+  margin: 0.8rem 0 0;
+  padding: 0.7rem;
+  border: 1px solid var(--chapter-accent);
+  background: var(--chapter-warning);
+  color: var(--chapter-accent);
+}
+
+.turing-lab__error[hidden] {
+  display: none;
+}
+
+.turing-lab__status {
+  min-height: 1.5em;
+  margin: 0.75rem 0 0 !important;
+  color: var(--chapter-muted);
+}
+
+.turing-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(14rem, 0.55fr);
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.turing-tape-panel,
+.turing-graph-panel,
+.turing-state-panel,
+.turing-rules {
+  min-width: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.turing-tape-panel h3,
+.turing-graph-panel h3,
+.turing-state-panel h3,
+.turing-rules h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+}
+
+.turing-graph-panel {
+  grid-column: 1 / -1;
+}
+
+.turing-state-graph {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 17rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.turing-graph-caption {
+  min-height: 2.6em;
+  margin: 0.6rem 0 0 !important;
+  color: var(--chapter-muted);
+  font-size: 0.82rem !important;
+}
+
+.turing-graph-edge__path {
+  fill: none;
+  stroke: var(--chapter-muted);
+  stroke-width: 2;
+  transition:
+    stroke var(--turing-motion-duration, 220ms) ease,
+    stroke-width var(--turing-motion-duration, 220ms) ease,
+    opacity var(--turing-motion-duration, 220ms) ease;
+}
+
+.turing-graph-edge__label {
+  fill: var(--chapter-muted);
+  font-family: "Courier Prime", monospace;
+  font-size: 13px;
+  paint-order: stroke;
+  stroke: var(--chapter-bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+  transition:
+    fill var(--turing-motion-duration, 220ms) ease,
+    font-weight var(--turing-motion-duration, 220ms) ease;
+}
+
+.turing-graph-edge.is-applicable .turing-graph-edge__path {
+  stroke: var(--chapter-focus);
+  stroke-width: 3;
+}
+
+.turing-graph-edge.is-applicable .turing-graph-edge__label {
+  fill: var(--chapter-focus);
+  font-weight: 700;
+}
+
+.turing-graph-edge.is-selected .turing-graph-edge__path {
+  stroke: var(--chapter-ink);
+  stroke-dasharray: 7 5;
+  stroke-width: 3;
+}
+
+.turing-graph-edge.is-selected .turing-graph-edge__label {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.turing-graph-edge.was-applied .turing-graph-edge__path {
+  stroke: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.turing-graph-edge.was-applied .turing-graph-edge__label {
+  fill: var(--chapter-accent);
+  font-weight: 700;
+}
+
+.turing-graph-marker {
+  fill: var(--chapter-muted);
+}
+
+.turing-graph-marker.is-applicable {
+  fill: var(--chapter-focus);
+}
+
+.turing-graph-marker.is-selected {
+  fill: var(--chapter-ink);
+}
+
+.turing-graph-marker.is-applied {
+  fill: var(--chapter-accent);
+}
+
+.turing-graph-node__shape,
+.turing-graph-node__inner {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 2;
+  transition:
+    fill var(--turing-motion-duration, 220ms) ease,
+    stroke var(--turing-motion-duration, 220ms) ease,
+    stroke-width var(--turing-motion-duration, 220ms) ease;
+}
+
+.turing-graph-node.is-accept .turing-graph-node__shape,
+.turing-graph-node.is-accept .turing-graph-node__inner {
+  stroke: var(--chapter-focus);
+}
+
+.turing-graph-node.is-reject .turing-graph-node__shape {
+  stroke: var(--chapter-accent);
+  stroke-dasharray: 5 4;
+}
+
+.turing-graph-node.is-current .turing-graph-node__shape {
+  fill: var(--chapter-history);
+  stroke: var(--chapter-accent);
+  stroke-width: 5;
+}
+
+.turing-graph-node__label {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.turing-graph-node__reject-mark {
+  fill: none;
+  stroke: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.turing-tape-viewport {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 2.8rem 0 0.3rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.turing-tape {
+  display: grid;
+  grid-template-columns: repeat(17, minmax(2.5rem, 1fr));
+  min-width: 45rem;
+  border-left: 1px solid var(--chapter-line);
+}
+
+.turing-cell {
+  position: relative;
+  min-width: 0;
+  height: 3.4rem;
+  border: 1px solid var(--chapter-line);
+  border-left: 0;
+  background: var(--chapter-paper);
+  text-align: center;
+}
+
+.turing-cell__position {
+  display: block;
+  color: var(--chapter-muted);
+  font-size: 0.68rem;
+  line-height: 1.2;
+}
+
+.turing-cell__symbol {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 1.15rem;
+}
+
+.turing-cell.is-head {
+  border-color: var(--chapter-accent);
+  background: var(--chapter-history);
+  box-shadow: inset 0 -0.25rem 0 var(--chapter-accent);
+}
+
+.turing-cell__head {
+  position: absolute;
+  bottom: calc(100% + 0.35rem);
+  left: 50%;
+  width: max-content;
+  max-width: 8rem;
+  transform: translateX(-50%);
+  color: var(--chapter-accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.turing-live-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-line);
+}
+
+.turing-live-metrics > div {
+  min-width: 0;
+  padding: 0.65rem;
+  background: var(--chapter-paper);
+}
+
+.turing-live-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.75rem;
+}
+
+.turing-live-metrics dd {
+  margin: 0.2rem 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+#turing-outcome {
+  white-space: nowrap;
+}
+
+.turing-configuration,
+.turing-current-rule {
+  margin: 0.75rem 0 0 !important;
+  overflow-wrap: anywhere;
+  font-size: 0.84rem !important;
+  line-height: 1.45 !important;
+}
+
+.turing-configuration {
+  padding: 0.65rem;
+  background: var(--chapter-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.turing-rules {
+  grid-column: 1 / -1;
+}
+
+.turing-rules__help {
+  color: var(--chapter-muted);
+  font-size: 0.82rem !important;
+}
+
+.turing-rules__table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--chapter-line);
+  -webkit-overflow-scrolling: touch;
+}
+
+.turing-rules table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.turing-rules th,
+.turing-rules td {
+  padding: 0.55rem;
+  border-bottom: 1px solid var(--chapter-line);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.turing-rules th {
+  background: var(--chapter-soft);
+}
+
+.turing-rules tr.is-applicable {
+  background: var(--chapter-history);
+}
+
+.turing-rules tr.is-applicable td:nth-child(2),
+.turing-rules tr.is-applicable td:nth-child(3) {
+  font-weight: 700;
+}
+
+.turing-rules tr.was-applied {
+  box-shadow: inset 0.25rem 0 0 var(--chapter-accent);
+}
+
+@media (max-width: 52rem) {
+  .turing-workbench {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 36rem) {
+  .turing-lab__form,
+  .turing-lab__execution {
+    grid-template-columns: 1fr;
+  }
+
+  .turing-lab__machine-description,
+  .turing-lab__roles,
+  .turing-lab__execution,
+  .turing-lab__actions {
+    grid-column: auto;
+  }
+
+  .turing-lab__actions button {
+    flex: 1 1 10rem;
+  }
+
+  .turing-live-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .turing-state-graph {
+    min-height: 12rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turing-cell,
+  .turing-state-graph * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

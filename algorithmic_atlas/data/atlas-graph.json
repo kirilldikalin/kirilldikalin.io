@@ -1,0 +1,446 @@
+{
+  "schemaVersion": 2,
+  "datasetVersion": "2026.07.31-2",
+  "title": "Алгоритмический атлас",
+  "routes": [
+    {
+      "id": "world-main",
+      "title": "Основной маршрут по атласу",
+      "scope": "continents",
+      "kind": "main",
+      "entries": [
+        {
+          "continentId": "origins-efficiency",
+          "position": 10
+        },
+        {
+          "continentId": "mathematical-tools",
+          "position": 20
+        },
+        {
+          "continentId": "data-structures",
+          "position": 30
+        },
+        {
+          "continentId": "algorithm-design",
+          "position": 40
+        },
+        {
+          "continentId": "graphs-networks-optimization",
+          "position": 50
+        },
+        {
+          "continentId": "strings-geometry-numerics",
+          "position": 60
+        },
+        {
+          "continentId": "randomization-approximation",
+          "position": 70
+        },
+        {
+          "continentId": "complexity-limits",
+          "position": 80
+        },
+        {
+          "continentId": "big-data-modern-models",
+          "position": 90
+        }
+      ]
+    },
+    {
+      "id": "origins-main",
+      "title": "Истоки и эффективность",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "origins-efficiency",
+      "entries": [
+        {
+          "nodeId": "before-computers",
+          "position": 10
+        },
+        {
+          "nodeId": "euclidean-algorithm",
+          "position": 20
+        },
+        {
+          "nodeId": "turing-machine-transition",
+          "position": 30
+        },
+        {
+          "nodeId": "input-size-and-cost",
+          "position": 40
+        },
+        {
+          "nodeId": "asymptotic-estimates",
+          "position": 50
+        }
+      ]
+    }
+  ],
+  "continents": [
+    {
+      "id": "origins-efficiency",
+      "name": "Истоки и эффективность",
+      "description": "От точных вычислительных процедур к вопросу о цене вычисления",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [],
+      "related": [
+        "complexity-limits"
+      ],
+      "worldPosition": {
+        "x": 112,
+        "y": 304
+      },
+      "worldSize": {
+        "width": 168,
+        "height": 112
+      },
+      "shapeVariant": 0,
+      "localMap": {
+        "viewBox": "0 0 1040 580",
+        "landPath": "M94 363 C82 270 142 178 245 153 C321 134 350 83 446 91 C527 98 559 146 621 141 C706 134 780 95 866 134 C957 175 984 260 946 335 C922 383 953 432 901 476 C847 523 775 494 706 501 C618 510 564 548 471 522 C403 503 345 535 278 499 C214 466 105 455 94 363 Z"
+      },
+      "regions": [
+        {
+          "id": "before-machines",
+          "name": "До вычислительных машин"
+        },
+        {
+          "id": "models",
+          "name": "Модели вычисления"
+        },
+        {
+          "id": "cost",
+          "name": "Эффективность"
+        }
+      ]
+    },
+    {
+      "id": "mathematical-tools",
+      "name": "Математические инструменты",
+      "description": "Дискретная математика, вероятность и алгебра как рабочий язык алгоритмов",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "origins-efficiency"
+      ],
+      "related": [
+        "strings-geometry-numerics"
+      ],
+      "worldPosition": {
+        "x": 278,
+        "y": 160
+      },
+      "worldSize": {
+        "width": 180,
+        "height": 106
+      },
+      "shapeVariant": 1,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "data-structures",
+      "name": "Структуры данных",
+      "description": "Как представление данных определяет доступные операции и их стоимость",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "mathematical-tools"
+      ],
+      "related": [
+        "big-data-modern-models"
+      ],
+      "worldPosition": {
+        "x": 420,
+        "y": 302
+      },
+      "worldSize": {
+        "width": 158,
+        "height": 108
+      },
+      "shapeVariant": 2,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "algorithm-design",
+      "name": "Методы построения алгоритмов",
+      "description": "Декомпозиция, жадный выбор, динамика и другие способы находить решение",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "data-structures"
+      ],
+      "related": [
+        "randomization-approximation"
+      ],
+      "worldPosition": {
+        "x": 552,
+        "y": 154
+      },
+      "worldSize": {
+        "width": 188,
+        "height": 112
+      },
+      "shapeVariant": 3,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "graphs-networks-optimization",
+      "name": "Графы, сети и оптимизация",
+      "description": "Маршруты, потоки, связи и задачи выбора на сетевых структурах",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "algorithm-design"
+      ],
+      "related": [
+        "complexity-limits"
+      ],
+      "worldPosition": {
+        "x": 694,
+        "y": 300
+      },
+      "worldSize": {
+        "width": 178,
+        "height": 116
+      },
+      "shapeVariant": 0,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "strings-geometry-numerics",
+      "name": "Строки, геометрия и численные алгоритмы",
+      "description": "Специализированные модели данных и вычисления над непрерывными величинами",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "graphs-networks-optimization"
+      ],
+      "related": [
+        "mathematical-tools"
+      ],
+      "worldPosition": {
+        "x": 858,
+        "y": 154
+      },
+      "worldSize": {
+        "width": 190,
+        "height": 112
+      },
+      "shapeVariant": 1,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "randomization-approximation",
+      "name": "Рандомизация и аппроксимация",
+      "description": "Что делать, когда случайность или приближённый ответ дают практическое преимущество",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "strings-geometry-numerics"
+      ],
+      "related": [
+        "algorithm-design"
+      ],
+      "worldPosition": {
+        "x": 874,
+        "y": 442
+      },
+      "worldSize": {
+        "width": 182,
+        "height": 110
+      },
+      "shapeVariant": 2,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "complexity-limits",
+      "name": "Сложность и границы вычислений",
+      "description": "Какие задачи требуют много ресурсов и какие ограничения принципиальны",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "randomization-approximation"
+      ],
+      "related": [
+        "origins-efficiency",
+        "graphs-networks-optimization"
+      ],
+      "worldPosition": {
+        "x": 650,
+        "y": 488
+      },
+      "worldSize": {
+        "width": 194,
+        "height": 112
+      },
+      "shapeVariant": 3,
+      "localMap": null,
+      "regions": []
+    },
+    {
+      "id": "big-data-modern-models",
+      "name": "Большие данные и современные модели",
+      "description": "Как классические идеи меняются при распределённых данных и обучаемых системах",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "complexity-limits"
+      ],
+      "related": [
+        "data-structures"
+      ],
+      "worldPosition": {
+        "x": 368,
+        "y": 490
+      },
+      "worldSize": {
+        "width": 190,
+        "height": 110
+      },
+      "shapeVariant": 0,
+      "localMap": null,
+      "regions": []
+    }
+  ],
+  "nodes": [
+    {
+      "id": "before-computers",
+      "title": "Что люди называли алгоритмами до появления компьютеров",
+      "description": "Как точная процедура отделилась от формулы, рецепта и догадки — и как описать вычисление через состояния и переходы",
+      "continentId": "origins-efficiency",
+      "regionId": "before-machines",
+      "type": "historical",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [],
+      "related": [
+        "euclidean-algorithm"
+      ],
+      "route": "./chapters/before-computers.html",
+      "minutes": 40,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 190,
+        "y": 385
+      }
+    },
+    {
+      "id": "euclidean-algorithm",
+      "title": "Алгоритм Евклида",
+      "description": "Один инвариант, два варианта процедуры и первый содержательный разговор о числе шагов",
+      "continentId": "origins-efficiency",
+      "regionId": "before-machines",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "before-computers"
+      ],
+      "related": [
+        "input-size-and-cost"
+      ],
+      "route": "./chapters/euclidean-algorithm.html",
+      "minutes": 50,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 410,
+        "y": 300
+      }
+    },
+    {
+      "id": "turing-machine-transition",
+      "title": "От ручного вычисления к машине Тьюринга",
+      "description": "Почему анализ действий человека с бумагой оказался математической моделью вычислимости",
+      "continentId": "origins-efficiency",
+      "regionId": "models",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "euclidean-algorithm"
+      ],
+      "related": [
+        "before-computers"
+      ],
+      "route": "./chapters/turing-machine-transition.html",
+      "minutes": 60,
+      "features": {
+        "proof": false,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 655,
+        "y": 230
+      }
+    },
+    {
+      "id": "input-size-and-cost",
+      "title": "Размер входа и стоимость вычисления",
+      "description": "Почему значение числа и длина его записи — разные величины и что именно считают при анализе алгоритма",
+      "continentId": "origins-efficiency",
+      "regionId": "cost",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "turing-machine-transition"
+      ],
+      "related": [
+        "euclidean-algorithm"
+      ],
+      "route": "./chapters/input-size-and-cost.html",
+      "minutes": 60,
+      "features": {
+        "proof": false,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 835,
+        "y": 390
+      }
+    },
+    {
+      "id": "asymptotic-estimates",
+      "title": "Асимптотические оценки",
+      "description": "Как сравнивать рост функций и что именно утверждают O, Ω и Θ",
+      "continentId": "origins-efficiency",
+      "regionId": "cost",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "input-size-and-cost"
+      ],
+      "related": [],
+      "route": "./chapters/asymptotic-estimates.html",
+      "minutes": 90,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 910,
+        "y": 205
+      }
+    }
+  ]
+}

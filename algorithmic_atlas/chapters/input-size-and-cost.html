@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Размер входа и стоимость вычисления — Алгоритмический атлас</title>
+  <meta name="description" content="Почему значение числа не равно размеру входа: кодирование, модели стоимости, битовая арифметика, псевдополиномиальные алгоритмы и интерактивное сравнение НОД.">
+  <meta property="og:title" content="Размер входа и стоимость вычисления — Алгоритмический атлас">
+  <meta property="og:description" content="Четвёртая глава Алгоритмического атласа: от длины записи к осмысленной цене вычисления.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/input-size-and-cost.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/input-size-and-cost.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/input-size.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {
+        load: ['[tex]/html']
+      },
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/input-size-core.js" defer></script>
+  <script src="../labs/input-size.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="input-size-and-cost">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a>
+    <span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a>
+    <span aria-hidden="true">/</span>
+    <span>Размер входа и стоимость вычисления</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Истоки и эффективность · точка 04</p>
+      <h1>Размер входа и стоимость вычисления</h1>
+      <p class="atlas-chapter-intro">
+        Фраза «алгоритм делает \(N\) шагов» ещё ничего не говорит о его
+        эффективности. Сначала нужно выяснить, как записан вход, сколько места
+        занимает эта запись и сколько стоит каждый названный шаг
+      </p>
+      <div class="atlas-chapter-meta">
+        <span>≈ 60 минут</span>
+        <span>3 модели стоимости</span>
+        <span>1 лаборатория · 2 режима</span>
+        <span>8 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#finite-input">Вход как конечная запись</a></li>
+          <li><a href="#encoding">Кодирование объектов</a></li>
+          <li><a href="#number-length">Значение и длина числа</a></li>
+          <li><a href="#unary-binary">Унарная и двоичная записи</a></li>
+          <li><a href="#concrete-cost">Цена конкретного вычисления</a></li>
+          <li><a href="#cost-models">Модели стоимости</a></li>
+          <li><a href="#big-arithmetic">Большая арифметика</a></li>
+          <li><a href="#representation">Представление меняет оценку</a></li>
+          <li><a href="#pseudo">Псевдополиномиальность</a></li>
+          <li><a href="#euclid-return">Возвращение к НОД</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#clock">Почему это не секундомер</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="finite-input">
+          <h2>Вход — не абстрактный объект, а конечная запись</h2>
+          <p>
+            В первой главе вход \(x\) запускал процедуру через начальное состояние
+            \(s_0(x)\). В главе о машине Тьюринга мы уточнили: исполнитель получает
+            конечную строку над входным алфавитом. Теперь это уточнение становится
+            главным. Чтобы алгоритм обработал число, граф или текст, объект нужно
+            представить конечной записью.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="definition">
+            <h3>Размер входа</h3>
+            <p>
+              Пусть \(\Sigma\) — конечный алфавит, а \(x\in\Sigma^*\) —
+              код входного объекта. Размером входа назовём длину этой записи:
+            </p>
+            <div class="atlas-math atlas-notation-formula">
+              \[
+                \class{atlas-notation-token notation-id-input-length}{|x|}
+                =\text{число символов в коде }x.
+              \]
+            </div>
+            <p>
+              Если один символ хранит фиксированное число битов, длина в символах
+              и длина в битах отличаются постоянным множителем. Для числовых задач
+              удобнее сразу считать биты.
+            </p>
+          </section>
+
+          <p>
+            Конечность входа не запрещает работать с огромными объектами: она лишь
+            требует конечного описания каждого отдельного экземпляра. Число из
+            миллиона бит допустимо, но оно не помещается в один обычный машинный
+            регистр и уже самим чтением требует заметной работы.
+          </p>
+        </section>
+
+        <section id="encoding">
+          <h2>Размер принадлежит не объекту, а его кодированию</h2>
+          <p>
+            Один объект можно закодировать по-разному. Граф задают матрицей
+            смежности из \(n^2\) ячеек или списками рёбер; разреженный граф во втором
+            виде может оказаться намного короче. Многочлен можно перечислить всеми
+            коэффициентами до степени \(d\) либо хранить только ненулевые. Отсюда
+            первый принцип анализа:
+          </p>
+          <div class="atlas-math">
+            \[
+              \text{задача}+\text{кодирование}+\text{модель шага}
+              \longrightarrow \text{оценка стоимости}.
+            \]
+          </div>
+          <p>
+            Обычно выбирают каноническую запись: например, положительное двоичное
+            число без ведущих нулей. Иначе одно и то же число \(5\) можно записать
+            как \(101\), \(0101\) или строку с миллиардом нулей впереди, искусственно
+            меняя \(|x|\). Служебные разделители, знак и описание структуры тоже
+            входят в размер, если они являются частью входа.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>«В задаче есть \(n\) чисел, значит размер входа равен \(n\)»</h3>
+            <p>
+              Нет: сами числа нужно записать. Если дан список
+              \(a_1,\ldots,a_n\), его битовая длина имеет порядок
+              \(\sum_i\max\{1,\lfloor\log_2|a_i|\rfloor+1\}\), плюс знаки
+              и разделители. Максимум с единицей учитывает запись нуля.
+              Считать только количество элементов допустимо лишь при дополнительном
+              ограничении на размер каждого элемента.
+            </p>
+          </section>
+        </section>
+
+        <section id="number-length">
+          <h2>Числовое значение и длина его записи</h2>
+          <p>
+            Для положительного целого \(N\) двоичная запись длины \(\ell\)
+            начинается с единицы. Наименьшее такое число равно \(2^{\ell-1}\),
+            а первое число, которому уже нужен следующий бит, равно \(2^\ell\):
+          </p>
+          <div class="atlas-math">
+            \[
+              2^{\ell-1}\le N&lt;2^\ell.
+            \]
+          </div>
+          <p>
+            Логарифмируя неравенство и выделяя \(\ell\), получаем точную формулу:
+          </p>
+          <div class="atlas-math">
+            \[
+              \ell(N)=\lfloor\log_2N\rfloor+1,\qquad N\ge1.
+            \]
+          </div>
+          <p>
+            Для нуля отдельно принимают длину записи «0», равную одному биту.
+            Каждое удвоение \(N\) добавляет не \(N\) новых символов, а всего один
+            бит. Число \(2^{100}\) огромно как значение, но его каноническая запись
+            — единица и сто нулей — имеет длину \(101\).
+          </p>
+
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Почему цикл из \(N\) шагов может быть экспоненциальным</h3>
+            <p>
+              Пусть единственный вход — двоичная запись \(N\), а алгоритм выполняет
+              ровно \(N\) итераций. При длине входа \(n\) возможны числа вплоть до
+              \(2^n-1\). Поэтому худшее число итераций для \(n\)-битного входа имеет
+              порядок \(2^n\), хотя в терминах самого значения оно выглядит
+              «линейным».
+            </p>
+          </section>
+        </section>
+
+        <section id="unary-binary">
+          <h2>Унарная и двоичная записи меняют вопрос</h2>
+          <p>
+            В унарной записи число \(N\) представляют \(N\) одинаковыми отметками:
+            \(5\mapsto11111\). Её длина равна \(N\). В двоичной записи
+            \(5\mapsto101\), а длина равна \(3\). Поэтому один и тот же цикл из
+            \(N\) шагов:
+          </p>
+          <ul>
+            <li>линеен по длине унарного входа;</li>
+            <li>экспоненциален по длине двоичного входа в худшем случае.</li>
+          </ul>
+          <p>
+            Это не словесный трюк. При унарном кодировании алгоритм успевает за
+            один проход хотя бы прочитать каждую входную отметку. При двоичном
+            кодировании короткая строка обозначает значение, несоизмеримо большее
+            собственной длины. Сжатое представление предъявляет к алгоритму более
+            сильное требование.
+          </p>
+
+          <table class="atlas-comparison">
+            <thead>
+              <tr>
+                <th scope="col">\(N\)</th>
+                <th scope="col">Унарно</th>
+                <th scope="col">Двоично</th>
+                <th scope="col">Отношение длин</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>\(8\)</td><td>\(11111111\), 8 знаков</td><td>\(1000\), 4 бита</td><td>\(2\)</td></tr>
+              <tr><td>\(1024\)</td><td>1024 знака</td><td>11 бит</td><td>≈ 93</td></tr>
+              <tr><td>\(2^{100}\)</td><td>\(2^{100}\) знаков</td><td>101 бит</td><td>астрономическое</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="concrete-cost">
+          <h2>Сначала считаем шаги на конкретном входе</h2>
+          <p>
+            Зафиксируем алгоритм \(A\), код входа \(x\) и правило, какие действия
+            считаются элементарными. Обозначим стоимость конкретного запуска:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}
+              =\text{число элементарных операций в вычислении }A(x).
+            \]
+          </div>
+          <p>
+            Это свойство конкретной трассы. Две строки одинаковой длины могут
+            приводить к разному числу шагов. Чтобы говорить только о размере,
+            входы одной длины агрегируют. Например,
+          </p>
+          <div class="atlas-math">
+            \[
+              T_A^{\max}(n)=\max_{\substack{x\ \text{допустим}\\|x|=n}}T_A(x).
+            \]
+          </div>
+          <p>
+            Это худшая стоимость для размера \(n\). Средний и амортизированный
+            анализ используют другие способы объединить трассы; мы сознательно
+            оставляем их отдельной будущей главе. Здесь важно лишь не перепрыгнуть
+            от одного удачного запуска к утверждению обо всех входах той же длины.
+          </p>
+          <p>
+            Запись \(T(n)=O(n^2)\) означает, что при достаточно больших \(n\)
+            стоимость ограничена постоянным множителем от \(n^2\). Что скрывается
+            за \(O\), как доказывать верхние и нижние оценки и сравнивать классы
+            роста, станет темой следующей точки маршрута.
+          </p>
+        </section>
+
+        <section id="cost-models">
+          <h2>Что считать элементарной операцией</h2>
+          <p>
+            Фраза «сложение занимает один шаг» осмысленна только вместе с пределом
+            размера складываемых чисел. Для учебного анализа используют несколько
+            моделей, каждая из которых намеренно забывает часть физической машины.
+          </p>
+
+          <dl class="atlas-definition-list">
+            <div>
+              <dt>Unit-cost RAM</dt>
+              <dd>
+                В упрощённом варианте доступ к регистру и названная арифметическая
+                операция стоят единицу. Удобно считать структуру алгоритма, но
+                опасно разрешать регистрам содержать числа неограниченной длины
+                бесплатно.
+              </dd>
+            </div>
+            <div>
+              <dt>Word-RAM</dt>
+              <dd>
+                Слово содержит \(w\) бит, обычно достаточно для адреса входа:
+                \(w\ge\lceil\log_2 n\rceil\). Операции над одним словом считаются
+                постоянными; длинное число занимает несколько слов.
+              </dd>
+            </div>
+            <div>
+              <dt>Битовая модель</dt>
+              <dd>
+                Цена выражается через элементарные действия над битами. Чтение
+                \(L\)-битного числа уже требует порядка \(L\) работы, а арифметика
+                зависит от длины операндов.
+              </dd>
+            </div>
+            <div>
+              <dt>Реальная платформа</dt>
+              <dd>
+                Инструкции процессора, память, кэши, векторизация, среда выполнения
+                и конкурирующие процессы превращают модельную стоимость в измеряемое
+                время.
+              </dd>
+            </div>
+          </dl>
+
+          <p>
+            «Правильной на все случаи» модели нет. Модель хороша, если явно названа,
+            соответствует диапазону входов и сохраняет различия, ради которых мы
+            сравниваем алгоритмы. Word-RAM уместна для индексов массива, помещающихся
+            в слово; битовая модель нужна, когда числа растут вместе со входом.
+          </p>
+        </section>
+
+        <section id="big-arithmetic">
+          <h2>Арифметика произвольной длины тоже является алгоритмом</h2>
+          <p>
+            Сложение двух \(L\)-битных чисел проходит по разрядам и в обычной
+            реализации требует порядка \(L\) битовых действий. Школьные умножение
+            и деление имеют квадратичную по \(L\) оценку, хотя существуют существенно
+            более быстрые алгоритмы. Поэтому строка псевдокода
+            \(r\leftarrow a\bmod b\) скрывает самостоятельное вычисление.
+          </p>
+          <p>
+            В unit-cost модели сто делений — сто шагов независимо от разрядности.
+            В битовой модели нужно сложить цены конкретных делений:
+          </p>
+          <div class="atlas-math">
+            \[
+              T_{\mathrm{bit}}
+              =\sum_i \operatorname{cost}_{\mathrm{div}}
+                \bigl(|a_i|,|b_i|\bigr).
+            \]
+          </div>
+          <p>
+            Это не делает подсчёт делений бесполезным. Он изолирует одну часть
+            поведения алгоритма и часто правильно показывает число фаз. Ошибка
+            начинается тогда, когда модельный счётчик без оговорки называют
+            временем на любых по размеру целых числах.
+          </p>
+        </section>
+
+        <section id="representation">
+          <h2>Представление данных способно поменять оценку</h2>
+          <p>
+            В массиве поиск элемента по индексу в word-RAM считают одним доступом.
+            В связном списке тот же логический запрос требует пройти предыдущие
+            узлы. В матрице смежности наличие ребра читается одной ячейкой, но
+            перечисление всех соседей просматривает строку из \(n\) позиций. Список
+            смежности хранит только существующие рёбра и меняет цену обеих операций.
+          </p>
+          <p>
+            Поэтому оценку нельзя переносить между реализациями, заменив только
+            название структуры. Нужно заново проверить:
+          </p>
+          <ol>
+            <li>какая строка считается входом и какова её длина;</li>
+            <li>какие состояния реально хранятся;</li>
+            <li>какие переходы считаются единичными;</li>
+            <li>не растёт ли размер операндов во время вычисления.</li>
+          </ol>
+        </section>
+
+        <section id="pseudo">
+          <h2>Простой источник псевдополиномиальности</h2>
+          <p>
+            В задаче о сумме подмножества даны положительные числа
+            \(a_1,\ldots,a_n\) и цель \(S\). Динамическая программа может хранить
+            таблицу: достижима ли каждая сумма от \(0\) до \(S\) после первых
+            \(i\) чисел. Таблица имеет порядка \(nS\) ячеек.
+          </p>
+          <p>
+            Если \(S\) записано двоично, оно занимает около \(\log_2S\) бит.
+            Значение \(S\) может быть экспоненциальным относительно этой длины,
+            поэтому \(O(nS)\) не является полиномиальной оценкой по битовому размеру
+            входа. Она полиномиальна по \(n\) и числовому значению \(S\), либо по
+            длине входа, если числа были бы записаны унарно. Такую зависимость
+            называют <strong>псевдополиномиальной</strong>.
+          </p>
+
+          <section class="atlas-block" data-atlas-block="warning">
+            <h3>«В формуле нет экспоненты, значит алгоритм полиномиальный»</h3>
+            <p>
+              Степени нужно брать от размера записи. Выражение \(S\) равно
+              \(2^{\log_2S}\): линейность по значению \(S\) совместима с
+              экспоненциальностью по числу битов, которыми это значение задано.
+            </p>
+          </section>
+        </section>
+
+        <section id="euclid-return">
+          <h2>Три способа искать НОД — и три разных масштаба</h2>
+          <p>
+            Вернёмся к паре \(a\ge b&gt;0\) из второй главы.
+          </p>
+          <table class="atlas-comparison">
+            <thead>
+              <tr>
+                <th scope="col">Метод</th>
+                <th scope="col">Что считаем шагом</th>
+                <th scope="col">Плохой пример</th>
+                <th scope="col">Что скрыто</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Проверка делителей</th>
+                <td>Одна проверка \(d\mid a\) и \(d\mid b\)</td>
+                <td>Для взаимно простых чисел проверяется почти всё до \(b\)</td>
+                <td>Цена двух делений для каждого \(d\)</td>
+              </tr>
+              <tr>
+                <th scope="row">Повторное вычитание</th>
+                <td>Одно вычитание меньшего из большего</td>
+                <td>\((a,1)\) требует \(a-1\) вычитаний</td>
+                <td>Цена вычитания длинных чисел</td>
+              </tr>
+              <tr>
+                <th scope="row">Евклид с остатком</th>
+                <td>Одно деление с остатком</td>
+                <td>Соседние числа Фибоначчи</td>
+                <td>Битовая цена каждого деления</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Первые два метода могут сделать порядка \(b\) шагов. Если \(b\) задано
+            \(L\) битами, это вплоть до порядка \(2^L\). Теорема Ламе ограничивает
+            число делений алгоритма Евклида величиной порядка \(L\). Но вывод
+            «значит, всё вычисление стоит \(O(L)\)» справедлив только в модели,
+            где деление длинных чисел стоит единицу. В битовой модели число делений
+            остаётся логарифмическим, а общая цена учитывает меняющиеся длины
+            остатков.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Сколько на самом деле велик вход</h2>
+          <p>
+            Первый режим сравнивает значение \(N\) с длиной его записи. Ползунок
+            выбирает точные степени двойки, поэтому его положение уже имеет
+            логарифмический смысл; произвольное положительное \(N\) можно ввести
+            вручную. Второй режим сравнивает три процедуры НОД на одной паре.
+            Огромные циклы не выполняются: число шагов выводится формулами и точной
+            арифметикой <code>BigInt</code>.
+          </p>
+
+          <div id="input-size-lab" class="input-size-lab">
+            <fieldset class="input-size-mode">
+              <legend>Режим лаборатории</legend>
+              <label>
+                <input type="radio" name="input-size-mode" value="magnitude" checked>
+                Значение и запись
+              </label>
+              <label>
+                <input type="radio" name="input-size-mode" value="gcd">
+                Три алгоритма НОД
+              </label>
+            </fieldset>
+
+            <section id="input-size-magnitude-panel" class="input-size-panel"
+              aria-labelledby="input-size-magnitude-title">
+              <h3 id="input-size-magnitude-title">Одно число в двух кодировках</h3>
+              <form id="input-size-form" class="input-size-form" novalidate>
+                <label for="input-size-value">
+                  Положительное целое \(N\)
+                  <input id="input-size-value" type="text" value="1000000"
+                    inputmode="numeric" autocomplete="off" spellcheck="false"
+                    maxlength="121">
+                </label>
+                <button type="submit">Применить число</button>
+
+                <div class="input-size-control is-wide">
+                  <label for="input-size-exponent">Логарифмический ползунок</label>
+                  <input id="input-size-exponent" type="range"
+                    min="0" max="399" step="1" value="19">
+                  <output id="input-size-exponent-output"
+                    for="input-size-exponent">k = 19; ползунок выбирает N = 2^k</output>
+                </div>
+
+                <label for="input-size-rate">
+                  Модельная скорость
+                  <select id="input-size-rate">
+                    <option value="1000">1 тысяча операций/с</option>
+                    <option value="1000000">1 миллион операций/с</option>
+                    <option value="1000000000" selected>1 миллиард операций/с</option>
+                    <option value="1000000000000">1 триллион операций/с</option>
+                  </select>
+                </label>
+              </form>
+
+              <p id="input-size-error" class="input-size-error" role="alert" hidden></p>
+
+              <dl class="input-size-metrics">
+                <div>
+                  <dt>Значение \(N\)</dt>
+                  <dd id="input-size-current-value">1 000 000</dd>
+                </div>
+                <div>
+                  <dt>Двоичная длина \(|x|\)</dt>
+                  <dd id="input-size-bit-length">20</dd>
+                </div>
+                <div>
+                  <dt>Двоичная запись</dt>
+                  <dd><code id="input-size-binary">11110100001001000000</code></dd>
+                </div>
+                <div>
+                  <dt>Унарная длина</dt>
+                  <dd id="input-size-unary-length">1 000 000</dd>
+                </div>
+                <div>
+                  <dt>Начало унарной записи</dt>
+                  <dd><code id="input-size-unary-preview">111111111111…</code></dd>
+                </div>
+                <div>
+                  <dt>Границы двоичной длины</dt>
+                  <dd id="input-size-binary-bounds">2^19 ≤ N &lt; 2^20</dd>
+                </div>
+              </dl>
+
+              <section class="input-size-encoding-panel"
+                aria-labelledby="input-size-encoding-heading">
+                <h3 id="input-size-encoding-heading">Физическая длина двух записей</h3>
+                <svg id="input-size-encoding-geometry"
+                  class="input-size-encoding-geometry"
+                  viewBox="0 0 760 430" role="img"></svg>
+                <p id="input-size-encoding-caption"
+                  class="input-size-encoding-caption"></p>
+              </section>
+
+              <div class="input-size-chart" role="group"
+                aria-labelledby="input-size-chart-title">
+                <h3 id="input-size-chart-title">Число условных шагов</h3>
+                <p>
+                  Ширина полосы пропорциональна \(\log_{10}(\text{шаги}+1)\).
+                  У всех трёх строк одна шкала.
+                </p>
+                <div id="input-size-bars" class="input-size-bars"></div>
+              </div>
+
+              <div class="input-size-table-wrap" role="region" tabindex="0"
+                aria-label="Сравнение модельных алгоритмов по числу шагов и времени">
+                <table class="input-size-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Модель алгоритма</th>
+                      <th scope="col">Шагов</th>
+                      <th scope="col">Время при выбранной скорости</th>
+                      <th scope="col">Способ оценки</th>
+                    </tr>
+                  </thead>
+                  <tbody id="input-size-table-body"></tbody>
+                </table>
+              </div>
+              <p id="input-size-status" class="input-size-status"
+                role="status" aria-live="polite"></p>
+            </section>
+
+            <section id="input-size-gcd-panel" class="input-size-panel"
+              aria-labelledby="input-size-gcd-title" hidden>
+              <h3 id="input-size-gcd-title">Три процедуры для одной пары</h3>
+              <form id="input-size-gcd-form" class="input-size-form" novalidate>
+                <label for="input-size-gcd-left">
+                  \(a&gt;0\)
+                  <input id="input-size-gcd-left" type="text" value="1071"
+                    inputmode="numeric" autocomplete="off" spellcheck="false"
+                    maxlength="121">
+                </label>
+                <label for="input-size-gcd-right">
+                  \(b&gt;0\)
+                  <input id="input-size-gcd-right" type="text" value="462"
+                    inputmode="numeric" autocomplete="off" spellcheck="false"
+                    maxlength="121">
+                </label>
+                <button type="submit">Сравнить</button>
+              </form>
+
+              <p id="input-size-gcd-error" class="input-size-error"
+                role="alert" hidden></p>
+
+              <dl class="input-size-metrics">
+                <div>
+                  <dt>НОД</dt>
+                  <dd id="input-size-gcd-result">21</dd>
+                </div>
+                <div>
+                  <dt>Максимальная длина аргумента</dt>
+                  <dd><span id="input-size-gcd-bits">11</span> бит</dd>
+                </div>
+                <div>
+                  <dt>Учебная битовая работа делений</dt>
+                  <dd id="input-size-gcd-bit-work">—</dd>
+                </div>
+              </dl>
+
+              <div class="input-size-chart" role="group"
+                aria-labelledby="input-size-gcd-chart-title">
+                <h3 id="input-size-gcd-chart-title">Сколько крупных шагов</h3>
+                <p>
+                  Шкала логарифмическая; точное число всегда подписано справа.
+                </p>
+                <div id="input-size-gcd-bars" class="input-size-bars"></div>
+              </div>
+
+              <div class="input-size-table-wrap" role="region" tabindex="0"
+                aria-label="Сравнение трёх процедур поиска НОД">
+                <table class="input-size-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Процедура</th>
+                      <th scope="col">Шагов</th>
+                      <th scope="col">Допущение модели</th>
+                      <th scope="col">Способ оценки</th>
+                    </tr>
+                  </thead>
+                  <tbody id="input-size-gcd-table-body"></tbody>
+                </table>
+              </div>
+              <p id="input-size-gcd-status" class="input-size-status"
+                role="status" aria-live="polite"></p>
+            </section>
+          </div>
+        </section>
+
+        <section id="clock">
+          <h2>Модельные операции не равны времени на часах</h2>
+          <p>
+            В лаборатории время получается делением числа условных шагов на
+            выбранное число операций в секунду. Это сценарий «если каждый шаг
+            одинаков и исполнитель выдерживает постоянную скорость», а не тест
+            производительности компьютера. Реальный запуск зависит от:
+          </p>
+          <ul>
+            <li>набора инструкций и длины машинного слова;</li>
+            <li>иерархии памяти, локальности данных и кэшей;</li>
+            <li>реализации длинной арифметики и среды выполнения;</li>
+            <li>параллелизма, векторизации и других процессов системы;</li>
+            <li>разогрева, планировщика и точности самого измерителя.</li>
+          </ul>
+          <p>
+            Асимптотическая модель отвечает, как меняется потребность в ресурсах
+            при росте входа. Бенчмарк отвечает, сколько занял конкретный запуск на
+            конкретной системе. Эти ответы дополняют друг друга, но ни один нельзя
+            честно подменить другим.
+          </p>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Проверьте понимание</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise">
+              <p>
+                <strong>1. Длина записи.</strong> Сколько битов в канонической
+                двоичной записи чисел \(1\), \(255\), \(256\) и \(1000\)?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Найдите соседние степени двойки.</p>
+              </details>
+              <details>
+                <summary>Показать пошаговое решение</summary>
+                <p>
+                  \(1=2^0\), поэтому длина 1. Для \(255\):
+                  \(2^7\le255&lt;2^8\), длина 8. Число \(256=2^8\) требует
+                  уже 9 бит. Наконец, \(2^9=512\le1000&lt;1024=2^{10}\),
+                  поэтому длина 10.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>2. Две кодировки.</strong> Алгоритм делает ровно \(N\)
+                шагов. Как оценить его время по длине унарной и двоичной записи
+                \(N\)?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>В одном случае \(|x|=N\), в другом \(N\) может быть почти \(2^{|x|}\).</p>
+              </details>
+              <details>
+                <summary>Показать пошаговое решение</summary>
+                <p>
+                  Для унарного входа \(n=|x|=N\), значит, шагов \(n\). Для
+                  двоичного входа длины \(n\) выполняется \(N&lt;2^n\), и существуют
+                  входы с \(N\ge2^{n-1}\). Поэтому худшая зависимость имеет порядок
+                  \(2^n\).
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>3. Параметр размера.</strong> Дан граф списком \(m\) рёбер,
+                а вершины нумеруются от \(1\) до \(n\). Почему просто \(m\) может
+                быть недостаточным размером входа?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Сколько битов нужно на один номер вершины?</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Каждое ребро хранит два номера длины порядка \(\log n\), поэтому
+                  только список концов занимает порядка \(m\log n\) бит. Кроме того,
+                  нужно закодировать \(n\) и границы записей.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>4. Найдите ошибку.</strong> «Перебираем все
+                \(d=1,\ldots,N\), следовательно, алгоритм линейный и быстрый».
+                Что пропущено?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Линейный относительно какой величины?</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  Пропущены кодирование и размер. Для двоичного \(N\) размер
+                  \(n=\lfloor\log_2N\rfloor+1\), а \(N\) итераций могут составлять
+                  порядка \(2^n\). Кроме того, нужно назвать цену действия внутри
+                  цикла.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>5. Шаги и время.</strong> Модель обещает \(3\cdot10^{12}\)
+                одинаковых операций, исполнитель — \(5\cdot10^8\) операций в
+                секунду. Каково модельное время?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Разделите число операций на скорость, затем переведите секунды в минуты.</p>
+              </details>
+              <details>
+                <summary>Показать пошаговое решение</summary>
+                <p>
+                  \(3\cdot10^{12}/(5\cdot10^8)=0{,}6\cdot10^4=6000\) секунд.
+                  Это \(6000/60=100\) минут, то есть 1 час 40 минут. Это оценка
+                  модели, а не обещание реальному процессору.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>6. Псевдополиномиальность.</strong> Таблица динамического
+                программирования имеет \(nW\) ячеек, а \(W\) входит в задачу
+                двоичным числом. Почему оценка \(O(nW)\) не обязана быть
+                полиномиальной по входу?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Сравните \(W\) с длиной \(\log_2 W\).</p>
+              </details>
+              <details>
+                <summary>Показать ответ</summary>
+                <p>
+                  На запись \(W\) нужно порядка \(\log W\) бит, тогда как таблица
+                  линейна по самому значению \(W\). Значение способно быть
+                  экспоненциальным по своей длине, поэтому оценка лишь
+                  псевдополиномиальна.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>7. Модель стоимости.</strong> Алгоритм выполняет десять
+                умножений целых чисел длины \(L\) бит. Как различаются оценки в
+                unit-cost RAM и при школьном умножении в битовой модели?
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>В первой модели умножение объявлено единичным, во второй имеет внутренние разрядные действия.</p>
+              </details>
+              <details>
+                <summary>Показать пошаговое решение</summary>
+                <p>
+                  Unit-cost даёт 10 шагов, то есть константу по \(L\). Школьное
+                  умножение стоит порядка \(L^2\) битовых действий, поэтому десять
+                  умножений имеют тот же порядок \(L^2\) с другим постоянным
+                  множителем. Быстрый алгоритм умножения изменил бы вторую оценку,
+                  но не первую.
+                </p>
+              </details>
+            </article>
+
+            <article class="atlas-exercise">
+              <p>
+                <strong>8. Полином по значению, экспонента по записи.</strong>
+                Процедура делает \(N^3\) действий для двоичного входа \(N\).
+                Перепишите верхнюю оценку через длину \(n=|x|\).
+              </p>
+              <details>
+                <summary>Показать подсказку</summary>
+                <p>Для \(n\)-битного положительного числа \(N&lt;2^n\).</p>
+              </details>
+              <details>
+                <summary>Показать пошаговое решение</summary>
+                <p>
+                  \(N^3&lt;(2^n)^3=2^{3n}=8^n\). С другой стороны, существуют
+                  \(n\)-битные \(N\ge2^{n-1}\), для которых
+                  \(N^3\ge2^{3n-3}\). Значит, худшее число действий растёт
+                  экспоненциально по длине записи, несмотря на кубическую формулу
+                  по значению.
+                </p>
+              </details>
+            </article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>
+              Stephen A. Cook, Robert A. Reckhow,
+              <a href="https://doi.org/10.1016/S0022-0000(73)80029-7"
+                target="_blank" rel="noopener noreferrer">Time Bounded Random Access Machines</a>,
+              Journal of Computer and System Sciences 7(4), 1973 — формальная RAM-модель,
+              меры стоимости и связь с машиной Тьюринга.
+            </li>
+            <li>
+              Richard P. Brent, Paul Zimmermann,
+              <a href="https://maths-people.anu.edu.au/~brent/pd/mca-0.5.1.pdf"
+                target="_blank" rel="noopener noreferrer">Modern Computer Arithmetic</a>,
+              Cambridge University Press, 2010 — алгоритмы и сложность арифметики
+              произвольной точности.
+            </li>
+            <li>
+              Richard P. Brent,
+              <a href="https://maths-people.anu.edu.au/~brent/pub/pub032.html"
+                target="_blank" rel="noopener noreferrer">The Complexity of Multiple-Precision Arithmetic</a>,
+              1976 — почему постоянная цена арифметической операции перестаёт быть
+              допустимой при росте точности.
+            </li>
+            <li>
+              MIT OpenCourseWare, 6.006,
+              <a href="https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/mit6_006s20_lec18.pdf"
+                target="_blank" rel="noopener noreferrer">Lecture 18: Pseudopolynomial</a>
+              — размер двоичного входа и псевдополиномиальные оценки.
+            </li>
+            <li>
+              Brigitte Vallée,
+              <a href="https://algo.inria.fr/seminars/sem99-00/vallee.html"
+                target="_blank" rel="noopener noreferrer">Average Bit-Complexity of Euclidean Algorithms</a>
+              — различие числа делений и суммарной битовой стоимости алгоритма
+              Евклида.
+            </li>
+            <li>
+              Michael Sipser,
+              <a href="https://www.cengage.com/c/introduction-to-the-theory-of-computation-3e-sipser/"
+                target="_blank" rel="noopener noreferrer">Introduction to the Theory of Computation</a>,
+              3rd edition — стандартная связь длины кодировки, времени машины и
+              анализа сложности.
+            </li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div>
+          <div id="atlas-route-next"></div>
+        </nav>
+
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">
+            Отметить главу пройденной
+          </button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

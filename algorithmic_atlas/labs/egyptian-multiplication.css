@@ -1,0 +1,133 @@
+.egyptian-speed {
+  display: grid;
+  grid-column: 1 / -1;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+  font-weight: 700;
+}
+
+.egyptian-speed input[type="range"] {
+  width: 100%;
+  accent-color: var(--chapter-accent);
+}
+
+.egyptian-speed output {
+  color: var(--chapter-muted);
+  font-size: 0.82rem;
+  font-weight: 400;
+}
+
+.egyptian-geometry-panel {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.egyptian-geometry-panel h3 {
+  margin: 0 0 0.65rem;
+  font-size: 0.95rem;
+}
+
+.egyptian-geometry {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 18rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.egyptian-geometry text {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 16px;
+}
+
+.egyptian-geometry .is-muted {
+  fill: var(--chapter-muted);
+  font-size: 13px;
+}
+
+.egyptian-area__outline {
+  fill: var(--chapter-soft);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+}
+
+.egyptian-area__remaining {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+  stroke-width: 1.5;
+}
+
+.egyptian-area__accumulated {
+  fill: var(--chapter-history);
+  stroke: var(--chapter-accent);
+  stroke-width: 1.5;
+}
+
+.egyptian-area__strip,
+.egyptian-area__cell.is-strip {
+  fill: var(--chapter-theorem);
+  stroke: var(--chapter-accent);
+}
+
+.egyptian-area__cell {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-line);
+  stroke-width: 0.8;
+}
+
+.egyptian-area__label {
+  font-size: 14px !important;
+  font-weight: 700;
+}
+
+.egyptian-area__strip-label {
+  fill: var(--chapter-accent) !important;
+  font-weight: 700;
+}
+
+.egyptian-area__arrow {
+  fill: var(--chapter-accent) !important;
+  font-size: 34px !important;
+}
+
+.egyptian-geometry.is-stepping .egyptian-area__remaining,
+.egyptian-geometry.is-stepping .egyptian-area__accumulated,
+.egyptian-geometry.is-stepping .egyptian-area__strip,
+.egyptian-geometry.is-stepping .egyptian-area__cell {
+  opacity: 0.45;
+  transform: translateY(0.2rem);
+  transition:
+    opacity var(--egyptian-motion-duration, 220ms) ease,
+    transform var(--egyptian-motion-duration, 220ms) ease;
+}
+
+.egyptian-geometry-caption {
+  min-height: 2.7em;
+  margin: 0.65rem 0 0 !important;
+  color: var(--chapter-muted);
+  font-size: 0.83rem !important;
+}
+
+@media (max-width: 36rem) {
+  .egyptian-speed {
+    grid-column: auto;
+  }
+
+  .egyptian-geometry {
+    min-height: 13rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .egyptian-geometry *,
+  .egyptian-geometry.is-stepping * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
