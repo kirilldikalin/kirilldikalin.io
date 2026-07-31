@@ -582,10 +582,43 @@
       );
       return;
     }
+    const continuation = atlasCore.routeContinuation(graph, nodeId);
+    if (continuation) {
+      renderRouteContinuation(
+        document.getElementById("atlas-route-next"),
+        continuation
+      );
+      return;
+    }
     renderAtlasTransition(
       document.getElementById("atlas-route-next"),
       nextContinent()
     );
+  }
+
+  function renderRouteContinuation(container, continuation) {
+    if (!container) {
+      return;
+    }
+    container.replaceChildren();
+    container.classList.remove("is-disabled");
+
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "atlas-route-nav__direction";
+    eyebrow.textContent = continuation.kind === "related"
+      ? "Будущая ветвь"
+      : "Дальше";
+
+    const mapLink = document.createElement("a");
+    mapLink.href = "../index.html";
+    mapLink.textContent = "Общая карта";
+
+    const target = document.createElement("span");
+    target.className = "atlas-route-nav__locked";
+    target.textContent = continuation.curriculumId + " · " +
+      continuation.title + " · готовится";
+
+    container.append(eyebrow, mapLink, target);
   }
 
   function nextContinent() {
@@ -770,6 +803,9 @@
         const triggers = Array.from(
           document.querySelectorAll("mjx-container .atlas-notation-token")
         ).filter(function (trigger) {
+          if (trigger.closest("mjx-assistive-mml")) {
+            return false;
+          }
           const notationClass = Array.from(trigger.classList).find(function (name) {
             return name.indexOf("notation-id-") === 0;
           });

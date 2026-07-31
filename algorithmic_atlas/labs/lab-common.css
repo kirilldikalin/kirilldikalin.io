@@ -1,0 +1,437 @@
+.atlas-lab {
+  --lab-a: var(--chapter-accent);
+  --lab-b: var(--chapter-focus);
+  --lab-c: #8a6d3b;
+  --lab-good: #356b45;
+  --lab-bad: #9b3d32;
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.1rem;
+  color: var(--chapter-ink);
+}
+
+.atlas-lab *,
+.atlas-lab *::before,
+.atlas-lab *::after {
+  box-sizing: border-box;
+}
+
+.atlas-lab h3,
+.atlas-lab h4,
+.atlas-lab p {
+  margin-top: 0;
+}
+
+.atlas-lab__intro,
+.atlas-lab__controls,
+.atlas-lab__transport,
+.atlas-lab__panel,
+.atlas-lab__figure,
+.atlas-lab__metrics,
+.atlas-lab__table-wrap {
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.atlas-lab__intro,
+.atlas-lab__controls,
+.atlas-lab__panel,
+.atlas-lab__figure {
+  padding: 0.9rem;
+}
+
+.atlas-lab__intro > :last-child,
+.atlas-lab__panel > :last-child,
+.atlas-lab__figure > :last-child {
+  margin-bottom: 0;
+}
+
+.atlas-lab__controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.atlas-lab__controls label,
+.atlas-lab__field,
+.atlas-lab__speed {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-width: 0;
+  font-weight: 700;
+}
+
+.atlas-lab__field.is-wide {
+  grid-column: 1 / -1;
+}
+
+.atlas-lab input,
+.atlas-lab select,
+.atlas-lab button {
+  min-width: 0;
+  border: 1px solid var(--chapter-line);
+  padding: 0.62rem 0.72rem;
+  background: var(--chapter-bg);
+  color: var(--chapter-ink);
+  font: inherit;
+}
+
+.atlas-lab input[type="range"] {
+  width: 100%;
+  padding: 0;
+  accent-color: var(--chapter-accent);
+}
+
+.atlas-lab button {
+  cursor: pointer;
+}
+
+.atlas-lab button[data-lab-action="run"],
+.atlas-lab button.is-primary,
+.atlas-lab button[aria-pressed="true"] {
+  border-color: var(--chapter-ink);
+  background: var(--chapter-ink);
+  color: var(--chapter-paper);
+}
+
+.atlas-lab button:disabled,
+.atlas-lab input:disabled,
+.atlas-lab select:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.atlas-lab button:focus-visible,
+.atlas-lab input:focus-visible,
+.atlas-lab select:focus-visible,
+.atlas-lab__visual:focus-visible,
+.atlas-lab__table-wrap:focus-visible {
+  outline: 3px solid var(--chapter-focus);
+  outline-offset: 2px;
+}
+
+.atlas-lab__transport {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(13rem, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.atlas-lab__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.atlas-lab__speed output,
+.atlas-lab output {
+  color: var(--chapter-muted);
+  font-size: 0.84rem;
+  font-weight: 400;
+}
+
+.atlas-lab__error,
+.atlas-lab__status,
+.atlas-lab__note {
+  margin: 0;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.atlas-lab__error {
+  border-color: var(--lab-bad);
+  color: var(--lab-bad);
+}
+
+.atlas-lab__error[hidden] {
+  display: none;
+}
+
+.atlas-lab__status {
+  min-height: 2.8rem;
+  color: var(--chapter-muted);
+}
+
+.atlas-lab__note.is-warning {
+  border-color: var(--chapter-accent);
+  background: var(--chapter-warning);
+}
+
+.atlas-lab__workspace,
+.atlas-lab__split,
+.atlas-lab__triple {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.atlas-lab__workspace,
+.atlas-lab__split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.atlas-lab__triple {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.atlas-lab__figure {
+  min-width: 0;
+  margin: 0;
+}
+
+.atlas-lab__figure h4 {
+  margin-bottom: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.atlas-lab__figure figcaption,
+.atlas-lab__caption {
+  min-height: 2.6em;
+  margin-top: 0.6rem;
+  color: var(--chapter-muted);
+  font-size: 0.84rem;
+}
+
+.atlas-lab__visual {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 18rem;
+  overflow: visible;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.atlas-lab__visual text {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 14px;
+}
+
+.atlas-lab__visual .is-muted {
+  fill: var(--chapter-muted);
+  font-size: 12px;
+}
+
+.atlas-lab__visual .is-strong {
+  font-weight: 700;
+}
+
+.atlas-lab__visual .is-a {
+  fill: var(--lab-a);
+  stroke: var(--lab-a);
+}
+
+.atlas-lab__visual .is-b {
+  fill: var(--lab-b);
+  stroke: var(--lab-b);
+}
+
+.atlas-lab__visual .is-c {
+  fill: var(--lab-c);
+  stroke: var(--lab-c);
+}
+
+.atlas-lab__visual .is-good {
+  fill: var(--lab-good);
+  stroke: var(--lab-good);
+}
+
+.atlas-lab__visual .is-bad {
+  fill: var(--lab-bad);
+  stroke: var(--lab-bad);
+}
+
+.atlas-lab__axis,
+.atlas-lab__grid-line {
+  fill: none;
+  stroke: var(--chapter-line);
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-lab__axis {
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+}
+
+.atlas-lab__grid-line {
+  stroke-width: 1;
+}
+
+.atlas-lab__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin: 0;
+  background: var(--chapter-line);
+}
+
+.atlas-lab__metrics > div {
+  min-width: 0;
+  padding: 0.75rem;
+  background: var(--chapter-paper);
+}
+
+.atlas-lab__metrics dt {
+  margin-bottom: 0.35rem;
+  color: var(--chapter-muted);
+  font-size: 0.78rem;
+}
+
+.atlas-lab__metrics dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.atlas-lab__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  margin: 0 0 0.65rem;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+}
+
+.atlas-lab__legend li::before {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.35rem;
+  border: 1px solid var(--chapter-ink);
+  background: var(--legend-color, var(--chapter-soft));
+  content: "";
+  vertical-align: -0.1rem;
+}
+
+.atlas-lab__table-wrap {
+  max-width: 100%;
+  max-height: 25rem;
+  overflow: auto;
+}
+
+.atlas-lab table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.atlas-lab th,
+.atlas-lab td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--chapter-line);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.atlas-lab th:first-child,
+.atlas-lab td:first-child {
+  text-align: left;
+}
+
+.atlas-lab thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--chapter-soft);
+}
+
+.atlas-lab tr.is-current {
+  background: var(--chapter-history);
+  font-weight: 700;
+}
+
+.atlas-lab__mode-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0;
+  border: 0;
+}
+
+.atlas-lab__mode-tabs legend {
+  width: 100%;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+}
+
+.atlas-lab__mode-tabs label {
+  position: relative;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+  cursor: pointer;
+}
+
+.atlas-lab__mode-tabs label:has(input:checked) {
+  border-color: var(--chapter-ink);
+  background: var(--chapter-ink);
+  color: var(--chapter-paper);
+}
+
+.atlas-lab__mode-tabs input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+@media (max-width: 52rem) {
+  .atlas-lab__controls,
+  .atlas-lab__triple {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .atlas-lab__transport,
+  .atlas-lab__workspace,
+  .atlas-lab__split {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-lab__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 36rem) {
+  .atlas-lab__controls,
+  .atlas-lab__triple,
+  .atlas-lab__metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .atlas-lab__field.is-wide {
+    grid-column: auto;
+  }
+
+  .atlas-lab__visual {
+    min-height: 13rem;
+  }
+
+  .atlas-lab__actions button {
+    flex: 1 1 8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-lab *,
+  .atlas-lab *::before,
+  .atlas-lab *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .atlas-lab {
+    --lab-c: #d9b66f;
+    --lab-good: #7bd38e;
+    --lab-bad: #ff8b7e;
+  }
+}

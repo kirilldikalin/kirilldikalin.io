@@ -1,0 +1,284 @@
+.growth-race-line,
+.polynomial-line,
+.concentration-theory-line {
+  fill: none;
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.growth-race-line.is-series-0,
+.polynomial-line.is-series-0 {
+  stroke: var(--lab-a);
+}
+
+.growth-race-line.is-series-1,
+.polynomial-line.is-series-1 {
+  stroke: var(--lab-b);
+}
+
+.growth-race-line.is-series-2,
+.polynomial-line.is-series-2 {
+  stroke: var(--lab-c);
+}
+
+.growth-race-crossing,
+.polynomial-crossover,
+.polynomial-cache-line {
+  stroke: var(--chapter-accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.growth-race-selected,
+.polynomial-selected {
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.recurrence-edge,
+.proof-edge,
+.relation-edge,
+.probability-edge {
+  fill: none;
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.recurrence-node,
+.proof-node,
+.relation-node,
+.probability-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.recurrence-node.is-current,
+.proof-node.is-complete,
+.relation-node.is-active,
+.probability-node.is-active {
+  fill: var(--chapter-history);
+  stroke: var(--chapter-accent);
+  stroke-width: 2.5;
+}
+
+.proof-node.is-available {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.proof-edge.is-missing,
+.relation-edge.is-violation {
+  stroke: var(--lab-bad);
+  stroke-dasharray: 5 4;
+}
+
+.recurrence-level-bar,
+.cost-model-bar,
+.analysis-cost-bar,
+.polynomial-cost-bar {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.relation-class-hull {
+  fill: var(--chapter-history);
+  fill-opacity: 0.65;
+  stroke: var(--chapter-accent);
+  stroke-width: 1.5;
+}
+
+.binary-cell,
+.combinatorics-cell,
+.word-cell,
+.dynamic-array-cell {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.binary-cell.is-candidate {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.binary-cell.is-mid,
+.dynamic-array-cell.is-new {
+  fill: var(--chapter-theorem);
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+}
+
+.binary-cell.is-eliminated,
+.dynamic-array-cell.is-empty {
+  fill: var(--chapter-soft);
+  opacity: 0.55;
+}
+
+.binary-bracket,
+.combinatorics-path {
+  fill: none;
+  stroke: var(--chapter-accent);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.combinatorics-venn-a,
+.probability-area-a {
+  fill: var(--lab-a);
+  fill-opacity: 0.32;
+  stroke: var(--lab-a);
+}
+
+.combinatorics-venn-b,
+.probability-area-b {
+  fill: var(--lab-b);
+  fill-opacity: 0.32;
+  stroke: var(--lab-b);
+}
+
+.combinatorics-item {
+  fill: var(--chapter-accent);
+  stroke: var(--chapter-ink);
+}
+
+.probability-edge.is-a,
+.probability-area-a.is-highlighted {
+  stroke: var(--lab-a);
+  stroke-width: 3;
+}
+
+.probability-edge.is-b,
+.probability-area-b.is-highlighted {
+  stroke: var(--lab-b);
+  stroke-width: 3;
+}
+
+.concentration-bar {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.concentration-bar.is-tail {
+  fill: var(--chapter-warning);
+  stroke: var(--chapter-accent);
+}
+
+.concentration-mean,
+.concentration-threshold {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.concentration-mean {
+  stroke: var(--lab-good);
+}
+
+.concentration-threshold {
+  stroke: var(--chapter-accent);
+  stroke-dasharray: 5 4;
+}
+
+.concentration-theory-line {
+  stroke: var(--lab-c);
+  stroke-dasharray: 4 3;
+}
+
+.word-cell.is-current,
+.cost-model-bar.is-current {
+  fill: var(--chapter-theorem);
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+}
+
+.word-bit {
+  fill: var(--chapter-soft);
+  stroke: var(--chapter-line);
+  stroke-width: 0.7;
+}
+
+.word-bus {
+  fill: none;
+  stroke: var(--chapter-focus);
+  stroke-width: 3;
+  stroke-dasharray: 8 5;
+}
+
+.analysis-distribution-bar {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.analysis-adversary-cell.is-tested {
+  fill: var(--chapter-warning);
+}
+
+.analysis-adversary-cell.is-target {
+  fill: var(--chapter-lab);
+  stroke: var(--lab-good);
+  stroke-width: 2;
+}
+
+.dynamic-array-copy {
+  fill: none;
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+  stroke-dasharray: 4 3;
+}
+
+.polynomial-line.is-experimental {
+  stroke-width: 3;
+}
+
+.polynomial-line.is-theoretical {
+  stroke-dasharray: 7 5;
+  opacity: 0.8;
+}
+
+.polynomial-cache-zone {
+  fill: var(--chapter-warning);
+  opacity: 0.45;
+}
+
+.proof-step-list,
+.relation-pair-grid {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.proof-step-list button {
+  width: 100%;
+  text-align: left;
+}
+
+.proof-step-list button.is-complete {
+  border-color: var(--lab-good);
+  background: var(--chapter-history);
+}
+
+.proof-step-list button.is-blocked {
+  border-color: var(--lab-bad);
+}
+
+.relation-pair-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.relation-pair-grid label {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  padding: 0.35rem;
+  border: 1px solid var(--chapter-line);
+}
+
+@media (max-width: 36rem) {
+  .relation-pair-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
