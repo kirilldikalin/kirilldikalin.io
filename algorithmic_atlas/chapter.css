@@ -416,6 +416,28 @@ body.atlas-chapter {
   background: var(--chapter-soft);
 }
 
+.atlas-table {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  margin: 1.2rem 0;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.atlas-table th,
+.atlas-table td {
+  padding: 0.7rem;
+  border: 1px solid var(--chapter-line);
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+.atlas-table th {
+  background: var(--chapter-soft);
+}
+
 .atlas-math {
   max-width: 100%;
   margin: 1.1rem 0;
@@ -1033,6 +1055,12 @@ mjx-container .atlas-notation-token:focus-visible {
   }
 
   .atlas-comparison {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .atlas-table {
     display: block;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
