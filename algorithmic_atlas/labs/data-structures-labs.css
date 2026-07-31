@@ -124,10 +124,98 @@
   stroke-width: 2.5;
 }
 
+.atlas-lab[data-atlas-lab="persistent-succinct-structures"] [data-group][hidden] {
+  display: none;
+}
+
+.atlas-lab[data-atlas-lab="persistent-succinct-structures"] .atlas-lab__workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.persistent-version-edge,
+.persistent-tree-edge,
+.persistent-divider {
+  fill: none;
+  stroke: var(--chapter-line);
+  stroke-width: 1.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.persistent-version-edge {
+  stroke: var(--chapter-muted);
+  stroke-dasharray: 5 3;
+}
+
+.persistent-version,
+.persistent-tree-node,
+.bitvector-cell,
+.bit-superblock {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.persistent-version.is-active,
+.persistent-tree-node.is-active,
+.bitvector-cell.is-active {
+  fill: var(--chapter-warning);
+  stroke: var(--chapter-accent);
+  stroke-width: 3;
+}
+
+.persistent-version.is-base {
+  stroke-dasharray: 4 2;
+}
+
+.persistent-tree-node.is-shared {
+  fill: var(--chapter-lab);
+}
+
+.persistent-tree-node.is-copied {
+  stroke: var(--chapter-accent);
+  stroke-width: 2.6;
+}
+
+.persistent-tree-node.is-path {
+  stroke-dasharray: 4 2;
+}
+
+.bit-superblock {
+  fill: transparent;
+  stroke: var(--chapter-line);
+}
+
+.bit-superblock.is-active {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+  stroke-width: 2;
+}
+
+.bit-block-line {
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.bit-block-line.is-active {
+  stroke: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.bitvector-cell.is-scanned {
+  fill: var(--chapter-lab);
+}
+
+.bitvector-cell.is-scanned.is-active {
+  fill: var(--chapter-warning);
+}
+
 @media (max-width: 720px) {
   .atlas-lab[data-atlas-lab="hash-tables"] .atlas-lab__visual,
   .atlas-lab[data-atlas-lab="balanced-search-trees"] .atlas-lab__visual,
-  .atlas-lab[data-atlas-lab="augmented-search-trees"] .atlas-lab__visual {
+  .atlas-lab[data-atlas-lab="augmented-search-trees"] .atlas-lab__visual,
+  .atlas-lab[data-atlas-lab="persistent-succinct-structures"] .atlas-lab__visual {
     min-height: 15rem;
   }
 }
@@ -136,7 +224,11 @@
   .structure-cell,
   .hash-slot,
   .tree-node,
-  .augmented-node {
+  .augmented-node,
+  .persistent-version,
+  .persistent-tree-node,
+  .bitvector-cell,
+  .bit-superblock {
     transition: none;
   }
 }
