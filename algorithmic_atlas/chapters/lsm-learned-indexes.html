@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LSM-tree и learned indexes — Алгоритмический атлас</title>
+  <meta name="description" content="Путь записи LSM-tree, compaction и amplification; learned index как модель CDF с ограниченной ошибкой и точным последующим поиском">
+  <meta property="og:title" content="LSM-tree и learned indexes — Алгоритмический атлас">
+  <meta property="og:description" content="Почему отложенное слияние ускоряет запись и как модель распределения превращается в проверяемое окно поиска">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/lsm-learned-indexes.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/lsm-learned-indexes.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/data-structures-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {loader:{load:['[tex]/html']},tex:{packages:{'[+]':['html']},inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true},options:{ignoreHtmlClass:'tex2jax_ignore',processHtmlClass:'tex2jax_process'}};
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/mathematical-tools-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/lsm-learned-indexes-core.js" defer></script>
+  <script src="../labs/lsm-learned-indexes.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="lsm-learned-indexes" data-atlas-lab-minutes="12">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>LSM-tree и learned indexes</span>
+  </nav>
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Структуры данных · ветвь 3.13</p>
+      <h1>LSM-tree и learned indexes</h1>
+      <p class="atlas-chapter-intro">Один индекс откладывает сортировку и переписывает уровни, другой угадывает позицию по распределению ключей — оба выигрывают только при честном учёте дополнительной работы</p>
+      <div class="atlas-chapter-meta">
+        <span data-atlas-reading-time>Теория рассчитывается</span><span data-atlas-lab-time>Лаборатория ≈ 12 мин</span>
+        <span>две связанные модели</span><span>12 упражнений</span>
+      </div>
+    </header>
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#write-problem">Проблема потока записей</a></li>
+          <li><a href="#write-path">WAL и memtable</a></li>
+          <li><a href="#sstable">SSTable и sorted runs</a></li>
+          <li><a href="#flush">Flush</a></li>
+          <li><a href="#compaction">Compaction как merge</a></li>
+          <li><a href="#policies">Leveled и tiered</a></li>
+          <li><a href="#amplification">Три amplification</a></li>
+          <li><a href="#reads">Чтение и Bloom filters</a></li>
+          <li><a href="#tombstones">Tombstones</a></li>
+          <li><a href="#ranges">Диапазонные запросы</a></li>
+          <li><a href="#correctness">Корректность LSM</a></li>
+          <li><a href="#btree">Сравнение с B+‑tree</a></li>
+          <li><a href="#learned-premise">Индекс как модель</a></li>
+          <li><a href="#cdf">CDF и предсказание ранга</a></li>
+          <li><a href="#error-window">Ошибка и last mile</a></li>
+          <li><a href="#rmi">RMI</a></li>
+          <li><a href="#pgm">PGM-index</a></li>
+          <li><a href="#updates-shift">Updates и distribution shift</a></li>
+          <li><a href="#guarantees">Worst-case гарантии</a></li>
+          <li><a href="#practice">Выбор структуры</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+      <article class="atlas-chapter-content">
+        <section id="write-problem">
+          <h2>Случайная запись в дерево превращает каждый update в работу со страницей</h2>
+          <p>
+            B+‑tree поддерживает ключи в порядке и находит нужный лист за логарифмическое число чтений. Но поток вставок по случайным ключам постоянно меняет разные листья. Страница читается, редактируется, журналируется и рано или поздно записывается обратно. Один небольшой update может породить запись целой страницы, а split затронет родителя. При высокой доле writes узким местом становится не число сравнений, а количество случайных обращений и синхронных фиксаций.
+          </p>
+          <p>
+            LSM-tree меняет контракт. Новые версии сначала накапливаются в памяти, где их дёшево сортировать, затем сбрасываются на накопитель большими последовательными сериями. Старые и новые серии некоторое время сосуществуют. Фоновый compaction объединяет их и удаляет затенённые версии. Так стоимость одной логической записи распределяется по будущим последовательным merge, но чтение обязано искать среди нескольких поколений.
+          </p>
+          <p>
+            Это не «дерево, которое быстрее пишет». Это семейство политик, выбирающих, когда и сколько данных переписывать. Чем реже мы сливаем серии, тем дешевле foreground write и тем больше мест приходится проверять read. Чем агрессивнее compaction, тем меньше read и space amplification, но тем выше объём фоновой записи. Поэтому LSM нельзя оценить одной буквой $O$: нужны модель памяти, ratio уровней, политика merge, фильтры и характер нагрузки.
+          </p>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Исходная идея LSM-tree</h3>
+            <p>
+              Патрик О’Нил, Эдвард Ченг, Дитер Гавлик и Элизабет О’Нил описали LSM-tree для файлов с длительным высоким потоком вставок и удалений. Базовая конструкция переносит изменения между компонентами возрастающего размера последовательными merge. Современные key-value stores используют множество практических вариантов этой идеи, поэтому детали конкретной системы нельзя автоматически приписывать исходной статье.
+            </p>
+          </section>
+        </section>
+
+        <section id="write-path">
+          <h2>WAL отвечает за долговечность, memtable — за упорядочивание</h2>
+          <p>
+            При записи пара `(key,value)` сначала попадает в write-ahead log. WAL — последовательный журнал операций, достаточный для восстановления недавних изменений после сбоя. Система подтверждает durable write только после требуемой политикой фиксации журнала. Затем та же версия обновляет memtable — упорядоченную in-memory структуру, часто skip list, дерево или массив с дополнительным индексом.
+          </p>
+          <p>
+            WAL и memtable решают разные задачи. Журнал оптимизирован для последовательного дописывания и recovery, но не для произвольного поиска. Memtable обслуживает чтения и формирует сортированный вывод, но исчезает при отказе питания. Повторное проигрывание WAL восстанавливает её. Если систему настроить подтверждать запись до устойчивого flush журнала, она осознанно меняет гарантию durability; это не свойство LSM как алгоритма.
+          </p>
+          <p>
+            Обновление существующего ключа не обязано искать старую версию на диске. Memtable хранит более новую запись с sequence number. Удаление также записывается как специальное значение — tombstone. Благодаря этому foreground path состоит из последовательного WAL append и изменения памяти. Цена поиска и освобождения места переносится в read и compaction.
+          </p>
+          <p>
+            Когда активная memtable достигает порога, её делают immutable. Новая memtable сразу принимает writes, а immutable-версия в фоне превращается в файл. Такое двойное состояние отделяет latency клиента от времени flush. Но если накопитель не успевает, очередь immutable memtables растёт; система должна замедлить или остановить новые writes, иначе память и compaction debt станут неограниченными.
+          </p>
+        </section>
+
+        <section id="sstable" class="atlas-block" data-atlas-block="definition">
+          <h2>SSTable — неизменяемая отсортированная серия</h2>
+          <p>
+            Результат flush обычно называют SSTable: Sorted String Table. Внутри файла записи упорядочены по ключу, а для одинакового ключа — по версии. Файл неизменяем: update создаёт новую запись в другом файле, а не редактирует старую страницу. Неизменяемость позволяет строить компактные block indexes, checksums, Bloom filters и использовать последовательное чтение без сложной координации writers.
+          </p>
+          <p>
+            Sorted run — более общий алгоритмический термин. Это отсортированная последовательность пар, которую можно слить с другой последовательностью линейным проходом. SSTable добавляет физический формат: data blocks, index blocks, метаданные и иногда compression. В анализе полезно сначала считать записи и block I/O, а затем возвращать размер ключа, value, индекс, фильтры и компрессию.
+          </p>
+          <p>
+            У каждой записи есть порядок свежести. Для одного key чтение выбирает версию с максимальным sequence number, видимую текущему snapshot. Отсортированность по ключу помогает merge и range scan, но сама по себе не определяет, какая версия победит. Поэтому comparator фактически включает пользовательский ключ и служебный суффикс версии.
+          </p>
+          <p>
+            Файл хранит диапазон от минимального до максимального ключа. Если диапазоны SSTables на уровне не пересекаются, point lookup проверяет не более одного файла этого уровня. Если пересекаются, приходится проверить несколько. Именно число одновременно допустимых runs связывает политику compaction с read amplification.
+          </p>
+        </section>
+
+        <section id="flush">
+          <h2>Flush создаёт новый run и уже увеличивает write amplification</h2>
+          <p>
+            Immutable memtable обходится в порядке ключей и записывается как новый SSTable уровня $L_0$. Если в памяти было $m$ entries, flush читает их из RAM и последовательно записывает примерно $m$ entries плюс индекс и фильтр. Логическая запись уже была представлена в WAL, а теперь получила вторую физическую форму. Это первая причина, почему write amplification больше единицы.
+          </p>
+          <p>
+            Размер memtable задаёт компромисс. Большой буфер создаёт крупные runs, лучше амортизирует метаданные и сокращает частоту flush, но требует памяти и увеличивает recovery work. Маленький буфер быстро освобождается, но генерирует много мелких файлов, усиливает compaction overhead и метаданные. Настройка зависит от размера values, доступной RAM и скорости background I/O.
+          </p>
+          <p>
+            Flush не обязан немедленно сливать новый файл с предыдущими. Это важная черта LSM: несколько immutable runs могут существовать одновременно. Но их число должно быть ограничено. Когда $L_0$ переполнен, compaction переносит данные дальше. Если очередь растёт быстрее background merge, система входит в write stall — намеренно снижает входящую скорость, чтобы восстановить ограниченность состояния.
+          </p>
+        </section>
+
+        <section id="compaction">
+          <h2>Compaction — внешний merge с правилами версий</h2>
+          <p>
+            Базовый compaction выбирает набор пересекающихся runs, читает их по возрастанию ключа и выдаёт новую отсортированную серию. Алгоритм похож на шаг merge sort. В памяти находится по одному буферу на источник и выход; большая часть работы последовательна. При совпадении ключей сохраняется самая новая видимая версия, а затенённые записи можно отбросить, если они больше не нужны snapshot или репликации.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+
+            \[
+              \class{atlas-notation-token notation-id-lsm-merge}{\operatorname{merge}}(R_1,\ldots,R_k)
+              = \text{отсортированный поток новейших видимых версий}.
+            \]
+          </div>
+          <p>
+            Merge корректен благодаря локальному выбору минимума среди текущих голов $k$ потоков. Следующий глобально минимальный ключ обязан находиться в одной из голов: всё остальное в соответствующем run не меньше неё. Если несколько голов имеют одинаковый key, sequence number определяет победителя. После вывода головы указатель этого потока двигается. Инвариант повторяется до исчерпания входов.
+          </p>
+          <p>
+            Compaction потребляет read bandwidth, write bandwidth и CPU на decompression, checksums и построение фильтров. Он может конкурировать с foreground запросами. «Фоновый» не означает бесплатный: очередь merge формирует compaction debt, а его погашение влияет на latency. Политика scheduler решает, сколько ресурсов оставить клиентам и какие уровни ремонтировать первыми.
+          </p>
+          <p>
+            Выбор границ тоже важен. Небольшой compaction переписывает меньше данных сейчас, но оставляет больше перекрытий. Крупный объединяет диапазон лучше, зато создаёт всплеск I/O и требует временное место для входов и выхода. Практические системы разбивают работу на файлы и subcompactions; математическая модель рассматривает тот же merge, только с другой гранулярностью.
+          </p>
+        </section>
+
+        <section id="policies">
+          <h2>Leveled и tiered compaction занимают разные точки обмена</h2>
+          <p>
+            Пусть базовый размер уровня равен $M$, а size ratio — $T&gt;1$. Номинальная ёмкость уровня $i$ растёт геометрически: $M T^i$. Число уровней для $N$ entries оценивается как
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-lsm-levels}{L}
+              \approx \left\lceil\log_{\class{atlas-notation-token notation-id-lsm-ratio}{T}}
+              \frac{\class{atlas-notation-token notation-id-structure-size}{N}}{M}\right\rceil.
+            \]
+          </div>
+          <p>
+            В leveled policy на каждом старшем уровне поддерживается один логически не перекрывающийся набор диапазонов. Run с предыдущего уровня сливается с пересекающейся частью следующего. Point lookup проверяет мало файлов, а лишних копий немного. Цена — одна запись может многократно переписываться, пока уровень постепенно принимает порции сверху.
+          </p>
+          <p>
+            Tiered policy допускает несколько runs сходного размера на уровне и сливает их группой после достижения порога. Каждый entry обычно участвует в меньшем числе merge, поэтому write amplification ниже. Но runs перекрываются: отрицательный point lookup и range merge должны рассматривать больше источников, а старые версии дольше занимают место.
+          </p>
+          <p>
+            Названия не задают единственную реализацию. Size-tiered, universal, leveled, lazy leveling и гибриды отличаются правилами выбора файлов и уровней. Поэтому формулы с коэффициентами справедливы только после фиксации модели. Надёжное сравнение говорит: сколько runs разрешено, какие диапазоны перекрываются, каков $T$, считаются ли values вместе с keys и когда удаляются obsolete versions.
+          </p>
+          <p>
+            Увеличение $T$ уменьшает число уровней, но расширяет разрыв размеров соседей. В leveled схеме это может увеличить объём переписывания нижнего уровня одной записью сверху; в tiered — число одновременно ожидающих runs. Даже один параметр двигает write, read и space costs в разные стороны, поэтому «выбрать больше ratio» не является универсальной оптимизацией.
+          </p>
+        </section>
+
+        <section id="amplification">
+          <h2>Три amplification нельзя свести к одной скорости</h2>
+          <p>
+            Write amplification — отношение физически записанных байтов к логическим байтам пользователя. WAL, flush и каждый compaction добавляют числитель. В упрощённой leveled-модели entry может переписываться порядка $T$ раз на уровень, поэтому оценка часто имеет вид $O(TL)$. В tiered-модели — порядка одного раза на уровень, то есть $O(L)$. Это порядок роста, а не точный коэффициент конкретной СУБД.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-write-amplification}{WA}
+              = \frac{\text{байты, записанные накопителем}}
+              {\text{логические байты пользователя}}.
+            \]
+          </div>
+          <p>
+            Read amplification — сколько независимых мест или блоков приходится проверить ради запроса. Leveled levels с непересекающимися диапазонами дают примерно один кандидат на уровень; tiered хранит несколько. Bloom filters резко сокращают I/O отрицательного point lookup, но не устраняют поиск newest version и почти не помогают большому range scan.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-read-amplification}{RA}
+              = \text{число блоков или runs, прочитанных на один логический запрос}.
+            \]
+          </div>
+          <p>
+            Space amplification — отношение физически занятого места к объёму актуальных данных. Причины: старые версии, tombstones, временное сосуществование входов и выхода compaction, резерв незаполненных blocks и индексы. Сильное tiering обычно удерживает больше obsolete copies. Сильное leveling быстрее освобождает их, но ценой write bandwidth.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-space-amplification}{SA}
+              = \frac{\text{физически занятые байты}}
+              {\text{байты живых записей}}.
+            \]
+          </div>
+          <p>
+            Эти отношения зависят от единиц. Если values вынесены в отдельный log, index LSM переписывает в основном keys и pointers; user bytes включают values, и наблюдаемый WA меняется. Компрессия уменьшает физические байты неодинаково на разных уровнях. В лаборатории мы считаем entries, чтобы геометрия была видна, и прямо не выдаём этот счётчик за storage benchmark.
+          </p>
+        </section>
+
+        <section id="reads">
+          <h2>Чтение идёт от нового к старому и использует фильтры как пропуски</h2>
+          <p>
+            Point lookup сначала проверяет mutable и immutable memtables, затем SSTables от свежих к старым. Range metadata отбрасывает файлы, чей диапазон не содержит key. Bloom filter отвечает, может ли ключ быть внутри конкретного файла. Ответ «точно нет» позволяет не читать data block; ответ «возможно» требует обычного поиска. Первый найденный visible sequence завершает запрос.
+          </p>
+          <p>
+            Bloom filter не определяет значение и не выбирает свежую версию. Ложноположительный ответ добавляет лишний I/O, ложноотрицательный нарушил бы корректность. Поэтому фильтр строят по всем relevant keys файла и проверяют совместимость hash/format при чтении. Распределение памяти фильтров по уровням может учитывать вероятность обращения: один и тот же bits-per-key не обязательно минимизирует общую стоимость.
+          </p>
+          <p>
+            Block cache меняет наблюдаемую latency, но не логический порядок. Index и filter blocks часто кэшируются отдельно от data. Горячий отрицательный запрос может завершиться без disk I/O, а холодный positive — прочитать один block каждого кандидата. Анализ сообщает both worst candidate count и ожидаемые пропуски при заданной false-positive rate.
+          </p>
+          <p>
+            Слишком много $L_0$ files особенно опасно: их диапазоны обычно перекрываются, поэтому один key может попасть в каждый. Даже хорошие фильтры выполняют hash work, а positive lookup обязан выбрать newest. Поэтому systems ограничивают $L_0$ и применяют write slowdown/stall задолго до исчерпания диска.
+          </p>
+        </section>
+
+        <section id="tombstones">
+          <h2>Tombstone — версия, а не немедленное освобождение места</h2>
+          <p>
+            Delete(key) записывает marker с новым sequence number. Читатель, встретив tombstone раньше старого value, сообщает отсутствие. Физическую старую запись нельзя просто удалить на месте: SSTables immutable, а ещё более старая копия может находиться на нижнем уровне. Tombstone должен пройти достаточно далеко, чтобы затенить все версии, которые иначе воскресли бы.
+          </p>
+          <p>
+            Compaction может отбросить tombstone, когда уверен, что ниже нет видимой версии и ни один snapshot не нуждается в старой истории. Это условие зависит от MVCC, replication и range tombstones. Раннее удаление нарушает корректность, позднее увеличивает space и read amplification. Поэтому delete-heavy workload способен временно занимать больше места, а не меньше.
+          </p>
+          <p>
+            Tombstone имеет собственный диапазон жизни. В tiered policy перекрывающиеся runs замедляют встречу со всеми старыми версиями. В leveled policy он чаще переписывается, но быстрее достигает нижних уровней. Метрика compaction debt должна учитывать не только байты, но и возраст deletion markers: задержанное освобождение может стать эксплуатационной проблемой.
+          </p>
+        </section>
+
+        <section id="ranges">
+          <h2>Range query объединяет несколько отсортированных потоков</h2>
+          <p>
+            Для диапазона $[a,b]$ каждый relevant run находит первый key не меньше $a$, после чего k-way merge выдаёт ключи по возрастанию. При совпадениях побеждает newest visible version; tombstone подавляет value. Сложность состоит из seek по каждому кандидату и линейной работы по выданным или просмотренным entries с heap голов потоков.
+          </p>
+          <p>
+            Bloom filters почти не помогают, потому что запрос не спрашивает один конкретный key. Непересекающиеся ranges уровней и block indexes сокращают кандидатов, но tiered layout всё равно объединяет больше потоков. Длинный scan может прочитать значительную часть всех версий до их фильтрации. Это причина, по которой write-optimized LSM иногда проигрывает B+‑tree на range-heavy workload.
+          </p>
+          <p>
+            Compaction улучшает будущие scans, заранее объединяя потоки, но сам выполняет похожую работу. Система выбирает, платить merge один раз в background или повторять его каждым reader. Если диапазоны редки, deferred merge выгоден; если постоянны, aggressive leveling может окупиться. Это тот же обмен, выраженный через частоту операций.
+          </p>
+        </section>
+
+        <section id="correctness" class="atlas-block" data-atlas-block="proof">
+          <h2>Почему чтение возвращает последнюю записанную версию</h2>
+          <p>
+            Зафиксируем инварианты. Каждая подтверждённая версия находится либо в WAL и memtable, либо в одном или нескольких immutable runs до удаления superseded copy. Внутри run keys отсортированы. Для одинакового key sequence numbers задают полный порядок. Flush сохраняет все entries immutable memtable; compaction заменяет входные runs выходом, содержащим newest required versions.
+          </p>
+          <p>
+            Чтение рассматривает компоненты в порядке, согласованном со свежестью, либо сравнивает sequence numbers найденных кандидатов. Пусть $v$ — максимальная видимая версия key. Она не могла исчезнуть: flush копирует её, а compaction удаляет только при наличии более новой видимой версии или законном истечении snapshot. Поэтому один из проверяемых компонентов содержит $v$.
+          </p>
+          <p>
+            Любая найденная более старая версия не может победить $v$, потому что reader либо уже встретил более новый компонент, либо сравнит sequence. Если $v$ — tombstone, результат «нет ключа» корректен. Если обычное value, возвращается именно последнее видимое значение. Следовательно, при атомарной публикации runs и сохранении WAL протокол поддерживает semantics last-write-wins для данной модели.
+          </p>
+          <p>
+            Доказательство не покрывает crash protocol автоматически. Чтобы оно пережило сбой, manifest должен атомарно сообщать набор активных файлов; новые outputs публикуются до удаления inputs; WAL сохраняется, пока соответствующие entries не стали durable в SSTable. Это отдельные обязательства реализации, которые соединяют алгоритмический merge с storage correctness.
+          </p>
+        </section>
+
+        <section id="btree">
+          <h2>B+‑tree обновляет место, LSM создаёт новую версию</h2>
+          <p>
+            B+‑tree хранит одну основную упорядоченную структуру и изменяет страницы на месте через журнал. Point и range reads идут по одному пути и листовой цепочке. LSM добавляет immutable runs и переносит сортировку в background merge. Его write path последовательнее, но reads и disk space временно видят несколько поколений.
+          </p>
+          <p>
+            Для read-heavy workload с узкими latency tails B+‑tree часто проще предсказать. Для sustained ingest LSM использует sequential bandwidth и batching. Но граница зависит от cache, storage device, key/value sizes и compaction scheduler. NVMe уменьшает штраф случайного I/O, не отменяя write amplification; large values делают переписывание особенно дорогим и мотивируют value separation.
+          </p>
+          <p>
+            Структуры можно сочетать. Memtable может быть деревом, SSTable содержит block index, metadata хранится в B-tree-подобной форме, а secondary index — отдельно. Вопрос не «какой индекс победил», а какая часть pipeline отвечает за equality, order, durability, updates и reclaim.
+          </p>
+        </section>
+
+        <section id="learned-premise">
+          <h2>Learned index начинается с наблюдения: любой индекс предсказывает место</h2>
+          <p>
+            В отсортированном массиве поиск key сводится к rank: позиции первого элемента не меньше key. B+‑tree использует разделители как кусочно-постоянную модель маршрута. Learned index заменяет часть явных разделителей функцией, приближающей позицию по самому значению key. Слово learned означает, что параметры подбираются по распределению сохранённых ключей, а не что индекс обязательно содержит нейросеть.
+          </p>
+          <p>
+            Модель не хранит values и обычно не заменяет проверку. Она предлагает небольшой диапазон позиций, где классический поиск находит точный ответ. Если распределение легко описывается, несколько коэффициентов заменяют большой набор pointers. Если распределение сложное, нужны дополнительные models или широкое error window; выигрыш исчезает.
+          </p>
+          <p>
+            Сравнивать нужно с хорошо настроенным baseline. B+‑tree использует cache-friendly blocks и SIMD search, interpolation search тоже эксплуатирует распределение, а radix structures используют bits ключа. Learned index платит prediction cost, metadata, training и updates. Он не является универсальной заменой дерева, а расширяет пространство представлений.
+          </p>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Индекс как модель CDF</h3>
+            <p>
+              Работа Краски, Бойтеля, Чи, Дина и Полизотиса сформулировала B-tree, hash index и Bloom filter как модели положения или membership и исследовала learned replacements. Это была постановка исследовательской программы, а не доказательство превосходства на любых данных. Последующие структуры добавили ограниченные ошибки, динамические updates и воспроизводимые benchmarks.
+            </p>
+          </section>
+        </section>
+
+        <section id="cdf" class="atlas-block" data-atlas-block="definition">
+          <h2>Эмпирическая CDF переводит ключ в rank</h2>
+          <p>
+            Для отсортированных уникальных ключей $x_0&lt;\dots&lt;x_{n-1}$ эмпирическая функция распределения сообщает долю ключей, не превосходящих $x$. Умножив её на $n$, получаем приблизительную позицию. На обучающих точках целевая функция — staircase: каждой паре соответствует $(x_i,i)$.
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \class{atlas-notation-token notation-id-learned-cdf}{F_n(x)}
+              = \frac{1}{n}\sum_{i=0}^{n-1}[x_i\le x],
+              \qquad
+              \class{atlas-notation-token notation-id-learned-prediction}{\widehat p(x)}
+              \approx nF_n(x).
+            \]
+          </div>
+          <p>
+            Равномерно распределённые числовые keys хорошо приближает одна прямая. Кластеры создают участки с разным slope; gaps — длинные горизонтальные промежутки; повторяющиеся keys требуют определить lower/upper bound. Модель выбирают по форме данных и допустимой ошибке, а не по модности метода.
+          </p>
+          <p>
+            В лаборатории используется одна линейная модель между минимальным и максимальным key. Она специально проста: читатель видит каждую ошибку. Production index может использовать piecewise linear segments, trees of models или другой регрессор. Но контракт остаётся одинаковым: prediction не является доказательством membership.
+          </p>
+          <p>
+            Если keys нечисловые, нужен order-preserving encoding. Строку можно интерпретировать через bytes префикса, но переменная длина и collation усложняют расстояние. Hash уничтожает порядок и не подходит для CDF rank. Представление key является частью модели и должно совпадать между training и query.
+          </p>
+        </section>
+
+        <section id="error-window">
+          <h2>Граница ошибки превращает prediction в корректный индекс</h2>
+          <p>
+            Пусть на сохранённом наборе доказано, что абсолютная ошибка модели не превосходит $\varepsilon$:
+          </p>
+          <div class="atlas-math atlas-notation-formula">
+            \[
+              \forall x_i:\quad
+              \left|\class{atlas-notation-token notation-id-learned-prediction}{\widehat p(x_i)}-i\right|
+              \le \class{atlas-notation-token notation-id-learned-error}{\varepsilon}.
+            \]
+          </div>
+          <p>
+            Тогда существующий key $x_i$ обязательно находится в целочисленном окне от $\lfloor\widehat p(x)-\varepsilon\rfloor$ до $\lceil\widehat p(x)+\varepsilon\rceil$. Binary search внутри окна выполняет $O(\log(2\varepsilon+1))$ сравнений. После него equality check подтверждает membership. Модель ускоряет локализацию, а классический алгоритм сохраняет точность.
+          </p>
+          <p>
+            Для absent key нужен lower-bound contract. Prediction между двумя training points может давать окно, которое следует расширить до соседних позиций. Структура формально задаёт, какую rank-функцию аппроксимирует и как округляет границы. Нельзя измерить ошибку только на присутствующих keys, а затем без доказательства обещать корректный predecessor для произвольного query.
+          </p>
+          <p>
+            Средняя ошибка не заменяет maximum error. Маленькая mean absolute error допускает один огромный промах и плохой tail latency. Если требуется гарантированный lookup, metadata хранит worst-case bound на segment или fallback на полный binary search. Если разрешена вероятностная гарантия, её нужно назвать и измерять отдельно.
+          </p>
+          <p>
+            Prediction и last mile используют разные ресурсы. Модель может помещаться в cache и вычисляться быстро, но большое окно читает много keys. Сложная модель уменьшает $\varepsilon$, но увеличивает CPU и footprint. Оптимальный вариант минимизирует полную стоимость, а не одну метрику accuracy.
+          </p>
+        </section>
+
+        <section id="rmi">
+          <h2>RMI направляет запрос от грубой модели к специализированной</h2>
+          <p>
+            Recursive Model Index строит иерархию. Модель первого уровня грубо предсказывает участок CDF и выбирает одну из моделей следующего уровня. Последняя выдаёт позицию и error bound. Это напоминает дерево маршрутизации, только разделители представлены параметрами regressors.
+          </p>
+          <p>
+            Если распределение имеет разные локальные slopes, specialized models уменьшают ошибку. Но routing mistake не должен потерять key: training вычисляет min/max error для leaf model или fallback. Число моделей, architecture и размер training set определяют space-time trade-off. Deep model не обязателен; linear regressions часто удобнее и быстрее.
+          </p>
+          <p>
+            Updates сложны, потому что CDF меняется. Вставка сдвигает ranks всех последующих keys. Можно оставлять gaps, буферизовать deltas, периодически retrain или использовать mutable segments. Каждый способ возвращает часть традиционной структуры и требует анализа worst-case. Исходный static benchmark нельзя переносить на write-heavy workload без такой конструкции.
+          </p>
+        </section>
+
+        <section id="pgm">
+          <h2>PGM-index покрывает точки сегментами с явной ошибкой</h2>
+          <p>
+            PGM-index рассматривает точки $(x_i,i)$ и строит кусочно-линейную аппроксимацию, у которой вертикальная ошибка не превышает заданное $\varepsilon$. Каждый segment хранит начало и коэффициенты. По key выбирается segment, вычисляется prediction, затем выполняется binary search в гарантированном окне.
+          </p>
+          <p>
+            Сегменты можно индексировать рекурсивно тем же способом. Если distribution проста, их мало; если сложна, структура автоматически хранит больше pieces. Параметр $\varepsilon$ управляет компромиссом: широкое окно уменьшает metadata, узкое — last-mile comparisons. В отличие от произвольной regression, construction обеспечивает требуемую error bound.
+          </p>
+          <p>
+            Динамический вариант хранит levels и перестраивает части структуры, соединяя learned geometry с идеями log-structured updates. Это хороший пример того, что граница между «классическим» и «learned» индексом размыта: алгоритм использует model там, где она сжимает regularity, и обычные invariants там, где нужна worst-case гарантия.
+          </p>
+          <p>
+            Provable bound не означает автоматическую практическую победу. Константы model evaluation, branch prediction, cache layout и key representation сравниваются с binary search, B-tree и radix baselines. На маленьком массиве обычный поиск может быть быстрее; на сложном распределении model footprint приближается к явному индексу.
+          </p>
+        </section>
+
+        <section id="updates-shift">
+          <h2>Distribution shift меняет не только accuracy, но и корректность окна</h2>
+          <p>
+            Если после training добавились keys в одном диапазоне, ranks справа сдвигаются. Старый maximum error больше не гарантирует новое окно. Monitoring средней ошибки на случайной выборке недостаточен: нужно сохранять invariant bound или fallback, который проверяет выход за окно. Dynamic index обновляет metadata, буферизует изменения и запускает retraining по формальному порогу.
+          </p>
+          <p>
+            Query distribution тоже может измениться без изменения keys. Distribution-aware index размещает больше точности в горячих диапазонах; после shift benefit пропадает, хотя lookup остаётся корректным. Поэтому correctness и performance drift — разные события. Первое требует немедленного fallback, второе — решения о перестройке по стоимости.
+          </p>
+          <p>
+            Deletes создают gaps и tombstones. Если array физически не уплотняется, predicted rank относится к slots, а не live records. Если уплотняется, позиции массово меняются. Learned index должен определить target: physical position, logical rank или block. Именно неясный target часто скрывается за фразой «модель предсказывает CDF».
+          </p>
+          <p>
+            Retraining само потребляет CPU, memory bandwidth и временное место. На rapidly changing dataset непрерывное обучение может стоить дороже сэкономленных comparisons. Hybrid design ограничивает модель стабильными нижними уровнями, а новые записи держит в mutable buffer; query объединяет оба источника, как в LSM.
+          </p>
+        </section>
+
+        <section id="guarantees" class="atlas-block" data-atlas-block="proof">
+          <h2>Модель не отменяет доказательство worst-case</h2>
+          <p>
+            Чтобы learned index был точным, достаточно трёх обязательств. Первое: order-preserving encoding одинаково обрабатывает stored и query keys. Второе: для каждого segment вычислена граница ошибки относительно целевой rank-функции. Третье: last-mile search охватывает всё гарантированное окно и выполняет точное сравнение.
+          </p>
+          <p>
+            Из error invariant следует, что позиция существующего key лежит в окне. Binary search корректен на отсортированном подмассиве и либо находит key, либо доказывает его отсутствие внутри окна. Для predecessor/lower_bound дополнительно доказывается, что границы включают соседнюю позицию произвольного query. Если bound нарушен после update, fallback расширяет поиск, иначе доказательство перестаёт действовать.
+          </p>
+          <p>
+            Время запроса раскладывается на model evaluation, выбор segment и $O(\log\varepsilon)$ last mile. Worst-case по всей структуре зависит от максимального $\varepsilon$ и fallback. Space состоит из keys/values плюс model metadata. Training cost и update cost рассматриваются отдельно. Только такой полный контракт сравним с B+‑tree.
+          </p>
+          <p>
+            Нейросетевая accuracy без deterministic window даёт empirical performance, но не классический worst-case index guarantee. Это допустимый инженерный выбор, если система выдерживает occasional fallback и мониторит drift. Недопустимо называть prediction точным lookup только потому, что benchmark не встретил ошибку.
+          </p>
+        </section>
+
+        <section id="practice">
+          <h2>Выбор начинается с workload и заканчивается полной стоимостью</h2>
+          <p>
+            LSM выбирают для sustained writes, когда sequential bandwidth, batching и background compaction выгоднее random page updates. B+‑tree удобен для predictable reads и ranges. Learned index полезен над большим sorted static или slowly changing массивом, если distribution сжимается небольшой моделью. Эти критерии могут сочетаться: SSTable block index может использовать learned predictor, а mutable верх — обычную структуру.
+          </p>
+          <p>
+            Эксперимент для LSM сообщает write rate, read mix, range lengths, value size, durability, cache, compaction policy, $T$, Bloom bits/key и длительность до steady state. Короткий benchmark до первого major compaction измеряет кредит, а не устойчивую производительность. Нужно дождаться, пока bytes entering и leaving levels стабилизируются, и отдельно показать p50/p99 latency и amplification.
+          </p>
+          <p>
+            Эксперимент learned index фиксирует dataset, query distribution, model size, training time, update policy и fallback. Сравнение проходит на одинаковом memory budget с optimized baselines. Отдельно проверяются absent keys, out-of-range queries, skew и post-update drift. Только average lookup на training keys создаёт заведомо благоприятную картину.
+          </p>
+          <p>
+            Инженерный выбор должен иметь failure mode. LSM отвечает write stall при backlog, disk space reserve для compaction и recovery after crash. Learned index отвечает на нарушение bound, model corruption и retraining failure. Структура данных — не только happy path, а инварианты, которые система умеет восстановить.
+          </p>
+          <p>
+            Наконец, стоимость эксплуатации часто важнее микроbenchmark. Compaction потребляет ресурс соседних workloads, retraining усложняет deployment, а новый формат требует совместимости. Иногда более крупный, но понятный B+‑tree выигрывает за счёт предсказуемости. Иногда write volume делает LSM неизбежным. Иногда learned segment убирает несколько cache misses без изменения остальной системы. Нужна конкретная причина, а не принадлежность к модному классу.
+          </p>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Типичные ошибки</h2>
+          <ul>
+            <li>Называть WAL частью sorted index и забывать, что он нужен прежде всего для recovery</li>
+            <li>Считать flush бесплатным, потому что он последовательный</li>
+            <li>Сравнивать leveled и tiered без числа runs, ratio и размера values</li>
+            <li>Считать Bloom filter источником значения или newest version</li>
+            <li>Удалять tombstone до встречи со всеми старыми версиями</li>
+            <li>Измерять LSM до выхода на steady state и не учитывать будущий compaction</li>
+            <li>Путать CDF prediction с доказанным membership</li>
+            <li>Использовать среднюю ошибку вместо максимальной границы окна</li>
+            <li>Тестировать learned index только на training keys</li>
+            <li>Игнорировать updates и distribution shift</li>
+            <li>Сравнивать model bytes без массива keys и last-mile index</li>
+            <li>Изображать learned index универсальной заменой B-tree</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: от write path к error window</h2>
+          <p>
+            В режиме LSM задайте последовательность updates и deletes, размер memtable и политику compaction. Кадры показывают WAL, memtable, flush, уровни и каждое переписывание; рядом меняются write/space amplification и результат чтения newest version. В режиме learned index набор ключей превращается в точки `(key,rank)`, затем появляется линейная модель, максимальная ошибка, гарантированное окно и точный last-mile search.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="lsm-learned-indexes"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Почему WAL нельзя заменить одной memtable?</p><details><summary>Подсказка</summary><p>Сравните скорость памяти и требование durability.</p></details><details><summary>Показать решение</summary><p>Memtable исчезает при сбое. WAL последовательно фиксирует операции на устойчивом носителе и позволяет восстановить ещё не сброшенные entries.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Memtable вмещает четыре уникальных key. Для операций `1=A, 2=B, 1=C, 3=D, 4=E` после какой операции произойдёт flush?</p><details><summary>Подсказка</summary><p>Update существующего key не увеличивает число уникальных entries.</p></details><details><summary>Показать решение</summary><p>После `4=E`: в memtable находятся keys 1,2,3,4. Версия `1=C` заменяет `1=A` в памяти, хотя обе записи присутствуют в WAL.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Докажите корректность одного шага k-way merge sorted runs.</p><details><summary>Подсказка</summary><p>Где может находиться минимальный ещё не выведенный key?</p></details><details><summary>Показать решение</summary><p>В каждом run остаток отсортирован, поэтому его минимум — текущая голова. Глобальный минимум обязан быть минимальной из голов. Вывод этой головы сохраняет инвариант для следующего шага.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Почему tiered compaction обычно уменьшает write amplification и увеличивает read amplification?</p><details><summary>Подсказка</summary><p>Сравните число merge одного entry и число одновременно существующих runs.</p></details><details><summary>Показать решение</summary><p>Entry реже переписывается и дольше остаётся в отдельном run. Поэтому запись дешевле, но lookup и range merge рассматривают больше перекрывающихся источников.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Логически записано 100 МБ, WAL записал 100 МБ, flush — 100 МБ, compaction — ещё 350 МБ. Найдите $WA$.</p><details><summary>Подсказка</summary><p>Сложите физические записи и разделите на user bytes.</p></details><details><summary>Показать решение</summary><p>$WA=(100+100+350)/100=5{,}5$. Если метрика накопителя считает дополнительные служебные записи, её значение будет выше.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Объясните, почему tombstone нельзя удалить сразу после его flush в $L_0$.</p><details><summary>Подсказка</summary><p>Где находится старое value?</p></details><details><summary>Показать решение</summary><p>Старая версия может лежать на нижнем уровне. Без tombstone reader найдёт её и «воскресит» key. Marker удаляется лишь когда merge охватил все такие версии и snapshots их больше не требуют.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Для $M=10^6$, $T=10$, $N=10^{10}$ оцените число уровней.</p><details><summary>Подсказка</summary><p>Подставьте в $\lceil\log_T(N/M)\rceil$.</p></details><details><summary>Показать решение</summary><p>$N/M=10^4$, поэтому $L\approx4$. Точный layout зависит от того, считается ли $L_0$ отдельным уровнем.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Модель предсказывает позицию 420, а гарантированная ошибка равна 16. Какой диапазон обязан проверить last mile?</p><details><summary>Подсказка</summary><p>Вычтите и прибавьте $\varepsilon$.</p></details><details><summary>Показать решение</summary><p>Позиции от 404 до 436 включительно, с clipping по границам массива. Binary search потребует порядка $\log_2 33$ сравнений.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Постройте контрпример к утверждению «средняя ошибка модели 1 гарантирует окно ширины 3».</p><details><summary>Подсказка</summary><p>Сосредоточьте всю ошибку в одной точке.</p></details><details><summary>Показать решение</summary><p>Для 100 точек 99 predictions точны, одна ошибается на 100. Средняя абсолютная ошибка равна 1, но для последней нужен radius 100.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Почему hash(key) нельзя напрямую использовать как координату CDF для range index?</p><details><summary>Подсказка</summary><p>Что происходит с порядком ключей?</p></details><details><summary>Показать решение</summary><p>Обычный hash намеренно перемешивает близкие keys. Порядок hash values не соответствует порядку исходных ключей, поэтому prediction не локализует rank и диапазон.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Сформулируйте fallback, сохраняющий корректность learned index после distribution shift.</p><details><summary>Подсказка</summary><p>Что делать, если key не найден в прежнем окне?</p></details><details><summary>Показать решение</summary><p>Расширять поиск экспоненциально либо переходить к полному binary search, одновременно отмечая нарушение bound и планируя rebuild. Тогда деградирует скорость, но не correctness.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Выберите структуру для журнала телеметрии: 95% inserts, 4% point lookup, 1% длинных range scans, данные намного больше RAM.</p><details><summary>Подсказка</summary><p>Сопоставьте sequential writes и цену редких scans.</p></details><details><summary>Показать решение</summary><p>LSM с контролируемым leveling/tiering естественно использует высокий ingest. Bloom filters помогают point lookup; редкие scans платят merge runs. Нужно проверить compaction bandwidth, retention/tombstones и steady-state p99. Learned index возможен внутри стабильных SSTables, но не заменяет write pipeline.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Patrick O’Neil, Edward Cheng, Dieter Gawlick, Elizabeth O’Neil, <a href="https://doi.org/10.1007/s002360050048" target="_blank" rel="noopener noreferrer">The Log-Structured Merge-Tree</a>, 1996 — исходная конструкция LSM-tree и анализ merge-компонентов.</li>
+            <li>Niv Dayan, Stratos Idreos, <a href="https://doi.org/10.1145/3183713.3196927" target="_blank" rel="noopener noreferrer">Dostoevsky: Better Space-Time Trade-Offs for LSM-Tree Based Key-Value Stores</a>, 2018 — формализация обмена между update, lookup и space costs.</li>
+            <li>RocksDB, <a href="https://github.com/facebook/rocksdb/wiki/Compaction" target="_blank" rel="noopener noreferrer">Compaction documentation</a> — авторитетная документация конкретной современной реализации; её детали не переносятся на все LSM.</li>
+            <li>Tim Kraska et al., <a href="https://arxiv.org/abs/1712.01208" target="_blank" rel="noopener noreferrer">The Case for Learned Index Structures</a>, 2018 — первичная постановка индекса как модели распределения ключей.</li>
+            <li>Paolo Ferragina, Giorgio Vinciguerra, <a href="https://www.vldb.org/pvldb/vol13/p1162-ferragina.pdf" target="_blank" rel="noopener noreferrer">The PGM-index: a fully-dynamic compressed learned index with provable worst-case bounds</a>, 2020 — piecewise geometric model, динамика и гарантии.</li>
+            <li>Paolo Ferragina, Fabrizio Lillo, Giorgio Vinciguerra, <a href="https://proceedings.mlr.press/v119/ferragina20a.html" target="_blank" rel="noopener noreferrer">Why Are Learned Indexes So Effective?</a>, 2020 — математический анализ связи эффективности с распределением данных.</li>
+            <li>Ryan Marcus et al., <a href="https://arxiv.org/abs/2006.12804" target="_blank" rel="noopener noreferrer">Benchmarking Learned Indexes</a>, 2020 — воспроизводимое сравнение learned и классических индексов.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту"><div id="atlas-route-previous"></div><div id="atlas-route-next"></div></nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
