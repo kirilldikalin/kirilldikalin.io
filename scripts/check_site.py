@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import json
+import math
 import re
+import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -77,8 +79,15 @@ class PageParser(HTMLParser):
         self.notation_ids = []
         self.visible_text = []
         self.display_math_outside_wrapper = []
+        self.theory_text = []
+        self.theory_formula_blocks = 0
+        self.theory_proof_blocks = 0
+        self.atlas_lab_minutes = None
+        self.reading_time_outputs = 0
         self._ignored_text_depth = 0
         self._math_wrapper_depth = 0
+        self._content_depth = 0
+        self._theory_exclusion_depth = 0
         self._open_tags = []
 
     def handle_starttag(self, tag, attrs):
@@ -88,16 +97,52 @@ class PageParser(HTMLParser):
             self.ids.append(attributes["id"])
         if tag == "body" and attributes.get("data-atlas-node-id"):
             self.atlas_node_id = attributes["data-atlas-node-id"]
+            self.atlas_lab_minutes = attributes.get("data-atlas-lab-minutes")
+        if "data-atlas-reading-time" in attributes:
+            self.reading_time_outputs += 1
         if attributes.get("data-atlas-block"):
             self.atlas_blocks.append(attributes["data-atlas-block"])
         if attributes.get("data-notation-id"):
             self.notation_ids.append(attributes["data-notation-id"])
         if tag in {"script", "style"}:
             self._ignored_text_depth += 1
-        is_math_wrapper = "atlas-math" in attributes.get("class", "").split()
-        self._open_tags.append((tag, is_math_wrapper))
+        classes = attributes.get("class", "").split()
+        is_math_wrapper = "atlas-math" in classes
+        is_content_root = "atlas-chapter-content" in classes
+        content_active = self._content_depth > 0 or is_content_root
+        excluded_block = attributes.get("data-atlas-block") in {
+            "lab", "exercises", "sources"
+        }
+        is_theory_excluded = (
+            is_math_wrapper
+            or excluded_block
+            or "atlas-block__label" in classes
+            or "hidden" in attributes
+        )
+        if (
+            content_active
+            and self._theory_exclusion_depth == 0
+            and is_math_wrapper
+        ):
+            self.theory_formula_blocks += 1
+        if (
+            content_active
+            and self._theory_exclusion_depth == 0
+            and (
+                attributes.get("data-atlas-block") == "proof"
+                or "data-reading-proof" in attributes
+            )
+        ):
+            self.theory_proof_blocks += 1
+        self._open_tags.append(
+            (tag, is_math_wrapper, is_content_root, is_theory_excluded)
+        )
         if is_math_wrapper:
             self._math_wrapper_depth += 1
+        if is_content_root:
+            self._content_depth += 1
+        if is_theory_excluded:
+            self._theory_exclusion_depth += 1
 
         for attribute in REFERENCE_ATTRIBUTES.get(tag, ()):
             value = attributes.get(attribute)
@@ -108,19 +153,27 @@ class PageParser(HTMLParser):
         if tag in {"script", "style"} and self._ignored_text_depth:
             self._ignored_text_depth -= 1
         for index in range(len(self._open_tags) - 1, -1, -1):
-            open_tag, _ = self._open_tags[index]
+            open_tag, _, _, _ = self._open_tags[index]
             if open_tag != tag:
                 continue
             closed = self._open_tags[index:]
             del self._open_tags[index:]
             self._math_wrapper_depth -= sum(
-                1 for _, is_wrapper in closed if is_wrapper
+                1 for _, is_wrapper, _, _ in closed if is_wrapper
+            )
+            self._content_depth -= sum(
+                1 for _, _, is_content_root, _ in closed if is_content_root
+            )
+            self._theory_exclusion_depth -= sum(
+                1 for _, _, _, is_excluded in closed if is_excluded
             )
             break
 
     def handle_data(self, data):
         if not self._ignored_text_depth and data.strip():
             self.visible_text.append(data)
+            if self._content_depth and not self._theory_exclusion_depth:
+                self.theory_text.append(data)
             self.notation_ids.extend(
                 re.findall(
                     r"\\class\{atlas-notation-token notation-id-([a-z0-9-]+)\}",
@@ -185,6 +238,29 @@ def parse_page(path):
     parser = PageParser()
     parser.feed(path.read_text(encoding="utf-8"))
     return parser
+
+
+def count_words(text):
+    return len(
+        re.findall(
+            r"[^\W_]+(?:[-‑‒–—'][^\W_]+)*",
+            text,
+            re.UNICODE,
+        )
+    )
+
+
+def reading_metrics(parser):
+    words = count_words(" ".join(parser.theory_text))
+    formulas = parser.theory_formula_blocks
+    proofs = parser.theory_proof_blocks
+    minutes = math.ceil(words / 180 + 0.35 * formulas + 0.75 * proofs)
+    return {
+        "words": words,
+        "formulaBlocks": formulas,
+        "proofBlocks": proofs,
+        "theoryMinutes": minutes,
+    }
 
 
 def local_target(source, value):
@@ -296,6 +372,24 @@ def validate_atlas(errors, parsed_pages):
                     f"but page content is {actual}"
                 )
 
+        declared_reading = node.get("reading")
+        if declared_reading is not None:
+            actual_reading = reading_metrics(parser)
+            for field, actual in actual_reading.items():
+                if declared_reading.get(field) != actual:
+                    errors.append(
+                        f"atlas node {node_id}: reading.{field}="
+                        f"{declared_reading.get(field)!r} but page content is {actual}"
+                    )
+            if parser.reading_time_outputs != 1:
+                errors.append(
+                    f"atlas node {node_id}: page needs one computed reading-time output"
+                )
+            if str(declared_reading.get("labMinutes")) != parser.atlas_lab_minutes:
+                errors.append(
+                    f"atlas node {node_id}: page laboratory time does not match graph"
+                )
+
         visible_text = " ".join(parser.visible_text)
         for math_error in math_delimiter_errors(visible_text):
             errors.append(f"{target.relative_to(ROOT)}: {math_error}")
@@ -350,6 +444,21 @@ def validate_atlas(errors, parsed_pages):
                 errors.append(
                     f"atlas chapter {node_id}: local notation {notation_id} is out of scope"
                 )
+
+
+def print_atlas_metrics():
+    graph = json.loads(
+        (ROOT / "algorithmic_atlas/data/atlas-graph.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    metrics = {}
+    for node in graph.get("nodes", []):
+        target = atlas_route_path(node.get("route"))
+        if node.get("publication") != "published" or not target or not target.is_file():
+            continue
+        metrics[node["id"]] = reading_metrics(parse_page(target))
+    print(json.dumps(metrics, ensure_ascii=False, indent=2))
 
 
 def main():
@@ -424,4 +533,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "--atlas-metrics" in sys.argv[1:]:
+        print_atlas_metrics()
+    else:
+        main()

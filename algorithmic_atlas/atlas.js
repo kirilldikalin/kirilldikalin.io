@@ -843,7 +843,10 @@
     elements.typeRow.hidden = false;
     elements.type.textContent = TYPE_LABELS[node.type];
     elements.minutesRow.hidden = false;
-    elements.minutes.textContent = node.minutes + " мин";
+    elements.minutes.textContent = node.reading
+      ? "Теория ≈ " + node.reading.theoryMinutes + " мин · Лаборатория ≈ " +
+        node.reading.labMinutes + " мин"
+      : node.minutes + " мин";
     elements.status.textContent = completed ? "пройдено" : ACCESS_LABELS[state];
 
     if (state === "published-unlocked") {

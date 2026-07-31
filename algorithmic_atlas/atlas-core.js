@@ -187,6 +187,26 @@
       assertReferenceList(node.related, nodeIds, node.id, "related node");
       assert(Number.isInteger(node.minutes) && node.minutes > 0,
         "minutes must be positive: " + node.id);
+      if (node.reading !== undefined) {
+        assert(node.reading && typeof node.reading === "object",
+          "reading metrics must be an object: " + node.id);
+        ["words", "formulaBlocks", "proofBlocks", "theoryMinutes", "labMinutes"]
+          .forEach(function (field) {
+            assert(Number.isInteger(node.reading[field]) && node.reading[field] >= 0,
+              "reading." + field + " must be a non-negative integer: " + node.id);
+          });
+        assert(node.reading.labMinutes > 0,
+          "reading.labMinutes must be positive: " + node.id);
+        const expectedTheoryMinutes = Math.ceil(
+          node.reading.words / 180 +
+          0.35 * node.reading.formulaBlocks +
+          0.75 * node.reading.proofBlocks
+        );
+        assert(node.reading.theoryMinutes === expectedTheoryMinutes,
+          "reading.theoryMinutes does not match content formula: " + node.id);
+        assert(node.minutes === node.reading.theoryMinutes + node.reading.labMinutes,
+          "minutes must equal theory plus laboratory time: " + node.id);
+      }
       assert(node.features && typeof node.features === "object",
         "features are required: " + node.id);
       FEATURE_DEFINITIONS.forEach(function (feature) {

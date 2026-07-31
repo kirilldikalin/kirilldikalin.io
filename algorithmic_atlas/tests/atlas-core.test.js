@@ -507,6 +507,34 @@ test("planned material cannot claim a page or content features", () => {
   );
 });
 
+test("derived reading metrics match the content formula and separate lab time", () => {
+  const measured = cloneGraph();
+  const node = measured.nodes[0];
+  node.reading = {
+    words: 2200,
+    formulaBlocks: 8,
+    proofBlocks: 3,
+    theoryMinutes: 18,
+    labMinutes: 7,
+  };
+  node.minutes = 25;
+  assert.equal(core.validateGraph(measured), measured);
+
+  const staleTheory = structuredClone(measured);
+  staleTheory.nodes[0].reading.theoryMinutes = 17;
+  assert.throws(
+    () => core.validateGraph(staleTheory),
+    /theoryMinutes does not match content formula/
+  );
+
+  const staleTotal = structuredClone(measured);
+  staleTotal.nodes[0].minutes = 24;
+  assert.throws(
+    () => core.validateGraph(staleTotal),
+    /minutes must equal theory plus laboratory time/
+  );
+});
+
 test("content feature labels are conditional and preserve their common order", () => {
   const turing = core.nodeMap(graph).get("turing-machine-transition");
   const planned = structuredClone(core.nodeMap(graph).get("asymptotic-estimates"));
