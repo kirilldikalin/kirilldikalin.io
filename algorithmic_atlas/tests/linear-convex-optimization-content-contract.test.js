@@ -121,12 +121,14 @@ test("complex theory depth is measured by the production parser", () => {
   assert.ok(metrics.proofBlocks >= 2);
 });
 
-test("notation proposal covers every explicit formula token exactly", () => {
-  const proposal = JSON.parse(fs.readFileSync("/tmp/atlas_413_notations.json", "utf8"));
+test("committed notation registry covers every explicit formula token", () => {
+  const registry = JSON.parse(
+    fs.readFileSync(path.join(atlasRoot, "data", "math-notations.json"), "utf8")
+  );
   const tokenIds = new Set(Array.from(html.matchAll(/notation-id-([a-z0-9-]+)/g), (match) => match[1]));
-  const entryIds = new Set(proposal.entries.map((entry) => entry.id));
-  assert.deepEqual(entryIds, tokenIds);
-  proposal.entries.forEach((entry) => {
+  const entries = registry.entries.filter((entry) => tokenIds.has(entry.id));
+  assert.deepEqual(new Set(entries.map((entry) => entry.id)), tokenIds);
+  entries.forEach((entry) => {
     assert.equal(entry.scope, "local");
     assert.equal(entry.chapterId, "linear-convex-optimization");
     assert.equal(entry.firstDefinition.chapterId, "linear-convex-optimization");
