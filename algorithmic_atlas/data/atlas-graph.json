@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-1",
+  "datasetVersion": "2026.08.01-2",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1624,19 +1624,25 @@
       "continentId": "algorithm-design",
       "regionId": "search-decomposition",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "range-query-structures"
       ],
       "related": [],
-      "route": null,
-      "minutes": 90,
-      "reading": null,
+      "route": "./chapters/exhaustive-search.html",
+      "minutes": 30,
+      "reading": {
+        "words": 2309,
+        "formulaBlocks": 8,
+        "proofBlocks": 2,
+        "theoryMinutes": 18,
+        "labMinutes": 12
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 150,
@@ -1651,19 +1657,25 @@
       "continentId": "algorithm-design",
       "regionId": "search-decomposition",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "exhaustive-search"
       ],
       "related": [],
-      "route": null,
-      "minutes": 90,
-      "reading": null,
+      "route": "./chapters/divide-and-conquer.html",
+      "minutes": 41,
+      "reading": {
+        "words": 3591,
+        "formulaBlocks": 12,
+        "proofBlocks": 3,
+        "theoryMinutes": 27,
+        "labMinutes": 14
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 340,

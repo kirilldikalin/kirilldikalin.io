@@ -438,8 +438,8 @@
       "displayNotation": "T(n)",
       "shortName": "стоимость задачи размера n",
       "explanation": "Функция стоимости, заданная через стоимости меньших подзадач и работу текущего уровня",
-      "scope": "local",
-      "chapterId": "sums-products-recurrences",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "sums-products-recurrences",
         "anchor": "recurrences"
@@ -2286,8 +2286,8 @@
       "displayNotation": "\\varepsilon>0",
       "shortName": "положительный эпсилон",
       "explanation": "Произвольная фиксированная положительная константа",
-      "scope": "local",
-      "chapterId": "growth-rates",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "growth-rates",
         "anchor": "quasilinear"
@@ -3515,6 +3515,390 @@
       "firstDefinition": {
         "chapterId": "balanced-search-trees",
         "anchor": "red-black"
+      }
+    },
+    {
+      "id": "search-solution-space",
+      "displayNotation": "\\mathcal L",
+      "shortName": "пространство полных решений",
+      "explanation": "Конечное множество всех полных кандидатов, среди которых ведётся исчерпывающий поиск",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-feasible-predicate",
+      "displayNotation": "P(z)",
+      "shortName": "предикат допустимости",
+      "explanation": "Условие, определяющее, удовлетворяет ли кандидат всем ограничениям задачи",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-objective-value",
+      "displayNotation": "v(z)",
+      "shortName": "целевая ценность",
+      "explanation": "Числовая ценность допустимого решения z, которую требуется максимизировать",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-optimum-value",
+      "displayNotation": "z^*",
+      "shortName": "оптимальное решение",
+      "explanation": "Допустимый кандидат, достигающий наилучшего значения целевой функции",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-partial-state",
+      "displayNotation": "s_d",
+      "shortName": "частичное состояние поиска",
+      "explanation": "Состояние после первых d решений, содержащее префикс выбора и данные для продолжения",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-depth",
+      "displayNotation": "d",
+      "shortName": "глубина дерева поиска",
+      "explanation": "Количество уже принятых последовательных решений в текущем пути дерева поиска",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-state-value",
+      "displayNotation": "p_d",
+      "shortName": "накопленная ценность",
+      "explanation": "Значение целевой функции, уже набранное частичным решением на глубине d",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "search-tree-node-count",
+      "displayNotation": "2^{n+1}-1",
+      "shortName": "размер полного дерева вариантов",
+      "explanation": "Число узлов полного двоичного дерева для n последовательных независимых выборов",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "enumeration"
+      }
+    },
+    {
+      "id": "subset-choice-bit",
+      "displayNotation": "x_i",
+      "shortName": "бит включения объекта",
+      "explanation": "Двоичная переменная: единица включает объект i в подмножество, ноль исключает",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "backtracking"
+      }
+    },
+    {
+      "id": "subset-target",
+      "displayNotation": "B",
+      "shortName": "целевая вместимость",
+      "explanation": "Максимальная допустимая сумма выбранных положительных чисел в учебной задаче subset sum",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "backtracking"
+      }
+    },
+    {
+      "id": "search-incumbent-value",
+      "displayNotation": "L",
+      "shortName": "ценность incumbent",
+      "explanation": "Ценность лучшего допустимого решения, уже найденного к текущему моменту",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "branch-bound"
+      }
+    },
+    {
+      "id": "search-upper-bound",
+      "displayNotation": "U(s)",
+      "shortName": "верхняя оценка ветви",
+      "explanation": "Доказуемый максимум ценности любого полного решения, продолжающего частичное состояние s",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "branch-bound"
+      }
+    },
+    {
+      "id": "search-remaining-potential",
+      "displayNotation": "\\sum_{i=d+1}^{n}a_i",
+      "shortName": "оставшийся потенциал",
+      "explanation": "Сумма всех ещё не рассмотренных положительных вкладов, используемая в простой верхней оценке",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "branch-bound"
+      }
+    },
+    {
+      "id": "divide-subproblem-count",
+      "displayNotation": "a",
+      "shortName": "число подзадач",
+      "explanation": "Количество рекурсивных подзадач, создаваемых одним небазовым вызовом",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "anatomy"
+      }
+    },
+    {
+      "id": "divide-subproblem-size",
+      "displayNotation": "n_i",
+      "shortName": "размер подзадачи",
+      "explanation": "Размер i-й дочерней задачи в выбранной мере входа",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "anatomy"
+      }
+    },
+    {
+      "id": "divide-combine-cost",
+      "displayNotation": "C(n)",
+      "shortName": "нерекурсивная работа узла",
+      "explanation": "Стоимость divide, combine и прочих локальных действий вызова размера n без стоимости детей",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "anatomy"
+      }
+    },
+    {
+      "id": "recursion-level",
+      "displayNotation": "\\ell",
+      "shortName": "уровень дерева рекурсии",
+      "explanation": "Расстояние в рёбрах от корневого вызова до рассматриваемого слоя дерева",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "merge-sort"
+      }
+    },
+    {
+      "id": "divide-level-work",
+      "displayNotation": "W_{\\ell}",
+      "shortName": "работа уровня",
+      "explanation": "Сумма локальных стоимостей всех узлов на уровне ell дерева рекурсии",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "merge-sort"
+      }
+    },
+    {
+      "id": "divide-shrink-factor",
+      "displayNotation": "b",
+      "shortName": "коэффициент уменьшения",
+      "explanation": "Постоянный множитель, во столько раз уменьшается размер каждой сбалансированной подзадачи",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "master"
+      }
+    },
+    {
+      "id": "divide-critical-exponent",
+      "displayNotation": "p=\\log_b a",
+      "shortName": "критический показатель дерева",
+      "explanation": "Показатель роста числа листьев сбалансированного дерева рекурсии",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "master"
+      }
+    },
+    {
+      "id": "divide-unbalanced-size",
+      "displayNotation": "n-1",
+      "shortName": "почти полная подзадача",
+      "explanation": "Размер большой дочерней задачи при крайнем несбалансированном разрезе",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "imbalance"
+      }
+    },
+    {
+      "id": "karatsuba-base",
+      "displayNotation": "B",
+      "shortName": "основание блока",
+      "explanation": "Основание позиционной записи, относительно степени которого число делится на старшую и младшую части",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "karatsuba"
+      }
+    },
+    {
+      "id": "karatsuba-split-position",
+      "displayNotation": "m",
+      "shortName": "позиция разреза",
+      "explanation": "Количество младших разрядов в одной половине записи числа",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "karatsuba"
+      }
+    },
+    {
+      "id": "karatsuba-low-product",
+      "displayNotation": "z_0",
+      "shortName": "произведение младших частей",
+      "explanation": "Произведение младших блоков x_0 и y_0 в схеме Карацубы",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "karatsuba"
+      }
+    },
+    {
+      "id": "karatsuba-middle-product",
+      "displayNotation": "z_1",
+      "shortName": "смешанное произведение",
+      "explanation": "Сумма перекрёстных произведений, восстановленная из третьего умножения в схеме Карацубы",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "karatsuba"
+      }
+    },
+    {
+      "id": "karatsuba-high-product",
+      "displayNotation": "z_2",
+      "shortName": "произведение старших частей",
+      "explanation": "Произведение старших блоков x_1 и y_1 в схеме Карацубы",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "karatsuba"
+      }
+    },
+    {
+      "id": "power-exponent",
+      "displayNotation": "n",
+      "shortName": "текущий показатель степени",
+      "explanation": "Неотрицательный целый показатель, который на каждом шаге быстрой степени делится пополам",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "power"
+      }
+    },
+    {
+      "id": "parallel-work",
+      "displayNotation": "W(n)",
+      "shortName": "полная работа",
+      "explanation": "Суммарное число модельных операций всех узлов параллельного вычисления",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "parallelism"
+      }
+    },
+    {
+      "id": "parallel-span",
+      "displayNotation": "S(n)",
+      "shortName": "критический путь",
+      "explanation": "Длина самой длинной цепочки зависимых операций при неограниченном параллелизме",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "parallelism"
+      }
+    },
+    {
+      "id": "parallel-processor-count",
+      "displayNotation": "P",
+      "shortName": "число исполнителей",
+      "explanation": "Количество доступных одинаковых параллельных исполнителей в модели планирования",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "parallelism"
+      }
+    },
+    {
+      "id": "search-node-cost",
+      "displayNotation": "C_{\\mathrm{node}}",
+      "shortName": "стоимость обработки узла",
+      "explanation": "Модельная цена создания, проверки и оценки одного посещённого узла дерева поиска",
+      "scope": "local",
+      "chapterId": "exhaustive-search",
+      "firstDefinition": {
+        "chapterId": "exhaustive-search",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "divide-constant-cost",
+      "displayNotation": "\\Theta(1)",
+      "shortName": "постоянная локальная работа",
+      "explanation": "Ограниченная константой нерекурсивная работа одного вызова в выбранной модели стоимости",
+      "scope": "local",
+      "chapterId": "divide-and-conquer",
+      "firstDefinition": {
+        "chapterId": "divide-and-conquer",
+        "anchor": "binary-search"
       }
     }
   ]

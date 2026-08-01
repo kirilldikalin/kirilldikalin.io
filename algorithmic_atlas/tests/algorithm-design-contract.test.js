@@ -13,6 +13,10 @@ const curriculum = fs.readFileSync(
   path.join(atlasRoot, "docs/curriculum.md"),
   "utf8"
 );
+const publishedChapterIds = new Set([
+  "exhaustive-search",
+  "divide-and-conquer",
+]);
 
 function canonicalAlgorithmDesign() {
   const section = curriculum.match(
@@ -59,18 +63,33 @@ test("continent 04 is a published shell for exactly fourteen canonical chapters"
   );
   actual.forEach((node, index) => {
     assert.equal(node.title, expected[index].title);
-    assert.equal(node.publication, "planned");
-    assert.equal(node.route, null);
-    assert.equal(node.reading, null);
-    assert.deepEqual(node.features, {
-      proof: false,
-      interactive: false,
-      exercises: false,
-    });
-    assert.equal(
-      core.nodeAccessState(graph, node, new Set(), true),
-      "planned"
-    );
+    const published = publishedChapterIds.has(node.id);
+    assert.equal(node.publication, published ? "published" : "planned");
+    if (published) {
+      assert.equal(node.route, "./chapters/" + node.id + ".html");
+      assert.ok(node.reading);
+      assert.deepEqual(node.features, {
+        proof: true,
+        interactive: true,
+        exercises: true,
+      });
+      assert.equal(
+        core.nodeAccessState(graph, node, new Set(), true),
+        "published-unlocked"
+      );
+    } else {
+      assert.equal(node.route, null);
+      assert.equal(node.reading, null);
+      assert.deepEqual(node.features, {
+        proof: false,
+        interactive: false,
+        exercises: false,
+      });
+      assert.equal(
+        core.nodeAccessState(graph, node, new Set(), true),
+        "planned"
+      );
+    }
   });
 });
 
@@ -158,16 +177,16 @@ test("continent 04 exposes only the seven canonical future exits", () => {
   );
 });
 
-test("planned chapters stay outside progress while the shell retains core structure", () => {
+test("published chapters enter progress while planned chapters stay outside", () => {
   assert.equal(core.continentCoreNodeIds(graph, "algorithm-design").length, 9);
   assert.deepEqual(
     core.continentProgressSummary(graph, "algorithm-design", new Set()),
     {
       completed: 0,
-      total: 0,
+      total: 2,
       percent: 0,
       coreCompleted: 0,
-      coreTotal: 0,
+      coreTotal: 2,
       branchCompleted: 0,
       branchTotal: 0,
       coreReady: false,
@@ -176,7 +195,7 @@ test("planned chapters stay outside progress while the shell retains core struct
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    29
+    31
   );
 });
 
