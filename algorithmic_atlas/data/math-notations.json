@@ -5232,6 +5232,474 @@
         "chapterId": "advanced-dynamic-programming",
         "anchor": "li-chao"
       }
+    },
+    {
+      "id": "local-solution-space",
+      "displayNotation": "𝒳",
+      "shortName": "пространство решений",
+      "explanation": "Множество всех допустимых решений задачи",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "local-objective",
+      "displayNotation": "Φ",
+      "shortName": "целевая функция",
+      "explanation": "Числовое качество решения, которое максимизируется",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "local-neighborhood",
+      "displayNotation": "𝒩(x)",
+      "shortName": "окрестность",
+      "explanation": "Допустимые решения, достижимые из x одним локальным ходом",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "local-optimum",
+      "displayNotation": "x^ℓ",
+      "shortName": "локальный оптимум",
+      "explanation": "Решение, не имеющее лучшего соседа в выбранной окрестности",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "optima"
+      }
+    },
+    {
+      "id": "global-optimum",
+      "displayNotation": "x★",
+      "shortName": "глобальный оптимум",
+      "explanation": "Решение, не хуже любого допустимого решения пространства",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "optima"
+      }
+    },
+    {
+      "id": "local-transition",
+      "displayNotation": "xₜ₊₁∈𝒩(xₜ)",
+      "shortName": "локальный переход",
+      "explanation": "Один разрешённый ход к соседнему решению",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "local-potential",
+      "displayNotation": "Φ(xₜ₊₁)>Φ(xₜ)",
+      "shortName": "строгий потенциал",
+      "explanation": "Величина, строго растущая на каждом hill-climbing ходе",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "local-first-improvement",
+      "displayNotation": "first{…}",
+      "shortName": "первое улучшение",
+      "explanation": "Первый просмотренный сосед со строго лучшим значением",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "improvement"
+      }
+    },
+    {
+      "id": "local-best-improvement",
+      "displayNotation": "arg max",
+      "shortName": "лучшее улучшение",
+      "explanation": "Сосед с максимальным значением во всей окрестности",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "improvement"
+      }
+    },
+    {
+      "id": "local-k-exchange",
+      "displayNotation": "𝒩ₖ(x)",
+      "shortName": "k-exchange-окрестность",
+      "explanation": "Решения после ограниченного удаления и добавления компонентов",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "exchange"
+      }
+    },
+    {
+      "id": "local-two-opt-delta",
+      "displayNotation": "Δ",
+      "shortName": "изменение 2-opt",
+      "explanation": "Новая стоимость четырёх затронутых рёбер минус старая",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "two-opt"
+      }
+    },
+    {
+      "id": "local-edge-cost",
+      "displayNotation": "c(a,b)",
+      "shortName": "стоимость ребра",
+      "explanation": "Цена соединения двух вершин маршрута",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "two-opt"
+      }
+    },
+    {
+      "id": "local-annealing-probability",
+      "displayNotation": "P(accept)",
+      "shortName": "вероятность принятия",
+      "explanation": "Вероятность, с которой annealing принимает предложенный ход",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "annealing"
+      }
+    },
+    {
+      "id": "local-objective-change",
+      "displayNotation": "Δ",
+      "shortName": "изменение цели",
+      "explanation": "Разность значения кандидата и текущего решения",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "annealing"
+      }
+    },
+    {
+      "id": "local-temperature",
+      "displayNotation": "T",
+      "shortName": "температура",
+      "explanation": "Параметр допуска ухудшающих ходов в simulated annealing",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "annealing"
+      }
+    },
+    {
+      "id": "local-cooling-factor",
+      "displayNotation": "α",
+      "shortName": "коэффициент охлаждения",
+      "explanation": "Множитель, уменьшающий температуру после шага",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "annealing"
+      }
+    },
+    {
+      "id": "local-restart-success",
+      "displayNotation": "P(успех после r)",
+      "shortName": "успех рестартов",
+      "explanation": "Вероятность хотя бы одного успешного независимого запуска",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "restarts"
+      }
+    },
+    {
+      "id": "local-restart-count",
+      "displayNotation": "r",
+      "shortName": "число рестартов",
+      "explanation": "Количество независимых запусков из новых стартовых решений",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "restarts"
+      }
+    },
+    {
+      "id": "local-neighborhood-size",
+      "displayNotation": "D(n)",
+      "shortName": "размер окрестности",
+      "explanation": "Число локальных кандидатов на одной итерации",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "practice"
+      }
+    },
+    {
+      "id": "local-delta-cost",
+      "displayNotation": "C(n)",
+      "shortName": "стоимость delta",
+      "explanation": "Цена вычисления изменения цели для одного хода",
+      "scope": "local",
+      "chapterId": "local-search",
+      "firstDefinition": {
+        "chapterId": "local-search",
+        "anchor": "practice"
+      }
+    },
+    {
+      "id": "mitm-left-index-set",
+      "displayNotation": "L",
+      "shortName": "левая половина",
+      "explanation": "Первая часть множества индексов после разреза",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "split"
+      }
+    },
+    {
+      "id": "mitm-right-index-set",
+      "displayNotation": "R",
+      "shortName": "правая половина",
+      "explanation": "Вторая часть множества индексов после разреза",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "split"
+      }
+    },
+    {
+      "id": "mitm-input-size",
+      "displayNotation": "n",
+      "shortName": "число переменных",
+      "explanation": "Размер полного двоичного выбора, разделяемого пополам",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "split"
+      }
+    },
+    {
+      "id": "mitm-left-sum",
+      "displayNotation": "s_L",
+      "shortName": "левая полусумма",
+      "explanation": "Сумма элементов выбранного подмножества левой половины",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "subset-sum"
+      }
+    },
+    {
+      "id": "mitm-right-sum",
+      "displayNotation": "s_R",
+      "shortName": "правая полусумма",
+      "explanation": "Сумма элементов выбранного подмножества правой половины",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "subset-sum"
+      }
+    },
+    {
+      "id": "mitm-target",
+      "displayNotation": "T",
+      "shortName": "целевая сумма",
+      "explanation": "Значение, которое должны дать две полусуммы вместе",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "subset-sum"
+      }
+    },
+    {
+      "id": "mitm-half-list",
+      "displayNotation": "P",
+      "shortName": "список полусумм",
+      "explanation": "Материализованные boundary states одной половины",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "lists"
+      }
+    },
+    {
+      "id": "mitm-half-size",
+      "displayNotation": "|L|",
+      "shortName": "размер половины",
+      "explanation": "Число переменных, участвующих в одном полусписке",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "lists"
+      }
+    },
+    {
+      "id": "mitm-complement",
+      "displayNotation": "q=T−s_L",
+      "shortName": "искомое дополнение",
+      "explanation": "Правая сумма, необходимая для текущей левой записи",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "pairing"
+      }
+    },
+    {
+      "id": "mitm-time",
+      "displayNotation": "T(n)",
+      "shortName": "время meet-in-the-middle",
+      "explanation": "Суммарная модельная работа генерации, сортировки и pairing",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "mitm-memory",
+      "displayNotation": "M(n)",
+      "shortName": "память meet-in-the-middle",
+      "explanation": "Число одновременно хранимых частичных состояний",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "mitm-full-solution",
+      "displayNotation": "S",
+      "shortName": "полное подмножество",
+      "explanation": "Свидетельство, единственно распадающееся по двум половинам",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "correctness"
+      }
+    },
+    {
+      "id": "mitm-schroeppel-time",
+      "displayNotation": "T(n)",
+      "shortName": "время Schroeppel–Shamir",
+      "explanation": "Время ленивой генерации и встречи полусумм",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "schroeppel-shamir"
+      }
+    },
+    {
+      "id": "mitm-schroeppel-memory",
+      "displayNotation": "M(n)",
+      "shortName": "память Schroeppel–Shamir",
+      "explanation": "Память четвертных списков и очередей фронта",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "schroeppel-shamir"
+      }
+    },
+    {
+      "id": "mitm-branching-factor",
+      "displayNotation": "b",
+      "shortName": "коэффициент ветвления",
+      "explanation": "Максимальное число переходов из одной вершины поиска",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "bidirectional"
+      }
+    },
+    {
+      "id": "mitm-path-depth",
+      "displayNotation": "d",
+      "shortName": "длина искомого пути",
+      "explanation": "Число рёбер от старта до цели",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "bidirectional"
+      }
+    },
+    {
+      "id": "mitm-giant-index",
+      "displayNotation": "i",
+      "shortName": "индекс giant step",
+      "explanation": "Номер большого блока в разложении показателя",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "bsgs"
+      }
+    },
+    {
+      "id": "mitm-bsgs-block",
+      "displayNotation": "m",
+      "shortName": "размер блока BSGS",
+      "explanation": "Параметр около квадратного корня границы показателя",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "bsgs"
+      }
+    },
+    {
+      "id": "mitm-baby-index",
+      "displayNotation": "j",
+      "shortName": "индекс baby step",
+      "explanation": "Позиция внутри блока показателя",
+      "scope": "local",
+      "chapterId": "meet-in-the-middle",
+      "firstDefinition": {
+        "chapterId": "meet-in-the-middle",
+        "anchor": "bsgs"
+      }
     }
   ]
 }

@@ -1,0 +1,84 @@
+.local-search-metrics,
+.local-search-figure,
+.local-search-panel {
+  grid-column: 1 / -1;
+}
+
+.local-search-metrics {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.local-search-cell {
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+}
+
+.local-search-cell.is-level-0 { fill: #e8e5df; }
+.local-search-cell.is-level-1 { fill: #ddd9cf; }
+.local-search-cell.is-level-2 { fill: #cec8b9; }
+.local-search-cell.is-level-3 { fill: #bcb39f; }
+.local-search-cell.is-level-4 { fill: #a5947d; }
+.local-search-cell.is-level-5 { fill: #8c6c58; }
+.local-search-cell.is-level-6 { fill: #6f4235; }
+
+.local-search-cell.is-visited {
+  stroke: var(--chapter-accent);
+  stroke-width: 3;
+}
+
+.local-search-cell.is-candidate {
+  stroke: var(--lab-c);
+  stroke-width: 4;
+  stroke-dasharray: 7 5;
+}
+
+.local-search-cell.is-current {
+  stroke: var(--chapter-ink);
+  stroke-width: 5;
+}
+
+.local-search-value {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.local-search-value.is-current {
+  fill: var(--chapter-paper);
+}
+
+.local-search-path {
+  fill: none;
+  stroke: var(--chapter-focus);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+}
+
+.local-search-marker {
+  fill: none;
+  stroke: var(--chapter-paper);
+  stroke-width: 3;
+}
+
+.local-search-global {
+  fill: var(--chapter-accent) !important;
+  font-weight: 700;
+}
+
+.local-search-local {
+  fill: var(--lab-c) !important;
+  font-weight: 700;
+}
+
+.local-search-message {
+  fill: var(--chapter-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .local-search-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

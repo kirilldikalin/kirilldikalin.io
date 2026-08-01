@@ -1,0 +1,78 @@
+.mitm-metrics,
+.mitm-figure,
+.mitm-panel {
+  grid-column: 1 / -1;
+}
+
+.mitm-metrics {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.mitm-entry {
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+}
+
+.mitm-entry.is-left {
+  fill: color-mix(in srgb, var(--lab-a) 13%, var(--chapter-paper));
+}
+
+.mitm-entry.is-right {
+  fill: color-mix(in srgb, var(--lab-b) 12%, var(--chapter-paper));
+}
+
+.mitm-entry.is-active {
+  stroke: var(--chapter-ink);
+  stroke-width: 4;
+  fill: var(--chapter-warning);
+}
+
+.mitm-entry-label,
+.mitm-entry-sum {
+  fill: var(--chapter-ink);
+  font-size: 12px;
+}
+
+.mitm-entry-sum {
+  font-weight: 700;
+}
+
+.mitm-target {
+  fill: var(--chapter-accent);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.mitm-join {
+  fill: none;
+  stroke: var(--lab-c);
+  stroke-width: 4;
+  stroke-dasharray: 8 6;
+}
+
+.mitm-join.is-exact {
+  stroke: var(--lab-good);
+  stroke-dasharray: none;
+}
+
+.mitm-equation {
+  fill: var(--lab-c);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.mitm-equation.is-exact {
+  fill: var(--lab-good);
+}
+
+.mitm-message {
+  fill: var(--chapter-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .mitm-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

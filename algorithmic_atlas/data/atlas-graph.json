@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-5",
+  "datasetVersion": "2026.08.01-6",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1888,19 +1888,25 @@
       "continentId": "algorithm-design",
       "regionId": "dynamic-heuristics",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "dynamic-programming"
       ],
       "related": [],
-      "route": null,
-      "minutes": 90,
-      "reading": null,
+      "route": "./chapters/local-search.html",
+      "minutes": 31,
+      "reading": {
+        "words": 2427,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 18,
+        "labMinutes": 13
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1250,
@@ -1915,19 +1921,25 @@
       "continentId": "algorithm-design",
       "regionId": "search-decomposition",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "exhaustive-search"
       ],
       "related": [],
-      "route": null,
-      "minutes": 85,
-      "reading": null,
+      "route": "./chapters/meet-in-the-middle.html",
+      "minutes": 31,
+      "reading": {
+        "words": 2487,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 19,
+        "labMinutes": 12
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 210,
