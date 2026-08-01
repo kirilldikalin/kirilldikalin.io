@@ -1,0 +1,165 @@
+.matroids-metrics,
+.matroids-figure,
+.matroids-step {
+  grid-column: 1 / -1;
+}
+
+.matroid-set-builder__title {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.matroid-set-builder__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.45rem;
+}
+
+.matroid-set-builder__row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.matroid-set-builder__row label {
+  display: flex;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.matroid-set-builder__row input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+}
+
+.matroids-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+}
+
+.matroids-metrics div {
+  padding: 0.7rem;
+  border-right: 1px solid var(--chapter-line);
+}
+
+.matroids-metrics div:last-child {
+  border-right: 0;
+}
+
+.matroids-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.78rem;
+}
+
+.matroids-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.matroids-figure .atlas-lab__visual {
+  min-height: 31rem;
+}
+
+.matroid-group {
+  fill: color-mix(in srgb, var(--chapter-line) 20%, var(--chapter-bg));
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+}
+
+.matroid-element,
+.matroid-vertex {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.matroid-element.is-in-a,
+.matroid-edge.is-in-a {
+  fill: color-mix(in srgb, var(--lab-a) 72%, var(--chapter-paper));
+  stroke: var(--lab-a);
+}
+
+.matroid-element.is-in-b,
+.matroid-edge.is-in-b {
+  fill: color-mix(in srgb, var(--lab-b) 46%, var(--chapter-paper));
+  stroke: var(--lab-b);
+}
+
+.matroid-element.is-in-both,
+.matroid-edge.is-in-both {
+  fill: color-mix(in srgb, var(--lab-a) 52%, var(--lab-b));
+  stroke: var(--chapter-ink);
+}
+
+.matroid-element.is-candidate {
+  stroke-width: 5;
+  stroke-dasharray: 7 4;
+}
+
+.matroid-element.is-current,
+.matroid-edge.is-current {
+  stroke: var(--chapter-accent);
+  stroke-width: 7;
+}
+
+.matroid-element.is-greedy,
+.matroid-edge.is-greedy {
+  filter: drop-shadow(0 0 7px var(--lab-good));
+}
+
+.matroid-edge {
+  fill: none;
+  stroke: var(--chapter-muted);
+  stroke-width: 8;
+  vector-effect: non-scaling-stroke;
+}
+
+.matroid-edge.is-candidate {
+  stroke-dasharray: 12 7;
+}
+
+.matroid-vertex {
+  stroke-width: 3;
+}
+
+.matroid-element-label,
+.matroid-vertex-label,
+.matroid-edge-label {
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.matroid-title,
+.matroid-frame-message {
+  font-weight: 700;
+}
+
+.matroid-frame-message {
+  font-size: 13px !important;
+}
+
+@media (max-width: 48rem) {
+  .matroids-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .matroids-metrics div {
+    border-bottom: 1px solid var(--chapter-line);
+  }
+
+  .matroids-figure {
+    overflow-x: auto;
+  }
+
+  .matroids-figure .atlas-lab__visual {
+    min-width: 52rem;
+  }
+}

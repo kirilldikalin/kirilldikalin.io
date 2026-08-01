@@ -1,0 +1,104 @@
+.optimization-metrics,
+.optimization-figure,
+.optimization-panel {
+  grid-column: 1 / -1;
+}
+
+.optimization-metrics {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.optimization-plane {
+  fill: color-mix(in srgb, var(--chapter-line) 10%, var(--chapter-paper));
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+}
+
+.optimization-heading {
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.optimization-grid {
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+  opacity: 0.45;
+}
+
+.optimization-axis {
+  stroke: var(--chapter-ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.optimization-axis-label,
+.optimization-point-label {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.optimization-region {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.optimization-region.is-primal {
+  fill: color-mix(in srgb, var(--lab-a) 28%, transparent);
+  stroke: var(--lab-a);
+}
+
+.optimization-region.is-dual {
+  fill: color-mix(in srgb, var(--lab-b) 24%, transparent);
+  stroke: var(--lab-b);
+}
+
+.optimization-constraint {
+  fill: none;
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.optimization-constraint.is-constraint-1 { stroke: var(--lab-c); }
+.optimization-constraint.is-constraint-2 { stroke: var(--chapter-accent); }
+.optimization-constraint.is-dim { opacity: 0.22; }
+
+.optimization-level {
+  stroke: var(--chapter-focus);
+  stroke-width: 2;
+  stroke-dasharray: 8 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.optimization-level.is-level-0 { opacity: 0.25; }
+.optimization-level.is-level-1 { opacity: 0.55; }
+.optimization-level.is-level-2 { opacity: 1; stroke-width: 4; }
+
+.optimization-optimum {
+  stroke: var(--chapter-paper);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.optimization-optimum.is-primal { fill: var(--lab-a); }
+.optimization-optimum.is-dual { fill: var(--lab-b); }
+
+.optimization-equality {
+  fill: var(--chapter-muted);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.optimization-equality.is-active {
+  fill: var(--chapter-accent);
+  font-size: 22px;
+}
+
+@media (max-width: 760px) {
+  .optimization-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .optimization-figure .atlas-lab__visual {
+    min-width: 62rem;
+  }
+}

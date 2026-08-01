@@ -279,6 +279,10 @@ body.atlas-chapter {
   min-width: 0;
 }
 
+.atlas-chapter-content > section:not([data-atlas-block="lab"]) {
+  overflow-x: clip;
+}
+
 .atlas-chapter-content > section:not(.atlas-block) {
   margin: 0 0 3rem;
 }

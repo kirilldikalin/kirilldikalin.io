@@ -187,7 +187,7 @@
       assertReferenceList(node.related, nodeIds, node.id, "related node");
       assert(Number.isInteger(node.minutes) && node.minutes > 0,
         "minutes must be positive: " + node.id);
-      if (node.reading !== undefined) {
+      if (node.reading !== undefined && node.reading !== null) {
         assert(node.reading && typeof node.reading === "object",
           "reading metrics must be an object: " + node.id);
         ["words", "formulaBlocks", "proofBlocks", "theoryMinutes", "labMinutes"]
@@ -266,6 +266,35 @@
     const continentMemberships = new Map();
     const nodeMemberships = new Map();
 
+    function validateContinuation(route, continuation, fieldLabel) {
+      assert(route.scope === "nodes",
+        "only a node route can have a continuation: " + route.id);
+      assert(continuation && typeof continuation === "object",
+        fieldLabel + " must be an object: " + route.id);
+      assertString(continuation.curriculumId,
+        fieldLabel + " curriculumId is required: " + route.id);
+      assert(/^\d+\.\d+$/.test(continuation.curriculumId),
+        "invalid " + fieldLabel + " curriculumId: " + route.id);
+      assert(!curriculumIds.has(continuation.curriculumId),
+        fieldLabel + " duplicates a published node or continuation: " +
+          continuation.curriculumId);
+      curriculumIds.add(continuation.curriculumId);
+      assertString(continuation.title,
+        fieldLabel + " title is required: " + route.id);
+      assert(continentIds.has(continuation.targetContinentId),
+        "unknown " + fieldLabel + " continent: " + route.id);
+      assert(continuation.targetContinentId !== route.continentId,
+        fieldLabel + " must leave its continent: " + route.id);
+      assert(CONTINUATION_KINDS.has(continuation.kind),
+        "unknown " + fieldLabel + " kind: " + route.id);
+      assert(
+        continuation.position &&
+          Number.isFinite(continuation.position.x) &&
+          Number.isFinite(continuation.position.y),
+        fieldLabel + " needs a map position: " + route.id
+      );
+    }
+
     graph.routes.forEach(function (route) {
       assertString(route.id, "route id is required");
       assert(!routeIds.has(route.id), "duplicate route id: " + route.id);
@@ -285,33 +314,20 @@
       }
 
       if (route.continuation !== undefined) {
-        const continuation = route.continuation;
+        validateContinuation(route, route.continuation, "route continuation");
+      }
+
+      if (route.relatedContinuations !== undefined) {
         assert(route.scope === "nodes",
-          "only a node route can have a continuation: " + route.id);
-        assert(continuation && typeof continuation === "object",
-          "route continuation must be an object: " + route.id);
-        assertString(continuation.curriculumId,
-          "route continuation curriculumId is required: " + route.id);
-        assert(/^\d+\.\d+$/.test(continuation.curriculumId),
-          "invalid route continuation curriculumId: " + route.id);
-        assert(!curriculumIds.has(continuation.curriculumId),
-          "route continuation duplicates a published node: " +
-            continuation.curriculumId);
-        curriculumIds.add(continuation.curriculumId);
-        assertString(continuation.title,
-          "route continuation title is required: " + route.id);
-        assert(continentIds.has(continuation.targetContinentId),
-          "unknown route continuation continent: " + route.id);
-        assert(continuation.targetContinentId !== route.continentId,
-          "route continuation must leave its continent: " + route.id);
-        assert(CONTINUATION_KINDS.has(continuation.kind),
-          "unknown route continuation kind: " + route.id);
-        assert(
-          continuation.position &&
-            Number.isFinite(continuation.position.x) &&
-            Number.isFinite(continuation.position.y),
-          "route continuation needs a map position: " + route.id
-        );
+          "only a node route can have related continuations: " + route.id);
+        assert(Array.isArray(route.relatedContinuations) &&
+          route.relatedContinuations.length,
+          "relatedContinuations must be a non-empty array: " + route.id);
+        route.relatedContinuations.forEach(function (continuation) {
+          validateContinuation(route, continuation, "related continuation");
+          assert(continuation.kind === "related",
+            "related continuation must use related kind: " + route.id);
+        });
       }
 
       const positions = new Set();
@@ -575,23 +591,37 @@
   }
 
   function continentContinuations(graph, continentId) {
-    return graph.routes.filter(function (route) {
+    const routes = graph.routes.filter(function (route) {
       return route.scope === "nodes" &&
         route.continentId === continentId &&
-        route.continuation;
+        (route.continuation ||
+          (route.relatedContinuations && route.relatedContinuations.length));
     }).sort(function (left, right) {
       if (left.kind !== right.kind) {
         return left.kind === "main" ? -1 : 1;
       }
       return left.id.localeCompare(right.id);
-    }).map(function (route) {
-      const ordered = routeOrder(graph, route.id);
-      return {
-        route: route,
-        source: ordered[ordered.length - 1],
-        continuation: route.continuation,
-      };
     });
+    const continuations = [];
+    routes.forEach(function (route) {
+      const ordered = routeOrder(graph, route.id);
+      const source = ordered[ordered.length - 1];
+      if (route.continuation) {
+        continuations.push({
+          route: route,
+          source: source,
+          continuation: route.continuation,
+        });
+      }
+      (route.relatedContinuations || []).forEach(function (continuation) {
+        continuations.push({
+          route: route,
+          source: source,
+          continuation: continuation,
+        });
+      });
+    });
+    return continuations;
   }
 
   function visibleNodes(graph, continentId) {

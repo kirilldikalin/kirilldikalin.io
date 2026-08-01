@@ -134,9 +134,12 @@
           <p>
             Распределение \(X\) задаётся вероятностями её значений:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="random-variables-concentration-f01"
+            data-notation-coverage="interactive"
+            data-required-notations="probability-mass-function-px,outcome-probability-mass">
             \[
-              p_X(x)=\mathbb P(X=x).
+              \class{atlas-notation-token notation-id-probability-mass-function-px}{p_X(x)}=\class{atlas-notation-token notation-id-outcome-probability-mass}{\mathbb P(X=x)}.
             \]
           </div>
           <p>
@@ -161,11 +164,12 @@
           <h2>Математическое ожидание</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Взвешенное среднее</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f02"
+              data-notation-coverage="interactive"
+              data-required-notations="expectation,random-variable,outcome-probability-mass">
               \[
-                \class{atlas-notation-token notation-id-expectation}{\mathbb E[X]}
-                =\sum_{\omega\in\Omega}X(\omega)p(\omega)
-                =\sum_x x\,\mathbb P(X=x).
+                \class{atlas-notation-token notation-id-expectation}{\mathbb E[X]} =\sum_{\omega\in\Omega}\class{atlas-notation-token notation-id-random-variable}{X(\omega)}\class{atlas-notation-token notation-id-outcome-probability-mass}{p(\omega)} =\sum_x x\,\class{atlas-notation-token notation-id-outcome-probability-mass}{\mathbb P(X=x)}.
               \]
             </div>
             <p>
@@ -180,16 +184,22 @@
               Для любых случайных величин с конечными ожиданиями и констант
               \(a,b\):
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f03"
+              data-notation-coverage="interactive"
+              data-required-notations="expectation">
               \[
-                \mathbb E[aX+bY]=a\mathbb E[X]+b\mathbb E[Y].
+                \class{atlas-notation-token notation-id-expectation}{\mathbb E[aX+bY]}=a\class{atlas-notation-token notation-id-expectation}{\mathbb E[X]}+b\class{atlas-notation-token notation-id-expectation}{\mathbb E[Y]}.
               \]
             </div>
             <p>
               Независимость не требуется. В конечном пространстве доказательство
               получается раскрытием суммы:
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="random-variables-concentration-f04"
+              data-notation-coverage="basic"
+              data-basic-reason="numeric-substitution">
               \[
                 \sum_{\omega}(aX(\omega)+bY(\omega))p(\omega)
                 =a\sum_{\omega}X(\omega)p(\omega)
@@ -209,13 +219,12 @@
           <p>
             Для события \(A\) определим индикатор
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="random-variables-concentration-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="indicator-variable,indicator-event-membership">
             \[
-              \mathbf 1_A(\omega)=
-              \begin{cases}
-                1, &amp; \omega\in A,\\
-                0, &amp; \omega\notin A.
-              \end{cases}
+              \class{atlas-notation-token notation-id-indicator-variable}{\mathbf 1_A(\omega)} = \begin{cases} 1, &amp; \class{atlas-notation-token notation-id-indicator-event-membership}{\omega\in A},\\ 0, &amp; \class{atlas-notation-token notation-id-indicator-event-membership}{\omega\notin A}. \end{cases}
             \]
           </div>
           <p>
@@ -223,9 +232,12 @@
             число произошедших событий \(A_1,\ldots,A_n\), то
             \(X=\sum_i\mathbf1_{A_i}\), и линейность даёт
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="random-variables-concentration-f06"
+            data-notation-coverage="interactive"
+            data-required-notations="expectation,event-probability-rv">
             \[
-              \mathbb E[X]=\sum_{i=1}^{n}\mathbb P(A_i).
+              \class{atlas-notation-token notation-id-expectation}{\mathbb E[X]} =\sum_{i=1}^{n}\class{atlas-notation-token notation-id-event-probability-rv}{\mathbb P(A_i)}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="example">
@@ -244,12 +256,12 @@
           <h2>Дисперсия и ковариация</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Средний квадрат отклонения</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f07"
+              data-notation-coverage="interactive"
+              data-required-notations="variance,expectation,random-variable">
               \[
-                \class{atlas-notation-token notation-id-variance}
-                  {\operatorname{Var}(X)}
-                =\mathbb E\!\left[(X-\mathbb E[X])^2\right]
-                =\mathbb E[X^2]-\mathbb E[X]^2.
+                \class{atlas-notation-token notation-id-variance}{\operatorname{Var}(X)} =\class{atlas-notation-token notation-id-expectation}{\mathbb E}\!\left[(\class{atlas-notation-token notation-id-random-variable}{X}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}])^2\right] =\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}^2]-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}]^2.
               \]
             </div>
             <p>
@@ -262,20 +274,22 @@
           <p>
             Связь двух величин описывает ковариация:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="random-variables-concentration-f08"
+            data-notation-coverage="interactive"
+            data-required-notations="covariance,expectation,random-variable">
             \[
-              \operatorname{Cov}(X,Y)
-              =\mathbb E[(X-\mathbb E[X])(Y-\mathbb E[Y])]
-              =\mathbb E[XY]-\mathbb E[X]\mathbb E[Y].
+              \class{atlas-notation-token notation-id-covariance}{\operatorname{Cov}(X,Y)} =\class{atlas-notation-token notation-id-expectation}{\mathbb E}[(\class{atlas-notation-token notation-id-random-variable}{X}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}])(\class{atlas-notation-token notation-id-random-variable}{Y}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{Y}])] =\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}\class{atlas-notation-token notation-id-random-variable}{Y}]-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}]\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{Y}].
             \]
           </div>
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Дисперсия суммы</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f09"
+              data-notation-coverage="interactive"
+              data-required-notations="variance,covariance">
               \[
-                \operatorname{Var}\!\left(\sum_{i=1}^{n}X_i\right)
-                =\sum_{i=1}^{n}\operatorname{Var}(X_i)
-                 +2\sum_{i&lt;j}\operatorname{Cov}(X_i,X_j).
+                \class{atlas-notation-token notation-id-variance}{\operatorname{Var}\!\left(\sum_{i=1}^{n}X_i\right)} =\sum_{i=1}^{n}\class{atlas-notation-token notation-id-variance}{\operatorname{Var}(X_i)} +2\sum_{i&lt;j}\class{atlas-notation-token notation-id-covariance}{\operatorname{Cov}(X_i,X_j)}.
               \]
             </div>
             <p>
@@ -292,11 +306,12 @@
               \(\mathbb P(X_i=1)=p_i\), и величины независимы, то для
               \(X=\sum_iX_i\)
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f10"
+              data-notation-coverage="interactive"
+              data-required-notations="expectation,bernoulli-success-probability,variance">
               \[
-                \mathbb E[X]=\sum_i p_i,
-                \qquad
-                \operatorname{Var}(X)=\sum_i p_i(1-p_i).
+                \class{atlas-notation-token notation-id-expectation}{\mathbb E[X]} =\sum_i \class{atlas-notation-token notation-id-bernoulli-success-probability}{p_i}, \qquad \class{atlas-notation-token notation-id-variance}{\operatorname{Var}(X)} =\sum_i \class{atlas-notation-token notation-id-bernoulli-success-probability}{p_i}(1-\class{atlas-notation-token notation-id-bernoulli-success-probability}{p_i}).
               \]
             </div>
           </section>
@@ -309,9 +324,12 @@
             <p>
               Если \(X\ge0\) и \(a&gt;0\), то
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f11"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,deviation-threshold,expectation">
               \[
-                \mathbb P(X\ge a)\le\frac{\mathbb E[X]}{a}.
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(\class{atlas-notation-token notation-id-random-variable}{X}\ge \class{atlas-notation-token notation-id-deviation-threshold}{a})\le\frac{\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-variable}{X}]}{\class{atlas-notation-token notation-id-deviation-threshold}{a}}.
               \]
             </div>
             <p>
@@ -338,9 +356,12 @@
               Если \(\mu=\mathbb E[X]\) и
               \(\sigma^2=\operatorname{Var}(X)&lt;\infty\), то для \(t&gt;0\)
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f12"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,distribution-mean-mu,deviation-threshold,standard-deviation-sigma">
               \[
-                \mathbb P(|X-\mu|\ge t)\le\frac{\sigma^2}{t^2}.
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(|\class{atlas-notation-token notation-id-random-variable}{X}-\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}|\ge \class{atlas-notation-token notation-id-deviation-threshold}{t})\le\frac{\class{atlas-notation-token notation-id-standard-deviation-sigma}{\sigma^2}}{\class{atlas-notation-token notation-id-deviation-threshold}{t}^2}.
               \]
             </div>
             <p>
@@ -369,32 +390,32 @@
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Мультипликативные границы</h3>
             <p>Для любого \(\delta&gt;0\):</p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f13"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,relative-deviation-delta,distribution-mean-mu">
               \[
-                \mathbb P(X\ge(1+\delta)\mu)
-                \le
-                \left(\frac{e^\delta}{(1+\delta)^{1+\delta}}\right)^\mu
-                \le
-                \exp\!\left(-\frac{\delta^2\mu}{2+\delta}\right).
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(\class{atlas-notation-token notation-id-random-variable}{X}\ge(1+\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta})\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}) \le \left(\frac{e^{\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}}}{(1+\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta})^{1+\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}}}\right)^{\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}} \le \exp\!\left(-\frac{\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}^2\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}}{2+\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}}\right).
               \]
             </div>
             <p>Для \(0&lt;\delta&lt;1\):</p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f14"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,relative-deviation-delta,distribution-mean-mu">
               \[
-                \mathbb P(X\le(1-\delta)\mu)
-                \le
-                \left(\frac{e^{-\delta}}{(1-\delta)^{1-\delta}}\right)^\mu
-                \le
-                \exp\!\left(-\frac{\delta^2\mu}{2}\right).
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(\class{atlas-notation-token notation-id-random-variable}{X}\le(1-\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta})\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}) \le \left(\frac{e^{-\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}}}{(1-\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta})^{1-\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}}}\right)^{\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}} \le \exp\!\left(-\frac{\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}^2\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}}{2}\right).
               \]
             </div>
             <p>
               В частности, при \(0&lt;\delta&lt;1\)
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f15"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,distribution-mean-mu,relative-deviation-delta">
               \[
-                \mathbb P(|X-\mu|\ge\delta\mu)
-                \le2\exp\!\left(-\frac{\delta^2\mu}{3}\right).
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(|\class{atlas-notation-token notation-id-random-variable}{X}-\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}|\ge\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}) \le2\exp\!\left(-\frac{\class{atlas-notation-token notation-id-relative-deviation-delta}{\delta}^2\class{atlas-notation-token notation-id-distribution-mean-mu}{\mu}}{3}\right).
               \]
             </div>
           </section>
@@ -404,10 +425,12 @@
               Для \(\lambda&gt;0\) событие \(X\ge a\) равносильно
               \(e^{\lambda X}\ge e^{\lambda a}\). Марков даёт
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f16"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-variable,deviation-threshold,expectation,exponential-tilt-lambda">
               \[
-                \mathbb P(X\ge a)
-                \le\frac{\mathbb E[e^{\lambda X}]}{e^{\lambda a}}.
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(\class{atlas-notation-token notation-id-random-variable}{X}\ge \class{atlas-notation-token notation-id-deviation-threshold}{a}) \le\frac{\class{atlas-notation-token notation-id-expectation}{\mathbb E}[e^{\class{atlas-notation-token notation-id-exponential-tilt-lambda}{\lambda}\class{atlas-notation-token notation-id-random-variable}{X}}]}{e^{\class{atlas-notation-token notation-id-exponential-tilt-lambda}{\lambda}\class{atlas-notation-token notation-id-deviation-threshold}{a}}}.
               \]
             </div>
             <p>
@@ -442,23 +465,21 @@
               \(a_i\le X_i\le b_i\) с вероятностью один. Для
               \(S=\sum_iX_i\) и \(t&gt;0\):
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f17"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-sum-s,expectation,deviation-threshold,bounded-range-width">
               \[
-                \mathbb P(S-\mathbb E[S]\ge t)
-                \le
-                \exp\!\left(
-                  -\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}
-                \right).
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(\class{atlas-notation-token notation-id-random-sum-s}{S}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-sum-s}{S}]\ge \class{atlas-notation-token notation-id-deviation-threshold}{t}) \le \exp\!\left( -\frac{2\class{atlas-notation-token notation-id-deviation-threshold}{t}^2}{\sum_{i=1}^{n}\class{atlas-notation-token notation-id-bounded-range-width}{(b_i-a_i)^2}} \right).
               \]
             </div>
             <p>Для двух сторон:</p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="random-variables-concentration-f18"
+              data-notation-coverage="interactive"
+              data-required-notations="tail-probability,random-sum-s,expectation,deviation-threshold,bounded-range-width">
               \[
-                \mathbb P(|S-\mathbb E[S]|\ge t)
-                \le
-                2\exp\!\left(
-                  -\frac{2t^2}{\sum_{i=1}^{n}(b_i-a_i)^2}
-                \right).
+                \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(|\class{atlas-notation-token notation-id-random-sum-s}{S}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-random-sum-s}{S}]|\ge \class{atlas-notation-token notation-id-deviation-threshold}{t}) \le 2\exp\!\left( -\frac{2\class{atlas-notation-token notation-id-deviation-threshold}{t}^2}{\sum_{i=1}^{n}\class{atlas-notation-token notation-id-bounded-range-width}{(b_i-a_i)^2}} \right).
               \]
             </div>
           </section>
@@ -466,10 +487,12 @@
             Для независимых \(X_i\in[0,1]\) и среднего
             \(\overline X=S/n\) подстановка \(t=n\varepsilon\) даёт
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="random-variables-concentration-f19"
+            data-notation-coverage="interactive"
+            data-required-notations="tail-probability,sample-mean-xbar,expectation,absolute-error-epsilon,input-size-n">
             \[
-              \mathbb P(|\overline X-\mathbb E[\overline X]|\ge\varepsilon)
-              \le2e^{-2n\varepsilon^2}.
+              \class{atlas-notation-token notation-id-tail-probability}{\mathbb P}(|\class{atlas-notation-token notation-id-sample-mean-xbar}{\overline X}-\class{atlas-notation-token notation-id-expectation}{\mathbb E}[\class{atlas-notation-token notation-id-sample-mean-xbar}{\overline X}]|\ge\class{atlas-notation-token notation-id-absolute-error-epsilon}{\varepsilon}) \le2e^{-2\class{atlas-notation-token notation-id-input-size-n}{n}\class{atlas-notation-token notation-id-absolute-error-epsilon}{\varepsilon}^2}.
             \]
           </div>
           <p>

@@ -295,9 +295,14 @@
               </li>
               <li>функцию чтения результата \(R:H\to Y\).</li>
             </ul>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="before-state-transition"
+              data-notation-coverage="interactive"
+              data-required-notations="initial-state-map-s0,state-s-t,transition-f">
               \[
-                s_0=s_0(x),\qquad
+                \class{atlas-notation-token notation-id-initial-state-map-s0}{s_0}
+                =
+                \class{atlas-notation-token notation-id-initial-state-map-s0}{s_0(x)},\qquad
                 \class{atlas-notation-token notation-id-state-s-t}{s_{t+1}}
                 =
                 \class{atlas-notation-token notation-id-transition-f}{F}
@@ -323,7 +328,10 @@
           </div>
 
           <p>Такая процедура вычисляет <em>частичную функцию</em>:</p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="before-partial-function"
+            data-notation-coverage="interactive"
+            data-required-notations="partial-function-f,input-set-x,partial-arrow,output-set-y">
             \[
               \class{atlas-notation-token notation-id-partial-function-f}{f}
               :
@@ -336,10 +344,21 @@
             Стрелка с перечёркнутым хвостом напоминает:
             для некоторых \(x\) значение может отсутствовать. Формально
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="before-result-contract"
+            data-notation-coverage="interactive"
+            data-required-notations="partial-function-f,result-function-r,state-s-t,halting-step-t,halting-set-h">
             \[
-              f(x)=R(s_T),\quad
-              \text{если существует }T\text{ такое, что }s_T\in H.
+              \class{atlas-notation-token notation-id-partial-function-f}{f(x)}
+              =
+              \class{atlas-notation-token notation-id-result-function-r}{R}
+              \bigl(\class{atlas-notation-token notation-id-state-s-t}{s_T}\bigr),\quad
+              \text{если существует }
+              \class{atlas-notation-token notation-id-halting-step-t}{T}
+              \text{ такое, что }
+              \class{atlas-notation-token notation-id-state-s-t}{s_T}
+              \in
+              \class{atlas-notation-token notation-id-halting-set-h}{H}.
             \]
           </div>
           <p>
@@ -556,9 +575,16 @@
             Пусть \(a,b\ge 0\), \(c\ge 0\) — текущее состояние, а исходные
             множители равны \(x,y\). Будем сохранять инвариант
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="before-egyptian-invariant"
+            data-notation-coverage="interactive"
+            data-required-notations="multiplication-accumulator-c,multiplication-residual-area,multiplication-target-product">
             \[
-              c+ab=|xy|.
+              \class{atlas-notation-token notation-id-multiplication-accumulator-c}{c}
+              +
+              \class{atlas-notation-token notation-id-multiplication-residual-area}{ab}
+              =
+              \class{atlas-notation-token notation-id-multiplication-target-product}{|xy|}.
             \]
           </div>
           <p>
@@ -568,7 +594,10 @@
             Если \(a=2q\) чётно, переход заменяет \((a,b,c)\) на
             \((q,2b,c)\). Тогда
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="before-even-transition-identity"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               c+q(2b)=c+ab.
             \]
@@ -577,7 +606,10 @@
             Если \(a=2q+1\) нечётно, сначала добавляем \(b\) в накопитель:
             новое состояние равно \((q,2b,c+b)\). Следовательно,
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="before-odd-transition-identity"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               (c+b)+q(2b)=c+(2q+1)b=c+ab.
             \]

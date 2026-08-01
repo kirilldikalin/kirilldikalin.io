@@ -87,11 +87,18 @@ test("free exploration removes route fog but never development fog", () => {
   const completed = new Set();
   const published = graph.nodes.filter((node) => node.publication === "published");
   const planned = graph.nodes.filter((node) => node.publication === "planned");
+  const continentsById = new Map(
+    graph.continents.map((continent) => [continent.id, continent])
+  );
+  const initiallyUnlocked = published.filter((node) => {
+    const continent = continentsById.get(node.continentId);
+    return continent.prerequisites.length === 0 && node.prerequisites.length === 0;
+  });
   assert.equal(
     published.filter((node) =>
       core.nodeAccessState(graph, node, completed, false) === "published-gated"
     ).length,
-    28
+    published.length - initiallyUnlocked.length
   );
   assert.ok(published.every((node) =>
     core.nodeAccessState(graph, node, completed, true) === "published-unlocked"
@@ -99,7 +106,7 @@ test("free exploration removes route fog but never development fog", () => {
   assert.ok(planned.every((node) =>
     core.nodeAccessState(graph, node, completed, true) === "planned"
   ));
-  assert.equal(planned.length, 0);
+  assert.equal(published.length + planned.length, graph.nodes.length);
   assert.deepEqual(
     core.continentContinuations(graph, "mathematical-tools")
       .map(({ continuation }) => continuation.curriculumId),
@@ -108,7 +115,12 @@ test("free exploration removes route fog but never development fog", () => {
   assert.deepEqual(
     core.continentContinuations(graph, "data-structures")
       .map(({ continuation }) => continuation.curriculumId),
-    ["4.1", "9.8", "6.3", "7.3", "9.13"]
+    ["9.8", "6.3", "7.3", "9.13"]
+  );
+  assert.deepEqual(
+    new Set(core.continentContinuations(graph, "algorithm-design")
+      .map(({ continuation }) => continuation.curriculumId)),
+    new Set(["5.1", "5.5", "6.5", "7.13", "8.4", "8.9", "8.14"])
   );
   assert.match(
     atlasScript,

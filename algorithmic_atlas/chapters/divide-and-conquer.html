@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Разделяй и властвуй — Алгоритмический атлас</title>
+  <meta name="description" content="Как делить задачу на независимые подзадачи, доказывать сборку ответа и читать стоимость по дереву рекурсии">
+  <meta property="og:title" content="Разделяй и властвуй — Алгоритмический атлас">
+  <meta property="og:description" content="Decomposition, рекурсивное решение, combine, рекуррентности, баланс и параллельность">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/divide-and-conquer.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/divide-and-conquer.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/divide-and-conquer.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/divide-and-conquer-core.js" defer></script>
+  <script src="../labs/divide-and-conquer.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="divide-and-conquer" data-atlas-lab-minutes="14">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Разделяй и властвуй</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Методы построения алгоритмов · точка 4.2</p>
+      <h1>Разделяй и властвуй</h1>
+      <p class="atlas-chapter-intro">
+        Как превратить один большой вход в независимые подзадачи, собрать их ответы без потери смысла и увидеть стоимость в геометрии дерева рекурсии
+      </p>
+      <div class="atlas-chapter-meta">
+        <span data-atlas-reading-time>Теория рассчитывается…</span>
+        <span data-atlas-lab-time>Лаборатория ≈ 14 мин</span>
+        <span>5 сценариев рекурсии</span><span>12 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#problem">От большого входа к одинаковым задачам</a></li>
+          <li><a href="#history">Как появился программный шаблон</a></li>
+          <li><a href="#recognition">Когда разделение полезно</a></li>
+          <li><a href="#anatomy">Divide, conquer, combine</a></li>
+          <li><a href="#binary-search">Двоичный поиск</a></li>
+          <li><a href="#merge-sort">Сортировка слиянием</a></li>
+          <li><a href="#correctness">Индуктивная корректность</a></li>
+          <li><a href="#recurrences">Рекуррентности и дерево</a></li>
+          <li><a href="#master">Сбалансированная схема</a></li>
+          <li><a href="#imbalance">Дисбаланс</a></li>
+          <li><a href="#combine-cost">Цена сборки</a></li>
+          <li><a href="#karatsuba">Карацуба</a></li>
+          <li><a href="#power">Быстрая степень</a></li>
+          <li><a href="#memory">Память и представление</a></li>
+          <li><a href="#parallelism">Работа и span</a></li>
+          <li><a href="#neighbors">Соседние методы</a></li>
+          <li><a href="#engineering">Практическая реализация</a></li>
+          <li><a href="#mistakes">Контрпримеры и ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="problem">
+          <h2>Большая задача становится системой маленьких того же типа</h2>
+          <p>
+            У метода divide and conquer есть узнаваемое обещание: вход можно разрезать, части можно решить независимо тем же алгоритмом, а ответы можно объединить в ответ исходной задачи. Рекурсия здесь не цель, а способ повторить один и тот же контракт на уменьшающихся размерах. Если хотя бы одна часть зависит от неизвестного результата другой, простая схема уже не описывает вычисление.
+          </p>
+          <p>
+            В сортировке слиянием две половины сортируются независимо, затем два упорядоченных потока сливаются. В умножении Карацубы половины записи участвуют в трёх меньших произведениях, после чего алгебра восстанавливает исходное. В двоичном поиске продолжает жить только одна половина: это пограничный случай, который точнее называют decrease and conquer, но он полезен для сравнения.
+          </p>
+          <p>
+            Метод даёт сразу четыре задачи для автора алгоритма. Нужно определить подзадачи, доказать их уменьшение, сформулировать combine и вывести стоимость не из глубины одной ветви, а из всей совокупности вызовов. Большинство ошибок появляется, когда один из этих пунктов подразумевается вместо явного контракта.
+          </p>
+        </section>
+
+        <section id="history" class="atlas-block" data-atlas-block="history">
+          <h2>Идея старше названия</h2>
+          <p>
+            Разбиение вычисления на меньшие экземпляры естественно для ручной арифметики, сортировки и поиска. В отчёте Herman Goldstine и John von Neumann 1948 года о программировании электронного вычислительного инструмента уже разобрана сортировка через «meshing» — объединение упорядоченных серий. Осторожнее говорить о раннем подробном машинном описании, а не приписывать этому документу единственное изобретение merge sort.
+          </p>
+          <p>
+            В 1962 году работа Анатолия Карацубы и Юрия Офмана показала особенно важный эффект: удачное алгебраическое разбиение может уменьшить не только размер, но и число рекурсивных подзадач. Позже Bentley, Haken и Saxe систематизировали решение широкого класса рекуррентностей divide and conquer; Akra и Bazzi расширили анализ на существенно неравные доли. История метода — это переход от отдельных рекурсивных программ к языку, связывающему структуру разбиения и асимптотику.
+          </p>
+        </section>
+
+        <section id="recognition">
+          <h2>Полезное разделение имеет три свойства</h2>
+          <p>
+            Во-первых, дочерние входы строго меньше по выбранной мере: число элементов, длина записи, площадь области. Это обеспечивает завершимость. Во-вторых, решения детей достаточны для родителя: combine не должен заново решать исходную задачу. В-третьих, суммарный объём разделения и сборки не съедает выигрыш от меньших подзадач.
+          </p>
+          <p>
+            Независимость не означает отсутствие общей исходной памяти. Две половины массива могут быть представлениями одного буфера, но логический результат левой половины не зависит от порядка вычисления правой. Если подзадачи перекрываются и одинаковые состояния возникают многократно, memoization или dynamic programming могут быть естественнее. Если после разрезания требуется сравнить почти каждую пару элементов из разных частей, combine может вернуть квадратичную цену.
+          </p>
+          <p>
+            Перед реализацией полезно ответить письменно: что получает рекурсивный вызов; что он гарантирует при возврате; как родитель использует только эти гарантии; как обрабатываются размеры 0 и 1; как округляются нечётные размеры. Эта спецификация одновременно становится основой доказательства и тестов.
+          </p>
+        </section>
+
+        <section id="anatomy">
+          <h2>Divide, conquer и combine — разные расходы</h2>
+          <p>
+            Для входа размера $n$ получаются $a$ подзадач размеров $n_1,\ldots,n_a$. Нерекурсивная работа $C(n)$ включает выбор границ, подготовку представлений, объединение результатов и локальные проверки. Тогда естественная модель стоимости выглядит так:
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-generic-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-subproblem-count,divide-subproblem-size,divide-combine-cost">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =
+              \sum_{i=1}^{\class{atlas-notation-token notation-id-divide-subproblem-count}{a}}
+              T\!\left(
+                \class{atlas-notation-token notation-id-divide-subproblem-size}{n_i}
+              \right)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{C(n)}.
+            \]
+          </div>
+          <p>
+            Структурированное описание алгоритма состоит из базового случая, процедуры divide, независимых вызовов conquer и combine. В рекурсивной записи легко забыть, что создание среза массива само копирует данные. Тогда реальный $C(n)$ отличается от объявленного. Индексы или представления диапазонов сохраняют логическое деление без скрытого линейного копирования на каждом уровне.
+          </p>
+          <p>
+            Базовый случай должен закрывать все минимальные входы, достижимые после округления. При делении нечётного $n$ на $\lfloor n/2\rfloor$ и $\lceil n/2\rceil$ обе части меньше $n$ для $n&gt;1$. Если по ошибке одна получает размер $n$, рекурсия не завершается, хотя псевдокод визуально похож на правильный.
+          </p>
+          <p>
+            Структурированный алгоритм можно прочитать как протокол. Сначала проверить базовый случай и вернуть его результат. Затем построить конечный список меньших экземпляров. Каждый ребёнок вызывается с тем же публичным контрактом; родитель не заглядывает в его внутренние шаги. После возврата всех обязательных детей combine проверяет их предусловия и строит объект нужного типа. Наконец временные данные освобождаются или передаются выше. Такая запись делает явным, что combine выполняется в postorder, а не сразу после divide.
+          </p>
+          <p>
+            В нерекурсивной реализации тот же порядок задаётся стеком кадров. Кадр содержит диапазон, фазу и уже полученные дочерние результаты. Состояния «войти», «дождаться левого», «дождаться правого», «объединить» заменяют системный стек. Это полезно для ограничения глубины и анимации, но не меняет число математических узлов. Если явная версия внезапно имеет другую асимптотику, значит, в одной из реализаций скрыта дополнительная работа или повтор.
+          </p>
+        </section>
+
+        <section id="binary-search">
+          <h2>Двоичный поиск показывает цену одной живой ветви</h2>
+          <p>
+            В отсортированном массиве сравнение с серединой исключает одну половину. Инвариант: если ключ присутствует, он лежит внутри текущего полуинтервала. После сравнения граница переносится так, чтобы это утверждение сохранилось. Размер кандидатов уменьшается примерно вдвое, а combine отсутствует: ответ ребёнка сразу становится ответом родителя.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-binary-search-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-subproblem-size,divide-constant-cost">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =T\!\left(
+                \class{atlas-notation-token notation-id-divide-subproblem-size}{\lfloor n/2\rfloor}
+              \right)
+              +
+              \class{atlas-notation-token notation-id-divide-constant-cost}{\Theta(1)}
+              =\Theta(\log n).
+            \]
+          </div>
+          <p>
+            Здесь дерево вырождено в путь: на уровне существует один вызов. Поэтому глубина и число узлов совпадают по порядку. Этот пример предупреждает против правила «рекурсия пополам всегда $n\log n$»: важны и количество детей, и локальная работа.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Нечётный диапазон</h3>
+            <p>
+              Для семи элементов после проверки середины остаётся не больше трёх. Корректный полуинтервал вида $[l,r)$ позволяет единообразно выразить пустой диапазон и избежать повторного включения середины. Ошибка в одной границе может оставить прежнюю длину и разрушить завершимость.
+            </p>
+          </section>
+        </section>
+
+        <section id="merge-sort">
+          <h2>Сортировка слиянием платит линейно на каждом уровне</h2>
+          <p>
+            Divide разбивает последовательность на две половины. Conquer возвращает две отсортированные последовательности. Combine сравнивает их первые ещё не использованные элементы, переносит меньший и в конце дописывает хвост. Инвариант merge: выход уже отсортирован и содержит в точности обработанные элементы обеих половин; каждый необработанный элемент не меньше последнего выведенного.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-merge-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-subproblem-size,divide-combine-cost">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =T\!\left(
+                \class{atlas-notation-token notation-id-divide-subproblem-size}{\lfloor n/2\rfloor}
+              \right)
+              +T\!\left(\lceil n/2\rceil\right)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{\Theta(n)}.
+            \]
+          </div>
+          <p>
+            Для степени двойки на уровне ℓ находится $2^ℓ$ подзадач размера $n/2^ℓ$. Их суммарная линейная работа равна $n$. Уровней $\log_2 n+1$, поэтому работа $\Theta(n\log n)$. Последняя единица учитывает листья; для асимптотики она не важна, но в точном профиле лаборатории видна.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-merge-level-work"
+            data-notation-coverage="interactive"
+            data-required-notations="recursion-level,divide-level-work,divide-subproblem-size">
+            \[
+              \class{atlas-notation-token notation-id-divide-level-work}{W_{\ell}}
+              =2^{\class{atlas-notation-token notation-id-recursion-level}{\ell}}
+              \cdot
+              \class{atlas-notation-token notation-id-divide-subproblem-size}{\frac{n}{2^{\ell}}}
+              =n.
+            \]
+          </div>
+          <p>
+            Стабильность возникает в combine: при равных ключах сначала берётся элемент левой половины, где исходный порядок был раньше. Сам факт рекурсивного деления стабильность не гарантирует. Дополнительный буфер обычно имеет размер $O(n)$; выделять новый массив в каждом вызове необязательно — один буфер можно переиспользовать по диапазонам.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Неровный вход из семи элементов</h3>
+            <p>
+              Массив $(8,3,5,3,9,1,4)$ делится на части длины 3 и 4. После рекурсии получаются $(3,5,8)$ и $(1,3,4,9)$. Merge сравнивает 3 с 1, затем 3 с 3. Если при равенстве взять левую тройку, её исходная метка останется раньше правой — стабильность сохранится. Дальше выход $(1,3,3,4,5,8,9)$. Нечётность не меняет доказательство: размеры половин отличаются не больше чем на один, а их сумма остаётся семь.
+            </p>
+            <p>
+              На этом примере виден контракт перестановки. Значения не достаточно просто получить в неубывающем порядке: алгоритм не может потерять одну тройку и продублировать другую. В реализации с индексами полезно после каждого merge проверять длину результата, а в тестах — частоты всех значений. Это отдельная часть корректности, не следующая из упорядоченности.
+            </p>
+          </section>
+        </section>
+
+        <section id="correctness">
+          <h2>Индукция следует форме рекурсивной программы</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Корректность сортировки слиянием</h3>
+            <p>
+              Для любого конечного массива алгоритм завершается и возвращает упорядоченную перестановку его элементов.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство</h3>
+            <p>
+              Индукция идёт по длине. Массивы длины 0 и 1 уже упорядочены и возвращаются без рекурсии. Для $n&gt;1$ обе половины короче $n$, поэтому по предположению индукции вызовы завершаются и возвращают отсортированные перестановки своих частей. Merge каждый раз берёт меньший первый элемент; значит, выход упорядочен. Каждый элемент переносится ровно один раз и ничего нового не создаётся, поэтому выход — перестановка исходного массива. Уменьшение размеров вместе с базой доказывает завершимость.
+            </p>
+          </section>
+          <p>
+            Этот шаблон требует двух независимых утверждений. Рекурсивная гипотеза говорит, что дети выполняют контракт. Лемма о combine говорит, что из контрактов детей следует контракт родителя. Нельзя доказывать только «половины отсортированы»: без корректного merge исходный ответ не получен. Нельзя и начинать индукцию, не показав строгого уменьшения меры.
+          </p>
+        </section>
+
+        <section id="recurrences">
+          <h2>Рекуррентность — бухгалтерия вызовов, а не магическая формула</h2>
+          <p>
+            Чтобы записать $T(n)$, сначала выбирают операцию и модель стоимости. Если merge сравнивает и перемещает $n$ элементов, toll равен $\Theta(n)$. Если подмассивы физически копируются до рекурсии, эта цена тоже входит в текущий уровень. Если два вызова выполняются последовательно, их времена складываются; если параллельно, для времени нужен максимум, а для работы сумма.
+          </p>
+          <p>
+            Дерево рекурсии раскрывает уравнение: узел несёт локальную цену, дети — рекурсивные слагаемые. Сумма всех узлов даёт последовательную работу. Группировка по уровням полезна при регулярном балансе, но не является доказательством сама по себе: нужно ограничить число узлов, их размеры и глубину, включая округления.
+          </p>
+          <p>
+            Подстановка проверяет предполагаемую границу индукцией. Для merge sort можно предположить $T(n)\le c n\log_2 n+d n$ и выбрать константы, поглощающие базу и линейный toll. Метод не зависит от красивого дерева и лучше переносится на неровные размеры. Итерация рекуррентности раскрывает уровни алгебраически и приводит к той же сумме.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Подстановка для верхней границы merge sort</h3>
+            <p>
+              Для простоты пусть $n$ — степень двойки и $T(1)\le d$, а локальная работа не превосходит $kn$. Предположим для меньших степеней, что $T(m)\le c m\log_2 m+d m$. Тогда два ребёнка дают $2[c(n/2)\log_2(n/2)+d(n/2)]$. После добавления $kn$ получается $cn\log_2 n+(d+k-c)n$. Выбор $c\ge k$ делает последний коэффициент не больше $d$, поэтому индуктивная граница закрывается. Нижняя граница следует, если каждый уровень обязан прочитать все $n$ элементов, а уровней логарифмически много.
+            </p>
+          </section>
+          <p>
+            Для произвольного $n$ округления дают две части суммарного размера $n$ и глубину не больше $\lceil\log_2 n\rceil$. Верхнюю границу можно доказать сравнением с ближайшей следующей степенью двойки либо аккуратной сильной индукцией. Замена $\lfloor n/2\rfloor$ на $n/2$ в черновой рекуррентности допустима для асимптотики только после такого контроля, а не потому, что целые границы «не важны вообще».
+          </p>
+        </section>
+
+        <section id="master">
+          <h2>Сбалансированная схема сравнивает листья и локальную работу</h2>
+          <p>
+            Для фиксированных $a\ge1$ и $b&gt;1$ часто встречается $T(n)=aT(n/b)+f(n)$. Число листьев растёт как $n^{\log_b a}$. Функция $f(n)$ описывает работу вне рекурсии. Сравнение этих величин объясняет три знакомых режима: доминируют листья, каждый уровень сопоставим или доминируют верхние уровни.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-balanced-master-form"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-subproblem-count,divide-shrink-factor,divide-combine-cost,divide-critical-exponent">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =
+              \class{atlas-notation-token notation-id-divide-subproblem-count}{a}
+              T\!\left(\frac{n}{
+                \class{atlas-notation-token notation-id-divide-shrink-factor}{b}}
+              \right)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{f(n)},
+              \qquad
+              \class{atlas-notation-token notation-id-divide-critical-exponent}{p=\log_b a}.
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-master-three-regimes"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-critical-exponent,divide-combine-cost,positive-epsilon,big-theta-class">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =
+              \begin{cases}
+                \class{atlas-notation-token notation-id-big-theta-class}{\Theta(n^p)},
+                  &\class{atlas-notation-token notation-id-divide-combine-cost}{f(n)}
+                    =O(n^{p-
+                      \class{atlas-notation-token notation-id-positive-epsilon}{\varepsilon}}),\\
+                \Theta(n^p\log n),
+                  &f(n)=\Theta(n^p),\\
+                \Theta(f(n)),
+                  &f(n)=\Omega(n^{p+\varepsilon})
+                    \text{ и выполнена регулярность},
+              \end{cases}
+              \quad
+              \class{atlas-notation-token notation-id-divide-critical-exponent}{p=\log_b a}.
+            \]
+          </div>
+          <p>
+            Формулировка master theorem имеет условия регулярности и не заменяет анализ произвольной рекурсии. Нельзя подставить переменное $a(n)$, перекрывающиеся размеры или отрицательный toll и выбрать ближайшую строку таблицы. Для неравных фиксированных долей более общий метод Akra–Bazzi находит показатель $p$ из суммы $\sum a_i b_i^p=1$ и учитывает toll интегралом при своих условиях.
+          </p>
+          <p>
+            Первый режим означает, что совокупность листьев растёт быстрее локальной работы: верх дерева дешёв, масса сосредоточена внизу. Второй — равновесие: каждый уровень имеет один порядок, поэтому появляется множитель глубины. В третьем локальная работа корня и ближайших уровней доминирует; условие регулярности не позволяет ей хаотически проваливаться на дочерних размерах. Эти объяснения важнее механического сопоставления степеней, потому что позволяют заметить неприменимость теоремы.
+          </p>
+          <p>
+            Например, binary search соответствует $a=1,b=2,f(n)=\Theta(1)$, то есть равновесию при $p=0$ и логарифму. Merge sort имеет $a=2,b=2,p=1$ и линейный toll — снова равновесие, теперь $n\log n$. Карацуба имеет $a=3,b=2,p=\log_2 3$, а линейный toll растёт медленнее $n^p$, поэтому доминируют листья.
+          </p>
+          <p>
+            В этой главе важнее не запоминание случаев, а источник показателя: геометрия размножения подзадач. В следующей работе с реальным алгоритмом сначала строят корректную рекуррентность, затем выбирают подходящий инструмент решения, а не наоборот.
+          </p>
+        </section>
+
+        <section id="imbalance">
+          <h2>Одна почти полная подзадача превращает логарифмическую глубину в линейную</h2>
+          <p>
+            Разрез $n-1$ и 1 формально создаёт две меньшие задачи, но большая ветвь уменьшается слишком медленно. При линейном combine получается сумма $n+(n-1)+\cdots+2$, то есть квадратичная работа. Количество детей совпадает с merge sort, однако геометрия размеров совершенно другая.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-unbalanced-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-unbalanced-size,divide-combine-cost">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =T\!\left(
+                \class{atlas-notation-token notation-id-divide-unbalanced-size}{n-1}
+              \right)+T(1)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{\Theta(n)}
+              =\Theta(n^2).
+            \]
+          </div>
+          <p>
+            Такой случай возникает у quicksort при систематически плохом pivot: partition остаётся линейным, а одна часть почти пуста. Рандомизация или выбор pivot меняют вероятность дисбаланса, но не отменяют существование худшего входа для конкретной политики. В геометрических задачах баланс может относиться не к числу элементов, а к размеру пространства; нужно анализировать ту меру, которая определяет работу.
+          </p>
+          <p>
+            Контрпример к фразе «обе части меньше, значит глубина логарифмическая» — именно последовательность $n,n-1,n-2,\ldots,1$. Для логарифмической глубины требуется уменьшение на постоянную долю либо другое сильное условие, а не просто строгая убываемость.
+          </p>
+          <p>
+            Неравные постоянные доли — другой случай. Разбиение на $n/3$ и $2n/3$ всё ещё имеет логарифмическую максимальную глубину, но уровни больше не состоят из одинаковых размеров. Простое умножение «число узлов на размер одного узла» становится неудобным. Можно ограничить сумму размеров на уровне или применить Akra–Bazzi. Смешивать этот случай с разрезом $1$ и $n-1$ нельзя: во втором большая доля стремится к единице и глубина уже линейна.
+          </p>
+          <p>
+            В quicksort partition ставит pivot на окончательное место, поэтому суммарный размер детей равен $n-1$. При идеальном балансе уровни линейны и глубина логарифмична. При крайнем выборе pivot последовательность локальных цен равна $n-1,n-2,\ldots,1$. Одна и та же процедура combine и разные геометрии разбиения дают $\Theta(n\log n)$ и $\Theta(n^2)$.
+          </p>
+        </section>
+
+        <section id="combine-cost">
+          <h2>Дешёвое деление не спасает дорогой combine</h2>
+          <p>
+            Представим, что две половины решаются за линейное время, но combine сравнивает каждый объект левой части с каждым объектом правой. Локальная цена $\Theta(n^2)$ уже доминирует дерево. Рекурсивность не ускоряет алгоритм автоматически; выигрыш появляется только при контролируемой сумме локальной работы.
+          </p>
+          <p>
+            Иногда combine можно изменить представлением. Слияние отсортированных списков линейно благодаря указателям на первые элементы. Объединение множеств может быть почти линейным по меньшей структуре либо постоянным при ленивом представлении. Свёртка полиномов требует отдельного алгоритма. Разработка divide and conquer часто сводится к поиску достаточного промежуточного результата, который делает combine дешевле исходной задачи.
+          </p>
+          <p>
+            Полезный мысленный тест — заменить рекурсивные результаты идеальными оракулами нулевой стоимости и измерить оставшийся родительский код. Если он всё ещё решает исходный экземпляр почти целиком, decomposition не вынесла главную трудность. Если combine читает только границы, краткие сертификаты или два упорядоченных потока, разделение действительно создало структуру.
+          </p>
+          <p>
+            Иногда цена зависит от формы результата, а не только от $n$. Слияние двух списков стоит сумму длин. Объединение выпуклых оболочек может зависеть от числа граничных точек. Тогда одномерная worst-case рекуррентность берёт максимум по всем допустимым формам, а более точный анализ вводит второй параметр. Запись $C(n)$ скрывает это решение модели и должна сопровождаться объяснением.
+          </p>
+          <p>
+            Есть и обратная крайность: combine стоит $O(1)$, но подготовка детей копирует $n$ элементов. Называть её бесплатным divide нельзя. Профилирование по фазам — split, recursive calls, combine, allocation — помогает сопоставить математическую модель с программой.
+          </p>
+        </section>
+
+        <section id="karatsuba">
+          <h2>Карацуба экономит одну рекурсивную операцию алгеброй</h2>
+          <p>
+            Пусть основание блока равно $B$, а числа разбиты пополам: $x=x_1B^m+x_0$, $y=y_1B^m+y_0$. Школьное раскрытие требует четырёх половинных произведений. Карацуба вычисляет $z_0=x_0y_0$, $z_2=x_1y_1$ и одно смешанное произведение $z_1=(x_0+x_1)(y_0+y_1)-z_0-z_2$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-karatsuba-identity"
+            data-notation-coverage="interactive"
+            data-required-notations="karatsuba-base,karatsuba-split-position,karatsuba-low-product,karatsuba-middle-product,karatsuba-high-product">
+            \[
+              xy=
+              \class{atlas-notation-token notation-id-karatsuba-high-product}{z_2}
+              \class{atlas-notation-token notation-id-karatsuba-base}{B}^{2
+                \class{atlas-notation-token notation-id-karatsuba-split-position}{m}}
+              +
+              \class{atlas-notation-token notation-id-karatsuba-middle-product}{z_1}
+              B^m
+              +
+              \class{atlas-notation-token notation-id-karatsuba-low-product}{z_0}.
+            \]
+          </div>
+          <p>
+            Сложения, вычитания и сдвиги по блокам линейны по длине записи. Три, а не четыре, подзадачи размера примерно $n/2$ дают показатель $\log_2 3\approx1{,}585$. Это первый ключевой урок проектирования: иногда структура combine позволяет уменьшить число детей и тем самым показатель сложности.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-karatsuba-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,divide-subproblem-count,divide-subproblem-size,divide-combine-cost,divide-critical-exponent">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =
+              \class{atlas-notation-token notation-id-divide-subproblem-count}{3}
+              T\!\left(
+                \class{atlas-notation-token notation-id-divide-subproblem-size}{\lceil n/2\rceil}
+              \right)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{\Theta(n)}
+              =\Theta\!\left(n^{
+                \class{atlas-notation-token notation-id-divide-critical-exponent}{\log_2 3}}
+              \right).
+            \]
+          </div>
+          <p>
+            На маленьких числах дополнительные сложения, временные буферы и рекурсивные вызовы дороже школьного цикла. Реальные библиотеки переключаются на Карацубу после измеренного порога. Асимптотически лучший метод не обязан выигрывать на каждом размере — это прямое продолжение главы о практической эффективности.
+          </p>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Числовая сборка $1234\cdot5678$</h3>
+            <p>
+              Берём $B^m=100$: $x_1=12,x_0=34,y_1=56,y_0=78$. Получаем $z_0=34\cdot78=2652$, $z_2=12\cdot56=672$, а смешанное произведение равно $46\cdot134-2652-672=2840$. Сборка даёт $672\cdot10000+2840\cdot100+2652=7006652$. Три половинных умножения заменили четыре, но потребовали несколько сложений и вычитаний.
+            </p>
+            <p>
+              На следующих уровнях тот же контракт применяется к произведениям 34·78, 12·56 и 46·134. Слагаемые могут иметь на один разряд больше половины из-за переноса, поэтому анализ использует ⌈n/2⌉ и допускает постоянную разницу размеров. Реализация должна поддерживать знак промежуточных вычитаний и переносы; алгебраическое тождество не решает эти инженерные детали автоматически.
+            </p>
+          </section>
+        </section>
+
+        <section id="power">
+          <h2>Быстрая степень переиспользует один результат</h2>
+          <p>
+            Наивное вычисление $a^n$ умножает $a$ примерно $n$ раз. Если $n=2k$, достаточно вычислить $a^k$ один раз и возвести результат в квадрат. При нечётном показателе добавляется одно умножение на $a$. Критически важно не вызвать рекурсивную функцию дважды в записи $power(a,k)\cdot power(a,k)$: это превратит путь обратно в бинарное дерево.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-fast-power-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,power-exponent,divide-constant-cost">
+            \[
+              \class{atlas-notation-token notation-id-recurrence-function}{T(n)}
+              =T\!\left(\left\lfloor
+                \frac{
+                  \class{atlas-notation-token notation-id-power-exponent}{n}
+                }{2}\right\rfloor\right)
+              +
+                \class{atlas-notation-token notation-id-divide-constant-cost}{\Theta(1)}
+              =\Theta(\log n).
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Инвариант двоичного разбора показателя</h3>
+            <p>
+              На каждом шаге текущий результат и основание можно понимать так: уже извлечённые младшие биты показателя учтены в аккумуляторе, а оставшаяся степень относится к текущему квадрату основания. Деление показателя пополам удаляет один бит, поэтому шагов столько, сколько битов в $n$. Эта итеративная формулировка показывает, что рекурсивный стек не обязателен.
+            </p>
+          </section>
+        </section>
+
+        <section id="memory">
+          <h2>Стек, временные буферы и копии входят в сложность</h2>
+          <p>
+            Глубина сбалансированного дерева $O(\log n)$, поэтому стек одной последовательной ветви логарифмический. Но одновременно существующие результаты детей могут занимать больше. Merge sort с обычным буфером использует $O(n)$ дополнительной памяти. Карацуба требует аккуратно переиспользовать временные массивы, иначе сумма аллокаций и копирований увеличивает константы и пиковое потребление.
+          </p>
+          <p>
+            Представление диапазоном $[l,r)$ содержит два индекса и ссылается на исходный массив. Представление новым массивом материализует часть и платит её длиной. В языках со срезами нужно знать семантику: view и copy выглядят одинаково в псевдокоде, но дают разные $C(n)$ и давление на сборщик мусора.
+          </p>
+          <p>
+            Tail recursion помогает только при одном рекурсивном вызове в хвостовой позиции. Merge sort должен дождаться двух детей и выполнить combine, поэтому простой tail-call elimination не удаляет весь стек. Явный стек кадров может дать контроль над памятью и порядком, но не меняет математическое дерево.
+          </p>
+          <p>
+            Пиковая память не равна сумме аллокаций за весь запуск. Если левый результат объединён или освобождён до построения дальних ветвей, одни и те же области можно переиспользовать. Для последовательного DFS одновременно живы кадры одного пути и результаты уже завершённых соседей. Для параллельного выполнения несколько крупных поддеревьев живут одновременно, поэтому ускорение способно увеличить peak memory. Этот компромисс нужно измерять отдельно от работы.
+          </p>
+        </section>
+
+        <section id="parallelism">
+          <h2>Независимые дети дают параллелизм, combine задаёт критический путь</h2>
+          <p>
+            Последовательная работа $W(n)$ суммирует все операции. Span $S(n)$ — длина критического пути при неограниченном числе исполнителей: независимые дети выполняются параллельно, поэтому берётся максимум их spans, а локальная работа остаётся на пути.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-work-span-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="parallel-work,parallel-span,divide-subproblem-size,divide-combine-cost">
+            \[
+              \class{atlas-notation-token notation-id-parallel-work}{W(n)}
+              =\sum_i W(n_i)+C(n),
+              \qquad
+              \class{atlas-notation-token notation-id-parallel-span}{S(n)}
+              =\max_i S\!\left(
+                \class{atlas-notation-token notation-id-divide-subproblem-size}{n_i}
+              \right)
+              +
+              \class{atlas-notation-token notation-id-divide-combine-cost}{C_{\infty}(n)}.
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="divide-parallel-time-bound"
+            data-notation-coverage="interactive"
+            data-required-notations="parallel-work,parallel-span,parallel-processor-count">
+            \[
+              \max\!\left(
+                \frac{
+                  \class{atlas-notation-token notation-id-parallel-work}{W(n)}}{
+                  \class{atlas-notation-token notation-id-parallel-processor-count}{P}},
+                \class{atlas-notation-token notation-id-parallel-span}{S(n)}
+              \right)
+              \le T_P(n)
+              \lesssim
+              \frac{W(n)}{P}+S(n).
+            \]
+          </div>
+          <p>
+            Если merge выполняется последовательным линейным проходом, span классической схемы остаётся $O(n)$, хотя рекурсивные сортировки половин параллельны. Параллельное слияние требует отдельного алгоритма. Ускорение на $P$ процессорах ограничено и работой $W/P$, и span; создание задачи для каждого маленького узла тоже имеет цену, поэтому применяют cutoff.
+          </p>
+          <p>
+            Нижняя граница слева имеет две причины. Все $W$ операций нужно распределить между $P$ исполнителями, поэтому быстрее $W/P$ не получится. Зависимая цепочка длины $S$ не распараллеливается вообще. Правая оценка — модельный ориентир хорошего планирования, а не обещание настенных секунд: кэш, коммуникация, синхронизация и неодинаковые процессоры добавляют расходы.
+          </p>
+          <p>
+            Баланс важен дважды: уменьшает глубину и распределяет работу между исполнителями. Несбалансированная ветвь не только повышает последовательную сложность, но и оставляет процессоры без работы. Планировщик work stealing помогает при непредсказуемом дереве, однако не может укоротить математически последовательную зависимость.
+          </p>
+        </section>
+
+        <section id="neighbors">
+          <h2>Divide and conquer решает все части, search выбирает альтернативу</h2>
+          <p>
+            В предыдущей главе дети search tree представляют альтернативные решения. Обычно нужно найти один допустимый или лучший лист; branch and bound может удалить альтернативу. В divide and conquer дети являются составными частями одного ответа: merge sort нуждается в обеих отсортированных половинах. Удалить одну по «неперспективности» нельзя.
+          </p>
+          <p>
+            Decrease and conquer создаёт одну меньшую задачу: binary search, insertion sort по префиксу, алгоритм Евклида. Dynamic programming нужен при перекрывающихся подзадачах: рекурсивное вычисление чисел Фибоначчи создаёт два дерева с множеством одинаковых узлов, а таблица объединяет их в DAG. В правильном divide and conquer дочерние экземпляры обычно независимы и повторов мало.
+          </p>
+          <p>
+            Meet-in-the-middle делит пространство вариантов, полностью перечисляет половины и затем ищет совместимую пару. Он похож на divide and conquer внешним разрезом, но не рекурсивно собирает решения того же типа; его ключевой обмен — экспоненциальное время на память. Название схемы не заменяет анализа информационного потока между частями.
+          </p>
+        </section>
+
+        <section id="engineering">
+          <h2>Реализация начинается с базовых размеров и порога</h2>
+          <p>
+            Для нечётных размеров тестируют обе половины, пустой вход и единицу. Для больших рекурсивных деревьев задают cutoff: ниже него переходят к простому циклу, insertion sort или школьному умножению. Порог выбирают измерением на целевой платформе, сохраняя семантическую эквивалентность базового алгоритма.
+          </p>
+          <p>
+            Нужно следить за overflow при вычислении середины: $l+(r-l)/2$ безопаснее $(l+r)/2$ в ограниченном целом типе. Размеры и индексы должны принадлежать согласованным типам. Combine обязан учитывать aliasing: запись результата поверх ещё не прочитанных данных может нарушить инвариант.
+          </p>
+          <p>
+            Тесты полезно строить метаморфно. Сортировка сохраняет мультимножество и идемпотентна. Умножение Карацубы совпадает со школьным на случайных коротких записях. Быстрая степень удовлетворяет $a^{p+q}=a^pa^q$ там, где арифметика определена. Отдельно проверяются точные счётчики дерева на степенях двойки и неровных размерах.
+          </p>
+          <p>
+            Профиль должен различать локальную работу и вызовы. Один только счётчик глубины не обнаружит, что Karatsuba создаёт три ветви, а merge sort — две. Один только общий таймер не объяснит, что копирование срезов стало главным toll. Геометрия дерева и стоимость уровней дают диагностическую модель до микрооптимизаций.
+          </p>
+          <p>
+            Гибридный cutoff является частью спецификации, а не случайной оптимизацией. Ниже порога $k$ рекуррентность получает базу $T(n)=T_{\mathrm{simple}}(n)$ для $n\le k$. Если простой метод корректен на том же контракте, доказательство верхних уровней не меняется. Зато выбор $k$ влияет на число кадров, локальность и константы. Его нельзя подбирать по одному отсортированному примеру: нужны разные размеры, распределения и прогретое измерение без смешения со стоимостью генерации данных.
+          </p>
+          <p>
+            При воспроизводимом тестировании полезно логировать размер каждого ребёнка и локальный счётчик работы. Для merge sort сумма размеров детей должна равняться размеру родителя; для binary search живой ребёнок не превышает половины; для Карацубы внутренних произведений ровно три. Эти структурные свойства ловят регрессии раньше, чем общий таймер. Затем эталонная нерекурсивная реализация проверяет результат на малых входах, а стресс-тест подтверждает предел стека и отсутствие чрезмерных аллокаций.
+          </p>
+        </section>
+
+        <section id="mistakes" class="atlas-block" data-atlas-block="warning">
+          <h2>Что ломает схему или её анализ</h2>
+          <ul>
+            <li>Одна дочерняя задача не уменьшается для части входов, поэтому рекурсия может не завершиться</li>
+            <li>Подзадачи не покрывают исходный объект либо дважды учитывают пересечение</li>
+            <li>Combine предполагает свойство, которого рекурсивный контракт не обещает</li>
+            <li>В рекуррентности забыты копирование срезов, аллокации или линейное слияние</li>
+            <li>Глубина одной ветви ошибочно принимается за число всех вызовов</li>
+            <li>Фраза «делим пополам» автоматически превращается в $O(n\log n)$</li>
+            <li>Master theorem применяют к неравным, переменным или перекрывающимся подзадачам без проверки условий</li>
+            <li>Быстрая степень дважды вычисляет один и тот же рекурсивный результат</li>
+            <li>Стабильность merge sort приписывается разбиению, хотя её определяет обработка равенства в merge</li>
+            <li>Параллельное время называют равным работе, игнорируя span, cutoff и стоимость планирования</li>
+          </ul>
+          <section class="atlas-block" data-atlas-block="example">
+            <h3>Контрпример: красивое дерево с дорогой границей</h3>
+            <p>
+              Алгоритм делит множество точек пополам, рекурсивно решает части, а затем сравнивает каждую левую точку с каждой правой. На корне combine уже выполняет около $n^2/4$ сравнений. Какими бы быстрыми ни были дети, итог остаётся квадратичным. Чтобы получить выигрыш, нужно использовать геометрическую структуру и ограничить число межчастных кандидатов.
+            </p>
+          </section>
+        </section>
+
+        <section id="laboratory" class="atlas-block" data-atlas-block="lab">
+          <h2>Лаборатория: дерево рекурсии и обратная сборка</h2>
+          <p>
+            Переключайтесь между двоичным поиском, merge sort, Карацубой, быстрой степенью и несбалансированным разрезом. Сначала кадры раскрывают вызовы сверху вниз, затем combine идёт в postorder. Под деревом строится точная стоимость уровней; рядом показаны последовательная работа и критический путь. Большие деревья не исполняют огромные циклы и ограничены проверенным числом узлов.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="divide-and-conquer"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>От контракта детей к стоимости всего дерева</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Запишите три контракта merge sort: вход ребёнка, его результат и действие combine.</p><details><summary>Показать подсказку</summary><p>Отделите диапазон, отсортированную перестановку и слияние.</p></details><details><summary>Показать решение</summary><p>Ребёнок получает диапазон исходного массива, возвращает отсортированную перестановку ровно его элементов; combine сливает две такие перестановки в отсортированную перестановку объединённого диапазона.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Решите $T(n)=T(n/2)+1$ для степеней двойки.</p><details><summary>Показать подсказку</summary><p>Сколько раз можно делить $n$ пополам?</p></details><details><summary>Показать решение</summary><p>После $\log_2 n$ делений достигается 1; с базовым вызовом получается $T(n)=T(1)+\log_2 n=\Theta(\log n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Почему два вызова размера $n/2$ нельзя заменить одним множителем 2 в параллельном span?</p><details><summary>Показать подсказку</summary><p>Независимые дети могут идти одновременно.</p></details><details><summary>Показать решение</summary><p>Работа складывает оба вызова, а критический путь берёт максимум их длительностей. Множитель 2 относится к $W$, но не обязательно к $S$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Докажите лемму корректности merge.</p><details><summary>Показать подсказку</summary><p>Поддерживайте утверждение о выведенном префиксе.</p></details><details><summary>Показать решение</summary><p>Перед каждым шагом выход отсортирован и содержит ровно обработанные элементы. Меньший из двух первых необработанных элементов не превосходит все остальные, поэтому его добавление сохраняет порядок и точность состава. После исчерпания одной стороны её инвариант позволяет дописать вторую.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Посчитайте работу уровней merge sort для $n=8$, считая один базовый шаг на лист.</p><details><summary>Показать подсказку</summary><p>Сложите локальную работу отдельно на каждой из четырёх глубин дерева.</p></details><details><summary>Показать решение</summary><p>На уровнях работы получаются значения $8,8,8,8$: корень, две половины, четыре пары и восемь листьев. Итого 32 модельных единицы.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Почему $T(n)=T(n-1)+T(1)+n$ квадратична?</p><details><summary>Показать подсказку</summary><p>Раскройте большую ветвь.</p></details><details><summary>Показать решение</summary><p>Локальная работа даёт $n+(n-1)+\cdots+2=\Theta(n^2)$; базовые единицы добавляют только $O(n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Найдите ошибку в функции степени, возвращающей $power(a,k)\cdot power(a,k)$.</p><details><summary>Показать подсказку</summary><p>Нарисуйте число вызовов.</p></details><details><summary>Показать решение</summary><p>Одинаковая подзадача вычисляется дважды, поэтому $T(n)=2T(n/2)+O(1)=\Theta(n)$. Нужно сохранить один результат и возвести его в квадрат.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Выведите смешанный член Карацубы.</p><details><summary>Показать подсказку</summary><p>Раскройте $(x_0+x_1)(y_0+y_1)$.</p></details><details><summary>Показать решение</summary><p>Произведение равно $x_0y_0+x_0y_1+x_1y_0+x_1y_1$. Вычитая $z_0=x_0y_0$ и $z_2=x_1y_1$, получаем $z_1=x_0y_1+x_1y_0$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Почему Карацуба может проигрывать школьному умножению на коротких числах?</p><details><summary>Показать подсказку</summary><p>Отделите асимптотический показатель от постоянной цены разбиения и сборки.</p></details><details><summary>Показать решение</summary><p>Он уменьшает показатель числа умножений, но добавляет рекурсивные вызовы, сложения, вычитания и временные буферы. До порога эти константы больше экономии.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Дайте пример перекрывающихся подзадач, где обычное divide and conquer повторяет работу.</p><details><summary>Показать подсказку</summary><p>Рассмотрите рекурсивные числа Фибоначчи.</p></details><details><summary>Показать решение</summary><p>Вызовы $F(n-1)$ и $F(n-2)$ оба вычисляют $F(n-3)$ и множество меньших значений. Memoization объединяет повторы и превращает дерево в DAG.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Что изменится в рекуррентности merge sort, если каждый срез копируется до вызова?</p><details><summary>Показать подсказку</summary><p>Суммарная длина двух копий равна $n$.</p></details><details><summary>Показать решение</summary><p>Локальный toll всё равно остаётся $\Theta(n)$, поэтому класс $\Theta(n\log n)$ не меняется, но константы, число записей и пиковая память могут заметно вырасти.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Предложите метаморфный тест для divide-and-conquer сортировки.</p><details><summary>Показать подсказку</summary><p>Используйте перестановку, порядок и повторный запуск.</p></details><details><summary>Показать решение</summary><p>Результат должен быть неубывающим, иметь то же мультимножество элементов и не меняться при повторной сортировке. Для стабильной версии равные ключи дополнительно сохраняют исходный порядок меток.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Herman H. Goldstine, John von Neumann, <a href="https://bitsavers.org/pdf/ias/Planning_and_Coding_of_Problems_for_an_Electronic_Computing_Instrument_Part_II_Volume_II_Apr48.pdf" target="_blank" rel="noopener noreferrer">Planning and Coding of Problems for an Electronic Computing Instrument, Part II, Volume II</a>, 1948 — первичный отчёт с разделом о combinatorial sorting и meshing.</li>
+            <li>A. Karatsuba, Yu. Ofman, <a href="https://www.mathnet.ru/eng/dan26729" target="_blank" rel="noopener noreferrer">Multiplication of Many-Digital Numbers by Automatic Computers</a>, Doklady Akademii Nauk SSSR 145(2), 1962 — первичная публикация субквадратичного умножения.</li>
+            <li>Jon Louis Bentley, Dorothea Haken, James B. Saxe, <a href="https://doi.org/10.1145/1008861.1008865" target="_blank" rel="noopener noreferrer">A General Method for Solving Divide-and-Conquer Recurrences</a>, SIGACT News 12(3), 1980 — унифицирующий анализ регулярных рекуррентностей.</li>
+            <li>Mohamad Akra, Louay Bazzi, <a href="https://doi.org/10.1023/A:1018373005182" target="_blank" rel="noopener noreferrer">On the Solution of Linear Recurrence Equations</a>, Computational Optimization and Applications 10(2), 1998 — анализ рекуррентностей с неравными долями.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

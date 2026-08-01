@@ -96,13 +96,9 @@
           <p>
             Пусть $S$ — множество вставленных ключей, а операция $\operatorname{query}(x)$ возвращает <code>absent</code> или <code>maybe</code>. Для базового Bloom filter без удаления действуют два утверждения. Если $x\in S$, ответ обязан быть <code>maybe</code>. Если $x\notin S$, возможны оба ответа; вероятность <code>maybe</code> обозначим через $\class{atlas-notation-token notation-id-filter-false-positive}{p_{\mathrm{fp}}}$. Вероятность берётся по случайному выбору хеш-функций или seed, а не по мистической случайности каждой команды.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-membership-contract" data-notation-coverage="interactive" data-required-notations="filter-membership-set,filter-no-false-negative-event,filter-query-operation,filter-false-positive-event,filter-false-positive">
             \[
-              x\in S\Longrightarrow \Pr[\operatorname{query}(x)=\texttt{absent}]=0,
-              \qquad
-              x\notin S\Longrightarrow
-              \Pr[\operatorname{query}(x)=\texttt{maybe}]
-              =\class{atlas-notation-token notation-id-filter-false-positive}{p_{\mathrm{fp}}}.
+              x\in \class{atlas-notation-token notation-id-filter-membership-set}{S}\Longrightarrow \class{atlas-notation-token notation-id-filter-no-false-negative-event}{\Pr}[\class{atlas-notation-token notation-id-filter-query-operation}{\operatorname{query}(x)}=\texttt{absent}]=0, \qquad x\notin \class{atlas-notation-token notation-id-filter-membership-set}{S}\Longrightarrow \class{atlas-notation-token notation-id-filter-false-positive-event}{\Pr}[\class{atlas-notation-token notation-id-filter-query-operation}{\operatorname{query}(x)}=\texttt{maybe}] =\class{atlas-notation-token notation-id-filter-false-positive}{p_{\mathrm{fp}}}.
             \]
           </div>
           <p>
@@ -121,13 +117,14 @@
           <p>
             Bloom filter содержит массив из $\class{atlas-notation-token notation-id-filter-bit-count}{m}$ битов, первоначально равных нулю, и $\class{atlas-notation-token notation-id-filter-hash-count}{k}$ отображений ключа в индексы $0,\ldots,m-1$. При вставке $x$ все позиции $h_1(x),\ldots,h_k(x)$ становятся единицами. При запросе проверяются те же позиции. Нулевой бит доказывает отсутствие: если бы ключ вставлялся, именно этот бит был бы установлен. Все единицы дают только <code>maybe</code>, потому что их могли независимо установить другие ключи.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3.12-bloom-insert" data-notation-coverage="interactive" data-required-notations="filter-insert-operation,filter-bit-array,filter-hash-position,filter-bit-set-transition,filter-hash-count">
             \[
-              \operatorname{insert}(x):\quad
-              B[h_i(x)]\gets1\quad(1\le i\le \class{atlas-notation-token notation-id-filter-hash-count}{k}),
+              \class{atlas-notation-token notation-id-filter-insert-operation}{\operatorname{insert}(x)}:\quad \class{atlas-notation-token notation-id-filter-bit-array}{B}[\class{atlas-notation-token notation-id-filter-hash-position}{h_i(x)}]\class{atlas-notation-token notation-id-filter-bit-set-transition}{\gets1}\quad(1\le i\le \class{atlas-notation-token notation-id-filter-hash-count}{k}),
             \]
+          </div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3.12-bloom-query" data-notation-coverage="interactive" data-required-notations="filter-query-operation,filter-all-positions-conjunction,filter-hash-count,filter-bit-array,filter-hash-position">
             \[
-              \operatorname{query}(x)=\bigwedge_{i=1}^{k} B[h_i(x)].
+              \class{atlas-notation-token notation-id-filter-query-operation}{\operatorname{query}(x)}=\class{atlas-notation-token notation-id-filter-all-positions-conjunction}{\bigwedge}_{i=1}^{\class{atlas-notation-token notation-id-filter-hash-count}{k}} \class{atlas-notation-token notation-id-filter-bit-array}{B}[\class{atlas-notation-token notation-id-filter-hash-position}{h_i(x)}].
             \]
           </div>
           <p>
@@ -149,22 +146,17 @@
           <p>
             Пусть вставлено $\class{atlas-notation-token notation-id-filter-item-count}{n}$ различных ключей, каждый делает $k$ равномерных независимых выборов среди $m$ позиций. Один конкретный выбор не попадает в фиксированный бит с вероятностью $1-1/m$. После $kn$ выборов вероятность, что бит всё ещё нулевой, равна $(1-1/m)^{kn}$. Следовательно, вероятность единицы равна единице минус это выражение.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-bit-occupancy" data-notation-coverage="interactive" data-required-notations="filter-zero-bit-probability,filter-bit-count,filter-hash-count,filter-item-count,filter-one-bit-probability">
             \[
-              \Pr[B[j]=0]=\left(1-\frac1{\class{atlas-notation-token notation-id-filter-bit-count}{m}}\right)^{
-                \class{atlas-notation-token notation-id-filter-hash-count}{k}
-                \class{atlas-notation-token notation-id-filter-item-count}{n}},
-              \qquad
-              \Pr[B[j]=1]=1-\left(1-\frac1m\right)^{kn}.
+              \class{atlas-notation-token notation-id-filter-zero-bit-probability}{\Pr[B[j]=0]}=\left(1-\frac1{\class{atlas-notation-token notation-id-filter-bit-count}{m}}\right)^{\class{atlas-notation-token notation-id-filter-hash-count}{k}\class{atlas-notation-token notation-id-filter-item-count}{n}}, \qquad \class{atlas-notation-token notation-id-filter-one-bit-probability}{\Pr[B[j]=1]}=1-\left(1-\frac1{\class{atlas-notation-token notation-id-filter-bit-count}{m}}\right)^{\class{atlas-notation-token notation-id-filter-hash-count}{k}\class{atlas-notation-token notation-id-filter-item-count}{n}}.
             \]
           </div>
           <p>
             Для большого $m$ используется приближение $(1-1/m)^{kn}\approx e^{-kn/m}$. Отсутствующий ключ проверяет $k$ позиций. Если считать их независимыми, все позиции одновременно равны единице с вероятностью
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-false-positive-rate" data-notation-coverage="interactive" data-required-notations="filter-false-positive,filter-bloom-fp-approximation,filter-hash-count,filter-item-count,filter-bit-count">
             \[
-              \class{atlas-notation-token notation-id-filter-false-positive}{p_{\mathrm{fp}}}
-              \approx \left(1-e^{-kn/m}\right)^k.
+              \class{atlas-notation-token notation-id-filter-false-positive}{p_{\mathrm{fp}}} \class{atlas-notation-token notation-id-filter-bloom-fp-approximation}{\approx} \left(1-e^{-\class{atlas-notation-token notation-id-filter-hash-count}{k}\class{atlas-notation-token notation-id-filter-item-count}{n}/\class{atlas-notation-token notation-id-filter-bit-count}{m}}\right)^\class{atlas-notation-token notation-id-filter-hash-count}{k}.
             \]
           </div>
           <p>
@@ -183,12 +175,9 @@
           <p>
             При фиксированных $m$ и $n$ один хеш проверяет мало условий, но оставляет много нулей. Слишком много хешей проверяет больше позиций, однако каждая вставка быстро заполняет массив. Оптимум находится между этими режимами. Положим $b=m/n$ — число битов на ключ. Минимизируем $p(k)=(1-e^{-k/b})^k$, разрешив $k$ временно быть вещественным.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-optimal-hash-count" data-notation-coverage="interactive" data-required-notations="filter-optimal-k,filter-bit-count,filter-item-count,filter-optimal-zero-fraction">
             \[
-              \class{atlas-notation-token notation-id-filter-optimal-k}{k_*}
-              =\frac{m}{n}\ln2,
-              \qquad
-              e^{-k_*n/m}=\frac12.
+              \class{atlas-notation-token notation-id-filter-optimal-k}{k_*} =\frac{\class{atlas-notation-token notation-id-filter-bit-count}{m}}{\class{atlas-notation-token notation-id-filter-item-count}{n}}\ln2, \qquad e^{-\class{atlas-notation-token notation-id-filter-optimal-k}{k_*}\class{atlas-notation-token notation-id-filter-item-count}{n}/\class{atlas-notation-token notation-id-filter-bit-count}{m}}=\class{atlas-notation-token notation-id-filter-optimal-zero-fraction}{\frac12}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -200,11 +189,9 @@
           <p>
             В оптимуме примерно половина битов установлена, а минимальная вероятность приближённо равна $(1/2)^{k_*}$. Из неё получается удобная формула проектирования. Для целевой ошибки $\varepsilon$ нужно около $-n\ln\varepsilon/(\ln2)^2$ битов, или $-\ln\varepsilon/(\ln2)^2$ битов на ключ.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-bits-per-key" data-notation-coverage="interactive" data-required-notations="filter-bit-count,filter-item-count,filter-target-error">
             \[
-              m\approx-\frac{n\ln\varepsilon}{(\ln2)^2},
-              \qquad
-              \frac mn\approx-\frac{\ln\varepsilon}{(\ln2)^2}.
+              \class{atlas-notation-token notation-id-filter-bit-count}{m}\approx-\frac{\class{atlas-notation-token notation-id-filter-item-count}{n}\ln \class{atlas-notation-token notation-id-filter-target-error}{\varepsilon}}{(\ln2)^2}, \qquad \frac{\class{atlas-notation-token notation-id-filter-bit-count}{m}}{\class{atlas-notation-token notation-id-filter-item-count}{n}}\approx-\frac{\ln \class{atlas-notation-token notation-id-filter-target-error}{\varepsilon}}{(\ln2)^2}.
             \]
           </div>
           <p>
@@ -259,11 +246,9 @@
           <p>
             Обычный бит не сообщает, сколько ключей его установили. Counting Bloom filter заменяет каждый бит небольшим счётчиком. Вставка увеличивает $k$ счётчиков, удаление уменьшает их. Запрос считает позицию занятой, если счётчик положителен. Теперь удаление одного ключа сохраняет следы других ключей, столкнувшихся с ним в тех же позициях.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-counting-update" data-notation-coverage="interactive" data-required-notations="filter-counter-increment,filter-counter-decrement">
             \[
-              C[h_i(x)]\gets C[h_i(x)]+1\quad\text{при вставке},
-              \qquad
-              C[h_i(x)]\gets C[h_i(x)]-1\quad\text{при корректном удалении}.
+              \class{atlas-notation-token notation-id-filter-counter-increment}{C[h_i(x)]\gets C[h_i(x)]+1}\quad\text{при вставке}, \qquad \class{atlas-notation-token notation-id-filter-counter-decrement}{C[h_i(x)]\gets C[h_i(x)]-1}\quad\text{при корректном удалении}.
             \]
           </div>
           <p>
@@ -282,12 +267,9 @@
           <p>
             Cuckoo filter заимствует идею cuckoo hashing, но хранит не полный ключ, а его короткий $\class{atlas-notation-token notation-id-filter-fingerprint}{fingerprint}$. Для ключа $x$ вычисляются отпечаток $f$ и первая корзина $i_1=h(x)$. Вторая корзина получается обратимо из первой и отпечатка: $i_2=i_1\oplus h(f)$. Поэтому, зная текущую корзину и fingerprint, можно вычислить альтернативную без исходного ключа.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-cuckoo-buckets" data-notation-coverage="interactive" data-required-notations="filter-fingerprint,filter-primary-bucket,filter-alternate-bucket,filter-bucket-involution">
             \[
-              \class{atlas-notation-token notation-id-filter-fingerprint}{f}=\operatorname{fp}(x),
-              \qquad i_1=h(x),
-              \qquad i_2=i_1\oplus h(f),
-              \qquad i_1=i_2\oplus h(f).
+              \class{atlas-notation-token notation-id-filter-fingerprint}{f}=\operatorname{fp}(x), \qquad \class{atlas-notation-token notation-id-filter-primary-bucket}{i_1}=h(x), \qquad \class{atlas-notation-token notation-id-filter-alternate-bucket}{i_2}=\class{atlas-notation-token notation-id-filter-primary-bucket}{i_1}\class{atlas-notation-token notation-id-filter-bucket-involution}{\oplus} h(\class{atlas-notation-token notation-id-filter-fingerprint}{f}), \qquad \class{atlas-notation-token notation-id-filter-primary-bucket}{i_1}=\class{atlas-notation-token notation-id-filter-alternate-bucket}{i_2}\class{atlas-notation-token notation-id-filter-bucket-involution}{\oplus} h(\class{atlas-notation-token notation-id-filter-fingerprint}{f}).
             \]
           </div>
           <p>
@@ -309,10 +291,9 @@
           <p>
             Xor filter рассчитан на статическое множество. Для каждого ключа выбираются три позиции и короткий fingerprint. В ячейках хранятся значения так, чтобы xor трёх выбранных ячеек равнялся fingerprint ключа. Запрос читает три ячейки и сравнивает их xor с вычисленным отпечатком.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-12-xor-equation" data-notation-coverage="interactive" data-required-notations="filter-xor-invariant">
             \[
-              F[h_0(x)]\oplus F[h_1(x)]\oplus F[h_2(x)]
-              =\operatorname{fp}(x)\quad\text{для каждого }x\in S.
+              \class{atlas-notation-token notation-id-filter-xor-invariant}{F[h_0(x)]\oplus F[h_1(x)]\oplus F[h_2(x)] =\operatorname{fp}(x)\quad\text{для каждого }x\in S.}
             \]
           </div>
           <p>

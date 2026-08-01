@@ -1,0 +1,108 @@
+.dynamic-programming-figure {
+  overflow-x: auto;
+}
+
+.dynamic-programming-figure .atlas-lab__visual {
+  min-height: 38rem;
+}
+
+.dp-dependency-edge {
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+  opacity: 0.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.dp-dependency-edge.is-take {
+  stroke-dasharray: 3 3;
+}
+
+.dp-dependency-edge.is-current {
+  stroke: var(--lab-b);
+  stroke-width: 2.5;
+  opacity: 1;
+}
+
+.dp-state-node {
+  stroke: var(--chapter-line);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.dp-state-node.is-pending {
+  fill: var(--chapter-paper);
+  opacity: 0.35;
+}
+
+.dp-state-node.is-resolved {
+  fill: color-mix(in srgb, var(--lab-good) 24%, var(--chapter-paper));
+  stroke: var(--lab-good);
+}
+
+.dp-state-node.is-current {
+  fill: var(--chapter-accent);
+  stroke: var(--chapter-ink);
+  stroke-width: 3;
+}
+
+.dp-node-label {
+  fill: var(--chapter-ink);
+  font-size: 8px !important;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.dp-collision-key,
+.dp-collision-value,
+.dp-warning-text {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.dp-collision-key { font-size: 24px !important; }
+.dp-collision-value { font-size: 22px !important; }
+.dp-warning-text { font-size: 18px !important; }
+
+.dp-collision-card {
+  fill: color-mix(in srgb, var(--lab-bad) 18%, var(--chapter-paper));
+  stroke: var(--lab-bad);
+  stroke-width: 2;
+}
+
+.dynamic-programming-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.dynamic-programming-table {
+  width: 100%;
+  min-width: 44rem;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.dynamic-programming-table th,
+.dynamic-programming-table td {
+  min-width: 2.7rem;
+  padding: 0.42rem;
+  border: 1px solid var(--chapter-line);
+}
+
+.dynamic-programming-table td.is-resolved {
+  background: color-mix(in srgb, var(--lab-good) 14%, var(--chapter-paper));
+}
+
+.dynamic-programming-table td.is-current {
+  color: var(--chapter-paper);
+  background: var(--chapter-accent);
+  font-weight: 700;
+}
+
+.dynamic-programming-explanation {
+  min-height: 10rem;
+}
+
+@media (max-width: 36rem) {
+  .dynamic-programming-figure .atlas-lab__visual { min-height: 32rem; }
+  .dp-warning-text { font-size: 14px !important; }
+}

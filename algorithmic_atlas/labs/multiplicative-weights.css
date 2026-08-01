@@ -1,0 +1,206 @@
+.multiplicative-weights-metrics,
+.multiplicative-weights-figure,
+.multiplicative-weights-table-panel,
+.multiplicative-weights-explanation {
+  grid-column: 1 / -1;
+}
+
+.multiplicative-weights-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+}
+
+.multiplicative-weights-metrics div {
+  min-width: 0;
+  padding: 0.72rem;
+  border-right: 1px solid var(--chapter-line);
+}
+
+.multiplicative-weights-metrics div:last-child {
+  border-right: 0;
+}
+
+.multiplicative-weights-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.78rem;
+}
+
+.multiplicative-weights-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.multiplicative-weights-figure .atlas-lab__visual {
+  min-height: 42rem;
+}
+
+.mw-section-title,
+.mw-expert-label {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.mw-expert-card {
+  fill: color-mix(in srgb, var(--chapter-paper) 88%, var(--chapter-line));
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.mw-weight-bar,
+.mw-probability {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.mw-expert-0 {
+  fill: color-mix(in srgb, var(--lab-a) 44%, var(--chapter-paper));
+  stroke: var(--lab-a);
+}
+
+.mw-expert-1 {
+  fill: color-mix(in srgb, var(--lab-b) 40%, var(--chapter-paper));
+  stroke: var(--lab-b);
+}
+
+.mw-expert-2 {
+  fill: color-mix(in srgb, var(--chapter-accent) 35%, var(--chapter-paper));
+  stroke: var(--chapter-accent);
+}
+
+.mw-expert-3 {
+  fill: color-mix(in srgb, var(--chapter-ink) 18%, var(--chapter-paper));
+  stroke: var(--chapter-ink);
+}
+
+.mw-probability {
+  fill-opacity: 0.78;
+}
+
+.mw-probability-label,
+.mw-value,
+.mw-loss-label {
+  fill: var(--chapter-ink);
+  pointer-events: none;
+}
+
+.mw-probability-label,
+.mw-value {
+  font-weight: 700;
+}
+
+.mw-loss-label {
+  font-size: 0.86rem;
+}
+
+.mw-history-line {
+  fill: none;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.mw-history-line.is-algorithm,
+.mw-legend.is-algorithm {
+  stroke: var(--lab-a);
+  fill: var(--lab-a);
+}
+
+.mw-history-line.is-best,
+.mw-legend.is-best {
+  stroke: var(--lab-b);
+  fill: var(--lab-b);
+}
+
+.mw-history-line.is-regret,
+.mw-legend.is-regret {
+  stroke: var(--chapter-accent);
+  fill: var(--chapter-accent);
+  stroke-dasharray: 7 4;
+}
+
+.mw-legend {
+  font-weight: 700;
+}
+
+.mw-round-cursor {
+  stroke: var(--chapter-ink);
+  stroke-width: 2;
+  stroke-dasharray: 4 5;
+  opacity: 0.58;
+  vector-effect: non-scaling-stroke;
+}
+
+.mw-potential-track {
+  fill: color-mix(in srgb, var(--chapter-line) 32%, var(--chapter-paper));
+  stroke: var(--chapter-line);
+}
+
+.mw-potential-value {
+  fill: color-mix(in srgb, var(--chapter-accent) 54%, var(--chapter-paper));
+  stroke: var(--chapter-accent);
+}
+
+.mw-potential-label,
+.mw-potential-bound {
+  fill: var(--chapter-ink);
+  font-weight: 700;
+}
+
+.multiplicative-weights-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.multiplicative-weights-table {
+  width: 100%;
+  min-width: 56rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.multiplicative-weights-table th,
+.multiplicative-weights-table td {
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--chapter-line);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.multiplicative-weights-table th:first-child,
+.multiplicative-weights-table td:first-child {
+  text-align: left;
+}
+
+@media (max-width: 58rem) {
+  .multiplicative-weights-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .multiplicative-weights-metrics div {
+    border-bottom: 1px solid var(--chapter-line);
+  }
+
+  .multiplicative-weights-metrics div:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .multiplicative-weights-metrics div:last-child {
+    grid-column: 1 / -1;
+    border-bottom: 0;
+  }
+
+  .multiplicative-weights-figure .atlas-lab__visual {
+    min-width: 62rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-weight-bar,
+  .mw-probability,
+  .mw-history-line,
+  .mw-potential-value {
+    transition: none;
+  }
+}

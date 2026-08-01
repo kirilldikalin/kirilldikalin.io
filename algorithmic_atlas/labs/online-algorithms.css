@@ -1,0 +1,117 @@
+.online-algorithms-metrics,
+.online-algorithms-figure,
+.online-algorithms-step {
+  grid-column: 1 / -1;
+}
+
+.online-algorithms-figure {
+  overflow-x: auto;
+}
+
+.online-algorithms-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+
+.online-algorithms-metrics div {
+  padding: 0.72rem;
+  border-right: 1px solid var(--chapter-line);
+}
+
+.online-algorithms-metrics div:last-child {
+  border-right: 0;
+}
+
+.online-algorithms-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.8rem;
+}
+
+.online-algorithms-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.online-algorithms-figure .atlas-lab__visual {
+  min-height: 38rem;
+}
+
+.online-request,
+.online-cache-slot {
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.online-request.is-hidden {
+  fill: color-mix(in srgb, var(--chapter-line) 24%, var(--chapter-paper));
+  stroke-dasharray: 6 4;
+}
+
+.online-request.is-revealed {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+}
+
+.online-request.is-current {
+  fill: color-mix(in srgb, var(--chapter-accent) 30%, var(--chapter-paper));
+  stroke: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.online-cache-slot.is-online {
+  fill: color-mix(in srgb, var(--lab-a) 30%, var(--chapter-paper));
+  stroke: var(--lab-a);
+}
+
+.online-cache-slot.is-offline {
+  fill: color-mix(in srgb, var(--lab-b) 22%, var(--chapter-paper));
+  stroke: var(--lab-b);
+}
+
+.online-request-label,
+.online-cache-label {
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.online-cost-line {
+  fill: none;
+  stroke-width: 4;
+  vector-effect: non-scaling-stroke;
+}
+
+.online-cost-line.is-online,
+.online-legend.is-online {
+  stroke: var(--lab-a);
+  fill: var(--lab-a);
+}
+
+.online-cost-line.is-offline,
+.online-legend.is-offline {
+  stroke: var(--lab-b);
+  fill: var(--lab-b);
+}
+
+.online-legend {
+  font-weight: 700;
+}
+
+@media (max-width: 42rem) {
+  .online-algorithms-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .online-algorithms-metrics div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .online-algorithms-metrics div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--chapter-line);
+  }
+
+  .online-algorithms-figure .atlas-lab__visual {
+    min-width: 54rem;
+  }
+}

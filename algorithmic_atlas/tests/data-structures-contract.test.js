@@ -128,8 +128,15 @@ test("continent 03 routes and continuations match the curriculum", () => {
 
   const continuation = (routeId) =>
     graph.routes.find(({ id }) => id === routeId).continuation;
-  assert.equal(continuation("data-structures-main").curriculumId, "4.1");
-  assert.equal(continuation("data-structures-main").kind, "route");
+  assert.equal(continuation("data-structures-main"), undefined);
+  assert.equal(
+    graph.nodes.find(({ curriculumId }) => curriculumId === "4.1").id,
+    "exhaustive-search"
+  );
+  assert.deepEqual(
+    graph.nodes.find(({ curriculumId }) => curriculumId === "4.1").prerequisites,
+    ["range-query-structures"]
+  );
   assert.equal(continuation("data-structures-randomized").curriculumId, "7.3");
   assert.equal(continuation("data-structures-prefix-persistence").curriculumId, "6.3");
   assert.equal(continuation("data-structures-filters").curriculumId, "9.8");

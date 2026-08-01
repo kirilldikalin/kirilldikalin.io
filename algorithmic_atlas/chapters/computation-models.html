@@ -100,7 +100,10 @@
               Для выполнения $e_1,e_2,\ldots,e_t$ выберем функцию цены
               $C(e_i)\ge0$. Полная модельная стоимость равна
             </p>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="computation-models-f01"
+              data-notation-coverage="interactive"
+              data-required-notations="model-cost,operation-cost">
               \[
                 \class{atlas-notation-token notation-id-model-cost}{C_{\mathcal M}}
                 =\sum_{i=1}^{t}\class{atlas-notation-token notation-id-operation-cost}{C(e_i)}.
@@ -123,7 +126,10 @@
             В простейшей unit-cost версии каждая разрешённая команда стоит
             единицу независимо от величины операндов.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="computation-models-f02"
+            data-notation-coverage="interactive"
+            data-required-notations="unit-cost">
             \[
               \class{atlas-notation-token notation-id-unit-cost}{C_{\mathrm{unit}}(e)}=1.
             \]
@@ -154,12 +160,12 @@
             сравнение, сдвиг и побитовые операции над словами стоят постоянно;
             результат снова обрезан до $w$ бит либо переполнение оговорено.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="computation-models-f03"
+            data-notation-coverage="interactive"
+            data-required-notations="word-size-w,input-size-n">
             \[
-              2^w\ge n
-              \quad\Longleftrightarrow\quad
-              \class{atlas-notation-token notation-id-word-size-w}{w}
-              \ge\lceil\log_2 n\rceil.
+              2^{\class{atlas-notation-token notation-id-word-size-w}{w}}\ge \class{atlas-notation-token notation-id-input-size-n}{n} \quad\Longleftrightarrow\quad \class{atlas-notation-token notation-id-word-size-w}{w} \ge\lceil\log_2 \class{atlas-notation-token notation-id-input-size-n}{n}\rceil.
             \]
           </div>
           <p>
@@ -199,11 +205,12 @@
             Школьное умножение требует $\Theta(b^2)$, хотя более быстрые
             алгоритмы дают меньшую асимптотику.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="computation-models-f04"
+            data-notation-coverage="interactive"
+            data-required-notations="addition-bit-cost,big-theta-class,schoolbook-multiplication-cost">
             \[
-              C_{+}(b)\in\Theta(b),
-              \qquad
-              C_{\times}^{\mathrm{school}}(b)\in\Theta(b^2).
+              \class{atlas-notation-token notation-id-addition-bit-cost}{C_{+}(b)}\in\class{atlas-notation-token notation-id-big-theta-class}{\Theta(b)}, \qquad \class{atlas-notation-token notation-id-schoolbook-multiplication-cost}{C_{\times}^{\mathrm{school}}(b)}\in\class{atlas-notation-token notation-id-big-theta-class}{\Theta(b^2)}.
             \]
           </div>
           <p>
@@ -248,10 +255,12 @@
             $2^{\Theta(|N|)}$ ячеек как функцию длины записи. Такую оценку
             называют псевдополиномиальной.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="computation-models-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="pseudo-polynomial-step-count,big-theta-class,exponential-time-bound,input-length">
             \[
-              T(N)=\Theta(N)
-              =2^{\Theta(\class{atlas-notation-token notation-id-input-length}{|N|})}.
+              \class{atlas-notation-token notation-id-pseudo-polynomial-step-count}{T(N)}=\class{atlas-notation-token notation-id-big-theta-class}{\Theta}(N) =\class{atlas-notation-token notation-id-exponential-time-bound}{2}^{\class{atlas-notation-token notation-id-big-theta-class}{\Theta}(\class{atlas-notation-token notation-id-input-length}{|N|})}.
             \]
           </div>
           <p>

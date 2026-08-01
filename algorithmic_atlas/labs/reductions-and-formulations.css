@@ -1,0 +1,178 @@
+.formulations-metrics,
+.formulations-figure,
+.formulations-step {
+  grid-column: 1 / -1;
+}
+
+.formulations-figure {
+  overflow-x: auto;
+}
+
+.formulation-editor__title {
+  display: block;
+  margin-bottom: 0.45rem;
+}
+
+.formulation-editor__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.formulation-editor__grid label {
+  display: flex;
+  grid-template-columns: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.formulation-editor__grid input {
+  width: 1.05rem;
+  height: 1.05rem;
+  margin: 0;
+}
+
+.formulations-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+}
+
+.formulations-metrics div {
+  padding: 0.68rem;
+  border-right: 1px solid var(--chapter-line);
+}
+
+.formulations-metrics div:last-child {
+  border-right: 0;
+}
+
+.formulations-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.76rem;
+}
+
+.formulations-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.formulations-figure .atlas-lab__visual {
+  min-height: 48rem;
+}
+
+.formulation-panel {
+  fill: color-mix(in srgb, var(--chapter-line) 12%, var(--chapter-paper));
+  stroke: var(--chapter-line);
+  stroke-width: 2;
+}
+
+.formulation-heading,
+.formulation-objective {
+  font-weight: 700;
+}
+
+.formulation-edge {
+  stroke-width: 8;
+  vector-effect: non-scaling-stroke;
+}
+
+.formulation-edge.is-covered {
+  stroke: var(--lab-good);
+}
+
+.formulation-edge.is-uncovered {
+  stroke: var(--lab-bad);
+  stroke-dasharray: 9 5;
+}
+
+.formulation-vertex {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.formulation-vertex.is-selected {
+  fill: var(--chapter-accent);
+  stroke: var(--chapter-accent);
+}
+
+.formulation-vertex-label {
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.formulation-vertex.is-selected + .formulation-vertex-label {
+  fill: var(--chapter-paper);
+}
+
+.formulation-constraint.is-good {
+  fill: var(--lab-good);
+}
+
+.formulation-constraint.is-bad {
+  fill: var(--lab-bad);
+  font-weight: 700;
+}
+
+.formulation-tree-edge {
+  stroke: var(--chapter-line);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.formulation-tree-edge.is-zero {
+  stroke-dasharray: 4 4;
+}
+
+.formulation-tree-edge.is-one {
+  stroke: var(--lab-b);
+}
+
+.formulation-tree-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.formulation-tree-node.is-future {
+  opacity: 0.25;
+}
+
+.formulation-tree-node.is-current {
+  fill: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.formulation-tree-node.is-solution {
+  fill: var(--lab-good);
+}
+
+.formulation-tree-node.is-pruned {
+  fill: color-mix(in srgb, var(--lab-bad) 28%, var(--chapter-paper));
+  stroke: var(--lab-bad);
+}
+
+.formulation-node-label {
+  font-size: 10px !important;
+}
+
+@media (max-width: 48rem) {
+  .formulations-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formulations-metrics div {
+    border-bottom: 1px solid var(--chapter-line);
+  }
+
+  .formulations-figure .atlas-lab__visual {
+    min-width: 58rem;
+  }
+}

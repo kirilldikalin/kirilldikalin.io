@@ -50,11 +50,11 @@
           <p>
             Ephemeral-структура предоставляет один корень. После update тот же логический объект обозначает новое состояние, а запрос к старому состоянию невозможен без внешнего журнала. Persistent-структура считает каждое состояние отдельной <span class="atlas-notation-token notation-id-persistence-version">версией $v$</span>. Update принимает идентификатор допустимой версии и возвращает новый идентификатор; прежний корень остаётся доступен и никогда не переписывается.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-persistence-version}{v_{new}}
-            =update(v_{base},op),
-            \qquad query(v_{base})\text{ остаётся неизменным}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-11-version-update" data-notation-coverage="interactive" data-required-notations="persistence-version,persistent-update-operation,persistent-query-operation">
+            \[
+              \class{atlas-notation-token notation-id-persistence-version}{v_{new}} =\class{atlas-notation-token notation-id-persistent-update-operation}{update}(\class{atlas-notation-token notation-id-persistence-version}{v_{base}},op), \qquad \class{atlas-notation-token notation-id-persistent-query-operation}{query}(\class{atlas-notation-token notation-id-persistence-version}{v_{base}})\text{ остаётся неизменным}.
+            \]
+          </div>
           <p>
             Неизменяемость относится к узлам, достижимым из опубликованной версии. Во время построения новой версии реализация может создавать и заполнять свежие узлы, пока их корень ещё не виден клиенту. После публикации менять общий узел нельзя: он может одновременно участвовать в старой и новой версии, и одна запись повредила бы обе.
           </p>
@@ -106,11 +106,11 @@
           <p>
             Для сбалансированного бинарного дерева высоты $h$ создаётся не более $h+1$ узлов. Неизменившиеся боковые поддеревья разделяются целиком. Если update затрагивает $k$ различных корневых путей, копируется их объединение, а не обязательно $kh$ узлов: общие префиксы путей копируются один раз внутри новой версии.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-persistence-path-copy-cost}{space(update)}
-            =\Theta(\text{числа изменившихся узлов на путях}),
-            \qquad O(h)\text{ для одной позиции}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-11-path-copying-space" data-notation-coverage="interactive" data-required-notations="persistence-path-copy-cost">
+            \[
+              \class{atlas-notation-token notation-id-persistence-path-copy-cost}{space(update)} =\Theta(\text{числа изменившихся узлов на путях}), \qquad O(h)\text{ для одной позиции}.
+            \]
+          </div>
           <p>
             Копирование выполняется снизу вверх либо рекурсивным возвратом. Сначала создаётся новая версия листа. Затем новый родитель получает одного нового и одного старого ребёнка; его агрегаты пересчитываются из обоих. Так продолжается до корня. Если дерево балансируется вращением, копируются и все узлы, чьи ссылки или метаданные меняет вращение.
           </p>
@@ -236,11 +236,11 @@
           <p>
             Succinct representation обычно использует $B(n)+o(B(n))$ битов и поддерживает требуемые операции эффективно, часто за $O(1)$ в word-RAM. Compact representation может использовать $O(B(n))$ с постоянным множителем, implicit — мало служебных данных сверх payload. Термины близки, но строгая succinctness требует исчезающей относительной избыточности.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-succinct-information-bound}{space(n)}
-            =B(n)+o(B(n)),
-            \qquad B(n)=\left\lceil\log_2 M_n\right\rceil.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-11-succinct-space" data-notation-coverage="interactive" data-required-notations="succinct-information-bound">
+            \[
+              \class{atlas-notation-token notation-id-succinct-information-bound}{space(n)} =B(n)+o(B(n)), \qquad B(n)=\left\lceil\log_2 M_n\right\rceil.
+            \]
+          </div>
           <p>
             Одного маленького файла недостаточно: если перед query его нужно полностью распаковать в pointer tree, рабочая память и время возвращаются. Succinct data structure отвечает непосредственно по закодированным битам с небольшим auxiliary index. Поэтому это одновременно задача кодирования и алгоритма доступа.
           </p>
@@ -270,13 +270,11 @@
           <p>
             Соглашения критичны. В этой главе $rank_1(i)$ считает единицы на полуинтервале $[0,i)$, поэтому $rank_1(0)=0$ и $rank_1(n)$ равен общему числу единиц. $select_1(k)$ получает $k$ от единицы и возвращает нулевую позицию k-th one. Другие библиотеки включают позицию $i$ в rank или нумеруют select от нуля; формулы нужно адаптировать, а не смешивать.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-bitvector-rank}{rank_1(i)}
-            =\sum_{j=0}^{i-1}B[j],
-            \qquad
-            \class{atlas-notation-token notation-id-bitvector-select}{select_1(k)}
-            =\min\{i:rank_1(i+1)=k\}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-11-rank-select" data-notation-coverage="interactive" data-required-notations="bitvector-rank,bitvector-select">
+            \[
+              \class{atlas-notation-token notation-id-bitvector-rank}{rank_1(i)} =\sum_{j=0}^{i-1}B[j], \qquad \class{atlas-notation-token notation-id-bitvector-select}{select_1(k)} =\min\{i:rank_1(i+1)=k\}.
+            \]
+          </div>
           <p>
             Наивный rank сканирует $i$ битов, select — до найденной единицы. Полный prefix array отвечает за $O(1)$, но хранит $n+1$ чисел по $\Theta(\log n)$ bits, то есть $\Theta(n\log n)$ extra bits — больше исходного вектора. Succinct index хранит ответы редко и восстанавливает малый остаток по компактным блокам.
           </p>

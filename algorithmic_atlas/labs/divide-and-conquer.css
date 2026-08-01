@@ -1,0 +1,90 @@
+.divide-conquer-figure {
+  overflow-x: auto;
+}
+
+.divide-conquer-figure .atlas-lab__visual {
+  min-height: 40rem;
+}
+
+.divide-conquer-step {
+  min-height: 9rem;
+}
+
+.recursion-edge {
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 180ms ease, opacity 180ms ease;
+}
+
+.recursion-edge.is-unseen {
+  opacity: 0.28;
+}
+
+.recursion-edge.is-waiting,
+.recursion-edge.is-current {
+  stroke: var(--lab-b);
+}
+
+.recursion-edge.is-combined {
+  stroke: var(--lab-good);
+}
+
+.recursion-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transition: fill 180ms ease, stroke 180ms ease;
+}
+
+.recursion-node.is-unseen {
+  opacity: 0.38;
+}
+
+.recursion-node.is-waiting {
+  fill: color-mix(in srgb, var(--lab-b) 18%, var(--chapter-paper));
+  stroke: var(--lab-b);
+}
+
+.recursion-node.is-combined {
+  fill: color-mix(in srgb, var(--lab-good) 23%, var(--chapter-paper));
+  stroke: var(--lab-good);
+}
+
+.recursion-node.is-current {
+  fill: var(--chapter-accent);
+  stroke: var(--chapter-ink);
+  stroke-width: 3;
+}
+
+.recursion-size {
+  fill: var(--chapter-ink);
+  font-size: 10px !important;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.recursion-node.is-current + .recursion-size {
+  fill: var(--chapter-paper);
+}
+
+.recursion-level-bar {
+  fill: var(--chapter-soft);
+  stroke: var(--chapter-line);
+  vector-effect: non-scaling-stroke;
+}
+
+.recursion-level-bar.is-current {
+  fill: var(--chapter-accent);
+}
+
+.divide-conquer-step + * {
+  min-width: 0;
+}
+
+@media (max-width: 36rem) {
+  .divide-conquer-figure .atlas-lab__visual {
+    min-height: 34rem;
+  }
+}

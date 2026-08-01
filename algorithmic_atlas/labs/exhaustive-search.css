@@ -1,0 +1,79 @@
+.exhaustive-search-figure {
+  overflow-x: auto;
+}
+
+.exhaustive-search-figure .atlas-lab__visual {
+  min-height: 36rem;
+}
+
+.atlas-lab__check {
+  display: flex !important;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.8rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.atlas-lab__check input {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 0;
+}
+
+.search-tree-edge {
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.search-tree-edge.is-exclude {
+  stroke-dasharray: 4 4;
+}
+
+.search-tree-edge.is-include {
+  stroke: var(--lab-b);
+}
+
+.search-tree-node {
+  stroke: var(--chapter-ink);
+  stroke-width: 1.4;
+  vector-effect: non-scaling-stroke;
+}
+
+.search-tree-node.is-visited {
+  fill: var(--chapter-paper);
+}
+
+.search-tree-node.is-pruned {
+  fill: color-mix(in srgb, var(--lab-bad) 24%, var(--chapter-paper));
+  stroke: var(--lab-bad);
+}
+
+.search-tree-node.is-current {
+  fill: var(--chapter-accent);
+  stroke-width: 3;
+}
+
+.search-tree-value {
+  fill: var(--chapter-ink);
+  font-size: 10px !important;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.search-tree-node.is-current + .search-tree-value {
+  fill: var(--chapter-paper);
+}
+
+.exhaustive-search-step {
+  min-height: 9rem;
+}
+
+@media (max-width: 36rem) {
+  .exhaustive-search-figure .atlas-lab__visual {
+    min-height: 30rem;
+  }
+}

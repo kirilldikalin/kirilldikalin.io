@@ -147,11 +147,17 @@
             число шагов на всех входах длины \(n\). Теперь зафиксируем две функции
             стоимости:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="asymptotic-function-domain"
+            data-notation-coverage="interactive"
+            data-required-notations="cost-function-fn,comparison-function-gn,natural-numbers,nonnegative-reals">
             \[
               \class{atlas-notation-token notation-id-cost-function-fn}{f},
               \class{atlas-notation-token notation-id-comparison-function-gn}{g}
-              \colon \mathbb N\to\mathbb R_{\ge 0}.
+              \colon
+              \class{atlas-notation-token notation-id-natural-numbers}{\mathbb N}
+              \to
+              \class{atlas-notation-token notation-id-nonnegative-reals}{\mathbb R_{\ge 0}}.
             \]
           </div>
           <p>
@@ -205,7 +211,10 @@
           <h2>Верхняя асимптотическая оценка</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Определение \(O\)</h3>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-big-o-definition"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn,comparison-function-gn,big-o-class,exists-quantifier,asymptotic-constant-c,asymptotic-threshold-n0,forall-tail-quantifier">
               \[
                 \class{atlas-notation-token notation-id-cost-function-fn}{f}
                 \in
@@ -249,7 +258,10 @@
           <h2>Нижняя граница и точный порядок</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Определения \(\Omega\) и \(\Theta\)</h3>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-big-omega-definition"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn,comparison-function-gn,big-omega-class,exists-quantifier,asymptotic-constant-c,asymptotic-threshold-n0,forall-tail-quantifier">
               \[
                 \class{atlas-notation-token notation-id-cost-function-fn}{f}
                 \in
@@ -264,19 +276,37 @@
                 \class{atlas-notation-token notation-id-forall-tail-quantifier}
                   {\forall n\ge n_0}:
                 \quad
-                0\le c\,g(n)\le f(n).
+                0\le
+                \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}\,
+                \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}
+                \le
+                \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}.
               \]
             </div>
             <p>
               Здесь постоянный множитель \(c\,g(n)\) лежит снизу. Поэтому сразу
               получается полезная симметрия:
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-order-duality"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn,comparison-function-gn,big-o-class,big-omega-class">
               \[
-                f\in\Omega(g)\iff g\in O(f).
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-omega-class}{\Omega}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+                \iff
+                \class{atlas-notation-token notation-id-comparison-function-gn}{g}
+                \in
+                \class{atlas-notation-token notation-id-big-o-class}{O}
+                \bigl(\class{atlas-notation-token notation-id-cost-function-fn}{f}\bigr).
               \]
             </div>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-theta-definition"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn,comparison-function-gn,big-theta-class,exists-quantifier,theta-lower-constant-c1,theta-upper-constant-c2,asymptotic-threshold-n0,forall-tail-quantifier">
               \[
                 \class{atlas-notation-token notation-id-cost-function-fn}{f}
                 \in
@@ -294,9 +324,12 @@
                 \quad
                 0\le
                 \class{atlas-notation-token notation-id-theta-lower-constant-c1}{c_1}
-                g(n)\le f(n)\le
+                \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}
+                \le
+                \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}
+                \le
                 \class{atlas-notation-token notation-id-theta-upper-constant-c2}{c_2}
-                g(n).
+                \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}.
               \]
             </div>
           </section>
@@ -310,11 +343,25 @@
               определение \(\Theta\) уже содержит верхнее и нижнее неравенства:
               первое даёт \(O\), второе — \(\Omega\). Поэтому
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-theta-equivalence"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn,comparison-function-gn,big-o-class,big-omega-class,big-theta-class">
               \[
-                f\in\Theta(g)
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-theta-class}{\Theta}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
                 \iff
-                f\in O(g)\land f\in\Omega(g).
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-o-class}{O}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr)
+                \land
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-big-omega-class}{\Omega}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr).
               \]
             </div>
           </section>
@@ -328,7 +375,10 @@
             положительный множитель не удерживает отношение от стремления к нулю
             или бесконечности.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="asymptotic-little-o-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="cost-function-fn,comparison-function-gn,little-o-class,forall-positive-constant,exists-quantifier,asymptotic-threshold-n0,forall-tail-quantifier,asymptotic-constant-c">
             \[
               \class{atlas-notation-token notation-id-cost-function-fn}{f}
               \in
@@ -342,10 +392,17 @@
               \in\mathbb N\;
               \class{atlas-notation-token notation-id-forall-tail-quantifier}
                 {\forall n\ge n_0}:
-              \quad 0\le f(n)&lt;c\,g(n).
+              \quad 0\le
+              \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}
+              &lt;
+              \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}\,
+              \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}.
             \]
           </div>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="asymptotic-little-omega-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="cost-function-fn,comparison-function-gn,little-omega-class,forall-positive-constant,exists-quantifier,asymptotic-threshold-n0,forall-tail-quantifier,asymptotic-constant-c">
             \[
               \class{atlas-notation-token notation-id-cost-function-fn}{f}
               \in
@@ -359,7 +416,11 @@
               \in\mathbb N\;
               \class{atlas-notation-token notation-id-forall-tail-quantifier}
                 {\forall n\ge n_0}:
-              \quad 0\le c\,g(n)&lt;f(n).
+              \quad 0\le
+              \class{atlas-notation-token notation-id-asymptotic-constant-c}{c}\,
+              \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}
+              &lt;
+              \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}.
             \]
           </div>
           <p>
@@ -375,13 +436,34 @@
               Если \(g(n)&gt;0\) начиная с некоторого места и отношение
               \(f(n)/g(n)\) имеет соответствующий предел, то
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-limit-criterion"
+              data-notation-coverage="interactive"
+              data-required-notations="asymptotic-limit,cost-function-fn,comparison-function-gn,little-o-class,little-omega-class">
               \[
-                \lim_{n\to\infty}\frac{f(n)}{g(n)}=0
-                \Longrightarrow f\in o(g),
+                \class{atlas-notation-token notation-id-asymptotic-limit}{\lim_{n\to\infty}}
+                \frac{
+                  \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}
+                }{
+                  \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}
+                }=0
+                \Longrightarrow
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-little-o-class}{o}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr),
                 \qquad
-                \lim_{n\to\infty}\frac{f(n)}{g(n)}=\infty
-                \Longrightarrow f\in\omega(g).
+                \class{atlas-notation-token notation-id-asymptotic-limit}{\lim_{n\to\infty}}
+                \frac{
+                  \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}
+                }{
+                  \class{atlas-notation-token notation-id-comparison-function-gn}{g(n)}
+                }=\infty
+                \Longrightarrow
+                \class{atlas-notation-token notation-id-cost-function-fn}{f}
+                \in
+                \class{atlas-notation-token notation-id-little-omega-class}{\omega}
+                \bigl(\class{atlas-notation-token notation-id-comparison-function-gn}{g}\bigr).
               \]
             </div>
             <p>
@@ -428,7 +510,10 @@
               \(3n^2\le3n^2+5n+7\). На том же хвосте выполняются
               \(n\le n^2\) и \(1\le n^2\), поэтому
             </p>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-polynomial-bound"
+              data-notation-coverage="interactive"
+              data-required-notations="cost-function-fn">
               \[
                 3n^2
                 \le
@@ -465,7 +550,10 @@
               \(\ln n\le\sqrt n\): в точке \(4\) неравенство верно, а производная
               \(\sqrt n-\ln n\) после \(4\) неотрицательна. Тогда
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="asymptotic-log-linear-squeeze"
+              data-notation-coverage="basic"
+              data-basic-reason="elementary-identity">
               \[
                 0\le\frac{\ln n}{n}\le\frac1{\sqrt n}\longrightarrow0.
               \]
@@ -483,13 +571,20 @@
               Пусть \(k\ge0\) фиксировано и \(r_n=n^k/2^n\). Для
               \(n\ge\max\{1,2k\}\)
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="asymptotic-ratio-contraction"
+              data-notation-coverage="interactive"
+              data-required-notations="ratio-sequence,fixed-polynomial-degree,contraction-factor">
               \[
-                \frac{r_{n+1}}{r_n}
-                =\frac{(1+1/n)^k}{2}
-                \le\frac{e^{k/n}}2
+                \frac{
+                  \class{atlas-notation-token notation-id-ratio-sequence}{r_{n+1}}
+                }{
+                  \class{atlas-notation-token notation-id-ratio-sequence}{r_n}
+                }
+                =\frac{(1+1/n)^{\class{atlas-notation-token notation-id-fixed-polynomial-degree}{k}}}{2}
+                \le\frac{e^{\class{atlas-notation-token notation-id-fixed-polynomial-degree}{k}/n}}2
                 \le\frac{\sqrt e}{2}
-                =\rho&lt;1.
+                =\class{atlas-notation-token notation-id-contraction-factor}{\rho}&lt;1.
               \]
             </div>
             <p>
@@ -505,12 +600,17 @@
         <section id="oscillation">
           <h2>Определения не требуют монотонности</h2>
           <p>Рассмотрим функцию, которая прыгает между двумя масштабами:</p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="asymptotic-oscillating-function"
+            data-notation-coverage="interactive"
+            data-required-notations="cost-function-fn,oscillating-even-branch,oscillating-odd-branch">
             \[
-              f(n)=
+              \class{atlas-notation-token notation-id-cost-function-fn}{f(n)}=
               \begin{cases}
-                n, &amp; n\text{ чётно},\\
-                n^2, &amp; n\text{ нечётно}.
+                \class{atlas-notation-token notation-id-oscillating-even-branch}{n},
+                  &amp; \class{atlas-notation-token notation-id-oscillating-even-branch}{n\text{ чётно}},\\
+                \class{atlas-notation-token notation-id-oscillating-odd-branch}{n^2},
+                  &amp; \class{atlas-notation-token notation-id-oscillating-odd-branch}{n\text{ нечётно}}.
               \end{cases}
             \]
           </div>

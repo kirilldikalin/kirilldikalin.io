@@ -107,7 +107,10 @@
               Пусть \(\Sigma\) — конечный алфавит, а \(x\in\Sigma^*\) —
               код входного объекта. Размером входа назовём длину этой записи:
             </p>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="input-size-definition"
+              data-notation-coverage="interactive"
+              data-required-notations="input-length">
               \[
                 \class{atlas-notation-token notation-id-input-length}{|x|}
                 =\text{число символов в коде }x.
@@ -137,7 +140,10 @@
             коэффициентами до степени \(d\) либо хранить только ненулевые. Отсюда
             первый принцип анализа:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="input-analysis-pipeline"
+            data-notation-coverage="basic"
+            data-basic-reason="diagram-summary">
             \[
               \text{задача}+\text{кодирование}+\text{модель шага}
               \longrightarrow \text{оценка стоимости}.
@@ -171,17 +177,31 @@
             начинается с единицы. Наименьшее такое число равно \(2^{\ell-1}\),
             а первое число, которому уже нужен следующий бит, равно \(2^\ell\):
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="input-binary-length-bounds"
+            data-notation-coverage="interactive"
+            data-required-notations="binary-length,input-number-n">
             \[
-              2^{\ell-1}\le N&lt;2^\ell.
+              2^{\class{atlas-notation-token notation-id-binary-length}{\ell}-1}
+              \le
+              \class{atlas-notation-token notation-id-input-number-n}{N}
+              &lt;
+              2^{\class{atlas-notation-token notation-id-binary-length}{\ell}}.
             \]
           </div>
           <p>
             Логарифмируя неравенство и выделяя \(\ell\), получаем точную формулу:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="input-binary-length-formula"
+            data-notation-coverage="interactive"
+            data-required-notations="binary-length,binary-length-expression,input-number-n">
             \[
-              \ell(N)=\lfloor\log_2N\rfloor+1,\qquad N\ge1.
+              \class{atlas-notation-token notation-id-binary-length}{\ell(N)}
+              =
+              \class{atlas-notation-token notation-id-binary-length-expression}{\lfloor\log_2N\rfloor+1},
+              \qquad
+              \class{atlas-notation-token notation-id-input-number-n}{N\ge1}.
             \]
           </div>
           <p>
@@ -246,7 +266,10 @@
             Зафиксируем алгоритм \(A\), код входа \(x\) и правило, какие действия
             считаются элементарными. Обозначим стоимость конкретного запуска:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="input-running-time-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="running-time-on-input">
             \[
               \class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}
               =\text{число элементарных операций в вычислении }A(x).
@@ -257,9 +280,15 @@
             приводить к разному числу шагов. Чтобы говорить только о размере,
             входы одной длины агрегируют. Например,
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="input-worst-case-cost"
+            data-notation-coverage="interactive"
+            data-required-notations="worst-case-cost,input-length,running-time-on-input">
             \[
-              T_A^{\max}(n)=\max_{\substack{x\ \text{допустим}\\|x|=n}}T_A(x).
+              \class{atlas-notation-token notation-id-worst-case-cost}{T_A^{\max}(n)}
+              =\max_{\substack{x\ \text{допустим}\\
+                \class{atlas-notation-token notation-id-input-length}{|x|}=n}}
+              \class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}.
             \]
           </div>
           <p>
@@ -341,11 +370,18 @@
             В unit-cost модели сто делений — сто шагов независимо от разрядности.
             В битовой модели нужно сложить цены конкретных делений:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="input-bit-cost-sum"
+            data-notation-coverage="interactive"
+            data-required-notations="bit-cost,division-bit-cost,operand-bit-length">
             \[
-              T_{\mathrm{bit}}
-              =\sum_i \operatorname{cost}_{\mathrm{div}}
-                \bigl(|a_i|,|b_i|\bigr).
+              \class{atlas-notation-token notation-id-bit-cost}{T_{\mathrm{bit}}}
+              =\sum_i
+              \class{atlas-notation-token notation-id-division-bit-cost}{\operatorname{cost}_{\mathrm{div}}}
+                \bigl(
+                  \class{atlas-notation-token notation-id-operand-bit-length}{|a_i|},
+                  \class{atlas-notation-token notation-id-operand-bit-length}{|b_i|}
+                \bigr).
             \]
           </div>
           <p>

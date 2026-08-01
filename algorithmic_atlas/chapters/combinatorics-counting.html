@@ -128,7 +128,10 @@
               Если конечное множество вариантов разбито на попарно
               непересекающиеся классы \(A_1,\ldots,A_k\), то
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="combinatorics-counting-f01"
+              data-notation-coverage="basic"
+              data-basic-reason="elementary-identity">
               \[
                 \left|\bigcup_{i=1}^{k}A_i\right|
                 =\sum_{i=1}^{k}|A_i|.
@@ -149,7 +152,10 @@
               и после любого допустимого префикса на шаге \(i\) доступно ровно
               \(m_i\) продолжений, то число результатов равно
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="combinatorics-counting-f02"
+              data-notation-coverage="basic"
+              data-basic-reason="elementary-identity">
               \[
                 m_1m_2\cdots m_k.
               \]
@@ -183,7 +189,10 @@
             второй \(n-1\), и так до одного. По соглашению \(0!=1\): существует
             ровно один пустой порядок.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="combinatorics-counting-f03"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               n!=n(n-1)\cdots2\cdot1.
             \]
@@ -192,7 +201,10 @@
             Если заполняются только \(k\) упорядоченных позиций без повторений,
             число размещений равно
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="combinatorics-counting-f04"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               n(n-1)\cdots(n-k+1)=\frac{n!}{(n-k)!}.
             \]
@@ -205,7 +217,10 @@
           </p>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Биномиальный коэффициент</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="combinatorics-counting-f05"
+              data-notation-coverage="interactive"
+              data-required-notations="binomial-coefficient">
               \[
                 \class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk}
                 =\frac{n!}{k!(n-k)!},
@@ -256,17 +271,22 @@
             либо нет. В первом случае остаётся выбрать \(k-1\) элемент из
             \(n-1\), во втором — \(k\) из \(n-1\). Получаем рекуррентность Паскаля:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="combinatorics-counting-f06"
+            data-notation-coverage="interactive"
+            data-required-notations="binomial-coefficient">
             \[
-              \class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk}
-              =\binom{n-1}{k-1}+\binom{n-1}{k}.
+              \class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk} =\class{atlas-notation-token notation-id-binomial-coefficient}{\binom{n-1}{k-1}}+\class{atlas-notation-token notation-id-binomial-coefficient}{\binom{n-1}{k}}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Биномиальная формула</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="combinatorics-counting-f07"
+              data-notation-coverage="interactive"
+              data-required-notations="binomial-power,binomial-summation,binomial-coefficient">
               \[
-                (x+y)^n=\sum_{k=0}^{n}\binom nk x^k y^{n-k}.
+                \class{atlas-notation-token notation-id-binomial-power}{(x+y)^n}=\class{atlas-notation-token notation-id-binomial-summation}{\sum_{k=0}^{n}}\class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk} x^k y^{n-k}.
               \]
             </div>
             <p>
@@ -298,9 +318,12 @@
               В конечном неориентированном графе сумма степеней вершин равна
               удвоенному числу рёбер:
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="combinatorics-counting-f08"
+              data-notation-coverage="interactive"
+              data-required-notations="vertex-degree,set-cardinality">
               \[
-                \sum_{v\in V}\deg(v)=2|E|.
+                \sum_{v\in V}\class{atlas-notation-token notation-id-vertex-degree}{\deg(v)} =2\class{atlas-notation-token notation-id-set-cardinality}{|E|}.
               \]
             </div>
             <p>
@@ -318,9 +341,12 @@
               элементов: \(k\binom nk\). Или сначала выбираем \(v\), затем
               остальные \(k-1\) элементов: \(n\binom{n-1}{k-1}\). Поэтому
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="combinatorics-counting-f09"
+              data-notation-coverage="interactive"
+              data-required-notations="binomial-coefficient">
               \[
-                k\binom nk=n\binom{n-1}{k-1}.
+                k\class{atlas-notation-token notation-id-binomial-coefficient}{\binom nk}=n\class{atlas-notation-token notation-id-binomial-coefficient}{\binom{n-1}{k-1}}.
               \]
             </div>
           </section>
@@ -332,7 +358,10 @@
             Для двух множеств сумма \(|A|+|B|\) дважды считает пересечение.
             Один экземпляр нужно вычесть:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="combinatorics-counting-f10"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               |A\cup B|=|A|+|B|-|A\cap B|.
             \]
@@ -342,21 +371,22 @@
             тройного пересечения сначала посчитан три раза, затем вычтен три
             раза. Его нужно вернуть один раз:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="combinatorics-counting-f11"
+            data-notation-coverage="interactive"
+            data-required-notations="set-cardinality">
             \[
-              |A\cup B\cup C|
-              =|A|+|B|+|C|
-              -|A\cap B|-|A\cap C|-|B\cap C|
-              +|A\cap B\cap C|.
+              \class{atlas-notation-token notation-id-set-cardinality}{|A\cup B\cup C|} =\class{atlas-notation-token notation-id-set-cardinality}{|A|}+\class{atlas-notation-token notation-id-set-cardinality}{|B|}+\class{atlas-notation-token notation-id-set-cardinality}{|C|} -\class{atlas-notation-token notation-id-set-cardinality}{|A\cap B|}-\class{atlas-notation-token notation-id-set-cardinality}{|A\cap C|}-\class{atlas-notation-token notation-id-set-cardinality}{|B\cap C|} +\class{atlas-notation-token notation-id-set-cardinality}{|A\cap B\cap C|}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Общая формула</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="combinatorics-counting-f12"
+              data-notation-coverage="interactive"
+              data-required-notations="set-cardinality,inclusion-index-family">
               \[
-                \left|\bigcup_{i=1}^{m}A_i\right|
-                =\sum_{\varnothing\ne I\subseteq[m]}
-                  (-1)^{|I|+1}\left|\bigcap_{i\in I}A_i\right|.
+                \class{atlas-notation-token notation-id-set-cardinality}{\left|\bigcup_{i=1}^{m}A_i\right|} =\sum_{\class{atlas-notation-token notation-id-inclusion-index-family}{\varnothing\ne I\subseteq[m]}} (-1)^{|I|+1}\class{atlas-notation-token notation-id-set-cardinality}{\left|\bigcap_{i\in I}A_i\right|}.
               \]
             </div>
             <p>

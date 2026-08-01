@@ -35,10 +35,11 @@
           <p>
             Корень соответствует пустой строке $\varepsilon$. Из каждой вершины выходит не более одного ребра с данным символом. Строка, прочитанная вдоль пути от корня к вершине $v$, — её префикс $pref(v)$. Вершина terminal тогда и только тогда, когда $pref(v)$ принадлежит хранимому множеству ключей. Этот инвариант определяет семантику независимо от способа хранения детей.
           </p>
-          <div class="atlas-math">\[
-            pref(root)=\varepsilon,
-            \qquad pref(child)=pref(parent)\cdot label(parent,child).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-10-prefix-invariant" data-notation-coverage="interactive" data-required-notations="trie-prefix-invariant">
+            \[
+              \class{atlas-notation-token notation-id-trie-prefix-invariant}{pref(root)=\varepsilon}, \qquad \class{atlas-notation-token notation-id-trie-prefix-invariant}{pref(child)=pref(parent)\cdot label(parent,child)}.
+            \]
+          </div>
           <p>
             В обычном trie label — один символ. Под «символом» реализация должна понимать конкретную единицу: byte, Unicode code point, grapheme cluster, token или bit. Оценка длины и равенство зависят от этого решения. Нормализация NFC/NFD, регистр и локаль относятся к контракту ключа до вставки; два визуально одинаковых текста могут иметь разные code points.
           </p>
@@ -68,12 +69,11 @@
           <p>
             Если переход к ребёнку стоит $C_{child}$, поиск ключа длины $m$ занимает $O(mC_{child})$. При dense array потомков $C_{child}=O(1)$ в RAM-модели; при sorted vector — $O(\log d)$ сравнений для степени $d$; при хеш-таблице — ожидаемое $O(1)$ с её предположениями. Поэтому короткая запись «trie lookup $O(m)$» включает модель хранения детей.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            T_{find}(x)=O\!\left(
-              \class{atlas-notation-token notation-id-trie-key-length}{|x|}
-              \cdot C_{child}
-            \right).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-10-trie-find-cost" data-notation-coverage="interactive" data-required-notations="trie-find-cost,big-o-class,trie-key-length,trie-child-access-cost">
+            \[
+              \class{atlas-notation-token notation-id-trie-find-cost}{T_{find}(x)}=\class{atlas-notation-token notation-id-big-o-class}{O}\!\left( \class{atlas-notation-token notation-id-trie-key-length}{|x|} \cdot \class{atlas-notation-token notation-id-trie-child-access-cost}{C_{child}} \right).
+            \]
+          </div>
           <p>
             Эта оценка не зависит явно от числа ключей $n$, что выгодно при множестве коротких strings. Но $m$ может быть большим; BST выполняет $O(\log n)$ сравнений, каждое потенциально читает общий префикс заново. Реальная граница зависит от distribution префиксов, cache и representation. Нельзя сравнивать $O(m)$ с $O(\log n)$ без связи между $m$ и $n$ и стоимости string comparison.
           </p>
@@ -100,11 +100,11 @@
           <p>
             Если нетерминальная вершина имеет ровно одного ребёнка, промежуточное решение ничего не различает. Её можно удалить и склеить labels двух рёбер. В compressed trie, или radix tree, label — непустая строка $\class{atlas-notation-token notation-id-radix-edge-label}{\lambda(e)}$, а первые символы исходящих labels одной вершины различны.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            pref(child)=pref(parent)\cdot
-            \class{atlas-notation-token notation-id-radix-edge-label}{\lambda(parent,child)},
-            \qquad |\lambda|\ge1.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-10-radix-prefix-invariant" data-notation-coverage="interactive" data-required-notations="trie-prefix,radix-edge-label">
+            \[
+              \class{atlas-notation-token notation-id-trie-prefix}{pref(child)}=\class{atlas-notation-token notation-id-trie-prefix}{pref(parent)}\cdot \class{atlas-notation-token notation-id-radix-edge-label}{\lambda(parent,child)}, \qquad |\class{atlas-notation-token notation-id-radix-edge-label}{\lambda}|\ge1.
+            \]
+          </div>
           <p>
             Поиск выбирает edge по первому символу, затем сравнивает весь label с соответствующим suffix input. Полное совпадение ведёт к ребёнку; расхождение внутри label доказывает отсутствие ключа. При вставке частичного совпадения edge делится: общий prefix становится label до новой branching-вершины, два различных suffix — исходящими рёбрами.
           </p>

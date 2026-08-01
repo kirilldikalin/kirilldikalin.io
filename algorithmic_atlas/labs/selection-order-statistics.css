@@ -1,0 +1,56 @@
+.selection-cell {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.selection-cell.is-less {
+  fill: color-mix(in srgb, var(--chapter-focus) 16%, var(--chapter-paper));
+}
+
+.selection-cell.is-equal,
+.selection-cell.is-pivot {
+  fill: var(--chapter-warning);
+  stroke: var(--chapter-accent);
+  stroke-width: 3;
+}
+
+.selection-cell.is-greater {
+  fill: color-mix(in srgb, var(--chapter-accent) 14%, var(--chapter-paper));
+}
+
+.selection-cell.is-active {
+  fill: var(--chapter-paper);
+}
+
+.selection-cell.is-random {
+  stroke-dasharray: 5 2;
+}
+
+.selection-cell.is-bfprt {
+  stroke-width: 2;
+}
+
+.selection-divider {
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.selection-lab__metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+@media (max-width: 720px) {
+  .selection-lab__metric-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selection-cell {
+    transition: none;
+  }
+}

@@ -1,0 +1,104 @@
+.greedy-algorithms-metrics,
+.greedy-algorithms-figure,
+.greedy-algorithms-step {
+  grid-column: 1 / -1;
+}
+
+.greedy-algorithms-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+
+.greedy-algorithms-metrics div {
+  padding: 0.72rem;
+  border-right: 1px solid var(--chapter-line);
+}
+
+.greedy-algorithms-metrics div:last-child {
+  border-right: 0;
+}
+
+.greedy-algorithms-metrics dt {
+  color: var(--chapter-muted);
+  font-size: 0.8rem;
+}
+
+.greedy-algorithms-metrics dd {
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.greedy-algorithms-figure .atlas-lab__visual {
+  min-height: 29rem;
+}
+
+.greedy-interval {
+  fill: color-mix(in srgb, var(--chapter-line) 34%, var(--chapter-paper));
+  stroke: var(--chapter-muted);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.greedy-interval.is-current {
+  stroke: var(--chapter-accent);
+  stroke-width: 4;
+}
+
+.greedy-interval.is-selected {
+  fill: color-mix(in srgb, var(--lab-a) 72%, var(--chapter-paper));
+  stroke: var(--lab-a);
+}
+
+.greedy-interval.is-witness {
+  fill: color-mix(in srgb, var(--lab-b) 20%, var(--chapter-paper));
+  stroke: var(--lab-b);
+  stroke-width: 2;
+  stroke-dasharray: 8 5;
+}
+
+.greedy-interval.is-removed {
+  stroke: var(--lab-bad);
+  stroke-width: 4;
+}
+
+.greedy-interval-label,
+.greedy-solution-label {
+  pointer-events: none;
+  font-weight: 700;
+}
+
+.greedy-solution-label {
+  fill: var(--chapter-paper) !important;
+}
+
+.greedy-interval.is-witness + .greedy-solution-label {
+  fill: var(--chapter-ink) !important;
+}
+
+.greedy-frame-message {
+  font-size: 13px !important;
+  font-weight: 700;
+}
+
+@media (max-width: 42rem) {
+  .greedy-algorithms-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .greedy-algorithms-metrics div:nth-child(2) {
+    border-right: 0;
+  }
+
+  .greedy-algorithms-metrics div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--chapter-line);
+  }
+
+  .greedy-algorithms-figure {
+    overflow-x: auto;
+  }
+
+  .greedy-algorithms-figure .atlas-lab__visual {
+    min-width: 52rem;
+  }
+}

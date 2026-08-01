@@ -37,11 +37,11 @@
           <p>
             Дан массив $a_0,\dots,a_{n-1}$. Запрос выбирает полуинтервал $[l,r)$ и просит агрегат: сумму, минимум, максимум, gcd или более сложное состояние. Обновление может менять одну позицию, прибавлять значение на целом диапазоне, присваивать диапазону константу или комбинировать несколько действий. Слово «диапазонная структура» не задаёт одну задачу: интерфейс определяется парой query/update и алгеброй агрегата.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-range-query}{Q(l,r)}
-            =a_l\circ a_{l+1}\circ\cdots\circ a_{r-1},
-            \qquad 0\le l\le r\le n.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-range-query" data-notation-coverage="interactive" data-required-notations="range-query,range-aggregate-operation,half-open-range">
+            \[
+              \class{atlas-notation-token notation-id-range-query}{Q(l,r)} =a_l\class{atlas-notation-token notation-id-range-aggregate-operation}{\circ} a_{l+1}\class{atlas-notation-token notation-id-range-aggregate-operation}{\circ}\cdots\class{atlas-notation-token notation-id-range-aggregate-operation}{\circ} a_{r-1}, \qquad \class{atlas-notation-token notation-id-half-open-range}{0\le l\le r\le n}.
+            \]
+          </div>
           <p>
             Полуинтервал удобен: длина равна $r-l$, соседние $[l,m)$ и $[m,r)$ не пересекаются, пустой диапазон $[l,l)$ естественен. Некоторые структуры и библиотеки используют включительные границы; ошибка на единицу возникает не из дерева, а из смешения контрактов. В этой главе segment tree использует $[l,r)$, а классическая формула Fenwick ниже — индексы $1\dots n$ и включительные префиксы.
           </p>
@@ -61,10 +61,11 @@
           <p>
             Определим $P_0=0$ и $P_{i+1}=P_i+a_i$. Тогда сумма полуинтервала получается вычитанием:
           </p>
-          <div class="atlas-math">\[
-            P_k=\sum_{i=0}^{k-1}a_i,
-            \qquad \sum_{i=l}^{r-1}a_i=P_r-P_l.
-          \]</div>
+          <div class="atlas-math" data-formula-id="3-9-prefix-sum" data-notation-coverage="basic" data-basic-reason="elementary-identity" data-required-notations="">
+            \[
+              P_k=\sum_{i=0}^{k-1}a_i, \qquad \sum_{i=l}^{r-1}a_i=P_r-P_l.
+            \]
+          </div>
           <p>
             Построение выполняет $n$ сложений и занимает $O(n)$ дополнительной памяти, каждый query — $O(1)$. Корректность следует из разбиения префикса $[0,r)$ на непересекающиеся $[0,l)$ и $[l,r)$. Метод использует обратимость сложения: вклад левого префикса можно вычесть. Для минимумов формула <code>min(prefix r) − min(prefix l)</code> не имеет смысла.
           </p>
@@ -87,10 +88,11 @@
           <p>
             Пусть $D_0=a_0$, $D_i=a_i-a_{i-1}$ для $i&gt;0$. Значение восстанавливается префиксом: $a_i=\sum_{j=0}^{i}D_j$. Чтобы прибавить $\Delta$ всем элементам $[l,r)$, достаточно изменить две границы:
           </p>
-          <div class="atlas-math">\[
-            D_l\mathrel{+}=\Delta,
-            \qquad D_r\mathrel{-}=\Delta\quad\text{при }r&lt;n.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-difference-update" data-notation-coverage="interactive" data-required-notations="difference-boundary-update,half-open-range">
+            \[
+              \class{atlas-notation-token notation-id-difference-boundary-update}{D_l\mathrel{+}=\Delta}, \qquad \class{atlas-notation-token notation-id-difference-boundary-update}{D_r\mathrel{-}=\Delta}\quad\text{при }\class{atlas-notation-token notation-id-half-open-range}{r&lt;n}.
+            \]
+          </div>
           <p>
             Внутри диапазона соседние разности не меняются: оба элемента увеличились одинаково. На входе возникает скачок $+\Delta$, после выхода — $-\Delta$. Update стоит $O(1)$, но получение одной точки после многих updates требует префикса $O(n)$ без дополнительной структуры. Если все обновления известны заранее, один финальный проход материализует массив за $O(n+q)$.
           </p>
@@ -107,10 +109,11 @@
           <p>
             Segment tree требует моноид: ассоциативную операцию $\circ$ и нейтральный элемент $e$. Тогда агрегат пустого диапазона равен $e$, а любой набор непересекающихся blocks можно объединять в любом расставлении скобок. Коммутативность не обязательна: для конкатенации строк или матриц порядок блоков нужно сохранять.
           </p>
-          <div class="atlas-math">\[
-            (x\circ y)\circ z=x\circ(y\circ z),
-            \qquad e\circ x=x\circ e=x.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-monoid-laws" data-notation-coverage="interactive" data-required-notations="monoid-laws">
+            \[
+              \class{atlas-notation-token notation-id-monoid-laws}{(x\circ y)\circ z=x\circ(y\circ z)}, \qquad \class{atlas-notation-token notation-id-monoid-laws}{e\circ x=x\circ e=x}.
+            \]
+          </div>
           <p>
             Prefix difference требует более сильную структуру — обратимый элемент, как в группе. Sparse table с двумя перекрывающимися блоками требует идемпотентность $x\circ x=x$, иначе overlap посчитается дважды. Lazy propagation требует ещё действия обновлений на агрегатах: нужно уметь применить update ко всему segment summary и композиционно объединить несколько pending updates.
           </p>
@@ -127,9 +130,11 @@
           <p>
             Таблица $T[k][i]$ хранит агрегат блока длины $2^k$, начинающегося в $i$. Строка $k=0$ — исходные элементы. Следующая строка склеивается из двух половин:
           </p>
-          <div class="atlas-math">\[
-            T[k][i]=T[k-1][i]\circ T[k-1][i+2^{k-1}].
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-sparse-table-recurrence" data-notation-coverage="interactive" data-required-notations="sparse-table-recurrence">
+            \[
+              \class{atlas-notation-token notation-id-sparse-table-recurrence}{T[k][i]=T[k-1][i]\circ T[k-1][i+2^{k-1}].}
+            \]
+          </div>
           <p>
             Есть $\lfloor\log_2n\rfloor+1$ уровней и $O(n\log n)$ entries. Построение имеет ту же временную и пространственную сложность. Любой диапазон можно разложить на $O(\log n)$ непересекающихся степенных блоков, поэтому для общего моноида query стоит $O(\log n)$.
           </p>
@@ -165,10 +170,11 @@
           <p>
             Binary indexed tree — массив $BIT[1..n]$. Ячейка с индексом $i$ хранит сумму диапазона, который заканчивается в $i$ и имеет длину младшего установленного бита:
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-range-lowbit}{\operatorname{lowbit}(i)}=i\mathbin{\&}(-i),
-            \qquad BIT[i]=\sum_{j=i-\operatorname{lowbit}(i)+1}^{i}a_j.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-fenwick-block" data-notation-coverage="interactive" data-required-notations="range-lowbit,fenwick-block-sum">
+            \[
+              \class{atlas-notation-token notation-id-range-lowbit}{\operatorname{lowbit}(i)}=i\mathbin{\&}(-i), \qquad \class{atlas-notation-token notation-id-fenwick-block-sum}{BIT[i]}=\sum_{j=i-\class{atlas-notation-token notation-id-range-lowbit}{\operatorname{lowbit}(i)}+1}^{i}a_j.
+            \]
+          </div>
           <p>
             В дополнительном коде операция <code>i & -i</code> оставляет самый правый единичный бит. Например, $12=1100_2$, поэтому $lowbit(12)=0100_2=4$, а $BIT[12]$ отвечает за индексы 9…12. Индекс 8 имеет lowbit 8 и хранит весь префикс 1…8. Это не явное дерево с указателями, а система вложенных dyadic blocks в плотном массиве.
           </p>
@@ -191,10 +197,11 @@
           <p>
             Point update позиции $i$ должен изменить все canonical blocks, содержащие её. После изменения $BIT[i]$ переходим $i\leftarrow i+lowbit(i)$. Новый индекс — ближайший предок в неявном дереве; его block расширяется влево и содержит исходную позицию. Каждый шаг увеличивает индекс и добавляет один значимый бит, поэтому updates также $O(\log n)$.
           </p>
-          <div class="atlas-math">\[
-            \operatorname{sum}(l,r)=\operatorname{prefix}(r)-\operatorname{prefix}(l-1)
-            \quad\text{для включительных 1-based границ}.
-          \]</div>
+          <div class="atlas-math" data-formula-id="3-9-fenwick-range-sum" data-notation-coverage="basic" data-basic-reason="repeated-result" data-required-notations="">
+            \[
+              \operatorname{sum}(l,r)=\operatorname{prefix}(r)-\operatorname{prefix}(l-1) \quad\text{для включительных 1-based границ}.
+            \]
+          </div>
           <p>
             Build через $n$ отдельных updates стоит $O(n\log n)$, но возможен линейный build: после записи текущей ячейки её сумму один раз передают непосредственному parent $i+lowbit(i)$. Каждый индекс участвует в постоянном числе действий. Корректность следует из того же отношения containment blocks.
           </p>
@@ -243,10 +250,11 @@
           <p>
             Range-add наивно меняет каждый лист и стоит $\Theta(r-l)$. Если узел целиком покрыт update, можно сразу изменить его summary и сохранить pending tag, не спускаясь. Для суммы прибавка $\Delta$ на segment длины $len$ меняет значение на $\Delta\cdot len$. Tag означает: логические значения всех листьев уже обновлены, но изменения ещё не материализованы в детях.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            sum(v)\leftarrow sum(v)+\Delta\cdot len(v),
-            \qquad \class{atlas-notation-token notation-id-lazy-tag}{lazy(v)}\leftarrow lazy(v)+\Delta.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-9-lazy-update" data-notation-coverage="interactive" data-required-notations="segment-node-sum,range-update-delta,segment-length,lazy-tag">
+            \[
+              \class{atlas-notation-token notation-id-segment-node-sum}{sum(v)}\leftarrow sum(v)+\class{atlas-notation-token notation-id-range-update-delta}{\Delta}\cdot \class{atlas-notation-token notation-id-segment-length}{len(v)}, \qquad \class{atlas-notation-token notation-id-lazy-tag}{lazy(v)}\leftarrow lazy(v)+\class{atlas-notation-token notation-id-range-update-delta}{\Delta}.
+            \]
+          </div>
           <p>
             Перед частичным спуском выполняют <code>push</code>: применяют tag к обоим детям и очищают его у родителя. После изменения детей выполняют <code>pull</code>: пересчитывают summary родителя. Полностью покрытый query может использовать summary без push, потому что он уже отражает update. Так range update и range query посещают только $O(\log n)$ пограничных узлов и canonical cover.
           </p>

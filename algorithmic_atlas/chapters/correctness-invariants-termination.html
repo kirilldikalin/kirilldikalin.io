@@ -105,10 +105,12 @@
             удовлетворяет $Q$. Она ничего не говорит о том, завершится ли
             выполнение.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="correctness-invariants-termination-f01"
+            data-notation-coverage="interactive"
+            data-required-notations="precondition-p,halts-predicate,postcondition-q">
             \[
-              P(s_0)\land\operatorname{halts}(s_0)
-              \Longrightarrow Q(s_f).
+              \class{atlas-notation-token notation-id-precondition-p}{P(s_0)}\land\class{atlas-notation-token notation-id-halts-predicate}{\operatorname{halts}(s_0)} \Longrightarrow \class{atlas-notation-token notation-id-postcondition-q}{Q(s_f)}.
             \]
           </div>
           <p>
@@ -121,7 +123,10 @@
 
         <section id="hoare">
           <h2>Тройка Хоара фиксирует локальный контракт</h2>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="correctness-invariants-termination-f02"
+            data-notation-coverage="interactive"
+            data-required-notations="hoare-triple">
             \[
               \class{atlas-notation-token notation-id-hoare-triple}
               {\{P\}\;C\;\{Q\}}.
@@ -153,7 +158,10 @@
             Для суммирования массива после обработки первых $i$ элементов
             естественен инвариант
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="correctness-invariants-termination-f03"
+            data-notation-coverage="interactive"
+            data-required-notations="loop-invariant">
             \[
               \class{atlas-notation-token notation-id-loop-invariant}
               {0\le i\le n\quad\land\quad s=\sum_{j=0}^{i-1}a_j}.
@@ -186,12 +194,12 @@
             Пусть отсортирован массив $a[0..n-1]$, а полуинтервал $[L,R)$ —
             ещё не исключённая область. Инвариант:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="correctness-invariants-termination-f04"
+            data-notation-coverage="interactive"
+            data-required-notations="binary-search-bounds,binary-search-candidate-condition">
             \[
-              0\le L\le R\le n
-              \quad\land\quad
-              \bigl(x\text{ присутствует}\Rightarrow
-              \exists i\in[L,R):a_i=x\bigr).
+              \class{atlas-notation-token notation-id-binary-search-bounds}{0\le L\le R\le n} \quad\land\quad \class{atlas-notation-token notation-id-binary-search-candidate-condition}{\bigl(x\text{ присутствует}\Rightarrow \exists i\in[L,R):a_i=x\bigr)}.
             \]
           </div>
           <p>
@@ -214,11 +222,12 @@
             обычно в неотрицательных целых, и строго уменьшается на каждой
             итерации, пока условие цикла истинно:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="correctness-invariants-termination-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="loop-variant,variant-strict-decrease">
             \[
-              \class{atlas-notation-token notation-id-loop-variant}{V=R-L}
-              \in\mathbb N,
-              \qquad V_{\mathrm{next}}&lt;V.
+              \class{atlas-notation-token notation-id-loop-variant}{V=R-L} \in\mathbb N, \qquad \class{atlas-notation-token notation-id-variant-strict-decrease}{V_{\mathrm{next}}&lt;V}.
             \]
           </div>
           <p>

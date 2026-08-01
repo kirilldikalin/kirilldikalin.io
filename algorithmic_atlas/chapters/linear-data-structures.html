@@ -79,9 +79,9 @@
             <p>
               ADT задаётся множеством допустимых состояний, набором операций, их предусловиями и постусловиями. Для операции $op$ удобно мыслить частичную функцию над состоянием: если предусловие выполнено, она возвращает новое состояние и результат; иначе интерфейс должен явно определить ошибку, специальное значение или запрет вызова.
             </p>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula" data-formula-id="3-1-adt-operation" data-notation-coverage="interactive" data-required-notations="adt-operation,state-space-s,input-set-x,partial-arrow,output-set-y">
               \[
-                \class{atlas-notation-token notation-id-adt-operation}{op}:S\times X\rightharpoonup S\times Y.
+                \class{atlas-notation-token notation-id-adt-operation}{op}:\class{atlas-notation-token notation-id-state-space-s}{S}\times \class{atlas-notation-token notation-id-input-set-x}{X}\class{atlas-notation-token notation-id-partial-arrow}{\rightharpoonup}\class{atlas-notation-token notation-id-state-space-s}{S}\times \class{atlas-notation-token notation-id-output-set-y}{Y}.
               \]
             </div>
           </section>
@@ -129,10 +129,9 @@
           <p>
             Массив размещает $n$ элементов одинакового размера $w$ подряд. Если адрес первой ячейки равен $b$, то ячейка $i$ начинается по адресу $b+iw$. Умножение и сложение не зависят от $n$, поэтому чтение или запись известного индекса занимает $\Theta(1)$ операций в RAM-модели. Корректность опирается на инвариант: логический элемент $x_i$ всегда хранится ровно в физической ячейке $i$.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math" data-formula-id="3-1-array-address" data-notation-coverage="basic" data-basic-reason="elementary-identity" data-required-notations="">
             \[
-              \operatorname{addr}(A[i])=b+i\cdot w,
-              \qquad 0\le i&lt;n.
+              \operatorname{addr}(A[i])=b+i\cdot w, \qquad 0\le i&lt;n.
             \]
           </div>
           <p>
@@ -196,10 +195,9 @@
           <p>
             Кольцевой буфер хранит очередь в массиве ёмкости $C$ и два счётчика: позицию головы $h$ и число элементов $n$. Логическая позиция $i$ находится в физической ячейке $(h+i)\bmod C$. Удаление головы увеличивает $h$ по модулю $C$, добавление пишет в $(h+n)\bmod C$. Ни одна операция не сдвигает остальные значения.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-1-circular-buffer-slot" data-notation-coverage="interactive" data-required-notations="circular-buffer-slot,circular-buffer-head,dynamic-array-capacity">
             \[
-              \operatorname{slot}(i)=(h+i)\bmod C,
-              \qquad 0\le i&lt;n\le C.
+              \class{atlas-notation-token notation-id-circular-buffer-slot}{\operatorname{slot}(i)}=(\class{atlas-notation-token notation-id-circular-buffer-head}{h}+i)\bmod \class{atlas-notation-token notation-id-dynamic-array-capacity}{C}, \qquad 0\le i&lt;n\le \class{atlas-notation-token notation-id-dynamic-array-capacity}{C}.
             \]
           </div>
           <p>
@@ -215,10 +213,9 @@
           <p>
             Динамический массив хранит размер $n$, ёмкость $C$ и непрерывный блок на $C$ элементов. Пока $n&lt;C$, <code>push</code> пишет значение в ячейку $n$ и увеличивает размер. При $n=C$ выделяется блок большей ёмкости, живые элементы копируются, старый блок освобождается, затем выполняется новая запись. Одна такая операция стоит $\Theta(n)$, поэтому worst-case цена push не постоянна.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-1-dynamic-array-growth" data-notation-coverage="interactive" data-required-notations="dynamic-array-size-n,dynamic-array-capacity,dynamic-array-growth-factor-gamma">
             \[
-              0\le n\le \class{atlas-notation-token notation-id-dynamic-array-capacity}{C},
-              \qquad C_{new}=\gamma C,\quad \gamma>1.
+              0\le \class{atlas-notation-token notation-id-dynamic-array-size-n}{n}\le \class{atlas-notation-token notation-id-dynamic-array-capacity}{C}, \qquad \class{atlas-notation-token notation-id-dynamic-array-capacity}{C_{new}}=\class{atlas-notation-token notation-id-dynamic-array-growth-factor-gamma}{\gamma}\class{atlas-notation-token notation-id-dynamic-array-capacity}{C},\quad \class{atlas-notation-token notation-id-dynamic-array-growth-factor-gamma}{\gamma}>1.
             \]
           </div>
           <p>
@@ -237,11 +234,9 @@
           <p>
             Рассмотрим пустой массив, который удваивает ёмкость. Каждая вставка выполняет одну запись. Копирования происходят при размерах $1,2,4,\ldots,2^k$, где $2^k&lt;m\le2^{k+1}$ для $m$ вставок. Суммарное число скопированных элементов меньше $1+2+\cdots+2^k=2^{k+1}-1&lt;2m$. Вместе с $m$ новыми записями фактическая цена меньше $3m$.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-1-amortized-push-bound" data-notation-coverage="interactive" data-required-notations="operation-count-m,dynamic-array-actual-cost-ci,amortized-operation-cost">
             \[
-              \sum_{i=1}^{m} c_i&lt;3m,
-              \qquad
-              \class{atlas-notation-token notation-id-amortized-operation-cost}{\widehat c_i}=3.
+              \sum_{i=1}^{\class{atlas-notation-token notation-id-operation-count-m}{m}} \class{atlas-notation-token notation-id-dynamic-array-actual-cost-ci}{c_i}&lt;3\class{atlas-notation-token notation-id-operation-count-m}{m}, \qquad \class{atlas-notation-token notation-id-amortized-operation-cost}{\widehat c_i}=3.
             \]
           </div>
           <p>

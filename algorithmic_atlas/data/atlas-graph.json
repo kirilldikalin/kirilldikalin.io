@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.07.31-4",
+  "datasetVersion": "2026.08.01-10",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -183,17 +183,7 @@
           "nodeId": "range-query-structures",
           "position": 70
         }
-      ],
-      "continuation": {
-        "curriculumId": "4.1",
-        "title": "Полный перебор, backtracking и branch and bound",
-        "targetContinentId": "algorithm-design",
-        "kind": "route",
-        "position": {
-          "x": 1430,
-          "y": 545
-        }
-      }
+      ]
     },
     {
       "id": "data-structures-augmented",
@@ -301,6 +291,179 @@
         "position": {
           "x": 1410,
           "y": 805
+        }
+      }
+    },
+    {
+      "id": "algorithm-design-main",
+      "title": "Основной маршрут методов построения алгоритмов",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "algorithm-design",
+      "entries": [
+        {
+          "nodeId": "exhaustive-search",
+          "position": 10
+        },
+        {
+          "nodeId": "divide-and-conquer",
+          "position": 20
+        },
+        {
+          "nodeId": "sorting-and-lower-bounds",
+          "position": 30
+        },
+        {
+          "nodeId": "selection-order-statistics",
+          "position": 40
+        },
+        {
+          "nodeId": "greedy-algorithms",
+          "position": 50
+        },
+        {
+          "nodeId": "dynamic-programming",
+          "position": 60
+        },
+        {
+          "nodeId": "local-search",
+          "position": 70
+        },
+        {
+          "nodeId": "online-algorithms",
+          "position": 80
+        },
+        {
+          "nodeId": "reductions-and-formulations",
+          "position": 90
+        }
+      ],
+      "continuation": {
+        "curriculumId": "5.1",
+        "title": "Язык графов, представления и обходы",
+        "targetContinentId": "graphs-networks-optimization",
+        "kind": "route",
+        "position": {
+          "x": 1580,
+          "y": 470
+        }
+      },
+      "relatedContinuations": [
+        {
+          "curriculumId": "8.4",
+          "title": "Полиномиальные сведения и NP-полнота",
+          "targetContinentId": "complexity-limits",
+          "kind": "related",
+          "position": {
+            "x": 1180,
+            "y": 875
+          }
+        },
+        {
+          "curriculumId": "8.14",
+          "title": "Практические решатели трудных задач",
+          "targetContinentId": "complexity-limits",
+          "kind": "related",
+          "position": {
+            "x": 1350,
+            "y": 1000
+          }
+        }
+      ]
+    },
+    {
+      "id": "algorithm-design-matroids",
+      "title": "Матроиды и границы жадного метода",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "algorithm-design",
+      "entries": [
+        {
+          "nodeId": "matroids",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "5.5",
+        "title": "Минимальные остовные деревья",
+        "targetContinentId": "graphs-networks-optimization",
+        "kind": "related",
+        "position": {
+          "x": 630,
+          "y": 875
+        }
+      }
+    },
+    {
+      "id": "algorithm-design-advanced-dp",
+      "title": "Продвинутое динамическое программирование",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "algorithm-design",
+      "entries": [
+        {
+          "nodeId": "advanced-dynamic-programming",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "6.5",
+        "title": "Редакционное расстояние, LCS и выравнивание последовательностей",
+        "targetContinentId": "strings-geometry-numerics",
+        "kind": "related",
+        "position": {
+          "x": 930,
+          "y": 875
+        }
+      }
+    },
+    {
+      "id": "algorithm-design-meet-in-the-middle",
+      "title": "Meet-in-the-middle",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "algorithm-design",
+      "entries": [
+        {
+          "nodeId": "meet-in-the-middle",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "8.9",
+        "title": "Параметризованная сложность",
+        "targetContinentId": "complexity-limits",
+        "kind": "related",
+        "position": {
+          "x": 180,
+          "y": 875
+        }
+      }
+    },
+    {
+      "id": "algorithm-design-optimization",
+      "title": "Математическая оптимизация",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "algorithm-design",
+      "entries": [
+        {
+          "nodeId": "linear-convex-optimization",
+          "position": 10
+        },
+        {
+          "nodeId": "multiplicative-weights",
+          "position": 20
+        }
+      ],
+      "continuation": {
+        "curriculumId": "7.13",
+        "title": "LP-релаксации и primal-dual",
+        "targetContinentId": "randomization-approximation",
+        "kind": "related",
+        "position": {
+          "x": 1580,
+          "y": 940
         }
       }
     }
@@ -440,13 +603,14 @@
       "id": "algorithm-design",
       "name": "Методы построения алгоритмов",
       "description": "Декомпозиция, жадный выбор, динамика и другие способы находить решение",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "data-structures"
       ],
       "related": [
-        "randomization-approximation"
+        "randomization-approximation",
+        "complexity-limits"
       ],
       "worldPosition": {
         "x": 552,
@@ -457,8 +621,28 @@
         "height": 112
       },
       "shapeVariant": 3,
-      "localMap": null,
-      "regions": []
+      "localMap": {
+        "viewBox": "0 0 1700 1160",
+        "landPath": "M52 410 C29 256 102 116 243 65 C365 21 475 74 591 49 C719 22 833 74 956 51 C1090 25 1255 59 1394 132 C1524 200 1670 318 1644 457 C1627 548 1679 644 1606 736 C1528 834 1404 829 1271 823 C1135 816 1043 918 899 886 C767 857 665 935 531 879 C413 830 292 865 197 777 C110 696 75 586 52 410 Z"
+      },
+      "regions": [
+        {
+          "id": "search-decomposition",
+          "name": "Поиск и декомпозиция"
+        },
+        {
+          "id": "order-greedy",
+          "name": "Порядок и жадный выбор"
+        },
+        {
+          "id": "dynamic-heuristics",
+          "name": "Динамика и эвристики"
+        },
+        {
+          "id": "formulations-optimization",
+          "name": "Формулировки и оптимизация"
+        }
+      ]
     },
     {
       "id": "graphs-networks-optimization",
@@ -1381,12 +1565,12 @@
       ],
       "related": [],
       "route": "./chapters/probabilistic-filters.html",
-      "minutes": 37,
+      "minutes": 38,
       "reading": {
         "words": 3502,
-        "formulaBlocks": 9,
+        "formulaBlocks": 10,
         "proofBlocks": 3,
-        "theoryMinutes": 25,
+        "theoryMinutes": 26,
         "labMinutes": 12
       },
       "features": {
@@ -1430,6 +1614,468 @@
       "position": {
         "x": 1275,
         "y": 710
+      }
+    },
+    {
+      "id": "exhaustive-search",
+      "curriculumId": "4.1",
+      "title": "Полный перебор, backtracking и branch and bound",
+      "description": "Как превратить пространство кандидатов в дерево поиска и отсекать заведомо бесперспективные ветви",
+      "continentId": "algorithm-design",
+      "regionId": "search-decomposition",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "range-query-structures"
+      ],
+      "related": [],
+      "route": "./chapters/exhaustive-search.html",
+      "minutes": 30,
+      "reading": {
+        "words": 2309,
+        "formulaBlocks": 8,
+        "proofBlocks": 2,
+        "theoryMinutes": 18,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 150,
+        "y": 180
+      }
+    },
+    {
+      "id": "divide-and-conquer",
+      "curriculumId": "4.2",
+      "title": "Разделяй и властвуй",
+      "description": "Как декомпозиция, рекурсивное решение и объединение результатов формируют стоимость алгоритма",
+      "continentId": "algorithm-design",
+      "regionId": "search-decomposition",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "exhaustive-search"
+      ],
+      "related": [],
+      "route": "./chapters/divide-and-conquer.html",
+      "minutes": 41,
+      "reading": {
+        "words": 3591,
+        "formulaBlocks": 12,
+        "proofBlocks": 3,
+        "theoryMinutes": 27,
+        "labMinutes": 14
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 340,
+        "y": 110
+      }
+    },
+    {
+      "id": "sorting-and-lower-bounds",
+      "curriculumId": "4.3",
+      "title": "Сортировка и её границы",
+      "description": "Как разные модели сортировки связаны с деревьями решений и нижними границами сравнений",
+      "continentId": "algorithm-design",
+      "regionId": "order-greedy",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "divide-and-conquer"
+      ],
+      "related": [],
+      "route": "./chapters/sorting-and-lower-bounds.html",
+      "minutes": 37,
+      "reading": {
+        "words": 3616,
+        "formulaBlocks": 11,
+        "proofBlocks": 1,
+        "theoryMinutes": 25,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 530,
+        "y": 180
+      }
+    },
+    {
+      "id": "selection-order-statistics",
+      "curriculumId": "4.4",
+      "title": "Выбор и порядковые статистики",
+      "description": "Как находить нужный ранг без полной сортировки и управлять качеством разбиения",
+      "continentId": "algorithm-design",
+      "regionId": "order-greedy",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "sorting-and-lower-bounds"
+      ],
+      "related": [],
+      "route": "./chapters/selection-order-statistics.html",
+      "minutes": 29,
+      "reading": {
+        "words": 2380,
+        "formulaBlocks": 11,
+        "proofBlocks": 1,
+        "theoryMinutes": 18,
+        "labMinutes": 11
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 720,
+        "y": 110
+      }
+    },
+    {
+      "id": "greedy-algorithms",
+      "curriculumId": "4.5",
+      "title": "Жадные алгоритмы и обменные доказательства",
+      "description": "Когда локально лучший выбор совместим с глобальным оптимумом и как это доказывать обменом",
+      "continentId": "algorithm-design",
+      "regionId": "order-greedy",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "selection-order-statistics"
+      ],
+      "related": [],
+      "route": "./chapters/greedy-algorithms.html",
+      "minutes": 38,
+      "reading": {
+        "words": 3668,
+        "formulaBlocks": 7,
+        "proofBlocks": 1,
+        "theoryMinutes": 24,
+        "labMinutes": 14
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 900,
+        "y": 180
+      }
+    },
+    {
+      "id": "matroids",
+      "curriculumId": "4.6",
+      "title": "Матроиды и границы жадного метода",
+      "description": "Какая структура независимых множеств точно характеризует универсальную корректность жадного выбора",
+      "continentId": "algorithm-design",
+      "regionId": "order-greedy",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "greedy-algorithms"
+      ],
+      "related": [],
+      "route": "./chapters/matroids.html",
+      "minutes": 42,
+      "reading": {
+        "words": 3748,
+        "formulaBlocks": 9,
+        "proofBlocks": 2,
+        "theoryMinutes": 26,
+        "labMinutes": 16
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 810,
+        "y": 510
+      }
+    },
+    {
+      "id": "dynamic-programming",
+      "curriculumId": "4.7",
+      "title": "Динамическое программирование",
+      "description": "Как выбрать состояния, переходы и порядок вычисления для задач с повторяющимися подзадачами",
+      "continentId": "algorithm-design",
+      "regionId": "dynamic-heuristics",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "greedy-algorithms"
+      ],
+      "related": [],
+      "route": "./chapters/dynamic-programming.html",
+      "minutes": 40,
+      "reading": {
+        "words": 3843,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 26,
+        "labMinutes": 14
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1080,
+        "y": 110
+      }
+    },
+    {
+      "id": "advanced-dynamic-programming",
+      "curriculumId": "4.8",
+      "title": "Продвинутое динамическое программирование",
+      "description": "Как структура переходов позволяет сокращать область поиска оптимума и ускорять динамику",
+      "continentId": "algorithm-design",
+      "regionId": "dynamic-heuristics",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "dynamic-programming"
+      ],
+      "related": [],
+      "route": "./chapters/advanced-dynamic-programming.html",
+      "minutes": 44,
+      "reading": {
+        "words": 4076,
+        "formulaBlocks": 12,
+        "proofBlocks": 1,
+        "theoryMinutes": 28,
+        "labMinutes": 16
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1090,
+        "y": 500
+      }
+    },
+    {
+      "id": "local-search",
+      "curriculumId": "4.9",
+      "title": "Локальный поиск и эвристики",
+      "description": "Как исследовать окрестность решения, выходить из локальных ловушек и честно оценивать эвристику",
+      "continentId": "algorithm-design",
+      "regionId": "dynamic-heuristics",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "dynamic-programming"
+      ],
+      "related": [],
+      "route": "./chapters/local-search.html",
+      "minutes": 31,
+      "reading": {
+        "words": 2427,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 18,
+        "labMinutes": 13
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1250,
+        "y": 180
+      }
+    },
+    {
+      "id": "meet-in-the-middle",
+      "curriculumId": "4.10",
+      "title": "Meet-in-the-middle и компромиссы время–память",
+      "description": "Как разрезать экспоненциальный перебор на две половины и обменять память на время",
+      "continentId": "algorithm-design",
+      "regionId": "search-decomposition",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "exhaustive-search"
+      ],
+      "related": [],
+      "route": "./chapters/meet-in-the-middle.html",
+      "minutes": 31,
+      "reading": {
+        "words": 2487,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 19,
+        "labMinutes": 12
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 210,
+        "y": 520
+      }
+    },
+    {
+      "id": "online-algorithms",
+      "curriculumId": "4.11",
+      "title": "Online-алгоритмы и конкурентный анализ",
+      "description": "Как принимать решения без знания будущего и сравнивать их с недостижимым офлайн-оптимумом",
+      "continentId": "algorithm-design",
+      "regionId": "dynamic-heuristics",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "local-search"
+      ],
+      "related": [],
+      "route": "./chapters/online-algorithms.html",
+      "minutes": 42,
+      "reading": {
+        "words": 3784,
+        "formulaBlocks": 7,
+        "proofBlocks": 3,
+        "theoryMinutes": 26,
+        "labMinutes": 16
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1410,
+        "y": 110
+      }
+    },
+    {
+      "id": "reductions-and-formulations",
+      "curriculumId": "4.12",
+      "title": "Сведения, декомпозиции и математические формулировки",
+      "description": "Как переносить решение между задачами и выбирать формулировку для точного или структурированного метода",
+      "continentId": "algorithm-design",
+      "regionId": "formulations-optimization",
+      "type": "theory",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "online-algorithms"
+      ],
+      "related": [],
+      "route": "./chapters/reductions-and-formulations.html",
+      "minutes": 45,
+      "reading": {
+        "words": 3803,
+        "formulaBlocks": 9,
+        "proofBlocks": 3,
+        "theoryMinutes": 27,
+        "labMinutes": 18
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1510,
+        "y": 260
+      }
+    },
+    {
+      "id": "linear-convex-optimization",
+      "curriculumId": "4.13",
+      "title": "Линейное программирование, двойственность и выпуклая оптимизация",
+      "description": "Как допустимая область, целевая функция и двойственная задача связывают геометрию с сертификатами оптимума",
+      "continentId": "algorithm-design",
+      "regionId": "formulations-optimization",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "reductions-and-formulations"
+      ],
+      "related": [],
+      "route": "./chapters/linear-convex-optimization.html",
+      "minutes": 48,
+      "reading": {
+        "words": 4570,
+        "formulaBlocks": 14,
+        "proofBlocks": 2,
+        "theoryMinutes": 32,
+        "labMinutes": 16
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1410,
+        "y": 520
+      }
+    },
+    {
+      "id": "multiplicative-weights",
+      "curriculumId": "4.14",
+      "title": "Метод мультипликативных весов",
+      "description": "Как обновлять веса экспертов и получать гарантии через накопленный проигрыш и потенциал",
+      "continentId": "algorithm-design",
+      "regionId": "formulations-optimization",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "linear-convex-optimization"
+      ],
+      "related": [],
+      "route": "./chapters/multiplicative-weights.html",
+      "minutes": 44,
+      "reading": {
+        "words": 3924,
+        "formulaBlocks": 13,
+        "proofBlocks": 1,
+        "theoryMinutes": 28,
+        "labMinutes": 16
+      },
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1510,
+        "y": 690
       }
     }
   ]

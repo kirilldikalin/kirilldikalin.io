@@ -109,7 +109,10 @@
 
         <section id="arithmetic">
           <h2>Арифметическая прогрессия: сложить с обратной копией</h2>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sums-products-recurrences-f01"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               1+2+\cdots+n=\sum_{k=1}^{n}k=\frac{n(n+1)}2.
             \]
@@ -137,7 +140,10 @@
         <section id="geometric">
           <h2>Геометрическая сумма: масштабировать и вычесть</h2>
           <p>Для $q\ne1$ конечная сумма имеет точную форму</p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sums-products-recurrences-f02"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \sum_{k=0}^{m}q^k=\frac{q^{m+1}-1}{q-1}.
             \]
@@ -168,9 +174,12 @@
             $H_n\in\Theta(\log n)$: в блоке от $2^j+1$ до $2^{j+1}$ примерно
             $2^j$ слагаемых порядка $2^{-j}$, то есть постоянный вклад.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sums-products-recurrences-f03"
+            data-notation-coverage="interactive"
+            data-required-notations="input-size-n,harmonic-number-hn">
             \[
-              \ln(n+1)\le H_n\le1+\ln n.
+              \ln(\class{atlas-notation-token notation-id-input-size-n}{n}+1)\le \class{atlas-notation-token notation-id-harmonic-number-hn}{H_n}\le1+\ln \class{atlas-notation-token notation-id-input-size-n}{n}.
             \]
           </div>
           <p>
@@ -185,7 +194,10 @@
             Иногда длинная сумма почти целиком сокращается после разложения
             каждого члена. Например,
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sums-products-recurrences-f04"
+            data-notation-coverage="basic"
+            data-basic-reason="numeric-substitution">
             \[
               \sum_{k=1}^{n}\frac1{k(k+1)}
               =\sum_{k=1}^{n}\left(\frac1k-\frac1{k+1}\right)
@@ -205,11 +217,12 @@
             Пусть $f$ неотрицательна и не возрастает на $[1,n]$. Прямоугольники
             ширины один дают
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sums-products-recurrences-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="comparison-integral,discrete-sum">
             \[
-              \int_1^{n+1}f(x)\,dx
-              \le\sum_{k=1}^{n}f(k)
-              \le f(1)+\int_1^n f(x)\,dx.
+              \class{atlas-notation-token notation-id-comparison-integral}{\int_1^{n+1}f(x)\,dx} \le\class{atlas-notation-token notation-id-discrete-sum}{\sum_{k=1}^{n}f(k)} \le f(1)+\class{atlas-notation-token notation-id-comparison-integral}{\int_1^n f(x)\,dx}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -254,9 +267,12 @@
         <section id="unfolding">
           <h2>Разворачивание: увидеть повторяющийся уровень</h2>
           <p>Для $n=2^h$ последовательно подставим рекуррентность саму в себя:</p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sums-products-recurrences-f06"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,input-size-n,recursion-depth-j">
             \[
-              T(n)=2^jT(n/2^j)+jn.
+              \class{atlas-notation-token notation-id-recurrence-function}{T}(\class{atlas-notation-token notation-id-input-size-n}{n})=2^{\class{atlas-notation-token notation-id-recursion-depth-j}{j}}\class{atlas-notation-token notation-id-recurrence-function}{T}(\class{atlas-notation-token notation-id-input-size-n}{n}/2^{\class{atlas-notation-token notation-id-recursion-depth-j}{j}})+\class{atlas-notation-token notation-id-recursion-depth-j}{j}\class{atlas-notation-token notation-id-input-size-n}{n}.
             \]
           </div>
           <p>
@@ -275,7 +291,10 @@
               Предположим по индукции, что $T(m)\le C m\log_2m+D m$ для меньших
               степеней двойки. Тогда
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="sums-products-recurrences-f07"
+              data-notation-coverage="basic"
+              data-basic-reason="numeric-substitution">
               \[
                 T(n)\le2\left(C\frac n2\log_2\frac n2+D\frac n2\right)+n
                 =Cn\log_2n+(D-C+1)n.
@@ -385,11 +404,12 @@
             $\sum_i a_i b_i^p=1$. При условиях теоремы на коэффициенты,
             неотрицательную $g$ и достаточно малые возмущения $h_i$ получается
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sums-products-recurrences-f08"
+            data-notation-coverage="interactive"
+            data-required-notations="recurrence-function,akra-scale-x,big-theta-class,akra-exponent-p,recurrence-toll-g,akra-integration-variable-u">
             \[
-              T(x)\in\Theta\left(
-                x^p\left(1+\int_1^x\frac{g(u)}{u^{p+1}}\,du\right)
-              \right).
+              \class{atlas-notation-token notation-id-recurrence-function}{T}(\class{atlas-notation-token notation-id-akra-scale-x}{x})\in\class{atlas-notation-token notation-id-big-theta-class}{\Theta}\left( \class{atlas-notation-token notation-id-akra-scale-x}{x}^{\class{atlas-notation-token notation-id-akra-exponent-p}{p}}\left(1+\int_1^{\class{atlas-notation-token notation-id-akra-scale-x}{x}}\frac{\class{atlas-notation-token notation-id-recurrence-toll-g}{g(u)}}{\class{atlas-notation-token notation-id-akra-integration-variable-u}{u}^{\class{atlas-notation-token notation-id-akra-exponent-p}{p}+1}}\,d\class{atlas-notation-token notation-id-akra-integration-variable-u}{u}\right) \right).
             \]
           </div>
           <p>

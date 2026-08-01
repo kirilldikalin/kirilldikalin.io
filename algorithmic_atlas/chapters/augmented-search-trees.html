@@ -56,10 +56,11 @@
           <p>
             Пусть атрибут $A(v)$ вычисляется за $O(1)$ из payload узла, $A(v.left)$ и $A(v.right)$. После вставки или удаления меняются только поддеревья узлов на одном корневом пути. Пересчёт снизу вверх занимает $O(h)$. Балансирующее вращение меняет состав поддеревьев у постоянного числа узлов, поэтому их атрибуты также восстанавливаются за $O(1)$ на вращение.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-monoid-aggregate}{A(v)}
-            =combine\bigl(A(v.left),payload(v),A(v.right)\bigr).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-4-augmentation-rule" data-notation-coverage="interactive" data-required-notations="monoid-aggregate">
+            \[
+              \class{atlas-notation-token notation-id-monoid-aggregate}{A(v)} =combine\bigl(A(v.left),payload(v),A(v.right)\bigr).
+            \]
+          </div>
           <p>
             При $h=O(\log n)$ расширенное дерево сохраняет асимптотику insert/delete. Это достаточное условие, а не автоматическое доказательство полезности запроса: ещё нужно показать, как $A$ позволяет выбрать ветвь или получить ответ. Также не всякая константная сводка имеет постоянный физический размер — например, большой битовый набор зависит от вселенной и меняет модель стоимости.
           </p>
@@ -76,11 +77,11 @@
           <p>
             В order-statistic tree каждый узел хранит число внутренних узлов своего поддерева. Для пустой ссылки размер ноль; для настоящего узла — единица плюс размеры детей. Корень хранит $n$. Значение легко валидировать независимым рекурсивным подсчётом.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-subtree-size}{size(v)}
-            =1+size(v.left)+size(v.right),
-            \qquad size(\varnothing)=0.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-4-subtree-size" data-notation-coverage="interactive" data-required-notations="subtree-size">
+            \[
+              \class{atlas-notation-token notation-id-subtree-size}{size(v)} =1+size(v.left)+size(v.right), \qquad size(\varnothing)=0.
+            \]
+          </div>
           <p>
             Левое поддерево содержит ровно те ключи, которые предшествуют $v$ внутри его поддерева. Поэтому локальный ранг самого $v$ равен $size(v.left)+1$. Сравнение целевого ранга с этим числом выбирает одну ветвь так же, как сравнение ключей в обычном lookup.
           </p>
@@ -94,14 +95,11 @@
           <p>
             Пусть нужно найти $i$-й ключ в отсортированном порядке. В узле $v$ вычисляем $r=size(v.left)+1$. Если $i=r$, ответ найден. Если $i&lt;r$, весь искомый префикс находится слева и ранг не меняется. Если $i&gt;r$, пропускаем левое поддерево и сам $v$, идём вправо с новым рангом $i-r$.
           </p>
-          <div class="atlas-math">\[
-            select(v,i)=
-            \begin{cases}
-              select(v.left,i),&amp;i&lt;r,\\
-              v,&amp;i=r,\\
-              select(v.right,i-r),&amp;i&gt;r.
-            \end{cases}
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-4-select-recurrence" data-notation-coverage="interactive" data-required-notations="order-statistic-select-recurrence">
+            \[
+              \class{atlas-notation-token notation-id-order-statistic-select-recurrence}{select(v,i)= \begin{cases} select(v.left,i),&amp;i&lt;r,\\ v,&amp;i=r,\\ select(v.right,i-r),&amp;i&gt;r. \end{cases}}
+            \]
+          </div>
           <p>
             Инвариант цикла: текущий $i$ является рангом искомого элемента внутри текущего поддерева. В правом переходе вычитаются ровно $r$ меньших элементов, поэтому инвариант сохраняется. Каждый шаг уменьшает глубину оставшегося поддерева; при $1\le i\le size(root)$ алгоритм достигнет узла. Стоимость $O(h)=O(\log n)$.
           </p>
@@ -147,10 +145,11 @@
           <p>
             Храним замкнутые интервалы $[low,high]$ и используем $low$ как BST-ключ. Для одинаковых левых границ нужен tie-breaker либо коллекция в узле. Два замкнутых интервала пересекаются тогда и только тогда, когда каждый начинается не правее конца другого.
           </p>
-          <div class="atlas-math">\[
-            [a,b]\cap[c,d]\ne\varnothing
-            \iff a\le d\ \land\ c\le b.
-          \]</div>
+          <div class="atlas-math" data-formula-id="3-4-interval-overlap" data-notation-coverage="basic" data-basic-reason="elementary-identity" data-required-notations="">
+            \[
+              [a,b]\cap[c,d]\ne\varnothing \iff a\le d\ \land\ c\le b.
+            \]
+          </div>
           <p>
             Обычный порядок по low недостаточен для выбора ветви. Если текущий интервал не пересекает запрос, в левом поддереве могут быть интервалы с маленьким low, но очень большим high. Нужна сводка, которая отвечает, насколько далеко вправо вообще достигает это поддерево.
           </p>
@@ -164,10 +163,11 @@
           <p>
             Каждый узел хранит максимум high среди собственного интервала и обоих поддеревьев. Пустая ссылка даёт $-\infty$. Это локальный агрегат: максимум трёх чисел вычисляется за постоянное время и обновляется по тем же правилам пути и вращения.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-interval-subtree-maximum}{max(v)}
-            =\max\{v.high,max(v.left),max(v.right)\}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-4-interval-subtree-max" data-notation-coverage="interactive" data-required-notations="interval-subtree-maximum">
+            \[
+              \class{atlas-notation-token notation-id-interval-subtree-maximum}{max(v)} =\max\{v.high,max(v.left),max(v.right)\}.
+            \]
+          </div>
           <p>
             Поле не сообщает, какой именно интервал достигает максимума, и не обязано. Для отсечения достаточно знать, существует ли хотя бы одна правая граница не меньше левой границы запроса. Если нужен сам аргумент максимума, можно хранить пару $(high,id)$ с согласованным tie-breaker.
           </p>
@@ -203,9 +203,11 @@
           <p>
             Size — сумма единиц, interval max — максимум правых границ. Оба являются свёртками с ассоциативной операцией и нейтральным элементом. Такая пара называется моноидом: $(M,\circ,e)$, где $(a\circ b)\circ c=a\circ(b\circ c)$ и $e\circ a=a\circ e=a$.
           </p>
-          <div class="atlas-math">\[
-            aggregate(v)=aggregate(v.left)\circ value(v)\circ aggregate(v.right).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-4-monoid-aggregate" data-notation-coverage="interactive" data-required-notations="monoid-tree-aggregate-rule">
+            \[
+              \class{atlas-notation-token notation-id-monoid-tree-aggregate-rule}{aggregate(v)=aggregate(v.left)\circ value(v)\circ aggregate(v.right).}
+            \]
+          </div>
           <p>
             Ассоциативность позволяет менять скобки вместе с вращением, не меняя итоговую свёртку inorder-последовательности. Сумма, минимум, максимум, gcd и конкатенация с учётом порядка — типичные примеры. Коммутативность не обязательна: для строк важно, что левое поддерево идёт раньше узла и правого.
           </p>
