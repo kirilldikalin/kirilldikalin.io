@@ -412,6 +412,19 @@ test("wide chapter titles stay inside the content column beside the TOC", () => 
   );
 });
 
+test("scrollable formulas cannot widen the chapter on narrow screens", () => {
+  const chapterStyles = fs.readFileSync(path.join(atlasRoot, "chapter.css"), "utf8");
+
+  assert.match(
+    chapterStyles,
+    /\.atlas-chapter-content > section:not\(\[data-atlas-block="lab"\]\)\s*\{\s*overflow-x:\s*clip;/
+  );
+  assert.match(
+    chapterStyles,
+    /\.atlas-math\s*\{[\s\S]*?overflow-x:\s*auto;/
+  );
+});
+
 test("page boundaries and adjacent sections have distinct keyboard buttons", () => {
   const chapterScript = fs.readFileSync(path.join(atlasRoot, "chapter.js"), "utf8");
 
