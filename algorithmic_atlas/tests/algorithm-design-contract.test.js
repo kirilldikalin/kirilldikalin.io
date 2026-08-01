@@ -18,6 +18,8 @@ const publishedChapterIds = new Set([
   "divide-and-conquer",
   "sorting-and-lower-bounds",
   "selection-order-statistics",
+  "greedy-algorithms",
+  "matroids",
 ]);
 
 function canonicalAlgorithmDesign() {
@@ -185,19 +187,19 @@ test("published chapters enter progress while planned chapters stay outside", ()
     core.continentProgressSummary(graph, "algorithm-design", new Set()),
     {
       completed: 0,
-      total: 4,
+      total: 6,
       percent: 0,
       coreCompleted: 0,
-      coreTotal: 4,
+      coreTotal: 5,
       branchCompleted: 0,
-      branchTotal: 0,
+      branchTotal: 1,
       coreReady: false,
       complete: false,
     }
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    33
+    35
   );
 });
 

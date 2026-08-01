@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-3",
+  "datasetVersion": "2026.08.01-4",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1756,19 +1756,25 @@
       "continentId": "algorithm-design",
       "regionId": "order-greedy",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "selection-order-statistics"
       ],
       "related": [],
-      "route": null,
-      "minutes": 95,
-      "reading": null,
+      "route": "./chapters/greedy-algorithms.html",
+      "minutes": 38,
+      "reading": {
+        "words": 3668,
+        "formulaBlocks": 7,
+        "proofBlocks": 1,
+        "theoryMinutes": 24,
+        "labMinutes": 14
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 900,
@@ -1783,19 +1789,25 @@
       "continentId": "algorithm-design",
       "regionId": "order-greedy",
       "type": "theory",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "greedy-algorithms"
       ],
       "related": [],
-      "route": null,
-      "minutes": 90,
-      "reading": null,
+      "route": "./chapters/matroids.html",
+      "minutes": 42,
+      "reading": {
+        "words": 3748,
+        "formulaBlocks": 8,
+        "proofBlocks": 2,
+        "theoryMinutes": 26,
+        "labMinutes": 16
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 810,

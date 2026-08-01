@@ -4392,6 +4392,258 @@
         "chapterId": "selection-order-statistics",
         "anchor": "related"
       }
+    },
+    {
+      "id": "greedy-ground-set-e",
+      "displayNotation": "E",
+      "shortName": "носитель элементов",
+      "explanation": "Конечное множество атомарных элементов, из которых жадный алгоритм собирает решение",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "greedy-feasible-family-f",
+      "displayNotation": "\\mathcal F",
+      "shortName": "семейство допустимых решений",
+      "explanation": "Подмножества носителя E, удовлетворяющие ограничениям рассматриваемой жадной задачи",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "greedy-element-weight-w",
+      "displayNotation": "w(e)",
+      "shortName": "вес элемента",
+      "explanation": "Числовой вклад элемента e в аддитивную целевую функцию",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "greedy-prefix-g-i",
+      "displayNotation": "G_i",
+      "shortName": "жадный префикс",
+      "explanation": "Допустимое частичное решение после i необратимых жадных выборов",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "schema"
+      }
+    },
+    {
+      "id": "greedy-choice-e-i",
+      "displayNotation": "e_i",
+      "shortName": "очередной жадный элемент",
+      "explanation": "Элемент, выбранный локальным правилом на i-м шаге",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "schema"
+      }
+    },
+    {
+      "id": "greedy-optimum-o",
+      "displayNotation": "O",
+      "shortName": "оптимальное свидетельство",
+      "explanation": "Оптимальное решение, которое преобразуется обменами для согласования с жадным префиксом",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "exchange-proof"
+      }
+    },
+    {
+      "id": "greedy-exchange-element-o-i",
+      "displayNotation": "o_i",
+      "shortName": "заменяемый элемент оптимума",
+      "explanation": "Элемент оптимального свидетельства, заменяемый очередным жадным выбором без потери качества",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "exchange-proof"
+      }
+    },
+    {
+      "id": "greedy-submodular-value-f",
+      "displayNotation": "f(S)",
+      "shortName": "ценность множества",
+      "explanation": "Неаддитивная целевая функция, назначающая ценность выбранному множеству S",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "submodular"
+      }
+    },
+    {
+      "id": "greedy-marginal-gain-delta",
+      "displayNotation": "\\Delta(e\\mid S)",
+      "shortName": "предельный выигрыш",
+      "explanation": "Дополнительная ценность от добавления элемента e к уже выбранному множеству S",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "submodular"
+      }
+    },
+    {
+      "id": "greedy-approximation-bound",
+      "displayNotation": "1-1/e",
+      "shortName": "гарантия субмодулярной жадности",
+      "explanation": "Классический гарантированный коэффициент для монотонной субмодулярной максимизации при ограничении мощности",
+      "scope": "local",
+      "chapterId": "greedy-algorithms",
+      "firstDefinition": {
+        "chapterId": "greedy-algorithms",
+        "anchor": "submodular"
+      }
+    },
+    {
+      "id": "matroid-ground-set-e",
+      "displayNotation": "E",
+      "shortName": "носитель матроида",
+      "explanation": "Конечное множество элементов, чьи подмножества проверяются на независимость",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "systems"
+      }
+    },
+    {
+      "id": "matroid-independent-family-i",
+      "displayNotation": "\\mathcal I",
+      "shortName": "семейство независимых множеств",
+      "explanation": "Семейство подмножеств носителя, удовлетворяющее аксиомам независимости матроида",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "systems"
+      }
+    },
+    {
+      "id": "matroid-independent-set-a",
+      "displayNotation": "A",
+      "shortName": "меньшее независимое множество",
+      "explanation": "Независимое множество, которое требуется расширить в аксиоме обмена",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "axioms"
+      }
+    },
+    {
+      "id": "matroid-independent-set-b",
+      "displayNotation": "B",
+      "shortName": "большее независимое множество",
+      "explanation": "Независимое множество большей мощности, предоставляющее элемент для обмена",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "axioms"
+      }
+    },
+    {
+      "id": "matroid-exchange-element-e",
+      "displayNotation": "e",
+      "shortName": "элемент обмена",
+      "explanation": "Элемент из B без A, добавление которого сохраняет независимость A",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "axioms"
+      }
+    },
+    {
+      "id": "matroid-rank-function",
+      "displayNotation": "r(X)",
+      "shortName": "ранг множества",
+      "explanation": "Максимальная мощность независимого подмножества, содержащегося в X",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "bases-rank"
+      }
+    },
+    {
+      "id": "matroid-greedy-prefix-g-i",
+      "displayNotation": "G_i",
+      "shortName": "жадный независимый префикс",
+      "explanation": "Независимое множество после обработки i элементов в порядке веса",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "greedy-theorem"
+      }
+    },
+    {
+      "id": "matroid-element-weight-w",
+      "displayNotation": "w(e)",
+      "shortName": "вес элемента матроида",
+      "explanation": "Неотрицательный линейный вклад элемента e в вес независимого множества",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "greedy-theorem"
+      }
+    },
+    {
+      "id": "matroid-uniform-rank-r",
+      "displayNotation": "r",
+      "shortName": "ранг равномерного матроида",
+      "explanation": "Максимально разрешённое число элементов в независимом множестве U_{r,n}",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "uniform"
+      }
+    },
+    {
+      "id": "matroid-partition-block-e-j",
+      "displayNotation": "E_j",
+      "shortName": "блок разбиения",
+      "explanation": "Одна из непересекающихся групп элементов матроида разбиения",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "partition"
+      }
+    },
+    {
+      "id": "matroid-partition-capacity-q-j",
+      "displayNotation": "q_j",
+      "shortName": "квота блока",
+      "explanation": "Максимальное разрешённое число выбранных элементов из блока E_j",
+      "scope": "local",
+      "chapterId": "matroids",
+      "firstDefinition": {
+        "chapterId": "matroids",
+        "anchor": "partition"
+      }
     }
   ]
 }
