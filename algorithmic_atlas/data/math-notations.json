@@ -4644,6 +4644,594 @@
         "chapterId": "matroids",
         "anchor": "partition"
       }
+    },
+    {
+      "id": "dp-state",
+      "displayNotation": "s",
+      "shortName": "состояние динамической программы",
+      "explanation": "Достаточный ключ подзадачи: вся информация из прошлого, которая влияет на допустимое будущее и его оптимальную стоимость",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-value-function",
+      "displayNotation": "D(s)",
+      "shortName": "значение состояния",
+      "explanation": "Оптимальная стоимость или агрегированный ответ подзадачи, представленной состоянием s",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-action-set",
+      "displayNotation": "A(s)",
+      "shortName": "допустимые действия",
+      "explanation": "Множество первых действий, разрешённых из состояния s",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-transition-cost",
+      "displayNotation": "c(s,a)",
+      "shortName": "локальная цена перехода",
+      "explanation": "Добавочная стоимость действия a, выполненного в состоянии s",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-successor-state",
+      "displayNotation": "next(s,a)",
+      "shortName": "следующее состояние",
+      "explanation": "Состояние подзадачи, полученной после выполнения действия a из состояния s",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-base-set",
+      "displayNotation": "B",
+      "shortName": "базовые состояния",
+      "explanation": "Множество состояний, ответы для которых известны без обращения к другим подзадачам",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "state"
+      }
+    },
+    {
+      "id": "dp-dependency-relation",
+      "displayNotation": "u ≺ v",
+      "shortName": "зависимость состояний",
+      "explanation": "Состояние v непосредственно использует уже вычисленное значение состояния u",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "dependency-dag"
+      }
+    },
+    {
+      "id": "dp-topological-order",
+      "displayNotation": "τ(s)",
+      "shortName": "топологическая позиция",
+      "explanation": "Номер состояния в порядке, где каждая зависимость вычислена раньше использующего её состояния",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "dependency-dag"
+      }
+    },
+    {
+      "id": "dp-parent-choice",
+      "displayNotation": "parent(s)",
+      "shortName": "выбранный предок",
+      "explanation": "Зависимость или действие, сохранённые для восстановления одного оптимального решения",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "reconstruction"
+      }
+    },
+    {
+      "id": "dp-current-layer",
+      "displayNotation": "D_i[c]",
+      "shortName": "текущий слой DP",
+      "explanation": "Значения подзадач после включения в рассмотрение первых i элементов",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "space"
+      }
+    },
+    {
+      "id": "dp-previous-layer",
+      "displayNotation": "D_{i-1}[c]",
+      "shortName": "предыдущий слой DP",
+      "explanation": "Слой значений, от которого непосредственно зависит текущий слой",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "space"
+      }
+    },
+    {
+      "id": "knapsack-capacity",
+      "displayNotation": "c",
+      "shortName": "вместимость рюкзака",
+      "explanation": "Доступный целочисленный предел суммарного веса в текущей подзадаче",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "knapsack"
+      }
+    },
+    {
+      "id": "knapsack-prefix-count",
+      "displayNotation": "i",
+      "shortName": "длина префикса предметов",
+      "explanation": "Количество первых предметов, доступных текущей подзадаче 0/1-рюкзака",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "knapsack"
+      }
+    },
+    {
+      "id": "knapsack-weight",
+      "displayNotation": "w_i",
+      "shortName": "вес предмета",
+      "explanation": "Вес предмета i, вычитаемый из доступной вместимости при его выборе",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "knapsack"
+      }
+    },
+    {
+      "id": "knapsack-value",
+      "displayNotation": "v_i",
+      "shortName": "ценность предмета",
+      "explanation": "Вклад предмета i в целевую ценность решения",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "knapsack"
+      }
+    },
+    {
+      "id": "matrix-chain-cost",
+      "displayNotation": "M[i,j]",
+      "shortName": "стоимость цепочки матриц",
+      "explanation": "Минимальное число скалярных умножений для произведения матриц от i до j",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "matrix-chain"
+      }
+    },
+    {
+      "id": "matrix-dimension",
+      "displayNotation": "p_{i-1}p_kp_j",
+      "shortName": "цена последнего умножения",
+      "explanation": "Число скалярных операций при перемножении двух частей цепочки после разделителя k",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "matrix-chain"
+      }
+    },
+    {
+      "id": "dp-split-index",
+      "displayNotation": "k",
+      "shortName": "индекс разделителя",
+      "explanation": "Кандидат точки, в которой задача делится на две уже решаемые подзадачи",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "matrix-chain"
+      }
+    },
+    {
+      "id": "dag-distance",
+      "displayNotation": "dist(v)",
+      "shortName": "расстояние до вершины",
+      "explanation": "Минимальная стоимость пути из фиксированного источника в вершину v",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "dag-paths"
+      }
+    },
+    {
+      "id": "dag-predecessor-set",
+      "displayNotation": "pred(v)",
+      "shortName": "предшественники вершины",
+      "explanation": "Вершины с ориентированным ребром, входящим в v",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "dag-paths"
+      }
+    },
+    {
+      "id": "dag-edge-weight",
+      "displayNotation": "w(u,v)",
+      "shortName": "вес ребра",
+      "explanation": "Добавочная стоимость перехода из вершины u в вершину v",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "dag-paths"
+      }
+    },
+    {
+      "id": "dp-state-count",
+      "displayNotation": "|V_D|",
+      "shortName": "число состояний",
+      "explanation": "Количество вершин в графе зависимостей динамической программы",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "engineering"
+      }
+    },
+    {
+      "id": "dp-edge-count",
+      "displayNotation": "|E_D|",
+      "shortName": "число переходов",
+      "explanation": "Количество рёбер зависимостей или явно перебираемых кандидатов в DP",
+      "scope": "local",
+      "chapterId": "dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "dynamic-programming",
+        "anchor": "engineering"
+      }
+    },
+    {
+      "id": "dp-bitmask",
+      "displayNotation": "M",
+      "shortName": "маска подмножества",
+      "explanation": "Битовая запись множества уже использованных объектов",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "bitmask"
+      }
+    },
+    {
+      "id": "dp-last-vertex",
+      "displayNotation": "v",
+      "shortName": "последняя вершина",
+      "explanation": "Текущий конец частичного маршрута, необходимый для оценки следующего ребра",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "bitmask"
+      }
+    },
+    {
+      "id": "dp-position",
+      "displayNotation": "t",
+      "shortName": "позиция обработки",
+      "explanation": "Номер уже обработанного слоя, клетки или цифры в послойной динамической программе",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "profile"
+      }
+    },
+    {
+      "id": "dp-profile-mask",
+      "displayNotation": "P",
+      "shortName": "профиль границы",
+      "explanation": "Сжатое состояние узкой границы между обработанной и необработанной частями",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "profile"
+      }
+    },
+    {
+      "id": "digit-tight",
+      "displayNotation": "tight",
+      "shortName": "флаг точного префикса",
+      "explanation": "Признак того, что выбранный префикс ещё совпадает с префиксом верхней границы",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "digit"
+      }
+    },
+    {
+      "id": "digit-started",
+      "displayNotation": "started",
+      "shortName": "флаг начала записи",
+      "explanation": "Признак появления первой значащей цифры, отделяющий ведущие нули",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "digit"
+      }
+    },
+    {
+      "id": "digit-automaton-state",
+      "displayNotation": "q",
+      "shortName": "состояние цифрового автомата",
+      "explanation": "Конечная память ограничения на уже выбранный префикс цифр",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "digit"
+      }
+    },
+    {
+      "id": "dp-stage",
+      "displayNotation": "t",
+      "shortName": "слой разбиения",
+      "explanation": "Номер текущего слоя слоистой динамической программы",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "transition-matrix"
+      }
+    },
+    {
+      "id": "dp-prefix-index",
+      "displayNotation": "j",
+      "shortName": "граница префикса",
+      "explanation": "Правая граница или позиция состояния в текущем слое DP",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "transition-matrix"
+      }
+    },
+    {
+      "id": "dp-transition-matrix",
+      "displayNotation": "A_t[j,i]",
+      "shortName": "матрица кандидатов перехода",
+      "explanation": "Полная цена выбора предшественника i для состояния j на слое t",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "transition-matrix"
+      }
+    },
+    {
+      "id": "dp-transition-cost-matrix",
+      "displayNotation": "C(i,j)",
+      "shortName": "цена сегмента перехода",
+      "explanation": "Добавочная стоимость перехода от предыдущей границы i к новой границе j",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "transition-matrix"
+      }
+    },
+    {
+      "id": "dp-opt-index",
+      "displayNotation": "opt(j)",
+      "shortName": "индекс левого минимума",
+      "explanation": "Наименьший индекс кандидата, достигающего минимальной цены в строке переходов",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "transition-matrix"
+      }
+    },
+    {
+      "id": "dp-search-left",
+      "displayNotation": "L",
+      "shortName": "левая строка поиска",
+      "explanation": "Левая граница диапазона ещё вычисляемых строк D&C optimization",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "divide-conquer"
+      }
+    },
+    {
+      "id": "dp-search-right",
+      "displayNotation": "R",
+      "shortName": "правая строка поиска",
+      "explanation": "Правая граница диапазона ещё вычисляемых строк D&C optimization",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "divide-conquer"
+      }
+    },
+    {
+      "id": "dp-opt-left",
+      "displayNotation": "K_L",
+      "shortName": "нижняя граница кандидатов",
+      "explanation": "Наименьший индекс предшественника, который ещё может быть оптимальным в рекурсивном диапазоне",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "divide-conquer"
+      }
+    },
+    {
+      "id": "dp-opt-right",
+      "displayNotation": "K_R",
+      "shortName": "верхняя граница кандидатов",
+      "explanation": "Наибольший индекс предшественника, который ещё может быть оптимальным в рекурсивном диапазоне",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "divide-conquer"
+      }
+    },
+    {
+      "id": "interval-dp-value",
+      "displayNotation": "D[i,j]",
+      "shortName": "значение интервала",
+      "explanation": "Оптимальная стоимость подзадачи на интервале от i до j",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "knuth"
+      }
+    },
+    {
+      "id": "interval-weight",
+      "displayNotation": "W(i,j)",
+      "shortName": "цена целого интервала",
+      "explanation": "Добавочная стоимость, одинаковая для всех последних разделителей интервала [i,j]",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "knuth"
+      }
+    },
+    {
+      "id": "quadrangle-indices",
+      "displayNotation": "a ≤ b ≤ c ≤ d",
+      "shortName": "упорядоченная четвёрка границ",
+      "explanation": "Четыре индекса перекрывающихся и вложенных интервалов в quadrangle inequality",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "quadrangle"
+      }
+    },
+    {
+      "id": "monge-matrix-entry",
+      "displayNotation": "A[r,c]",
+      "shortName": "клетка Monge-матрицы",
+      "explanation": "Цена кандидата в строке r и столбце c матрицы",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "monge"
+      }
+    },
+    {
+      "id": "monge-row-indices",
+      "displayNotation": "r < r'",
+      "shortName": "пара строк Monge",
+      "explanation": "Две строки матрицы в естественном возрастающем порядке",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "monge"
+      }
+    },
+    {
+      "id": "monge-column-indices",
+      "displayNotation": "c < c'",
+      "shortName": "пара столбцов Monge",
+      "explanation": "Два столбца матрицы в естественном возрастающем порядке",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "monge"
+      }
+    },
+    {
+      "id": "cht-query-x",
+      "displayNotation": "x",
+      "shortName": "координата запроса",
+      "explanation": "Аргумент, в котором требуется минимум среди добавленных линейных функций",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "cht"
+      }
+    },
+    {
+      "id": "cht-line-slope",
+      "displayNotation": "m_i",
+      "shortName": "наклон линии",
+      "explanation": "Коэффициент при x в линейной функции, соответствующей кандидату i",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "cht"
+      }
+    },
+    {
+      "id": "cht-line-intercept",
+      "displayNotation": "b_i",
+      "shortName": "свободный член линии",
+      "explanation": "Не зависящая от запроса часть линейной функции кандидата i",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "cht"
+      }
+    },
+    {
+      "id": "li-chao-domain",
+      "displayNotation": "[X_min,X_max]",
+      "shortName": "домен дерева Ли Чао",
+      "explanation": "Диапазон координат запросов, на котором структура поддерживает минимум линий",
+      "scope": "local",
+      "chapterId": "advanced-dynamic-programming",
+      "firstDefinition": {
+        "chapterId": "advanced-dynamic-programming",
+        "anchor": "li-chao"
+      }
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-4",
+  "datasetVersion": "2026.08.01-5",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1822,19 +1822,25 @@
       "continentId": "algorithm-design",
       "regionId": "dynamic-heuristics",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "greedy-algorithms"
       ],
       "related": [],
-      "route": null,
-      "minutes": 100,
-      "reading": null,
+      "route": "./chapters/dynamic-programming.html",
+      "minutes": 40,
+      "reading": {
+        "words": 3843,
+        "formulaBlocks": 10,
+        "proofBlocks": 1,
+        "theoryMinutes": 26,
+        "labMinutes": 14
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1080,
@@ -1849,19 +1855,25 @@
       "continentId": "algorithm-design",
       "regionId": "dynamic-heuristics",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "dynamic-programming"
       ],
       "related": [],
-      "route": null,
-      "minutes": 105,
-      "reading": null,
+      "route": "./chapters/advanced-dynamic-programming.html",
+      "minutes": 44,
+      "reading": {
+        "words": 4076,
+        "formulaBlocks": 12,
+        "proofBlocks": 1,
+        "theoryMinutes": 28,
+        "labMinutes": 16
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1090,

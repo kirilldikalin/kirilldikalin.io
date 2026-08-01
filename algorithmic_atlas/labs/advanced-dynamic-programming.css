@@ -1,0 +1,87 @@
+.advanced-dp-figure {
+  overflow-x: auto;
+}
+
+.advanced-dp-figure .atlas-lab__visual {
+  min-height: 42rem;
+}
+
+.advanced-dp-header,
+.advanced-dp-row-label,
+.advanced-dp-cell-text {
+  fill: var(--chapter-ink);
+  font-size: 11px !important;
+  pointer-events: none;
+}
+
+.advanced-dp-row-label.is-current {
+  fill: var(--chapter-accent);
+  font-weight: 700;
+}
+
+.advanced-dp-cell {
+  fill: color-mix(in srgb, var(--lab-b) 11%, var(--chapter-paper));
+  stroke: var(--chapter-line);
+  stroke-width: 1;
+}
+
+.advanced-dp-cell.is-excluded {
+  fill: color-mix(in srgb, var(--chapter-line) 20%, var(--chapter-paper));
+  opacity: 0.5;
+}
+
+.advanced-dp-cell.is-selected {
+  fill: color-mix(in srgb, var(--lab-good) 32%, var(--chapter-paper));
+  stroke: var(--lab-good);
+  stroke-width: 2;
+}
+
+.advanced-dp-cell.is-missed {
+  fill: color-mix(in srgb, var(--lab-bad) 38%, var(--chapter-paper));
+  stroke: var(--lab-bad);
+  opacity: 1;
+}
+
+.advanced-dp-opt-path {
+  fill: none;
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+  opacity: 0.7;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.advanced-dp-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.advanced-dp-table {
+  min-width: 32rem;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.advanced-dp-table th,
+.advanced-dp-table td {
+  min-width: 3rem;
+  padding: 0.48rem;
+  border: 1px solid var(--chapter-line);
+}
+
+.advanced-dp-table td.is-violation {
+  color: var(--lab-bad);
+  background: color-mix(in srgb, var(--lab-bad) 14%, var(--chapter-paper));
+  font-weight: 700;
+}
+
+.advanced-dp-explanation {
+  min-height: 10rem;
+}
+
+@media (max-width: 36rem) {
+  .advanced-dp-figure .atlas-lab__visual { min-height: 34rem; }
+  .advanced-dp-header,
+  .advanced-dp-row-label,
+  .advanced-dp-cell-text { font-size: 9px !important; }
+}

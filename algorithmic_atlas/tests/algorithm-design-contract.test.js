@@ -20,6 +20,8 @@ const publishedChapterIds = new Set([
   "selection-order-statistics",
   "greedy-algorithms",
   "matroids",
+  "dynamic-programming",
+  "advanced-dynamic-programming",
 ]);
 
 function canonicalAlgorithmDesign() {
@@ -187,19 +189,19 @@ test("published chapters enter progress while planned chapters stay outside", ()
     core.continentProgressSummary(graph, "algorithm-design", new Set()),
     {
       completed: 0,
-      total: 6,
+      total: 8,
       percent: 0,
       coreCompleted: 0,
-      coreTotal: 5,
+      coreTotal: 6,
       branchCompleted: 0,
-      branchTotal: 1,
+      branchTotal: 2,
       coreReady: false,
       complete: false,
     }
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    35
+    37
   );
 });
 
