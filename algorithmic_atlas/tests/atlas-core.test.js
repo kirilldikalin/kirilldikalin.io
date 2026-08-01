@@ -37,8 +37,8 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   assert.equal(core.validateGraph(graph), graph);
   assert.equal(graph.schemaVersion, 2);
   assert.equal(graph.continents.length, 9);
-  assert.equal(graph.nodes.length, 29);
-  assert.equal(graph.routes.length, 10);
+  assert.equal(graph.nodes.length, 43);
+  assert.equal(graph.routes.length, 15);
   assert.deepEqual(
     graph.continents.map(({ name }) => name),
     [
@@ -55,7 +55,7 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   );
   assert.equal(
     graph.continents.filter(({ publication }) => publication === "published").length,
-    3
+    4
   );
 });
 
@@ -711,7 +711,7 @@ test("continent two has eleven unique canonical curriculum ids", () => {
   const nodes = core.visibleNodes(graph, "mathematical-tools");
   const ids = nodes.map(({ curriculumId }) => curriculumId);
   assert.equal(nodes.length, 11);
-  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 29);
+  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 43);
   assert.deepEqual(ids.slice().sort((left, right) => {
     const leftNumber = Number(left.split(".")[1]);
     const rightNumber = Number(right.split(".")[1]);
@@ -815,7 +815,11 @@ test("published inter-continent steps replace continuations while future exits s
   assert.deepEqual(
     core.continentContinuations(graph, "data-structures")
       .map(({ continuation }) => continuation.curriculumId),
-    ["4.1", "9.8", "6.3", "7.3", "9.13"]
+    ["9.8", "6.3", "7.3", "9.13"]
+  );
+  assert.equal(
+    core.routeNeighbors(graph, "range-query-structures").next.id,
+    "exhaustive-search"
   );
 
   const duplicate = cloneGraph();
@@ -827,11 +831,19 @@ test("published inter-continent steps replace continuations while future exits s
   );
 
   const unknownTarget = cloneGraph();
-  unknownTarget.routes.find(({ id }) => id === "data-structures-main")
+  unknownTarget.routes.find(({ id }) => id === "algorithm-design-main")
     .continuation.targetContinentId = "missing-continent";
   assert.throws(
     () => core.validateGraph(unknownTarget),
     /unknown route continuation continent/
+  );
+
+  const invalidRelatedKind = cloneGraph();
+  invalidRelatedKind.routes.find(({ id }) => id === "algorithm-design-main")
+    .relatedContinuations[0].kind = "route";
+  assert.throws(
+    () => core.validateGraph(invalidRelatedKind),
+    /related continuation must use related kind/
   );
 });
 
