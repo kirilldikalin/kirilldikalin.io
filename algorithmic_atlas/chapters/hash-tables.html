@@ -47,10 +47,11 @@
           <p>
             Пусть $U$ — вселенная допустимых ключей, а массив имеет $m$ buckets или slots. Хеш-функция отображает каждый ключ в индекс от 0 до $m-1$. Обычно $|U|\gg m$, поэтому по принципу Дирихле разные ключи обязаны получить один адрес. Равенство $h(x)=h(y)$ при $x\ne y$ называется коллизией. Структура должна разрешать её; надежда на «достаточно хороший» хеш не заменяет алгоритм.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-hash-family}{h}:U\to\{0,1,\ldots,m-1\},
-            \qquad x\ne y,\ h(x)=h(y).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-hash-function" data-notation-coverage="interactive" data-required-notations="hash-function-h,hash-universe-u,hash-table-size-m,hash-collision">
+            \[
+              \class{atlas-notation-token notation-id-hash-function-h}{h}:\class{atlas-notation-token notation-id-hash-universe-u}{U}\to\{0,1,\ldots,\class{atlas-notation-token notation-id-hash-table-size-m}{m}-1\}, \qquad \class{atlas-notation-token notation-id-hash-collision}{x\ne y,\ h(x)=h(y)}.
+            \]
+          </div>
           <p>
             Два требования легко перепутать. Детерминированность означает, что в рамках жизни таблицы равный ключ получает тот же результат. Равномерность означает, что используемые ключи распределяются по адресам без тяжёлых скоплений в выбранной вероятностной модели. Первое необходимо для поиска, второе — предпосылка ожидаемой эффективности. Никакая фиксированная функция не равномерна для всех возможных наборов: зная её, можно подобрать конфликтующие ключи.
           </p>
@@ -64,9 +65,11 @@
           <p>
             Обозначим число элементов через $n$. Коэффициент заполнения сравнивает нагрузку с числом адресных ячеек. Для chaining он может превышать единицу: bucket содержит коллекцию. Для open addressing каждый slot хранит не более одного элемента, поэтому $0\le\alpha&lt;1$, а при $\alpha=1$ вставка нового ключа невозможна без перестройки.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-hash-load-factor}{\alpha}=\frac{n}{m}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-hash-load-factor" data-notation-coverage="interactive" data-required-notations="hash-load-factor">
+            \[
+              \class{atlas-notation-token notation-id-hash-load-factor}{\alpha}=\frac{n}{m}.
+            \]
+          </div>
           <p>
             Load factor — не просто статистика интерфейса. Он входит в формулы числа проб и определяет порог resize. При открытой адресации приближение к единице резко увеличивает длинные серии занятых ячеек. При chaining большой $\alpha$ удлиняет buckets, но структура остаётся работоспособной. Практический порог зависит от схемы, качества функции, размера метаданных, допустимой памяти и требований к хвостовой задержке.
           </p>
@@ -99,11 +102,11 @@
           <p>
             Предположим simple uniform hashing: для каждого ключа адрес ведёт себя как независимый равномерный выбор из $m$ buckets. Для неуспешного поиска просматривается bucket $h(x)$. Ожидаемое число уже хранимых ключей в нём равно сумме $n$ индикаторов коллизии, каждый с ожиданием $1/m$. По линейности ожидания получаем $n/m=\alpha$ сравнений с ключами, плюс постоянная работа с массивом.
           </p>
-          <div class="atlas-math">\[
-            \mathbb E[L_{h(x)}]
-            =\sum_{y\in S}\Pr[h(y)=h(x)]
-            =\frac{n}{m}=\alpha.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-expected-chain-length" data-notation-coverage="interactive" data-required-notations="expectation-operator,hash-expected-bucket-length,hash-collision-probability,hash-key-count-n,hash-table-size-m,hash-load-factor">
+            \[
+              \class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}[\class{atlas-notation-token notation-id-hash-expected-bucket-length}{L_{h(x)}}] =\sum_{y\in S}\class{atlas-notation-token notation-id-hash-collision-probability}{\Pr[h(y)=h(x)]} =\frac{\class{atlas-notation-token notation-id-hash-key-count-n}{n}}{\class{atlas-notation-token notation-id-hash-table-size-m}{m}}=\class{atlas-notation-token notation-id-hash-load-factor}{\alpha}.
+            \]
+          </div>
           <p>
             Для успешного поиска при вставке в начало списка найденный ключ в среднем имеет перед собой примерно половину тех элементов, которые попали в bucket позже, поэтому распространённая оценка — $1+\alpha/2$ при подходящей модели порядка вставок. Константа зависит от внутреннего bucket и соглашения о подсчёте. Надёжный вывод: при ограниченном $\alpha$ ожидаемая стоимость constant после вычисления хеша, но worst case остаётся $\Theta(n)$.
           </p>
@@ -117,10 +120,11 @@
           <p>
             При открытой адресации каждый slot содержит либо пару, либо специальное состояние. Для ключа задаётся последовательность проб $h(x,0),h(x,1),\ldots,h(x,m-1)$. Вставка идёт по ней до допустимого свободного места, поиск — до равного ключа или до ячейки, которая никогда не была занята. Инвариант поиска: если $x$ хранится, то все более ранние позиции его probe sequence не могли остановить поиск как «изначально пустые».
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-hash-probe-sequence}{h(x,i)}\in\{0,\ldots,m-1\},
-            \qquad i=0,1,\ldots,m-1.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-probe-sequence" data-notation-coverage="interactive" data-required-notations="hash-probe-sequence">
+            \[
+              \class{atlas-notation-token notation-id-hash-probe-sequence}{h(x,i)}\in\{0,\ldots,m-1\}, \qquad i=0,1,\ldots,m-1.
+            \]
+          </div>
           <p>
             Пары лежат компактно, без указателя на каждый узел. Несколько slots помещаются в cache line, а метаданные занятости можно проверять группами. Цена — более жёсткое ограничение $\alpha&lt;1$, сложное удаление и чувствительность к форме probe sequence. Если последовательность не посещает все slots, вставка может сообщить переполнение даже при наличии пустых мест.
           </p>
@@ -150,19 +154,20 @@
           <p>
             В идеализированной модели каждая probe sequence является равномерной случайной перестановкой slots. Для неуспешного поиска вероятность того, что первые $k$ проверок заняты, не превосходит $\alpha^k$; точная выборка без возвращения только уменьшает вероятность. По формуле хвостовых сумм ожидаемое число проб ограничено геометрическим рядом.
           </p>
-          <div class="atlas-math">\[
-            \mathbb E[P_{unsuccessful}]
-            \le\sum_{k\ge0}\alpha^k
-            =\frac{1}{1-\alpha}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-unsuccessful-probes" data-notation-coverage="interactive" data-required-notations="expectation-operator,hash-unsuccessful-probes,hash-load-factor,hash-unsuccessful-probe-bound">
+            \[
+              \class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}[\class{atlas-notation-token notation-id-hash-unsuccessful-probes}{P_{unsuccessful}}] \le\sum_{k\ge0}\class{atlas-notation-token notation-id-hash-load-factor}{\alpha}^k =\class{atlas-notation-token notation-id-hash-unsuccessful-probe-bound}{\frac{1}{1-\alpha}}.
+            \]
+          </div>
           <p>
             Успешный поиск повторяет путь, выполненный при вставке ключа. Усреднение по моментам вставки от нагрузки 0 до текущей $\alpha$ даёт границу
             $\frac1\alpha\ln\frac1{1-\alpha}$. При $\alpha=0.5$ это около 1,386 проб для успешного и не более 2 для неуспешного поиска в идеальной модели. При $\alpha=0.9$ границы становятся примерно 2,56 и 10. Даже «постоянная» резко меняется.
           </p>
-          <div class="atlas-math">\[
-            \mathbb E[P_{successful}]
-            \le \frac1\alpha\ln\frac1{1-\alpha}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-successful-probes" data-notation-coverage="interactive" data-required-notations="expectation-operator,hash-successful-probes,hash-successful-probe-bound">
+            \[
+              \class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}[\class{atlas-notation-token notation-id-hash-successful-probes}{P_{successful}}] \le \class{atlas-notation-token notation-id-hash-successful-probe-bound}{\frac1\alpha\ln\frac1{1-\alpha}}.
+            \]
+          </div>
           <p>
             Эти формулы не являются формулами linear probing: его кластеры нарушают uniform probing и дают худшие зависимости от $1-\alpha$. Они также не доказывают worst-case $O(1)$. Одна неудачная таблица может потребовать линейного пути; ожидание берётся по заявленному источнику случайности.
           </p>
@@ -211,11 +216,11 @@
           <p>
             Фиксируем произвольный набор ключей, даже подобранный противником до построения таблицы. Вместо одной функции берём семейство $\mathcal H$ и случайно выбираем $h\in\mathcal H$. Семейство универсально, если для любых различных $x,y$ вероятность их коллизии по случайному выбору функции не превосходит $1/m$.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \Pr_{h\sim\class{atlas-notation-token notation-id-hash-family}{\mathcal H}}
-            [h(x)=h(y)]\le\frac1m,
-            \qquad x\ne y.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-2-universal-collision-bound" data-notation-coverage="interactive" data-required-notations="hash-collision-probability,hash-family,hash-table-size-m">
+            \[
+              \class{atlas-notation-token notation-id-hash-collision-probability}{\Pr}_{h\sim\class{atlas-notation-token notation-id-hash-family}{\mathcal H}} [h(x)=h(y)]\le\frac1\class{atlas-notation-token notation-id-hash-table-size-m}{m}, \qquad x\ne y.
+            \]
+          </div>
           <p>
             Для chaining это сразу ограничивает ожидаемое число конфликтов выбранного ключа: суммируем индикаторы по остальным $n-1$ ключам и получаем не более $(n-1)/m&lt;\alpha$. Независимость всех адресов не нужна; достаточно попарной границы. Таким образом, для любого заранее фиксированного набора ожидаемая длина bucket контролируется случайным секретным выбором функции.
           </p>

@@ -78,11 +78,9 @@
           <p>
             В оперативной памяти удобно считать чтение отдельного слова элементарной операцией. На диске, SSD и даже между уровнями кэша данные перемещаются блоками. Если нужный байт находится на странице размером 8 КиБ, устройство всё равно доставляет страницу целиком. Поэтому для индекса над большим файлом естественная модель стоимости считает переносы блоков, а не отдельные сравнения ключей. Обозначим размер страницы через $B$ байт, число записей через $N$, а число выполненных переносов — через $\class{atlas-notation-token notation-id-page-io}{\operatorname{I/O}}$. Внутри уже загруженной страницы можно выполнить десятки сравнений значительно дешевле следующего случайного чтения.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-7-page-io-model" data-notation-coverage="interactive" data-required-notations="page-io">
             \[
-              \class{atlas-notation-token notation-id-page-io}{\text{стоимость поиска}}
-              \approx \text{число прочитанных страниц},
-              \qquad \text{не число сравнений ключей}.
+              \class{atlas-notation-token notation-id-page-io}{\text{стоимость поиска}} \approx \text{число прочитанных страниц}, \qquad \text{не число сравнений ключей}.
             \]
           </div>
           <p>
@@ -120,11 +118,9 @@
           <p>
             Зафиксируем минимальную степень $t\ge2$. Каждый внутренний узел, кроме корня, содержит от $t-1$ до $2t-1$ ключей и от $t$ до $2t$ детей. Корень непустого дерева имеет хотя бы один ключ; если он не лист, у него хотя бы два ребёнка. Ключи внутри узла строго возрастают. Поддерево перед $k_i$ содержит ключи соответствующего промежутка, а все листья находятся на одной глубине. Последнее условие делает дерево сбалансированным без вращений.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-7-occupancy-invariants" data-notation-coverage="interactive" data-required-notations="b-tree-occupancy-invariant">
             \[
-              t-1\le m\le 2t-1,
-              \qquad m+1\text{ детей у внутреннего узла},
-              \qquad \operatorname{depth}(\ell)=h\text{ для каждого листа }\ell.
+              \class{atlas-notation-token notation-id-b-tree-occupancy-invariant}{t-1\le m\le 2t-1}, \qquad \class{atlas-notation-token notation-id-b-tree-occupancy-invariant}{m+1\text{ детей у внутреннего узла}}, \qquad \class{atlas-notation-token notation-id-b-tree-occupancy-invariant}{\operatorname{depth}(\ell)=h\text{ для каждого листа }\ell}.
             \]
           </div>
           <p>
@@ -140,10 +136,9 @@
           <p>
             Пусть размер страницы $B$, заголовок занимает $H$, разделитель — $K$ байт, указатель на дочернюю страницу — $P$ байт. Внутренний узел с $f$ детьми хранит $f-1$ разделителей, поэтому максимальное ветвление оценивается из неравенства $H+(f-1)K+fP\le B$. Отсюда
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-7-fanout-bound" data-notation-coverage="interactive" data-required-notations="b-tree-fanout,page-size-b,page-header-size-h,separator-size-k,child-pointer-size-p">
             \[
-              \class{atlas-notation-token notation-id-b-tree-fanout}{f}
-              \le \left\lfloor\frac{B-H+K}{K+P}\right\rfloor.
+              \class{atlas-notation-token notation-id-b-tree-fanout}{f} \le \left\lfloor\frac{\class{atlas-notation-token notation-id-page-size-b}{B}-\class{atlas-notation-token notation-id-page-header-size-h}{H}+\class{atlas-notation-token notation-id-separator-size-k}{K}}{\class{atlas-notation-token notation-id-separator-size-k}{K}+\class{atlas-notation-token notation-id-child-pointer-size-p}{P}}\right\rfloor.
             \]
           </div>
           <p>
@@ -222,13 +217,9 @@
           <p>
             Рассмотрим непустое B-дерево минимальной степени $t$ и высоты $h$, где корень находится на уровне ноль. Чтобы дерево заданной высоты содержало как можно меньше ключей, дадим корню один ключ и двух детей, а каждому прочему внутреннему узлу — минимальные $t$ детей. На глубине $i\ge1$ тогда не меньше $2t^{i-1}$ узлов, каждый с $t-1$ ключами.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-7-height-bound" data-notation-coverage="interactive" data-required-notations="b-tree-key-count-n,b-tree-height,b-tree-minimum-degree-t">
             \[
-              N\ge 1+\sum_{i=1}^{h}2t^{i-1}(t-1)
-              =2t^h-1,
-              \qquad
-              \class{atlas-notation-token notation-id-b-tree-height}{h}
-              \le \log_t\frac{N+1}{2}.
+              \class{atlas-notation-token notation-id-b-tree-key-count-n}{N}\ge 1+\sum_{i=1}^{\class{atlas-notation-token notation-id-b-tree-height}{h}}2\class{atlas-notation-token notation-id-b-tree-minimum-degree-t}{t}^{i-1}(\class{atlas-notation-token notation-id-b-tree-minimum-degree-t}{t}-1) =2\class{atlas-notation-token notation-id-b-tree-minimum-degree-t}{t}^\class{atlas-notation-token notation-id-b-tree-height}{h}-1, \qquad \class{atlas-notation-token notation-id-b-tree-height}{h} \le \log_\class{atlas-notation-token notation-id-b-tree-minimum-degree-t}{t}\frac{\class{atlas-notation-token notation-id-b-tree-key-count-n}{N}+1}{2}.
             \]
           </div>
           <p>

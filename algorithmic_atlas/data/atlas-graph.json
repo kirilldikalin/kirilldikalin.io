@@ -1384,9 +1384,9 @@
       "minutes": 37,
       "reading": {
         "words": 3502,
-        "formulaBlocks": 9,
+        "formulaBlocks": 10,
         "proofBlocks": 3,
-        "theoryMinutes": 25,
+        "theoryMinutes": 26,
         "labMinutes": 12
       },
       "features": {

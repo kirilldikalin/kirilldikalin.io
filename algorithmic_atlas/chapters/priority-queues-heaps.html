@@ -162,14 +162,9 @@
             Форма однозначно определяется числом элементов. Поэтому хранить
             ссылки на детей не нужно: нумерация массива уже кодирует рёбра.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-heap-indices" data-notation-coverage="interactive" data-required-notations="heap-parent-index,heap-child-indices">
             \[
-              \class{atlas-notation-token notation-id-heap-parent-index}
-              {\operatorname{parent}(i)=\left\lfloor\frac{i-1}{2}\right\rfloor},
-              \qquad
-              \class{atlas-notation-token notation-id-heap-child-indices}
-              {\operatorname{left}(i)=2i+1,\quad
-               \operatorname{right}(i)=2i+2}.
+              \class{atlas-notation-token notation-id-heap-parent-index} {\operatorname{parent}(i)=\left\lfloor\frac{i-1}{2}\right\rfloor}, \qquad \class{atlas-notation-token notation-id-heap-child-indices} {\operatorname{left}(i)=2i+1,\quad \operatorname{right}(i)=2i+2}.
             \]
           </div>
           <p>
@@ -212,11 +207,9 @@
           <h2>Инвариант сильнее минимума и слабее сортировки</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Свойство min-heap</h3>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-heap-property" data-notation-coverage="interactive" data-required-notations="heap-property">
               \[
-                \class{atlas-notation-token notation-id-heap-property}
-                {A[\operatorname{parent}(i)]\le A[i]}
-                \qquad\text{для каждого }i=1,\ldots,n-1.
+                \class{atlas-notation-token notation-id-heap-property} {A[\operatorname{parent}(i)]\le A[i]} \qquad\text{для каждого }i=1,\ldots,n-1.
               \]
             </div>
             <p>
@@ -349,11 +342,9 @@
             около листьев. Число вершин высоты $h$ ограничено величиной порядка
             $n/2^{h+1}$. Поэтому суммарный путь всех просеиваний ограничен
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-build-heap-cost" data-notation-coverage="interactive" data-required-notations="big-o-class,build-heap-linear-bound">
             \[
-              \sum_{h\ge0}O\!\left(\frac{n}{2^{h+1}}\right)h
-              =O(n)\sum_{h\ge0}\frac{h}{2^{h+1}}
-              =O(n).
+              \sum_{h\ge0}\class{atlas-notation-token notation-id-big-o-class}{O}\!\left(\frac{n}{2^{h+1}}\right)h =\class{atlas-notation-token notation-id-big-o-class}{O}(n)\sum_{h\ge0}\frac{h}{2^{h+1}} =\class{atlas-notation-token notation-id-build-heap-linear-bound}{O(n)}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -395,10 +386,9 @@
             оставшихся ключей, поэтому правый хвост уже окончательно
             отсортирован и больше не участвует в просеивании.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-heapsort-cost" data-notation-coverage="interactive" data-required-notations="heapsort-cost,big-theta-class,big-o-class">
             \[
-              T(n)=\Theta(n)+\sum_{k=2}^{n}O(\log k)
-              =O(n\log n).
+              \class{atlas-notation-token notation-id-heapsort-cost}{T(n)}=\class{atlas-notation-token notation-id-big-theta-class}{\Theta}(n)+\sum_{k=2}^{n}\class{atlas-notation-token notation-id-big-o-class}{O}(\log k) =\class{atlas-notation-token notation-id-big-o-class}{O}(n\log n).
             \]
           </div>
           <p>
@@ -438,11 +428,9 @@
             $di+1,\ldots,di+d$. Sift-up становится короче, зато sift-down на
             каждом уровне ищет минимум среди до $d$ детей.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-d-ary-cost" data-notation-coverage="interactive" data-required-notations="d-ary-heap-costs,big-o-class">
             \[
-              T_{\mathrm{up}}=O(\log_d n),
-              \qquad
-              T_{\mathrm{down}}=O(d\log_d n).
+              \class{atlas-notation-token notation-id-d-ary-heap-costs}{T_{\mathrm{up}}}=\class{atlas-notation-token notation-id-big-o-class}{O}(\log_d n), \qquad \class{atlas-notation-token notation-id-d-ary-heap-costs}{T_{\mathrm{down}}}=\class{atlas-notation-token notation-id-big-o-class}{O}(d\log_d n).
             \]
           </div>
           <p>
@@ -546,13 +534,9 @@
           </p>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Потенциал леса</h3>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula" data-formula-id="3-5-fibonacci-potential" data-notation-coverage="interactive" data-required-notations="heap-potential,amortized-cost">
               \[
-                \class{atlas-notation-token notation-id-heap-potential}
-                {\Phi(H)=t(H)+2m(H)},
-                \qquad
-                \class{atlas-notation-token notation-id-amortized-cost}
-                {\widehat c_i=c_i+\Phi(H_i)-\Phi(H_{i-1})}.
+                \class{atlas-notation-token notation-id-heap-potential} {\Phi(H)=t(H)+2m(H)}, \qquad \class{atlas-notation-token notation-id-amortized-cost} {\widehat c_i=c_i+\Phi(H_i)-\Phi(H_{i-1})}.
               \]
             </div>
             <p>

@@ -390,8 +390,8 @@
       "displayNotation": "\\exists",
       "shortName": "существует",
       "explanation": "Нужно предъявить хотя бы одно допустимое значение следующего за квантором параметра",
-      "scope": "local",
-      "chapterId": "asymptotic-estimates",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "asymptotic-estimates",
         "anchor": "big-o-definition"
@@ -1319,6 +1319,2202 @@
       "firstDefinition": {
         "chapterId": "lsm-learned-indexes",
         "anchor": "error-window"
+      }
+    },
+    {
+      "id": "initial-state-map-s0",
+      "displayNotation": "s_0(x)",
+      "shortName": "инициализация состояния",
+      "explanation": "Функция, которая по входу x строит начальное состояние вычисления",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "result-function-r",
+      "displayNotation": "R",
+      "shortName": "функция результата",
+      "explanation": "Функция, которая извлекает результат из завершающего состояния",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "halting-step-t",
+      "displayNotation": "T",
+      "shortName": "шаг остановки",
+      "explanation": "Номер первого шага, на котором состояние стало завершающим",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "state-model"
+      }
+    },
+    {
+      "id": "multiplication-accumulator-c",
+      "displayNotation": "c",
+      "shortName": "накопленная часть произведения",
+      "explanation": "Уже отделённая и просуммированная часть произведения в египетском умножении",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "proof"
+      }
+    },
+    {
+      "id": "multiplication-residual-area",
+      "displayNotation": "ab",
+      "shortName": "оставшаяся площадь",
+      "explanation": "Часть произведения, которая ещё заключена в текущих множителях a и b",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "proof"
+      }
+    },
+    {
+      "id": "multiplication-target-product",
+      "displayNotation": "|xy|",
+      "shortName": "исходное произведение по модулю",
+      "explanation": "Неизменная целевая величина, равная модулю произведения исходных множителей",
+      "scope": "local",
+      "chapterId": "before-computers",
+      "firstDefinition": {
+        "chapterId": "before-computers",
+        "anchor": "proof"
+      }
+    },
+    {
+      "id": "euclid-positive-order",
+      "displayNotation": "a>b>0",
+      "shortName": "порядок положительных аргументов",
+      "explanation": "Условие, при котором из большего положительного числа вычитают меньшее",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "subtraction"
+      }
+    },
+    {
+      "id": "euclid-current-a",
+      "displayNotation": "a",
+      "shortName": "первый текущий аргумент",
+      "explanation": "Первый компонент текущего состояния алгоритма Евклида",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "euclid-current-b",
+      "displayNotation": "b",
+      "shortName": "второй текущий аргумент",
+      "explanation": "Второй компонент текущего состояния и делитель на данном шаге алгоритма Евклида",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "euclid-remainder-range",
+      "displayNotation": "0≤r<b",
+      "shortName": "диапазон остатка",
+      "explanation": "Остаток неотрицателен и строго меньше положительного делителя",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "remainder"
+      }
+    },
+    {
+      "id": "common-divisor-set",
+      "displayNotation": "{d>0:d|a,d|b}",
+      "shortName": "множество общих делителей",
+      "explanation": "Множество всех положительных чисел, делящих оба аргумента",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "invariant"
+      }
+    },
+    {
+      "id": "euclid-invariant",
+      "displayNotation": "I(a,b)",
+      "shortName": "инвариант алгоритма Евклида",
+      "explanation": "Утверждение о сохранении НОД исходных чисел в текущей паре",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "invariant"
+      }
+    },
+    {
+      "id": "euclid-remainder-term",
+      "displayNotation": "r_i",
+      "shortName": "остаток с номером i",
+      "explanation": "Один из последовательных остатков в трассе алгоритма Евклида",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "fibonacci"
+      }
+    },
+    {
+      "id": "fibonacci-number",
+      "displayNotation": "F_k",
+      "shortName": "число Фибоначчи",
+      "explanation": "Член последовательности Фибоначчи, задающей минимальные входы для длинной трассы Евклида",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "fibonacci"
+      }
+    },
+    {
+      "id": "bezout-coefficient",
+      "displayNotation": "u,v",
+      "shortName": "коэффициенты Безу",
+      "explanation": "Целые коэффициенты линейной комбинации исходных аргументов, равной их НОД",
+      "scope": "local",
+      "chapterId": "euclidean-algorithm",
+      "firstDefinition": {
+        "chapterId": "euclidean-algorithm",
+        "anchor": "fibonacci"
+      }
+    },
+    {
+      "id": "turing-machine-m",
+      "displayNotation": "M",
+      "shortName": "машина Тьюринга",
+      "explanation": "Полное конечное описание детерминированной машины Тьюринга",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "turing-initial-state",
+      "displayNotation": "q_0",
+      "shortName": "начальное состояние машины",
+      "explanation": "Управляющее состояние, в котором машина начинает вычисление",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "tm-move-directions",
+      "displayNotation": "{L,R}",
+      "shortName": "направления движения головки",
+      "explanation": "Два допустимых сдвига головки: на одну клетку влево или вправо",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "formal-machine"
+      }
+    },
+    {
+      "id": "tm-configuration",
+      "displayNotation": "C",
+      "shortName": "конфигурация машины",
+      "explanation": "Полный мгновенный снимок управления, головки и содержимого ленты",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "configuration"
+      }
+    },
+    {
+      "id": "tm-current-state",
+      "displayNotation": "q",
+      "shortName": "текущее состояние управления",
+      "explanation": "Состояние конечного управления в рассматриваемой конфигурации",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "configuration"
+      }
+    },
+    {
+      "id": "tm-head-position",
+      "displayNotation": "h",
+      "shortName": "позиция головки",
+      "explanation": "Целочисленный индекс клетки ленты, над которой находится головка",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "configuration"
+      }
+    },
+    {
+      "id": "tm-tape-contents",
+      "displayNotation": "τ",
+      "shortName": "содержимое ленты",
+      "explanation": "Функция, сопоставляющая каждой позиции символ ленточного алфавита",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "configuration"
+      }
+    },
+    {
+      "id": "universal-turing-machine",
+      "displayNotation": "U",
+      "shortName": "универсальная машина",
+      "explanation": "Машина Тьюринга, интерпретирующая код другой машины и её входа",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "universal-machine"
+      }
+    },
+    {
+      "id": "tm-encoded-input",
+      "displayNotation": "⟨M,x⟩",
+      "shortName": "код машины и входа",
+      "explanation": "Конечная запись описания машины M вместе с предназначенным ей входом x",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "universal-machine"
+      }
+    },
+    {
+      "id": "tm-simulation-equivalence",
+      "displayNotation": "≃",
+      "shortName": "эквивалентность частичных вычислений",
+      "explanation": "Обе стороны дают одинаковый результат при остановке и вместе могут оставаться неопределёнными",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "universal-machine"
+      }
+    },
+    {
+      "id": "tm-computation",
+      "displayNotation": "M(x)",
+      "shortName": "вычисление машины на входе",
+      "explanation": "Результат запуска машины M на входе x, если этот запуск останавливается",
+      "scope": "local",
+      "chapterId": "turing-machine-transition",
+      "firstDefinition": {
+        "chapterId": "turing-machine-transition",
+        "anchor": "universal-machine"
+      }
+    },
+    {
+      "id": "binary-length",
+      "displayNotation": "ℓ",
+      "shortName": "длина двоичной записи",
+      "explanation": "Число битов в канонической двоичной записи положительного числа",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "number-length"
+      }
+    },
+    {
+      "id": "input-number-n",
+      "displayNotation": "N",
+      "shortName": "числовое значение входа",
+      "explanation": "Положительное целое число как значение, отличаемое от длины его записи",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "number-length"
+      }
+    },
+    {
+      "id": "binary-length-expression",
+      "displayNotation": "⌊log₂N⌋+1",
+      "shortName": "формула двоичной длины",
+      "explanation": "Точное число битов канонической записи положительного целого N",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "number-length"
+      }
+    },
+    {
+      "id": "worst-case-cost",
+      "displayNotation": "T_A^{max}(n)",
+      "shortName": "худшая стоимость для размера n",
+      "explanation": "Максимальная стоимость алгоритма A среди допустимых входов длины n",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "concrete-cost"
+      }
+    },
+    {
+      "id": "bit-cost",
+      "displayNotation": "T_bit",
+      "shortName": "полная битовая стоимость",
+      "explanation": "Суммарное число элементарных битовых действий вычисления",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "big-arithmetic"
+      }
+    },
+    {
+      "id": "division-bit-cost",
+      "displayNotation": "cost_div",
+      "shortName": "битовая цена деления",
+      "explanation": "Стоимость одного деления как функция разрядностей его аргументов",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "big-arithmetic"
+      }
+    },
+    {
+      "id": "operand-bit-length",
+      "displayNotation": "|a_i|,|b_i|",
+      "shortName": "разрядности операндов",
+      "explanation": "Битовые длины двух аргументов текущего деления, а не их абсолютные значения",
+      "scope": "local",
+      "chapterId": "input-size-and-cost",
+      "firstDefinition": {
+        "chapterId": "input-size-and-cost",
+        "anchor": "big-arithmetic"
+      }
+    },
+    {
+      "id": "natural-numbers",
+      "displayNotation": "ℕ",
+      "shortName": "натуральные размеры входа",
+      "explanation": "Область значений дискретного параметра размера n",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "cost-functions"
+      }
+    },
+    {
+      "id": "nonnegative-reals",
+      "displayNotation": "ℝ≥0",
+      "shortName": "неотрицательные вещественные стоимости",
+      "explanation": "Область значений функций стоимости и сравнения",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "cost-functions"
+      }
+    },
+    {
+      "id": "asymptotic-limit",
+      "displayNotation": "lim n→∞",
+      "shortName": "предел при росте входа",
+      "explanation": "Предел последовательности при неограниченном росте натурального размера n",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "strict-relations"
+      }
+    },
+    {
+      "id": "ratio-sequence",
+      "displayNotation": "r_n",
+      "shortName": "отношение полинома к экспоненте",
+      "explanation": "Последовательность n^k/2^n, сжатие которой доказывает стремление отношения к нулю",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "proofs"
+      }
+    },
+    {
+      "id": "fixed-polynomial-degree",
+      "displayNotation": "k",
+      "shortName": "фиксированная степень полинома",
+      "explanation": "Не зависящий от n неотрицательный показатель степени",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "proofs"
+      }
+    },
+    {
+      "id": "contraction-factor",
+      "displayNotation": "ρ",
+      "shortName": "коэффициент геометрического сжатия",
+      "explanation": "Постоянный множитель меньше единицы, ограничивающий отношение соседних членов",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "proofs"
+      }
+    },
+    {
+      "id": "oscillating-even-branch",
+      "displayNotation": "n, n чётно",
+      "shortName": "чётная ветвь функции",
+      "explanation": "Линейное значение немонотонного примера на чётных аргументах",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "oscillation"
+      }
+    },
+    {
+      "id": "oscillating-odd-branch",
+      "displayNotation": "n², n нечётно",
+      "shortName": "нечётная ветвь функции",
+      "explanation": "Квадратичное значение немонотонного примера на нечётных аргументах",
+      "scope": "local",
+      "chapterId": "asymptotic-estimates",
+      "firstDefinition": {
+        "chapterId": "asymptotic-estimates",
+        "anchor": "oscillation"
+      }
+    },
+    {
+      "id": "absolute-error-epsilon",
+      "displayNotation": "\\varepsilon",
+      "shortName": "допустимая абсолютная ошибка",
+      "explanation": "Порог абсолютного отклонения выборочного среднего",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "hoeffding"
+      }
+    },
+    {
+      "id": "actual-operation-cost-ci",
+      "displayNotation": "c_i",
+      "shortName": "фактическая цена операции",
+      "explanation": "Реальная стоимость i-й операции последовательности",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "amortized"
+      }
+    },
+    {
+      "id": "addition-bit-cost",
+      "displayNotation": "C_+(b)",
+      "shortName": "битовая цена сложения",
+      "explanation": "Стоимость сложения двух b-битных чисел",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "bit-complexity"
+      }
+    },
+    {
+      "id": "akra-exponent-p",
+      "displayNotation": "p",
+      "shortName": "показатель Акры — Бацци",
+      "explanation": "Показатель, определяемый балансом размеров рекурсивных подзадач",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "akra-bazzi"
+      }
+    },
+    {
+      "id": "akra-integration-variable-u",
+      "displayNotation": "u",
+      "shortName": "переменная интегрирования",
+      "explanation": "Вспомогательная переменная интеграла в формуле Акры — Бацци",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "akra-bazzi"
+      }
+    },
+    {
+      "id": "akra-scale-x",
+      "displayNotation": "x",
+      "shortName": "масштаб задачи",
+      "explanation": "Непрерывный параметр размера в формуле Акры — Бацци",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "akra-bazzi"
+      }
+    },
+    {
+      "id": "algorithm-randomness-r",
+      "displayNotation": "R",
+      "shortName": "случайность алгоритма",
+      "explanation": "Внутренние случайные биты или seed рандомизированного алгоритма",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "randomized"
+      }
+    },
+    {
+      "id": "asymptotic-equivalence",
+      "displayNotation": "\\sim",
+      "shortName": "асимптотическая эквивалентность",
+      "explanation": "Отношение функций, чьё отношение стремится к единице",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "explosion"
+      }
+    },
+    {
+      "id": "bernoulli-success-probability",
+      "displayNotation": "p_i",
+      "shortName": "вероятность успеха",
+      "explanation": "Вероятность единицы i-го индикатора Бернулли",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "variance"
+      }
+    },
+    {
+      "id": "best-case",
+      "displayNotation": "T_{\\mathrm{best}}(n)",
+      "shortName": "стоимость лучшего случая",
+      "explanation": "Минимальная стоимость среди входов фиксированного размера",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "best"
+      }
+    },
+    {
+      "id": "binary-search-bounds",
+      "displayNotation": "0\\le L\\le R\\le n",
+      "shortName": "границы поиска",
+      "explanation": "Корректный полуоткрытый интервал кандидатов бинарного поиска",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "binary-search"
+      }
+    },
+    {
+      "id": "binary-search-candidate-condition",
+      "displayNotation": "x\\in a[L,R)",
+      "shortName": "условие кандидата",
+      "explanation": "Если цель существует, её позиция остаётся внутри интервала кандидатов",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "binary-search"
+      }
+    },
+    {
+      "id": "binomial-power",
+      "displayNotation": "(x+y)^n",
+      "shortName": "степень бинома",
+      "explanation": "Левая часть формулы бинома Ньютона",
+      "scope": "local",
+      "chapterId": "combinatorics-counting",
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "binomial"
+      }
+    },
+    {
+      "id": "binomial-summation",
+      "displayNotation": "\\sum_{k=0}^{n}",
+      "shortName": "биномиальное суммирование",
+      "explanation": "Суммирование по всем возможным числам выбранных элементов",
+      "scope": "local",
+      "chapterId": "combinatorics-counting",
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "binomial"
+      }
+    },
+    {
+      "id": "bounded-range-width",
+      "displayNotation": "(b_i-a_i)^2",
+      "shortName": "ширина диапазона",
+      "explanation": "Квадрат ширины допустимого интервала i-й независимой величины",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "hoeffding"
+      }
+    },
+    {
+      "id": "comparison-integral",
+      "displayNotation": "\\int f(x)\\,dx",
+      "shortName": "сравнивающий интеграл",
+      "explanation": "Интеграл, ограничивающий сумму монотонной функции",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "integral"
+      }
+    },
+    {
+      "id": "covariance",
+      "displayNotation": "\\operatorname{Cov}(X,Y)",
+      "shortName": "ковариация",
+      "explanation": "Совместное линейное изменение двух случайных величин",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "variance"
+      }
+    },
+    {
+      "id": "deviation-threshold",
+      "displayNotation": "t",
+      "shortName": "порог отклонения",
+      "explanation": "Положительный уровень события большого отклонения",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "markov"
+      }
+    },
+    {
+      "id": "discrete-sum",
+      "displayNotation": "\\sum f(k)",
+      "shortName": "дискретная сумма",
+      "explanation": "Сумма значений функции по целочисленным аргументам",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "integral"
+      }
+    },
+    {
+      "id": "distribution-mean-mu",
+      "displayNotation": "\\mu",
+      "shortName": "среднее распределения",
+      "explanation": "Математическое ожидание рассматриваемой случайной величины",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "chebyshev"
+      }
+    },
+    {
+      "id": "event-probability",
+      "displayNotation": "\\mathbb P(A)",
+      "shortName": "вероятность события",
+      "explanation": "Вероятностная мера события или пересечения событий",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "probability-spaces",
+        "anchor": "finite-space"
+      }
+    },
+    {
+      "id": "event-probability-rv",
+      "displayNotation": "\\mathbb P(A_i)",
+      "shortName": "вероятность индикаторного события",
+      "explanation": "Вероятность события, которому соответствует индикатор",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "indicators"
+      }
+    },
+    {
+      "id": "expectation-operator",
+      "displayNotation": "\\mathbb E",
+      "shortName": "оператор ожидания",
+      "explanation": "Усреднение стоимости по явно заданной случайности",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "average"
+      }
+    },
+    {
+      "id": "exponential-tilt-lambda",
+      "displayNotation": "\\lambda",
+      "shortName": "экспоненциальный параметр",
+      "explanation": "Положительный параметр экспоненциального момента",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "chernoff"
+      }
+    },
+    {
+      "id": "exponential-time-bound",
+      "displayNotation": "c^n",
+      "shortName": "экспоненциальный рост",
+      "explanation": "Зависимость стоимости с постоянным основанием больше единицы и показателем размера",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "pseudo"
+      }
+    },
+    {
+      "id": "factorial-n",
+      "displayNotation": "n!",
+      "shortName": "факториал",
+      "explanation": "Произведение положительных целых чисел от 1 до n",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "explosion"
+      }
+    },
+    {
+      "id": "finite-growth-ratio-limit",
+      "displayNotation": "L\\in(0,\\infty)",
+      "shortName": "конечный предел отношения",
+      "explanation": "Положительный конечный предел отношения двух функций",
+      "scope": "local",
+      "chapterId": "growth-rates",
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "ratio"
+      }
+    },
+    {
+      "id": "fixed-size-input-set",
+      "displayNotation": "X_n",
+      "shortName": "входы размера n",
+      "explanation": "Множество всех допустимых входов с одинаковым размером n",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "worst"
+      }
+    },
+    {
+      "id": "halts-predicate",
+      "displayNotation": "\\operatorname{halts}(s_0)",
+      "shortName": "условие завершения",
+      "explanation": "Утверждение, что запуск из начального состояния останавливается",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "partial-total"
+      }
+    },
+    {
+      "id": "harmonic-number-hn",
+      "displayNotation": "H_n",
+      "shortName": "гармоническое число",
+      "explanation": "Сумма обратных величин от 1 до n",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "harmonic"
+      }
+    },
+    {
+      "id": "inclusion-index-family",
+      "displayNotation": "\\varnothing\\ne I\\subseteq[m]",
+      "shortName": "семейство индексов",
+      "explanation": "Непустое подмножество индексов в общей формуле включений — исключений",
+      "scope": "local",
+      "chapterId": "combinatorics-counting",
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "inclusion-exclusion"
+      }
+    },
+    {
+      "id": "indicator-event-membership",
+      "displayNotation": "\\omega\\in A",
+      "shortName": "принадлежность событию",
+      "explanation": "Условие, определяющее значение индикатора события",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "indicators"
+      }
+    },
+    {
+      "id": "indicator-variable",
+      "displayNotation": "\\mathbf 1_A",
+      "shortName": "индикатор события",
+      "explanation": "Случайная величина, равная единице ровно на событии A",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "indicators"
+      }
+    },
+    {
+      "id": "input-distribution-dn",
+      "displayNotation": "D_n",
+      "shortName": "распределение входов",
+      "explanation": "Вероятностное распределение на входах размера n",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "average"
+      }
+    },
+    {
+      "id": "input-size-n",
+      "displayNotation": "n",
+      "shortName": "размер входа",
+      "explanation": "Числовой параметр длины или размера входного представления",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "quasilinear"
+      }
+    },
+    {
+      "id": "logarithmic-growth-term",
+      "displayNotation": "\\log n",
+      "shortName": "логарифмический член",
+      "explanation": "Функция логарифмического роста",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "hierarchy"
+      }
+    },
+    {
+      "id": "operation-sequence-length-m",
+      "displayNotation": "m",
+      "shortName": "число операций",
+      "explanation": "Длина анализируемой последовательности операций",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "amortized"
+      }
+    },
+    {
+      "id": "outcome-probability-mass",
+      "displayNotation": "p(\\omega)",
+      "shortName": "масса исхода",
+      "explanation": "Вероятность отдельного исхода или отдельного значения дискретной величины",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "probability-spaces",
+        "anchor": "finite-space"
+      }
+    },
+    {
+      "id": "polynomial-growth-term",
+      "displayNotation": "n^{1+\\varepsilon}",
+      "shortName": "полиномиальный член",
+      "explanation": "Степенная функция с постоянным положительным превышением линейной степени",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "hierarchy"
+      }
+    },
+    {
+      "id": "positive-epsilon",
+      "displayNotation": "\\varepsilon>0",
+      "shortName": "положительный эпсилон",
+      "explanation": "Произвольная фиксированная положительная константа",
+      "scope": "local",
+      "chapterId": "growth-rates",
+      "firstDefinition": {
+        "chapterId": "growth-rates",
+        "anchor": "quasilinear"
+      }
+    },
+    {
+      "id": "postcondition-q",
+      "displayNotation": "Q(s_f)",
+      "shortName": "постусловие",
+      "explanation": "Свойство, требуемое от завершающего состояния",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "partial-total"
+      }
+    },
+    {
+      "id": "precondition-p",
+      "displayNotation": "P(s_0)",
+      "shortName": "предусловие",
+      "explanation": "Свойство, требуемое от начального состояния",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "partial-total"
+      }
+    },
+    {
+      "id": "predicate-pxy",
+      "displayNotation": "P(x,y)",
+      "shortName": "предикат двух аргументов",
+      "explanation": "Логическое условие на выбранных объектах x и y",
+      "scope": "local",
+      "chapterId": "sets-relations-functions-logic",
+      "firstDefinition": {
+        "chapterId": "sets-relations-functions-logic",
+        "anchor": "predicates"
+      }
+    },
+    {
+      "id": "probability-mass-function-px",
+      "displayNotation": "p_X(x)",
+      "shortName": "функция вероятностной массы",
+      "explanation": "Вероятность того, что дискретная случайная величина принимает значение x",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "random-variable"
+      }
+    },
+    {
+      "id": "pseudo-polynomial-step-count",
+      "displayNotation": "T(N)",
+      "shortName": "псевдополиномиальная стоимость",
+      "explanation": "Число шагов, полиномиальное по числовому значению, но не обязательно по длине записи",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "pseudo"
+      }
+    },
+    {
+      "id": "quasilinear-growth-term",
+      "displayNotation": "n\\log n",
+      "shortName": "квазилинейный член",
+      "explanation": "Произведение размера входа на его логарифм",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "hierarchy"
+      }
+    },
+    {
+      "id": "random-sum-s",
+      "displayNotation": "S",
+      "shortName": "сумма случайных величин",
+      "explanation": "Сумма независимых ограниченных случайных величин",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "hoeffding"
+      }
+    },
+    {
+      "id": "randomized-worst-case",
+      "displayNotation": "T_{\\mathrm{rand}}(n)",
+      "shortName": "рандомизированная стоимость",
+      "explanation": "Худшая по входу ожидаемая по внутренней случайности стоимость",
+      "scope": "local",
+      "chapterId": "analysis-cases",
+      "firstDefinition": {
+        "chapterId": "analysis-cases",
+        "anchor": "randomized"
+      }
+    },
+    {
+      "id": "recurrence-toll-g",
+      "displayNotation": "g(u)",
+      "shortName": "нерекурсивная работа",
+      "explanation": "Добавочная работа уровня рекуррентности в формуле Акры — Бацци",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "akra-bazzi"
+      }
+    },
+    {
+      "id": "recursion-depth-j",
+      "displayNotation": "j",
+      "shortName": "глубина развёртки",
+      "explanation": "Число выполненных уровней развёртывания рекуррентности",
+      "scope": "local",
+      "chapterId": "sums-products-recurrences",
+      "firstDefinition": {
+        "chapterId": "sums-products-recurrences",
+        "anchor": "unfolding"
+      }
+    },
+    {
+      "id": "relative-deviation-delta",
+      "displayNotation": "\\delta",
+      "shortName": "относительное отклонение",
+      "explanation": "Доля среднего, задающая мультипликативное отклонение",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "chernoff"
+      }
+    },
+    {
+      "id": "sample-mean-xbar",
+      "displayNotation": "\\overline X",
+      "shortName": "выборочное среднее",
+      "explanation": "Среднее арифметическое независимых наблюдений",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "hoeffding"
+      }
+    },
+    {
+      "id": "schoolbook-multiplication-cost",
+      "displayNotation": "C_{\\times}^{\\mathrm{school}}(b)",
+      "shortName": "цена школьного умножения",
+      "explanation": "Битовая стоимость обычного поразрядного умножения b-битных чисел",
+      "scope": "local",
+      "chapterId": "computation-models",
+      "firstDefinition": {
+        "chapterId": "computation-models",
+        "anchor": "bit-complexity"
+      }
+    },
+    {
+      "id": "set-cardinality",
+      "displayNotation": "|A|",
+      "shortName": "мощность множества",
+      "explanation": "Число элементов конечного множества",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "double-counting"
+      }
+    },
+    {
+      "id": "standard-deviation-sigma",
+      "displayNotation": "\\sigma",
+      "shortName": "стандартное отклонение",
+      "explanation": "Корень из дисперсии рассматриваемой случайной величины",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "chebyshev"
+      }
+    },
+    {
+      "id": "strict-growth-order",
+      "displayNotation": "\\prec",
+      "shortName": "строго меньший рост",
+      "explanation": "Отношение строгого асимптотического доминирования соседних функций",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "hierarchy"
+      }
+    },
+    {
+      "id": "superexponential-growth-term",
+      "displayNotation": "n^n",
+      "shortName": "сверхэкспоненциальный член",
+      "explanation": "Функция, в которой и основание, и показатель растут с n",
+      "scope": "local",
+      "chapterId": "polynomial-efficiency",
+      "firstDefinition": {
+        "chapterId": "polynomial-efficiency",
+        "anchor": "hierarchy"
+      }
+    },
+    {
+      "id": "tail-probability",
+      "displayNotation": "\\mathbb P(\\text{отклонение})",
+      "shortName": "хвостовая вероятность",
+      "explanation": "Вероятность выхода случайной величины за заданный порог",
+      "scope": "local",
+      "chapterId": "random-variables-concentration",
+      "firstDefinition": {
+        "chapterId": "random-variables-concentration",
+        "anchor": "markov"
+      }
+    },
+    {
+      "id": "total-function-arrow",
+      "displayNotation": "\\longrightarrow",
+      "shortName": "тотальное отображение",
+      "explanation": "Стрелка функции, определённой на каждом допустимом входе",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "sets-relations-functions-logic",
+        "anchor": "functions"
+      }
+    },
+    {
+      "id": "total-function-f",
+      "displayNotation": "f",
+      "shortName": "тотальная функция",
+      "explanation": "Функция, сопоставляющая результат каждому элементу области определения",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "sets-relations-functions-logic",
+        "anchor": "functions"
+      }
+    },
+    {
+      "id": "universal-quantifier",
+      "displayNotation": "\\forall",
+      "shortName": "квантор всеобщности",
+      "explanation": "Требование выполнения утверждения для каждого допустимого объекта",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "sets-relations-functions-logic",
+        "anchor": "predicates"
+      }
+    },
+    {
+      "id": "variant-strict-decrease",
+      "displayNotation": "V_{\\mathrm{next}}<V",
+      "shortName": "строгое убывание варианта",
+      "explanation": "Условие уменьшения функции-варианта на каждом продолжающем шаге",
+      "scope": "local",
+      "chapterId": "correctness-invariants-termination",
+      "firstDefinition": {
+        "chapterId": "correctness-invariants-termination",
+        "anchor": "variant"
+      }
+    },
+    {
+      "id": "vertex-degree",
+      "displayNotation": "\\deg(v)",
+      "shortName": "степень вершины",
+      "explanation": "Число рёбер, инцидентных вершине v",
+      "scope": "local",
+      "chapterId": "combinatorics-counting",
+      "firstDefinition": {
+        "chapterId": "combinatorics-counting",
+        "anchor": "double-counting"
+      }
+    },
+    {
+      "id": "circular-buffer-slot",
+      "displayNotation": "\\operatorname{slot}(i)",
+      "shortName": "физическая позиция кольцевого буфера",
+      "explanation": "Индекс ячейки массива, соответствующей логической позиции i в кольцевом буфере",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "circular-buffer"
+      }
+    },
+    {
+      "id": "circular-buffer-head",
+      "displayNotation": "h",
+      "shortName": "голова кольцевого буфера",
+      "explanation": "Индекс физической ячейки, в которой находится первый логический элемент буфера",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "circular-buffer"
+      }
+    },
+    {
+      "id": "dynamic-array-size-n",
+      "displayNotation": "n",
+      "shortName": "размер динамического массива",
+      "explanation": "Текущее число элементов, уже хранящихся в динамическом массиве",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "dynamic-array"
+      }
+    },
+    {
+      "id": "dynamic-array-growth-factor-gamma",
+      "displayNotation": "\\gamma",
+      "shortName": "коэффициент роста ёмкости",
+      "explanation": "Постоянный множитель больше единицы, на который увеличивается ёмкость массива",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "dynamic-array"
+      }
+    },
+    {
+      "id": "operation-count-m",
+      "displayNotation": "m",
+      "shortName": "число операций",
+      "explanation": "Длина рассматриваемой последовательности операций над структурой данных",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "amortized-proof"
+      }
+    },
+    {
+      "id": "dynamic-array-actual-cost-ci",
+      "displayNotation": "c_i",
+      "shortName": "фактическая цена операции",
+      "explanation": "Число единичных записей и копирований, выполненных i-й операцией push",
+      "scope": "local",
+      "chapterId": "linear-data-structures",
+      "firstDefinition": {
+        "chapterId": "linear-data-structures",
+        "anchor": "amortized-proof"
+      }
+    },
+    {
+      "id": "hash-function-h",
+      "displayNotation": "h",
+      "shortName": "хеш-функция",
+      "explanation": "Отображение ключа из универсального множества в индекс таблицы",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "hash-model"
+      }
+    },
+    {
+      "id": "hash-universe-u",
+      "displayNotation": "U",
+      "shortName": "универсум ключей",
+      "explanation": "Множество всех допустимых ключей хеш-таблицы",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "hash-model"
+      }
+    },
+    {
+      "id": "hash-table-size-m",
+      "displayNotation": "m",
+      "shortName": "число ячеек хеш-таблицы",
+      "explanation": "Количество адресуемых корзин или позиций в таблице",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "hash-model"
+      }
+    },
+    {
+      "id": "hash-collision",
+      "displayNotation": "h(x)=h(y)",
+      "shortName": "коллизия хеширования",
+      "explanation": "Ситуация, когда разные ключи получают один индекс таблицы",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "hash-model"
+      }
+    },
+    {
+      "id": "hash-expected-bucket-length",
+      "displayNotation": "L_{h(x)}",
+      "shortName": "длина выбранной корзины",
+      "explanation": "Число ключей в корзине, куда хеш-функция направляет x",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "chaining-analysis"
+      }
+    },
+    {
+      "id": "hash-collision-probability",
+      "displayNotation": "\\Pr[h(y)=h(x)]",
+      "shortName": "вероятность коллизии",
+      "explanation": "Вероятность того, что два рассматриваемых ключа попадают в одну корзину",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "chaining-analysis"
+      }
+    },
+    {
+      "id": "hash-key-count-n",
+      "displayNotation": "n",
+      "shortName": "число хранимых ключей",
+      "explanation": "Количество ключей, уже находящихся в хеш-таблице",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "chaining-analysis"
+      }
+    },
+    {
+      "id": "hash-unsuccessful-probes",
+      "displayNotation": "P_{unsuccessful}",
+      "shortName": "пробы неуспешного поиска",
+      "explanation": "Число просмотренных позиций при поиске отсутствующего ключа",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "open-analysis"
+      }
+    },
+    {
+      "id": "hash-unsuccessful-probe-bound",
+      "displayNotation": "1/(1-\\alpha)",
+      "shortName": "граница неуспешного поиска",
+      "explanation": "Верхняя граница ожидаемого числа проб в модели равномерного пробирования",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "open-analysis"
+      }
+    },
+    {
+      "id": "hash-successful-probes",
+      "displayNotation": "P_{successful}",
+      "shortName": "пробы успешного поиска",
+      "explanation": "Число просмотренных позиций до нахождения существующего ключа",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "open-analysis"
+      }
+    },
+    {
+      "id": "hash-successful-probe-bound",
+      "displayNotation": "\\alpha^{-1}\\ln(1-\\alpha)^{-1}",
+      "shortName": "граница успешного поиска",
+      "explanation": "Верхняя граница ожидаемого числа проб успешного поиска",
+      "scope": "local",
+      "chapterId": "hash-tables",
+      "firstDefinition": {
+        "chapterId": "hash-tables",
+        "anchor": "open-analysis"
+      }
+    },
+    {
+      "id": "bst-order-invariant",
+      "displayNotation": "left(v)&lt;v&lt;right(v)",
+      "shortName": "инвариант дерева поиска",
+      "explanation": "Все ключи слева меньше ключа вершины, а все ключи справа больше него",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "bst-invariant"
+      }
+    },
+    {
+      "id": "rotation-inorder-preservation",
+      "displayNotation": "inorder(rotate(T))=inorder(T)",
+      "shortName": "сохранение порядка вращением",
+      "explanation": "Локальное вращение меняет форму дерева, но не порядок ключей при симметричном обходе",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "rotations"
+      }
+    },
+    {
+      "id": "order-statistic-select-recurrence",
+      "displayNotation": "select(v,i)",
+      "shortName": "рекуррентность порядковой статистики",
+      "explanation": "Правило выбора i-го ключа по размеру левого поддерева",
+      "scope": "local",
+      "chapterId": "augmented-search-trees",
+      "firstDefinition": {
+        "chapterId": "augmented-search-trees",
+        "anchor": "select"
+      }
+    },
+    {
+      "id": "monoid-tree-aggregate-rule",
+      "displayNotation": "aggregate(v)",
+      "shortName": "агрегат поддерева",
+      "explanation": "Композиция агрегата левого поддерева, значения вершины и агрегата правого поддерева",
+      "scope": "local",
+      "chapterId": "augmented-search-trees",
+      "firstDefinition": {
+        "chapterId": "augmented-search-trees",
+        "anchor": "monoids"
+      }
+    },
+    {
+      "id": "build-heap-linear-bound",
+      "displayNotation": "O(n)",
+      "shortName": "линейная сборка кучи",
+      "explanation": "Итоговая асимптотическая граница bottom-up построения двоичной кучи",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "build-heap"
+      }
+    },
+    {
+      "id": "heapsort-cost",
+      "displayNotation": "T(n)",
+      "shortName": "стоимость heapsort",
+      "explanation": "Число операций сортировки кучей для массива из n элементов",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "heapsort"
+      }
+    },
+    {
+      "id": "d-ary-heap-costs",
+      "displayNotation": "T_{up},T_{down}",
+      "shortName": "стоимости d-ичной кучи",
+      "explanation": "Оценки подъёма и просеивания элемента в куче с d потомками",
+      "scope": "local",
+      "chapterId": "priority-queues-heaps",
+      "firstDefinition": {
+        "chapterId": "priority-queues-heaps",
+        "anchor": "d-ary"
+      }
+    },
+    {
+      "id": "dsu-equivalence",
+      "displayNotation": "x\\sim y",
+      "shortName": "эквивалентность DSU",
+      "explanation": "Два элемента принадлежат одному блоку тогда и только тогда, когда имеют одного представителя",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "interface"
+      }
+    },
+    {
+      "id": "dsu-find-operation",
+      "displayNotation": "\\operatorname{FIND}(x)",
+      "shortName": "поиск представителя",
+      "explanation": "Операция, возвращающая корень множества, содержащего x",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "forest"
+      }
+    },
+    {
+      "id": "dsu-path-compression",
+      "displayNotation": "parent[x]\\leftarrow FIND(parent[x])",
+      "shortName": "сжатие пути",
+      "explanation": "Перепривязка посещённой вершины непосредственно к представителю множества",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "path-compression"
+      }
+    },
+    {
+      "id": "kruskal-cost",
+      "displayNotation": "T_{Kruskal}",
+      "shortName": "стоимость алгоритма Краскала",
+      "explanation": "Суммарная стоимость сортировки рёбер и операций DSU",
+      "scope": "local",
+      "chapterId": "disjoint-set-union",
+      "firstDefinition": {
+        "chapterId": "disjoint-set-union",
+        "anchor": "kruskal"
+      }
+    },
+    {
+      "id": "b-tree-occupancy-invariant",
+      "displayNotation": "t-1\\le m\\le2t-1",
+      "shortName": "заполнение B-дерева",
+      "explanation": "Ограничения на число ключей, потомков и глубину листьев B-дерева",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "invariants"
+      }
+    },
+    {
+      "id": "page-size-b",
+      "displayNotation": "B",
+      "shortName": "размер страницы",
+      "explanation": "Число байтов в одной странице внешней памяти",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "fanout"
+      }
+    },
+    {
+      "id": "page-header-size-h",
+      "displayNotation": "H",
+      "shortName": "заголовок страницы",
+      "explanation": "Число байтов служебных данных внутри страницы",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "fanout"
+      }
+    },
+    {
+      "id": "separator-size-k",
+      "displayNotation": "K",
+      "shortName": "размер ключа-разделителя",
+      "explanation": "Число байтов, занимаемое одним разделяющим ключом узла",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "fanout"
+      }
+    },
+    {
+      "id": "child-pointer-size-p",
+      "displayNotation": "P",
+      "shortName": "размер ссылки на потомка",
+      "explanation": "Число байтов, занимаемое адресом дочерней страницы",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "fanout"
+      }
+    },
+    {
+      "id": "b-tree-key-count-n",
+      "displayNotation": "N",
+      "shortName": "число ключей B-дерева",
+      "explanation": "Общее количество ключей, размещённых в B-дереве",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "height-bound"
+      }
+    },
+    {
+      "id": "b-tree-minimum-degree-t",
+      "displayNotation": "t",
+      "shortName": "минимальная степень B-дерева",
+      "explanation": "Параметр, задающий нижнюю и верхнюю заполненность внутреннего узла",
+      "scope": "local",
+      "chapterId": "b-trees-external-memory",
+      "firstDefinition": {
+        "chapterId": "b-trees-external-memory",
+        "anchor": "height-bound"
+      }
+    },
+    {
+      "id": "skip-level-threshold-k",
+      "displayNotation": "k",
+      "shortName": "порог уровня skip list",
+      "explanation": "Номер уровня, вероятность достижения которого рассматривается",
+      "scope": "local",
+      "chapterId": "randomized-data-structures",
+      "firstDefinition": {
+        "chapterId": "randomized-data-structures",
+        "anchor": "skip-levels"
+      }
+    },
+    {
+      "id": "skip-promotion-probability-p",
+      "displayNotation": "p",
+      "shortName": "вероятность повышения уровня",
+      "explanation": "Вероятность продолжить башню узла ещё на один уровень",
+      "scope": "local",
+      "chapterId": "randomized-data-structures",
+      "firstDefinition": {
+        "chapterId": "randomized-data-structures",
+        "anchor": "skip-levels"
+      }
+    },
+    {
+      "id": "treap-bst-order",
+      "displayNotation": "x\\in L(v),x\\in R(v)",
+      "shortName": "порядок ключей treap",
+      "explanation": "Обычный инвариант дерева поиска для ключей в левом и правом поддеревьях",
+      "scope": "local",
+      "chapterId": "randomized-data-structures",
+      "firstDefinition": {
+        "chapterId": "randomized-data-structures",
+        "anchor": "treap"
+      }
+    },
+    {
+      "id": "range-aggregate-operation",
+      "displayNotation": "\\circ",
+      "shortName": "операция агрегирования",
+      "explanation": "Ассоциативная бинарная операция, которой объединяются элементы диапазона",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "half-open-range",
+      "displayNotation": "[l,r)",
+      "shortName": "полуинтервал",
+      "explanation": "Диапазон, включающий левую границу l и не включающий правую границу r",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "difference-boundary-update",
+      "displayNotation": "D_l{+}=\\Delta, D_r{-}=\\Delta",
+      "shortName": "граничное обновление разностей",
+      "explanation": "Пара противоположных изменений, кодирующая прибавление на полуинтервале",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "difference"
+      }
+    },
+    {
+      "id": "monoid-laws",
+      "displayNotation": "(x\\circ y)\\circ z=x\\circ(y\\circ z)",
+      "shortName": "законы моноида",
+      "explanation": "Ассоциативность операции и существование нейтрального элемента",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "algebra"
+      }
+    },
+    {
+      "id": "sparse-table-recurrence",
+      "displayNotation": "T[k][i]",
+      "shortName": "переход sparse table",
+      "explanation": "Объединение двух соседних блоков длины 2 в блок следующего уровня",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "sparse-table"
+      }
+    },
+    {
+      "id": "fenwick-block-sum",
+      "displayNotation": "BIT[i]",
+      "shortName": "блок дерева Фенвика",
+      "explanation": "Сумма элементов в блоке, заканчивающемся индексом i и имеющем длину lowbit(i)",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "fenwick"
+      }
+    },
+    {
+      "id": "segment-node-sum",
+      "displayNotation": "sum(v)",
+      "shortName": "сумма вершины",
+      "explanation": "Агрегированная сумма отрезка, представленного вершиной дерева отрезков",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "lazy"
+      }
+    },
+    {
+      "id": "range-update-delta",
+      "displayNotation": "\\Delta",
+      "shortName": "величина обновления",
+      "explanation": "Добавляемое значение для всех элементов выбранного диапазона",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "lazy"
+      }
+    },
+    {
+      "id": "segment-length",
+      "displayNotation": "len(v)",
+      "shortName": "длина отрезка вершины",
+      "explanation": "Число элементов массива, представленное вершиной дерева отрезков",
+      "scope": "local",
+      "chapterId": "range-query-structures",
+      "firstDefinition": {
+        "chapterId": "range-query-structures",
+        "anchor": "lazy"
+      }
+    },
+    {
+      "id": "trie-prefix-invariant",
+      "displayNotation": "pref(child)=pref(parent)\\cdot label",
+      "shortName": "инвариант префикса trie",
+      "explanation": "Префикс дочерней вершины получается добавлением метки ребра к префиксу родителя",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "trie"
+      }
+    },
+    {
+      "id": "trie-find-cost",
+      "displayNotation": "T_{find}(x)",
+      "shortName": "стоимость поиска в trie",
+      "explanation": "Число модельных операций при поиске ключа x в префиксном дереве",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "cost"
+      }
+    },
+    {
+      "id": "trie-child-access-cost",
+      "displayNotation": "C_{child}",
+      "shortName": "цена перехода к потомку",
+      "explanation": "Стоимость нахождения исходящего ребра по следующему символу ключа",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "cost"
+      }
+    },
+    {
+      "id": "trie-prefix",
+      "displayNotation": "pref(v)",
+      "shortName": "префикс вершины",
+      "explanation": "Строка, прочитанная на пути от корня trie до вершины v",
+      "scope": "local",
+      "chapterId": "tries-radix-trees",
+      "firstDefinition": {
+        "chapterId": "tries-radix-trees",
+        "anchor": "radix"
+      }
+    },
+    {
+      "id": "persistent-update-operation",
+      "displayNotation": "update",
+      "shortName": "персистентное обновление",
+      "explanation": "Операция, создающая новую версию структуры без изменения базовой версии",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "persistence"
+      }
+    },
+    {
+      "id": "persistent-query-operation",
+      "displayNotation": "query",
+      "shortName": "запрос к версии",
+      "explanation": "Операция чтения, выполняемая над явно выбранной версией структуры",
+      "scope": "local",
+      "chapterId": "persistent-succinct-structures",
+      "firstDefinition": {
+        "chapterId": "persistent-succinct-structures",
+        "anchor": "persistence"
+      }
+    },
+    {
+      "id": "filter-membership-set",
+      "displayNotation": "S",
+      "shortName": "множество вставленных ключей",
+      "explanation": "Множество ключей, для которых фильтр обязан исключать ложноотрицательный ответ",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "contract"
+      }
+    },
+    {
+      "id": "filter-no-false-negative-event",
+      "displayNotation": "\\Pr[query(x)=absent]",
+      "shortName": "событие ложного отрицания",
+      "explanation": "Вероятностное событие, запрещённое контрактом для вставленного ключа",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "contract"
+      }
+    },
+    {
+      "id": "filter-query-operation",
+      "displayNotation": "\\operatorname{query}(x)",
+      "shortName": "проверка ключа в Bloom filter",
+      "explanation": "Операция читает те же k позиций и возвращает absent при хотя бы одном нуле, иначе maybe",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "contract"
+      }
+    },
+    {
+      "id": "filter-false-positive-event",
+      "displayNotation": "\\Pr[query(x)=maybe]",
+      "shortName": "событие ложного срабатывания",
+      "explanation": "Событие ответа maybe для ключа, отсутствующего во множестве",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "contract"
+      }
+    },
+    {
+      "id": "filter-insert-operation",
+      "displayNotation": "\\operatorname{insert}(x)",
+      "shortName": "вставка ключа в Bloom filter",
+      "explanation": "Операция вычисляет k позиций ключа x и монотонно устанавливает соответствующие биты в единицу",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-bit-array",
+      "displayNotation": "B",
+      "shortName": "битовый массив фильтра",
+      "explanation": "Массив из m битов, первоначально нулевых; вставка меняет выбранные позиции только с 0 на 1",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-hash-position",
+      "displayNotation": "h_i(x)",
+      "shortName": "i-я позиция ключа",
+      "explanation": "Индекс битового массива, вычисленный i-й хеш-функцией для ключа x",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-bit-set-transition",
+      "displayNotation": "\\gets1",
+      "shortName": "установка бита",
+      "explanation": "Монотонное обновление выбранной позиции: после вставки бит становится единицей и в обычном Bloom filter не сбрасывается",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-all-positions-conjunction",
+      "displayNotation": "\\bigwedge",
+      "shortName": "проверка всех позиций",
+      "explanation": "Логическое И по k битам: единица получается только когда каждая позиция запроса уже установлена",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "bloom"
+      }
+    },
+    {
+      "id": "filter-zero-bit-probability",
+      "displayNotation": "\\Pr[B[j]=0]",
+      "shortName": "вероятность нулевого бита",
+      "explanation": "Вероятность того, что фиксированная позиция не была установлена ни одной вставкой",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "probability"
+      }
+    },
+    {
+      "id": "filter-one-bit-probability",
+      "displayNotation": "\\Pr[B[j]=1]",
+      "shortName": "вероятность единичного бита",
+      "explanation": "Вероятность того, что фиксированная позиция установлена хотя бы одной вставкой",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "probability"
+      }
+    },
+    {
+      "id": "filter-bloom-fp-approximation",
+      "displayNotation": "\\approx",
+      "shortName": "приближение Bloom filter",
+      "explanation": "Переход к стандартной экспоненциальной аппроксимации вероятности ложного срабатывания",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "probability"
+      }
+    },
+    {
+      "id": "filter-optimal-zero-fraction",
+      "displayNotation": "1/2",
+      "shortName": "оптимальная доля нулей",
+      "explanation": "При оптимальном числе хешей вероятность нулевого бита приближённо равна одной второй",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "optimal-k"
+      }
+    },
+    {
+      "id": "filter-target-error",
+      "displayNotation": "\\varepsilon",
+      "shortName": "целевая ошибка фильтра",
+      "explanation": "Требуемая верхняя граница вероятности ложного положительного ответа",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "optimal-k"
+      }
+    },
+    {
+      "id": "filter-counter-increment",
+      "displayNotation": "C[h_i(x)]\\gets C[h_i(x)]+1",
+      "shortName": "увеличение счётчика",
+      "explanation": "Изменение позиции counting Bloom filter при вставке ключа",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "counting"
+      }
+    },
+    {
+      "id": "filter-counter-decrement",
+      "displayNotation": "C[h_i(x)]\\gets C[h_i(x)]-1",
+      "shortName": "уменьшение счётчика",
+      "explanation": "Изменение позиции counting Bloom filter при корректном удалении ключа",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "counting"
+      }
+    },
+    {
+      "id": "filter-primary-bucket",
+      "displayNotation": "i_1",
+      "shortName": "первая корзина cuckoo filter",
+      "explanation": "Основная корзина отпечатка, вычисленная непосредственно из ключа",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "cuckoo"
+      }
+    },
+    {
+      "id": "filter-alternate-bucket",
+      "displayNotation": "i_2",
+      "shortName": "альтернативная корзина",
+      "explanation": "Вторая допустимая корзина отпечатка cuckoo filter",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "cuckoo"
+      }
+    },
+    {
+      "id": "filter-bucket-involution",
+      "displayNotation": "\\oplus",
+      "shortName": "обратимый переход между корзинами",
+      "explanation": "Операция xor, позволяющая получить альтернативную корзину и вернуться обратно",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "cuckoo"
+      }
+    },
+    {
+      "id": "filter-xor-invariant",
+      "displayNotation": "F[h_0(x)]\\oplus F[h_1(x)]\\oplus F[h_2(x)]=fp(x)",
+      "shortName": "инвариант xor filter",
+      "explanation": "Xor трёх выбранных ячеек равен отпечатку ключа из статического множества",
+      "scope": "local",
+      "chapterId": "probabilistic-filters",
+      "firstDefinition": {
+        "chapterId": "probabilistic-filters",
+        "anchor": "xor"
+      }
+    },
+    {
+      "id": "lsm-base-level-size",
+      "displayNotation": "M",
+      "shortName": "базовый размер уровня",
+      "explanation": "Объём памяти или данных, относительно которого считается число уровней LSM",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "policies"
+      }
+    },
+    {
+      "id": "learned-key-count",
+      "displayNotation": "n",
+      "shortName": "число обучающих ключей",
+      "explanation": "Количество отсортированных ключей, по которым строится эмпирическая функция распределения",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "cdf"
+      }
+    },
+    {
+      "id": "learned-cdf-indicator",
+      "displayNotation": "[x_i\\le x]",
+      "shortName": "индикатор CDF",
+      "explanation": "Единица, если обучающий ключ не превосходит x, и ноль иначе",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "cdf"
+      }
+    },
+    {
+      "id": "learned-training-key",
+      "displayNotation": "x_i",
+      "shortName": "обучающий ключ",
+      "explanation": "Ключ с известной позицией i в отсортированной обучающей выборке",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "error-window"
+      }
+    },
+    {
+      "id": "learned-true-rank",
+      "displayNotation": "i",
+      "shortName": "истинная позиция ключа",
+      "explanation": "Точный индекс обучающего ключа в отсортированном массиве",
+      "scope": "local",
+      "chapterId": "lsm-learned-indexes",
+      "firstDefinition": {
+        "chapterId": "lsm-learned-indexes",
+        "anchor": "error-window"
+      }
+    },
+    {
+      "id": "tree-node-count-n",
+      "displayNotation": "n",
+      "shortName": "число узлов дерева",
+      "explanation": "Общее число узлов в сбалансированном дереве поиска, относительно которого оценивается его высота",
+      "scope": "local",
+      "chapterId": "balanced-search-trees",
+      "firstDefinition": {
+        "chapterId": "balanced-search-trees",
+        "anchor": "red-black"
       }
     }
   ]

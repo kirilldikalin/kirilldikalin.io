@@ -108,10 +108,12 @@
           <h2>Худший случай: гарантия для каждого входа</h2>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Максимальная стоимость</h3>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="analysis-cases-f01"
+              data-notation-coverage="interactive"
+              data-required-notations="worst-case,fixed-size-input-set,running-time-on-input">
               \[
-                \class{atlas-notation-token notation-id-worst-case}{T_{\mathrm{worst}}(n)}
-                =\max_{x\in X_n} T_A(x).
+                \class{atlas-notation-token notation-id-worst-case}{T_{\mathrm{worst}}(n)} =\max_{x\in \class{atlas-notation-token notation-id-fixed-size-input-set}{X_n}} \class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}.
               \]
             </div>
             <p>
@@ -131,9 +133,12 @@
 
         <section id="best">
           <h2>Лучший случай редко характеризует алгоритм</h2>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f02"
+            data-notation-coverage="interactive"
+            data-required-notations="best-case,fixed-size-input-set,running-time-on-input">
             \[
-              T_{\mathrm{best}}(n)=\min_{x\in X_n}T_A(x).
+              \class{atlas-notation-token notation-id-best-case}{T_{\mathrm{best}}(n)} =\min_{x\in \class{atlas-notation-token notation-id-fixed-size-input-set}{X_n}}\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}.
             \]
           </div>
           <p>
@@ -151,11 +156,12 @@
             Среднее не определено, пока не задана вероятность каждого входа.
             Для распределения $D_n$ на $X_n$:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f03"
+            data-notation-coverage="interactive"
+            data-required-notations="average-case,expectation-operator,input-distribution-dn,running-time-on-input,fixed-size-input-set">
             \[
-              \class{atlas-notation-token notation-id-average-case}{T_{\mathrm{avg},D}(n)}
-              =\mathbb E_{x\sim D_n}[T_A(x)]
-              =\sum_{x\in X_n}D_n(x)T_A(x).
+              \class{atlas-notation-token notation-id-average-case}{T_{\mathrm{avg},D}(n)} =\class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}_{\class{atlas-notation-token notation-id-input-distribution-dn}{x\sim D_n}}[\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)} ] =\sum_{x\in \class{atlas-notation-token notation-id-fixed-size-input-set}{X_n}}\class{atlas-notation-token notation-id-input-distribution-dn}{D_n(x)}\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x)}.
             \]
           </div>
           <p>
@@ -183,10 +189,12 @@
             Можно зафиксировать вход $x$ и усреднить только по монетам
             алгоритма:
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f04"
+            data-notation-coverage="interactive"
+            data-required-notations="randomized-worst-case,fixed-size-input-set,expectation-operator,algorithm-randomness-r,running-time-on-input">
             \[
-              T_{\mathrm{rand}}(n)
-              =\max_{x\in X_n}\mathbb E_R[T_A(x;R)].
+              \class{atlas-notation-token notation-id-randomized-worst-case}{T_{\mathrm{rand}}(n)} =\max_{x\in \class{atlas-notation-token notation-id-fixed-size-input-set}{X_n}}\class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}_{\class{atlas-notation-token notation-id-algorithm-randomness-r}{R}}[\class{atlas-notation-token notation-id-running-time-on-input}{T_A(x;R)}].
             \]
           </div>
           <p>
@@ -206,9 +214,12 @@
             фактическую цену. Если для любой допустимой последовательности
             $\sigma=(o_1,\ldots,o_m)$ выполнено
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="operation-sequence-length-m,actual-operation-cost-ci,amortized-bound">
             \[
-              \sum_{i=1}^{m}c_i\le m\,\class{atlas-notation-token notation-id-amortized-bound}{\widehat c},
+              \sum_{i=1}^{\class{atlas-notation-token notation-id-operation-sequence-length-m}{m}}\class{atlas-notation-token notation-id-actual-operation-cost-ci}{c_i}\le \class{atlas-notation-token notation-id-operation-sequence-length-m}{m}\,\class{atlas-notation-token notation-id-amortized-bound}{\widehat c},
             \]
           </div>
           <p>
@@ -227,7 +238,10 @@
             затем делит её на $m$. У двоичного счётчика младший бит меняется на
             каждом увеличении, следующий — раз в два шага, затем раз в четыре:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="analysis-cases-f06"
+            data-notation-coverage="basic"
+            data-basic-reason="numeric-substitution">
             \[
               m+\left\lfloor\frac m2\right\rfloor+
               \left\lfloor\frac m4\right\rfloor+\cdots&lt;2m.
@@ -248,9 +262,12 @@
             структуры. Если кредит никогда не становится отрицательным, то
             накопленная амортизированная плата всегда покрывает фактическую:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f07"
+            data-notation-coverage="interactive"
+            data-required-notations="operation-sequence-length-m,actual-operation-cost-ci,amortized-cost">
             \[
-              \sum_{i=1}^{m}c_i\le\sum_{i=1}^{m}\widehat c_i.
+              \sum_{i=1}^{\class{atlas-notation-token notation-id-operation-sequence-length-m}{m}}\class{atlas-notation-token notation-id-actual-operation-cost-ci}{c_i}\le\sum_{i=1}^{\class{atlas-notation-token notation-id-operation-sequence-length-m}{m}}\class{atlas-notation-token notation-id-amortized-cost}{\widehat c_i}.
             \]
           </div>
           <p>
@@ -268,11 +285,12 @@
             — неотрицательная функция состояния структуры после $i$ операций.
             Амортизированную цену определяют как
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="analysis-cases-f08"
+            data-notation-coverage="interactive"
+            data-required-notations="amortized-cost,actual-operation-cost-ci,potential-function">
             \[
-              \class{atlas-notation-token notation-id-amortized-cost}{\widehat c_i}
-              =c_i+\class{atlas-notation-token notation-id-potential-function}{\Phi(D_i)}
-              -\class{atlas-notation-token notation-id-potential-function}{\Phi(D_{i-1})}.
+              \class{atlas-notation-token notation-id-amortized-cost}{\widehat c_i} =\class{atlas-notation-token notation-id-actual-operation-cost-ci}{c_i}+\class{atlas-notation-token notation-id-potential-function}{\Phi(D_i)} -\class{atlas-notation-token notation-id-potential-function}{\Phi(D_{i-1})}.
             \]
           </div>
           <p>

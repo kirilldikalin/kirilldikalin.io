@@ -97,11 +97,12 @@
             $2^k$ раз, а экспонента — в $c^n$ раз. Это качественно разные
             реакции на масштабирование.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="polynomial-efficiency-f01"
+            data-notation-coverage="interactive"
+            data-required-notations="polynomial-time,exponential-time-bound">
             \[
-              \class{atlas-notation-token notation-id-polynomial-time}{T_{\mathrm{poly}}(n)\le Cn^k}
-              \qquad\text{против}\qquad
-              T_{\mathrm{exp}}(n)=\Theta(c^n).
+              \class{atlas-notation-token notation-id-polynomial-time}{T_{\mathrm{poly}}(n)\le Cn^k} \qquad\text{против}\qquad \class{atlas-notation-token notation-id-exponential-time-bound}{T_{\mathrm{exp}}(n)=\Theta(c^n)}.
             \]
           </div>
           <p>
@@ -142,10 +143,12 @@
             При $n\to\infty$, фиксированных $\varepsilon>0$ и $c>1$ действует
             порядок
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="polynomial-efficiency-f02"
+            data-notation-coverage="interactive"
+            data-required-notations="logarithmic-growth-term,strict-growth-order,input-size-n,quasilinear-growth-term,polynomial-growth-term,exponential-time-bound,factorial-n,superexponential-growth-term">
             \[
-              \log n \prec n \prec n\log n \prec n^{1+\varepsilon}
-              \prec c^n \prec n! \prec n^n,
+              \class{atlas-notation-token notation-id-logarithmic-growth-term}{\log n} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-input-size-n}{n} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-quasilinear-growth-term}{n\log n} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-polynomial-growth-term}{n^{1+\varepsilon}} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-exponential-time-bound}{c^n} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-factorial-n}{n!} \class{atlas-notation-token notation-id-strict-growth-order}{\prec} \class{atlas-notation-token notation-id-superexponential-growth-term}{n^n},
             \]
           </div>
           <p>
@@ -198,9 +201,12 @@
             длины следует $2^{|W|-1}\le W&lt;2^{|W|}$, поэтому
             $W=\Theta(2^{|W|})$.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="polynomial-efficiency-f03"
+            data-notation-coverage="interactive"
+            data-required-notations="pseudo-polynomial-step-count,big-theta-class,input-size-n,exponential-time-bound">
             \[
-              nW=\Theta\!\left(n\,2^{|W|}\right).
+              \class{atlas-notation-token notation-id-pseudo-polynomial-step-count}{nW}=\class{atlas-notation-token notation-id-big-theta-class}{\Theta}\!\left(\class{atlas-notation-token notation-id-input-size-n}{n}\,\class{atlas-notation-token notation-id-exponential-time-bound}{2^{|W|}}\right).
             \]
           </div>
           <p>

@@ -56,11 +56,11 @@
           <p>
             Для каждого узла $v$ все ключи в левом поддереве меньше $key(v)$, а все ключи в правом больше. Мы пока запрещаем дубликаты; multiset требует отдельного правила — например, счётчика в узле. Не стоит формулировать инвариант как «левый ребёнок меньше»: условие относится ко всему поддереву. Узел 12 не может оказаться в правом поддереве узла 15, даже если его непосредственный родитель больше 15.
           </p>
-          <div class="atlas-math">\[
-            \forall u\in left(v):\ key(u)&lt;key(v),
-            \qquad
-            \forall w\in right(v):\ key(v)&lt;key(w).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-3-bst-order" data-notation-coverage="interactive" data-required-notations="bst-order-invariant">
+            \[
+              \class{atlas-notation-token notation-id-bst-order-invariant}{\forall u\in left(v):\ key(u)&lt;key(v)}, \qquad \class{atlas-notation-token notation-id-bst-order-invariant}{\forall w\in right(v):\ key(v)&lt;key(w)}.
+            \]
+          </div>
           <p>
             Отсюда следует важная проверка: inorder-обход — левое поддерево, узел, правое поддерево — выдаёт ключи строго по возрастанию. Обратное также полезно при валидации: рекурсивному вызову передают допустимый открытый интервал ключей. Проверять только родительскую пару недостаточно; нужно наследовать ограничения всех предков.
           </p>
@@ -124,11 +124,11 @@
           <p>
             Если вставлять ключи $1,2,3,\ldots,n$, каждый новый ключ становится правым ребёнком предыдущего. Высота равна $n$, а поиск последнего ключа делает $n$ сравнений. Случайный порядок часто даёт существенно лучшую форму, но порядок входа — часть данных, а не механизм корректности. Отсортированный импорт, временные идентификаторы и adversarial запросы естественно создают плохую последовательность.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-tree-height}{h(T)}
-            =1+\max\bigl(h(T_{left}),h(T_{right})\bigr),
-            \qquad h(\varnothing)=0.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-3-height-recurrence" data-notation-coverage="interactive" data-required-notations="tree-height">
+            \[
+              \class{atlas-notation-token notation-id-tree-height}{h(T)} =1+\max\bigl(\class{atlas-notation-token notation-id-tree-height}{h(T_{left})},\class{atlas-notation-token notation-id-tree-height}{h(T_{right})}\bigr), \qquad \class{atlas-notation-token notation-id-tree-height}{h(\varnothing)}=0.
+            \]
+          </div>
           <p>
             Любая операция, ограниченная одним корневым путём, получает гарантированное $O(\log n)$ время, если доказано $h=O(\log n)$. Балансировка не обязана делать дерево идеально полным и не обязана делить число узлов пополам у каждого корня. Нужен более слабый инвариант, из которого логарифмическая граница высоты следует математически и который можно локально восстановить после update.
           </p>
@@ -145,11 +145,11 @@
           <p>
             Рассмотрим правое вращение вокруг $y$, у которого левый ребёнок $x$. До вращения поддеревья идут в порядке $A,x,B,y,C$. После него $x$ становится корнем фрагмента, $y$ — его правым ребёнком, а $B$ переезжает из правого ребёнка $x$ в левого ребёнка $y$. Inorder-последовательность остаётся $A,x,B,y,C$; следовательно, BST-инвариант сохраняется.
           </p>
-          <div class="atlas-math">\[
-            A&lt;x&lt;B&lt;y&lt;C
-            \quad\Longrightarrow\quad
-            inorder\bigl(rotateRight(y)\bigr)=A,x,B,y,C.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-3-rotation-order" data-notation-coverage="interactive" data-required-notations="rotation-inorder-preservation">
+            \[
+              \class{atlas-notation-token notation-id-rotation-inorder-preservation}{A&lt;x&lt;B&lt;y&lt;C \quad\Longrightarrow\quad inorder\bigl(rotateRight(y)\bigr)=A,x,B,y,C.}
+            \]
+          </div>
           <p>
             Вращение меняет постоянное число ссылок и потому занимает $O(1)$ без учёта пересчёта расширенных метаданных. Нужно обновить связь с прежним родителем $y$, родителя $x$, обе связи между $x$ и $y$, а также родителя корня $B$, если он существует. Если $y$ был корнем всего дерева, внешняя ссылка на корень тоже меняется. Пропуск одной из этих записей создаёт цикл или теряет поддерево.
           </p>
@@ -169,11 +169,11 @@
           <p>
             Для узла $v$ определим balance factor как высоту левого поддерева минус высота правого. AVL-инвариант требует, чтобы значение было $-1$, $0$ или $1$ в каждом узле. Высота хранится в узле и пересчитывается из детей после изменения; пустое поддерево имеет высоту ноль, лист — один.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \class{atlas-notation-token notation-id-avl-balance-factor}{bf(v)}
-            =h(v.left)-h(v.right),
-            \qquad |bf(v)|\le1.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-3-avl-balance" data-notation-coverage="interactive" data-required-notations="avl-balance-factor,tree-height">
+            \[
+              \class{atlas-notation-token notation-id-avl-balance-factor}{bf(v)} =\class{atlas-notation-token notation-id-tree-height}{h(v.left)}-\class{atlas-notation-token notation-id-tree-height}{h(v.right)}, \qquad |\class{atlas-notation-token notation-id-avl-balance-factor}{bf(v)}|\le1.
+            \]
+          </div>
           <p>
             Почему это даёт логарифм? Пусть $N(h)$ — минимальное число узлов AVL-дерева высоты $h$. Чтобы высота была $h$ и разность не превышала единицу, самые маленькие допустимые поддеревья имеют высоты $h-1$ и $h-2$. Поэтому $N(h)=1+N(h-1)+N(h-2)$ с $N(0)=0$, $N(1)=1$. Последовательность растёт как числа Фибоначчи, то есть экспоненциально по $h$. Значит, $n\ge N(h)$ влечёт $h=O(\log n)$.
           </p>
@@ -259,9 +259,11 @@
           <p>
             Теперь рассмотрим любой путь от корня до sentinel. Красный узел не соседствует с красным, поэтому красных узлов не больше, чем чёрных. Обычная высота $h$ не превосходит удвоенной black height корня: $h\le2bh(root)$. Из $n\ge2^{bh(root)}-1$ следует $bh(root)\le\log_2(n+1)$, а значит
           </p>
-          <div class="atlas-math">\[
-            h\le2\,bh(root)\le2\log_2(n+1).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-3-red-black-height" data-notation-coverage="interactive" data-required-notations="tree-height,red-black-black-height,tree-node-count-n">
+            \[
+              \class{atlas-notation-token notation-id-tree-height}{h}\le2\,\class{atlas-notation-token notation-id-red-black-black-height}{bh(root)}\le2\log_2(\class{atlas-notation-token notation-id-tree-node-count-n}{n}+1).
+            \]
+          </div>
           <p>
             Доказательство не утверждает, что все листья лежат на одной глубине. Самый длинный путь может быть почти вдвое длиннее кратчайшего, чередуя black и red. Равными являются только числа black-узлов. Именно эта более слабая свобода обычно уменьшает число вращений при частых updates по сравнению с AVL.
           </p>

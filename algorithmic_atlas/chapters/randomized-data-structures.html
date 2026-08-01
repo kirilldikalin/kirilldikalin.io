@@ -81,10 +81,11 @@
           <p>
             При вставке начинаем с уровня один и подбрасываем монету: с вероятностью $p$ добавляем ещё один уровень, затем повторяем. Обычно $p=1/2$. Поэтому
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            \Pr\!\left(\class{atlas-notation-token notation-id-skip-random-level}{H}\ge k\right)=p^{k-1},
-            \qquad \mathbb E[H]=\frac{1}{1-p}.
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-8-skip-level-distribution" data-notation-coverage="interactive" data-required-notations="skip-random-level,skip-level-threshold-k,skip-promotion-probability-p,expectation-operator">
+            \[
+              \Pr\!\left(\class{atlas-notation-token notation-id-skip-random-level}{H}\ge \class{atlas-notation-token notation-id-skip-level-threshold-k}{k}\right)=\class{atlas-notation-token notation-id-skip-promotion-probability-p}{p}^{k-1}, \qquad \class{atlas-notation-token notation-id-expectation-operator}{\mathbb E}[\class{atlas-notation-token notation-id-skip-random-level}{H}]=\frac{1}{1-\class{atlas-notation-token notation-id-skip-promotion-probability-p}{p}}.
+            \]
+          </div>
           <p>
             Среднее число forward-указателей на узел при $p=1/2$ равно двум, то есть память остаётся линейной. Из $n$ узлов ожидаемо $np^{k-1}$ достигают уровня $k$. Максимальный полезный уровень находится около $\log_{1/p}n$: выше ожидается меньше одного узла. Реализация обычно ставит безопасный cap, чтобы один невероятный опыт не выделил огромный массив указателей.
           </p>
@@ -130,10 +131,11 @@
           <p>
             Каждому ключу $x$ независимо назначается случайный приоритет $\class{atlas-notation-token notation-id-treap-priority}{\pi(x)}$ из непрерывного диапазона. По ключам выполняется BST-инвариант: слева меньше, справа больше. По приоритетам выполняется min-heap-инвариант: приоритет родителя меньше приоритетов детей. Если приоритеты уникальны, эти два порядка однозначно задают форму дерева.
           </p>
-          <div class="atlas-math atlas-notation-formula">\[
-            x\in L(v)\Rightarrow x&lt;key(v),\quad x\in R(v)\Rightarrow x&gt;key(v),
-            \qquad \class{atlas-notation-token notation-id-treap-priority}{\pi(v)}&lt;\pi(child).
-          \]</div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-8-treap-invariants" data-notation-coverage="interactive" data-required-notations="treap-bst-order,treap-priority">
+            \[
+              \class{atlas-notation-token notation-id-treap-bst-order}{x\in L(v)\Rightarrow x&lt;key(v)},\quad \class{atlas-notation-token notation-id-treap-bst-order}{x\in R(v)\Rightarrow x&gt;key(v)}, \qquad \class{atlas-notation-token notation-id-treap-priority}{\pi(v)}&lt;\class{atlas-notation-token notation-id-treap-priority}{\pi(child)}.
+            \]
+          </div>
           <p>
             Корень — ключ с минимальным приоритетом; меньшие ключи рекурсивно образуют левый treap, большие — правый. Поиск игнорирует приоритеты и идёт как в BST. Случайность влияет на высоту, но не на семантику словаря.
           </p>

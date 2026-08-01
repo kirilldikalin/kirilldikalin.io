@@ -146,11 +146,9 @@
             блоку тогда и только тогда, когда их FIND возвращает одинаковый
             идентификатор.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-partition-equivalence" data-notation-coverage="interactive" data-required-notations="dsu-equivalence">
             \[
-              x\sim y
-              \quad\Longleftrightarrow\quad
-              \operatorname{FIND}(x)=\operatorname{FIND}(y).
+              \class{atlas-notation-token notation-id-dsu-equivalence}{x\sim y \quad\Longleftrightarrow\quad \operatorname{FIND}(x)=\operatorname{FIND}(y).}
             \]
           </div>
           <p>
@@ -179,17 +177,9 @@
             деревьев образуют лес, а каждое дерево в точности соответствует
             одному блоку разбиения.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-find-recurrence" data-notation-coverage="interactive" data-required-notations="dsu-parent,dsu-find-operation">
             \[
-              \class{atlas-notation-token notation-id-dsu-parent}
-              {\operatorname{parent}[r]=r}
-              \quad\text{для корня }r,
-              \qquad
-              \operatorname{FIND}(x)=
-              \begin{cases}
-                x,&\operatorname{parent}[x]=x,\\
-                \operatorname{FIND}(\operatorname{parent}[x]),&\text{иначе}.
-              \end{cases}
+              \class{atlas-notation-token notation-id-dsu-parent}{\operatorname{parent}[r]=r} \quad\text{для корня }r, \qquad \class{atlas-notation-token notation-id-dsu-find-operation}{\operatorname{FIND}(x)}= \begin{cases} x,&amp;\class{atlas-notation-token notation-id-dsu-parent}{\operatorname{parent}[x]=x},\\ \class{atlas-notation-token notation-id-dsu-find-operation}{\operatorname{FIND}(\operatorname{parent}[x])},&amp;\text{иначе}. \end{cases}
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -258,11 +248,9 @@
             равен сумме. Внутренние значения size можно не поддерживать: решение
             принимается только для корней.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-set-size" data-notation-coverage="interactive" data-required-notations="dsu-size">
             \[
-              \class{atlas-notation-token notation-id-dsu-size}
-              {\operatorname{size}[r]=
-                |\{x:\operatorname{FIND}(x)=r\}|}.
+              \class{atlas-notation-token notation-id-dsu-size} {\operatorname{size}[r]= |\{x:\operatorname{FIND}(x)=r\}|}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -314,12 +302,9 @@
             увеличивается на единицу. В отличие от size, ранг не обязан
             совпадать с числом элементов или текущей высотой после сжатий.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-rank-update" data-notation-coverage="interactive" data-required-notations="dsu-rank">
             \[
-              \class{atlas-notation-token notation-id-dsu-rank}
-              {\operatorname{rank}[r]\leftarrow
-               \operatorname{rank}[r]+1}
-              \quad\text{только при связи корней равного ранга}.
+              \class{atlas-notation-token notation-id-dsu-rank} {\operatorname{rank}[r]\leftarrow \operatorname{rank}[r]+1} \quad\text{только при связи корней равного ранга}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -369,11 +354,9 @@
             сохраняется. Следующий FIND с любой вершины того же пути становится
             короче.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-path-compression" data-notation-coverage="interactive" data-required-notations="dsu-path-compression">
             \[
-              \operatorname{FIND}(x):\quad
-              \operatorname{parent}[x]\leftarrow
-              \operatorname{FIND}(\operatorname{parent}[x]).
+              \class{atlas-notation-token notation-id-dsu-path-compression}{\operatorname{FIND}(x):\quad \operatorname{parent}[x]\leftarrow \operatorname{FIND}(\operatorname{parent}[x]).}
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
@@ -503,11 +486,9 @@
             формы, поэтому конкретные малые ответы могут отличаться на
             константу. Асимптотический смысл один: рост чрезвычайно медленный.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-inverse-ackermann" data-notation-coverage="interactive" data-required-notations="inverse-ackermann">
             \[
-              \class{atlas-notation-token notation-id-inverse-ackermann}
-              {\alpha(n)=\min\{k:A_k(c)\ge n\}}
-              \qquad\text{для фиксированной принятой иерархии }A_k.
+              \class{atlas-notation-token notation-id-inverse-ackermann} {\alpha(n)=\min\{k:A_k(c)\ge n\}} \qquad\text{для фиксированной принятой иерархии }A_k.
             \]
           </div>
           <p>
@@ -621,10 +602,9 @@
               Быстрая структура не заменяет доказательство жадного выбора.
             </p>
           </section>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="3-6-kruskal-cost" data-notation-coverage="interactive" data-required-notations="kruskal-cost,big-o-class,inverse-ackermann">
             \[
-              T_{\mathrm{Kruskal}}
-              =O(|E|\log|E|)+O(|E|\alpha(|V|)).
+              \class{atlas-notation-token notation-id-kruskal-cost}{T_{\mathrm{Kruskal}}} =\class{atlas-notation-token notation-id-big-o-class}{O}(|E|\log|E|)+\class{atlas-notation-token notation-id-big-o-class}{O}(|E|\class{atlas-notation-token notation-id-inverse-ackermann}{\alpha(|V|)}).
             \]
           </div>
           <p>

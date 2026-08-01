@@ -303,14 +303,17 @@
             Зафиксируем одну распространённую учебную версию. Детерминированная
             машина Тьюринга — кортеж
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="turing-machine-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="turing-machine-m,tm-state-set-q,input-alphabet-sigma,tape-alphabet-gamma,transition-delta,turing-initial-state,accept-state,reject-state">
             \[
-              M=\bigl(
+              \class{atlas-notation-token notation-id-turing-machine-m}{M}=\bigl(
                 \class{atlas-notation-token notation-id-tm-state-set-q}{Q},
                 \class{atlas-notation-token notation-id-input-alphabet-sigma}{\Sigma},
                 \class{atlas-notation-token notation-id-tape-alphabet-gamma}{\Gamma},
                 \class{atlas-notation-token notation-id-transition-delta}{\delta},
-                q_0,
+                \class{atlas-notation-token notation-id-turing-initial-state}{q_0},
                 \class{atlas-notation-token notation-id-accept-state}{q_{\mathrm{acc}}},
                 \class{atlas-notation-token notation-id-reject-state}{q_{\mathrm{rej}}}
               \bigr).
@@ -350,13 +353,25 @@
               Для неостанавливающего состояния и символа под головкой функция
               переходов имеет вид
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="turing-transition-signature"
+              data-notation-coverage="interactive"
+              data-required-notations="transition-delta,tm-state-set-q,tm-halting-states,tape-alphabet-gamma,partial-arrow,tm-move-directions">
               \[
-                \delta:
-                \bigl(Q\setminus\{q_{\mathrm{acc}},q_{\mathrm{rej}}\}\bigr)
-                \times\Gamma
-                \rightharpoonup
-                Q\times\Gamma\times\{L,R\}.
+                \class{atlas-notation-token notation-id-transition-delta}{\delta}:
+                \bigl(
+                  \class{atlas-notation-token notation-id-tm-state-set-q}{Q}
+                  \setminus
+                  \class{atlas-notation-token notation-id-tm-halting-states}{\{q_{\mathrm{acc}},q_{\mathrm{rej}}\}}
+                \bigr)
+                \times
+                \class{atlas-notation-token notation-id-tape-alphabet-gamma}{\Gamma}
+                \class{atlas-notation-token notation-id-partial-arrow}{\rightharpoonup}
+                \class{atlas-notation-token notation-id-tm-state-set-q}{Q}
+                \times
+                \class{atlas-notation-token notation-id-tape-alphabet-gamma}{\Gamma}
+                \times
+                \class{atlas-notation-token notation-id-tm-move-directions}{\{L,R\}}.
               \]
             </div>
             <p>
@@ -373,9 +388,17 @@
             Одного текущего состояния \(q\) недостаточно: продолжение зависит от
             ленты и положения головки. Обозначим конфигурацию тройкой
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="turing-configuration"
+            data-notation-coverage="interactive"
+            data-required-notations="tm-configuration,tm-current-state,tm-head-position,tm-tape-contents">
             \[
-              C=(q,h,\tau),
+              \class{atlas-notation-token notation-id-tm-configuration}{C}
+              =\bigl(
+                \class{atlas-notation-token notation-id-tm-current-state}{q},
+                \class{atlas-notation-token notation-id-tm-head-position}{h},
+                \class{atlas-notation-token notation-id-tm-tape-contents}{\tau}
+              \bigr),
             \]
           </div>
           <p>
@@ -488,9 +511,15 @@
             которая получает код \(\langle M,x\rangle\) и шаг за шагом имитирует
             работу \(M\) на \(x\):
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="turing-universal-simulation"
+            data-notation-coverage="interactive"
+            data-required-notations="universal-turing-machine,tm-encoded-input,tm-simulation-equivalence,tm-computation">
             \[
-              U(\langle M,x\rangle)\simeq M(x).
+              \class{atlas-notation-token notation-id-universal-turing-machine}{U}
+              \bigl(\class{atlas-notation-token notation-id-tm-encoded-input}{\langle M,x\rangle}\bigr)
+              \class{atlas-notation-token notation-id-tm-simulation-equivalence}{\simeq}
+              \class{atlas-notation-token notation-id-tm-computation}{M(x)}.
             \]
           </div>
           <p>

@@ -133,18 +133,24 @@
               исходов. Каждому \(\omega\in\Omega\) сопоставлен вес
               \(p(\omega)\ge0\), причём
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f01"
+              data-notation-coverage="interactive"
+              data-required-notations="sample-space,outcome-probability-mass">
               \[
-                \sum_{\omega\in\Omega}p(\omega)=1.
+                \sum_{\omega\in\class{atlas-notation-token notation-id-sample-space}{\Omega}}\class{atlas-notation-token notation-id-outcome-probability-mass}{p(\omega)} =1.
               \]
             </div>
             <p>
               Событие \(A\) — подмножество \(\Omega\), а его вероятность равна
               сумме весов входящих исходов:
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f02"
+              data-notation-coverage="interactive"
+              data-required-notations="event-probability,outcome-probability-mass">
               \[
-                \mathbb P(A)=\sum_{\omega\in A}p(\omega).
+                \class{atlas-notation-token notation-id-event-probability}{\mathbb P(A)} =\sum_{\omega\in A}\class{atlas-notation-token notation-id-outcome-probability-mass}{p(\omega)}.
               \]
             </div>
           </section>
@@ -175,12 +181,18 @@
             одно событие, а \(A^c=\Omega\setminus A\) — ненаступление \(A\).
             Поэтому
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="probability-spaces-f03"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \mathbb P(A^c)=1-\mathbb P(A),
             \]
           </div>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="probability-spaces-f04"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \mathbb P(A\cup B)
               =\mathbb P(A)+\mathbb P(B)-\mathbb P(A\cap B).
@@ -213,12 +225,12 @@
           </p>
           <section class="atlas-block" data-atlas-block="definition">
             <h3>Определение</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f05"
+              data-notation-coverage="interactive"
+              data-required-notations="conditional-probability,event-probability">
               \[
-                \class{atlas-notation-token notation-id-conditional-probability}
-                  {\mathbb P(A\mid B)}
-                =\frac{\mathbb P(A\cap B)}{\mathbb P(B)},
-                \qquad \mathbb P(B)&gt;0.
+                \class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B)} =\frac{\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A\cap B)}}{\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B)}}, \qquad \class{atlas-notation-token notation-id-event-probability}{\mathbb P(B)}&gt;0.
               \]
             </div>
             <p>
@@ -230,11 +242,12 @@
           <p>
             Переставляя множители, получаем правило умножения:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="probability-spaces-f06"
+            data-notation-coverage="interactive"
+            data-required-notations="event-probability,conditional-probability">
             \[
-              \mathbb P(A\cap B)
-              =\mathbb P(B)\,\mathbb P(A\mid B)
-              =\mathbb P(A)\,\mathbb P(B\mid A).
+              \class{atlas-notation-token notation-id-event-probability}{\mathbb P(A\cap B)} =\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B)}\,\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B)} =\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A)}\,\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(B\mid A)}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="example">
@@ -263,12 +276,12 @@
               Для событий \(A_1,\ldots,A_k\), когда все знаменатели положительны,
               повторное применение правила умножения даёт цепное правило:
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f07"
+              data-notation-coverage="interactive"
+              data-required-notations="event-probability,conditional-probability">
               \[
-                \mathbb P\!\left(\bigcap_{i=1}^{k}A_i\right)
-                =\mathbb P(A_1)
-                 \prod_{i=2}^{k}
-                 \mathbb P\!\left(A_i\mid\bigcap_{j=1}^{i-1}A_j\right).
+                \class{atlas-notation-token notation-id-event-probability}{\mathbb P\!\left(\bigcap_{i=1}^{k}A_i\right)} =\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A_1)} \prod_{i=2}^{k} \class{atlas-notation-token notation-id-conditional-probability}{\mathbb P\!\left(A_i\mid\bigcap_{j=1}^{i-1}A_j\right)}.
               \]
             </div>
             <p>
@@ -295,11 +308,12 @@
           </p>
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Полная вероятность</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f08"
+              data-notation-coverage="interactive"
+              data-required-notations="event-probability,conditional-probability">
               \[
-                \mathbb P(A)
-                =\sum_{i=1}^{m}\mathbb P(A\cap B_i)
-                =\sum_{i=1}^{m}\mathbb P(B_i)\mathbb P(A\mid B_i).
+                \class{atlas-notation-token notation-id-event-probability}{\mathbb P(A)} =\sum_{i=1}^{m}\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A\cap B_i)} =\sum_{i=1}^{m}\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B_i)}\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B_i)}.
               \]
             </div>
             <p>
@@ -327,21 +341,24 @@
             Правило умножения выражает одну и ту же совместную вероятность
             двумя способами. При \(\mathbb P(A)&gt;0\) и \(\mathbb P(B)&gt;0\):
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="probability-spaces-f09"
+            data-notation-coverage="interactive"
+            data-required-notations="conditional-probability,event-probability">
             \[
-              \mathbb P(B\mid A)
-              =\frac{\mathbb P(A\mid B)\mathbb P(B)}{\mathbb P(A)}.
+              \class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(B\mid A)} =\frac{\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B)}\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B)}}{\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A)}}.
             \]
           </div>
           <p>
             Если \(B_1,\ldots,B_m\) — разбиение, знаменатель раскрывается
             формулой полной вероятности:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="probability-spaces-f10"
+            data-notation-coverage="interactive"
+            data-required-notations="conditional-probability,event-probability">
             \[
-              \mathbb P(B_j\mid A)
-              =\frac{\mathbb P(B_j)\mathbb P(A\mid B_j)}
-                {\sum_{i=1}^{m}\mathbb P(B_i)\mathbb P(A\mid B_i)}.
+              \class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(B_j\mid A)} =\frac{\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B_j)}\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B_j)}} {\sum_{i=1}^{m}\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B_i)}\class{atlas-notation-token notation-id-conditional-probability}{\mathbb P(A\mid B_i)}}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="example">
@@ -353,7 +370,10 @@
               ложных положительных результатов. Поэтому после положительного
               теста вероятность наличия признака равна
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="probability-spaces-f11"
+              data-notation-coverage="basic"
+              data-basic-reason="numeric-substitution">
               \[
                 \frac{0{,}01\cdot0{,}99}
                   {0{,}01\cdot0{,}99+0{,}99\cdot0{,}05}
@@ -385,9 +405,12 @@
             <p>
               События \(A\) и \(B\) независимы, если
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="probability-spaces-f12"
+              data-notation-coverage="interactive"
+              data-required-notations="event-probability">
               \[
-                \mathbb P(A\cap B)=\mathbb P(A)\mathbb P(B).
+                \class{atlas-notation-token notation-id-event-probability}{\mathbb P(A\cap B)}=\class{atlas-notation-token notation-id-event-probability}{\mathbb P(A)}\class{atlas-notation-token notation-id-event-probability}{\mathbb P(B)}.
               \]
             </div>
             <p>

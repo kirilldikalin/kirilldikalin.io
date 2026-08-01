@@ -109,10 +109,13 @@
               — наибольший положительный общий делитель. Знаки
               не влияют на делимость, поэтому
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="euclid-sign-normalization"
+              data-notation-coverage="interactive"
+              data-required-notations="gcd">
               \[
                 \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
-                =\gcd(|a|,|b|).
+                =\class{atlas-notation-token notation-id-gcd}{\gcd(|a|,|b|)}.
               \]
             </div>
             <p>
@@ -169,9 +172,16 @@
             \((a-b)+b=a\). Значит, набор общих делителей не изменился.
           </p>
 
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="euclid-subtraction-invariant"
+            data-notation-coverage="interactive"
+            data-required-notations="gcd,euclid-positive-order">
             \[
-              \gcd(a,b)=\gcd(a-b,b), \qquad a&gt;b&gt;0.
+              \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
+              =
+              \class{atlas-notation-token notation-id-gcd}{\gcd(a-b,b)},
+              \qquad
+              \class{atlas-notation-token notation-id-euclid-positive-order}{a&gt;b&gt;0}.
             \]
           </div>
 
@@ -179,7 +189,10 @@
             Можно продолжать, каждый раз вычитая меньшее число из большего,
             пока числа не сравняются. Для \(48\) и \(18\) получаем
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="euclid-subtraction-example"
+            data-notation-coverage="basic"
+            data-basic-reason="numeric-substitution">
             \[
               (48,18)\to(30,18)\to(12,18)\to(12,6)\to(6,6).
             \]
@@ -199,13 +212,18 @@
             Разделим \(a\) на \(b\) с остатком
             \(a\bmod b\):
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="euclid-division-with-remainder"
+            data-notation-coverage="interactive"
+            data-required-notations="euclid-current-a,euclid-current-b,quotient-q,remainder-r,euclid-remainder-range">
             \[
-              a=
-              \class{atlas-notation-token notation-id-quotient-q}{q}b+
+              \class{atlas-notation-token notation-id-euclid-current-a}{a}
+              =
+              \class{atlas-notation-token notation-id-quotient-q}{q}
+              \class{atlas-notation-token notation-id-euclid-current-b}{b}+
               \class{atlas-notation-token notation-id-remainder-r}{r},
               \qquad
-              0\le \class{atlas-notation-token notation-id-remainder-r}{r}&lt;b.
+              \class{atlas-notation-token notation-id-euclid-remainder-range}{0\le r&lt;b}.
             \]
           </div>
           <p>
@@ -218,7 +236,10 @@
 
           <section class="atlas-block" data-atlas-block="example">
             <h3>Та же пара \(48\) и \(18\), но крупными шагами</h3>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="euclid-division-example"
+              data-notation-coverage="basic"
+              data-basic-reason="numeric-substitution">
               \[
               \begin{aligned}
                 48 &= 2\cdot18+12,\\
@@ -293,11 +314,16 @@ b ← min(|x|, |y|)
               \(r\)
               удовлетворяет \(0\le r&lt;b\), то
             </p>
-            <div class="atlas-math atlas-notation-formula">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="euclid-gcd-invariant"
+              data-notation-coverage="interactive"
+              data-required-notations="gcd,remainder-r,modulo">
               \[
                 \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
-                =\gcd(b,r)
-                =\gcd\bigl(b,\class{atlas-notation-token notation-id-modulo}{a\bmod b}\bigr).
+                =\class{atlas-notation-token notation-id-gcd}{\gcd}(b,
+                \class{atlas-notation-token notation-id-remainder-r}{r})
+                =\class{atlas-notation-token notation-id-gcd}{\gcd}\bigl(b,
+                \class{atlas-notation-token notation-id-modulo}{a\bmod b}\bigr).
               \]
             </div>
           </section>
@@ -311,10 +337,14 @@ b ← min(|x|, |y|)
             Обратно, если \(d\mid b\) и \(d\mid r\), то
               \(d\mid qb+r=a\). Поэтому
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="euclid-common-divisor-sets"
+              data-notation-coverage="interactive"
+              data-required-notations="common-divisor-set">
               \[
-                \{d>0:d\mid a,\ d\mid b\}=
-                \{d>0:d\mid b,\ d\mid r\}.
+                \class{atlas-notation-token notation-id-common-divisor-set}{\{d>0:d\mid a,\ d\mid b\}}
+                =
+                \class{atlas-notation-token notation-id-common-divisor-set}{\{d>0:d\mid b,\ d\mid r\}}.
               \]
             </div>
             <p>
@@ -326,9 +356,15 @@ b ← min(|x|, |y|)
           <p>
             В терминах первой главы атласа инвариант состояния выглядит так:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="euclid-state-invariant"
+            data-notation-coverage="interactive"
+            data-required-notations="euclid-invariant,gcd">
             \[
-              I(a,b):\qquad \gcd(a,b)=\gcd(|x|,|y|).
+              \class{atlas-notation-token notation-id-euclid-invariant}{I(a,b)}:\qquad
+              \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
+              =
+              \class{atlas-notation-token notation-id-gcd}{\gcd(|x|,|y|)}.
             \]
           </div>
           <p>
@@ -351,7 +387,10 @@ b ← min(|x|, |y|)
               Пока \(b&gt;0\), новый второй компонент равен
               \(r=a\bmod b\), причём
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="euclid-remainder-bound"
+              data-notation-coverage="basic"
+              data-basic-reason="repeated-result">
               \[
                 0\le r&lt;b.
               \]
@@ -370,7 +409,10 @@ b ← min(|x|, |y|)
           <p>
             Если алгоритм остановился в состоянии \((a,0)\), инвариант даёт
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="euclid-terminal-gcd"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \gcd(|x|,|y|)=\gcd(a,0)=a.
             \]
@@ -381,7 +423,10 @@ b ← min(|x|, |y|)
             доказывает завершимость. Вместе они дают полную корректность на
             области:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="euclid-domain"
+            data-notation-coverage="basic"
+            data-basic-reason="repeated-result">
             \[
               \{(x,y)\in\mathbb Z^2:(x,y)\ne(0,0)\}.
             \]
@@ -557,9 +602,16 @@ b ← min(|x|, |y|)
             минимальное частное равно \(1\). Тогда каждый предыдущий остаток
             почти равен сумме двух следующих:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="euclid-remainder-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="euclid-remainder-term">
             \[
-              r_{i-1}=r_i+r_{i+1}.
+              \class{atlas-notation-token notation-id-euclid-remainder-term}{r_{i-1}}
+              =
+              \class{atlas-notation-token notation-id-euclid-remainder-term}{r_i}
+              +
+              \class{atlas-notation-token notation-id-euclid-remainder-term}{r_{i+1}}.
             \]
           </div>
           <p>
@@ -574,9 +626,17 @@ b ← min(|x|, |y|)
             <p>
               Если алгоритм для \(a&gt;b&gt;0\) выполняет \(k\) делений, то
             </p>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="euclid-fibonacci-lower-bound"
+              data-notation-coverage="interactive"
+              data-required-notations="euclid-current-a,euclid-current-b,fibonacci-number">
             \[
-              a\ge F_{k+2},\qquad b\ge F_{k+1}.
+              \class{atlas-notation-token notation-id-euclid-current-a}{a}
+              \ge
+              \class{atlas-notation-token notation-id-fibonacci-number}{F_{k+2}},\qquad
+              \class{atlas-notation-token notation-id-euclid-current-b}{b}
+              \ge
+              \class{atlas-notation-token notation-id-fibonacci-number}{F_{k+1}}.
             \]
             </div>
             <p>
@@ -654,9 +714,18 @@ b ← min(|x|, |y|)
             Если сохранять не только остатки, но и их представление через
             исходные числа, в конце получится:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="euclid-bezout-preview"
+            data-notation-coverage="interactive"
+            data-required-notations="gcd,euclid-current-a,euclid-current-b,bezout-coefficient">
             \[
-              \gcd(a,b)=ua+vb
+              \class{atlas-notation-token notation-id-gcd}{\gcd(a,b)}
+              =
+              \class{atlas-notation-token notation-id-bezout-coefficient}{u}
+              \class{atlas-notation-token notation-id-euclid-current-a}{a}
+              +
+              \class{atlas-notation-token notation-id-bezout-coefficient}{v}
+              \class{atlas-notation-token notation-id-euclid-current-b}{b}
             \]
           </div>
           <p>

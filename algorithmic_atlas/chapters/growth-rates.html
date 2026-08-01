@@ -134,7 +134,10 @@
             $\log_b(2n)=\log_b n+\log_b2$: удвоение аргумента добавляет
             постоянную. Любые два фиксированных основания дают тот же класс:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="growth-rates-f01"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \log_a n=\frac{\log_b n}{\log_b a}.
             \]
@@ -171,12 +174,12 @@
             слиянием, многие деревья рекурсии и обработка всех элементов на
             каждом уровне сбалансированного разбиения.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="growth-rates-f02"
+            data-notation-coverage="interactive"
+            data-required-notations="input-size-n,positive-epsilon">
             \[
-              \frac{n\log n}{n}=\log n\to\infty,
-              \qquad
-              \frac{n\log n}{n^{1+\varepsilon}}
-              =\frac{\log n}{n^\varepsilon}\to0.
+              \frac{\class{atlas-notation-token notation-id-input-size-n}{n}\log \class{atlas-notation-token notation-id-input-size-n}{n}}{\class{atlas-notation-token notation-id-input-size-n}{n}}=\log \class{atlas-notation-token notation-id-input-size-n}{n}\to\infty, \qquad \frac{\class{atlas-notation-token notation-id-input-size-n}{n}\log \class{atlas-notation-token notation-id-input-size-n}{n}}{\class{atlas-notation-token notation-id-input-size-n}{n}^{1+\class{atlas-notation-token notation-id-positive-epsilon}{\varepsilon}}} =\frac{\log \class{atlas-notation-token notation-id-input-size-n}{n}}{\class{atlas-notation-token notation-id-input-size-n}{n}^{\class{atlas-notation-token notation-id-positive-epsilon}{\varepsilon}}}\to0.
             \]
           </div>
           <p>
@@ -196,9 +199,12 @@
           </p>
           <section class="atlas-block" data-atlas-block="theorem">
             <h3>Формула Стирлинга</h3>
-            <div class="atlas-math">
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="growth-rates-f03"
+              data-notation-coverage="interactive"
+              data-required-notations="factorial-n,asymptotic-equivalence,input-size-n">
               \[
-                n!\sim\sqrt{2\pi n}\left(\frac ne\right)^n.
+                \class{atlas-notation-token notation-id-factorial-n}{n!} \class{atlas-notation-token notation-id-asymptotic-equivalence}{\sim}\sqrt{2\pi \class{atlas-notation-token notation-id-input-size-n}{n}}\left(\frac {\class{atlas-notation-token notation-id-input-size-n}{n}}e\right)^{\class{atlas-notation-token notation-id-input-size-n}{n}}.
               \]
             </div>
             <p>
@@ -219,15 +225,12 @@
             положительной константе — функции одного порядка; если бесконечности
             — $f$ строго больше.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="growth-rates-f04"
+            data-notation-coverage="interactive"
+            data-required-notations="growth-ratio,little-o-class,finite-growth-ratio-limit,big-theta-class,little-omega-class">
             \[
-              \lim_{n\to\infty}\frac{f(n)}{g(n)}
-              =
-              \begin{cases}
-                0,&f\in o(g),\\
-                L\in(0,\infty),&f\in\Theta(g),\\
-                \infty,&f\in\omega(g).
-              \end{cases}
+              \lim_{n\to\infty}\class{atlas-notation-token notation-id-growth-ratio}{\frac{f(n)}{g(n)}} = \begin{cases} 0,&\class{atlas-notation-token notation-id-little-o-class}{f\in o(g)},\\ \class{atlas-notation-token notation-id-finite-growth-ratio-limit}{L\in(0,\infty)},&\class{atlas-notation-token notation-id-big-theta-class}{f\in\Theta(g)},\\ \infty,&\class{atlas-notation-token notation-id-little-omega-class}{f\in\omega(g)}. \end{cases}
             \]
           </div>
           <p>
@@ -245,7 +248,10 @@
             Сравнивать их безопаснее по логарифмам, поскольку логарифм строго
             возрастает:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="growth-rates-f05"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \log(2^n)=n\log2,\qquad
               \log(n!)=\sum_{k=1}^{n}\log k,\qquad

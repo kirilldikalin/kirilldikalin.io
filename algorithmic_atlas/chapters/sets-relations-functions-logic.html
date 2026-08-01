@@ -118,7 +118,10 @@
             важны: $\{1,2,2\}=\{2,1\}$. Два множества равны тогда и только тогда,
             когда у них совпадают все элементы.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sets-relations-functions-logic-f01"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               A=B\quad\Longleftrightarrow\quad
               \forall x\,(x\in A\Longleftrightarrow x\in B).
@@ -159,7 +162,10 @@
           </p>
           <section class="atlas-block" data-atlas-block="proof">
             <h3>Первый закон де Моргана</h3>
-            <div class="atlas-math">
+            <div class="atlas-math"
+              data-formula-id="sets-relations-functions-logic-f02"
+              data-notation-coverage="basic"
+              data-basic-reason="elementary-identity">
               \[
                 \overline{A\cup B}=\overline A\cap\overline B.
               \]
@@ -176,7 +182,10 @@
 
         <section id="cartesian">
           <h2>Декартово произведение хранит порядок компонентов</h2>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sets-relations-functions-logic-f03"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               A\times B=\{(a,b):a\in A,\ b\in B\}.
             \]
@@ -290,11 +299,12 @@
             кодомен, а $f(A)=\{f(a):a\in A\}$ — образ. Образ может быть строго
             меньше кодомена.
           </p>
-          <div class="atlas-math atlas-notation-formula">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sets-relations-functions-logic-f04"
+            data-notation-coverage="interactive"
+            data-required-notations="total-function-f,input-set-x,total-function-arrow,output-set-y">
             \[
-              f:\class{atlas-notation-token notation-id-input-set-x}{X}
-              \longrightarrow
-              \class{atlas-notation-token notation-id-output-set-y}{Y}.
+              \class{atlas-notation-token notation-id-total-function-f}{f}:\class{atlas-notation-token notation-id-input-set-x}{X} \class{atlas-notation-token notation-id-total-function-arrow}{\longrightarrow} \class{atlas-notation-token notation-id-output-set-y}{Y}.
             \]
           </div>
           <p>
@@ -356,9 +366,12 @@
             свидетеля. Переменная внутри области действия квантора связана;
             свободная переменная оставляет формулу открытой.
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sets-relations-functions-logic-f05"
+            data-notation-coverage="interactive"
+            data-required-notations="universal-quantifier,exists-quantifier,predicate-pxy">
             \[
-              \forall x\in A\ \exists y\in B\ P(x,y)
+              \class{atlas-notation-token notation-id-universal-quantifier}{\forall x\in A}\ \class{atlas-notation-token notation-id-exists-quantifier}{\exists y\in B}\ \class{atlas-notation-token notation-id-predicate-pxy}{P(x,y)}
             \]
           </div>
           <p>
@@ -381,7 +394,10 @@
 
         <section id="negation">
           <h2>Отрицание проходит сквозь квантор и меняет его тип</h2>
-          <div class="atlas-math">
+          <div class="atlas-math"
+            data-formula-id="sets-relations-functions-logic-f06"
+            data-notation-coverage="basic"
+            data-basic-reason="elementary-identity">
             \[
               \neg\forall x\,P(x)\Longleftrightarrow\exists x\,\neg P(x),
               \qquad
@@ -392,11 +408,12 @@
             Поэтому отрицание нескольких кванторов выполняется по одному слою,
             сохраняя их порядок:
           </p>
-          <div class="atlas-math">
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="sets-relations-functions-logic-f07"
+            data-notation-coverage="interactive"
+            data-required-notations="universal-quantifier,exists-quantifier,predicate-pxy">
             \[
-              \neg\bigl(\forall x\ \exists y\ P(x,y)\bigr)
-              \Longleftrightarrow
-              \exists x\ \forall y\ \neg P(x,y).
+              \neg\bigl(\class{atlas-notation-token notation-id-universal-quantifier}{\forall x}\ \class{atlas-notation-token notation-id-exists-quantifier}{\exists y}\ \class{atlas-notation-token notation-id-predicate-pxy}{P(x,y)}\bigr) \Longleftrightarrow \class{atlas-notation-token notation-id-exists-quantifier}{\exists x}\ \class{atlas-notation-token notation-id-universal-quantifier}{\forall y}\ \neg \class{atlas-notation-token notation-id-predicate-pxy}{P(x,y)}.
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof">
