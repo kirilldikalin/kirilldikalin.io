@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-9",
+  "datasetVersion": "2026.08.01-10",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1799,7 +1799,7 @@
       "minutes": 42,
       "reading": {
         "words": 3748,
-        "formulaBlocks": 8,
+        "formulaBlocks": 9,
         "proofBlocks": 2,
         "theoryMinutes": 26,
         "labMinutes": 16
