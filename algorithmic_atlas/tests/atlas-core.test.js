@@ -687,9 +687,16 @@ test("the first continent is complete after exactly five published chapters", ()
     core.continentCompleted(graph, "origins-efficiency", completed),
     true
   );
+  const publishedTotal = graph.nodes.filter(
+    ({ publication }) => publication === "published"
+  ).length;
   assert.deepEqual(
     core.progressSummary(graph, completed),
-    { completed: 5, total: 29, percent: 17 }
+    {
+      completed: completed.size,
+      total: publishedTotal,
+      percent: Math.round(completed.size * 100 / publishedTotal),
+    }
   );
   assert.deepEqual(
     core.continentProgressSummary(graph, "origins-efficiency", completed),
