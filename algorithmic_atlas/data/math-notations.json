@@ -6096,6 +6096,342 @@
         "chapterId": "reductions-and-formulations",
         "anchor": "decomposition"
       }
+    },
+    {
+      "id": "lp-primal-vector",
+      "displayNotation": "x",
+      "shortName": "вектор прямых переменных",
+      "explanation": "Выбираемый вектор решения прямой задачи; его координаты описывают объёмы действий или продуктов",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "linear-program"
+      }
+    },
+    {
+      "id": "lp-objective-vector",
+      "displayNotation": "c",
+      "shortName": "коэффициенты цели",
+      "explanation": "Вектор удельных вкладов переменных в линейную целевую функцию",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "linear-program"
+      }
+    },
+    {
+      "id": "lp-constraint-matrix",
+      "displayNotation": "A",
+      "shortName": "матрица ограничений",
+      "explanation": "Матрица технологических коэффициентов: строка задаёт ограничение, столбец — участие одной переменной",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "linear-program"
+      }
+    },
+    {
+      "id": "lp-resource-vector",
+      "displayNotation": "b",
+      "shortName": "вектор правых частей",
+      "explanation": "Запасы или пределы, с которыми сравниваются левые части ограничений",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "linear-program"
+      }
+    },
+    {
+      "id": "lp-feasible-set",
+      "displayNotation": "P",
+      "shortName": "прямая допустимая область",
+      "explanation": "Множество всех неотрицательных векторов x, выполняющих прямые ограничения Ax≤b",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "linear-program"
+      }
+    },
+    {
+      "id": "convex-mixture-weight",
+      "displayNotation": "λ",
+      "shortName": "вес выпуклой смеси",
+      "explanation": "Число от нуля до единицы, задающее положение на отрезке между двумя точками",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "geometry"
+      }
+    },
+    {
+      "id": "lp-optimum-vector",
+      "displayNotation": "x^★",
+      "shortName": "оптимальное прямое решение",
+      "explanation": "Допустимый вектор прямой задачи с наилучшим значением цели",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "vertices"
+      }
+    },
+    {
+      "id": "lp-dual-vector",
+      "displayNotation": "y",
+      "shortName": "вектор двойственных переменных",
+      "explanation": "Неотрицательные цены прямых ограничений, образующие двойственный сертификат",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "dual"
+      }
+    },
+    {
+      "id": "lp-dual-feasible-set",
+      "displayNotation": "D",
+      "shortName": "двойственная допустимая область",
+      "explanation": "Множество неотрицательных цен y, удовлетворяющих Aᵀy≥c",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "dual"
+      }
+    },
+    {
+      "id": "lp-primal-value",
+      "displayNotation": "cᵀx",
+      "shortName": "прямая стоимость",
+      "explanation": "Значение целевой функции прямого допустимого решения",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "weak-duality"
+      }
+    },
+    {
+      "id": "lp-dual-value",
+      "displayNotation": "bᵀy",
+      "shortName": "двойственная стоимость",
+      "explanation": "Стоимость всех ресурсов в двойственных ценах; верхняя граница прямой прибыли",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "weak-duality"
+      }
+    },
+    {
+      "id": "lp-dual-optimum-vector",
+      "displayNotation": "y^★",
+      "shortName": "оптимальное двойственное решение",
+      "explanation": "Допустимый вектор цен с минимальной двойственной стоимостью",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "strong-duality"
+      }
+    },
+    {
+      "id": "lp-slack",
+      "displayNotation": "b_i−(Ax)_i",
+      "shortName": "прямой запас",
+      "explanation": "Неиспользованная величина i-го прямого ресурса",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "complementary"
+      }
+    },
+    {
+      "id": "lp-dual-slack",
+      "displayNotation": "(Aᵀy)_j−c_j",
+      "shortName": "двойственный запас",
+      "explanation": "Превышение двойственной оценки j-го продукта над его прямой ценностью",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "complementary"
+      }
+    },
+    {
+      "id": "lp-value-function",
+      "displayNotation": "v(b)",
+      "shortName": "функция оптимальной стоимости",
+      "explanation": "Оптимальное значение прямой задачи как функция доступных ресурсов b",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "sensitivity"
+      }
+    },
+    {
+      "id": "lp-shadow-price",
+      "displayNotation": "y_i^★",
+      "shortName": "теневая цена",
+      "explanation": "Локальное изменение оптимальной стоимости при добавлении единицы i-го ресурса",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "sensitivity"
+      }
+    },
+    {
+      "id": "convex-set",
+      "displayNotation": "C",
+      "shortName": "выпуклое множество",
+      "explanation": "Множество, содержащее весь отрезок между любыми двумя своими точками",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "convexity"
+      }
+    },
+    {
+      "id": "convex-function",
+      "displayNotation": "f",
+      "shortName": "выпуклая функция",
+      "explanation": "Функция, значение которой на смеси не превышает смесь значений",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "convex-functions"
+      }
+    },
+    {
+      "id": "convex-gradient",
+      "displayNotation": "∇f(x)",
+      "shortName": "градиент цели",
+      "explanation": "Вектор первых производных, задающий наклон касательной опоры",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "optimality"
+      }
+    },
+    {
+      "id": "convex-lagrangian",
+      "displayNotation": "L",
+      "shortName": "лагранжиан",
+      "explanation": "Целевая функция с ограничениями, добавленными через множители",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "optimality"
+      }
+    },
+    {
+      "id": "kkt-multiplier",
+      "displayNotation": "λ_i",
+      "shortName": "множитель неравенства",
+      "explanation": "Неотрицательная цена i-го выпуклого ограничения в условиях KKT",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "optimality"
+      }
+    },
+    {
+      "id": "kkt-stationarity",
+      "displayNotation": "∇ₓL=0",
+      "shortName": "стационарность KKT",
+      "explanation": "Баланс градиента цели и нормалей активных ограничений",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "optimality"
+      }
+    },
+    {
+      "id": "kkt-complementarity",
+      "displayNotation": "λ_i f_i(x)=0",
+      "shortName": "дополняющая нежёсткость KKT",
+      "explanation": "Положительный множитель возможен только у активного ограничения",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "optimality"
+      }
+    },
+    {
+      "id": "convex-barrier-function",
+      "displayNotation": "φ_μ(x)",
+      "shortName": "барьерная цель",
+      "explanation": "Цель со штрафом, который не позволяет итератам касаться границы области",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "algorithms"
+      }
+    },
+    {
+      "id": "convex-barrier-parameter",
+      "displayNotation": "μ",
+      "shortName": "параметр барьера",
+      "explanation": "Положительный коэффициент барьерного штрафа, уменьшаемый вдоль центральной траектории",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "algorithms"
+      }
+    },
+    {
+      "id": "lp-relaxation-optimum",
+      "displayNotation": "OPT_LP",
+      "shortName": "оптимум LP-релаксации",
+      "explanation": "Лучшее значение после замены целочисленных ограничений непрерывными",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "relaxations"
+      }
+    },
+    {
+      "id": "integer-optimum",
+      "displayNotation": "OPT_IP",
+      "shortName": "целочисленный оптимум",
+      "explanation": "Лучшее значение исходной задачи при обязательной целочисленности переменных",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "relaxations"
+      }
+    },
+    {
+      "id": "integrality-gap",
+      "displayNotation": "gap",
+      "shortName": "разрыв целочисленности",
+      "explanation": "Отношение между значениями релаксации и целочисленной задачи при явно указанном соглашении",
+      "scope": "local",
+      "chapterId": "linear-convex-optimization",
+      "firstDefinition": {
+        "chapterId": "linear-convex-optimization",
+        "anchor": "relaxations"
+      }
     }
   ]
 }

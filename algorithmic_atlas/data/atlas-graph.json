@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-7",
+  "datasetVersion": "2026.08.01-8",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2020,19 +2020,25 @@
       "continentId": "algorithm-design",
       "regionId": "formulations-optimization",
       "type": "math",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "reductions-and-formulations"
       ],
       "related": [],
-      "route": null,
-      "minutes": 105,
-      "reading": null,
+      "route": "./chapters/linear-convex-optimization.html",
+      "minutes": 48,
+      "reading": {
+        "words": 4570,
+        "formulaBlocks": 14,
+        "proofBlocks": 2,
+        "theoryMinutes": 32,
+        "labMinutes": 16
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1410,
