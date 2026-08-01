@@ -1,0 +1,469 @@
+{
+  "schemaVersion": 1,
+  "snapshot": {
+    "publishedContinents": [
+      "origins-efficiency",
+      "mathematical-tools",
+      "data-structures"
+    ],
+    "publishedChapterCount": 29,
+    "displayFormulaTotal": 204,
+    "basicFormulaTotal": 35,
+    "interactiveFormulaTotal": 169
+  },
+  "fingerprint": {
+    "algorithm": "sha256",
+    "normalizationVersion": "atlas-formula-v1",
+    "stripNotationTokenWrappers": true,
+    "decodeHtmlEntities": true,
+    "removeWhitespace": true,
+    "removeSpacingCommands": [
+      "\\,",
+      "\\;"
+    ]
+  },
+  "metadata": {
+    "coverageValues": [
+      "interactive",
+      "basic"
+    ],
+    "basicReasonValues": [
+      "numeric-substitution",
+      "elementary-identity",
+      "repeated-result",
+      "diagram-summary"
+    ]
+  },
+  "basicAllowlist": [
+    {
+      "chapterId": "before-computers",
+      "fingerprint": "sha256:40afc85d00adeab4723176f97c3b419957a478bf8810e5f034dc4f9b23a744b5",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "before-computers",
+      "fingerprint": "sha256:664160f8e4567645b63b5e4773fe62338eb8afa9eb46175405d371ec80899b81",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:7c157081b8c2edc45e414d351643797ad0e35bae1bb8436ff11da8de2af48979",
+      "reviewReason": "concrete-example"
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:c114a7b512f7bed923056246ee7657b4458ae163242bcd54082cd964f5ead1b6",
+      "reviewReason": "concrete-example"
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:f5aa88695c901ec872162cff223ade32acde530bb1be227bb132227bcdbd7cce",
+      "reviewReason": "already-explained-restatement"
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:fddc9960a1095e0adbbdabd757054b7c82fecee481b3e751eb6e02c27cb13741",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:4d90c6ea7cc43f8834712708cf47b36c4fee766c9b319b2d0c6fd7f796c1ff60",
+      "reviewReason": "domain-restatement"
+    },
+    {
+      "chapterId": "input-size-and-cost",
+      "fingerprint": "sha256:5c5628fd84b05e5935e2898837f22702a358edcc5f6e18302dbdb63edf58805c",
+      "reviewReason": "diagrammatic-summary"
+    },
+    {
+      "chapterId": "asymptotic-estimates",
+      "fingerprint": "sha256:7b61e336fb773255ff2cec4e1a319678f37a1e64f7bb2293114babbc7bc796aa",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "growth-rates",
+      "fingerprint": "sha256:4f5e2a75fc26a84fef9b1f1b6553f14c9cd666a402146a50efdd4ccf2680919c",
+      "reviewReason": "elementary-identity"
+    },
+    {
+      "chapterId": "growth-rates",
+      "fingerprint": "sha256:62143ea9bb04134bb801c235151db0ba9aa984f71fd6849181f2759633e49f00",
+      "reviewReason": "elementary-identity"
+    },
+    {
+      "chapterId": "sums-products-recurrences",
+      "fingerprint": "sha256:72c0dbf13961ac9ebfdae47f5b2cd560a8d25b96eba62db4ed5ff67403f4f538",
+      "reviewReason": "standard-closed-form"
+    },
+    {
+      "chapterId": "sums-products-recurrences",
+      "fingerprint": "sha256:a1174da55a5fb5e9ea79a925ce63ffd08af01de9f5cd5a7e22cdf9865460a9ad",
+      "reviewReason": "standard-closed-form"
+    },
+    {
+      "chapterId": "sums-products-recurrences",
+      "fingerprint": "sha256:872e4f262f5efd2e0a82e5ea04ab0d93c7ebd56bcc7688467e9037a7cf45a1a6",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "sums-products-recurrences",
+      "fingerprint": "sha256:347fc23e133074e32dce26e01c49241111e1505e75f099bddd03c945f8ac4bd3",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "sets-relations-functions-logic",
+      "fingerprint": "sha256:88424c52aa8cba93408560a19594719f043a1583180ae895f81aee79af91d951",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "sets-relations-functions-logic",
+      "fingerprint": "sha256:97a66e4dbedf776087279a1ceb0d8096398909d4c7232aefc541db4d60290e91",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "sets-relations-functions-logic",
+      "fingerprint": "sha256:050a5738adbd5d799b7d11c5a9fb037f4ac84bc13790f2063c3becc76798aa79",
+      "reviewReason": "foundational-definition"
+    },
+    {
+      "chapterId": "sets-relations-functions-logic",
+      "fingerprint": "sha256:44ea6bb05d644e12ea8d1e4361e705a4c06ab812ff806d3c52cb9db177e56db3",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "proof-methods-induction",
+      "fingerprint": "sha256:bb2460cfc4d6e5bf54d27c01c85dc2ed444ff76a03f9e2473bb93a98930bcac4",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "proof-methods-induction",
+      "fingerprint": "sha256:375249ed047da37cc184f7ca04d2a6d1ed5b112946e4703fef68634b9da18922",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "combinatorics-counting",
+      "fingerprint": "sha256:a5b7eaa2ab15302075851dceaa3637a353f42d2cbcd94e9725465547b8b257f7",
+      "reviewReason": "foundational-counting-rule"
+    },
+    {
+      "chapterId": "combinatorics-counting",
+      "fingerprint": "sha256:4e62e150a72d48898d35437702e814d75934f99b0fd25aa195c9a20e47997ff6",
+      "reviewReason": "foundational-counting-rule"
+    },
+    {
+      "chapterId": "combinatorics-counting",
+      "fingerprint": "sha256:e56bfecd72d6ef8596e03097cfb07e0672f1ee1e920f90e20da06f6d7d4b3bf8",
+      "reviewReason": "foundational-definition"
+    },
+    {
+      "chapterId": "combinatorics-counting",
+      "fingerprint": "sha256:0365d9095261867268a13b99c9d5ccc47371dd2a025fcd359038f5c8a3d4d05a",
+      "reviewReason": "standard-closed-form"
+    },
+    {
+      "chapterId": "combinatorics-counting",
+      "fingerprint": "sha256:4bbb41d8079e0b32c1f210b9522fbc63ea32f1e69e316e34246a119fd805c6a3",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "probability-spaces",
+      "fingerprint": "sha256:a23fe1244954767c91df6fccdd3d827a49eb6e211fccc4b5930c7f9bbc6d2c70",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "probability-spaces",
+      "fingerprint": "sha256:201b404e3314f8894a69af333337863c15289a40c2688ffb1eaf945cbb380a83",
+      "reviewReason": "foundational-identity"
+    },
+    {
+      "chapterId": "probability-spaces",
+      "fingerprint": "sha256:eed7d3acfd7b81e2e9d224ccc16a97c9d2402c3cb0219f6044756d5a6d43049d",
+      "reviewReason": "concrete-example"
+    },
+    {
+      "chapterId": "random-variables-concentration",
+      "fingerprint": "sha256:5c3cc4c09c13338fa3a623b376cb9fe54ad1894705b194d8c28df424fd22b3fa",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "analysis-cases",
+      "fingerprint": "sha256:f849d3bc7c9cec287f7f1aac12f2afeafd130f2799c0f75b05a0c98969038a85",
+      "reviewReason": "worked-arithmetic"
+    },
+    {
+      "chapterId": "linear-data-structures",
+      "fingerprint": "sha256:6fe15a642ddcc70b02235765ce5fb74ebc40e9402ebddd9f6702d75513d5a02f",
+      "reviewReason": "direct-addressing-identity"
+    },
+    {
+      "chapterId": "augmented-search-trees",
+      "fingerprint": "sha256:187e767f531a17e524ab0364ddfbef4e966c2ffa7af35a8c1394126f761c504b",
+      "reviewReason": "elementary-condition"
+    },
+    {
+      "chapterId": "range-query-structures",
+      "fingerprint": "sha256:debb51eb4c6fed2efe5b2918ad0ac654eca32fca5355e5256fa0553050b8a65d",
+      "reviewReason": "standard-prefix-identity"
+    },
+    {
+      "chapterId": "range-query-structures",
+      "fingerprint": "sha256:8c6f413be93c715fc75ef760e69efa194907c6a7a09454355d5ef49beac89abc",
+      "reviewReason": "already-explained-restatement"
+    }
+  ],
+  "complexMinimumTokenOccurrences": [
+    {
+      "chapterId": "before-computers",
+      "fingerprint": "sha256:ad543eaedb975f9ad206bc1e4d2eca2d4b2b1b76adf9589210a62315e7a0a7b3",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:67604734908a23b9a852cfc434b6dceb23a00d7bbffaed668d4ea067117c2018",
+      "minTokenOccurrences": 2
+    },
+    {
+      "chapterId": "euclidean-algorithm",
+      "fingerprint": "sha256:e1448323a3797f765536f405c53c523c9366aa2dd56b38bac662843af0ca47be",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "turing-machine-transition",
+      "fingerprint": "sha256:762788a107cf2a7f7210c0254d5617162969586be944bf8a0f95611bff393d6e",
+      "minTokenOccurrences": 8
+    },
+    {
+      "chapterId": "asymptotic-estimates",
+      "fingerprint": "sha256:02525205fa408b1de36ddca3cb9cbf843a0adb6804619e7b6bab832fd2746ef3",
+      "minTokenOccurrences": 11
+    },
+    {
+      "chapterId": "asymptotic-estimates",
+      "fingerprint": "sha256:269812fbacb0110e3c4dc67055227c4216fa04edefaf4455811953850ebd4cbb",
+      "minTokenOccurrences": 14
+    },
+    {
+      "chapterId": "asymptotic-estimates",
+      "fingerprint": "sha256:ebb74ada9aa29046b0f983c8cbe1e7e4d8b073f230664d1c98147cea20b21fde",
+      "minTokenOccurrences": 10
+    },
+    {
+      "chapterId": "asymptotic-estimates",
+      "fingerprint": "sha256:48582be72ba0034b1849a4a9dd54d8b2722a6a8d62e9beb590e4499175f76788",
+      "minTokenOccurrences": 10
+    },
+    {
+      "chapterId": "sets-relations-functions-logic",
+      "fingerprint": "sha256:4682bc1b4290560e1deacc659e51ad3225f632bf0dd2680180fcb1889c84ea3d",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "correctness-invariants-termination",
+      "fingerprint": "sha256:c3f7ff6e1e195694b4eddfb326c4be44b1b71a1d5c223346f5d64c6dbb57685e",
+      "minTokenOccurrences": 2
+    },
+    {
+      "chapterId": "random-variables-concentration",
+      "fingerprint": "sha256:447faa687867c656221ac029ed5055b4ea2951c6190352d07ca7b9499e504d38",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "random-variables-concentration",
+      "fingerprint": "sha256:88b73372aaaf7c79ce6425065a909e9d2069970135ad3c1bcd69ee160f8f2c84",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "computation-models",
+      "fingerprint": "sha256:271e5e934bc3803bc927a7cf8a750802985e2bfcc01db21738cc8fc7471e8ca8",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "analysis-cases",
+      "fingerprint": "sha256:a5a3e4ceaccdd1dc85b3db9f91154b259ad6cf848384c8edaea5e3dbc9df1d11",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "analysis-cases",
+      "fingerprint": "sha256:7794393032df004243e75e0812eb8c8d6ce9c64db894116786487212389f85a4",
+      "minTokenOccurrences": 6
+    },
+    {
+      "chapterId": "analysis-cases",
+      "fingerprint": "sha256:0e5c5caca28ed1b00bf9b3ea3930def575f967cfd98923778a1452c9167a9c06",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "analysis-cases",
+      "fingerprint": "sha256:48cc9ebffacf7ae8ab4c139bb9f16cdcda38c7a40a1ef2ee632e979e60288da5",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "polynomial-efficiency",
+      "fingerprint": "sha256:000006aa14df6e74d045c6ddeb5c20129af5478a94f7ed50cd49f428314b9497",
+      "minTokenOccurrences": 2
+    },
+    {
+      "chapterId": "linear-data-structures",
+      "fingerprint": "sha256:39f9b0428df3c23335865ddb0025aff5546b80763d60f8cff9c8ab0e15600809",
+      "minTokenOccurrences": 6
+    },
+    {
+      "chapterId": "linear-data-structures",
+      "fingerprint": "sha256:89e209e5ad0cd3d309e7747e2a5602f079268febba28f66b796be14b0d08729c",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "linear-data-structures",
+      "fingerprint": "sha256:b2edb9eecfb7ceb7209309f0d27bc4027c3f0762c078e9ae21a7e57e8ada3ffd",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "hash-tables",
+      "fingerprint": "sha256:52bad9e3667840b8a41b1e0c76df4be943fda8873913b03a59717108dd491add",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "hash-tables",
+      "fingerprint": "sha256:8e17e34f0bcd8b1f401b01d033cc510f41c204cad225a844a463731ed3ab033e",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "balanced-search-trees",
+      "fingerprint": "sha256:9aa7e62748b686ad9e19a7fac1314f4cec1497313fee595924a5f2ebb5e085ae",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "balanced-search-trees",
+      "fingerprint": "sha256:e6ea171aec0650f4e3c8efdf16593a6670f548c88c523a446f9b8737d9c1dd64",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "disjoint-set-union",
+      "fingerprint": "sha256:4dd6eb8d3a9d3da7f8b24a8bc6f2cce8479a5051b4c818a157a9188577bfb995",
+      "minTokenOccurrences": 2
+    },
+    {
+      "chapterId": "b-trees-external-memory",
+      "fingerprint": "sha256:6b6446e0990c3b14b5dcde9cf13703bfa2f42f0a28bc97e5fda42d16db563bf3",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "b-trees-external-memory",
+      "fingerprint": "sha256:f0297fef2f6f558478ba84ba07107491ecf7c7a90a699768bc5d85e0b43b65de",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "randomized-data-structures",
+      "fingerprint": "sha256:2d63aa9287914187c4fa06487e6ac016391a5c57477f2dbd420c40691065e9a3",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "randomized-data-structures",
+      "fingerprint": "sha256:3ce160ccb2292c3c791fcc8244e8732e009bbe8e4322fdf41f28e6b0dd1df2ff",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "range-query-structures",
+      "fingerprint": "sha256:ac8fd5c424f1ed56bde90dbacedcd82c8aab303b47eb0389874d0f5c83c01cae",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "range-query-structures",
+      "fingerprint": "sha256:b1a4c79cecf82417cca97b5a1225cf8408e3ba9383066926a61e50d2e4661bf1",
+      "minTokenOccurrences": 2
+    },
+    {
+      "chapterId": "range-query-structures",
+      "fingerprint": "sha256:04cc872f4a65ec938023397bde907a7807edc93e8b5e314b13f35460b4e8c26b",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "tries-radix-trees",
+      "fingerprint": "sha256:679c58adca9deb64f191d531ef4bf0426ab294fb8811a18a3cfe4819c57320d7",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "tries-radix-trees",
+      "fingerprint": "sha256:de37ffef863ba3adfe15a9f39d6ee0f2d1d22caea795e77faa151f12d6bfaadf",
+      "minTokenOccurrences": 3
+    },
+    {
+      "chapterId": "persistent-succinct-structures",
+      "fingerprint": "sha256:9e7366ca4e36e73e04c5f95ba476e47206c71734ac977b637a29b67afced966f",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:e68f47e0d641058efeea5ed8e02ced8bae7be03830c053de518bc0f3518b6e35",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:01897d2a3953836d05ce554fca22c9f1e5cc758cf6a6d8b8fbc0d6dca1bb54c7",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:9932a2b52ae31f74aad4e94a5a761e9c1489451e304ba5d39d8715679f2b2ff1",
+      "minTokenOccurrences": 8
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:9101f6cdd3a96c4378f010e6027c75ee69fbc1d3c7997970437c70d2d2908d1e",
+      "minTokenOccurrences": 6
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:c7ce6dbac682543e6fae39c8df841dafdc9d552698ae70a06cbd3d1da3bbfc68",
+      "minTokenOccurrences": 6
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "fingerprint": "sha256:1a55f1350e43ff946da31558498b0e7242a3d7968edb35d9bf5c9535403469da",
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "lsm-learned-indexes",
+      "fingerprint": "sha256:33c3adc3cb637920e7ec46cd2a4a6b70aaabcd9e54fe7dcfec2876f991baa73c",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "lsm-learned-indexes",
+      "fingerprint": "sha256:ecb5e954bf0ff42dffcdb055cbc684d9fbbdd2db32f3b7dea437e46aad6755f1",
+      "minTokenOccurrences": 4
+    },
+    {
+      "chapterId": "lsm-learned-indexes",
+      "fingerprint": "sha256:f81f6905da8b9547bd664173bb119e9a6aa774286df36286d632571c70ba68a7",
+      "minTokenOccurrences": 4
+    }
+  ],
+  "bloomExactRequiredNotations": [
+    {
+      "chapterId": "probabilistic-filters",
+      "formulaId": "3.12-bloom-insert",
+      "fingerprint": "sha256:01897d2a3953836d05ce554fca22c9f1e5cc758cf6a6d8b8fbc0d6dca1bb54c7",
+      "requiredNotationIds": [
+        "filter-insert-operation",
+        "filter-bit-array",
+        "filter-hash-position",
+        "filter-bit-set-transition",
+        "filter-hash-count"
+      ],
+      "minTokenOccurrences": 5
+    },
+    {
+      "chapterId": "probabilistic-filters",
+      "formulaId": "3.12-bloom-query",
+      "fingerprint": "sha256:deb33b26e9a765f6e4322450e108997a8cea73b0a87dc73052c40a506e1b46a9",
+      "requiredNotationIds": [
+        "filter-query-operation",
+        "filter-all-positions-conjunction",
+        "filter-hash-count",
+        "filter-bit-array",
+        "filter-hash-position"
+      ],
+      "minTokenOccurrences": 5
+    }
+  ]
+}
