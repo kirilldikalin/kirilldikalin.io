@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-6",
+  "datasetVersion": "2026.08.01-7",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1954,19 +1954,25 @@
       "continentId": "algorithm-design",
       "regionId": "dynamic-heuristics",
       "type": "theory",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "local-search"
       ],
       "related": [],
-      "route": null,
-      "minutes": 90,
-      "reading": null,
+      "route": "./chapters/online-algorithms.html",
+      "minutes": 42,
+      "reading": {
+        "words": 3784,
+        "formulaBlocks": 7,
+        "proofBlocks": 3,
+        "theoryMinutes": 26,
+        "labMinutes": 16
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1410,
@@ -1981,19 +1987,25 @@
       "continentId": "algorithm-design",
       "regionId": "formulations-optimization",
       "type": "theory",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "online-algorithms"
       ],
       "related": [],
-      "route": null,
-      "minutes": 100,
-      "reading": null,
+      "route": "./chapters/reductions-and-formulations.html",
+      "minutes": 45,
+      "reading": {
+        "words": 3803,
+        "formulaBlocks": 9,
+        "proofBlocks": 3,
+        "theoryMinutes": 27,
+        "labMinutes": 18
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1510,

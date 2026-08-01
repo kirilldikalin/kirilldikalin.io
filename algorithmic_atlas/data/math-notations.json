@@ -5700,6 +5700,402 @@
         "chapterId": "meet-in-the-middle",
         "anchor": "bsgs"
       }
+    },
+    {
+      "id": "online-request-sequence-sigma",
+      "displayNotation": "\\sigma",
+      "shortName": "последовательность запросов",
+      "explanation": "Полный конечный вход online-задачи, который раскрывается алгоритму по одному запросу",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "online-prefix-sigma-t",
+      "displayNotation": "\\sigma_t",
+      "shortName": "раскрытый префикс",
+      "explanation": "Первые t запросов последовательности, то есть вся доступная online-алгоритму информация о входе",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "online-state-s-t",
+      "displayNotation": "s_t",
+      "shortName": "online-состояние",
+      "explanation": "Внутреннее состояние алгоритма после обработки t запросов",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "online-action-a-t",
+      "displayNotation": "a_t",
+      "shortName": "действие на шаге t",
+      "explanation": "Решение, выбранное по раскрытому префиксу и текущему состоянию без знания будущего",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "online-cost-alg",
+      "displayNotation": "\\operatorname{cost}_A(\\sigma)",
+      "shortName": "стоимость online-алгоритма",
+      "explanation": "Суммарная стоимость действий алгоритма A на последовательности запросов sigma",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "competitive"
+      }
+    },
+    {
+      "id": "online-cost-opt",
+      "displayNotation": "\\operatorname{OPT}(\\sigma)",
+      "shortName": "offline-оптимум",
+      "explanation": "Минимальная допустимая стоимость на той же последовательности при полном знании будущего",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "offline"
+      }
+    },
+    {
+      "id": "online-competitive-ratio-c",
+      "displayNotation": "c",
+      "shortName": "конкурентный коэффициент",
+      "explanation": "Постоянный мультипликативный предел потери online-алгоритма относительно offline OPT",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "competitive"
+      }
+    },
+    {
+      "id": "online-additive-alpha",
+      "displayNotation": "\\alpha",
+      "shortName": "добавочная константа",
+      "explanation": "Ограниченная добавка, не зависящая от длины и содержания последовательности запросов",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "competitive"
+      }
+    },
+    {
+      "id": "online-ski-buy-cost-b",
+      "displayNotation": "B",
+      "shortName": "цена покупки",
+      "explanation": "Однократная цена покупки в дискретной задаче ski rental",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "ski-rental"
+      }
+    },
+    {
+      "id": "online-ski-duration-d",
+      "displayNotation": "d",
+      "shortName": "длина сезона",
+      "explanation": "Фактическое число дней использования, заранее неизвестное online-алгоритму",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "ski-rental"
+      }
+    },
+    {
+      "id": "online-ski-threshold-tau",
+      "displayNotation": "\\tau",
+      "shortName": "день покупки",
+      "explanation": "Порог, в начале которого детерминированная ski-rental политика прекращает аренду и покупает",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "ski-lower-bound"
+      }
+    },
+    {
+      "id": "online-page-request-p-t",
+      "displayNotation": "p_t",
+      "shortName": "запрошенная страница",
+      "explanation": "Страница, к которой относится t-й запрос paging-последовательности",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "paging"
+      }
+    },
+    {
+      "id": "online-cache-state-c-t",
+      "displayNotation": "C_t",
+      "shortName": "содержимое кэша",
+      "explanation": "Множество страниц в быстром кэше после обработки t-го запроса",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "paging"
+      }
+    },
+    {
+      "id": "online-cache-capacity-k",
+      "displayNotation": "k",
+      "shortName": "ёмкость кэша",
+      "explanation": "Максимальное число страниц, одновременно находящихся в online-кэше",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "paging"
+      }
+    },
+    {
+      "id": "online-phase-count-m",
+      "displayNotation": "m",
+      "shortName": "число фаз",
+      "explanation": "Число максимальных фрагментов трассы, содержащих не более k различных страниц",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "lru"
+      }
+    },
+    {
+      "id": "online-potential-phi",
+      "displayNotation": "\\Phi_t",
+      "shortName": "потенциал состояний",
+      "explanation": "Неотрицательная мера рассогласования между состояниями online-алгоритма и сравниваемого OPT",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "online-step-cost-a",
+      "displayNotation": "a_t",
+      "shortName": "цена online-шага",
+      "explanation": "Фактическая стоимость t-го действия анализируемого online-алгоритма в потенциальном доказательстве",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "online-step-cost-opt",
+      "displayNotation": "o_t",
+      "shortName": "цена шага OPT",
+      "explanation": "Стоимость действия offline-эталона на t-м запросе в пошаговом сравнении",
+      "scope": "local",
+      "chapterId": "online-algorithms",
+      "firstDefinition": {
+        "chapterId": "online-algorithms",
+        "anchor": "potential"
+      }
+    },
+    {
+      "id": "formulation-graph-g",
+      "displayNotation": "G",
+      "shortName": "исходный граф",
+      "explanation": "Конечный неориентированный граф, для которого строятся эквивалентные формулировки vertex cover",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "semantics"
+      }
+    },
+    {
+      "id": "formulation-vertex-set-v",
+      "displayNotation": "V",
+      "shortName": "множество вершин",
+      "explanation": "Множество всех вершин исходного графа G",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "semantics"
+      }
+    },
+    {
+      "id": "formulation-edge-set-e",
+      "displayNotation": "E",
+      "shortName": "множество рёбер",
+      "explanation": "Множество неориентированных пар вершин, каждую из которых должно касаться покрытие",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "semantics"
+      }
+    },
+    {
+      "id": "formulation-cover-s",
+      "displayNotation": "S",
+      "shortName": "вершинное покрытие",
+      "explanation": "Выбранное подмножество вершин, содержащее хотя бы один конец каждого ребра",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "semantics"
+      }
+    },
+    {
+      "id": "formulation-budget-k",
+      "displayNotation": "k",
+      "shortName": "бюджет покрытия",
+      "explanation": "Максимально допустимое число выбранных вершин в decision-версии vertex cover",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "semantics"
+      }
+    },
+    {
+      "id": "formulation-binary-x-v",
+      "displayNotation": "x_v",
+      "shortName": "индикатор выбора вершины",
+      "explanation": "Булева или бинарная переменная, равная единице ровно для выбранной вершины v",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "sat"
+      }
+    },
+    {
+      "id": "formulation-cnf-phi",
+      "displayNotation": "\\Phi",
+      "shortName": "CNF-формула",
+      "explanation": "Конъюнкция клауз, кодирующая покрытие рёбер и ограничение числа выбранных вершин",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "sat"
+      }
+    },
+    {
+      "id": "formulation-search-state-s-i",
+      "displayNotation": "s_i",
+      "shortName": "состояние перебора",
+      "explanation": "Пара из индекса следующей вершины и множества вершин, уже выбранных в текущей ветви",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "states"
+      }
+    },
+    {
+      "id": "formulation-problem-pi-one",
+      "displayNotation": "\\Pi_1",
+      "shortName": "исходная задача сведения",
+      "explanation": "Задача решения, экземпляр которой преобразуется полиномиальным отображением",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "reductions"
+      }
+    },
+    {
+      "id": "formulation-problem-pi-two",
+      "displayNotation": "\\Pi_2",
+      "shortName": "целевая задача сведения",
+      "explanation": "Задача решения, решатель которой после преобразования отвечает на исходный экземпляр",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "reductions"
+      }
+    },
+    {
+      "id": "formulation-reduction-f",
+      "displayNotation": "f",
+      "shortName": "полиномиальное преобразование",
+      "explanation": "Вычислимое за полиномиальное время отображение экземпляра, сохраняющее ответ да или нет",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "reductions"
+      }
+    },
+    {
+      "id": "formulation-lp-opt",
+      "displayNotation": "\\operatorname{OPT}_{LP}",
+      "shortName": "оптимум LP-релаксации",
+      "explanation": "Лучшее значение расширенной дробной модели, служащее нижней границей в минимизации",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "relaxations"
+      }
+    },
+    {
+      "id": "formulation-integer-opt",
+      "displayNotation": "\\operatorname{OPT}_{IP}",
+      "shortName": "целочисленный оптимум",
+      "explanation": "Минимальная стоимость среди исходных дискретных допустимых решений",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "relaxations"
+      }
+    },
+    {
+      "id": "formulation-master-y",
+      "displayNotation": "\\lambda_{jp}",
+      "shortName": "вес столбца мастер-задачи",
+      "explanation": "Неотрицательный коэффициент, с которым локальный план входит в мастер-решение Dantzig–Wolfe",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "decomposition"
+      }
+    },
+    {
+      "id": "formulation-subproblem-x",
+      "displayNotation": "x^{(j)}",
+      "shortName": "решение блока",
+      "explanation": "Локальная часть решения j-го блока, представленная комбинацией допустимых столбцов",
+      "scope": "local",
+      "chapterId": "reductions-and-formulations",
+      "firstDefinition": {
+        "chapterId": "reductions-and-formulations",
+        "anchor": "decomposition"
+      }
     }
   ]
 }
