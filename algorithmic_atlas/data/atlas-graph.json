@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-8",
+  "datasetVersion": "2026.08.01-9",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2053,19 +2053,25 @@
       "continentId": "algorithm-design",
       "regionId": "formulations-optimization",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "linear-convex-optimization"
       ],
       "related": [],
-      "route": null,
-      "minutes": 95,
-      "reading": null,
+      "route": "./chapters/multiplicative-weights.html",
+      "minutes": 44,
+      "reading": {
+        "words": 3924,
+        "formulaBlocks": 13,
+        "proofBlocks": 1,
+        "theoryMinutes": 28,
+        "labMinutes": 16
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1510,

@@ -6432,6 +6432,234 @@
         "chapterId": "linear-convex-optimization",
         "anchor": "relaxations"
       }
+    },
+    {
+      "id": "mw-expert-count",
+      "displayNotation": "N",
+      "shortName": "число экспертов",
+      "explanation": "Количество доступных фиксированных решений или советчиков в протоколе мультипликативных весов",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-expert-index",
+      "displayNotation": "i",
+      "shortName": "индекс эксперта",
+      "explanation": "Номер фиксированного решения, вес и проигрыш которого отслеживаются по раундам",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-round",
+      "displayNotation": "t",
+      "shortName": "номер раунда",
+      "explanation": "Шаг последовательного протокола, на котором выбирается распределение и раскрывается новый loss-вектор",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-weight",
+      "displayNotation": "w_i^(t)",
+      "shortName": "вес эксперта",
+      "explanation": "Положительная ненормированная величина доверия к эксперту i перед раундом t",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-potential",
+      "displayNotation": "Phi_t",
+      "shortName": "потенциал весов",
+      "explanation": "Сумма всех ненормированных весов, используемая одновременно для нормировки и regret-доказательства",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-probability",
+      "displayNotation": "p_i^(t)",
+      "shortName": "вероятность эксперта",
+      "explanation": "Нормированный вес эксперта i, определяющий его долю в смеси текущего раунда",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-loss",
+      "displayNotation": "ell_i^(t)",
+      "shortName": "проигрыш эксперта",
+      "explanation": "Ограниченная стоимость эксперта i, раскрытая средой после решения на раунде t",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "protocol"
+      }
+    },
+    {
+      "id": "mw-learning-rate",
+      "displayNotation": "eta",
+      "shortName": "скорость обучения",
+      "explanation": "Положительный параметр, определяющий резкость экспоненциальной реакции веса на проигрыш",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "update"
+      }
+    },
+    {
+      "id": "mw-algorithm-round-loss",
+      "displayNotation": "hat ell_t",
+      "shortName": "проигрыш смеси за раунд",
+      "explanation": "Ожидаемый проигрыш текущего распределения, равный скалярному произведению вероятностей и losses",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "randomization"
+      }
+    },
+    {
+      "id": "mw-cumulative-algorithm-loss",
+      "displayNotation": "L_A(T)",
+      "shortName": "накопленный проигрыш алгоритма",
+      "explanation": "Сумма ожидаемых потерь смеси за первые T раундов",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "regret"
+      }
+    },
+    {
+      "id": "mw-expert-cumulative-loss",
+      "displayNotation": "L_i(T)",
+      "shortName": "накопленный проигрыш эксперта",
+      "explanation": "Сумма losses фиксированного эксперта i на том же префиксе из T раундов",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "regret"
+      }
+    },
+    {
+      "id": "mw-best-expert-loss",
+      "displayNotation": "L_*(T)",
+      "shortName": "проигрыш лучшего эксперта",
+      "explanation": "Минимальный накопленный проигрыш среди всех фиксированных экспертов, выбранных задним числом",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "regret"
+      }
+    },
+    {
+      "id": "mw-regret",
+      "displayNotation": "R_T",
+      "shortName": "external regret",
+      "explanation": "Разность накопленного проигрыша алгоритма и лучшего фиксированного эксперта",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "regret"
+      }
+    },
+    {
+      "id": "mw-regret-bound",
+      "displayNotation": "ln(N)/eta + eta*T/8",
+      "shortName": "универсальная граница regret",
+      "explanation": "Верхняя оценка external regret экспоненциального обновления для losses в [0,1]",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "proof"
+      }
+    },
+    {
+      "id": "mw-game-matrix",
+      "displayNotation": "A",
+      "shortName": "матрица игры",
+      "explanation": "Матрица проигрышей или выигрышей чистых стратегий двух игроков с нулевой суммой",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "games"
+      }
+    },
+    {
+      "id": "mw-row-mixture",
+      "displayNotation": "bar x",
+      "shortName": "средняя стратегия строк",
+      "explanation": "Эмпирическое среднее смешанных стратегий первого игрока по всем раундам",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "games"
+      }
+    },
+    {
+      "id": "mw-column-mixture",
+      "displayNotation": "bar y",
+      "shortName": "средняя стратегия столбцов",
+      "explanation": "Эмпирическое среднее смешанных стратегий второго игрока по всем раундам",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "games"
+      }
+    },
+    {
+      "id": "mw-constraint-weight",
+      "displayNotation": "u_j^(t)",
+      "shortName": "вес ограничения",
+      "explanation": "Текущая цена внимания к ограничению j в приближённой packing или covering схеме",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "linear-programming"
+      }
+    },
+    {
+      "id": "mw-constraint-load",
+      "displayNotation": "a_j(x_t)",
+      "shortName": "нагрузка ограничения",
+      "explanation": "Нормированный вклад текущего oracle-решения x_t в ограничение j",
+      "scope": "local",
+      "chapterId": "multiplicative-weights",
+      "firstDefinition": {
+        "chapterId": "multiplicative-weights",
+        "anchor": "linear-programming"
+      }
     }
   ]
 }

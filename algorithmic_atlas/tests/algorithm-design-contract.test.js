@@ -27,6 +27,7 @@ const publishedChapterIds = new Set([
   "online-algorithms",
   "reductions-and-formulations",
   "linear-convex-optimization",
+  "multiplicative-weights",
 ]);
 
 function canonicalAlgorithmDesign() {
@@ -194,19 +195,19 @@ test("published chapters enter progress while planned chapters stay outside", ()
     core.continentProgressSummary(graph, "algorithm-design", new Set()),
     {
       completed: 0,
-      total: 13,
+      total: 14,
       percent: 0,
       coreCompleted: 0,
       coreTotal: 9,
       branchCompleted: 0,
-      branchTotal: 4,
+      branchTotal: 5,
       coreReady: false,
       complete: false,
     }
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    42
+    43
   );
 });
 
