@@ -1,3 +1,5 @@
+@import url("lab-layout.css");
+
 .atlas-lab {
   --lab-a: var(--chapter-accent);
   --lab-b: var(--chapter-focus);

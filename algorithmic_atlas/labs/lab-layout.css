@@ -1,0 +1,81 @@
+/* Shared presentation contract for every Atlas laboratory. */
+:where(
+  .atlas-lab,
+  .egyptian-lab,
+  .euclid-lab,
+  .turing-lab,
+  .input-size-lab,
+  .asymptotics-lab
+) {
+  --atlas-lab-readable-visual-width: 42rem;
+  min-width: 0;
+}
+
+/* Runtime laboratories always place controls before one full-width workspace. */
+.atlas-lab > .atlas-lab__workspace {
+  grid-column: 1 / -1;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  min-width: 0;
+}
+
+/* The five original laboratories use bespoke names but the same row contract. */
+.egyptian-lab .egyptian-geometry-panel,
+.euclid-lab .euclid-visual-grid,
+.turing-lab .turing-workbench,
+.input-size-lab .input-size-panel,
+.asymptotics-lab .asymptotics-plot-wrap,
+.asymptotics-lab .asymptotics-detail-grid {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-width: 0;
+}
+
+.euclid-lab .euclid-visual-grid,
+.turing-lab .turing-workbench,
+.asymptotics-lab .asymptotics-detail-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/*
+ * Preserve a readable vector viewport. On a narrow screen the panel, not the
+ * page, owns horizontal scrolling; SVG viewBox scaling remains untouched.
+ */
+.atlas-lab .atlas-lab__figure,
+.egyptian-lab .egyptian-geometry-panel,
+.euclid-lab .euclid-geometry-panel,
+.turing-lab .turing-graph-panel,
+.input-size-lab .input-size-encoding-panel,
+.asymptotics-lab .asymptotics-plot-wrap,
+.asymptotics-lab .asymptotics-detail-grid > section:first-child {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.atlas-lab .atlas-lab__visual,
+.egyptian-lab .egyptian-geometry,
+.euclid-lab .euclid-geometry,
+.turing-lab .turing-state-graph,
+.input-size-lab .input-size-encoding-geometry,
+.asymptotics-lab .asymptotics-plot,
+.asymptotics-lab .asymptotics-ratio {
+  width: max(100%, var(--atlas-lab-readable-visual-width));
+  max-width: none;
+  transform: none;
+}
+
+@media (max-width: 52rem) {
+  :where(
+    .atlas-lab,
+    .egyptian-lab,
+    .euclid-lab,
+    .turing-lab,
+    .input-size-lab,
+    .asymptotics-lab
+  ) {
+    --atlas-lab-readable-visual-width: 38rem;
+  }
+}
