@@ -3900,6 +3900,498 @@
         "chapterId": "divide-and-conquer",
         "anchor": "binary-search"
       }
+    },
+    {
+      "id": "sorting-input-array",
+      "displayNotation": "a",
+      "shortName": "входной массив",
+      "explanation": "Исходная последовательность записей, которую требуется упорядочить",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "sorting-output-permutation",
+      "displayNotation": "b=π(a)",
+      "shortName": "перестановка входа",
+      "explanation": "Результат содержит ровно те же записи, но, возможно, в другом порядке",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "sorting-key",
+      "displayNotation": "key(x)",
+      "shortName": "ключ записи",
+      "explanation": "Значение, по которому сравниваются и упорядочиваются записи",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "sorting-stability",
+      "displayNotation": "stable",
+      "shortName": "устойчивость",
+      "explanation": "Равные по ключу записи сохраняют исходный относительный порядок",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "properties"
+      }
+    },
+    {
+      "id": "sorting-original-position",
+      "displayNotation": "pos_b(x)",
+      "shortName": "позиция в результате",
+      "explanation": "Индекс исходной записи x в выходной перестановке b",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "properties"
+      }
+    },
+    {
+      "id": "sorting-prefix-invariant",
+      "displayNotation": "a₀≤…≤aᵢ₋₁",
+      "shortName": "инвариант префикса",
+      "explanation": "Обработанный префикс уже отсортирован перед следующей вставкой",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "insertion"
+      }
+    },
+    {
+      "id": "sorting-inversions",
+      "displayNotation": "I(a)",
+      "shortName": "число инверсий",
+      "explanation": "Число пар i<j, в которых aᵢ>aⱼ",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "insertion"
+      }
+    },
+    {
+      "id": "sorting-time-recurrence",
+      "displayNotation": "T(n)",
+      "shortName": "время сортировки",
+      "explanation": "Модельное число элементарных действий на входе размера n",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "merge"
+      }
+    },
+    {
+      "id": "sorting-linear-merge",
+      "displayNotation": "Θ(n)",
+      "shortName": "линейное слияние",
+      "explanation": "Совместная обработка двух отсортированных частей занимает линейное время",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "merge"
+      }
+    },
+    {
+      "id": "sorting-heap-parent",
+      "displayNotation": "⌊(i−1)/2⌋",
+      "shortName": "родитель в куче",
+      "explanation": "Индекс родителя вершины i при нулевой индексации двоичной кучи",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "heap"
+      }
+    },
+    {
+      "id": "sorting-heap-invariant",
+      "displayNotation": "a_parent≥aᵢ",
+      "shortName": "инвариант max-heap",
+      "explanation": "Ключ каждого родителя не меньше ключей его детей",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "heap"
+      }
+    },
+    {
+      "id": "sorting-pivot",
+      "displayNotation": "p",
+      "shortName": "опорный ключ",
+      "explanation": "Значение, относительно которого partition делит активный диапазон",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "quick"
+      }
+    },
+    {
+      "id": "sorting-partition-invariant",
+      "displayNotation": "a<p | a=p | ? | a>p",
+      "shortName": "инвариант разбиения",
+      "explanation": "Четыре области трёхпутевого partition с известными отношениями к pivot",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "quick"
+      }
+    },
+    {
+      "id": "sorting-balanced-recurrence",
+      "displayNotation": "2T(n/2)+Θ(n)",
+      "shortName": "сбалансированная рекурсия",
+      "explanation": "Обе части имеют сравнимый размер, поэтому глубина логарифмична",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "pivot"
+      }
+    },
+    {
+      "id": "sorting-degenerate-recurrence",
+      "displayNotation": "T(n−1)+Θ(n)",
+      "shortName": "вырожденная рекурсия",
+      "explanation": "После разбиения почти весь массив остаётся в одной части",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "pivot"
+      }
+    },
+    {
+      "id": "sorting-multiset",
+      "displayNotation": "multiset(b)=multiset(a)",
+      "shortName": "сохранение мультимножества",
+      "explanation": "Сортировка не теряет, не добавляет и не подменяет записи",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "correctness"
+      }
+    },
+    {
+      "id": "sorting-order-postcondition",
+      "displayNotation": "∀i: bᵢ≤bᵢ₊₁",
+      "shortName": "постусловие порядка",
+      "explanation": "Соседние ключи результата расположены неубывающе",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "correctness"
+      }
+    },
+    {
+      "id": "sorting-decision-height",
+      "displayNotation": "h",
+      "shortName": "высота дерева решений",
+      "explanation": "Максимальное число сравнений на пути от корня к листу",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "decision-tree"
+      }
+    },
+    {
+      "id": "sorting-permutations",
+      "displayNotation": "n!",
+      "shortName": "число порядков",
+      "explanation": "Количество возможных взаимных порядков n различных ключей",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "decision-tree"
+      }
+    },
+    {
+      "id": "sorting-comparison-lower-bound",
+      "displayNotation": "⌈log₂(n!)⌉",
+      "shortName": "нижняя граница сравнений",
+      "explanation": "Минимальная возможная высота бинарного дерева с n! листьями",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "lower-bound"
+      }
+    },
+    {
+      "id": "sorting-key-universe",
+      "displayNotation": "K",
+      "shortName": "размер диапазона ключей",
+      "explanation": "Число возможных целочисленных значений ключа для counting sort",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "escape"
+      }
+    },
+    {
+      "id": "sorting-counting-cost",
+      "displayNotation": "T(n,K)=Θ(n+K)",
+      "shortName": "стоимость counting sort",
+      "explanation": "Суммарная работа по входу и массиву частот",
+      "scope": "local",
+      "chapterId": "sorting-and-lower-bounds",
+      "firstDefinition": {
+        "chapterId": "sorting-and-lower-bounds",
+        "anchor": "escape"
+      }
+    },
+    {
+      "id": "selection-input-size",
+      "displayNotation": "n",
+      "shortName": "размер массива",
+      "explanation": "Число записей, среди которых ищется порядковая статистика",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "selection-rank-k",
+      "displayNotation": "k",
+      "shortName": "искомый ранг",
+      "explanation": "Номер порядковой статистики при индексации с единицы",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "selection-order-statistic",
+      "displayNotation": "a₍ₖ₎",
+      "shortName": "k-я порядковая статистика",
+      "explanation": "Значение на позиции k в неубывающей перестановке входа",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "selection-sorted-order",
+      "displayNotation": "sorted(a)",
+      "shortName": "неубывающий порядок",
+      "explanation": "Мысленная отсортированная перестановка, задающая ранги",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "problem"
+      }
+    },
+    {
+      "id": "selection-minimum-comparisons",
+      "displayNotation": "C_min(n)",
+      "shortName": "сравнения для минимума",
+      "explanation": "Точное число сравнений линейного поиска минимума",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "extrema"
+      }
+    },
+    {
+      "id": "selection-minmax-comparisons",
+      "displayNotation": "C_min,max(n)",
+      "shortName": "сравнения для min и max",
+      "explanation": "Число сравнений при совместной обработке элементов парами",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "simultaneous"
+      }
+    },
+    {
+      "id": "selection-pivot",
+      "displayNotation": "p",
+      "shortName": "опорное значение",
+      "explanation": "Значение, относительно которого selection выполняет разбиение",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "partition"
+      }
+    },
+    {
+      "id": "selection-partition-less",
+      "displayNotation": "L",
+      "shortName": "размер меньшей области",
+      "explanation": "Число элементов, строго меньших pivot",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "partition"
+      }
+    },
+    {
+      "id": "selection-partition-equal",
+      "displayNotation": "E",
+      "shortName": "размер равной области",
+      "explanation": "Число элементов, равных pivot",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "partition"
+      }
+    },
+    {
+      "id": "selection-time-recurrence",
+      "displayNotation": "T(n)",
+      "shortName": "время выбора",
+      "explanation": "Модельная стоимость selection на активной области размера n",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "quickselect"
+      }
+    },
+    {
+      "id": "selection-surviving-size",
+      "displayNotation": "s",
+      "shortName": "сохранившийся размер",
+      "explanation": "Размер единственной области, в которой остаётся искомый ранг",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "quickselect"
+      }
+    },
+    {
+      "id": "selection-expected-time",
+      "displayNotation": "E[T(n)]",
+      "shortName": "ожидаемое время",
+      "explanation": "Среднее по случайному выбору pivot при фиксированном входе",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "randomized"
+      }
+    },
+    {
+      "id": "selection-group-medians",
+      "displayNotation": "m₁,…,m⌈n/5⌉",
+      "shortName": "медианы пятёрок",
+      "explanation": "Медианы малых групп, из которых рекурсивно выбирается pivot",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "bfprt"
+      }
+    },
+    {
+      "id": "selection-median-of-medians",
+      "displayNotation": "select₁/₂",
+      "shortName": "медиана медиан",
+      "explanation": "Порядковая статистика списка групповых медиан",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "bfprt"
+      }
+    },
+    {
+      "id": "selection-guaranteed-discard",
+      "displayNotation": "D(n)",
+      "shortName": "гарантированное отсечение",
+      "explanation": "Число элементов, заведомо отброшенных по каждую сторону BFPRT pivot",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "discard"
+      }
+    },
+    {
+      "id": "selection-bfprt-recurrence",
+      "displayNotation": "T(n)≤T(n/5)+T(7n/10+6)+cn",
+      "shortName": "рекуррентность BFPRT",
+      "explanation": "Две рекурсивные подзадачи занимают суммарно меньше исходного размера",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "discard"
+      }
+    },
+    {
+      "id": "selection-top-k",
+      "displayNotation": "top-k",
+      "shortName": "k наименьших элементов",
+      "explanation": "Множество элементов первых k рангов, возможно без внутреннего порядка",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "related"
+      }
+    },
+    {
+      "id": "selection-weight",
+      "displayNotation": "wₓ",
+      "shortName": "вес элемента",
+      "explanation": "Неотрицательный вклад элемента в условие взвешенной медианы",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "related"
+      }
+    },
+    {
+      "id": "selection-weighted-median",
+      "displayNotation": "m",
+      "shortName": "взвешенная медиана",
+      "explanation": "Точка, по обе стороны которой находится не больше половины общего веса",
+      "scope": "local",
+      "chapterId": "selection-order-statistics",
+      "firstDefinition": {
+        "chapterId": "selection-order-statistics",
+        "anchor": "related"
+      }
     }
   ]
 }

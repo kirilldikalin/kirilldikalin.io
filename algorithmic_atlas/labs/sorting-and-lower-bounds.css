@@ -1,0 +1,71 @@
+.sorting-bar {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.sorting-bar.is-compared {
+  fill: var(--chapter-warning);
+  stroke: var(--chapter-accent);
+  stroke-width: 3;
+}
+
+.sorting-bar.is-swapped,
+.sorting-bar.is-active {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+  stroke-width: 3;
+}
+
+.sorting-bar.is-pivot {
+  fill: var(--chapter-theorem);
+  stroke: var(--lab-bad);
+  stroke-width: 3;
+}
+
+.sorting-bar.is-sorted {
+  fill: color-mix(in srgb, var(--lab-good) 24%, var(--chapter-paper));
+  stroke: var(--lab-good);
+}
+
+.sorting-range,
+.sorting-decision-edge {
+  fill: none;
+  stroke: var(--chapter-accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.sorting-decision-edge.is-no {
+  stroke: var(--chapter-muted);
+  stroke-dasharray: 5 3;
+}
+
+.sorting-decision-node {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.sorting-decision-node.is-leaf {
+  fill: var(--chapter-lab);
+  stroke: var(--chapter-focus);
+}
+
+.sorting-lab__metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 720px) {
+  .sorting-lab__metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sorting-bar,
+  .sorting-decision-node {
+    transition: none;
+  }
+}

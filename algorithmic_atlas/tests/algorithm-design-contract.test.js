@@ -16,6 +16,8 @@ const curriculum = fs.readFileSync(
 const publishedChapterIds = new Set([
   "exhaustive-search",
   "divide-and-conquer",
+  "sorting-and-lower-bounds",
+  "selection-order-statistics",
 ]);
 
 function canonicalAlgorithmDesign() {
@@ -183,10 +185,10 @@ test("published chapters enter progress while planned chapters stay outside", ()
     core.continentProgressSummary(graph, "algorithm-design", new Set()),
     {
       completed: 0,
-      total: 2,
+      total: 4,
       percent: 0,
       coreCompleted: 0,
-      coreTotal: 2,
+      coreTotal: 4,
       branchCompleted: 0,
       branchTotal: 0,
       coreReady: false,
@@ -195,7 +197,7 @@ test("published chapters enter progress while planned chapters stay outside", ()
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    31
+    33
   );
 });
 

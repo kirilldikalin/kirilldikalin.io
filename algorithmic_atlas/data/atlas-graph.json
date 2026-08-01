@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-2",
+  "datasetVersion": "2026.08.01-3",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -1690,19 +1690,25 @@
       "continentId": "algorithm-design",
       "regionId": "order-greedy",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "divide-and-conquer"
       ],
       "related": [],
-      "route": null,
-      "minutes": 95,
-      "reading": null,
+      "route": "./chapters/sorting-and-lower-bounds.html",
+      "minutes": 37,
+      "reading": {
+        "words": 3616,
+        "formulaBlocks": 11,
+        "proofBlocks": 1,
+        "theoryMinutes": 25,
+        "labMinutes": 12
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 530,
@@ -1717,19 +1723,25 @@
       "continentId": "algorithm-design",
       "regionId": "order-greedy",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "sorting-and-lower-bounds"
       ],
       "related": [],
-      "route": null,
-      "minutes": 85,
-      "reading": null,
+      "route": "./chapters/selection-order-statistics.html",
+      "minutes": 29,
+      "reading": {
+        "words": 2380,
+        "formulaBlocks": 11,
+        "proofBlocks": 1,
+        "theoryMinutes": 18,
+        "labMinutes": 11
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 720,
