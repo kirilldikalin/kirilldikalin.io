@@ -153,15 +153,13 @@
         <section id="strong-duality" class="atlas-block" data-atlas-block="theorem">
           <h2>Сильная двойственность утверждает, что лучшая граница точна</h2>
           <p>Для пары линейных программ при существовании конечного прямого оптимума существует двойственный оптимум с тем же значением. Между максимумом производства и минимумом стоимости ресурсов не остаётся щели. Это гораздо сильнее цепочки предыдущего раздела: там сравнивалась каждая пара, здесь утверждается существование совпадающей пары.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-strong-duality" data-notation-coverage="interactive" data-required-notations="lp-optimum-vector,lp-dual-optimum-vector,lp-objective-vector,lp-resource-vector,lp-primal-value,lp-dual-value">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-strong-duality" data-notation-coverage="interactive" data-required-notations="lp-optimum-vector,lp-dual-optimum-vector,lp-objective-vector,lp-resource-vector">
             \[
-              \class{atlas-notation-token notation-id-lp-primal-value}{
-                \class{atlas-notation-token notation-id-lp-objective-vector}{c}^{\mathsf T}
-                \class{atlas-notation-token notation-id-lp-optimum-vector}{x^\star}}
+              \class{atlas-notation-token notation-id-lp-objective-vector}{c}^{\mathsf T}
+              \class{atlas-notation-token notation-id-lp-optimum-vector}{x^\star}
               =
-              \class{atlas-notation-token notation-id-lp-dual-value}{
-                \class{atlas-notation-token notation-id-lp-resource-vector}{b}^{\mathsf T}
-                \class{atlas-notation-token notation-id-lp-dual-optimum-vector}{y^\star}}.
+              \class{atlas-notation-token notation-id-lp-resource-vector}{b}^{\mathsf T}
+              \class{atlas-notation-token notation-id-lp-dual-optimum-vector}{y^\star}.
             \]
           </div>
           <p>Один путь доказательства использует разделяющую гиперплоскость. Из линейного отображения допустимых решений строится выпуклое множество пар «использованные ресурсы, достигнутая ценность». Точка, обещающая значение выше оптимума без превышения запасов, лежит вне него. Разделяющая гиперплоскость задаёт неотрицательные коэффициенты ресурсов; после нормировки они становятся допустимым двойственным решением с нужной стоимостью.</p>
@@ -250,10 +248,10 @@
             \]
           </div>
           <p>При ограничениях градиент цели в оптимуме компенсируется комбинацией нормалей активных границ. Лагранжиан добавляет ограничения к цели с множителями. Для минимизации с $f_i(x)\le0$ пишут $L(x,\lambda,\nu)=f_0(x)+\sum_i\lambda_i f_i(x)+\nu^{\mathsf T}(Ax-b)$, где $\lambda_i\ge0$.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-kkt" data-notation-coverage="interactive" data-required-notations="convex-lagrangian,kkt-multiplier,kkt-stationarity,kkt-complementarity">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-kkt" data-notation-coverage="interactive" data-required-notations="convex-lagrangian,kkt-multiplier,kkt-complementarity">
             \[
-              \class{atlas-notation-token notation-id-kkt-stationarity}{\nabla_x
-              \class{atlas-notation-token notation-id-convex-lagrangian}{L}(x^\star,\lambda^\star,\nu^\star)=0},
+              \nabla_x
+              \class{atlas-notation-token notation-id-convex-lagrangian}{L}(x^\star,\lambda^\star,\nu^\star)=0,
               \qquad
               \class{atlas-notation-token notation-id-kkt-multiplier}{\lambda_i^\star\ge0},
               \qquad
@@ -271,12 +269,11 @@
           <p>Полиномиальная граница не означает, что эллипсоидальный метод автоматически быстрее хорошей симплексной реализации на типичных данных. Его значение также в работе с оракулами разделения: область может иметь неявно огромное число ограничений, но если нарушенную строку удаётся находить эффективно, оптимизация часто остаётся доступной. Так полиномиальное доказательство становится инструментом проектирования.</p>
           <p>В 1984 году Нарендра Кармаркар предложил полиномиальный interior-point метод. Вместо переходов по рёбрам он движется через внутренность допустимой области, используя барьер, удерживающий траекторию от границы. Современные внутренние точки решают последовательность линейных систем и особенно естественны для больших разреженных задач и выпуклых конических обобщений.</p>
           <p>Логарифмический барьер для неравенств $a_i^{\mathsf T}x&lt;b_i$ добавляет к цели слагаемые $-\mu\sum_i\log(b_i-a_i^{\mathsf T}x)$. При положительном $\mu$ граница имеет бесконечную цену, а при уменьшении $\mu$ центральная траектория приближается к оптимуму. Это схематическое объяснение; сложность зависит от self-concordance барьера и точности решения систем.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-log-barrier" data-notation-coverage="interactive" data-required-notations="convex-barrier-parameter,convex-barrier-function,lp-constraint-matrix,lp-resource-vector">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-log-barrier" data-notation-coverage="interactive" data-required-notations="convex-barrier-parameter,lp-constraint-matrix,lp-resource-vector">
             \[
-              \class{atlas-notation-token notation-id-convex-barrier-function}{
               \phi_\mu(x)=f_0(x)-
               \class{atlas-notation-token notation-id-convex-barrier-parameter}{\mu}
-              \sum_{i=1}^{m}\log\bigl(b_i-a_i^{\mathsf T}x\bigr)},
+              \sum_{i=1}^{m}\log\bigl(b_i-a_i^{\mathsf T}x\bigr),
               \qquad \class{atlas-notation-token notation-id-lp-constraint-matrix}{A}x&lt;
               \class{atlas-notation-token notation-id-lp-resource-vector}{b}.
             \]
@@ -299,12 +296,11 @@
           <h2>LP-релаксация даёт границу, но не всегда целое решение</h2>
           <p>Во многих задачах переменная обязана быть нулём или единицей. Если заменить $x_j\in\{0,1\}$ на $0\le x_j\le1$, получится LP-релаксация. Для максимизации её допустимая область шире, поэтому оптимум не меньше целочисленного и служит верхней границей. Для минимизации направление границы меняется.</p>
           <p>Дробное решение имеет самостоятельный смысл как смесь, доля или вероятность только если это разрешено предметной областью. Половина моста или 0,3 сервера обычно не является допустимым итогом. Простое округление координат может нарушить ограничения или резко ухудшить цель. Нужны специальные схемы округления, primal-dual методы, сечения или branch and bound.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-integrality-gap" data-notation-coverage="interactive" data-required-notations="lp-relaxation-optimum,integer-optimum,integrality-gap">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-13-integrality-gap" data-notation-coverage="interactive" data-required-notations="lp-relaxation-optimum,integer-optimum">
             \[
-              \class{atlas-notation-token notation-id-integrality-gap}{
               \operatorname{gap}=
               \frac{\class{atlas-notation-token notation-id-lp-relaxation-optimum}{\operatorname{OPT}_{LP}}}
-              {\class{atlas-notation-token notation-id-integer-optimum}{\operatorname{OPT}_{IP}}}}
+              {\class{atlas-notation-token notation-id-integer-optimum}{\operatorname{OPT}_{IP}}}
               \quad\text{для положительной задачи максимизации}.
             \]
           </div>

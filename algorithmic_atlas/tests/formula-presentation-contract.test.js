@@ -360,10 +360,10 @@ function validateFormulaMetadata(formulas, options = {}) {
 
 test("formula presentation policy is a closed reviewed snapshot", () => {
   assert.equal(policy.schemaVersion, 1);
-  assert.equal(policy.snapshot.publishedChapterCount, 29);
-  assert.equal(policy.snapshot.displayFormulaTotal, 204);
+  assert.equal(policy.snapshot.publishedChapterCount, 43);
+  assert.equal(policy.snapshot.displayFormulaTotal, 347);
   assert.equal(policy.snapshot.basicFormulaTotal, 35);
-  assert.equal(policy.snapshot.interactiveFormulaTotal, 169);
+  assert.equal(policy.snapshot.interactiveFormulaTotal, 312);
   assert.equal(
     policy.snapshot.basicFormulaTotal + policy.snapshot.interactiveFormulaTotal,
     policy.snapshot.displayFormulaTotal
@@ -452,7 +452,7 @@ test("the five published origin chapters expose 44 classified formulas", () => {
   assert.equal(result.interactiveCount, 35);
 });
 
-test("published continents 01-03 obey the formula presentation policy", () => {
+test("all published continents obey the formula presentation policy", () => {
   const nodes = publishedNodes();
   const { formulas, wrappers } = collectFormulas(nodes);
   const errors = [];

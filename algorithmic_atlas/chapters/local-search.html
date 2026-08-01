@@ -95,11 +95,11 @@
         <section id="improvement">
           <h2>Первое и лучшее улучшение платят за разные вещи</h2>
           <p>First improvement просматривает соседей в заданном порядке и принимает первого лучшего. Шаг может быть дешёвым, но траектория зависит от порядка генерации. Best improvement оценивает всю окрестность и выбирает максимальный прирост. Он делает меньше переходов, однако один переход может быть значительно дороже.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-9-improvement-rules" data-notation-coverage="interactive" data-required-notations="local-first-improvement,local-best-improvement,local-objective,local-neighborhood">
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-9-improvement-rules" data-notation-coverage="interactive" data-required-notations="local-first-improvement,local-objective,local-neighborhood">
             \[
               \class{atlas-notation-token notation-id-local-first-improvement}{y=\text{first}\{z\in\mathcal N(x):\Phi(z)>\Phi(x)\}},
               \qquad
-              \class{atlas-notation-token notation-id-local-best-improvement}{y\in\arg\max_{z\in\class{atlas-notation-token notation-id-local-neighborhood}{\mathcal N(x)}}\class{atlas-notation-token notation-id-local-objective}{\Phi(z)}.
+              y\in\arg\max_{z\in\class{atlas-notation-token notation-id-local-neighborhood}{\mathcal N(x)}}\class{atlas-notation-token notation-id-local-objective}{\Phi(z)}.
             \]
           </div>
           <p>Лучшее локальное улучшение не обязано приводить к лучшему финалу. Большой ранний подъём может попасть на низкий изолированный пик, тогда как небольшой ход открывал путь к глобальному. Это легко показать конечным графом из нескольких вершин. Следовательно, сравнивать стратегии нужно по итоговому качеству и общей стоимости, а не по приросту первого шага.</p>

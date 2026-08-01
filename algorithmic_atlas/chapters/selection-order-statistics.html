@@ -35,8 +35,8 @@
         <section id="problem">
           <h2>Один ранг содержит меньше информации, чем полный порядок</h2>
           <p>После сортировки массива $a$ обозначим элементы в неубывающем порядке как $a_{(1)},a_{(2)},\ldots,a_{(n)}$. Элемент $a_{(k)}$ называется k-й порядковой статистикой. Минимум — первая, максимум — n-я, нижняя медиана для чётного размера — $a_{(n/2)}$. Контракт должен уточнять индексацию ранга и поведение при дубликатах; здесь $k$ начинается с единицы.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-order-statistic" data-notation-coverage="interactive" data-required-notations="selection-rank-k,selection-order-statistic,selection-sorted-order">
-            \[\class{atlas-notation-token notation-id-selection-order-statistic}{a_{(\class{atlas-notation-token notation-id-selection-rank-k}{k})}}=\class{atlas-notation-token notation-id-selection-sorted-order}{\text{k-й элемент любой неубывающей перестановки }a}.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-order-statistic" data-notation-coverage="interactive" data-required-notations="selection-rank-k,selection-sorted-order">
+            \[a_{(\class{atlas-notation-token notation-id-selection-rank-k}{k})}=\class{atlas-notation-token notation-id-selection-sorted-order}{\text{k-й элемент любой неубывающей перестановки }a}.\]
           </div>
           <p>Можно отсортировать массив и взять позицию $k$, заплатив $O(n\log n)$ сравнений. Но полный порядок сообщает гораздо больше: отношения почти всех элементов между собой. Для одного ранга достаточно выяснить, какие элементы точно меньше искомого и какие точно больше. Алгоритмы выбора используют partition, отбрасывая целую область после каждого шага.</p>
           <p>Нижняя граница уже линейна: чтобы удостовериться в минимуме, каждый из остальных $n-1$ элементов должен хотя бы однажды проиграть сравнение. Иначе не сравнивавшийся кандидат мог бы оказаться меньше. Линейный проход достигает этой границы. Значит для выбора возможен $\Theta(n)$-алгоритм, и сортировка действительно выполняет лишнюю работу.</p>
@@ -50,8 +50,8 @@
           <p>Текущий кандидат на минимум сравнивается с очередным элементом. Инвариант: после обработки первых $i$ записей кандидат равен минимуму этого префикса. Следующее сравнение оставляет меньший из кандидата и $a_i$, поэтому инвариант сохраняется. После последнего элемента он охватывает весь массив. Выполнено ровно $n-1$ сравнений, что совпадает с нижней границей.</p>
           <p>Турнирная картина хранит дополнительную информацию. Победитель-минимум сравнивался только с элементами на своём пути. Второй минимум обязан быть среди проигравших непосредственно ему; их не больше $\lceil\log_2 n\rceil$ при сбалансированном турнире. Поэтому второй минимум находится за $n+\lceil\log_2 n\rceil-2$ сравнений, если сохранить список соперников победителя.</p>
           <p>Почему нельзя искать второй минимум среди всех проигравших вообще? Элемент, проигравший не минимуму, уже имеет перед собой по крайней мере два меньших кандидата: своего победителя и глобальный минимум на пути выше. Значит вторым может стать только непосредственный соперник чемпиона. Турнирное дерево превращает историю сравнений в сертификат ранга и показывает, что иногда полезно хранить не только победителя, но и причину его победы.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-minimum-bound" data-notation-coverage="interactive" data-required-notations="selection-minimum-comparisons,selection-input-size">
-            \[\class{atlas-notation-token notation-id-selection-minimum-comparisons}{C_{\min}(\class{atlas-notation-token notation-id-selection-input-size}{n})}=n-1.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-minimum-bound" data-notation-coverage="interactive" data-required-notations="selection-input-size">
+            \[C_{\min}(\class{atlas-notation-token notation-id-selection-input-size}{n})=n-1.\]
           </div>
           <p>Пустой массив не имеет минимума без дополнительного соглашения. Для массива из одного элемента сравнений нет. На floating-point данных значение NaN нарушает привычный порядок: сравнения с ним ложны, поэтому контракт обязан определить обработку. Такие края не являются мелкими деталями реализации — они определяют математическую функцию алгоритма.</p>
         </section>
@@ -59,8 +59,8 @@
         <section id="simultaneous">
           <h2>Минимум и максимум выгодно искать парами</h2>
           <p>Два независимых прохода выполняют (2n-2) сравнений. Можно сначала сравнить элементы внутри каждой пары. Меньший участвует только в соревновании за минимум, больший — только за максимум. На пару приходится одно внутреннее сравнение и ещё два сравнения с глобальными кандидатами, то есть примерно три вместо четырёх.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-minmax-bound" data-notation-coverage="interactive" data-required-notations="selection-minmax-comparisons,selection-input-size">
-            \[\class{atlas-notation-token notation-id-selection-minmax-comparisons}{C_{\min,\max}(\class{atlas-notation-token notation-id-selection-input-size}{n})}\le\left\lceil\frac{3n}{2}\right\rceil-2.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-minmax-bound" data-notation-coverage="interactive" data-required-notations="selection-input-size">
+            \[C_{\min,\max}(\class{atlas-notation-token notation-id-selection-input-size}{n})\le\left\lceil\frac{3n}{2}\right\rceil-2.\]
           </div>
           <p>Для чётного $n$ первую пару используют как начальные минимум и максимум, затем каждая из $(n-2)/2$ пар требует три сравнения: всего $3n/2-2$. Для нечётного начальным кандидатом служит один элемент, оставшиеся пары дают $3(n-1)/2$. Верхняя компактная запись охватывает оба случая.</p>
           <p>Это упражнение показывает смысл группировки сравнений. Мы не ускорили одно сравнение и не использовали сложную структуру; мы перестали сравнивать очевидного «победителя пары» с минимумом и очевидного «проигравшего» с максимумом. Аналогичная идея классифицировать элементы до рекурсии лежит в основе selection.</p>
@@ -91,8 +91,8 @@
         <section id="randomized">
           <h2>Случайный pivot даёт линейное ожидаемое время</h2>
           <p>Если pivot равновероятно выбирается среди активных элементов, не обязательно каждый раз попадать близко к медиане. Достаточно, что с постоянной вероятностью он лежит в средней половине рангов и уменьшает активную область хотя бы до (3n/4). Число неудачных попыток до такого шага имеет постоянное ожидание, а размеры успешных этапов образуют геометрическую прогрессию.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-randomized-expected" data-notation-coverage="interactive" data-required-notations="selection-expected-time,selection-input-size">
-            \[\class{atlas-notation-token notation-id-selection-expected-time}{\mathbb E[T(\class{atlas-notation-token notation-id-selection-input-size}{n})]}=O(n).\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-randomized-expected" data-notation-coverage="interactive" data-required-notations="selection-input-size">
+            \[\mathbb E[T(\class{atlas-notation-token notation-id-selection-input-size}{n})]=O(n).\]
           </div>
           <p>Ожидание берётся по случайности алгоритма для любого фиксированного входа. Это не среднее по «обычным данным» и не гарантия каждой трассы. Фиксированный seed полезен для воспроизведения лаборатории, но превращает последовательность pivot в предсказуемую. В приложении с недоверенным вводом противник может использовать предсказуемость, если знает реализацию.</p>
           <p>Линейность ожидания можно увидеть через хорошие этапы. Pivot попадает в средние 50% рангов с вероятностью не меньше $1/2$ и тогда оставляет не более $3n/4$ элементов. Ожидаемое число попыток до такого сокращения не больше двух. Работа между двумя хорошими сокращениями имеет ожидаемый порядок текущего размера, а размеры после успехов образуют $n,3n/4,(3/4)^2n,\ldots$. Сумма геометрического ряда линейна. Аргумент требует равномерного pivot в каждой активной области.</p>
@@ -112,8 +112,8 @@
           <p>Алгоритм Blum–Floyd–Pratt–Rivest–Tarjan делит элементы на группы по пять, сортирует каждую маленькую группу и берёт её медиану. Затем рекурсивно выбирает медиану среди этих медиан. Полученное значение используется как pivot для исходного массива. На первый взгляд это лишняя рекурсия; её смысл — сертификат, что pivot не может оказаться слишком близко к краю.</p>
           <p>Почему пять? Группа нечётного размера имеет однозначную середину, а по обе стороны её медианы лежат по два элемента. Медиана медиан гарантирует, что не меньше половины групповых медиан не меньше pivot. В каждой такой полной группе как минимум три элемента не меньше pivot: сама медиана и два больших. Симметрично получаем много элементов не больше pivot.</p>
           <p>Группы по три дают слишком слабое отсечение для стандартной рекуррентности: суммы долей подзадач достигают единицы. Большие нечётные группы тоже работают асимптотически, но сортировать их дороже. Пять — минимальный классический баланс простого локального порядка и достаточной глобальной гарантии.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-bfprt-pivot" data-notation-coverage="interactive" data-required-notations="selection-group-medians,selection-median-of-medians,selection-pivot">
-            \[\class{atlas-notation-token notation-id-selection-pivot}{p}=\class{atlas-notation-token notation-id-selection-median-of-medians}{\operatorname{select}_{1/2}(\class{atlas-notation-token notation-id-selection-group-medians}{m_1,m_2,\ldots,m_{\lceil n/5\rceil}})}.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-bfprt-pivot" data-notation-coverage="interactive" data-required-notations="selection-group-medians,selection-pivot">
+            \[\class{atlas-notation-token notation-id-selection-pivot}{p}=\operatorname{select}_{1/2}(\class{atlas-notation-token notation-id-selection-group-medians}{m_1,m_2,\ldots,m_{\lceil n/5\rceil}}).\]
           </div>
         </section>
 
@@ -124,8 +124,8 @@
             \[\class{atlas-notation-token notation-id-selection-guaranteed-discard}{D(n)}\ge 3\left(\left\lfloor\frac{\lceil \class{atlas-notation-token notation-id-selection-input-size}{n}/5\rceil}{2}\right\rfloor-1\right)\ge\frac{3n}{10}-6.\]
           </div>
           <p>После partition рекурсивная сторона имеет не больше (7n/10+6) элементов. Выбор median of medians сам решает задачу размера около (n/5), а группировка и partition линейны. Получается рекуррентность, в которой доли двух рекурсивных подзадач в сумме меньше единицы.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-bfprt-recurrence" data-notation-coverage="interactive" data-required-notations="selection-bfprt-recurrence,selection-input-size">
-            \[\class{atlas-notation-token notation-id-selection-bfprt-recurrence}{T(\class{atlas-notation-token notation-id-selection-input-size}{n})\le T(\lceil n/5\rceil)+T(7n/10+6)+cn=O(n)}.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-4-bfprt-recurrence" data-notation-coverage="interactive" data-required-notations="selection-input-size">
+            \[T(\class{atlas-notation-token notation-id-selection-input-size}{n})\le T(\lceil n/5\rceil)+T(7n/10+6)+cn=O(n).\]
           </div>
           <p>Подстановкой можно выбрать $A$, чтобы $T(m)\le Am$ для меньших $m$. Тогда правая часть не превосходит $A(n/5+7n/10+O(1))+cn=0.9An+cn+O(A)$. Запас $0.1An$ поглощает линейную работу при достаточно большом $A$ и $n$; конечные малые размеры закрываются базовым случаем.</p>
           <p>Доказательство не обещает малую константу. BFPRT сортирует группы, рекурсивно выбирает pivot и только затем выполняет основное разбиение. Его ценность — детерминированное $O(n)$ в худшем случае и строительный блок для других доказательств. Практический код часто применяет более дешёвые sampling pivots и оставляет BFPRT как fallback.</p>

@@ -4,12 +4,13 @@
     "publishedContinents": [
       "origins-efficiency",
       "mathematical-tools",
-      "data-structures"
+      "data-structures",
+      "algorithm-design"
     ],
-    "publishedChapterCount": 29,
-    "displayFormulaTotal": 204,
+    "publishedChapterCount": 43,
+    "displayFormulaTotal": 347,
     "basicFormulaTotal": 35,
-    "interactiveFormulaTotal": 169
+    "interactiveFormulaTotal": 312
   },
   "fingerprint": {
     "algorithm": "sha256",

@@ -277,11 +277,11 @@
           <div class="atlas-math atlas-notation-formula"
             data-formula-id="dp-topological-induction-step"
             data-notation-coverage="interactive"
-            data-required-notations="dp-state,dp-value-function,dp-topological-order,dp-dependency-relation">
+            data-required-notations="dp-state,dp-value-function,dp-topological-order">
             \[
               \bigl(\forall u:\
-                \class{atlas-notation-token notation-id-dp-dependency-relation}{u\prec
-                  \class{atlas-notation-token notation-id-dp-state}{s}}
+                u\prec
+                  \class{atlas-notation-token notation-id-dp-state}{s}
                 \Rightarrow D(u)\text{ верно}\bigr)
               \Longrightarrow
               \class{atlas-notation-token notation-id-dp-value-function}{D(s)}
@@ -364,10 +364,9 @@
           <div class="atlas-math atlas-notation-formula"
             data-formula-id="dp-zero-one-knapsack-transition"
             data-notation-coverage="interactive"
-            data-required-notations="knapsack-prefix-count,knapsack-capacity,knapsack-weight,knapsack-value,dp-value-function">
+            data-required-notations="knapsack-prefix-count,knapsack-capacity,knapsack-weight,knapsack-value">
             \[
-              \class{atlas-notation-token notation-id-dp-value-function}{D[
-                \class{atlas-notation-token notation-id-knapsack-prefix-count}{i},c]}
+              D[\class{atlas-notation-token notation-id-knapsack-prefix-count}{i},c]
               =\max\!\left(
                 D[i-1,c],
                 D\!\left[i-1,c-

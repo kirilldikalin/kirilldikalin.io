@@ -85,8 +85,8 @@
         <section id="heap">
           <h2>Куча превращает выбор максимума в локальный ремонт</h2>
           <p>Двоичная max-heap хранится прямо в массиве. Для нулевой индексации дети вершины $i$ находятся в $2i+1$ и $2i+2$. Инвариант требует, чтобы ключ родителя был не меньше ключей детей. Тогда максимум находится в корне. Построив кучу, heapsort меняет корень с последним элементом активной части, уменьшает размер кучи и просеивает новый корень вниз.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-heap-invariant" data-notation-coverage="interactive" data-required-notations="sorting-heap-parent,sorting-heap-invariant">
-            \[\class{atlas-notation-token notation-id-sorting-heap-invariant}{a_{\class{atlas-notation-token notation-id-sorting-heap-parent}{\lfloor(i-1)/2\rfloor}}\ge a_i}\qquad(1\le i&lt;m).\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-heap-invariant" data-notation-coverage="interactive" data-required-notations="sorting-heap-parent">
+            \[a_{\class{atlas-notation-token notation-id-sorting-heap-parent}{\lfloor(i-1)/2\rfloor}}\ge a_i\qquad(1\le i&lt;m).\]
           </div>
           <p>После обмена нарушиться может только цепочка от корня вниз: обе дочерние подкучи по-прежнему корректны. Просеивание выбирает большего ребёнка и меняет его с текущей вершиной, пока порядок не восстановится. Оно проходит не больше высоты $O(\log n)$. Повторяем операцию $n-1$ раз и получаем $O(n\log n)$ худшего времени при $O(1)$ дополнительной памяти.</p>
           <p>Построение кучи последовательными вставками стоит $O(n\log n)$, но bottom-up heapify — $\Theta(n)$. Большинство вершин находятся близко к листьям и просеиваются на малую глубину; сумма высот поддеревьев линейна. Это хороший пример того, как умножение «число элементов на максимальную цену операции» даёт верную верхнюю, но неточную оценку.</p>
@@ -97,8 +97,8 @@
         <section id="quick">
           <h2>Quicksort строится вокруг разбиения</h2>
           <p>Quicksort выбирает опорный ключ $p$, переставляет элементы так, чтобы меньшие оказались слева, большие справа, а затем независимо сортирует полученные части. В трёхпутевом варианте выделяется средняя область ключей, равных $p$. Это особенно важно при множестве дубликатов: все равные элементы завершаются за одно разбиение и не порождают бесполезную рекурсию.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-partition-invariant" data-notation-coverage="interactive" data-required-notations="sorting-pivot,sorting-partition-invariant">
-            \[\class{atlas-notation-token notation-id-sorting-partition-invariant}{a[0..l)&lt;\class{atlas-notation-token notation-id-sorting-pivot}{p},\quad a[l..r)=p,\quad a[r..u)\text{ не исследовано},\quad a[u..n)&gt;p}.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-partition-invariant" data-notation-coverage="interactive" data-required-notations="sorting-pivot">
+            \[a[0..l)&lt;\class{atlas-notation-token notation-id-sorting-pivot}{p},\quad a[l..r)=p,\quad a[r..u)\text{ не исследовано},\quad a[u..n)&gt;p.\]
           </div>
           <p>Схемы Ломуто и Хоара используют разные границы и возвращают разные объекты. Нельзя взять цикл одной схемы и рекурсивные диапазоны другой. В доказательстве нужно явно назвать полуинтервалы, состояние до шага и то, как обмен увеличивает обработанную область. Большая доля ошибок quicksort — это не неверная идея, а несогласованный контракт partition.</p>
           <p>Одно разбиение линейно: каждый элемент сравнивается с pivot постоянное число раз. Если части имеют размеры $k$ и $n-k-1$, время описывает $T(n)=T(k)+T(n-k-1)+\Theta(n)$. При близком к середине $k$ глубина логарифмична и время $\Theta(n\log n)$. При $k=0$ на каждом уровне получается $\Theta(n^2)$. Таким образом, та же строка partition ведёт к разным трассам из-за выбора pivot.</p>
@@ -141,8 +141,8 @@
         <section id="lower-bound" class="atlas-block" data-atlas-block="theorem">
           <h2>Сравнительная сортировка требует $\Omega(n\log n)$ сравнений</h2>
           <p>Из дерева решений остаётся оценить логарифм факториала. Уже произведение последних $n/2$ множителей не меньше $(n/2)^{n/2}$. Поэтому $\log_2(n!)\ge(n/2)\log_2(n/2)=\Omega(n\log n)$. Более точная формула Стирлинга даёт $\log_2(n!)=n\log_2 n-(\log_2 e)n+O(\log n)$, но для класса роста она не нужна.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-comparison-lower-bound" data-notation-coverage="interactive" data-required-notations="sorting-comparison-lower-bound,sorting-permutations">
-            \[\class{atlas-notation-token notation-id-sorting-comparison-lower-bound}{\lceil\log_2(\class{atlas-notation-token notation-id-sorting-permutations}{n!})\rceil}=\Omega(n\log n).\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-comparison-lower-bound" data-notation-coverage="interactive" data-required-notations="sorting-permutations">
+            \[\lceil\log_2(\class{atlas-notation-token notation-id-sorting-permutations}{n!})\rceil=\Omega(n\log n).\]
           </div>
           <p>Это нижняя граница худшего случая любого алгоритма, который получает сведения о произвольных ключах только через бинарные сравнения. Mergesort и heapsort имеют $O(n\log n)$ сравнений, значит асимптотически оптимальны в этой модели. Из этого не следует, что они быстрее любого quicksort на каждом размере: граница скрывает константы, движения данных и архитектуру памяти.</p>
           <p>Граница не утверждает, что каждый вход требует $n\log n$ сравнений. Вставки распознают уже отсортированный массив линейно. Она утверждает, что среди всех возможных порядков существует путь нужной глубины. Не утверждает она и невозможность линейной сортировки целых чисел: такая сортировка использует значения ключей как адреса или цифры и тем самым выходит из сравнительной модели.</p>
@@ -151,8 +151,8 @@
         <section id="escape">
           <h2>Counting sort и radix sort используют структуру ключа</h2>
           <p>Если ключ — целое число из известного диапазона $0..K-1$, counting sort заводит массив частот. Один проход считает ключи, префиксы определяют позиции, ещё один проход размещает записи. Время $O(n+K)$, память $O(K)$. Это не опровержение нижней границы: операция доступа к ячейке по значению ключа раскрывает за шаг больше информации, чем одно сравнение.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-counting-cost" data-notation-coverage="interactive" data-required-notations="sorting-key-universe,sorting-counting-cost">
-            \[\class{atlas-notation-token notation-id-sorting-counting-cost}{T(n,K)=\Theta(n+\class{atlas-notation-token notation-id-sorting-key-universe}{K})}.\]
+          <div class="atlas-math atlas-notation-formula" data-formula-id="4-3-counting-cost" data-notation-coverage="interactive" data-required-notations="sorting-key-universe">
+            \[T(n,K)=\Theta(n+\class{atlas-notation-token notation-id-sorting-key-universe}{K}).\]
           </div>
           <p>Если $K$ огромно относительно $n$, линейность по $n+K$ бесполезна. Например, десять 64-битных идентификаторов не оправдывают массив из $2^{64}$ счётчиков. Radix sort обрабатывает ключи разрядами, используя устойчивую сортировку каждого разряда. Для $d$ разрядов алфавита размера $B$ модельная стоимость $O(d(n+B))$. Выбор $B$ балансирует число проходов, память и кэш.</p>
           <p>Стабильность внутренней сортировки radix принципиальна: после обработки следующего разряда порядок по уже обработанным младшим разрядам должен сохраниться. Направление прохода зависит от варианта LSD или MSD. Для знаковых чисел, строк переменной длины и floating-point ключей простая запись цифр требует дополнительного контракта кодирования.</p>

@@ -243,7 +243,7 @@
           <div class="atlas-math atlas-notation-formula"
             data-formula-id="mw-cumulative-losses"
             data-notation-coverage="interactive"
-            data-required-notations="mw-cumulative-algorithm-loss,mw-algorithm-round-loss,mw-expert-cumulative-loss,mw-loss,mw-round,mw-expert-index">
+            data-required-notations="mw-cumulative-algorithm-loss,mw-algorithm-round-loss,mw-expert-cumulative-loss,mw-round,mw-expert-index">
             \[
               \class{atlas-notation-token notation-id-mw-cumulative-algorithm-loss}{L_A(T)}
               =\sum_{
@@ -252,22 +252,20 @@
               \qquad
               \class{atlas-notation-token notation-id-mw-expert-cumulative-loss}{L_i(T)}
               =\sum_{t=1}^{T}
-                \class{atlas-notation-token notation-id-mw-loss}{\ell_{
-                  \class{atlas-notation-token notation-id-mw-expert-index}{i}}^{(t)}}.
+                \ell_{\class{atlas-notation-token notation-id-mw-expert-index}{i}}^{(t)}.
             \]
           </div>
           <div class="atlas-math atlas-notation-formula"
             data-formula-id="mw-external-regret"
             data-notation-coverage="interactive"
-            data-required-notations="mw-regret,mw-cumulative-algorithm-loss,mw-best-expert-loss,mw-expert-cumulative-loss,mw-expert-index,mw-expert-count">
+            data-required-notations="mw-regret,mw-cumulative-algorithm-loss,mw-best-expert-loss,mw-expert-cumulative-loss,mw-expert-count">
             \[
               \class{atlas-notation-token notation-id-mw-regret}{R_T}
               =\class{atlas-notation-token notation-id-mw-cumulative-algorithm-loss}{L_A(T)}
               -\class{atlas-notation-token notation-id-mw-best-expert-loss}{L_*(T)},
               \qquad
-              L_*(T)=\min_{
-                \class{atlas-notation-token notation-id-mw-expert-index}{1\le i\le
-                \class{atlas-notation-token notation-id-mw-expert-count}{N}}}
+              L_*(T)=\min_{1\le i\le
+                \class{atlas-notation-token notation-id-mw-expert-count}{N}}
                 \class{atlas-notation-token notation-id-mw-expert-cumulative-loss}{L_i(T)}.
             \]
           </div>
@@ -379,16 +377,15 @@
           <div class="atlas-math atlas-notation-formula"
             data-formula-id="mw-regret-final-bound"
             data-notation-coverage="interactive"
-            data-required-notations="mw-regret,mw-expert-count,mw-learning-rate,mw-round,mw-regret-bound">
+            data-required-notations="mw-regret,mw-expert-count,mw-learning-rate,mw-round">
             \[
               \class{atlas-notation-token notation-id-mw-regret}{R_T}
               \le
-              \class{atlas-notation-token notation-id-mw-regret-bound}{
-                \frac{\ln
-                  \class{atlas-notation-token notation-id-mw-expert-count}{N}}{
-                  \class{atlas-notation-token notation-id-mw-learning-rate}{\eta}}
-                +\frac{\eta
-                  \class{atlas-notation-token notation-id-mw-round}{T}}{8}}.
+              \frac{\ln
+                \class{atlas-notation-token notation-id-mw-expert-count}{N}}{
+                \class{atlas-notation-token notation-id-mw-learning-rate}{\eta}}
+              +\frac{\eta
+                \class{atlas-notation-token notation-id-mw-round}{T}}{8}.
             \]
           </div>
           <p>
