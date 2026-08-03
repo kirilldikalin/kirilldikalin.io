@@ -39,6 +39,7 @@ const publishedChapterIds = new Set([
   "graph-language-traversals",
   "dag-topological-scc",
   "single-source-shortest-paths",
+  "all-pairs-shortest-paths",
 ]);
 
 function canonicalChapters() {

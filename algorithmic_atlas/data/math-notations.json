@@ -7260,6 +7260,294 @@
         "chapterId": "single-source-shortest-paths",
         "anchor": "complexity"
       }
+    },
+    {
+      "id": "apsp-graph",
+      "displayNotation": "G",
+      "shortName": "взвешенный граф APSP",
+      "explanation": "Ориентированный граф, в котором ищутся кратчайшие расстояния между всеми упорядоченными парами вершин",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-vertex-set",
+      "displayNotation": "V",
+      "shortName": "множество вершин APSP",
+      "explanation": "Конечное множество вершин входного взвешенного графа",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-edge-set",
+      "displayNotation": "E",
+      "shortName": "множество дуг APSP",
+      "explanation": "Ориентированные рёбра, задающие допустимые переходы между вершинами",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-weight",
+      "displayNotation": "w(P)",
+      "shortName": "вес дуги или пути",
+      "explanation": "Для пути это сумма числовых весов всех пройденных дуг",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-distance",
+      "displayNotation": "delta(u,v)",
+      "shortName": "расстояние между парой вершин",
+      "explanation": "Минимальный вес направленного пути из u в v при существовании конечного минимума",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-infinity",
+      "displayNotation": "+infinity",
+      "shortName": "недостижимая пара",
+      "explanation": "Метка отсутствия направленного пути между выбранной парой вершин",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "apsp-model"
+      }
+    },
+    {
+      "id": "apsp-distance-layer",
+      "displayNotation": "D^(k)_ij",
+      "shortName": "слой Floyd–Warshall",
+      "explanation": "Кратчайшее расстояние i в j среди путей с внутренними вершинами только из первого k-элементного префикса",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "floyd-invariant"
+      }
+    },
+    {
+      "id": "apsp-intermediate-prefix",
+      "displayNotation": "{1,...,k}",
+      "shortName": "разрешённые промежуточные вершины",
+      "explanation": "Префикс нумерации вершин, которыми путь может пользоваться внутри слоя динамики",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "floyd-invariant"
+      }
+    },
+    {
+      "id": "apsp-floyd-recurrence",
+      "displayNotation": "Floyd recurrence",
+      "shortName": "переход Floyd–Warshall",
+      "explanation": "Минимум между старым путём и путём, разделённым текущей промежуточной вершиной k",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "floyd-invariant"
+      }
+    },
+    {
+      "id": "apsp-intermediate",
+      "displayNotation": "k",
+      "shortName": "текущая промежуточная вершина",
+      "explanation": "Новая вершина, которую очередной слой Floyd–Warshall разрешает использовать внутри пути",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "floyd-invariant"
+      }
+    },
+    {
+      "id": "apsp-next-hop",
+      "displayNotation": "next[i,j]",
+      "shortName": "первый шаг пути",
+      "explanation": "Следующая вершина после i в восстановленном кратчайшем пути из i в j",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "path-reconstruction"
+      }
+    },
+    {
+      "id": "apsp-negative-diagonal",
+      "displayNotation": "D_kk < 0",
+      "shortName": "отрицательный диагональный элемент",
+      "explanation": "Свидетельствует, что из k можно вернуться в k по циклу отрицательного веса",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "negative-cycles"
+      }
+    },
+    {
+      "id": "apsp-negative-infinity",
+      "displayNotation": "-infinity",
+      "shortName": "конечного минимума нет",
+      "explanation": "Путь может проходить достижимый отрицательный цикл сколько угодно раз и не имеет минимального веса",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "negative-cycles"
+      }
+    },
+    {
+      "id": "apsp-min-plus-product",
+      "displayNotation": "A tensor B",
+      "shortName": "min-plus произведение",
+      "explanation": "Матричная операция, где сложение заменено минимумом, а умножение — сложением весов",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "min-plus"
+      }
+    },
+    {
+      "id": "apsp-min-plus-entry",
+      "displayNotation": "C_ij",
+      "shortName": "ячейка min-plus произведения",
+      "explanation": "Минимальная сумма A_ik плюс B_kj по всем возможным промежуточным индексам k",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "min-plus"
+      }
+    },
+    {
+      "id": "apsp-super-source",
+      "displayNotation": "q",
+      "shortName": "вспомогательный источник Johnson",
+      "explanation": "Новая вершина с нулевой дугой во все исходные вершины для вычисления потенциалов",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-potentials"
+      }
+    },
+    {
+      "id": "apsp-potential",
+      "displayNotation": "h(v)",
+      "shortName": "потенциал вершины Johnson",
+      "explanation": "Кратчайшее расстояние из вспомогательного источника q до вершины v",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-potentials"
+      }
+    },
+    {
+      "id": "apsp-reweighted-weight",
+      "displayNotation": "w'(u,v)",
+      "shortName": "перевзвешенный вес дуги",
+      "explanation": "Вес после добавления разности потенциалов концов, неотрицательный при корректных h",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-reweighting"
+      }
+    },
+    {
+      "id": "apsp-path-weight",
+      "displayNotation": "w'(P)",
+      "shortName": "перевзвешенный вес пути",
+      "explanation": "Сумма новых весов дуг пути, отличающаяся от исходной на телескопическую поправку концов",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-reweighting"
+      }
+    },
+    {
+      "id": "apsp-restored-distance",
+      "displayNotation": "distance restoration",
+      "shortName": "обратная поправка расстояния",
+      "explanation": "Удаляет из перевзвешенного расстояния потенциал начала и возвращает потенциал конца",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-reweighting"
+      }
+    },
+    {
+      "id": "apsp-reweighted-distance",
+      "displayNotation": "delta'(u,v)",
+      "shortName": "перевзвешенное расстояние",
+      "explanation": "Кратчайшее расстояние между u и v после преобразования весов Johnson",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "johnson-reweighting"
+      }
+    },
+    {
+      "id": "apsp-vertex-count",
+      "displayNotation": "n",
+      "shortName": "число вершин APSP",
+      "explanation": "Количество вершин входного графа задачи всех пар",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "apsp-edge-count",
+      "displayNotation": "m",
+      "shortName": "число дуг APSP",
+      "explanation": "Количество ориентированных рёбер входного графа задачи всех пар",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "apsp-time",
+      "displayNotation": "T",
+      "shortName": "время APSP",
+      "explanation": "Асимптотическая стоимость выбранного алгоритма всех пар в указанной модели данных",
+      "scope": "local",
+      "chapterId": "all-pairs-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "all-pairs-shortest-paths",
+        "anchor": "complexity"
+      }
     }
   ]
 }

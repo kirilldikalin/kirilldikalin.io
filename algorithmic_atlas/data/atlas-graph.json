@@ -2354,19 +2354,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "paths-and-trees",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "single-source-shortest-paths"
       ],
       "related": [],
-      "route": null,
-      "minutes": 58,
-      "reading": null,
+      "route": "./chapters/all-pairs-shortest-paths.html",
+      "minutes": 53,
+      "reading": {
+        "words": 4006,
+        "formulaBlocks": 12,
+        "proofBlocks": 2,
+        "theoryMinutes": 28,
+        "labMinutes": 25
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 500,
