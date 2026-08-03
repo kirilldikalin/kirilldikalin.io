@@ -2453,19 +2453,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "flows-and-matchings",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "max-flow-min-cut"
       ],
       "related": [],
-      "route": null,
-      "minutes": 63,
-      "reading": null,
+      "route": "./chapters/circulations-min-cost-flow.html",
+      "minutes": 56,
+      "reading": {
+        "words": 4027,
+        "formulaBlocks": 12,
+        "proofBlocks": 3,
+        "theoryMinutes": 29,
+        "labMinutes": 27
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 890,

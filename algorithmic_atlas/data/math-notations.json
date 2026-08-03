@@ -7908,6 +7908,285 @@
         "chapterId": "max-flow-min-cut",
         "anchor": "modeling"
       }
+    },
+    {
+      "id": "mcf-flow",
+      "displayNotation": "f_e",
+      "shortName": "поток по дуге циркуляции",
+      "explanation": "Количество потока, назначенное дуге e между её нижней и верхней границами",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-lower-bound",
+      "displayNotation": "ell_e",
+      "shortName": "нижняя граница потока",
+      "explanation": "Обязательный минимальный объём потока по дуге e",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-upper-bound",
+      "displayNotation": "u_e",
+      "shortName": "верхняя граница потока",
+      "explanation": "Максимально допустимый объём потока по дуге e",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-balance",
+      "displayNotation": "b_v",
+      "shortName": "требуемый баланс вершины",
+      "explanation": "Заданный чистый приток вершины v; знак отличает спрос от предложения",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-inflow",
+      "displayNotation": "sum in f",
+      "shortName": "суммарный приток",
+      "explanation": "Сумма потоков по всем дугам, входящим в вершину",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-outflow",
+      "displayNotation": "sum out f",
+      "shortName": "суммарный отток",
+      "explanation": "Сумма потоков по всем дугам, выходящим из вершины",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-edge-set",
+      "displayNotation": "E",
+      "shortName": "дуги циркуляции",
+      "explanation": "Множество направленных дуг сети с границами и стоимостями",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-unit-cost",
+      "displayNotation": "c_e",
+      "shortName": "стоимость единицы потока",
+      "explanation": "Изменение целевой функции при проведении одной единицы по дуге e",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-total-cost",
+      "displayNotation": "C(f)",
+      "shortName": "общая стоимость потока",
+      "explanation": "Сумма произведений потока каждой дуги на её удельную стоимость",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "mcf-model"}
+    },
+    {
+      "id": "mcf-variable-flow",
+      "displayNotation": "x_e",
+      "shortName": "поток сверх нижней границы",
+      "explanation": "Переменная часть f_e после фиксации обязательного потока ell_e",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "mcf-residual-capacity",
+      "displayNotation": "U_e",
+      "shortName": "переменная ёмкость",
+      "explanation": "Разность верхней и нижней границ, доступная после сдвига переменной",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "mcf-adjusted-balance",
+      "displayNotation": "d_v",
+      "shortName": "скорректированный баланс",
+      "explanation": "Оставшийся баланс вершины после учёта обязательных нижних потоков",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "mcf-lower-net",
+      "displayNotation": "lower inflow minus outflow",
+      "shortName": "чистый приток нижних границ",
+      "explanation": "Баланс, уже созданный обязательными нижними значениями на дугах",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "mcf-super-source",
+      "displayNotation": "sigma",
+      "shortName": "вспомогательный источник",
+      "explanation": "Вершина вспомогательной сети, подающая суммарное предложение",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "feasible-reduction"}
+    },
+    {
+      "id": "mcf-super-sink",
+      "displayNotation": "tau",
+      "shortName": "вспомогательный сток",
+      "explanation": "Вершина вспомогательной сети, собирающая суммарный спрос",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "feasible-reduction"}
+    },
+    {
+      "id": "mcf-required-value",
+      "displayNotation": "B",
+      "shortName": "обязательный объём",
+      "explanation": "Суммарный объём предложения, который вспомогательный max-flow обязан доставить",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "feasible-reduction"}
+    },
+    {
+      "id": "mcf-forward-residual",
+      "displayNotation": "e+",
+      "shortName": "прямая остаточная дуга",
+      "explanation": "Возможность увеличить переменную часть потока по исходной дуге",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "residual"}
+    },
+    {
+      "id": "mcf-reverse-residual",
+      "displayNotation": "e-",
+      "shortName": "обратная остаточная дуга",
+      "explanation": "Возможность отменить часть ранее назначенного переменного потока",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "residual"}
+    },
+    {
+      "id": "mcf-residual-cost",
+      "displayNotation": "c_f(u,v)",
+      "shortName": "стоимость остаточной дуги",
+      "explanation": "Изменение общей стоимости при единичной поправке по остаточной дуге",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "residual"}
+    },
+    {
+      "id": "mcf-residual-cycle",
+      "displayNotation": "C",
+      "shortName": "остаточный цикл",
+      "explanation": "Направленный цикл положительной остаточной ёмкости, сохраняющий балансы при поправке",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "optimality"}
+    },
+    {
+      "id": "mcf-cycle-cost",
+      "displayNotation": "c(C)",
+      "shortName": "стоимость остаточного цикла",
+      "explanation": "Сумма стоимостей всех остаточных дуг цикла C",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "optimality"}
+    },
+    {
+      "id": "mcf-bottleneck",
+      "displayNotation": "Delta",
+      "shortName": "остаточное горлышко цикла",
+      "explanation": "Минимальная остаточная ёмкость дуги выбранного цикла или пути",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "optimality"}
+    },
+    {
+      "id": "mcf-potential",
+      "displayNotation": "pi(v)",
+      "shortName": "потенциал вершины",
+      "explanation": "Двойственная метка, преобразующая остаточные стоимости без изменения порядка путей",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "potentials"}
+    },
+    {
+      "id": "mcf-reduced-cost",
+      "displayNotation": "c-hat_pi(u,v)",
+      "shortName": "приведённая стоимость",
+      "explanation": "Остаточная стоимость с добавленной разностью потенциалов концов дуги",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "potentials"}
+    },
+    {
+      "id": "mcf-path",
+      "displayNotation": "P:s to t",
+      "shortName": "остаточный путь",
+      "explanation": "Путь между выбранными вершинами по дугам положительной остаточной ёмкости",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "potentials"}
+    },
+    {
+      "id": "mcf-path-cost",
+      "displayNotation": "c(P)",
+      "shortName": "исходная стоимость пути",
+      "explanation": "Сумма неприведённых стоимостей остаточных дуг пути P",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "potentials"}
+    },
+    {
+      "id": "mcf-reduced-path-cost",
+      "displayNotation": "c-hat_pi(P)",
+      "shortName": "приведённая стоимость пути",
+      "explanation": "Сумма приведённых стоимостей дуг пути с телескопической поправкой потенциалов концов",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "potentials"}
+    },
+    {
+      "id": "mcf-integral-optimum",
+      "displayNotation": "f* in Z^E",
+      "shortName": "целочисленный оптимум",
+      "explanation": "Оптимальная допустимая циркуляция с целыми значениями потока на всех дугах",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "integrality"}
+    },
+    {
+      "id": "mcf-vertex-count",
+      "displayNotation": "n",
+      "shortName": "число вершин min-cost flow",
+      "explanation": "Количество вершин рассматриваемой сети",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "complexity"}
+    },
+    {
+      "id": "mcf-edge-count",
+      "displayNotation": "m",
+      "shortName": "число дуг min-cost flow",
+      "explanation": "Количество исходных направленных дуг сети",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "complexity"}
+    },
+    {
+      "id": "mcf-time",
+      "displayNotation": "T_SSP",
+      "shortName": "время successive shortest paths",
+      "explanation": "Модельная стоимость последовательных увеличений по кратчайшим остаточным путям",
+      "scope": "local",
+      "chapterId": "circulations-min-cost-flow",
+      "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "complexity"}
     }
   ]
 }
