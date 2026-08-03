@@ -2288,19 +2288,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "graph-foundations",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "graph-language-traversals"
       ],
       "related": [],
-      "route": null,
-      "minutes": 55,
-      "reading": null,
+      "route": "./chapters/dag-topological-scc.html",
+      "minutes": 51,
+      "reading": {
+        "words": 4035,
+        "formulaBlocks": 9,
+        "proofBlocks": 1,
+        "theoryMinutes": 27,
+        "labMinutes": 24
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 340,

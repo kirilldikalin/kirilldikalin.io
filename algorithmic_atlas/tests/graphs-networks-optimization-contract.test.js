@@ -37,6 +37,7 @@ const expectedIds = new Map([
 // only in the same commit that adds the real page, laboratory and tests.
 const publishedChapterIds = new Set([
   "graph-language-traversals",
+  "dag-topological-scc",
 ]);
 
 function canonicalChapters() {

@@ -6888,6 +6888,162 @@
         "chapterId": "graph-language-traversals",
         "anchor": "complexity"
       }
+    },
+    {
+      "id": "dag-directed-graph",
+      "displayNotation": "G",
+      "shortName": "ориентированный граф",
+      "explanation": "Граф, каждое ребро которого задаёт направленную дугу от начала к концу",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "directed-graph-model"
+      }
+    },
+    {
+      "id": "dag-vertex-set",
+      "displayNotation": "V",
+      "shortName": "вершины ориентированного графа",
+      "explanation": "Конечное множество объектов, между которыми заданы направленные зависимости",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "directed-graph-model"
+      }
+    },
+    {
+      "id": "dag-edge-set",
+      "displayNotation": "E",
+      "shortName": "дуги ориентированного графа",
+      "explanation": "Подмножество V на V, задающее разрешённые направленные переходы",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "directed-graph-model"
+      }
+    },
+    {
+      "id": "dag-reachability",
+      "displayNotation": "leadsto",
+      "shortName": "направленная достижимость",
+      "explanation": "Отношение означает существование направленного пути от левой вершины к правой",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "directed-graph-model"
+      }
+    },
+    {
+      "id": "dag-graph",
+      "displayNotation": "G is DAG",
+      "shortName": "ориентированный ациклический граф",
+      "explanation": "Ориентированный граф, в котором не существует направленного цикла",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "dag-definition"
+      }
+    },
+    {
+      "id": "dag-partial-order",
+      "displayNotation": "u preceq v",
+      "shortName": "частичный порядок достижимости",
+      "explanation": "В DAG вершина u предшествует v, если из u существует направленный путь в v",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "partial-order"
+      }
+    },
+    {
+      "id": "dag-topological-order",
+      "displayNotation": "pi",
+      "shortName": "топологический порядок",
+      "explanation": "Биекция позиций, в которой начало каждой дуги стоит раньше её конца",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "topological-order"
+      }
+    },
+    {
+      "id": "dag-indegree",
+      "displayNotation": "d^-_R(v)",
+      "shortName": "остаточная входящая степень",
+      "explanation": "Число дуг в v из вершин ещё не удалённого множества R в алгоритме Кана",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "kahn-proof"
+      }
+    },
+    {
+      "id": "scc-component",
+      "displayNotation": "SCC(u)",
+      "shortName": "сильная компонента вершины",
+      "explanation": "Максимальный класс вершин, взаимно достижимых с вершиной u",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "scc-definition"
+      }
+    },
+    {
+      "id": "scc-condensation",
+      "displayNotation": "Cond(G)",
+      "shortName": "граф конденсации",
+      "explanation": "DAG, полученный сжатием каждой сильной компоненты исходного графа в одну вершину",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "condensation"
+      }
+    },
+    {
+      "id": "scc-index",
+      "displayNotation": "index[v]",
+      "shortName": "индекс открытия Тарьяна",
+      "explanation": "Последовательный номер, присвоенный вершине v при первом входе DFS",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "tarjan"
+      }
+    },
+    {
+      "id": "scc-lowlink",
+      "displayNotation": "low[v]",
+      "shortName": "low-link вершины",
+      "explanation": "Минимальный индекс активной вершины, достижимой из текущего DFS-поддерева разрешённым обратным переходом",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "tarjan"
+      }
+    },
+    {
+      "id": "scc-active-stack",
+      "displayNotation": "S",
+      "shortName": "стек активных вершин",
+      "explanation": "Вершины DFS, открытые алгоритмом Тарьяна, но ещё не назначенные готовой сильной компоненте",
+      "scope": "local",
+      "chapterId": "dag-topological-scc",
+      "firstDefinition": {
+        "chapterId": "dag-topological-scc",
+        "anchor": "tarjan"
+      }
     }
   ]
 }
