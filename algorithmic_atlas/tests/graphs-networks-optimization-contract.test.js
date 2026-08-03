@@ -49,6 +49,7 @@ const publishedChapterIds = new Set([
   "dynamic-graph-algorithms",
   "linear-algebra-for-graphs",
   "spectral-graph-algorithms",
+  "parallel-distributed-graphs",
 ]);
 
 function canonicalChapters() {

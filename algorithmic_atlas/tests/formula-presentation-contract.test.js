@@ -360,10 +360,10 @@ function validateFormulaMetadata(formulas, options = {}) {
 
 test("formula presentation policy is a closed reviewed snapshot", () => {
   assert.equal(policy.schemaVersion, 1);
-  assert.equal(policy.snapshot.publishedChapterCount, 56);
-  assert.equal(policy.snapshot.displayFormulaTotal, 516);
+  assert.equal(policy.snapshot.publishedChapterCount, 57);
+  assert.equal(policy.snapshot.displayFormulaTotal, 524);
   assert.equal(policy.snapshot.basicFormulaTotal, 35);
-  assert.equal(policy.snapshot.interactiveFormulaTotal, 481);
+  assert.equal(policy.snapshot.interactiveFormulaTotal, 489);
   assert.equal(
     policy.snapshot.basicFormulaTotal + policy.snapshot.interactiveFormulaTotal,
     policy.snapshot.displayFormulaTotal

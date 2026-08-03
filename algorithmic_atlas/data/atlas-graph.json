@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-17",
+  "datasetVersion": "2026.08.03-18",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2684,19 +2684,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "traveling-salesman-exact"
       ],
       "related": [],
-      "route": null,
-      "minutes": 58,
-      "reading": null,
+      "route": "./chapters/parallel-distributed-graphs.html",
+      "minutes": 55,
+      "reading": {
+        "words": 4007,
+        "formulaBlocks": 8,
+        "proofBlocks": 3,
+        "theoryMinutes": 28,
+        "labMinutes": 27
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1630,

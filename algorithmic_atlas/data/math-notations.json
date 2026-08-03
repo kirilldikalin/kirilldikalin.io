@@ -9411,6 +9411,141 @@
       "scope": "local",
       "chapterId": "spectral-graph-algorithms",
       "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
+    },
+    {
+      "id": "parallel-graph-work",
+      "displayNotation": "W",
+      "shortName": "суммарная работа",
+      "explanation": "Общее число модельных операций во всём DAG параллельного вычисления",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "work-span"}
+    },
+    {
+      "id": "parallel-graph-processors",
+      "displayNotation": "P",
+      "shortName": "число процессоров",
+      "explanation": "Количество параллельных исполнителей, доступных планировщику",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "work-span"}
+    },
+    {
+      "id": "parallel-graph-span",
+      "displayNotation": "S",
+      "shortName": "критический путь",
+      "explanation": "Длина самой длинной цепочки зависимых операций при неограниченном числе процессоров",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "work-span"}
+    },
+    {
+      "id": "parallel-frontier",
+      "displayNotation": "F_i",
+      "shortName": "фронт уровня",
+      "explanation": "Вершины, обрабатываемые одновременно на уровне i параллельного BFS",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "parallel-bfs"}
+    },
+    {
+      "id": "parallel-bfs-distance",
+      "displayNotation": "d(v)",
+      "shortName": "расстояние BFS",
+      "explanation": "Число рёбер в кратчайшем пути от источника до вершины v",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "parallel-bfs"}
+    },
+    {
+      "id": "parallel-parent-pointer",
+      "displayNotation": "p_i(v)",
+      "shortName": "указатель на предка",
+      "explanation": "Родительский указатель вершины v после i раундов сжатия леса",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "pointer-jumping"}
+    },
+    {
+      "id": "parallel-pointer-round",
+      "displayNotation": "h_i",
+      "shortName": "высота после раунда",
+      "explanation": "Максимальная оставшаяся высота цепочки указателей после i раундов",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "pointer-jumping"}
+    },
+    {
+      "id": "parallel-component-count",
+      "displayNotation": "c_i",
+      "shortName": "число компонент",
+      "explanation": "Количество текущих компонент перед фазой i алгоритма Boruvka",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "parallel-mst"}
+    },
+    {
+      "id": "parallel-mis-set",
+      "displayNotation": "I",
+      "shortName": "максимальное по включению независимое множество",
+      "explanation": "Независимое множество, в которое нельзя добавить ещё одну вершину",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "mis"}
+    },
+    {
+      "id": "parallel-random-priority",
+      "displayNotation": "\\pi(v)",
+      "shortName": "случайный приоритет",
+      "explanation": "Случайный приоритет активной вершины v в текущем раунде Luby",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "mis"}
+    },
+    {
+      "id": "distributed-round-count",
+      "displayNotation": "R",
+      "shortName": "число раундов",
+      "explanation": "Количество синхронных коммуникационных раундов распределённого алгоритма",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "distributed-model"}
+    },
+    {
+      "id": "distributed-cut-edges",
+      "displayNotation": "\\delta(S)",
+      "shortName": "рёбра разреза",
+      "explanation": "Рёбра с одним концом в S и другим вне S, через которые проходит информация",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "distributed-bandwidth",
+      "displayNotation": "B",
+      "shortName": "пропускная способность ребра",
+      "explanation": "Максимальное число бит, передаваемых по одному ребру за синхронный раунд",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "parallel-load-skew",
+      "displayNotation": "skew",
+      "shortName": "перекос нагрузки",
+      "explanation": "Отношение максимальной нагрузки секции к средней нагрузке непустого раунда",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "partitioning"}
+    },
+    {
+      "id": "parallel-partition-load",
+      "displayNotation": "L_j",
+      "shortName": "нагрузка секции",
+      "explanation": "Число операций с рёбрами текущего фронта, назначенных секции j",
+      "scope": "local",
+      "chapterId": "parallel-distributed-graphs",
+      "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "partitioning"}
     }
   ]
 }
