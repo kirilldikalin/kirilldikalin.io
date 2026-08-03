@@ -120,7 +120,12 @@ test("free exploration removes route fog but never development fog", () => {
   assert.deepEqual(
     new Set(core.continentContinuations(graph, "algorithm-design")
       .map(({ continuation }) => continuation.curriculumId)),
-    new Set(["5.1", "5.5", "6.5", "7.13", "8.4", "8.9", "8.14"])
+    new Set(["6.5", "7.13", "8.4", "8.9", "8.14"])
+  );
+  assert.deepEqual(
+    new Set(core.continentContinuations(graph, "graphs-networks-optimization")
+      .map(({ continuation }) => continuation.curriculumId)),
+    new Set(["6.1", "7.9", "7.11", "8.10", "9.3", "9.4"])
   );
   assert.match(
     atlasScript,

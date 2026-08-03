@@ -1,0 +1,211 @@
+@import url("lab-layout.css");
+
+.atlas-graph-lab,
+.atlas-graph__svg {
+  --graph-node-fill: var(--chapter-paper);
+  --graph-node-stroke: var(--chapter-ink);
+  --graph-edge: color-mix(in srgb, var(--chapter-ink) 62%, transparent);
+  --graph-active: var(--chapter-accent);
+  --graph-visited: #356b45;
+  --graph-candidate: #8a6d3b;
+  --graph-rejected: #9b3d32;
+  width: 100%;
+  min-width: 0;
+}
+
+.atlas-graph__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  margin: 0 0 0.55rem;
+}
+
+.atlas-graph__toolbar button {
+  min-width: 2.6rem;
+  min-height: 2.6rem;
+  border: 1px solid var(--chapter-line);
+  padding: 0.45rem 0.65rem;
+  background: var(--chapter-bg);
+  color: var(--chapter-ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.atlas-graph__toolbar button:hover {
+  border-color: var(--chapter-accent);
+  color: var(--chapter-accent);
+}
+
+.atlas-graph__toolbar button:focus-visible,
+.atlas-graph__svg:focus-visible,
+.atlas-graph__node:focus-visible {
+  outline: 3px solid var(--chapter-focus);
+  outline-offset: 2px;
+}
+
+.atlas-graph__scale {
+  min-width: 4.5rem;
+  margin-inline-start: auto;
+  color: var(--chapter-muted);
+  text-align: end;
+}
+
+.atlas-lab .atlas-graph__svg,
+.atlas-graph__svg {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-height: clamp(19rem, 58vw, 39rem);
+  overflow: hidden;
+  border: 1px solid var(--chapter-line);
+  background:
+    linear-gradient(color-mix(in srgb, var(--chapter-line) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--chapter-line) 14%, transparent) 1px, transparent 1px),
+    var(--chapter-bg);
+  background-size: 2rem 2rem;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+
+.atlas-graph__svg.is-panning {
+  cursor: grabbing;
+}
+
+.atlas-graph__viewport {
+  transform-origin: 0 0;
+  transition: transform 150ms ease-out;
+}
+
+.atlas-graph__svg.is-panning .atlas-graph__viewport {
+  transition: none;
+}
+
+.atlas-graph__edge-line {
+  fill: none;
+  stroke: var(--graph-edge);
+  stroke-width: 2.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-graph__arrow {
+  fill: var(--graph-edge);
+  fill: context-stroke;
+  stroke: none;
+}
+
+.atlas-graph__edge-label {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--chapter-bg);
+  stroke-linejoin: round;
+  stroke-width: 5px;
+}
+
+.atlas-graph__node {
+  cursor: pointer;
+}
+
+.atlas-graph__node-shape {
+  fill: var(--graph-node-fill);
+  stroke: var(--graph-node-stroke);
+  stroke-width: 2.4;
+  vector-effect: non-scaling-stroke;
+  transition: fill 150ms ease-out, stroke 150ms ease-out, stroke-width 150ms ease-out;
+}
+
+.atlas-graph__node-label {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.atlas-graph__node:hover .atlas-graph__node-shape,
+.atlas-graph__node:focus .atlas-graph__node-shape {
+  stroke: var(--chapter-focus);
+  stroke-width: 3.5;
+}
+
+.atlas-graph__node.is-active .atlas-graph__node-shape,
+.atlas-graph__edge.is-active .atlas-graph__edge-line {
+  fill: color-mix(in srgb, var(--graph-active) 16%, var(--chapter-paper));
+  stroke: var(--graph-active);
+  stroke-width: 4;
+}
+
+.atlas-graph__node.is-visited .atlas-graph__node-shape,
+.atlas-graph__edge.is-visited .atlas-graph__edge-line {
+  fill: color-mix(in srgb, var(--graph-visited) 14%, var(--chapter-paper));
+  stroke: var(--graph-visited);
+}
+
+.atlas-graph__node.is-candidate .atlas-graph__node-shape,
+.atlas-graph__edge.is-candidate .atlas-graph__edge-line {
+  fill: color-mix(in srgb, var(--graph-candidate) 14%, var(--chapter-paper));
+  stroke: var(--graph-candidate);
+  stroke-dasharray: 7 4;
+}
+
+.atlas-graph__node.is-rejected .atlas-graph__node-shape,
+.atlas-graph__edge.is-rejected .atlas-graph__edge-line {
+  fill: color-mix(in srgb, var(--graph-rejected) 12%, var(--chapter-paper));
+  stroke: var(--graph-rejected);
+  stroke-dasharray: 3 4;
+}
+
+.atlas-graph__node.is-dimmed,
+.atlas-graph__edge.is-dimmed {
+  opacity: 0.28;
+}
+
+.atlas-graph__edge.is-active .atlas-graph__arrow {
+  fill: var(--graph-active);
+}
+
+@media (max-width: 42rem) {
+  .atlas-lab .atlas-graph__svg,
+  .atlas-graph__svg {
+    min-height: 23rem;
+  }
+
+  .atlas-graph__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 0.35rem;
+    background: color-mix(in srgb, var(--chapter-paper) 94%, transparent);
+  }
+
+  .atlas-graph__toolbar button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+
+  .atlas-graph__edge-label,
+  .atlas-graph__node-label {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .atlas-graph-lab,
+  .atlas-graph__svg {
+    --graph-visited: #7dca91;
+    --graph-candidate: #e0ba71;
+    --graph-rejected: #ef8e83;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-graph__viewport,
+  .atlas-graph__node-shape {
+    transition: none;
+  }
+}

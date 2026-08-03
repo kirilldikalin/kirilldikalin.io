@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.01-10",
+  "datasetVersion": "2026.08.03-11",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -338,16 +338,6 @@
           "position": 90
         }
       ],
-      "continuation": {
-        "curriculumId": "5.1",
-        "title": "Язык графов, представления и обходы",
-        "targetContinentId": "graphs-networks-optimization",
-        "kind": "route",
-        "position": {
-          "x": 1580,
-          "y": 470
-        }
-      },
       "relatedContinuations": [
         {
           "curriculumId": "8.4",
@@ -382,17 +372,7 @@
           "nodeId": "matroids",
           "position": 10
         }
-      ],
-      "continuation": {
-        "curriculumId": "5.5",
-        "title": "Минимальные остовные деревья",
-        "targetContinentId": "graphs-networks-optimization",
-        "kind": "related",
-        "position": {
-          "x": 630,
-          "y": 875
-        }
-      }
+      ]
     },
     {
       "id": "algorithm-design-advanced-dp",
@@ -466,6 +446,173 @@
           "y": 940
         }
       }
+    },
+    {
+      "id": "graphs-main",
+      "title": "Основной маршрут графов, сетей и оптимизации",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "graphs-networks-optimization",
+      "entries": [
+        {
+          "nodeId": "graph-language-traversals",
+          "position": 10
+        },
+        {
+          "nodeId": "dag-topological-scc",
+          "position": 20
+        },
+        {
+          "nodeId": "single-source-shortest-paths",
+          "position": 30
+        },
+        {
+          "nodeId": "minimum-spanning-trees",
+          "position": 40
+        },
+        {
+          "nodeId": "max-flow-min-cut",
+          "position": 50
+        },
+        {
+          "nodeId": "graph-matchings",
+          "position": 60
+        },
+        {
+          "nodeId": "connectivity-cuts-network-design",
+          "position": 70
+        },
+        {
+          "nodeId": "traveling-salesman-exact",
+          "position": 80
+        },
+        {
+          "nodeId": "parallel-distributed-graphs",
+          "position": 90
+        }
+      ],
+      "continuation": {
+        "curriculumId": "6.1",
+        "title": "Строки и точный поиск образца",
+        "targetContinentId": "strings-geometry-numerics",
+        "kind": "route",
+        "position": {
+          "x": 1680,
+          "y": 560
+        }
+      },
+      "relatedContinuations": [
+        {
+          "curriculumId": "7.9",
+          "title": "Set Cover и Vertex Cover",
+          "targetContinentId": "randomization-approximation",
+          "kind": "related",
+          "sourceNodeId": "max-flow-min-cut",
+          "position": {
+            "x": 1040,
+            "y": 1010
+          }
+        },
+        {
+          "curriculumId": "7.11",
+          "title": "Метрический TSP",
+          "targetContinentId": "randomization-approximation",
+          "kind": "related",
+          "sourceNodeId": "traveling-salesman-exact",
+          "position": {
+            "x": 1480,
+            "y": 930
+          }
+        },
+        {
+          "curriculumId": "9.3",
+          "title": "Параллельные алгоритмы: work/span и PRAM",
+          "targetContinentId": "big-data-modern-models",
+          "kind": "related",
+          "sourceNodeId": "parallel-distributed-graphs",
+          "position": {
+            "x": 1600,
+            "y": 1010
+          }
+        },
+        {
+          "curriculumId": "9.4",
+          "title": "Распределённые модели: LOCAL, CONGEST и MPC",
+          "targetContinentId": "big-data-modern-models",
+          "kind": "related",
+          "sourceNodeId": "parallel-distributed-graphs",
+          "position": {
+            "x": 1720,
+            "y": 1110
+          }
+        }
+      ]
+    },
+    {
+      "id": "graphs-all-pairs",
+      "title": "Кратчайшие пути между всеми парами",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "graphs-networks-optimization",
+      "entries": [
+        {
+          "nodeId": "all-pairs-shortest-paths",
+          "position": 10
+        }
+      ]
+    },
+    {
+      "id": "graphs-min-cost-flow",
+      "title": "Циркуляции и потоки минимальной стоимости",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "graphs-networks-optimization",
+      "entries": [
+        {
+          "nodeId": "circulations-min-cost-flow",
+          "position": 10
+        }
+      ]
+    },
+    {
+      "id": "graphs-dynamic",
+      "title": "Динамические графовые алгоритмы",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "graphs-networks-optimization",
+      "entries": [
+        {
+          "nodeId": "dynamic-graph-algorithms",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "8.10",
+        "title": "ETH, SETH и fine-grained complexity",
+        "targetContinentId": "complexity-limits",
+        "kind": "related",
+        "position": {
+          "x": 1250,
+          "y": 1080
+        }
+      }
+    },
+    {
+      "id": "graphs-spectral",
+      "title": "Линейная алгебра и спектральные методы",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "graphs-networks-optimization",
+      "entries": [
+        {
+          "nodeId": "linear-algebra-for-graphs",
+          "position": 10
+        },
+        {
+          "nodeId": "spectral-graph-algorithms",
+          "position": 20
+        }
+      ]
     }
   ],
   "continents": [
@@ -648,13 +795,14 @@
       "id": "graphs-networks-optimization",
       "name": "Графы, сети и оптимизация",
       "description": "Маршруты, потоки, связи и задачи выбора на сетевых структурах",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "algorithm-design"
       ],
       "related": [
-        "complexity-limits"
+        "randomization-approximation",
+        "big-data-modern-models"
       ],
       "worldPosition": {
         "x": 694,
@@ -665,8 +813,28 @@
         "height": 116
       },
       "shapeVariant": 0,
-      "localMap": null,
-      "regions": []
+      "localMap": {
+        "viewBox": "0 0 1800 1180",
+        "landPath": "M54 418 C30 264 106 112 252 62 C380 18 489 73 610 49 C747 22 866 77 992 49 C1132 19 1294 52 1435 126 C1581 203 1763 328 1740 480 C1724 589 1780 692 1701 792 C1624 890 1492 860 1368 878 C1229 899 1142 1001 997 965 C864 932 760 1012 620 955 C498 905 366 949 252 861 C139 773 79 586 54 418 Z"
+      },
+      "regions": [
+        {
+          "id": "graph-foundations",
+          "name": "Язык графов и обходы"
+        },
+        {
+          "id": "paths-and-trees",
+          "name": "Пути и остовы"
+        },
+        {
+          "id": "flows-and-matchings",
+          "name": "Потоки и паросочетания"
+        },
+        {
+          "id": "network-analysis",
+          "name": "Разрезы, оптимизация и спектр"
+        }
+      ]
     },
     {
       "id": "strings-geometry-numerics",
@@ -724,8 +892,7 @@
         "randomization-approximation"
       ],
       "related": [
-        "origins-efficiency",
-        "graphs-networks-optimization"
+        "origins-efficiency"
       ],
       "worldPosition": {
         "x": 650,
@@ -1794,7 +1961,9 @@
       "prerequisites": [
         "greedy-algorithms"
       ],
-      "related": [],
+      "related": [
+        "minimum-spanning-trees"
+      ],
       "route": "./chapters/matroids.html",
       "minutes": 42,
       "reading": {
@@ -2076,6 +2245,384 @@
       "position": {
         "x": 1510,
         "y": 690
+      }
+    },
+    {
+      "id": "graph-language-traversals",
+      "curriculumId": "5.1",
+      "title": "Язык графов, представления и обходы",
+      "description": "Как описывать сетевую структуру и систематически исследовать её очередью или стеком",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "graph-foundations",
+      "type": "theory",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "reductions-and-formulations"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 38,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 150,
+        "y": 210
+      }
+    },
+    {
+      "id": "dag-topological-scc",
+      "curriculumId": "5.2",
+      "title": "DAG, топологическая сортировка и сильная связность",
+      "description": "Как порядок зависимостей, циклы и сильные компоненты раскрывают устройство ориентированного графа",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "graph-foundations",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "graph-language-traversals"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 55,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 340,
+        "y": 120
+      }
+    },
+    {
+      "id": "single-source-shortest-paths",
+      "curriculumId": "5.3",
+      "title": "Кратчайшие пути из одной вершины",
+      "description": "Как выбирать алгоритм кратчайших путей по весам и структуре графа и доказывать безопасность релаксаций",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "paths-and-trees",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "dag-topological-scc"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 62,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 530,
+        "y": 210
+      }
+    },
+    {
+      "id": "all-pairs-shortest-paths",
+      "curriculumId": "5.4",
+      "title": "Кратчайшие пути между всеми парами",
+      "description": "Как динамическое программирование, перевзвешивание и структура графа меняют задачу всех пар",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "paths-and-trees",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "single-source-shortest-paths"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 500,
+        "y": 510
+      }
+    },
+    {
+      "id": "minimum-spanning-trees",
+      "curriculumId": "5.5",
+      "title": "Минимальные остовные деревья",
+      "description": "Почему безопасные рёбра через разрезы объединяют все вершины с минимальным суммарным весом",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "paths-and-trees",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "single-source-shortest-paths"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 52,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 720,
+        "y": 120
+      }
+    },
+    {
+      "id": "max-flow-min-cut",
+      "curriculumId": "5.6",
+      "title": "Максимальный поток и минимальный разрез",
+      "description": "Как остаточная сеть превращает локальные увеличения потока в глобальный сертификат оптимальности",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "flows-and-matchings",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "minimum-spanning-trees"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 65,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 920,
+        "y": 210
+      }
+    },
+    {
+      "id": "circulations-min-cost-flow",
+      "curriculumId": "5.7",
+      "title": "Циркуляции и потоки минимальной стоимости",
+      "description": "Как нижние границы, балансы, стоимости и потенциалы расширяют модель максимального потока",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "flows-and-matchings",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "max-flow-min-cut"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 63,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 890,
+        "y": 520
+      }
+    },
+    {
+      "id": "graph-matchings",
+      "curriculumId": "5.8",
+      "title": "Паросочетания",
+      "description": "Как чередующиеся пути увеличивают паросочетание и почему нечётный цикл требует сжатия цветка",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "flows-and-matchings",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "max-flow-min-cut"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 64,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 1110,
+        "y": 120
+      }
+    },
+    {
+      "id": "connectivity-cuts-network-design",
+      "curriculumId": "5.9",
+      "title": "Связность, разрезы и проектирование сетей",
+      "description": "Как локальные значения low-link, пути и разрезы описывают устойчивость сети к отказам",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "theory",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "graph-matchings"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 1290,
+        "y": 210
+      }
+    },
+    {
+      "id": "traveling-salesman-exact",
+      "curriculumId": "5.10",
+      "title": "Коммивояжер: точные методы и метрическая структура",
+      "description": "Как полный перебор, динамика по подмножествам и нижние границы совместно ищут точный тур",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "connectivity-cuts-network-design"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 1470,
+        "y": 120
+      }
+    },
+    {
+      "id": "dynamic-graph-algorithms",
+      "curriculumId": "5.11",
+      "title": "Динамические графовые алгоритмы",
+      "description": "Как отвечать на запросы между обновлениями графа и измерять компромисс между update и query",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "connectivity-cuts-network-design"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 57,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 1260,
+        "y": 520
+      }
+    },
+    {
+      "id": "linear-algebra-for-graphs",
+      "curriculumId": "5.12",
+      "title": "Линейная алгебра для графовых алгоритмов",
+      "description": "Как матрицы смежности, инцидентности и Лапласиан переводят структуру графа в геометрию",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "math",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "minimum-spanning-trees"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 60,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 670,
+        "y": 760
+      }
+    },
+    {
+      "id": "spectral-graph-algorithms",
+      "curriculumId": "5.13",
+      "title": "Спектральные алгоритмы на графах",
+      "description": "Как собственные векторы, проводимость и случайные блуждания обнаруживают крупномасштабную структуру графа",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "math",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "linear-algebra-for-graphs"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 62,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 850,
+        "y": 850
+      }
+    },
+    {
+      "id": "parallel-distributed-graphs",
+      "curriculumId": "5.14",
+      "title": "Параллельные и распределённые графовые алгоритмы",
+      "description": "Как работа, критический путь, раунды и коммуникация меняют исполнение привычных графовых процедур",
+      "continentId": "graphs-networks-optimization",
+      "regionId": "network-analysis",
+      "type": "algorithm",
+      "publication": "planned",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "traveling-salesman-exact"
+      ],
+      "related": [],
+      "route": null,
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": false,
+        "interactive": false,
+        "exercises": false
+      },
+      "position": {
+        "x": 1630,
+        "y": 280
       }
     }
   ]

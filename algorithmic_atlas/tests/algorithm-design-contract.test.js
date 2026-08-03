@@ -167,7 +167,7 @@ test("continent 04 routes and branch dependencies match the curriculum", () => {
   ).kind, "route");
 });
 
-test("continent 04 exposes only the seven canonical future exits", () => {
+test("continent 04 keeps only unresolved canonical future exits", () => {
   const continuations = core.continentContinuations(graph, "algorithm-design");
   const byCurriculumId = new Map(continuations.map((item) => [
     item.continuation.curriculumId,
@@ -175,12 +175,18 @@ test("continent 04 exposes only the seven canonical future exits", () => {
   ]));
   assert.deepEqual(
     Array.from(byCurriculumId.keys()).sort(),
-    ["5.1", "5.5", "6.5", "7.13", "8.14", "8.4", "8.9"].sort()
+    ["6.5", "7.13", "8.14", "8.4", "8.9"].sort()
   );
-  assert.equal(byCurriculumId.get("5.1").continuation.kind, "route");
-  ["5.5", "6.5", "7.13", "8.4", "8.9", "8.14"].forEach((id) => {
+  ["6.5", "7.13", "8.4", "8.9", "8.14"].forEach((id) => {
     assert.equal(byCurriculumId.get(id).continuation.kind, "related");
   });
+  assert.equal(
+    core.routeNeighbors(graph, "reductions-and-formulations").next.id,
+    "graph-language-traversals"
+  );
+  assert.ok(core.nodeMap(graph).get("matroids").related.includes(
+    "minimum-spanning-trees"
+  ));
   assert.equal(byCurriculumId.get("8.4").source.id, "reductions-and-formulations");
   assert.equal(byCurriculumId.get("8.14").source.id, "reductions-and-formulations");
   assert.equal(

@@ -37,8 +37,8 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   assert.equal(core.validateGraph(graph), graph);
   assert.equal(graph.schemaVersion, 2);
   assert.equal(graph.continents.length, 9);
-  assert.equal(graph.nodes.length, 43);
-  assert.equal(graph.routes.length, 15);
+  assert.equal(graph.nodes.length, 57);
+  assert.equal(graph.routes.length, 20);
   assert.deepEqual(
     graph.continents.map(({ name }) => name),
     [
@@ -55,7 +55,7 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   );
   assert.equal(
     graph.continents.filter(({ publication }) => publication === "published").length,
-    4
+    5
   );
 });
 
@@ -102,6 +102,17 @@ test("route order is explicit and independent of every JSON array order", () => 
     "b-trees-external-memory",
     "range-query-structures",
   ];
+  const expectedGraphsCore = [
+    "graph-language-traversals",
+    "dag-topological-scc",
+    "single-source-shortest-paths",
+    "minimum-spanning-trees",
+    "max-flow-min-cut",
+    "graph-matchings",
+    "connectivity-cuts-network-design",
+    "traveling-salesman-exact",
+    "parallel-distributed-graphs",
+  ];
   assert.deepEqual(
     core.routeOrder(graph, "world-main").map(({ id }) => id),
     expectedWorld
@@ -121,6 +132,10 @@ test("route order is explicit and independent of every JSON array order", () => 
   assert.deepEqual(
     core.routeOrder(graph, "data-structures-main").map(({ id }) => id),
     expectedStructuresCore
+  );
+  assert.deepEqual(
+    core.routeOrder(graph, "graphs-main").map(({ id }) => id),
+    expectedGraphsCore
   );
 
   const shuffled = cloneGraph();
@@ -386,6 +401,42 @@ test("internal route neighbors retain every branch and merge edge", () => {
     ["branch-left", "branch-right"]
   );
   assert.equal(core.routeNeighbors(branched, "branch-merge").previous.id, "branch-left");
+});
+
+test("a main route tail prefers the next continent main route over branches", () => {
+  const branched = cloneGraph();
+  const template = structuredClone(
+    core.nodeMap(branched).get("growth-rates")
+  );
+  Object.assign(template, {
+    id: "tail-branch",
+    curriculumId: "99.1",
+    title: "Альтернативная ветвь",
+    description: "Проверочная альтернативная ветвь",
+    prerequisites: ["polynomial-efficiency"],
+    related: [],
+    route: "./chapters/tail-branch.html",
+    position: { x: 100, y: 100 },
+  });
+  branched.nodes.push(template);
+  branched.routes.find(({ id }) => id === "data-structures-main").id =
+    "zzz-next-continent-main";
+  branched.routes.push({
+    id: "aaa-tail-branch",
+    title: "Альтернативная ветвь",
+    scope: "nodes",
+    kind: "branch",
+    continentId: "mathematical-tools",
+    entries: [{ nodeId: "tail-branch", position: 10 }],
+  });
+  core.validateGraph(branched);
+
+  const neighbors = core.routeNeighbors(branched, "polynomial-efficiency");
+  assert.equal(neighbors.next.id, "linear-data-structures");
+  assert.deepEqual(neighbors.nextAll.map(({ id }) => id), [
+    "linear-data-structures",
+    "tail-branch",
+  ]);
 });
 
 test("publication and access are independent states", () => {
@@ -718,7 +769,7 @@ test("continent two has eleven unique canonical curriculum ids", () => {
   const nodes = core.visibleNodes(graph, "mathematical-tools");
   const ids = nodes.map(({ curriculumId }) => curriculumId);
   assert.equal(nodes.length, 11);
-  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 43);
+  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 57);
   assert.deepEqual(ids.slice().sort((left, right) => {
     const leftNumber = Number(left.split(".")[1]);
     const rightNumber = Number(right.split(".")[1]);
@@ -838,7 +889,7 @@ test("published inter-continent steps replace continuations while future exits s
   );
 
   const unknownTarget = cloneGraph();
-  unknownTarget.routes.find(({ id }) => id === "algorithm-design-main")
+  unknownTarget.routes.find(({ id }) => id === "graphs-main")
     .continuation.targetContinentId = "missing-continent";
   assert.throws(
     () => core.validateGraph(unknownTarget),
@@ -851,6 +902,39 @@ test("published inter-continent steps replace continuations while future exits s
   assert.throws(
     () => core.validateGraph(invalidRelatedKind),
     /related continuation must use related kind/
+  );
+});
+
+test("related continuations can choose a source node from their own route", () => {
+  const sourced = cloneGraph();
+  const mainRoute = sourced.routes.find(({ id }) => id === "algorithm-design-main");
+  mainRoute.relatedContinuations[0].sourceNodeId = "greedy-algorithms";
+  core.validateGraph(sourced);
+
+  const continuations = core.continentContinuations(sourced, "algorithm-design");
+  const explicit = continuations.find(({ continuation }) =>
+    continuation.curriculumId === "8.4"
+  );
+  const implicit = continuations.find(({ continuation }) =>
+    continuation.curriculumId === "8.14"
+  );
+  assert.equal(explicit.source.id, "greedy-algorithms");
+  assert.equal(implicit.source.id, "reductions-and-formulations");
+
+  const unknown = cloneGraph();
+  unknown.routes.find(({ id }) => id === "algorithm-design-main")
+    .relatedContinuations[0].sourceNodeId = "missing-node";
+  assert.throws(
+    () => core.validateGraph(unknown),
+    /unknown related continuation source node: missing-node/
+  );
+
+  const otherRoute = cloneGraph();
+  otherRoute.routes.find(({ id }) => id === "algorithm-design-main")
+    .relatedContinuations[0].sourceNodeId = "matroids";
+  assert.throws(
+    () => core.validateGraph(otherRoute),
+    /related continuation source node must belong to route: matroids/
   );
 });
 

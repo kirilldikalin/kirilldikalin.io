@@ -327,6 +327,17 @@
           validateContinuation(route, continuation, "related continuation");
           assert(continuation.kind === "related",
             "related continuation must use related kind: " + route.id);
+          if (continuation.sourceNodeId !== undefined) {
+            assertString(continuation.sourceNodeId,
+              "related continuation sourceNodeId is required: " + route.id);
+            assert(nodeIds.has(continuation.sourceNodeId),
+              "unknown related continuation source node: " +
+                continuation.sourceNodeId);
+            assert(route.entries.some(function (entry) {
+              return entry.nodeId === continuation.sourceNodeId;
+            }), "related continuation source node must belong to route: " +
+              continuation.sourceNodeId);
+          }
         });
       }
 
@@ -545,6 +556,24 @@
 
     const routePrevious = index > 0 ? ordered[index - 1] : null;
     const routeNext = index < ordered.length - 1 ? ordered[index + 1] : null;
+    let nextContinentMainStart = null;
+    if (!routeNext && route.kind === "main") {
+      const worldRoute = mainRoute(graph, "continents");
+      const continents = worldRoute ? routeOrder(graph, worldRoute.id) : [];
+      const continentIndex = continents.findIndex(function (continent) {
+        return continent.id === route.continentId;
+      });
+      const nextContinent = continentIndex >= 0
+        ? continents[continentIndex + 1]
+        : null;
+      const nextMainRoute = nextContinent
+        ? mainRoute(graph, "nodes", nextContinent.id)
+        : null;
+      const nextMainOrder = nextMainRoute
+        ? routeOrder(graph, nextMainRoute.id)
+        : [];
+      nextContinentMainStart = nextMainOrder[0] || null;
+    }
 
     const previousAll = node.prerequisites.map(function (id) {
       return byId.get(id);
@@ -565,6 +594,12 @@
         return -1;
       }
       if (right === routeNext) {
+        return 1;
+      }
+      if (left === nextContinentMainStart) {
+        return -1;
+      }
+      if (right === nextContinentMainStart) {
         return 1;
       }
       return routeRank(graph, left.id).localeCompare(routeRank(graph, right.id));
@@ -614,9 +649,14 @@
         });
       }
       (route.relatedContinuations || []).forEach(function (continuation) {
+        const relatedSource = continuation.sourceNodeId
+          ? ordered.find(function (node) {
+            return node.id === continuation.sourceNodeId;
+          })
+          : source;
         continuations.push({
           route: route,
-          source: source,
+          source: relatedSource,
           continuation: continuation,
         });
       });
