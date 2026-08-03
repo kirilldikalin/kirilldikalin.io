@@ -40,6 +40,7 @@ const publishedChapterIds = new Set([
   "dag-topological-scc",
   "single-source-shortest-paths",
   "all-pairs-shortest-paths",
+  "minimum-spanning-trees",
 ]);
 
 function canonicalChapters() {

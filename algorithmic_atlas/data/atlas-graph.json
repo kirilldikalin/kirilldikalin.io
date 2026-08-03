@@ -2387,19 +2387,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "paths-and-trees",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "single-source-shortest-paths"
       ],
       "related": [],
-      "route": null,
-      "minutes": 52,
-      "reading": null,
+      "route": "./chapters/minimum-spanning-trees.html",
+      "minutes": 54,
+      "reading": {
+        "words": 4081,
+        "formulaBlocks": 13,
+        "proofBlocks": 3,
+        "theoryMinutes": 30,
+        "labMinutes": 24
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 720,

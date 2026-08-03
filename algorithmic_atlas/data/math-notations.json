@@ -2874,8 +2874,8 @@
       "displayNotation": "\\operatorname{FIND}(x)",
       "shortName": "поиск представителя",
       "explanation": "Операция, возвращающая корень множества, содержащего x",
-      "scope": "local",
-      "chapterId": "disjoint-set-union",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "disjoint-set-union",
         "anchor": "forest"
@@ -6666,8 +6666,8 @@
       "displayNotation": "G",
       "shortName": "граф",
       "explanation": "Конечная структура, состоящая из множества вершин V и множества или семейства рёбер E",
-      "scope": "local",
-      "chapterId": "graph-language-traversals",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "graph-language-traversals",
         "anchor": "graph-model"
@@ -7048,10 +7048,10 @@
     {
       "id": "graph-vertex-set-v",
       "displayNotation": "V",
-      "shortName": "вершины взвешенного графа",
-      "explanation": "Конечное множество вершин входного графа задачи кратчайших путей",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "shortName": "множество вершин графа",
+      "explanation": "Конечное множество вершин рассматриваемого графа",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "model"
@@ -7060,10 +7060,10 @@
     {
       "id": "graph-edge-set-e",
       "displayNotation": "E",
-      "shortName": "рёбра взвешенного графа",
-      "explanation": "Множество ориентированных рёбер, по которым разрешены переходы",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "shortName": "множество рёбер графа",
+      "explanation": "Множество рёбер или дуг рассматриваемого графа",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "model"
@@ -7074,8 +7074,8 @@
       "displayNotation": "w",
       "shortName": "вес ребра",
       "explanation": "Функция, сопоставляющая каждому ребру его числовую стоимость",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "model"
@@ -7108,10 +7108,10 @@
     {
       "id": "sssp-distance-delta",
       "displayNotation": "delta(s,v)",
-      "shortName": "истинное кратчайшее расстояние",
-      "explanation": "Инфимум длин всех путей из источника s в вершину v",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "shortName": "кратчайшее расстояние",
+      "explanation": "Инфимум длин всех путей между указанными вершинами в выбранном взвешенном графе",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "model"
@@ -7240,10 +7240,10 @@
     {
       "id": "graph-vertex-count-n",
       "displayNotation": "n",
-      "shortName": "число вершин SSSP",
-      "explanation": "Количество вершин входного взвешенного графа",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "shortName": "число вершин графа",
+      "explanation": "Количество вершин рассматриваемого конечного графа",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "complexity"
@@ -7252,10 +7252,10 @@
     {
       "id": "graph-edge-count-m",
       "displayNotation": "m",
-      "shortName": "число рёбер SSSP",
-      "explanation": "Количество ориентированных рёбер входного взвешенного графа",
-      "scope": "local",
-      "chapterId": "single-source-shortest-paths",
+      "shortName": "число рёбер графа",
+      "explanation": "Количество рёбер или дуг рассматриваемого конечного графа",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "single-source-shortest-paths",
         "anchor": "complexity"
@@ -7547,6 +7547,186 @@
       "firstDefinition": {
         "chapterId": "all-pairs-shortest-paths",
         "anchor": "complexity"
+      }
+    },
+    {
+      "id": "mst-tree-t",
+      "displayNotation": "T",
+      "shortName": "остовное дерево",
+      "explanation": "Связный ациклический подграф, содержащий все вершины исходного графа",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "mst-tree-family",
+      "displayNotation": "T(G)",
+      "shortName": "семейство остовных деревьев",
+      "explanation": "Множество всех остовных деревьев связного графа G",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "mst-tree-weight",
+      "displayNotation": "w(T)",
+      "shortName": "вес дерева",
+      "explanation": "Сумма весов всех рёбер, входящих в дерево T",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "mst-optimal-tree",
+      "displayNotation": "T*",
+      "shortName": "минимальное остовное дерево",
+      "explanation": "Остовное дерево минимального суммарного веса среди всех остовов G",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "mst-safe-edge",
+      "displayNotation": "e",
+      "shortName": "безопасное ребро",
+      "explanation": "Ребро, после добавления которого текущий лес по-прежнему содержится хотя бы в одном MST",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "exchange"
+      }
+    },
+    {
+      "id": "mst-safe-set-a",
+      "displayNotation": "A",
+      "shortName": "текущий безопасный лес",
+      "explanation": "Уже выбранный ациклический набор рёбер, который можно продолжить до минимального остова",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "exchange"
+      }
+    },
+    {
+      "id": "mst-cut-boundary",
+      "displayNotation": "delta(S)",
+      "shortName": "рёбра разреза",
+      "explanation": "Рёбра с одним концом в S, а другим в дополнении V без S",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "cut-property"
+      }
+    },
+    {
+      "id": "mst-cut-set-s",
+      "displayNotation": "S",
+      "shortName": "сторона разреза",
+      "explanation": "Одна часть разбиения множества вершин, задающая рассматриваемый разрез",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "cut-property"
+      }
+    },
+    {
+      "id": "mst-cycle-c",
+      "displayNotation": "C",
+      "shortName": "цикл обмена",
+      "explanation": "Цикл, на котором применяется обменное свойство минимального остова",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "cycle-property"
+      }
+    },
+    {
+      "id": "mst-cycle-heavy-edge",
+      "displayNotation": "e",
+      "shortName": "строго тяжелейшее ребро цикла",
+      "explanation": "Ребро, чей вес больше веса каждого другого ребра рассматриваемого цикла",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "cycle-property"
+      }
+    },
+    {
+      "id": "mst-boruvka-phase",
+      "displayNotation": "i",
+      "shortName": "фаза Boruvka",
+      "explanation": "Номер параллельной фазы, в которой каждая текущая компонента выбирает своё лёгкое исходящее ребро",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "boruvka"
+      }
+    },
+    {
+      "id": "mst-component-count-k",
+      "displayNotation": "k_i",
+      "shortName": "число компонент в фазе",
+      "explanation": "Количество DSU-компонент перед фазой i алгоритма Boruvka",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "boruvka"
+      }
+    },
+    {
+      "id": "mst-nontree-edge",
+      "displayNotation": "e",
+      "shortName": "неостовное ребро",
+      "explanation": "Ребро исходного графа, не входящее в рассматриваемое остовное дерево",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "uniqueness"
+      }
+    },
+    {
+      "id": "mst-tree-path",
+      "displayNotation": "P_T(u,v)",
+      "shortName": "путь в дереве",
+      "explanation": "Единственный путь между вершинами u и v в дереве T",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "uniqueness"
+      }
+    },
+    {
+      "id": "mst-sensitivity-slack",
+      "displayNotation": "slack(e)",
+      "shortName": "запас обмена",
+      "explanation": "Разность между весом неостовного ребра и максимальным весом на его фундаментальном пути",
+      "scope": "local",
+      "chapterId": "minimum-spanning-trees",
+      "firstDefinition": {
+        "chapterId": "minimum-spanning-trees",
+        "anchor": "sensitivity"
       }
     }
   ]
