@@ -43,6 +43,34 @@ PUBLIC_PAGES = (
     "algorithmic_atlas/chapters/persistent-succinct-structures.html",
     "algorithmic_atlas/chapters/probabilistic-filters.html",
     "algorithmic_atlas/chapters/lsm-learned-indexes.html",
+    "algorithmic_atlas/chapters/exhaustive-search.html",
+    "algorithmic_atlas/chapters/divide-and-conquer.html",
+    "algorithmic_atlas/chapters/sorting-and-lower-bounds.html",
+    "algorithmic_atlas/chapters/selection-order-statistics.html",
+    "algorithmic_atlas/chapters/greedy-algorithms.html",
+    "algorithmic_atlas/chapters/matroids.html",
+    "algorithmic_atlas/chapters/dynamic-programming.html",
+    "algorithmic_atlas/chapters/advanced-dynamic-programming.html",
+    "algorithmic_atlas/chapters/local-search.html",
+    "algorithmic_atlas/chapters/meet-in-the-middle.html",
+    "algorithmic_atlas/chapters/online-algorithms.html",
+    "algorithmic_atlas/chapters/reductions-and-formulations.html",
+    "algorithmic_atlas/chapters/linear-convex-optimization.html",
+    "algorithmic_atlas/chapters/multiplicative-weights.html",
+    "algorithmic_atlas/chapters/graph-language-traversals.html",
+    "algorithmic_atlas/chapters/dag-topological-scc.html",
+    "algorithmic_atlas/chapters/single-source-shortest-paths.html",
+    "algorithmic_atlas/chapters/all-pairs-shortest-paths.html",
+    "algorithmic_atlas/chapters/minimum-spanning-trees.html",
+    "algorithmic_atlas/chapters/max-flow-min-cut.html",
+    "algorithmic_atlas/chapters/circulations-min-cost-flow.html",
+    "algorithmic_atlas/chapters/graph-matchings.html",
+    "algorithmic_atlas/chapters/connectivity-cuts-network-design.html",
+    "algorithmic_atlas/chapters/traveling-salesman-exact.html",
+    "algorithmic_atlas/chapters/dynamic-graph-algorithms.html",
+    "algorithmic_atlas/chapters/linear-algebra-for-graphs.html",
+    "algorithmic_atlas/chapters/spectral-graph-algorithms.html",
+    "algorithmic_atlas/chapters/parallel-distributed-graphs.html",
     "articles/myths_DE.html",
     "brain/main_brain.html",
     "brain/map_msk/map_msk.html",
@@ -204,8 +232,16 @@ def math_delimiter_errors(text):
     errors = []
     delimiter_pattern = re.compile(r"\\\(|\\\)|\\\[|\\\]|(?<!\\)\$\$|(?<!\\)\$")
     raw_command_pattern = re.compile(r"\\[A-Za-z]+")
+    bare_command_pattern = re.compile(
+        r"(?<![\\A-Za-z])"
+        r"(class|operatorname|lfloor|rfloor|lceil|rceil|frac|Theta|Omega|"
+        r"nleq|leq|geq|le|ge|lambda|pi|ldots|times|cdot|sqrt|infty|"
+        r"mathbb|mathcal|varepsilon|Pr|Phi)"
+        r"(?=[{_\s\\0-9A-Z(,;])"
+    )
     mode = None
     previous_end = 0
+    math_start = None
 
     def add_raw_commands(fragment, offset):
         for command in raw_command_pattern.finditer(fragment):
@@ -214,18 +250,29 @@ def math_delimiter_errors(text):
                 f"{offset + command.start()}: {command.group(0)}"
             )
 
+    def add_bare_commands(fragment, offset):
+        for command in bare_command_pattern.finditer(fragment):
+            errors.append(
+                f"possible TeX command without backslash at character "
+                f"{offset + command.start()}: {command.group(1)}"
+            )
+
     for delimiter in delimiter_pattern.finditer(text):
         token = delimiter.group(0)
         if mode is None:
             add_raw_commands(text[previous_end:delimiter.start()], previous_end)
             if token == r"\(":
                 mode = ("inline", r"\)")
+                math_start = delimiter.end()
             elif token == r"\[":
                 mode = ("display", r"\]")
+                math_start = delimiter.end()
             elif token == "$":
                 mode = ("inline", "$")
+                math_start = delimiter.end()
             elif token == "$$":
                 mode = ("display", "$$")
+                math_start = delimiter.end()
             else:
                 errors.append(
                     f"closing delimiter without opener at character {delimiter.start()}"
@@ -237,7 +284,9 @@ def math_delimiter_errors(text):
                     f"expected {expected} before {token} at character {delimiter.start()}"
                 )
             else:
+                add_bare_commands(text[math_start:delimiter.start()], math_start)
                 mode = None
+                math_start = None
                 previous_end = delimiter.end()
 
     if mode is None:

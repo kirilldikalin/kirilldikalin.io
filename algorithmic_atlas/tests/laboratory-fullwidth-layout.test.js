@@ -11,6 +11,8 @@ const auditedContinents = new Set([
   "origins-efficiency",
   "mathematical-tools",
   "data-structures",
+  "algorithm-design",
+  "graphs-networks-optimization",
 ]);
 const auditedNodes = graph.nodes.filter(
   (node) => node.publication === "published" && auditedContinents.has(node.continentId)
@@ -30,8 +32,8 @@ function localStylesheets(html, pagePath) {
   );
 }
 
-test("the 29 published laboratories of continents 01-03 load the shared layout", () => {
-  assert.equal(auditedNodes.length, 29);
+test("the 57 published laboratories of continents 01-05 load the shared layout", () => {
+  assert.equal(auditedNodes.length, 57);
   for (const node of auditedNodes) {
     const pagePath = path.join(atlasRoot, node.route.replace(/^algorithmic_atlas\//, ""));
     const html = fs.readFileSync(pagePath, "utf8");

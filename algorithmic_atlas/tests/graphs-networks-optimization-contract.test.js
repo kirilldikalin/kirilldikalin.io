@@ -75,6 +75,10 @@ function routeIds(routeId) {
     .map(({ nodeId }) => nodeId);
 }
 
+function chapterFile(node) {
+  return path.join(atlasRoot, node.route.replace(/^\.\//, ""));
+}
+
 test("continent 05 contains exactly the fourteen canonical graph chapters", () => {
   const canonical = canonicalChapters();
   assert.equal(canonical.length, 14);
@@ -122,6 +126,92 @@ test("continent 05 contains exactly the fourteen canonical graph chapters", () =
         exercises: false,
       });
     }
+  });
+});
+
+test("every graph chapter uses the shared page and laboratory contracts", () => {
+  const nodes = core.visibleNodes(graph, "graphs-networks-optimization")
+    .filter(({ publication }) => publication === "published");
+  assert.equal(nodes.length, 14);
+
+  nodes.forEach((node) => {
+    const file = chapterFile(node);
+    const html = fs.readFileSync(file, "utf8");
+    assert.match(
+      html,
+      new RegExp('<body[^>]+data-atlas-node-id="' + node.id + '"')
+    );
+    assert.match(html, /class="atlas-chapter-layout"/);
+    assert.match(html, /class="atlas-chapter-toc"/);
+    assert.match(html, /class="atlas-route-nav"/);
+    assert.match(html, /class="atlas-completion"/);
+    assert.match(html, /id="atlas-route-previous"/);
+    assert.match(html, /id="atlas-route-next"/);
+    assert.match(html, /id="atlas-mark-complete"/);
+    assert.match(html, /data-atlas-block="lab"/);
+    assert.match(html, /atlas-block--fullwidth/);
+    assert.match(html, new RegExp('data-atlas-lab="' + node.id + '"'));
+
+    [
+      "../chapter.css",
+      "../labs/lab-common.css",
+      "../labs/graph-labs.css",
+    ].forEach((href) => {
+      assert.match(html, new RegExp('href="' + href.replace(/\./g, "\\.") + '"'));
+    });
+    [
+      "../labs/lab-runtime.js",
+      "../labs/lab-svg.js",
+      "../labs/graph-lab-core.js",
+      "../labs/graph-lab-runtime.js",
+      "../labs/" + node.id + "-core.js",
+      "../labs/" + node.id + ".js",
+    ].forEach((src) => {
+      assert.match(html, new RegExp('src="' + src.replace(/\./g, "\\.") + '"'));
+    });
+
+    const exercises = html.match(
+      /<section id="exercises"[^>]*data-atlas-block="exercises"[^>]*>[\s\S]*?<\/section>/
+    );
+    assert.ok(exercises, node.id + " has no exercise section");
+    assert.ok(
+      (exercises[0].match(/<article\b/g) || []).length >= 10,
+      node.id + " must have at least ten exercises"
+    );
+    const sources = html.match(
+      /<section id="sources"[^>]*data-atlas-block="sources"[^>]*>[\s\S]*?<\/section>/
+    );
+    assert.ok(sources, node.id + " has no source section");
+    assert.ok(
+      (sources[0].match(/href="https?:\/\//g) || []).length >= 3,
+      node.id + " must cite direct academic or primary sources"
+    );
+    assert.match(html, /notation-id-[a-z0-9-]+/);
+    assert.match(html, /<pre\b[^>]*>\s*<code>/);
+
+    const intro = html.match(
+      /<p class="atlas-chapter-intro">([\s\S]*?)<\/p>/
+    );
+    assert.ok(intro, node.id + " has no chapter intro");
+    const introText = intro[1].replace(/<[^>]+>/g, "").trim();
+    assert.doesNotMatch(
+      introText,
+      /[.!?…]$/,
+      node.id + " short intro must not end with punctuation"
+    );
+
+    ["-core.js", ".js"].forEach((suffix) => {
+      const source = fs.readFileSync(
+        path.join(atlasRoot, "labs", node.id + suffix),
+        "utf8"
+      );
+      assert.doesNotMatch(source, /\beval\s*\(/, node.id + " uses eval");
+      assert.doesNotMatch(
+        source,
+        /\bnew\s+Function\s*\(/,
+        node.id + " uses dynamic Function"
+      );
+    });
   });
 });
 
@@ -202,6 +292,125 @@ test("continent 05 exposes all six canonical future exits from exact sources", (
   ]));
 });
 
+test("sequential and free exploration keep graph access separate from progress", () => {
+  const byId = core.nodeMap(graph);
+  const previousCore = new Set(routeIds("algorithm-design-main"));
+  const first = byId.get("graph-language-traversals");
+  assert.equal(
+    core.nodeAccessState(graph, first, previousCore, false),
+    "published-unlocked"
+  );
+  publishedChapterIds.forEach((id) => {
+    if (id !== first.id) {
+      assert.equal(
+        core.nodeAccessState(graph, byId.get(id), previousCore, false),
+        "published-gated",
+        id + " must stay gated before its graph prerequisites"
+      );
+    }
+  });
+
+  const freeProgress = new Set();
+  publishedChapterIds.forEach((id) => {
+    assert.equal(
+      core.nodeAccessState(graph, byId.get(id), freeProgress, true),
+      "published-unlocked",
+      id + " must open in free exploration"
+    );
+  });
+  assert.deepEqual(Array.from(freeProgress), []);
+});
+
+test("each graph branch opens only after its canonical entry prerequisite", () => {
+  const byId = core.nodeMap(graph);
+  const previousCore = new Set(routeIds("algorithm-design-main"));
+  const entries = [
+    ["all-pairs-shortest-paths", "single-source-shortest-paths"],
+    ["circulations-min-cost-flow", "max-flow-min-cut"],
+    ["dynamic-graph-algorithms", "connectivity-cuts-network-design"],
+    ["linear-algebra-for-graphs", "minimum-spanning-trees"],
+    ["spectral-graph-algorithms", "linear-algebra-for-graphs"],
+  ];
+
+  function completeDependencies(nodeId, completed) {
+    byId.get(nodeId).prerequisites.forEach((dependencyId) => {
+      const dependency = byId.get(dependencyId);
+      if (dependency && dependency.continentId === "graphs-networks-optimization") {
+        completeDependencies(dependencyId, completed);
+      }
+      completed.add(dependencyId);
+    });
+  }
+
+  entries.forEach(([targetId, sourceId]) => {
+    const completed = new Set(previousCore);
+    completeDependencies(sourceId, completed);
+    assert.equal(completed.has(sourceId), false);
+    assert.equal(
+      core.nodeAccessState(graph, byId.get(targetId), completed, false),
+      "published-gated",
+      targetId + " must wait for " + sourceId
+    );
+    assert.equal(
+      core.nodeAccessState(graph, byId.get(sourceId), completed, false),
+      "published-unlocked",
+      sourceId + " must itself be reachable"
+    );
+    completed.add(sourceId);
+    assert.equal(
+      core.nodeAccessState(graph, byId.get(targetId), completed, false),
+      "published-unlocked",
+      targetId + " must open after " + sourceId
+    );
+  });
+});
+
+test("the 6.1 continuation waits for the core while planned material keeps development fog", () => {
+  const previousCore = new Set(routeIds("algorithm-design-main"));
+  const graphCore = routeIds("graphs-main");
+  const completedCore = new Set(previousCore);
+  graphCore.forEach((id) => completedCore.add(id));
+  const continuation = core.routeContinuation(
+    graph,
+    "parallel-distributed-graphs"
+  );
+  assert.equal(continuation.curriculumId, "6.1");
+  assert.equal(continuation.targetContinentId, "strings-geometry-numerics");
+
+  const planned = core.continentMap(graph).get("strings-geometry-numerics");
+  assert.equal(
+    core.continentAccessState(graph, planned, completedCore, false),
+    "planned"
+  );
+  assert.equal(
+    core.continentAccessState(graph, planned, completedCore, true),
+    "planned"
+  );
+
+  const publishedFuture = JSON.parse(JSON.stringify(graph));
+  const nextContinent = core.continentMap(publishedFuture)
+    .get("strings-geometry-numerics");
+  nextContinent.publication = "published";
+  assert.equal(
+    core.continentAccessState(
+      publishedFuture,
+      nextContinent,
+      previousCore,
+      false
+    ),
+    "published-gated"
+  );
+  assert.equal(
+    core.continentAccessState(
+      publishedFuture,
+      nextContinent,
+      completedCore,
+      false
+    ),
+    "published-unlocked"
+  );
+});
+
 test("continent 05 map coordinates fit the local viewBox", () => {
   const continent = core.continentMap(graph).get("graphs-networks-optimization");
   const [minX, minY, width, height] = continent.localMap.viewBox
@@ -217,10 +426,12 @@ test("continent 05 map coordinates fit the local viewBox", () => {
   });
 });
 
-test("planned graph chapters stay outside progress without losing old ids", () => {
+test("published graph progress separates the nine core chapters and five branches", () => {
   const coreTotal = routeIds("graphs-main")
     .filter((id) => publishedChapterIds.has(id)).length;
   const branchTotal = publishedChapterIds.size - coreTotal;
+  assert.equal(coreTotal, 9);
+  assert.equal(branchTotal, 5);
   const progress = core.continentProgressSummary(
     graph,
     "graphs-networks-optimization",
@@ -237,6 +448,46 @@ test("planned graph chapters stay outside progress without losing old ids", () =
     coreReady: false,
     complete: false,
   });
+
+  const coreCompleted = new Set(routeIds("graphs-main"));
+  assert.deepEqual(
+    core.continentProgressSummary(
+      graph,
+      "graphs-networks-optimization",
+      coreCompleted
+    ),
+    {
+      completed: 9,
+      total: 14,
+      percent: 64,
+      coreCompleted: 9,
+      coreTotal: 9,
+      branchCompleted: 0,
+      branchTotal: 5,
+      coreReady: true,
+      complete: false,
+    }
+  );
+
+  const allCompleted = new Set(publishedChapterIds);
+  assert.deepEqual(
+    core.continentProgressSummary(
+      graph,
+      "graphs-networks-optimization",
+      allCompleted
+    ),
+    {
+      completed: 14,
+      total: 14,
+      percent: 100,
+      coreCompleted: 9,
+      coreTotal: 9,
+      branchCompleted: 5,
+      branchTotal: 5,
+      coreReady: true,
+      complete: true,
+    }
+  );
 
   const oldCompleted = new Set([
     "before-computers",

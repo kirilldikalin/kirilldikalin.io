@@ -213,7 +213,7 @@ test("published chapters enter progress while planned chapters stay outside", ()
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    43
+    57
   );
 });
 
