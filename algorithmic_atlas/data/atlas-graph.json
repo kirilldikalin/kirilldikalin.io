@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-12",
+  "datasetVersion": "2026.08.03-13",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2519,19 +2519,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "theory",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "graph-matchings"
       ],
       "related": [],
-      "route": null,
-      "minutes": 58,
-      "reading": null,
+      "route": "./chapters/connectivity-cuts-network-design.html",
+      "minutes": 59,
+      "reading": {
+        "words": 4006,
+        "formulaBlocks": 17,
+        "proofBlocks": 4,
+        "theoryMinutes": 32,
+        "labMinutes": 27
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1290,

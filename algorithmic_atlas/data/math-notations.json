@@ -8295,6 +8295,159 @@
       "scope": "local",
       "chapterId": "graph-matchings",
       "firstDefinition": {"chapterId": "graph-matchings", "anchor": "blossom"}
+    },
+    {
+      "id": "connectivity-component-relation",
+      "displayNotation": "\\sim_G",
+      "shortName": "отношение связности",
+      "explanation": "Отношение, связывающее две вершины тогда и только тогда, когда между ними существует путь",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "components"}
+    },
+    {
+      "id": "connectivity-component-count",
+      "displayNotation": "\\operatorname{cc}(G)",
+      "shortName": "число компонент",
+      "explanation": "Количество компонент связности рассматриваемого неориентированного графа",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "components"}
+    },
+    {
+      "id": "connectivity-bridge",
+      "displayNotation": "e",
+      "shortName": "мост",
+      "explanation": "Ребро, удаление которого увеличивает число компонент связности",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "single-failures"}
+    },
+    {
+      "id": "connectivity-articulation",
+      "displayNotation": "v",
+      "shortName": "точка сочленения",
+      "explanation": "Вершина, удаление которой вместе с инцидентными рёбрами увеличивает число компонент",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "single-failures"}
+    },
+    {
+      "id": "connectivity-discovery-time",
+      "displayNotation": "\\operatorname{tin}[v]",
+      "shortName": "время входа DFS",
+      "explanation": "Порядковый номер первого посещения вершины поиском в глубину",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "dfs-low"}
+    },
+    {
+      "id": "connectivity-low-link",
+      "displayNotation": "\\operatorname{low}[v]",
+      "shortName": "low-link вершины",
+      "explanation": "Наименьшее время входа, достижимое из DFS-поддерева через не более чем одно обратное ребро",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "dfs-low"}
+    },
+    {
+      "id": "connectivity-biconnected-block",
+      "displayNotation": "B",
+      "shortName": "двусвязный блок",
+      "explanation": "Максимальный рёберный блок, выделяемый на границе low-link дочернего поддерева",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "biconnected"}
+    },
+    {
+      "id": "connectivity-edge-connectivity",
+      "displayNotation": "\\lambda(G)",
+      "shortName": "рёберная связность",
+      "explanation": "Минимальное число рёбер, удаление которых нарушает связность графа",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "connectivity-numbers"}
+    },
+    {
+      "id": "connectivity-vertex-connectivity",
+      "displayNotation": "\\kappa(G)",
+      "shortName": "вершинная связность",
+      "explanation": "Минимальное число вершин, удаление которых делает граф несвязным или тривиальным",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "connectivity-numbers"}
+    },
+    {
+      "id": "connectivity-local-edge-cut",
+      "displayNotation": "\\lambda(s,t)",
+      "shortName": "локальная рёберная связность",
+      "explanation": "Минимальный размер или ёмкость рёберного разделителя выбранных вершин s и t",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "menger"}
+    },
+    {
+      "id": "connectivity-path-family",
+      "displayNotation": "\\mathcal P",
+      "shortName": "семейство независимых путей",
+      "explanation": "Набор попарно рёберно либо внутренне вершинно непересекающихся путей",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "menger"}
+    },
+    {
+      "id": "connectivity-local-vertex-cut",
+      "displayNotation": "\\kappa(s,t)",
+      "shortName": "локальная вершинная связность",
+      "explanation": "Минимальный размер вершинного разделителя выбранных терминалов",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "menger"}
+    },
+    {
+      "id": "connectivity-cut-boundary",
+      "displayNotation": "\\delta(S)",
+      "shortName": "граница разреза",
+      "explanation": "Множество рёбер с концами на разных сторонах разбиения S и V без S",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "local-cuts"}
+    },
+    {
+      "id": "connectivity-gomory-hu-tree",
+      "displayNotation": "T_{\\mathrm{GH}}",
+      "shortName": "дерево Гомори — Ху",
+      "explanation": "Взвешенное дерево, кодирующее значения минимальных разрезов всех пар исходного графа",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "gomory-hu"}
+    },
+    {
+      "id": "connectivity-steiner-tree",
+      "displayNotation": "T",
+      "shortName": "дерево Штейнера",
+      "explanation": "Связный подграф минимальной стоимости, содержащий все обязательные терминалы",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "network-design"}
+    },
+    {
+      "id": "connectivity-steiner-terminals",
+      "displayNotation": "R",
+      "shortName": "терминалы Штейнера",
+      "explanation": "Множество обязательных вершин, которые должен соединить проектируемый подграф",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "network-design"}
+    },
+    {
+      "id": "connectivity-survivability-demand",
+      "displayNotation": "r(u,v)",
+      "shortName": "требование живучести",
+      "explanation": "Требуемое число независимых соединений между выбранной парой терминалов",
+      "scope": "local",
+      "chapterId": "connectivity-cuts-network-design",
+      "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "network-design"}
     }
   ]
 }

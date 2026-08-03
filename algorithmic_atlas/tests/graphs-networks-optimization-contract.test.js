@@ -44,6 +44,7 @@ const publishedChapterIds = new Set([
   "max-flow-min-cut",
   "circulations-min-cost-flow",
   "graph-matchings",
+  "connectivity-cuts-network-design",
 ]);
 
 function canonicalChapters() {

@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Связность, разрезы и проектирование сетей — Алгоритмический атлас</title>
+  <meta name="description" content="Компоненты, мосты, точки сочленения, low-link, теорема Менгера, локальные и глобальные разрезы и модели устойчивых сетей">
+  <meta property="og:title" content="Связность, разрезы и проектирование сетей — Алгоритмический атлас">
+  <meta property="og:description" content="Как локальные значения DFS, непересекающиеся пути и разрезы измеряют устойчивость сети к отказам">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/connectivity-cuts-network-design.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/connectivity-cuts-network-design.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/graph-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/graph-lab-core.js" defer></script>
+  <script src="../labs/graph-lab-runtime.js" defer></script>
+  <script src="../labs/connectivity-cuts-network-design-core.js" defer></script>
+  <script src="../labs/connectivity-cuts-network-design.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="connectivity-cuts-network-design" data-atlas-lab-minutes="27">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Связность, разрезы и проектирование сетей</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Графы, сети и оптимизация · точка 5.9</p>
+      <h1>Связность, разрезы и проектирование сетей</h1>
+      <p class="atlas-chapter-intro">
+        От одного DFS и локального low-link — к непересекающимся маршрутам, глобальным разрезам и инженерному вопросу о том, какие отказы переживёт сеть
+      </p>
+      <div class="atlas-chapter-meta">
+        <span data-atlas-reading-time>Теория рассчитывается…</span>
+        <span data-atlas-lab-time>Лаборатория ≈ 27 мин</span>
+        <span>5 режимов</span><span>12 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#problem">Связь и устойчивость</a></li>
+          <li><a href="#components">Компоненты связности</a></li>
+          <li><a href="#single-failures">Мосты и точки сочленения</a></li>
+          <li><a href="#dfs-low">Время входа и low-link</a></li>
+          <li><a href="#bridge-proof">Критерий моста</a></li>
+          <li><a href="#articulation-proof">Критерий точки сочленения</a></li>
+          <li><a href="#biconnected">Двусвязные блоки</a></li>
+          <li><a href="#connectivity-numbers">Числа связности</a></li>
+          <li><a href="#menger">Теорема Менгера</a></li>
+          <li><a href="#local-cuts">Локальный s–t-разрез</a></li>
+          <li><a href="#global-cut">Глобальный разрез</a></li>
+          <li><a href="#gomory-hu">Дерево Гомори — Ху</a></li>
+          <li><a href="#network-design">Проектирование сети</a></li>
+          <li><a href="#pseudocode">Псевдокод</a></li>
+          <li><a href="#constraints">Границы и контрпримеры</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="problem">
+          <h2>Фраза «граф связен» ничего не говорит о цене первого отказа</h2>
+          <p>
+            Две сети могут соединять все пары пунктов и выглядеть одинаково исправными, пока ничего не ломается. В первой удаление одного кабеля делит систему пополам. Во второй между любыми важными пунктами остаётся запасной маршрут. Обычная связность отвечает только на вопрос о существовании пути сейчас. Устойчивость требует измерять, сколько и каких элементов нужно удалить, чтобы путь исчез.
+          </p>
+          <p>
+            Есть несколько разных вопросов. Как быстро найти уже отделённые компоненты? Какие отдельные рёбра являются мостами, а вершины — точками сочленения? Сколько рёбер нужно удалить между выбранными $s$ и $t$? Сколько — где угодно во всей сети? Можно ли описать ответы для всех пар компактнее, чем отдельной таблицей разрезов? И, наконец, какие новые связи стоит купить, чтобы требуемая устойчивость выполнялась при минимальной стоимости?
+          </p>
+          <p>
+            Эти вопросы связаны, но не взаимозаменяемы. Мост — локально распознаваемый отказ одного ребра. Глобальный минимальный разрез может состоять из нескольких рёбер далеко от интересующей пары терминалов. Точка сочленения относится к удалению вершины и всех инцидентных рёбер, а не к малой суммарной ёмкости каналов. Теорема Менгера связывает минимальный разделитель с максимальным числом непересекающихся путей, но рёберная и вершинная версии требуют разных понятий непересечения.
+          </p>
+          <p>
+            В этой главе базовый граф неориентированный и конечный. Параллельные рёбра разрешены: два независимых кабеля действительно дают резервирование. Петля не связывает разные вершины и потому не спасает от разделения. Для мостов и шарниров веса не нужны; для разрезов ребро может иметь неотрицательную целую ёмкость. Направленная сильная связность и соответствующие разрезы требуют другой техники.
+          </p>
+        </section>
+
+        <section id="components">
+          <h2>Компонента — максимальная область взаимной достижимости</h2>
+          <p>
+            В неориентированном графе отношение «между вершинами существует путь» рефлексивно, симметрично и транзитивно. Поэтому оно разбивает множество вершин на классы эквивалентности — компоненты связности. Максимальность означает, что к компоненте нельзя добавить внешнюю вершину, сохранив пути между всеми её вершинами. Изолированная вершина образует компоненту из одного элемента; пустой граф имеет ноль компонент.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-component-relation"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-component-relation,connectivity-component-count,graph-vertex-set-v">
+            \[
+              u\mathrel{
+              \class{atlas-notation-token notation-id-connectivity-component-relation}{\sim_G}}v
+              \iff u\leadsto v,
+              \qquad
+              \class{atlas-notation-token notation-id-connectivity-component-count}{\operatorname{cc}(G)}
+              =
+              \left|
+              \class{atlas-notation-token notation-id-graph-vertex-set-v}{V}/\sim_G
+              \right|.
+            \]
+          </div>
+          <p>
+            Один DFS или BFS из непосещённой вершины перечисляет ровно одну компоненту. Повторяя запуск, получаем DFS-лес. Время $O(|V|+|E|)$ при списках смежности: каждая вершина открывается один раз, каждое неориентированное ребро встречается с двух концов. Матрица смежности меняет стоимость до $O(|V|^2)$, потому что поиск соседей просматривает целую строку.
+          </p>
+          <p>
+            Сравнивая состояние до и после отказа, важно не требовать, чтобы число компонент всегда увеличилось буквально. Удаление единственной вершины отдельной компоненты уменьшит их число, но такая вершина не является точкой сочленения. Стандартное определение шарнира сравнивает связность оставшихся вершин: удаление должно увеличить число компонент относительно исходного графа. Для несвязного графа критерий применяется ко всему графу и корректно игнорирует исчезновение изолированного класса.
+          </p>
+          <p>
+            Компоненты отвечают и на пакетный вопрос: какие пары уже разъединены. После одного обхода каждой вершине назначается номер компоненты, и запрос о существовании пути между $u$ и $v$ сводится к сравнению двух номеров. Если граф строится только добавлением рёбер, ту же информацию удобно поддерживать системой непересекающихся множеств: объединять компоненты концов нового ребра. Но удаление ломает эту монотонность. DSU не умеет восстановить распавшееся множество без дополнительной офлайн-техники или динамической структуры.
+          </p>
+          <p>
+            Это различие важно для лаборатории. После удаления элемента она не пытается локально «подправить» старые номера компонент, а заново вычисляет их на ограниченном графе. Для четырнадцати вершин это прозрачно и надёжно. В большой меняющейся сети повторный обход после каждого события может стать дорогим; динамическая связность вынесена в отдельную будущую главу, где появятся временные интервалы, откаты и деревья динамического леса.
+          </p>
+        </section>
+
+        <section id="single-failures">
+          <h2>Мост ломает связь одним ребром, точка сочленения — одной вершиной</h2>
+          <p>
+            Ребро $e$ называется мостом, если после его удаления компонент становится больше. В связном графе это означает разделение на две или более части. В лесу каждое ребро — мост. На цикле мостов нет: для концов любого ребра остаётся обход по остальной части цикла. Параллельная пара тоже не содержит мостов, потому что удаление одного экземпляра сохраняет второй.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-bridge-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-bridge,connectivity-component-count">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-bridge}{e}
+              \text{ — мост}
+              \iff
+              \class{atlas-notation-token notation-id-connectivity-component-count}{
+              \operatorname{cc}(G-e)}
+              >
+              \class{atlas-notation-token notation-id-connectivity-component-count}{
+              \operatorname{cc}(G)}.
+            \]
+          </div>
+          <p>
+            Вершина $v$ называется точкой сочленения, если удаление самой вершины вместе со всеми инцидентными рёбрами увеличивает число компонент. Конец простого пути не является шарниром: после его удаления оставшийся путь всё ещё связан. Внутренняя вершина пути является. В полном графе на трёх и более вершинах шарниров нет, хотя удаление вершины уничтожает множество рёбер.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-articulation-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-articulation,connectivity-component-count">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-articulation}{v}
+              \text{ — точка сочленения}
+              \iff
+              \class{atlas-notation-token notation-id-connectivity-component-count}{
+              \operatorname{cc}(G-v)}
+              >
+              \class{atlas-notation-token notation-id-connectivity-component-count}{
+              \operatorname{cc}(G)}.
+            \]
+          </div>
+          <p>
+            Лобовая проверка проста: удалить каждый объект и заново запустить обход. Для всех рёбер это $O(|E|(|V|+|E|))$, для всех вершин — $O(|V|(|V|+|E|))$. Такой эталон полезен в тестах на малых графах, но один DFS способен найти все мосты и шарниры линейно. Ему нужно понять, может ли поддерево вернуться к уже открытой верхней части без родительского ребра.
+          </p>
+        </section>
+
+        <section id="dfs-low">
+          <h2>Low-link сообщает, насколько высоко поддерево умеет вернуться</h2>
+          <p>
+            При DFS каждой вершине назначается время первого входа $\operatorname{tin}[v]$. Древесное ребро открывает нового ребёнка. Ребро к уже открытому предку называется обратным. В неориентированном DFS иных поперечных связей между независимыми поддеревьями не возникает: если ребро связывает их, первое посещённое поддерево откроет второе через это ребро.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-discovery-time"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-discovery-time">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-discovery-time}{
+              \operatorname{tin}[v]}
+              =
+              \text{номер события первого входа DFS в }v.
+            \]
+          </div>
+          <p>
+            Значение $\operatorname{low}[v]$ — минимальное время входа, достижимое из $v$ или его DFS-поддерева, если разрешено спускаться по древесным рёбрам и затем использовать не более одного обратного ребра к предку. Рекуррентность собирает три возможности: остаться в $v$, пройти непосредственное обратное ребро или воспользоваться возвратом дочернего поддерева.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-low-link-recurrence"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-low-link,connectivity-discovery-time">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-low-link}{
+              \operatorname{low}[v]}
+              =
+              \min\!\left(
+                \class{atlas-notation-token notation-id-connectivity-discovery-time}{
+                \operatorname{tin}[v]},
+                \min_{\substack{(v,w)\text{ — обратное}\\\text{к предку}}}
+                  \operatorname{tin}[w],
+                \min_{\substack{u\text{ — ребёнок}\\v\text{ в DFS}}}
+                  \operatorname{low}[u]
+              \right).
+            \]
+          </div>
+          <p>
+            Для неориентированного мультиграфа родительское ребро нужно запоминать по идентификатору, а не пропускать любого соседа-родителя. Если между $v$ и его родителем две параллельные связи, одна открыла $v$, а вторая является законным возвратом. Пропуск обеих ошибочно оставит $\operatorname{low}[v]=\operatorname{tin}[v]$ и объявит первое ребро мостом.
+          </p>
+          <p>
+            Петля ведёт из вершины в неё же. Она не уменьшает low-link ниже собственного времени и не влияет на мосты или шарниры. В реализации её можно явно обработать как нейтральное событие. Это лучше, чем надеяться, что случайная ветка условий даст правильный эффект: лаборатория показывает петлю отдельным кадром.
+          </p>
+          <p>
+            Инвариант в момент выхода из $v$ формулируется точнее: $operatorname{low}[v]$ уже учитывает каждое ребро, чей более глубокий конец лежит в полностью обработанном поддереве $v$, и ни одно ребро из ещё не открытой части. До возврата последнего ребёнка значение промежуточное, поэтому проверять критерий моста сразу при входе в ребёнка нельзя. Визуальная трасса разделяет события входа, обратного ребра и возврата именно для сохранения этого временного смысла.
+          </p>
+          <p>
+            Low-link не является расстоянием и не хранит конкретный альтернативный путь. Малое значение лишь свидетельствует о достижимости раннего предка по разрешённой форме маршрута. Если нужен сам обход моста, следует дополнительно помнить обратное ребро, давшее минимум, и цепочку родителей. Для поиска критических объектов достаточно числа, что и делает алгоритм линейным и компактным.
+          </p>
+        </section>
+
+        <section id="bridge-proof">
+          <h2>Древесное ребро — мост ровно тогда, когда ребёнок не возвращается к предкам</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Критерий моста</h3>
+            <p>
+              Для древесного ребра $(v,u)$, где $v$ — родитель $u$, ребро является мостом тогда и только тогда, когда $\operatorname{low}[u]>\operatorname{tin}[v]$.
+            </p>
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="connectivity-bridge-criterion"
+              data-notation-coverage="interactive"
+              data-required-notations="connectivity-bridge,connectivity-low-link,connectivity-discovery-time">
+              \[
+                (v,u)\text{ — }
+                \class{atlas-notation-token notation-id-connectivity-bridge}{мост}
+                \iff
+                \class{atlas-notation-token notation-id-connectivity-low-link}{
+                \operatorname{low}[u]}
+                >
+                \class{atlas-notation-token notation-id-connectivity-discovery-time}{
+                \operatorname{tin}[v]}.
+              \]
+            </div>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему условие необходимо</h3>
+            <p>
+              Если $\operatorname{low}[u]\le\operatorname{tin}[v]$, из поддерева $u$ существует обратное ребро к $v$ или одному из его предков. После удаления $(v,u)$ можно спуститься из $u$ к началу этого обратного ребра, подняться им в верхнюю часть дерева и затем дойти до $v$. Значит концы удалённого ребра остаются связаны, а ребро не является мостом.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему условие достаточно</h3>
+            <p>
+              Пусть $\operatorname{low}[u]>\operatorname{tin}[v]$. Тогда ни одна вершина поддерева $u$ не имеет обратного ребра к $v$ или выше. В неориентированном DFS любое ребро из этого поддерева наружу должно вести к предку: поперечное ребро в ещё не посещённую область сделало бы её частью того же поддерева. Единственная связь с верхней частью — родительское $(v,u)$. После его удаления поддерево отделяется, число компонент растёт, следовательно ребро — мост.
+            </p>
+          </section>
+          <p>
+            Строгое неравенство существенно. Если $\operatorname{low}[u]=\operatorname{tin}[v]$, существует возврат именно в родителя, например второе параллельное ребро или цикл. Удаление древесного экземпляра не разделит граф. Критерий применяется только после полного обхода ребёнка, когда его low-link уже собрал сведения всего поддерева.
+          </p>
+        </section>
+
+        <section id="articulation-proof">
+          <h2>Критерий шарнира похож на мост, но корень DFS требует отдельного правила</h2>
+          <section class="atlas-block" data-atlas-block="theorem">
+            <h3>Критерий точки сочленения</h3>
+            <p>
+              Некорневая вершина $v$ является точкой сочленения, если у неё есть ребёнок $u$ с $\operatorname{low}[u]\ge\operatorname{tin}[v]$. Корень DFS-дерева является точкой сочленения тогда и только тогда, когда имеет не менее двух древесных детей.
+            </p>
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="connectivity-articulation-criterion"
+              data-notation-coverage="interactive"
+              data-required-notations="connectivity-articulation,connectivity-low-link,connectivity-discovery-time">
+              \[
+                \class{atlas-notation-token notation-id-connectivity-articulation}{
+                v\text{ — шарнир}}
+                \iff
+                \begin{cases}
+                  \exists u\text{ — ребёнок }v:
+                  \class{atlas-notation-token notation-id-connectivity-low-link}{
+                  \operatorname{low}[u]}
+                  \ge
+                  \class{atlas-notation-token notation-id-connectivity-discovery-time}{
+                  \operatorname{tin}[v]},&v\text{ не корень},\\
+                  \#\operatorname{children}(v)\ge2,&v\text{ корень}.
+                \end{cases}
+              \]
+            </div>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Некорневая вершина</h3>
+            <p>
+              Если $\operatorname{low}[u]\ge\operatorname{tin}[v]$, поддерево $u$ не имеет обратного ребра к строгому предку $v$. Любой путь из него в верхнюю часть проходит через $v$; после удаления $v$ поддерево отделяется. Обратно, если для каждого ребёнка low-link меньше $\operatorname{tin}[v]$, каждое дочернее поддерево имеет путь к строгому предку $v$. После удаления $v$ оно соединяется с верхней частью, а через неё — с остальными поддеревьями. Разделения не происходит.
+            </p>
+          </section>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Корень DFS-дерева</h3>
+            <p>
+              У корня нет строгих предков, поэтому сравнение low-link с его временем почти всегда дало бы ложный вывод. Если у корня один древесный ребёнок, все остальные вершины дерева лежат в одном дочернем поддереве и после удаления корня остаются связаны. Если детей хотя бы два, между их поддеревьями не может быть ребра: DFS первого ребёнка тогда открыл бы второе. Удаление корня разделяет эти поддеревья.
+            </p>
+          </section>
+          <p>
+            В DFS-лесу правило применяется к корню каждого дерева отдельно. Вершина может оказаться шарниром только внутри своей исходной компоненты; наличие других компонент не делает её критической автоматически. Линейный алгоритм получает все ответы в моменты возврата рекурсии.
+          </p>
+        </section>
+
+        <section id="biconnected">
+          <h2>Двусвязные блоки локализуют области без единственной критической вершины</h2>
+          <p>
+            Вершинно двусвязный блок — максимальная область, внутри которой удаление одной внутренней вершины не разрывает связи между оставшимися вершинами. Эквивалентно, для любой пары различных вершин блока существуют два внутренне вершинно непересекающихся пути, с обычными оговорками для одиночного ребра. Разные блоки могут пересекаться в точке сочленения, но не делят обычное ребро.
+          </p>
+          <p>
+            Во время DFS древесные и обратные рёбра складываются в стек. Когда после ребёнка $u$ выполняется $\operatorname{low}[u]\ge\operatorname{tin}[v]$, рёбра от вершины стека до $(v,u)$ включительно образуют законченный блок. Ни одно из них не может соединиться с будущей частью без прохождения через $v$. Мост становится блоком из одного ребра; цикл выходит единым блоком.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-block-boundary"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-biconnected-block,connectivity-low-link,connectivity-discovery-time">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-low-link}{
+              \operatorname{low}[u]}
+              \ge
+              \class{atlas-notation-token notation-id-connectivity-discovery-time}{
+              \operatorname{tin}[v]}
+              \Longrightarrow
+              \class{atlas-notation-token notation-id-connectivity-biconnected-block}{
+              \text{извлечь рёбра стека до }(v,u)}.
+            \]
+          </div>
+          <p>
+            Блоки образуют полезную структуру «блок — шарнир». Создадим двудольный граф: одна доля — блоки, другая — точки сочленения, ребро означает принадлежность шарнира блоку. Для каждой связной компоненты эта структура является деревом. Она показывает, через какие критические узлы проходит связь между надёжными областями, и позволяет отвечать на запросы устойчивости на более компактном графе.
+          </p>
+          <p>
+            Рёберная двусвязность отличается: там запрещается разрушение одним ребром, а компоненты получаются удалением мостов. Нельзя называть оба разбиения просто «двусвязными компонентами» без уточнения. Цикл с прикреплённым мостом имеет одну нетривиальную рёберно и вершинно двусвязную область, но в более сложных графах два понятия расходятся.
+          </p>
+        </section>
+
+        <section id="connectivity-numbers">
+          <h2>Числа рёберной и вершинной связности измеряют минимальный размер отказа</h2>
+          <p>
+            Для связного нетривиального графа рёберная связность $\lambda(G)$ — минимальное число рёбер, удаление которых делает граф несвязным. Вершинная связность $\kappa(G)$ — минимальное число вершин, после удаления которых граф становится несвязным или тривиальным. Для несвязного графа обе величины равны нулю. Для полного графа $K_n$ принимают $\kappa(K_n)=n-1$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-edge-number"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-edge-connectivity,connectivity-component-count">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-edge-connectivity}{
+              \lambda(G)}
+              =
+              \min\{|F|:
+              \class{atlas-notation-token notation-id-connectivity-component-count}{
+              \operatorname{cc}(G-F)}
+              >
+              \operatorname{cc}(G)\}.
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-vertex-number"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-vertex-connectivity">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-vertex-connectivity}{
+              \kappa(G)}
+              =
+              \min\{|X|:
+              G-X\text{ несвязен или имеет не более одной вершины}\}.
+            \]
+          </div>
+          <p>
+            Всегда $\kappa(G)\le\lambda(G)\le\delta(G)$, где $\delta(G)$ — минимальная степень. Последнее неравенство получается удалением всех рёбер, инцидентных вершине минимальной степени. Первое требует содержательной связи между вершинными и рёберными разделителями; оно согласуется с тем, что удалить вершины обычно сильнее, чем такое же число отдельных рёбер.
+          </p>
+          <p>
+            Мост в связном графе эквивалентен $\lambda(G)=1$. Наличие точки сочленения обычно означает $\kappa(G)=1$, кроме малых соглашений. Но отсутствие одиночных критических объектов не гарантирует высокую устойчивость: два рёбра могут образовать разрез, хотя каждое по отдельности лежит на цикле.
+          </p>
+        </section>
+
+        <section id="menger">
+          <h2>Теорема Менгера превращает минимальный отказ в максимальное резервирование</h2>
+          <p>
+            Для двух различных вершин $s$ и $t$ определим локальную рёберную связность как минимальное число рёбер, удаляющее все пути между ними. Теорема Менгера утверждает, что это число равно максимальному количеству попарно рёберно непересекающихся $s$–$t$-путей. Разделитель даёт очевидную верхнюю границу: каждый путь обязан использовать хотя бы одно удаляемое ребро. Неочевидная часть — существование стольких независимых путей, сколько допускает лучший разделитель.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-menger-edge"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-local-edge-cut,connectivity-path-family">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-local-edge-cut}{
+              \lambda(s,t)}
+              =
+              \max\left\{
+              |\class{atlas-notation-token notation-id-connectivity-path-family}{\mathcal P}|:
+              \mathcal P\text{ — семейство попарно рёберно непересекающихся }
+              s\text{–}t\text{-путей}\right\}.
+            \]
+          </div>
+          <p>
+            Рёберная версия следует из теоремы о максимальном потоке и минимальном разрезе: назначаем каждому ребру единичную ёмкость и используем целочисленность. Целый поток раскладывается на единичные пути, а разрез имеет мощность числа пересекающих рёбер. Для неориентированного ребра нужно корректно выразить общий ресурс обоих направлений; встречные циклические части можно удалить, не меняя значение.
+          </p>
+          <p>
+            Вершинная версия использует внутренне непересекающиеся пути: они могут делить $s$ и $t$, но никакую другую вершину. Минимальный вершинный разделитель не включает сами терминалы. Для несмежных $s$ и $t$ максимальное число таких путей равно минимальному размеру разделителя. Сведение к потоку расщепляет каждую промежуточную вершину на вход и выход с единичной ёмкостью.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-menger-vertex"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-local-vertex-cut,connectivity-path-family">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-local-vertex-cut}{
+              \kappa(s,t)}
+              =
+              \max\left\{
+              |\class{atlas-notation-token notation-id-connectivity-path-family}{\mathcal P}|:
+              \mathcal P\text{ — внутренне вершинно непересекающиеся }
+              s\text{–}t\text{-пути}\right\}.
+            \]
+          </div>
+          <p>
+            Историческая работа Карла Менгера 1927 года была написана в контексте общей теории кривых; привычные конечные графовые формулировки — современная специализация и развитие идеи. Для проектирования сетей теорема важна как перевод между двумя инженерными языками: «пережить $k-1$ отказов» и «иметь $k$ независимых маршрутов».
+          </p>
+          <p>
+            В одну сторону теорема почти видна: если существует $k$ непересекающихся путей, разделитель обязан задеть каждый из них и содержит хотя бы $k$ объектов. Трудна обратная сторона — доказать наличие $k$ путей из одного лишь факта, что меньший разделитель невозможен. Потоковое доказательство рёберной версии создаёт сразу два свидетельства: целый поток раскладывается в пути, а минимальный разрез предъявляет разделитель той же мощности. Равенство сертификатов закрывает разрыв между конструкцией и запретом.
+          </p>
+          <p>
+            Вершинная версия требует аккуратности с соседними терминалами. Прямое ребро $st$ даёт путь без внутренних вершин, который нельзя разрушить удалением разрешённых промежуточных вершин. Поэтому классическая формулировка задаётся для несмежных $s,t$ либо использует расширенное соглашение о разделителе. В прикладной модели проще явно решить, разрешено ли выводить из строя терминалы и считается ли непосредственный канал отдельным неуязвимым маршрутом.
+          </p>
+        </section>
+
+        <section id="local-cuts">
+          <h2>Локальный разрез защищает выбранную пару, а не всю сеть</h2>
+          <p>
+            Во взвешенном неориентированном графе $s$–$t$-разрез делит вершины на $S$ и $V\setminus S$, причём $s\in S$, $t\notin S$. Его ёмкость — сумма ёмкостей рёбер, пересекающих границу. Минимальный локальный разрез отвечает, какой суммарный ресурс достаточно вывести из строя, чтобы разлучить именно эту пару.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-local-cut"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-local-edge-cut,connectivity-cut-boundary">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-local-edge-cut}{
+              \lambda_c(s,t)}
+              =
+              \min_{\substack{s\in S\\t\notin S}}
+              \sum_{e\in
+              \class{atlas-notation-token notation-id-connectivity-cut-boundary}{\delta(S)}}
+              c(e).
+            \]
+          </div>
+          <p>
+            Если в другой части графа висит дешёвая листовая вершина, глобальный разрез может отсечь её, но это никак не ухудшит связь важных терминалов $s$ и $t$. Поэтому локальная величина способна быть намного больше глобальной. Обратной ситуации быть не может: глобальный минимум выбирает среди всех нетривиальных разбиений, включая любое разбиение, разделяющее конкретную пару.
+          </p>
+          <p>
+            Для единичных ёмкостей локальный минимум равен числу рёбер в наименьшем разделителе и по Менгеру — числу независимых путей. Для произвольных ёмкостей речь идёт о суммарной пропускной способности, а не о числе физических рёбер. Одно ребро ёмкости сто может дать большой поток, но остаётся единичной точкой физического отказа; модель должна выбрать правильный тип риска.
+          </p>
+          <p>
+            Лаборатория на графах до четырнадцати вершин вычисляет разрез прямым перебором всех допустимых сторон $S$. Это экспоненциальный эталон, а не предлагаемый промышленный алгоритм. Он полезен потому, что независимо проверяет формулу ёмкости, параллельные рёбра, нулевые веса и различие локального и глобального запросов.
+          </p>
+        </section>
+
+        <section id="global-cut">
+          <h2>Глобальный минимальный разрез ищет самое слабое место без заданных терминалов</h2>
+          <p>
+            Глобальный разрез требует только, чтобы обе стороны были непусты. Его минимум равен наименьшей локальной величине по всем парам различных вершин. В единичном графе это рёберная связность. Для уже несвязного графа значение равно нулю: можно выбрать объединение готовых компонент и не пересечь ни одного ребра.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-global-cut"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-edge-connectivity,connectivity-cut-boundary">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-edge-connectivity}{
+              \lambda_c(G)}
+              =
+              \min_{\varnothing\ne S\subsetneq V}
+              \sum_{e\in
+              \class{atlas-notation-token notation-id-connectivity-cut-boundary}{\delta(S)}}c(e)
+              =
+              \min_{s\ne t}\lambda_c(s,t).
+            \]
+          </div>
+          <p>
+            Наивно можно запустить максимум потока для многих пар или перебрать $2^{|V|-1}-1$ разбиений. Алгоритм Штёра — Вагнера решает глобальную задачу в неориентированном графе с неотрицательными весами без вызовов потока. В каждой фазе maximum adjacency search постепенно добавляет вершину, наиболее сильно связанную с уже выбранным множеством. Последняя добавленная вершина $t$ и предыдущая $s$ задают разрез фазы; затем $s$ и $t$ стягиваются.
+          </p>
+          <p>
+            Минимум среди разрезов фаз является глобальным минимумом. Доказательство показывает: либо искомый глобальный разрез разделяет последнюю пару $s,t$, и тогда разрез фазы не хуже, либо обе вершины лежат на одной стороне, и стягивание сохраняет этот оптимальный разрез для следующего графа. После $|V|-1$ стягиваний остаётся лучший кандидат. Простая матричная реализация работает за $O(|V|^3)$; структуры приоритетов дают более тонкую оценку.
+          </p>
+          <p>
+            Стягивание создаёт параллельные рёбра, веса которых суммируются, а петли удаляются. Потеря истории групп вершин приведёт к правильному числу, но невозможности восстановить сам разрез. Поэтому реализация хранит за каждой стянутой вершиной множество исходных вершин. В этой главе алгоритм дан обзорно; интерактив использует прозрачный полный перебор малых графов.
+          </p>
+          <p>
+            Почему последняя вершина фазы вообще даёт полезный разрез? Maximum adjacency search выбирает очередную вершину по суммарному весу связей с уже набранным множеством $A$. Непосредственно перед добавлением последней $t$ все остальные вершины уже в $A$, поэтому вес её присоединения равен ёмкости границы ${t}$. Более сильное фазовое утверждение сравнивает этот разрез со всеми разрезами, разделяющими предпоследнюю $s$ и последнюю $t$: ни один из них не дешевле. Именно оно разрешает безопасно стянуть пару после сохранения кандидата.
+          </p>
+          <p>
+            Веса при стягивании нужно складывать точно. Если $s$ и $t$ имели рёбра к одной вершине $x$, новая супервершина получает к $x$ ребро суммарной ёмкости. Рёбра между $s$ и $t$ превращаются в петли и больше не пересекают ни один будущий разрез. Нулевые рёбра можно оставить или удалить, но отрицательные недопустимы: выбор наиболее тесно связанной вершины и фазовое доказательство предполагают неотрицательные вклады.
+          </p>
+        </section>
+
+        <section id="gomory-hu">
+          <h2>Дерево Гомори — Ху кодирует минимальные разрезы всех пар</h2>
+          <p>
+            Для неориентированного взвешенного графа можно построить дерево на тех же вершинах с весами рёбер, хотя исходный граф деревом не является. Минимальная ёмкость $s$–$t$-разреза в исходном графе равна минимальному весу ребра на единственном пути между $s$ и $t$ в этом дереве. Удаление такого минимального ребра дерева также задаёт стороны некоторого минимального разреза исходного графа.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-gomory-hu-property"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-gomory-hu-tree,connectivity-local-edge-cut">
+            \[
+              \class{atlas-notation-token notation-id-connectivity-local-edge-cut}{
+              \lambda_c(s,t)}
+              =
+              \min_{e\in P_{
+                \class{atlas-notation-token notation-id-connectivity-gomory-hu-tree}{
+                T_{\mathrm{GH}}}}(s,t)}
+              w_{T_{\mathrm{GH}}}(e).
+            \]
+          </div>
+          <p>
+            Гомори и Ху показали, как построить такое дерево с помощью $|V|-1$ вычислений максимального потока, а не отдельного вычисления для каждой из $\binom{|V|}{2}$ пар. Дерево хранит значения всех пар в $O(|V|)$ рёбрах, но не перечисляет все возможные минимальные разрезы: у пары может быть несколько оптимальных разделений.
+          </p>
+          <p>
+            Структура применима именно к симметричным неориентированным ёмкостям. В направленном графе значение разреза из $s$ в $t$ может отличаться от значения из $t$ в $s$, и одно неориентированное дерево не способно сохранить эту асимметрию. Это пример того, как небольшое изменение модели разрушает красивое компактное представление.
+          </p>
+        </section>
+
+        <section id="network-design">
+          <h2>Анализ находит слабые места, а проектирование выбирает, что построить</h2>
+          <p>
+            В задаче минимального остовного дерева нужно дешёво соединить все вершины, но полученная сеть предельно хрупка: каждое ребро дерева — мост. Если нужен запасной путь, целевая функция должна явно требовать более высокой связности. Добавление рёбер «на глаз» может закрыть один мост и оставить другой разрез прежней ёмкости.
+          </p>
+          <p>
+            В задаче Штейнера требуется соединить не все вершины, а выделенное множество терминалов $R$; разрешено использовать дополнительные вершины как дешёвые развилки. Минимизируется стоимость выбранного связного подграфа. В отличие от MST, оптимальное дерево Штейнера в общем случае вычислительно трудно найти точно. Хорошая модель сначала отделяет обязательные терминалы от доступных промежуточных площадок.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-steiner-objective"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-steiner-terminals,connectivity-steiner-tree">
+            \[
+              \min_{
+              \class{atlas-notation-token notation-id-connectivity-steiner-tree}{T}
+              \subseteq G}
+              \sum_{e\in T}w(e),
+              \qquad
+              \class{atlas-notation-token notation-id-connectivity-steiner-terminals}{R}
+              \subseteq V(T).
+            \]
+          </div>
+          <p>
+            Проектирование живучей сети задаёт требование $r(u,v)$: сколько независимых соединений должно оставаться между каждой важной парой. В рёберной модели естественные ограничения требуют, чтобы любой разрез, разделяющий $u$ и $v$, содержал достаточное число выбранных рёбер. Это семейство экспоненциально по числу множеств $S$, но минимальный разрез служит алгоритмом разделения: он находит нарушенное ограничение, если такое есть.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="connectivity-survivable-cut-constraint"
+            data-notation-coverage="interactive"
+            data-required-notations="connectivity-cut-boundary,connectivity-survivability-demand">
+            \[
+              \sum_{e\in
+              \class{atlas-notation-token notation-id-connectivity-cut-boundary}{\delta(S)}}
+              x_e
+              \ge
+              \max_{\substack{u\in S\\v\notin S}}
+              \class{atlas-notation-token notation-id-connectivity-survivability-demand}{r(u,v)}
+              \qquad
+              \text{для каждого }\varnothing\ne S\subsetneq V.
+            \]
+          </div>
+          <p>
+            Стоимость, ёмкость и надёжность — разные атрибуты. Два параллельных канала в одной траншее математически выглядят независимыми рёбрами, но имеют общий риск отказа. Для реальной сети нужны группы рисков, география и вероятности. Графовая связность остаётся базовой проверкой, но не заменяет предметную модель отказов. Штейнеровы деревья и живучее проектирование оставлены как будущие ветви атласа.
+          </p>
+          <p>
+            Полезно разделять проверку и синтез. Проверка получает уже выбранную сеть и либо подтверждает требуемую связность, либо возвращает малый разрез как контрпример. Синтез выбирает подмножество доступных рёбер и платит их стоимость. Даже если проверка выполняется полиномиально, выбор самого дешёвого набора с множеством требований может быть значительно труднее. Алгоритм разреза тогда работает внутри более крупной оптимизационной схемы и отделяет нарушенные решения.
+          </p>
+          <p>
+            Требование «пережить один отказ» тоже неоднозначно. Можно требовать связность всего графа после удаления любого ребра, связь только заданных терминалов, сохранение минимальной пропускной способности или существование маршрута ограниченной длины. Первое выражается отсутствием мостов, второе — локальными разделителями, третье — ёмкостными разрезами, четвёртое уже не следует из одной связности. Перед оптимизацией нужно записать проверяемое условие, иначе более дорогая сеть может оказаться устойчивой не к тем событиям.
+          </p>
+        </section>
+
+        <section id="pseudocode">
+          <h2>Линейный алгоритм обязан хранить родительское ребро и момент возврата</h2>
+          <p>
+            Рекурсивный псевдокод отражает доказательство: при входе назначаем время, затем обрабатываем соседей, а критерии применяем после полного возврата ребёнка. Для больших цепочек рекурсия может переполнить стек; итеративная версия хранит кадр с вершиной, родительским ребром и индексом следующего соседа.
+          </p>
+          <pre><code>dfs(v, parentEdge):
+    tin[v] = low[v] = ++timer
+    children = 0
+    для каждого инцидентного ребра e = {v, u}:
+        если e.id == parentEdge: продолжить
+        если tin[u] не задан:
+            children++
+            поместить e в стек блоков
+            dfs(u, e.id)
+            low[v] = min(low[v], low[u])
+            если low[u] &gt; tin[v]: e — мост
+            если v не корень и low[u] &gt;= tin[v]: v — шарнир
+            если low[u] &gt;= tin[v]: извлечь блок до e
+        иначе если tin[u] &lt; tin[v]:
+            поместить e в стек блоков
+            low[v] = min(low[v], tin[u])
+    если v — корень и children &gt; 1: v — шарнир</code></pre>
+          <p>
+            Условие $\operatorname{tin}[u]<\operatorname{tin}[v]$ кладёт неориентированное обратное ребро в стек только один раз, со стороны потомка. Петля обрабатывается отдельно. Массив идентификаторов мостов и множество шарниров не должны зависеть от текста меток вершин.
+          </p>
+          <p>
+            Полный перебор разрезов в лаборатории фиксирует одну вершину в $S$, чтобы не считать одновременно $S$ и дополнение. Для локального режима дополнительно фиксируются $s\in S$ и $t\notin S$. Для каждого кандидата сумма проходит по исходным рёбрам; петля никогда не пересекает границу, а каждый параллельный экземпляр даёт собственный вклад.
+          </p>
+        </section>
+
+        <section id="constraints">
+          <h2>Одинаковое число компонент может скрывать разную устойчивость</h2>
+          <p>
+            Связный цикл и связное дерево оба имеют одну компоненту, но рёберная связность цикла равна двум, а дерева — единице. Минимальная степень тоже не определяет ответ точно: она даёт верхнюю границу, но узкий разрез может проходить между двумя плотными областями и быть меньше степеней большинства вершин.
+          </p>
+          <p>
+            Наличие двух различных путей ещё не означает независимость. Пути могут делить одно ребро или одну внутреннюю вершину. Для отказа кабеля нужны рёберно непересекающиеся маршруты; для отказа маршрутизатора — внутренне вершинно непересекающиеся. Если оба маршрута проходят через один дата-центр, рёберная резервированность не спасает от его отключения.
+          </p>
+          <p>
+            Минимальный взвешенный разрез и минимальное число удаляемых рёбер отвечают на разные вопросы. Ребро ёмкости ноль делает взвешенный глобальный разрез нулевым даже в топологически связном графе. Для топологической рёберной связности каждой непетлевой связи назначается единичный вес независимо от пропускной способности.
+          </p>
+          <p>
+            Стоер — Вагнер требует неориентированных неотрицательных весов. Отрицательная «ёмкость» разрушает смысл: выгодно пересекать дополнительные отрицательные рёбра, а монотонность фаз исчезает. Дерево Гомори — Ху также опирается на симметрию. Low-link мостов и шарниров не переносится простым копированием на сильную связность ориентированного графа.
+          </p>
+          <p>
+            Полный перебор лаборатории ограничен четырнадцатью вершинами. Он не выполняет миллионы бессмысленных операций на основном потоке страницы. Ёмкости хранятся точными целыми до тридцати шести цифр; число кандидатов ограничено размером графа. На производственной сети локальный разрез вычислялся бы алгоритмом максимального потока, а глобальный — специализированным методом.
+          </p>
+          <p>
+            Независимая проверка критических объектов намеренно использует более медленный смысл определения. Для каждого непетлевого ребра оно удаляется, затем заново считаются компоненты; для каждой вершины удаляются и она, и все инцидентные рёбра. Совпадение такого эталона с low-link на случайных мультиграфах проверяет не только конечное число ответов, но и тонкие случаи родительского экземпляра, параллельной связи и нескольких исходных компонент. Сам эталон не участвует в визуальной трассе и потому не может случайно повторить ту же ошибку обновления low-link.
+          </p>
+          <p>
+            Разрезы проверяются вторым независимым перебором подмножеств. При этом одна вершина фиксируется на стороне $S$, чтобы разбиение и его дополнение не дублировались; в локальном запросе дополнительно фиксируется сторона $t$. Каждое исходное ребро пересекает границу тогда и только тогда, когда его концы имеют разные признаки стороны. Такой тест дорог, но на малом ограниченном графе даёт точный ответ, не зависящий от реализации потока, Штёра — Вагнера или дерева Гомори — Ху.
+          </p>
+          <p>
+            Если пользователь удаляет элемент, старые времена DFS и старый разрез становятся недействительными целиком. Лаборатория начинает новую трассу и не смешивает номера двух состояний. В динамическом алгоритме можно было бы переиспользовать часть структуры, но тогда потребовались бы отдельные инварианты обновления. В образовательной версии полная пересборка делает причинную связь ясной: показанные компоненты, low-link и сертификат относятся ровно к текущему набору неудалённых элементов.
+            Это также упрощает воспроизводимое сравнение разных сценариев отказа.
+          </p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Большинство ошибок возникает на границе дерева DFS и исходного графа</h2>
+          <p>
+            Первая ошибка — объявлять каждое древесное ребро мостом. Дерево DFS не содержит обратных рёбер как древесных, но исходный граф содержит, и именно они создают обход. Вторая — использовать условие $\operatorname{low}[u]\ge\operatorname{tin}[v]$ для моста: равенство означает возврат в родителя и требует строгого знака.
+          </p>
+          <p>
+            Третья ошибка — применять некорневой критерий шарнира к корню. Четвёртая — считать корень шарниром при одном ребёнке. Пятая — пропускать все рёбра к родительской вершине и ломать параллельные связи. Шестая — обновлять low-link временем выхода или low-link уже посещённого предка вместо его времени входа.
+          </p>
+          <p>
+            Седьмая ошибка — забывать запускать DFS из каждой компоненты. Восьмая — смешивать рёберно и вершинно двусвязные блоки. Девятая — считать петлю запасным путём между разными вершинами. Десятая — удалять вершину, но оставлять её инцидентные рёбра в структуре.
+          </p>
+          <p>
+            Одиннадцатая ошибка — называть минимальный $s$–$t$-разрез глобальным. Двенадцатая — считать число рёбер вместо суммы ёмкостей во взвешенной задаче. Тринадцатая — суммировать параллельные рёбра в low-link и потерять факт двух независимых экземпляров. Четырнадцатая — сообщать единственный «правильный» разрез, хотя оптимальных разбиений может быть несколько.
+          </p>
+          <p>
+            Наконец, линейный поиск мостов не решает задачу минимального разреза произвольного размера. Отсутствие мостов говорит лишь, что один отказ ребра недостаточен. Следующим слабым местом может быть пара, тройка или малая суммарная ёмкость множества рёбер.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
+          <h2>Лаборатория: удалите элемент и увидьте, что именно распалось</h2>
+          <p>
+            Выберите режим low-link, мостов, точек сочленения, локального или глобального разреза. В DFS-режимах подпись вершины показывает $\operatorname{tin}/\operatorname{low}$, активное ребро синхронизировано с таблицей, а итоговые мосты, шарниры и блоки строятся из того же состояния. В режимах разреза малый граф проверяется полным точным перебором, и каждый улучшившийся кандидат становится отдельным кадром. Удалите или верните вершину либо конкретный экземпляр ребра: число компонент и сертификат пересчитаются. Параллельные рёбра, петли, нулевые и большие целые ёмкости сохраняются. Граф масштабируется, перемещается мышью или касанием и управляется с клавиатуры.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="connectivity-cuts-network-design"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Найдите мосты и точки сочленения в пути $a-b-c-d$ и в цикле $a-b-c-d-a$.</p><details><summary>Показать подсказку</summary><p>Проверьте существование обхода после каждого одиночного удаления.</p></details><details><summary>Показать решение</summary><p>В пути все три ребра — мосты, внутренние $b,c$ — точки сочленения. В цикле мостов и точек сочленения нет.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Докажите, что неориентированное ребро является мостом тогда и только тогда, когда не входит ни в один цикл.</p><details><summary>Показать подсказку</summary><p>Цикл даёт обход; обратное докажите через альтернативный путь между концами.</p></details><details><summary>Показать решение</summary><p>Если ребро лежит на цикле, остальная часть цикла соединяет его концы после удаления. Если ребро не мост, после удаления остаётся путь между концами; вместе с удалённым ребром он образует цикл.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Почему в критерии моста используется $>$, а в критерии шарнира для некорня — $\ge$?</p><details><summary>Показать подсказку</summary><p>Рассмотрите возврат дочернего поддерева точно в родителя.</p></details><details><summary>Показать решение</summary><p>Возврат в $v$ обходит древесное ребро, поэтому оно не мост. Но после удаления самой $v$ такой возврат исчезает и не соединяет поддерево со строгими предками, поэтому $v$ остаётся шарниром.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Покажите ошибку алгоритма, который пропускает любого соседа, равного родительской вершине.</p><details><summary>Показать подсказку</summary><p>Возьмите две вершины и два параллельных ребра.</p></details><details><summary>Показать решение</summary><p>Одно ребро становится древесным, второе должно уменьшить low-link ребёнка до времени родителя. Если пропустить оба, первое ложно объявится мостом, хотя второе сохраняет связь.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Выполните DFS для треугольника с прикреплённым листом и выпишите $\operatorname{tin}$, $\operatorname{low}$, мост и блоки.</p><details><summary>Показать подсказку</summary><p>В треугольнике потомок возвращается к самой ранней вершине.</p></details><details><summary>Показать решение</summary><p>При порядке $a,b,c,d$ для рёбер треугольника $ab,bc,ca$ получаем low вершин цикла, достигающий tin[$a$]. Прикреплённое $c-d$ имеет low[$d$]=tin[$d$]&gt;tin[$c$] и является мостом. Треугольник — один блок, мост — отдельный.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Постройте связный граф без мостов, но с точкой сочленения.</p><details><summary>Показать подсказку</summary><p>Склейте два цикла одной вершиной.</p></details><details><summary>Показать решение</summary><p>Два треугольника с общей вершиной не имеют мостов: каждое ребро лежит на цикле. Общая вершина — точка сочленения, потому что после её удаления треугольники разделяются.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Объясните рёберную версию теоремы Менгера через единичный максимальный поток.</p><details><summary>Показать подсказку</summary><p>Используйте целочисленность и разложение потока на пути.</p></details><details><summary>Показать решение</summary><p>Единичные ёмкости делают целый поток набором путей, причём ребро используется не более одного раза. Минимальный потоковый разрез считает рёбра. Равенство максимального потока и минимального разреза даёт равенство числа путей и размера разделителя.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Приведите граф, где глобальный минимум меньше минимального разреза между выбранными $s$ и $t$.</p><details><summary>Показать подсказку</summary><p>Прикрепите дешёвый лист к хорошо резервированной области.</p></details><details><summary>Показать решение</summary><p>Возьмите две вершины $s,t$ с несколькими независимыми путями общей минимальной ёмкости 5 и прикрепите к внутренней вершине лист ребром ёмкости 1. Глобальный разрез отсекает лист за 1, а любой $s$–$t$-разрез стоит не меньше 5.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Почему два параллельных канала в одной траншее могут не давать инженерной рёберной связности два?</p><details><summary>Показать подсказку</summary><p>Математическая независимость должна соответствовать независимым причинам отказа.</p></details><details><summary>Показать решение</summary><p>Оба ребра имеют общий физический риск: повреждение траншеи удаляет их одновременно. Модель должна представить такой отказ группой или общим промежуточным элементом; обычный мультиграф ошибочно считает каналы независимыми.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Для цикла из пяти вершин найдите $\lambda(G)$ и $\kappa(G)$ и дайте соответствующие семейства путей.</p><details><summary>Показать подсказку</summary><p>Между любыми двумя вершинами есть два направления обхода.</p></details><details><summary>Показать решение</summary><p>Обе величины равны 2. Удаление двух подходящих рёбер или двух вершин разделяет цикл, а один объект не разделяет. Два направления по циклу дают два рёберно и внутренне вершинно непересекающихся пути.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Объясните, почему MST — плохая конечная модель для сети, которая обязана пережить один отказ ребра.</p><details><summary>Показать подсказку</summary><p>Какое свойство имеет каждое ребро дерева?</p></details><details><summary>Показать решение</summary><p>Каждое ребро дерева — мост, поэтому удаление любого из них разделяет сеть. Нужно требовать рёберную связность хотя бы два или явно обеспечить альтернативные пути, что меняет оптимизационную задачу.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Что именно хранит дерево Гомори — Ху и чего оно не обязано хранить?</p><details><summary>Показать подсказку</summary><p>Сравните значение разреза и множество всех оптимальных разбиений.</p></details><details><summary>Показать решение</summary><p>Минимальный вес на пути в дереве равен значению минимального разреза выбранной пары, а удаление соответствующего ребра даёт один такой разрез. Дерево не обязано перечислять все минимальные разрезы, если их несколько.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Karl Menger, <a href="https://doi.org/10.4064/fm-10-1-96-115" target="_blank" rel="noopener noreferrer">Zur allgemeinen Kurventheorie</a>, Fundamenta Mathematicae 10, 1927, 96–115 — исходная работа, из которой выросла теорема о путях и разделителях.</li>
+            <li>Robert Tarjan, <a href="https://doi.org/10.1137/0201010" target="_blank" rel="noopener noreferrer">Depth-First Search and Linear Graph Algorithms</a>, SIAM Journal on Computing 1(2), 1972, 146–160 — линейные DFS-алгоритмы, включая двусвязные компоненты неориентированного графа.</li>
+            <li>R. E. Gomory, T. C. Hu, <a href="https://doi.org/10.1137/0109047" target="_blank" rel="noopener noreferrer">Multi-Terminal Network Flows</a>, Journal of the Society for Industrial and Applied Mathematics 9(4), 1961, 551–570 — компактное дерево значений разрезов всех пар.</li>
+            <li>Mechthild Stoer, Frank Wagner, <a href="https://doi.org/10.1145/263867.263872" target="_blank" rel="noopener noreferrer">A Simple Min-Cut Algorithm</a>, Journal of the ACM 44(4), 1997, 585–591 — алгоритм глобального минимального разреза через фазы maximum adjacency search и стягивания.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
