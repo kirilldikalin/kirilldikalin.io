@@ -5,12 +5,13 @@
       "origins-efficiency",
       "mathematical-tools",
       "data-structures",
-      "algorithm-design"
+      "algorithm-design",
+      "graphs-networks-optimization"
     ],
-    "publishedChapterCount": 43,
-    "displayFormulaTotal": 347,
+    "publishedChapterCount": 44,
+    "displayFormulaTotal": 354,
     "basicFormulaTotal": 35,
-    "interactiveFormulaTotal": 312
+    "interactiveFormulaTotal": 319
   },
   "fingerprint": {
     "algorithm": "sha256",

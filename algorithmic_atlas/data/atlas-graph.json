@@ -2255,19 +2255,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "graph-foundations",
       "type": "theory",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "reductions-and-formulations"
       ],
       "related": [],
-      "route": null,
-      "minutes": 38,
-      "reading": null,
+      "route": "./chapters/graph-language-traversals.html",
+      "minutes": 32,
+      "reading": {
+        "words": 2555,
+        "formulaBlocks": 7,
+        "proofBlocks": 1,
+        "theoryMinutes": 18,
+        "labMinutes": 14
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 150,

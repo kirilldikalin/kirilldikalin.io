@@ -35,7 +35,9 @@ const expectedIds = new Map([
 
 // The map/runtime commit introduces the complete plan first. Add an id here
 // only in the same commit that adds the real page, laboratory and tests.
-const publishedChapterIds = new Set([]);
+const publishedChapterIds = new Set([
+  "graph-language-traversals",
+]);
 
 function canonicalChapters() {
   const section = curriculum.match(
@@ -203,6 +205,9 @@ test("continent 05 map coordinates fit the local viewBox", () => {
 });
 
 test("planned graph chapters stay outside progress without losing old ids", () => {
+  const coreTotal = routeIds("graphs-main")
+    .filter((id) => publishedChapterIds.has(id)).length;
+  const branchTotal = publishedChapterIds.size - coreTotal;
   const progress = core.continentProgressSummary(
     graph,
     "graphs-networks-optimization",
@@ -213,9 +218,9 @@ test("planned graph chapters stay outside progress without losing old ids", () =
     total: publishedChapterIds.size,
     percent: 0,
     coreCompleted: 0,
-    coreTotal: 0,
+    coreTotal,
     branchCompleted: 0,
-    branchTotal: 0,
+    branchTotal,
     coreReady: false,
     complete: false,
   });

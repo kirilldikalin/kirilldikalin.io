@@ -6660,6 +6660,234 @@
         "chapterId": "multiplicative-weights",
         "anchor": "linear-programming"
       }
+    },
+    {
+      "id": "graph-graph",
+      "displayNotation": "G",
+      "shortName": "граф",
+      "explanation": "Конечная структура, состоящая из множества вершин V и множества или семейства рёбер E",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "graph-model"
+      }
+    },
+    {
+      "id": "graph-vertex-set",
+      "displayNotation": "V",
+      "shortName": "множество вершин",
+      "explanation": "Множество объектов графа, между которыми рёбра задают связи",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "graph-model"
+      }
+    },
+    {
+      "id": "graph-edge-set",
+      "displayNotation": "E",
+      "shortName": "множество рёбер",
+      "explanation": "Множество или семейство неориентированных связей либо ориентированных дуг графа",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "graph-model"
+      }
+    },
+    {
+      "id": "graph-vertex-count",
+      "displayNotation": "n",
+      "shortName": "число вершин",
+      "explanation": "Мощность множества вершин графа: n равно |V|",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "graph-model"
+      }
+    },
+    {
+      "id": "graph-edge-count",
+      "displayNotation": "m",
+      "shortName": "число рёбер",
+      "explanation": "Мощность множества или размер семейства рёбер графа: m равно |E|",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "graph-model"
+      }
+    },
+    {
+      "id": "graph-degree",
+      "displayNotation": "deg(v)",
+      "shortName": "степень вершины",
+      "explanation": "Число инцидентных вершине рёбер неориентированного графа; петля учитывается дважды",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "degree"
+      }
+    },
+    {
+      "id": "graph-outdegree",
+      "displayNotation": "deg+(v)",
+      "shortName": "полустепень исхода",
+      "explanation": "Число ориентированных рёбер, выходящих из вершины v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "degree"
+      }
+    },
+    {
+      "id": "graph-indegree",
+      "displayNotation": "deg-(v)",
+      "shortName": "полустепень захода",
+      "explanation": "Число ориентированных рёбер, входящих в вершину v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "degree"
+      }
+    },
+    {
+      "id": "graph-adjacency-matrix",
+      "displayNotation": "A_uv",
+      "shortName": "элемент матрицы смежности",
+      "explanation": "Ячейка матрицы, кодирующая наличие или кратность ребра из u в v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "representations"
+      }
+    },
+    {
+      "id": "graph-edge-multiplicity",
+      "displayNotation": "mu(u,v)",
+      "shortName": "кратность ребра",
+      "explanation": "Количество параллельных рёбер с выбранной парой концов",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "representations"
+      }
+    },
+    {
+      "id": "graph-source",
+      "displayNotation": "s",
+      "shortName": "источник обхода",
+      "explanation": "Стартовая вершина, от которой BFS измеряет число рёбер до достижимых вершин",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "bfs"
+      }
+    },
+    {
+      "id": "graph-distance",
+      "displayNotation": "d[v]",
+      "shortName": "метка расстояния",
+      "explanation": "Число рёбер в найденном BFS кратчайшем пути от источника до вершины v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "bfs"
+      }
+    },
+    {
+      "id": "graph-parent",
+      "displayNotation": "pi[v]",
+      "shortName": "родитель в дереве обхода",
+      "explanation": "Вершина, из которой v была впервые открыта текущим обходом",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "bfs"
+      }
+    },
+    {
+      "id": "graph-queue",
+      "displayNotation": "Q",
+      "shortName": "очередь BFS",
+      "explanation": "FIFO-граница поиска в ширину, которая сохраняет порядок слоёв расстояния",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "bfs"
+      }
+    },
+    {
+      "id": "graph-discovery-time",
+      "displayNotation": "t_in[v]",
+      "shortName": "время входа DFS",
+      "explanation": "Порядковый момент первого открытия вершины v поиском в глубину",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "dfs-edges"
+      }
+    },
+    {
+      "id": "graph-finish-time",
+      "displayNotation": "t_out[v]",
+      "shortName": "время выхода DFS",
+      "explanation": "Момент, когда поиск в глубину закончил просматривать все рёбра вершины v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "dfs-edges"
+      }
+    },
+    {
+      "id": "graph-ancestor",
+      "displayNotation": "u ancestor of v",
+      "shortName": "предок DFS",
+      "explanation": "Вершина u лежит на родительском пути DFS от корня к вершине v",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "dfs-edges"
+      }
+    },
+    {
+      "id": "graph-time-cost",
+      "displayNotation": "T(G)",
+      "shortName": "время обхода",
+      "explanation": "Количество элементарных операций обхода графа G в выбранном представлении",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "graph-space-cost",
+      "displayNotation": "S_aux(G)",
+      "shortName": "дополнительная память обхода",
+      "explanation": "Память цветов, родителей, меток и очереди или стека сверх хранения самого графа",
+      "scope": "local",
+      "chapterId": "graph-language-traversals",
+      "firstDefinition": {
+        "chapterId": "graph-language-traversals",
+        "anchor": "complexity"
+      }
     }
   ]
 }
