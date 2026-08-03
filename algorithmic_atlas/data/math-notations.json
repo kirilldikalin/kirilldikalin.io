@@ -8736,6 +8736,141 @@
       "scope": "local",
       "chapterId": "traveling-salesman-exact",
       "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "exact-vs-approx"}
+    },
+    {
+      "id": "dynamic-graph-state",
+      "displayNotation": "G_t",
+      "shortName": "версия динамического графа",
+      "explanation": "Граф, существующий после первых t обновлений временной шкалы",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "model"}
+    },
+    {
+      "id": "dynamic-update-operation",
+      "displayNotation": "u_t",
+      "shortName": "операция обновления",
+      "explanation": "Добавление, удаление или другое разрешённое изменение, переводящее текущую версию графа в следующую",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "model"}
+    },
+    {
+      "id": "dynamic-query-operation",
+      "displayNotation": "q_t",
+      "shortName": "динамический запрос",
+      "explanation": "Запрос характеристики текущей версии графа без изменения этой версии",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "model"}
+    },
+    {
+      "id": "dynamic-update-time",
+      "displayNotation": "T_u",
+      "shortName": "время обновления",
+      "explanation": "Стоимость обработки одной операции изменения динамического графа в заявленной модели вычисления",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "cost"}
+    },
+    {
+      "id": "dynamic-query-time",
+      "displayNotation": "T_q",
+      "shortName": "время запроса",
+      "explanation": "Стоимость получения ответа из поддерживаемого состояния текущей версии графа",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "cost"}
+    },
+    {
+      "id": "dynamic-operation-sequence",
+      "displayNotation": "o_i",
+      "shortName": "операция временной шкалы",
+      "explanation": "Одна операция последовательности обновлений и запросов, используемой при амортизированном анализе",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "cost"}
+    },
+    {
+      "id": "dynamic-amortized-cost",
+      "displayNotation": "A(n)",
+      "shortName": "амортизированная стоимость",
+      "explanation": "Верхняя граница средней стоимости операции по любой допустимой последовательности заданной длины",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "cost"}
+    },
+    {
+      "id": "dynamic-edge-interval",
+      "displayNotation": "I_e=[l_e,r_e)",
+      "shortName": "интервал жизни ребра",
+      "explanation": "Полуинтервал моментов времени, в которых конкретное ребро активно",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "reverse-time"}
+    },
+    {
+      "id": "dynamic-rollback-snapshot",
+      "displayNotation": "σ",
+      "shortName": "снимок rollback DSU",
+      "explanation": "Размер журнала изменений, к которому структура объединяющихся множеств должна откатиться после выхода из временного диапазона",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "reverse-time"}
+    },
+    {
+      "id": "dynamic-spanning-forest",
+      "displayNotation": "F_t",
+      "shortName": "динамический остовный лес",
+      "explanation": "Лес текущей версии, компоненты которого точно совпадают с компонентами полного активного графа",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "forest"}
+    },
+    {
+      "id": "dynamic-link-operation",
+      "displayNotation": "link(u,v)",
+      "shortName": "соединение динамических деревьев",
+      "explanation": "Операция добавления ребра между двумя различными деревьями поддерживаемого леса",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "euler-tour"}
+    },
+    {
+      "id": "dynamic-cut-operation",
+      "displayNotation": "cut(u,v)",
+      "shortName": "разрезание динамического дерева",
+      "explanation": "Операция удаления древесного ребра, разделяющая одно поддерживаемое дерево на два",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "euler-tour"}
+    },
+    {
+      "id": "dynamic-omv-matrix",
+      "displayNotation": "M",
+      "shortName": "матрица задачи OMv",
+      "explanation": "Фиксированная булева матрица, известная до поступления последовательности online-векторов",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "dynamic-omv-vector",
+      "displayNotation": "v_i",
+      "shortName": "online-вектор OMv",
+      "explanation": "Очередной булев вектор, после получения которого нужно вывести произведение до появления следующего вектора",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "dynamic-omv-product",
+      "displayNotation": "y_i",
+      "shortName": "результат OMv",
+      "explanation": "Булево произведение фиксированной матрицы M на очередной online-вектор v_i",
+      "scope": "local",
+      "chapterId": "dynamic-graph-algorithms",
+      "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "lower-bounds"}
     }
   ]
 }

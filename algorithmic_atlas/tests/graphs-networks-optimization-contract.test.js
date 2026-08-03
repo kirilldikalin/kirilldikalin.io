@@ -46,6 +46,7 @@ const publishedChapterIds = new Set([
   "graph-matchings",
   "connectivity-cuts-network-design",
   "traveling-salesman-exact",
+  "dynamic-graph-algorithms",
 ]);
 
 function canonicalChapters() {

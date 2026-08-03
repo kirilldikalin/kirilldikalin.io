@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-14",
+  "datasetVersion": "2026.08.03-15",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2585,19 +2585,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "connectivity-cuts-network-design"
       ],
       "related": [],
-      "route": null,
+      "route": "./chapters/dynamic-graph-algorithms.html",
       "minutes": 57,
-      "reading": null,
+      "reading": {
+        "words": 4119,
+        "formulaBlocks": 9,
+        "proofBlocks": 3,
+        "theoryMinutes": 29,
+        "labMinutes": 28
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1260,
