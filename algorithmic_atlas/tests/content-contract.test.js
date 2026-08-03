@@ -88,7 +88,7 @@ function malformedMathCommands(source) {
   const fragments =
     /\\\[([\s\S]*?)\\\]|\\\(([\s\S]*?)\\\)|\$\$([\s\S]*?)\$\$|(?<!\\)\$(?!\$)([\s\S]*?)(?<!\\)\$(?!\$)/g;
   const missingSlash =
-    /(?<![\\A-Za-z])(class|operatorname|lfloor|rfloor|lceil|rceil|frac|Theta|Omega|nleq|leq|geq|times|cdot|sqrt|infty|mathbb|mathcal|varepsilon|Pr|Phi)(?=[{_\s\\0-9A-Z(])/g;
+    /(?<![\\A-Za-z])(class|operatorname|lfloor|rfloor|lceil|rceil|frac|Theta|Omega|nleq|leq|geq|le|ge|lambda|pi|ldots|times|cdot|sqrt|infty|mathbb|mathcal|varepsilon|Pr|Phi)(?=[{_\s\\0-9A-Z(,;])/g;
   let fragment;
   while ((fragment = fragments.exec(source)) !== null) {
     const tex = fragment.slice(1).find((value) => value !== undefined);
@@ -124,6 +124,19 @@ test("all visible chapter TeX has balanced delimiters and no raw commands", () =
     "utf8"
   );
   assert.match(firstChapter, /\\\(\\lfloor a\/2\\rfloor&lt;a\\\)/);
+});
+
+test("math audit catches common TeX commands with an omitted backslash", () => {
+  const broken = [
+    "$lambda_2$",
+    "$pi_i$",
+    "$s,ldots,t$",
+    "$operatorname{low}[v]$",
+    "$d(y)le d(x)+1$",
+  ];
+  broken.forEach((source) => {
+    assert.equal(malformedMathCommands(source).length, 1, source);
+  });
 });
 
 test("the notation registry has stable unique entries and valid definitions", () => {

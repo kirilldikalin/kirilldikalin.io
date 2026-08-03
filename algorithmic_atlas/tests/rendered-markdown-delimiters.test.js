@@ -11,6 +11,8 @@ const auditedContinents = new Set([
   "origins-efficiency",
   "mathematical-tools",
   "data-structures",
+  "algorithm-design",
+  "graphs-networks-optimization",
 ]);
 
 function renderedText(html) {
@@ -47,14 +49,14 @@ function markdownDelimiterMatches(text) {
   );
 }
 
-test("published chapters of continents 01-03 contain no rendered Markdown delimiters", () => {
+test("all published atlas chapters contain no rendered Markdown delimiters", () => {
   const chapters = graph.nodes.filter(
     (node) =>
       node.publication === "published" &&
       auditedContinents.has(node.continentId)
   );
 
-  assert.equal(chapters.length, 29, "expected all 29 published chapters of continents 01-03");
+  assert.equal(chapters.length, 57, "expected all 57 published chapters of continents 01-05");
 
   for (const node of chapters) {
     const file = path.join(atlasRoot, node.route.replace(/^\.\//, ""));
