@@ -12,6 +12,8 @@
   --chapter-warning: #f1dfd7;
   --chapter-lab: #dfe8e6;
   --chapter-focus: #1b6e78;
+  --chapter-title-max-width: 42rem;
+  --chapter-title-toc-gutter: 14rem;
 }
 
 * {
@@ -80,7 +82,7 @@ body.atlas-chapter {
 }
 
 .atlas-chapter-header h1 {
-  max-width: 46rem;
+  max-width: var(--chapter-title-max-width);
   margin: 0.2em auto 0.35em;
   font-size: clamp(2.15rem, 6.5vw, 4.8rem);
   line-height: 1;
@@ -922,7 +924,10 @@ mjx-container .atlas-notation-token:focus-visible {
 
 @media (min-width: 50.0625rem) {
   .atlas-chapter-header h1 {
-    width: min(46rem, calc(100% - 12rem));
+    width: min(
+      var(--chapter-title-max-width),
+      calc(100% - var(--chapter-title-toc-gutter))
+    );
   }
 }
 

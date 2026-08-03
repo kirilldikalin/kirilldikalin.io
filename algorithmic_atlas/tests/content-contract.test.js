@@ -413,11 +413,15 @@ test("wide chapter titles stay inside the content column beside the TOC", () => 
 
   assert.match(
     chapterStyles,
-    /\.atlas-chapter-header h1\s*\{[\s\S]*?max-width:\s*46rem;[\s\S]*?margin:\s*0\.2em auto 0\.35em;[\s\S]*?text-wrap:\s*balance;/
+    /--chapter-title-max-width:\s*42rem;[\s\S]*?--chapter-title-toc-gutter:\s*14rem;/
   );
   assert.match(
     chapterStyles,
-    /@media \(min-width: 50\.0625rem\) \{\s*\.atlas-chapter-header h1\s*\{\s*width:\s*min\(46rem, calc\(100% - 12rem\)\);/
+    /\.atlas-chapter-header h1\s*\{[\s\S]*?max-width:\s*var\(--chapter-title-max-width\);[\s\S]*?margin:\s*0\.2em auto 0\.35em;[\s\S]*?text-wrap:\s*balance;/
+  );
+  assert.match(
+    chapterStyles,
+    /@media \(min-width: 50\.0625rem\) \{\s*\.atlas-chapter-header h1\s*\{\s*width:\s*min\(\s*var\(--chapter-title-max-width\),\s*calc\(100% - var\(--chapter-title-toc-gutter\)\)\s*\);/
   );
   assert.match(
     chapterStyles,
