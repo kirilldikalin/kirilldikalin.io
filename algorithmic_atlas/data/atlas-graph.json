@@ -2420,19 +2420,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "flows-and-matchings",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "minimum-spanning-trees"
       ],
       "related": [],
-      "route": null,
-      "minutes": 65,
-      "reading": null,
+      "route": "./chapters/max-flow-min-cut.html",
+      "minutes": 60,
+      "reading": {
+        "words": 4193,
+        "formulaBlocks": 19,
+        "proofBlocks": 2,
+        "theoryMinutes": 32,
+        "labMinutes": 28
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 920,

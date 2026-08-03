@@ -41,6 +41,7 @@ const publishedChapterIds = new Set([
   "single-source-shortest-paths",
   "all-pairs-shortest-paths",
   "minimum-spanning-trees",
+  "max-flow-min-cut",
 ]);
 
 function canonicalChapters() {

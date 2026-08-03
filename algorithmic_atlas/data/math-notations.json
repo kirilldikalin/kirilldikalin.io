@@ -7728,6 +7728,186 @@
         "chapterId": "minimum-spanning-trees",
         "anchor": "sensitivity"
       }
+    },
+    {
+      "id": "flow-network-g",
+      "displayNotation": "G",
+      "shortName": "сеть потока",
+      "explanation": "Ориентированный граф с ёмкостями, выделенными истоком и стоком",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-source-s",
+      "displayNotation": "s",
+      "shortName": "исток",
+      "explanation": "Вершина, из которой в сеть поступает максимизируемый поток",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-sink-t",
+      "displayNotation": "t",
+      "shortName": "сток",
+      "explanation": "Вершина, в которую должен быть доставлен поток",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-capacity-c",
+      "displayNotation": "c(e)",
+      "shortName": "ёмкость дуги",
+      "explanation": "Неотрицательная верхняя граница потока по исходной дуге",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-function-f",
+      "displayNotation": "f(e)",
+      "shortName": "поток по дуге",
+      "explanation": "Количество потока, назначенное исходной ориентированной дуге",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-conservation",
+      "displayNotation": "sum in f = sum out f",
+      "shortName": "сохранение потока",
+      "explanation": "В каждой промежуточной вершине суммарный приток равен суммарному оттоку",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-value",
+      "displayNotation": "|f|",
+      "shortName": "значение потока",
+      "explanation": "Чистый отток из истока, равный чистому притоку в сток",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "flow-residual-capacity",
+      "displayNotation": "c_f(u,v)",
+      "shortName": "остаточная ёмкость",
+      "explanation": "Допустимая величина увеличения вперёд или отмены текущего потока назад",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "residual"
+      }
+    },
+    {
+      "id": "flow-residual-graph",
+      "displayNotation": "G_f",
+      "shortName": "остаточная сеть",
+      "explanation": "Граф всех допустимых положительных поправок к текущему потоку",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "residual"
+      }
+    },
+    {
+      "id": "flow-augmenting-path",
+      "displayNotation": "P",
+      "shortName": "увеличивающий путь",
+      "explanation": "Путь из истока в сток по положительным дугам остаточной сети",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "augmentation"
+      }
+    },
+    {
+      "id": "flow-bottleneck",
+      "displayNotation": "Delta(P)",
+      "shortName": "бутылочное горлышко",
+      "explanation": "Минимальная остаточная ёмкость среди дуг увеличивающего пути",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "augmentation"
+      }
+    },
+    {
+      "id": "flow-level-function",
+      "displayNotation": "ell(v)",
+      "shortName": "уровень вершины",
+      "explanation": "Расстояние от истока до вершины в текущей остаточной сети",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "dinic"
+      }
+    },
+    {
+      "id": "flow-cut-pair",
+      "displayNotation": "(S,T)",
+      "shortName": "разрез сети",
+      "explanation": "Разбиение вершин, помещающее исток в S, а сток в T",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "cuts"
+      }
+    },
+    {
+      "id": "flow-cut-capacity",
+      "displayNotation": "c(S,T)",
+      "shortName": "ёмкость разреза",
+      "explanation": "Сумма ёмкостей исходных дуг, направленных из стороны истока в сторону стока",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "cuts"
+      }
+    },
+    {
+      "id": "flow-vertex-capacity",
+      "displayNotation": "b(v)",
+      "shortName": "ёмкость вершины",
+      "explanation": "Ограничение суммарного потока через вершину, реализуемое её расщеплением",
+      "scope": "local",
+      "chapterId": "max-flow-min-cut",
+      "firstDefinition": {
+        "chapterId": "max-flow-min-cut",
+        "anchor": "modeling"
+      }
     }
   ]
 }
