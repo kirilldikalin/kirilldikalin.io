@@ -8448,6 +8448,294 @@
       "scope": "local",
       "chapterId": "connectivity-cuts-network-design",
       "firstDefinition": {"chapterId": "connectivity-cuts-network-design", "anchor": "network-design"}
+    },
+    {
+      "id": "tsp-graph",
+      "displayNotation": "G",
+      "shortName": "граф экземпляра TSP",
+      "explanation": "Граф, вершины которого являются городами, а рёбра или дуги — допустимыми прямыми переездами",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-vertex-set",
+      "displayNotation": "V",
+      "shortName": "множество городов",
+      "explanation": "Множество вершин-городов рассматриваемого экземпляра задачи коммивояжера",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-edge-set",
+      "displayNotation": "E",
+      "shortName": "допустимые переезды",
+      "explanation": "Множество рёбер или ориентированных дуг, по которым разрешён прямой переход между городами",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-cost",
+      "displayNotation": "c",
+      "shortName": "стоимость переезда",
+      "explanation": "Неотрицательная стоимость ребра, дуги, пути или тура в зависимости от аргумента",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-optimum",
+      "displayNotation": "C^*",
+      "shortName": "стоимость оптимального тура",
+      "explanation": "Минимальная стоимость среди всех допустимых гамильтоновых циклов экземпляра",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-tour",
+      "displayNotation": "s,\\pi_1,\\ldots,\\pi_{n-1},s",
+      "shortName": "замкнутый тур",
+      "explanation": "Последовательность, начинающаяся и заканчивающаяся в фиксированном старте и посещающая каждый другой город ровно один раз",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-permutation",
+      "displayNotation": "\\pi",
+      "shortName": "порядок посещения",
+      "explanation": "Перестановка всех городов кроме фиксированного старта, задающая кандидата в тур",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-asymmetric-cost",
+      "displayNotation": "c(u,v)\\ne c(v,u)",
+      "shortName": "асимметрия стоимости",
+      "explanation": "Прямой и обратный переходы между той же парой городов могут иметь разные стоимости",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "model"}
+    },
+    {
+      "id": "tsp-vertex-count",
+      "displayNotation": "n",
+      "shortName": "число городов",
+      "explanation": "Количество вершин рассматриваемого экземпляра TSP",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "brute-force"}
+    },
+    {
+      "id": "tsp-permutation-count",
+      "displayNotation": "N_{\\mathrm{perm}}",
+      "shortName": "число порядков перебора",
+      "explanation": "Количество перестановок городов, остающееся после фиксации стартовой вершины",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "brute-force"}
+    },
+    {
+      "id": "tsp-dp-state",
+      "displayNotation": "DP[S,v]",
+      "shortName": "состояние Held–Karp",
+      "explanation": "Минимальная стоимость пути из старта, посетившего в точности S и закончившегося в v",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "held-karp"}
+    },
+    {
+      "id": "tsp-subset",
+      "displayNotation": "S",
+      "shortName": "посещённое подмножество",
+      "explanation": "Подмножество городов без старта, уже включённых в путь состояния динамики",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "held-karp"}
+    },
+    {
+      "id": "tsp-endpoint",
+      "displayNotation": "v",
+      "shortName": "последний город состояния",
+      "explanation": "Город из S, в котором заканчивается путь, представленный состоянием Held–Karp",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "held-karp"}
+    },
+    {
+      "id": "tsp-dp-recurrence",
+      "displayNotation": "DP[S,v]",
+      "shortName": "рекуррентность Held–Karp",
+      "explanation": "Минимум по возможным предпоследним городам после удаления v из посещённого множества",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "held-karp"}
+    },
+    {
+      "id": "tsp-parent",
+      "displayNotation": "u",
+      "shortName": "предшественник состояния",
+      "explanation": "Предпоследний город, достигающий минимума рекуррентности и позволяющий восстановить тур",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "held-karp"}
+    },
+    {
+      "id": "tsp-held-karp-time",
+      "displayNotation": "T(n)",
+      "shortName": "время Held–Karp",
+      "explanation": "Число элементарных операций точной динамики по всем подмножествам и конечным городам",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "reconstruction"}
+    },
+    {
+      "id": "tsp-held-karp-memory",
+      "displayNotation": "M(n)",
+      "shortName": "память Held–Karp",
+      "explanation": "Объём таблицы значений и родителей динамики по подмножествам",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "reconstruction"}
+    },
+    {
+      "id": "tsp-lower-bound",
+      "displayNotation": "LB(P)",
+      "shortName": "нижняя граница ветви",
+      "explanation": "Гарантированная нижняя оценка стоимости любого полного тура, продолжающего частичный путь P",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "branch-bound"}
+    },
+    {
+      "id": "tsp-partial-path",
+      "displayNotation": "P",
+      "shortName": "частичный маршрут",
+      "explanation": "Префикс тура в текущем узле дерева ветвления",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "branch-bound"}
+    },
+    {
+      "id": "tsp-incumbent",
+      "displayNotation": "U",
+      "shortName": "стоимость рекордного тура",
+      "explanation": "Лучшая известная стоимость уже построенного допустимого тура, то есть верхняя граница на оптимум",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "branch-bound"}
+    },
+    {
+      "id": "tsp-mst",
+      "displayNotation": "MST(R)",
+      "shortName": "остов непосещённых городов",
+      "explanation": "Минимальное остовное дерево на множестве ещё не посещённых вершин R",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "mst-bound"}
+    },
+    {
+      "id": "tsp-mst-weight",
+      "displayNotation": "w",
+      "shortName": "вес остова",
+      "explanation": "Суммарная стоимость рёбер выбранного минимального остовного дерева",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "mst-bound"}
+    },
+    {
+      "id": "tsp-one-tree",
+      "displayNotation": "MST(V\\setminus\\{s\\})",
+      "shortName": "остовная часть 1-tree",
+      "explanation": "Минимальный остов после удаления специальной вершины, к которому добавляются два её дешёвых ребра",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "one-tree"}
+    },
+    {
+      "id": "tsp-one-tree-bound",
+      "displayNotation": "L_{1\\text{-tree}}",
+      "shortName": "граница 1-tree",
+      "explanation": "Стоимость минимального 1-tree, не превосходящая стоимость оптимального гамильтонова цикла",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "one-tree"}
+    },
+    {
+      "id": "tsp-binary-edge",
+      "displayNotation": "x_e",
+      "shortName": "переменная выбора ребра",
+      "explanation": "Бинарная переменная целочисленной модели: единица означает включение ребра e в тур",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "integer-program"}
+    },
+    {
+      "id": "tsp-degree-constraint",
+      "displayNotation": "\\sum_{e\\in\\delta(v)}x_e=2",
+      "shortName": "ограничение степени",
+      "explanation": "Каждый город должен иметь ровно два выбранных инцидентных ребра в симметричном туре",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "integer-program"}
+    },
+    {
+      "id": "tsp-subtour-cut",
+      "displayNotation": "\\sum_{e\\subseteq S}x_e\\le |S|-1",
+      "shortName": "ограничение подтура",
+      "explanation": "Запрещает выбранному собственному подмножеству вершин замыкаться в отдельный цикл",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "subtour"}
+    },
+    {
+      "id": "tsp-subtour-set",
+      "displayNotation": "S",
+      "shortName": "кандидат на подтур",
+      "explanation": "Непустое собственное подмножество городов, для которого проверяется ограничение связности",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "subtour"}
+    },
+    {
+      "id": "tsp-triangle-inequality",
+      "displayNotation": "c(u,v)\\le c(u,w)+c(w,v)",
+      "shortName": "неравенство треугольника",
+      "explanation": "Прямой переход не дороже перехода через любой третий город",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "metric"}
+    },
+    {
+      "id": "tsp-metric-closure",
+      "displayNotation": "c'(u,v)",
+      "shortName": "стоимость метрического замыкания",
+      "explanation": "Стоимость ребра полного замыкания, равная длине кратчайшего пути в исходном графе",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "metric"}
+    },
+    {
+      "id": "tsp-shortest-distance",
+      "displayNotation": "d_G(u,v)",
+      "shortName": "кратчайшее расстояние в графе",
+      "explanation": "Минимальная стоимость пути из u в v в исходном взвешенном графе G",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "metric"}
+    },
+    {
+      "id": "tsp-approximation-ratio",
+      "displayNotation": "\\alpha",
+      "shortName": "коэффициент приближения",
+      "explanation": "Множитель, ограничивающий стоимость результата приближённого алгоритма относительно оптимума",
+      "scope": "local",
+      "chapterId": "traveling-salesman-exact",
+      "firstDefinition": {"chapterId": "traveling-salesman-exact", "anchor": "exact-vs-approx"}
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-13",
+  "datasetVersion": "2026.08.03-14",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2552,19 +2552,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "connectivity-cuts-network-design"
       ],
       "related": [],
-      "route": null,
-      "minutes": 58,
-      "reading": null,
+      "route": "./chapters/traveling-salesman-exact.html",
+      "minutes": 61,
+      "reading": {
+        "words": 4072,
+        "formulaBlocks": 15,
+        "proofBlocks": 6,
+        "theoryMinutes": 33,
+        "labMinutes": 28
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1470,

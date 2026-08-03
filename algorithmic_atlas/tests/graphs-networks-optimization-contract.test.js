@@ -45,6 +45,7 @@ const publishedChapterIds = new Set([
   "circulations-min-cost-flow",
   "graph-matchings",
   "connectivity-cuts-network-design",
+  "traveling-salesman-exact",
 ]);
 
 function canonicalChapters() {
