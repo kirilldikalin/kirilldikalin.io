@@ -7044,6 +7044,222 @@
         "chapterId": "dag-topological-scc",
         "anchor": "tarjan"
       }
+    },
+    {
+      "id": "graph-vertex-set-v",
+      "displayNotation": "V",
+      "shortName": "вершины взвешенного графа",
+      "explanation": "Конечное множество вершин входного графа задачи кратчайших путей",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "graph-edge-set-e",
+      "displayNotation": "E",
+      "shortName": "рёбра взвешенного графа",
+      "explanation": "Множество ориентированных рёбер, по которым разрешены переходы",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "graph-weight-function-w",
+      "displayNotation": "w",
+      "shortName": "вес ребра",
+      "explanation": "Функция, сопоставляющая каждому ребру его числовую стоимость",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-path-p",
+      "displayNotation": "P",
+      "shortName": "путь",
+      "explanation": "Последовательность совместимых ориентированных рёбер из начальной вершины в конечную",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-path-length",
+      "displayNotation": "w(P)",
+      "shortName": "длина пути",
+      "explanation": "Сумма весов всех рёбер пути P с учётом их повторений",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-distance-delta",
+      "displayNotation": "delta(s,v)",
+      "shortName": "истинное кратчайшее расстояние",
+      "explanation": "Инфимум длин всех путей из источника s в вершину v",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-source-s",
+      "displayNotation": "s",
+      "shortName": "источник кратчайших путей",
+      "explanation": "Фиксированная начальная вершина, от которой измеряются расстояния",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-target-v",
+      "displayNotation": "v",
+      "shortName": "целевая вершина",
+      "explanation": "Вершина, расстояние до которой рассматривается относительно источника s",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-infinity",
+      "displayNotation": "+infinity",
+      "shortName": "недостижимость",
+      "explanation": "Математическая метка отсутствия пути, которую нельзя подменять произвольным большим числом",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "model"
+      }
+    },
+    {
+      "id": "sssp-relaxation",
+      "displayNotation": "relax(u,v)",
+      "shortName": "релаксация ребра",
+      "explanation": "Проверка, улучшает ли путь через u текущую метку расстояния вершины v",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "relaxation"
+      }
+    },
+    {
+      "id": "sssp-distance-label-d",
+      "displayNotation": "d[v]",
+      "shortName": "текущая метка расстояния",
+      "explanation": "Длина лучшего уже найденного конкретного пути из s в v или метка бесконечности",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "relaxation"
+      }
+    },
+    {
+      "id": "sssp-predecessor-pi",
+      "displayNotation": "pi[v]",
+      "shortName": "предшественник кратчайшего пути",
+      "explanation": "Вершина, через которую получено текущее лучшее значение d[v]",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "relaxation"
+      }
+    },
+    {
+      "id": "sssp-settled-set",
+      "displayNotation": "S",
+      "shortName": "закрытые вершины Дейкстры",
+      "explanation": "Множество вершин, чьи метки уже доказаны равными истинным расстояниям",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "dijkstra"
+      }
+    },
+    {
+      "id": "sssp-priority-queue-q",
+      "displayNotation": "Q",
+      "shortName": "очередь Дейкстры",
+      "explanation": "Очередь с приоритетом по текущей метке расстояния незакрытой вершины",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "dijkstra"
+      }
+    },
+    {
+      "id": "sssp-bf-layer-distance",
+      "displayNotation": "d_k[v]",
+      "shortName": "слой Bellman–Ford",
+      "explanation": "Минимальная длина пути из s в v, использующего не более k рёбер",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "bellman-ford-invariant"
+      }
+    },
+    {
+      "id": "sssp-negative-cycle",
+      "displayNotation": "C",
+      "shortName": "отрицательный цикл",
+      "explanation": "Достижимый ориентированный цикл с отрицательной суммой весов",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "negative-cycles"
+      }
+    },
+    {
+      "id": "graph-vertex-count-n",
+      "displayNotation": "n",
+      "shortName": "число вершин SSSP",
+      "explanation": "Количество вершин входного взвешенного графа",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "complexity"
+      }
+    },
+    {
+      "id": "graph-edge-count-m",
+      "displayNotation": "m",
+      "shortName": "число рёбер SSSP",
+      "explanation": "Количество ориентированных рёбер входного взвешенного графа",
+      "scope": "local",
+      "chapterId": "single-source-shortest-paths",
+      "firstDefinition": {
+        "chapterId": "single-source-shortest-paths",
+        "anchor": "complexity"
+      }
     }
   ]
 }

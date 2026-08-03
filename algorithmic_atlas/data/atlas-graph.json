@@ -2321,19 +2321,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "paths-and-trees",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "dag-topological-scc"
       ],
       "related": [],
-      "route": null,
-      "minutes": 62,
-      "reading": null,
+      "route": "./chapters/single-source-shortest-paths.html",
+      "minutes": 55,
+      "reading": {
+        "words": 4113,
+        "formulaBlocks": 10,
+        "proofBlocks": 5,
+        "theoryMinutes": 31,
+        "labMinutes": 24
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 530,

@@ -38,6 +38,7 @@ const expectedIds = new Map([
 const publishedChapterIds = new Set([
   "graph-language-traversals",
   "dag-topological-scc",
+  "single-source-shortest-paths",
 ]);
 
 function canonicalChapters() {
