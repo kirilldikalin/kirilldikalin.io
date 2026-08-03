@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-15",
+  "datasetVersion": "2026.08.03-16",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2618,19 +2618,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "math",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "minimum-spanning-trees"
       ],
       "related": [],
-      "route": null,
+      "route": "./chapters/linear-algebra-for-graphs.html",
       "minutes": 60,
-      "reading": null,
+      "reading": {
+        "words": 4023,
+        "formulaBlocks": 20,
+        "proofBlocks": 5,
+        "theoryMinutes": 34,
+        "labMinutes": 26
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 670,

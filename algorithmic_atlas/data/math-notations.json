@@ -8871,6 +8871,213 @@
       "scope": "local",
       "chapterId": "dynamic-graph-algorithms",
       "firstDefinition": {"chapterId": "dynamic-graph-algorithms", "anchor": "lower-bounds"}
+    },
+    {
+      "id": "linear-adjacency-matrix",
+      "displayNotation": "A, A_{ij}",
+      "shortName": "матрица смежности",
+      "explanation": "Симметричная матрица суммарных весов непосредственных связей; петля даёт двойной диагональный вклад по соглашению главы",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "adjacency"}
+    },
+    {
+      "id": "linear-edge-weight",
+      "displayNotation": "w_e",
+      "shortName": "вес ребра",
+      "explanation": "Неотрицательный целый вес конкретного экземпляра ребра; параллельные экземпляры сохраняются отдельно",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "conventions"}
+    },
+    {
+      "id": "linear-degree-matrix",
+      "displayNotation": "D",
+      "shortName": "матрица степеней",
+      "explanation": "Диагональная матрица взвешенных степеней вершин",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "adjacency"}
+    },
+    {
+      "id": "linear-weighted-degree",
+      "displayNotation": "d_i",
+      "shortName": "взвешенная степень",
+      "explanation": "Сумма i-й строки матрицы смежности, то есть общий вес концов рёбер в вершине v_i",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "adjacency"}
+    },
+    {
+      "id": "linear-incidence-matrix",
+      "displayNotation": "B, B_{ve}",
+      "shortName": "матрица инцидентности",
+      "explanation": "Матрица с вершинами в строках и экземплярами рёбер в столбцах; условная ориентация задаёт знаки −1 и +1",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "incidence"}
+    },
+    {
+      "id": "linear-weight-matrix",
+      "displayNotation": "W",
+      "shortName": "матрица весов рёбер",
+      "explanation": "Диагональная матрица, чья координата для столбца e матрицы инцидентности равна w_e",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "incidence"}
+    },
+    {
+      "id": "linear-laplacian",
+      "displayNotation": "L",
+      "shortName": "лапласиан графа",
+      "explanation": "Симметричный оператор L=D−A=BWB^T, измеряющий взвешенные перепады сигнала вдоль рёбер",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "laplacian"}
+    },
+    {
+      "id": "linear-vertex-signal",
+      "displayNotation": "x",
+      "shortName": "сигнал на вершинах",
+      "explanation": "Вектор, назначающий каждой вершине вещественное значение",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "energy"}
+    },
+    {
+      "id": "linear-laplacian-energy",
+      "displayNotation": "sum_e w_e(x_u-x_v)^2",
+      "shortName": "лапласианова энергия",
+      "explanation": "Сумма взвешенных квадратов перепадов сигнала на всех экземплярах рёбер, равная x^T Lx",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "energy"}
+    },
+    {
+      "id": "linear-positive-semidefinite",
+      "displayNotation": "L\\succeq0",
+      "shortName": "положительная полуопределённость",
+      "explanation": "Утверждение, что квадратичная форма лапласиана неотрицательна на любом вещественном векторе",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "psd"}
+    },
+    {
+      "id": "linear-laplacian-kernel",
+      "displayNotation": "\\ker L",
+      "shortName": "ядро лапласиана",
+      "explanation": "Пространство сигналов нулевой энергии; они постоянны на каждой компоненте положительной опоры",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "kernel"}
+    },
+    {
+      "id": "linear-component-count",
+      "displayNotation": "\\operatorname{cc}_{+}(G)",
+      "shortName": "компоненты положительной опоры",
+      "explanation": "Число компонент после игнорирования петель и рёбер нулевого веса",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "kernel"}
+    },
+    {
+      "id": "linear-eigenvector",
+      "displayNotation": "v_i",
+      "shortName": "собственный вектор",
+      "explanation": "Ненулевое направление, которое лапласиан сохраняет, умножая лишь на собственное значение",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "eigen"}
+    },
+    {
+      "id": "linear-eigenvalue",
+      "displayNotation": "\\lambda_i",
+      "shortName": "собственное значение лапласиана",
+      "explanation": "Неотрицательный коэффициент растяжения собственного направления лапласианом",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "eigen"}
+    },
+    {
+      "id": "linear-rayleigh-quotient",
+      "displayNotation": "R_L(x)",
+      "shortName": "частное Рэлея",
+      "explanation": "Энергия сигнала, делённая на квадрат его евклидовой нормы; инвариантна к ненулевому масштабированию",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "rayleigh"}
+    },
+    {
+      "id": "linear-normalized-laplacian",
+      "displayNotation": "\\mathcal L",
+      "shortName": "нормированный лапласиан",
+      "explanation": "Оператор D^{-1/2}LD^{-1/2}, учитывающий масштаб взвешенных степеней",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "normalized"}
+    },
+    {
+      "id": "linear-random-walk-transition",
+      "displayNotation": "P",
+      "shortName": "матрица случайного перехода",
+      "explanation": "Строково-стохастическая матрица вероятностей перехода по ребру пропорционально его весу",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "random-walk"}
+    },
+    {
+      "id": "linear-stationary-distribution",
+      "displayNotation": "\\pi",
+      "shortName": "стационарное распределение",
+      "explanation": "Распределение массы, которое не меняется после умножения на матрицу переходов",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "random-walk"}
+    },
+    {
+      "id": "linear-spanning-tree-weight",
+      "displayNotation": "\\tau_w(G)",
+      "shortName": "взвешенная сумма остовов",
+      "explanation": "Сумма произведений весов рёбер по всем остовным деревьям графа",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "matrix-tree"}
+    },
+    {
+      "id": "linear-laplacian-cofactor",
+      "displayNotation": "\\det L^{(r)}",
+      "shortName": "кофактор лапласиана",
+      "explanation": "Определитель матрицы после удаления из L строки и столбца одной вершины",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "matrix-tree"}
+    },
+    {
+      "id": "linear-singular-value-decomposition",
+      "displayNotation": "M=U\\Sigma V^{\\mathsf T}",
+      "shortName": "сингулярное разложение",
+      "explanation": "Факторизация произвольной вещественной матрицы в левые направления, неотрицательные масштабы и правые направления",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "svd"}
+    },
+    {
+      "id": "linear-singular-values",
+      "displayNotation": "\\sigma_i",
+      "shortName": "сингулярные значения",
+      "explanation": "Неотрицательные масштабы SVD; их квадраты являются собственными значениями M^T M",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "svd"}
+    },
+    {
+      "id": "linear-eigen-residual",
+      "displayNotation": "\\rho_i",
+      "shortName": "невязка собственной пары",
+      "explanation": "Норма отклонения Lv_i от λ_i v_i, используемая для проверки численного результата",
+      "scope": "local",
+      "chapterId": "linear-algebra-for-graphs",
+      "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "computation"}
     }
   ]
 }

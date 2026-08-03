@@ -47,6 +47,7 @@ const publishedChapterIds = new Set([
   "connectivity-cuts-network-design",
   "traveling-salesman-exact",
   "dynamic-graph-algorithms",
+  "linear-algebra-for-graphs",
 ]);
 
 function canonicalChapters() {

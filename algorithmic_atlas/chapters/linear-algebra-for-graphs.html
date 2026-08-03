@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Линейная алгебра для графовых алгоритмов — Алгоритмический атлас</title>
+  <meta name="description" content="Матрицы смежности и инцидентности, лапласиан, спектр, случайные блуждания и матричная теорема о деревьях">
+  <meta property="og:title" content="Линейная алгебра для графовых алгоритмов — Алгоритмический атлас">
+  <meta property="og:description" content="Как структура графа превращается в матрицу, энергию, спектр и точный подсчёт остовных деревьев">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/linear-algebra-for-graphs.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/linear-algebra-for-graphs.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/graph-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {
+      loader: {load: ['[tex]/html']},
+      tex: {
+        packages: {'[+]': ['html']},
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}
+    };
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/graph-lab-core.js" defer></script>
+  <script src="../labs/graph-lab-runtime.js" defer></script>
+  <script src="../labs/linear-algebra-for-graphs-core.js" defer></script>
+  <script src="../labs/linear-algebra-for-graphs.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="linear-algebra-for-graphs" data-atlas-lab-minutes="26">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Линейная алгебра для графовых алгоритмов</span>
+  </nav>
+
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Графы, сети и оптимизация · дополнительная ветвь 5.12</p>
+      <h1>Линейная алгебра для графовых алгоритмов</h1>
+      <p class="atlas-chapter-intro">
+        Один граф превращается в несколько матриц, а их энергия, ядро и спектр делают видимыми связность, блуждания и число остовных деревьев
+      </p>
+      <div class="atlas-chapter-meta">
+        <span data-atlas-reading-time>Теория рассчитывается…</span>
+        <span data-atlas-lab-time>Лаборатория ≈ 26 мин</span>
+        <span>6 представлений</span><span>12 упражнений</span>
+      </div>
+    </header>
+
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#translation">Зачем графу матрица</a></li>
+          <li><a href="#conventions">Соглашения о весах</a></li>
+          <li><a href="#adjacency">Матрица смежности</a></li>
+          <li><a href="#incidence">Матрица инцидентности</a></li>
+          <li><a href="#laplacian">Лапласиан</a></li>
+          <li><a href="#worked-example">Один пример целиком</a></li>
+          <li><a href="#energy">Энергия рёбер</a></li>
+          <li><a href="#psd">Положительная полуопределённость</a></li>
+          <li><a href="#kernel">Ядро и компоненты</a></li>
+          <li><a href="#eigen">Собственные направления</a></li>
+          <li><a href="#rayleigh">Частное Рэлея</a></li>
+          <li><a href="#normalized">Нормированный лапласиан</a></li>
+          <li><a href="#random-walk">Случайное блуждание</a></li>
+          <li><a href="#matrix-tree">Теорема Кирхгофа</a></li>
+          <li><a href="#svd">Сингулярное разложение</a></li>
+          <li><a href="#computation">Как это вычисляется</a></li>
+          <li><a href="#edge-cases">Граничные случаи</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+
+      <article class="atlas-chapter-content">
+        <section id="translation">
+          <h2>Матрица не заменяет граф — она открывает другой набор вопросов</h2>
+          <p>
+            Список смежности прекрасно отвечает на вопрос «куда можно перейти из вершины». Обходы, кратчайшие пути и остовные деревья естественно формулируются как работа с вершинами и рёбрами. Но некоторые свойства трудно увидеть локально. Насколько функция на вершинах меняется вдоль рёбер? Сколько независимых компонент скрыто в сети? Как ведёт себя случайный путник после множества шагов? Сколько различных остовных деревьев вообще существует? Для таких вопросов полезно перевести комбинаторную структуру в линейный оператор.
+          </p>
+          <p>
+            Перевод не является бесплатной упаковкой. Если хранить плотную матрицу для графа с миллионом вершин, потребуется порядка триллиона ячеек, хотя рёбер может быть лишь несколько миллионов. Поэтому алгоритм обычно не строит матрицу целиком, а умеет быстро умножать разреженный оператор на вектор. Тем не менее матричная запись отделяет математический объект от способа хранения и позволяет использовать геометрию, ортогональность, собственные значения и численные методы.
+          </p>
+          <p>
+            Главный герой главы — лапласиан. Его можно получить как разность матрицы степеней и матрицы смежности, как произведение инцидентности на её транспонированную матрицу или как оператор, измеряющий отличие значения в вершине от значений у соседей. Эти три взгляда совпадают. Именно совпадение превращает формулы в алгоритмический инструмент: структурное утверждение о компонентах становится утверждением о ядре матрицы, а сумма локальных перепадов — квадратичной формой.
+          </p>
+          <p>
+            Мы будем постоянно возвращаться к одному правилу чтения: строка относится к вершине, столбец квадратной матрицы — тоже к вершине, а столбец инцидентности — к конкретному экземпляру ребра. Если размеры и смысл индексов названы до вычисления, почти все дальнейшие тождества можно проверить локально и затем использовать глобально.
+          </p>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>От электрических цепей к спектральным алгоритмам</h3>
+            <p>
+              В 1847 году Густав Кирхгоф исследовал линейные уравнения электрических токов и получил определитель, который сегодня читается как взвешенная сумма остовных деревьев. Современных слов «лапласиан графа» и «спектральный алгоритм» в этой работе не было: позднейший язык объединил электрическую и комбинаторную стороны результата. В 1973 году Мирослав Фидлер систематически связал второе собственное значение лапласиана со связностью графа. Сегодня эти идеи лежат под спектральным разбиением, решателями систем на графах и анализом сетей, но их смысл можно понять без предварительного курса спектральной теории.
+            </p>
+          </section>
+        </section>
+
+        <section id="conventions">
+          <h2>Сначала нужно договориться, что означает петля и вес</h2>
+          <p>
+            Пусть $G=(V,E)$ — конечный неориентированный мультиграф. Каждому экземпляру ребра $e$ назначен неотрицательный вес $w_e$. Параллельные рёбра остаются различными объектами, но в матрице смежности их веса складываются. Нулевое ребро сохраняется в данных, однако не связывает компоненты положительной опоры и не даёт энергии. Это удобно: предел при стремлении проводимости к нулю согласуется с буквальным удалением связи.
+          </p>
+          <p>
+            Для петли в вершине $u$ примем стандартное для неориентированных мультиграфов соглашение: она входит в $A_{uu}$ с коэффициентом $2w_e$ и дважды учитывается в степени. Тогда в $D-A$ её вклады сокращаются. Столбец ориентированной матрицы инцидентности для петли нулевой, ведь начало и конец совпадают. Поэтому равенства $L=D-A=BWB^{\mathsf T}$ и формула энергии остаются буквальными. Другое соглашение возможно, но нельзя брать степень из одной конвенции, а диагональ смежности — из другой.
+          </p>
+          <p>
+            Неотрицательность весов существенна. Отрицательный вес превращает сумму квадратов в знакопеременную форму: лапласиан может перестать быть положительно полуопределённым, а случайный переход с отрицательной вероятностью теряет смысл. Ориентированные графы тоже имеют несколько неэквивалентных лапласианов. Здесь мы сознательно остаёмся в симметричном случае, где существует ортонормированный базис собственных векторов и ясная энергетическая интерпретация.
+          </p>
+        </section>
+
+        <section id="adjacency">
+          <h2>Матрица смежности хранит суммарную силу непосредственной связи</h2>
+          <p>
+            Зафиксируем порядок вершин $v_1,\ldots,v_n$. Матрица смежности $A$ имеет размер $n\times n$. Для разных вершин её ячейка равна сумме весов всех рёбер между ними. В неориентированном графе $A_{ij}=A_{ji}$, поэтому матрица симметрична. Перестановка вершин одновременно переставляет строки и столбцы: числа в таблице меняют места, но сам линейный оператор меняется лишь выбором координат.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-adjacency-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-adjacency-matrix,linear-edge-weight">
+            \[
+              \class{atlas-notation-token notation-id-linear-adjacency-matrix}{A_{ij}}
+              =\sum_{\substack{e\in E\\e=\{v_i,v_j\}}}
+              \class{atlas-notation-token notation-id-linear-edge-weight}{w_e}
+              \quad(i\ne j),
+              \qquad
+              A_{ii}=2\sum_{e\text{ — петля в }v_i}w_e.
+            \]
+          </div>
+          <p>
+            Степень вершины в этой взвешенной модели — сумма строки $A$. Диагональная матрица $D$ содержит степени на диагонали и нули вне её. Для простого невзвешенного графа это обычное число инцидентных концов рёбер. При умножении $Ax$ координата $(Ax)_i$ является взвешенной суммой значений $x_j$ у соседей. Значит, $A$ распространяет сигнал по одному ребру, а степень измеряет общий объём связи вершины.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-degree-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-degree-matrix,linear-adjacency-matrix,linear-weighted-degree">
+            \[
+              \class{atlas-notation-token notation-id-linear-degree-matrix}{D}
+              =\operatorname{diag}(d_1,\ldots,d_n),
+              \qquad
+              \class{atlas-notation-token notation-id-linear-weighted-degree}{d_i}
+              =\sum_{j=1}^{n}
+              \class{atlas-notation-token notation-id-linear-adjacency-matrix}{A_{ij}}.
+            \]
+          </div>
+          <p>
+            Степени матрицы смежности кодируют последовательности шагов. В простом невзвешенном графе $(A^k)_{ij}$ равно числу маршрутов длины $k$ из $v_i$ в $v_j$, где вершины и рёбра разрешено посещать повторно. Индукция проста: последний шаг приходит из некоторой $v_t$, а матричное произведение суммирует число предыдущих маршрутов по всем возможным предпоследним вершинам. Во взвешенном мультиграфе вместо количества получается сумма произведений весов вдоль маршрутов.
+          </p>
+          <p>
+            Это сильная, но не универсальная интерпретация. Матрица $A$ не различает, каким именно из параллельных рёбер был сделан шаг, если их веса уже сложены; она хранит лишь агрегированный оператор. Кроме того, собственные значения $A$ могут быть отрицательными даже при неотрицательных весах: для одного ребра матрица $\begin{pmatrix}0&1\\1&0\end{pmatrix}$ имеет значения $1$ и $-1$. Поэтому положительная полуопределённость, на которой строится энергетическая геометрия, относится к $L$, а не к любой графовой матрице.
+          </p>
+        </section>
+
+        <section id="incidence">
+          <h2>Инцидентность хранит не соседство, а перепад на каждом ребре</h2>
+          <p>
+            Произвольно ориентируем каждое непетлевое ребро. Эта стрелка нужна только для знака и не превращает граф в ориентированный. Матрица $B$ имеет одну строку на вершину и один столбец на экземпляр ребра. В столбце ребра из $u$ в $v$ стоит $-1$ в строке $u$, $+1$ в строке $v$ и нули в остальных строках. Параллельные рёбра получают разные одинаковые по форме столбцы; петля — нулевой столбец.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-incidence-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-incidence-matrix">
+            \[
+              \class{atlas-notation-token notation-id-linear-incidence-matrix}{B_{ve}}
+              =
+              \begin{cases}
+                -1,&v\text{ — выбранное начало }e,\\
+                +1,&v\text{ — выбранный конец }e,\\
+                0,&\text{иначе}.
+              \end{cases}
+            \]
+          </div>
+          <p>
+            Для вектора значений на вершинах выражение $B^{\mathsf T}x$ имеет по одной координате на ребро: это $x_v-x_u$. Смена условной ориентации умножает соответствующий столбец $B$ и координату перепада на $-1$, но квадрат перепада не меняется. Поэтому конечные неориентированные величины не зависят от нарисованных стрелок.
+          </p>
+          <p>
+            Если $W$ — диагональная матрица весов рёбер, то $W^{1/2}B^{\mathsf T}x$ собирает перепады, умноженные на квадратный корень из проводимости. Это дискретный аналог градиента. Транспонированный оператор $BW^{1/2}$ собирает ориентированные потоки обратно в вершины и играет роль дивергенции. Лапласиан получится как «дивергенция градиента».
+          </p>
+        </section>
+
+        <section id="laplacian">
+          <h2>Лапласиан сравнивает вершину со всем её окружением</h2>
+          <p>
+            Комбинаторный взвешенный лапласиан определяется разностью $D-A$. Его диагональ содержит степени, а внедиагональная ячейка равна минус суммарному весу между двумя различными вершинами. Сумма каждой строки равна нулю. Поэтому постоянный вектор всегда лежит в ядре: если везде одно значение, перепада вдоль рёбер нет.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-laplacian-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-laplacian,linear-degree-matrix,linear-adjacency-matrix">
+            \[
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              =
+              \class{atlas-notation-token notation-id-linear-degree-matrix}{D}
+              -
+              \class{atlas-notation-token notation-id-linear-adjacency-matrix}{A}.
+            \]
+          </div>
+          <p>
+            Та же матрица получается из инцидентности. Вклад одного непетлевого ребра $u-v$ веса $w$ — матрица, у которой $+w$ в позициях $(u,u)$ и $(v,v)$, $-w$ в $(u,v)$ и $(v,u)$. Это ровно внешнее произведение его столбца инцидентности, умноженное на вес. Суммируя по столбцам, получаем факторизацию.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-laplacian-factorization"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-laplacian,linear-incidence-matrix,linear-weight-matrix">
+            \[
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              =
+              \class{atlas-notation-token notation-id-linear-incidence-matrix}{B}
+              \class{atlas-notation-token notation-id-linear-weight-matrix}{W}
+              B^{\mathsf T}.
+            \]
+          </div>
+          <p>
+            Факторизация полезнее поэлементной проверки. Она сразу объясняет симметрию, отсутствие зависимости от ориентации столбцов и положительную полуопределённость. В реализации лаборатории обе конструкции вычисляются независимо и сравниваются тестами на обычных, взвешенных и случайных мультиграфах.
+          </p>
+        </section>
+
+        <section id="worked-example">
+          <h2>Один треугольник связывает все представления без абстрактного скачка</h2>
+          <p>
+            Возьмём вершины $a,b,c$ и три ребра: $a-b$ веса $2$, $b-c$ веса $1$ и $a-c$ веса $3$. Это маленький связный граф, но он уже показывает роль веса, выбор ориентации, энергию, блуждание и подсчёт деревьев. Зафиксируем порядок вершин $a,b,c$ и условно направим столбцы инцидентности как $a\to b$, $b\to c$, $a\to c$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-worked-example-matrices"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-adjacency-matrix,linear-degree-matrix,linear-laplacian">
+            \[
+              \class{atlas-notation-token notation-id-linear-adjacency-matrix}{A}
+              =\begin{pmatrix}0&2&3\\2&0&1\\3&1&0\end{pmatrix},
+              \quad
+              \class{atlas-notation-token notation-id-linear-degree-matrix}{D}
+              =\begin{pmatrix}5&0&0\\0&3&0\\0&0&4\end{pmatrix},
+              \quad
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              =\begin{pmatrix}5&-2&-3\\-2&3&-1\\-3&-1&4\end{pmatrix}.
+            \]
+          </div>
+          <p>
+            Каждая внедиагональная ячейка $L$ — отрицательный вес соответствующей связи, а диагональ компенсирует строку до нулевой суммы. Уже отсюда видно $L(1,1,1)^{\mathsf T}=0$. Поскольку все три веса положительны и граф связен, доказательство через энергию позже покажет, что других независимых нулевых направлений нет.
+          </p>
+          <p>
+            Матрица инцидентности имеет строки $(-1,0,-1)$, $(1,-1,0)$ и $(0,1,1)$, а $W=\operatorname{diag}(2,1,3)$. Первый столбец сообщает только разность между $a$ и $b$, второй — между $b$ и $c$, третий — между $a$ и $c$. Умножение $BWB^{\mathsf T}$ сначала умножает каждый такой локальный перепад на вес, затем собирает его с противоположными знаками в концы. В результате получается ровно выписанный $L$.
+          </p>
+          <p>
+            Теперь назначим сигнал $x=(0,2,1)^{\mathsf T}$. Матричное умножение даёт $Lx=(-7,5,2)^{\mathsf T}$ и $x^{\mathsf T}Lx=12$. По рёбрам получается то же число: $2(0-2)^2+1(2-1)^2+3(0-1)^2=8+1+3$. Увеличение веса $a-b$ на единицу добавило бы $(0-2)^2=4$ к энергии и матрицу ранга один к лапласиану. Так лаборатория объясняет причинность изменения, а не просто заменяет числа в таблице.
+          </p>
+          <p>
+            Случайный путник имеет стационарные массы, пропорциональные степеням: $\pi=(5/12,3/12,4/12)$. Из $a$ он идёт в $b$ с вероятностью $2/5$ и в $c$ с вероятностью $3/5$. Поток стационарной массы из $a$ в $b$ равен $(5/12)(2/5)=2/12$; обратный поток равен $(3/12)(2/3)=2/12$. Та же симметрия выполняется для каждой пары и называется детальным балансом.
+          </p>
+          <p>
+            Наконец, у треугольника три остовных дерева. Удаляя по одному ребру, получаем произведения весов $2\cdot1$, $2\cdot3$ и $1\cdot3$, всего $11$. Определитель минора, полученного удалением первой строки и столбца, равен $\det\begin{pmatrix}3&-1\\-1&4\end{pmatrix}=12-1=11$. Один и тот же набор исходных рёбер проявился как локальные переходы, энергия сигнала и глобальный комбинаторный подсчёт. Именно ради таких совпадений граф переводят на язык линейной алгебры.
+          </p>
+        </section>
+
+        <section id="energy">
+          <h2>Квадратичная форма — это сумма несогласий на рёбрах</h2>
+          <p>
+            Пусть $x\in\mathbb R^n$ назначает каждой вершине число: температуру, потенциал, вероятность, координату или произвольную метку. Лапласиан измеряет шероховатость этого сигнала. Если соседние значения близки, энергия мала; если тяжёлое ребро соединяет сильно разные значения, его вклад велик.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-energy-identity"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-vertex-signal,linear-laplacian,linear-laplacian-energy,linear-edge-weight">
+            \[
+              \class{atlas-notation-token notation-id-linear-vertex-signal}{x}^{\mathsf T}
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              x
+              =
+              \class{atlas-notation-token notation-id-linear-laplacian-energy}{
+                \sum_{e=\{u,v\}\in E}}
+              \class{atlas-notation-token notation-id-linear-edge-weight}{w_e}
+              (x_u-x_v)^2.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство через инцидентность</h3>
+            <p>
+              Подставим $L=BWB^{\mathsf T}$. Ассоциативность умножения даёт $x^{\mathsf T}BWB^{\mathsf T}x=(B^{\mathsf T}x)^{\mathsf T}W(B^{\mathsf T}x)$. Координата $B^{\mathsf T}x$, соответствующая ориентированному ребру $u\to v$, равна $x_v-x_u$. Диагональная $W$ умножает квадрат этой координаты на $w_e$, а скалярное произведение суммирует все вклады. Для петли координата нулевая. Смена ориентации меняет знак разности, но не её квадрат.
+            </p>
+          </section>
+          <p>
+            Можно раскрыть и $D-A$. Тогда $x^{\mathsf T}Dx=\sum_i d_ix_i^2$, а $x^{\mathsf T}Ax$ дважды учитывает каждое непетлевое ребро как $2w_ex_ux_v$. Группировка даёт $w_e(x_u^2-2x_ux_v+x_v^2)$. Это второе доказательство полезно как независимая проверка коэффициентов, особенно двойного вклада петли.
+          </p>
+          <p>
+            Электрическая интерпретация буквальна: если $w_e$ — проводимость, то энергия потенциала пропорциональна сумме $w_e(x_u-x_v)^2$. В алгоритмах та же форма штрафует резкие изменения метки вдоль сильных связей. Спектральное разбиение ищет непостоянный сигнал малой энергии, то есть такой, который почти постоянен внутри плотных областей и меняется преимущественно на слабой границе.
+          </p>
+        </section>
+
+        <section id="psd">
+          <h2>Положительная полуопределённость следует из квадратов, а не из рисунка</h2>
+          <p>
+            Симметричная матрица называется положительно полуопределённой, если её квадратичная форма неотрицательна для любого вектора. Слово «полу» разрешает ненулевые векторы с нулевой энергией. Для лапласиана такими векторами будут функции, постоянные на компонентах.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-psd-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-positive-semidefinite,linear-laplacian,linear-vertex-signal">
+            \[
+              \class{atlas-notation-token notation-id-linear-positive-semidefinite}{L\succeq0}
+              \iff
+              \class{atlas-notation-token notation-id-linear-vertex-signal}{x}^{\mathsf T}
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}x\ge0
+              \quad\text{для всех }x\in\mathbb R^n.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство положительной полуопределённости</h3>
+            <p>
+              В энергетической формуле каждый множитель $w_e$ неотрицателен и каждый квадрат $(x_u-x_v)^2$ неотрицателен. Их сумма неотрицательна для любого $x$. Следовательно, $L\succeq0$. Эквивалентно можно написать $L=(BW^{1/2})(BW^{1/2})^{\mathsf T}$: любая матрица вида $CC^{\mathsf T}$ положительно полуопределена, потому что $x^{\mathsf T}CC^{\mathsf T}x=\|C^{\mathsf T}x\|_2^2$.
+            </p>
+          </section>
+          <p>
+            Для вещественной симметричной матрицы положительная полуопределённость эквивалентна неотрицательности всех собственных значений. Это уже спектральный вывод: если $Lv=\lambda v$ и $v\ne0$, то $v^{\mathsf T}Lv=\lambda\|v\|^2\ge0$, значит $\lambda\ge0$. Лаборатория не «исправляет» отрицательные собственные значения, кроме численного округления величин порядка машинной погрешности; заметный минус означал бы ошибку модели или вычисления.
+          </p>
+        </section>
+
+        <section id="kernel">
+          <h2>Кратность нуля точно считает компоненты положительной опоры</h2>
+          <p>
+            Постоянный вектор $\mathbf1$ удовлетворяет $L\mathbf1=0$, потому что строки лапласиана суммируются в ноль. Если граф несвязен, можно взять индикатор одной компоненты: единицы на её вершинах и нули вне. Ни одно положительное ребро не пересекает границу компоненты, поэтому такой индикатор тоже имеет нулевую энергию. Индикаторы разных компонент линейно независимы.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-nullity-components"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-laplacian-kernel,linear-component-count,linear-laplacian">
+            \[
+              \dim
+              \class{atlas-notation-token notation-id-linear-laplacian-kernel}{\ker}
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              =
+              \class{atlas-notation-token notation-id-linear-component-count}{\operatorname{cc}_{+}(G)}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство равенства ядра и пространства покомпонентных констант</h3>
+            <p>
+              Пусть $Lx=0$. Тогда $x^{\mathsf T}Lx=0$. Энергия является суммой неотрицательных слагаемых, поэтому для каждого ребра положительного веса $x_u=x_v$. Вдоль любого пути положительной опоры равенства передаются, и $x$ постоянен на каждой компоненте. Обратное уже показано: любая покомпонентная константа даёт нулевой перепад на каждом положительном ребре. Значит, ядро имеет базис из индикаторов компонент и его размерность равна их числу.
+            </p>
+          </section>
+          <p>
+            Для симметричной матрицы геометрическая и алгебраическая кратности собственного значения совпадают: существует ортонормированный базис собственных векторов. Поэтому число нулей в спектре равно $\dim\ker L$. Связный граф имеет ровно один ноль. Нулевые веса и петли не соединяют разные вершины; вершина только с петлями остаётся отдельной компонентой положительной опоры и добавляет ещё один ноль.
+          </p>
+        </section>
+
+        <section id="eigen">
+          <h2>Собственный вектор — направление, форму которого оператор не поворачивает</h2>
+          <p>
+            Равенство $Lv=\lambda v$ означает: после применения лапласиана вектор сохраняет направление и лишь масштабируется. У симметричного $L$ все собственные значения вещественны, а собственные векторы можно выбрать ортонормированными. Любой сигнал раскладывается по этим направлениям. Компоненты при малых $\lambda$ меняются вдоль рёбер медленно, при больших — быстро чередуются между сильно связанными вершинами.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-eigenpair-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-eigenvalue,linear-eigenvector,linear-laplacian">
+            \[
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              \class{atlas-notation-token notation-id-linear-eigenvector}{v_i}
+              =
+              \class{atlas-notation-token notation-id-linear-eigenvalue}{\lambda_i}
+              v_i,
+              \qquad
+              0\le\lambda_1\le\cdots\le\lambda_n.
+            \]
+          </div>
+          <p>
+            Если граф связен, $lambda_1=0$ соответствует постоянному вектору, а $lambda_2>0$. Фидлер назвал второе собственное значение алгебраической связностью. Малое $lambda_2$ указывает, что существует непостоянный сигнал с малой энергией — часто это следствие узкой границы между двумя крупными областями. Но одно число не выдаёт готовый минимальный разрез: оно связано с непрерывным ослаблением дискретной задачи.
+          </p>
+          <p>
+            При нескольких компонентах первые $c$ значений равны нулю, поэтому выражение «второе собственное значение измеряет связность» без оговорки неверно. Второй ноль просто подтверждает вторую компоненту. Спектральные алгоритмы следующей главы будут выбирать нужное подпространство, нормировать векторы и округлять вещественное решение до дискретного разбиения. Здесь важно понять только язык оператора.
+          </p>
+          <p>
+            У спектра есть быстрые контрольные суммы. След матрицы равен сумме её собственных значений, а для лапласиана $\operatorname{tr}L=\sum_i d_i$. В невзвешенном простом графе это $2|E|$. Определитель $L$ равен произведению собственных значений и всегда нулевой, поскольку хотя бы одно из них нулевое; именно поэтому в теореме о деревьях берут кофактор, а не полный определитель. Эти равенства не восстанавливают весь спектр, но хорошо обнаруживают потерянное ребро, неверную степень или грубую численную ошибку.
+          </p>
+          <p>
+            Собственный вектор не имеет закреплённого знака: если $v$ подходит, то $-v$ тоже подходит. При кратном собственном значении неоднозначен даже отдельный вектор — определено всё собственное подпространство. Поэтому корректный тест сравнивает уравнение $Lv=\lambda v$, взаимную ортогональность и подпространства, а не требует побитового совпадения координат с одной библиотекой. Лаборатория выбирает знак лишь ради устойчивой подписи, не приписывая ему математического смысла.
+          </p>
+        </section>
+
+        <section id="rayleigh">
+          <h2>Частное Рэлея сравнивает энергию с масштабом сигнала</h2>
+          <p>
+            Умножение $x$ на десять увеличивает энергию в сто раз, поэтому голая величина $x^{\mathsf T}Lx$ не позволяет сравнивать формы сигналов разного масштаба. Деление на квадрат евклидовой нормы устраняет этот эффект. Частное Рэлея неизменно при ненулевом масштабировании $x$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-rayleigh-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-rayleigh-quotient,linear-vertex-signal,linear-laplacian">
+            \[
+              \class{atlas-notation-token notation-id-linear-rayleigh-quotient}{R_L(x)}
+              =\frac{
+                \class{atlas-notation-token notation-id-linear-vertex-signal}{x}^{\mathsf T}
+                \class{atlas-notation-token notation-id-linear-laplacian}{L}x
+              }{x^{\mathsf T}x},
+              \qquad x\ne0.
+            \]
+          </div>
+          <p>
+            Если разложить $x=\sum_i\alpha_iv_i$ по ортонормированным собственным векторам, числитель станет $\sum_i\lambda_i\alpha_i^2$, а знаменатель — $\sum_i\alpha_i^2$. Значит, частное Рэлея — взвешенное среднее собственных значений и всегда лежит между минимальным и максимальным. На собственном векторе $v_i$ оно равно $lambda_i$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-rayleigh-bounds"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-rayleigh-quotient,linear-eigenvalue">
+            \[
+              \class{atlas-notation-token notation-id-linear-eigenvalue}{\lambda_1}
+              \le
+              \class{atlas-notation-token notation-id-linear-rayleigh-quotient}{R_L(x)}
+              \le\lambda_n.
+            \]
+          </div>
+          <p>
+            Минимизация $R_L(x)$ по всем ненулевым $x$ даёт тривиальный постоянный вектор и значение ноль. Чтобы увидеть первую нетривиальную моду связного графа, добавляют ограничение $x\perp\mathbf1$. Тогда минимум равен $\lambda_2$. Это пример общего алгоритмического хода: дискретное разделение заменяется непрерывной оптимизацией квадратичной формы, которую можно решать методами линейной алгебры.
+          </p>
+        </section>
+
+        <section id="normalized">
+          <h2>Нормировка отделяет перепад от абсолютной величины степени</h2>
+          <p>
+            Комбинаторный лапласиан сильнее штрафует изменение около вершины большой степени, потому что там больше суммарного веса. Иногда это именно нужно. Для сравнения областей с разной плотностью чаще используют симметричный нормированный лапласиан. На вершинах положительной степени он подобен оператору случайного блуждания и имеет спектр в отрезке $[0,2]$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-normalized-laplacian"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-normalized-laplacian,linear-degree-matrix,linear-laplacian">
+            \[
+              \class{atlas-notation-token notation-id-linear-normalized-laplacian}{\mathcal L}
+              =
+              \class{atlas-notation-token notation-id-linear-degree-matrix}{D}^{-1/2}
+              \class{atlas-notation-token notation-id-linear-laplacian}{L}
+              D^{-1/2}.
+            \]
+          </div>
+          <p>
+            Для изолированной вершины $D^{-1/2}$ не определена обычным делением. Мы задаём соответствующую диагональную координату равной нулю; строка и столбец $\mathcal L$ тогда нулевые. В литературе встречается и соглашение с единицей на диагонали изолированной вершины. Оба допустимы, если объявлены заранее; они по-разному кодируют нулевую степень и меняют кратность нуля.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-normalized-energy"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-normalized-laplacian,linear-edge-weight,linear-weighted-degree">
+            \[
+              y^{\mathsf T}
+              \class{atlas-notation-token notation-id-linear-normalized-laplacian}{\mathcal L}y
+              =\sum_{\substack{\{u,v\}\in E\\w_{uv}>0}}
+              \class{atlas-notation-token notation-id-linear-edge-weight}{w_{uv}}
+              \left(
+                \frac{y_u}{\sqrt{
+                  \class{atlas-notation-token notation-id-linear-weighted-degree}{d_u}}}
+                -\frac{y_v}{\sqrt{d_v}}
+              \right)^2.
+            \]
+          </div>
+          <p>
+            Нормировка не делает один оператор «правильным», а другой «неправильным». Она меняет геометрию задачи. Комбинаторный $L$ сравнивает сигналы в обычной евклидовой норме. Нормированный вариант фактически учитывает меру вершин, пропорциональную степени. При постановке алгоритма надо выбрать, должна ли большая вершина иметь больший вес в качестве объекта или лишь больше связей.
+          </p>
+        </section>
+
+        <section id="random-walk">
+          <h2>Случайное блуждание использует ту же матрицу, но нормирует строки</h2>
+          <p>
+            Из вершины $i$ путник выбирает следующий конец пропорционально весу связи. Матрица переходов $P=D^{-1}A$ строково-стохастична: элементы неотрицательны, сумма строки равна единице. Для изолированной вершины договоримся оставаться на месте, то есть положим $P_{ii}=1$. Тогда каждый шаг переводит распределение строкой $p^{\mathsf T}$ в $p^{\mathsf T}P$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-random-walk-transition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-random-walk-transition,linear-adjacency-matrix,linear-weighted-degree">
+            \[
+              \class{atlas-notation-token notation-id-linear-random-walk-transition}{P_{ij}}
+              =\frac{
+                \class{atlas-notation-token notation-id-linear-adjacency-matrix}{A_{ij}}
+              }{
+                \class{atlas-notation-token notation-id-linear-weighted-degree}{d_i}}
+              \quad(d_i>0).
+            \]
+          </div>
+          <p>
+            В неориентированном графе распределение, пропорциональное степени, стационарно. Объём графа $operatorname{vol}(G)=\sum_i d_i$ считает каждый непетлевой вес дважды и согласован с нашей конвенцией для петель. Равенство детального баланса $pi_iP_{ij}=A_{ij}/\operatorname{vol}(G)=\pi_jP_{ji}$ показывает стационарность после суммирования по $i$.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-stationary-distribution"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-stationary-distribution,linear-random-walk-transition,linear-weighted-degree">
+            \[
+              \class{atlas-notation-token notation-id-linear-stationary-distribution}{\pi_i}
+              =\frac{
+                \class{atlas-notation-token notation-id-linear-weighted-degree}{d_i}
+              }{\sum_jd_j},
+              \qquad
+              \class{atlas-notation-token notation-id-linear-stationary-distribution}{\pi}^{\mathsf T}
+              \class{atlas-notation-token notation-id-linear-random-walk-transition}{P}
+              =\pi^{\mathsf T},
+              \qquad \sum_jd_j>0.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему стационарность не означает сходимость из любого старта</h3>
+            <p>
+              Равенство $\pi^{\mathsf T}P=\pi^{\mathsf T}$ только говорит, что уже стационарное распределение не меняется. В несвязном графе масса не переходит между компонентами, поэтому стационарных распределений много. В связном двудольном графе блуждание без петель имеет период два и колеблется между долями. Для единственности и сходимости нужны связность положительной опоры и апериодичность либо «ленивый» шаг, который с положительной вероятностью остаётся на месте.
+            </p>
+          </section>
+          <p>
+            Связь со спектром получается из подобия: $D^{1/2}(I-P)D^{-1/2}=\mathcal L$ на вершинах положительной степени. Поэтому собственные значения нормированного лапласиана описывают скорости затухания мод случайного блуждания. Это мост к следующей главе, но здесь важно не путать стационарность, смешивание и простое существование вероятностной матрицы.
+          </p>
+        </section>
+
+        <section id="matrix-tree">
+          <h2>Один минор лапласиана суммирует все остовные деревья</h2>
+          <p>
+            Остовное дерево выбирает $n-1$ рёбер, соединяет все вершины и не содержит цикла. Полный перебор подмножеств экспоненциален. Матричная теорема Кирхгофа утверждает, что достаточно удалить из $L$ одну строку и тот же столбец и вычислить определитель полученного кофактора. Для невзвешенного графа это число деревьев; для взвешенного — сумма произведений весов по деревьям.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-matrix-tree-theorem"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-spanning-tree-weight,linear-laplacian-cofactor,linear-edge-weight">
+            \[
+              \class{atlas-notation-token notation-id-linear-spanning-tree-weight}{\tau_w(G)}
+              =
+              \class{atlas-notation-token notation-id-linear-laplacian-cofactor}{\det L^{(r)}}
+              =\sum_{T\text{ — остовное дерево}}
+              \prod_{e\in T}
+              \class{atlas-notation-token notation-id-linear-edge-weight}{w_e}.
+            \]
+          </div>
+          <p>
+            Выбор удаляемой вершины $r$ не меняет ответ. В связном графе любой кофактор положителен при положительных весах. В несвязном — равен нулю, потому что остовных деревьев нет и ранг лапласиана меньше $n-1$. Для одной вершины пустое множество рёбер считается единственным остовным деревом, поэтому пустой определитель равен единице. Для графа без вершин лаборатория явно возвращает ноль: это отдельное прикладное соглашение.
+          </p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Доказательство через инцидентность и формулу Коши — Бине</h3>
+            <p>
+              Удалим из $B$ строку вершины $r$ и получим $B_r$. Тогда $L^{(r)}=B_rWB_r^{\mathsf T}$. Применим формулу Коши — Бине к произведению матриц размера $(n-1)\times m$ и $m\times(n-1)$. Определитель раскрывается в сумму по всем наборам $S$ из $n-1$ столбцов, то есть по наборам $n-1$ экземпляров рёбер:
+            </p>
+            <div class="atlas-math atlas-notation-formula"
+              data-formula-id="linear-cauchy-binet-tree"
+              data-notation-coverage="interactive"
+              data-required-notations="linear-incidence-matrix,linear-edge-weight,linear-laplacian-cofactor">
+              \[
+                \class{atlas-notation-token notation-id-linear-laplacian-cofactor}{\det L^{(r)}}
+                =\sum_{|S|=n-1}
+                \det(
+                  \class{atlas-notation-token notation-id-linear-incidence-matrix}{B_{r,S}})^2
+                \prod_{e\in S}
+                \class{atlas-notation-token notation-id-linear-edge-weight}{w_e}.
+              \]
+            </div>
+            <p>
+              Если $S$ содержит цикл, его ориентированные столбцы линейно зависимы: знаковая сумма вдоль цикла равна нулю. Если $S$ не соединяет все вершины, при $n-1$ рёбрах он тоже не может дать полный ранг. Поэтому определитель равен нулю. Если $S$ — дерево, последовательное удаление листа показывает, что $\det B_{r,S}=\pm1$: в строке листа есть единственный ненулевой элемент, после раскрытия остаётся меньшая такая же задача. Квадрат определителя равен единице, знак ориентации исчезает, и в сумме остаются ровно произведения весов деревьев.
+            </p>
+          </section>
+          <p>
+            Теорема показывает, что определитель кодирует не один оптимальный остов, а все остовы сразу. Лаборатория считает его точно алгоритмом Барейса над целыми числами, избегая округления плавающей точки. Независимые тесты перечисляют все подмножества на малых случайных мультиграфах и сравнивают взвешенную сумму с кофактором.
+          </p>
+        </section>
+
+        <section id="svd">
+          <h2>SVD работает и тогда, когда матрица не квадратна или не симметрична</h2>
+          <p>
+            Спектральное разложение особенно удобно для симметричного $L$. Матрица инцидентности $B$ прямоугольна, а матрица переходов $P$ обычно не симметрична. Для произвольной вещественной матрицы $M$ существует сингулярное разложение: ортогональные матрицы левых и правых направлений и неотрицательные сингулярные значения.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-svd-definition"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-singular-value-decomposition,linear-singular-values">
+            \[
+              \class{atlas-notation-token notation-id-linear-singular-value-decomposition}{M=U\Sigma V^{\mathsf T}},
+              \qquad
+              \class{atlas-notation-token notation-id-linear-singular-values}{
+                \sigma_1\ge\sigma_2\ge\cdots\ge0}.
+            \]
+          </div>
+          <p>
+            Квадраты сингулярных значений — собственные значения $M^{\mathsf T}M$ или $MM^{\mathsf T}$. Если взять взвешенный градиент $M=W^{1/2}B^{\mathsf T}$, то $M^{\mathsf T}M=L$. Поэтому ненулевые сингулярные значения градиента равны квадратным корням из ненулевых собственных значений лапласиана. Ранг, ядро и компоненты снова оказываются одной картиной.
+          </p>
+          <p>
+            SVD также даёт наилучшие приближения матрицы заданного малого ранга в стандартных нормах. Но низкоранговое приближение плотной матрицы смежности и разреженное приближение графа — разные задачи: первое может заполнить почти все ячейки ненулевыми числами. В алгоритмах над большими графами обычно вычисляют лишь несколько крайних собственных или сингулярных направлений итерационными методами, не строя полное разложение.
+          </p>
+        </section>
+
+        <section id="computation">
+          <h2>Формула плотная, а хороший алгоритм остаётся разреженным</h2>
+          <p>
+            Плотное хранение $A$ или $L$ требует $O(n^2)$ памяти. Список рёбер требует $O(n+m)$. Чтобы вычислить $y=Lx$, достаточно пройти по рёбрам: каждое непетлевое ребро $u-v$ веса $w$ добавляет $w(x_u-x_v)$ в $y_u$ и противоположную величину в $y_v$. Стоимость одного умножения — $O(n+m)$, и этого достаточно для многих итерационных методов поиска собственных значений или решения линейных систем.
+          </p>
+          <p>
+            Полный спектр плотным симметричным алгоритмом стоит порядка $O(n^3)$ времени и $O(n^2)$ памяти. На большом разреженном графе обычно нужны только несколько малых собственных значений; методы Ланцоша строят малое подпространство из последовательных умножений на $L$. Точность становится частью контракта: вычисленный вектор проверяют по невязке $\|Lv-\lambda v\|$, а ортогональность — по скалярным произведениям.
+          </p>
+          <div class="atlas-math atlas-notation-formula"
+            data-formula-id="linear-eigen-residual"
+            data-notation-coverage="interactive"
+            data-required-notations="linear-eigen-residual,linear-eigenvalue,linear-eigenvector,linear-laplacian">
+            \[
+              \class{atlas-notation-token notation-id-linear-eigen-residual}{\rho_i}
+              =\left\|
+                \class{atlas-notation-token notation-id-linear-laplacian}{L}
+                \class{atlas-notation-token notation-id-linear-eigenvector}{v_i}
+                -
+                \class{atlas-notation-token notation-id-linear-eigenvalue}{\lambda_i}v_i
+              \right\|_2.
+            \]
+          </div>
+          <p>
+            Учебная лаборатория ограничивает граф десятью вершинами и использует метод вращений Якоби. На таком размере он прозрачен и устойчив: симметрия сохраняется, а невязки и ортогональность проверяются тестами на случайных графах. Это не рекомендация для промышленного миллиона вершин. Аналогично, точный определитель Барейса удобен для малых целочисленных матриц, но подсчёт огромного графа потребует разреженного исключения, модульной арифметики или другой специализированной техники.
+          </p>
+          <p>
+            Матрицы в интерфейсе, напротив, намеренно плотные: читатель должен увидеть изменение конкретных ячеек. При добавлении ребра $u-v$ веса $w$ меняются лишь четыре позиции лапласиана: две диагонали получают $+w$, две симметричные внедиагональные — $-w$. Это обновление имеет ранг один и записывается как $wbb^{\mathsf T}$, где $b$ — столбец инцидентности ребра. На практике такая локальность позволяет не пересобирать оператор с нуля после каждого изменения, хотя пересчёт собственных направлений уже требует более осторожных динамических методов.
+          </p>
+          <p>
+            Разреженность влияет и на выбор формата. Списки координат удобны для загрузки рёбер; CSR быстро умножает матрицу на вектор строка за строкой; явная инцидентность полезна, когда алгоритм одновременно хранит вершины и потоки на рёбрах. Один математический $L$ может иметь несколько физических представлений. Сложность алгоритма следует оценивать по реально выполненным операциям над выбранным форматом, а не по виду компактной формулы в статье.
+          </p>
+        </section>
+
+        <section id="edge-cases">
+          <h2>Пустота, нулевой вес, петля и кратное ребро меняют разные части модели</h2>
+          <p>
+            Граф без вершин имеет матрицы размера $0\times0$ и пустой спектр. Граф из одной изолированной вершины имеет $A=D=L=[0]$, одну компоненту и один нулевой собственный вектор. Если на вершине есть положительная петля, $A=[2w]$ и $D=[2w]$, но $L=[0]$. Блуждание остаётся на месте. Петля не создаёт нового остовного дерева.
+          </p>
+          <p>
+            Ребро нулевого веса записывается в списке, но его вклад в $A,D,L$ и энергию равен нулю. Поэтому оно не склеивает компоненты, обнаруживаемые ядром. Если предметная область считает даже нулевую связь топологическим ребром, то спектральная компонента и обычная компонента будут разными понятиями; необходимо выбрать одно до построения матрицы.
+          </p>
+          <p>
+            Параллельные рёбра складываются в $A$ и $L$, но остаются отдельными столбцами $B$. В матричной теореме это важно: дерево может выбрать первый или второй экземпляр, и взвешенная сумма учитывает оба варианта. Сжатие их в одно ребро с суммарным весом сохраняет лапласиан и суммарный вес деревьев, хотя теряет идентичность физического канала.
+          </p>
+          <p>
+            В несвязном графе распределение случайного блуждания не обязано быть единственным. Формула, пропорциональная степени, даёт одно стационарное распределение на всех непустых компонентах, но начальная масса между компонентами сохраняется навсегда. Изолированные вершины могут нести произвольную стационарную массу. Поэтому лабораторная подпись честно говорит «одна стационарная мера», а не «единственная».
+          </p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что чаще всего ломается при переходе от рисунка к матрице</h2>
+          <p>
+            Первая ошибка — считать $A_{ij}$ булевым признаком, а затем ожидать от него взвешенные степени. Вторая — учесть петлю один раз в $A_{ii}$ и дважды в степени: строка $L$ перестанет суммироваться в ноль. Третья — забыть, что порядок вершин задаёт координаты, и сравнивать матрицы после разных перестановок буквально, а не с соответствующей перестановочной матрицей.
+          </p>
+          <p>
+            Четвёртая ошибка — объявить ориентацию столбца $B$ направлением исходного ребра. Пятая — потерять отдельные столбцы параллельных рёбер. Шестая — написать $B^{\mathsf T}WB$ при нашей ориентации размеров: если $B$ имеет вершины в строках, корректно $BWB^{\mathsf T}$. Проверка размерностей ловит такую ошибку до вычислений.
+          </p>
+          <p>
+            Седьмая ошибка — заключить из положительной полуопределённости, что $x^{\mathsf T}Lx>0$ для любого ненулевого $x$. Постоянные сигналы дают ноль. Восьмая — считать второй собственный вектор единственным при кратном собственном значении: уникально только подпространство, а базис внутри него может вращаться. Девятая — сравнивать знаки собственных векторов как идентификаторы; $v$ и $-v$ описывают одно направление.
+          </p>
+          <p>
+            Десятая ошибка — применять $D^{-1}$ к изолированной вершине без соглашения. Одиннадцатая — путать стационарность с достигнутым равновесием после конечного числа шагов. Двенадцатая — вычислять число деревьев определителем с плавающей точкой и округлять огромное почти целое число: потеря нескольких младших разрядов может дать ложный ответ. Для точного целочисленного результата нужна точная арифметика.
+          </p>
+          <p>
+            Наконец, маленькая невязка одного численного собственного вектора не доказывает корректность всего спектра. Нужно проверить все пары, ортонормальность, след или другие инварианты и независимые структурные следствия. В тестах главы кратность нуля сравнивается с обходом графа, энергия — с прямой суммой по рёбрам, а теорема Кирхгофа — с перебором деревьев.
+          </p>
+        </section>
+
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
+          <h2>Лаборатория: измените одно ребро и проследите всю цепочку</h2>
+          <p>
+            Выберите граф или задайте собственный неориентированный мультиграф, затем запускайте добавление рёбер по одному. Один кадр синхронно обновляет рисунок, матрицы $A$, $D$, $L$, нормированный лапласиан, инцидентность, переходы случайного блуждания, энергию выбранного вектора, компоненты и спектр. Изменение веса выбранного ребра немедленно пересчитывает полное состояние. Нулевые веса, петли, параллельные рёбра, несвязный и одноточечный графы имеют явные режимы. Масштаб и положение графа управляются мышью, касанием или клавиатурой; автоматическое воспроизведение можно остановить в любой момент.
+          </p>
+          <div class="atlas-lab" data-atlas-lab="linear-algebra-for-graphs"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Постройте $A$, $D$ и $L$ для пути $a-b-c$ с весами $2$ и $5$. Проверьте суммы строк $L$.</p><details><summary>Показать подсказку</summary><p>Смежность симметрична, степени равны суммам строк $A$.</p></details><details><summary>Показать решение</summary><p>$A=\begin{pmatrix}0&2&0\\2&0&5\\0&5&0\end{pmatrix}$, $D=\operatorname{diag}(2,7,5)$, $L=\begin{pmatrix}2&-2&0\\-2&7&-5\\0&-5&5\end{pmatrix}$. Каждая строка суммируется в ноль.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Добавьте к вершине $b$ петлю веса $4$. Какие из $A$, $D$, $L$ и $B$ меняются?</p><details><summary>Показать подсказку</summary><p>Используйте двойной вклад петли и нулевой перепад от вершины к самой себе.</p></details><details><summary>Показать решение</summary><p>$A_{bb}$ и $D_{bb}$ увеличиваются на $8$, поэтому их разность $L$ не меняется. В $B$ появляется нулевой столбец. Энергия и компоненты также не меняются.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Докажите напрямую из $D-A$, что $x^{\mathsf T}Lx=\sum_{\{u,v\}}w_{uv}(x_u-x_v)^2$.</p><details><summary>Показать подсказку</summary><p>Каждое непетлевое ребро входит в степени двух концов и дважды в симметричную сумму смежности.</p></details><details><summary>Показать решение</summary><p>Вклад ребра в $x^{\mathsf T}Dx$ равен $w(x_u^2+x_v^2)$, а в $x^{\mathsf T}Ax$ — $2wx_ux_v$. Разность равна $w(x_u-x_v)^2$. Суммирование по экземплярам рёбер даёт формулу.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Найдите базис ядра лапласиана графа с компонентами $\{a,b,c\}$, $\{d,e\}$ и $\{f\}$.</p><details><summary>Показать подсказку</summary><p>Возьмите индикатор каждой компоненты.</p></details><details><summary>Показать решение</summary><p>Подойдут $(1,1,1,0,0,0)$, $(0,0,0,1,1,0)$ и $(0,0,0,0,0,1)$. Любой вектор ядра постоянен на каждой компоненте, поэтому эти три вектора образуют базис.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Покажите, что смена ориентации одного столбца $B$ не меняет $BWB^{\mathsf T}$.</p><details><summary>Показать подсказку</summary><p>Смена ориентации умножает столбец на $-1$ с обеих сторон внешнего произведения.</p></details><details><summary>Показать решение</summary><p>Вклад столбца $b_e$ равен $w_eb_eb_e^{\mathsf T}$. После замены на $-b_e$ получаем $w_e(-b_e)(-b_e)^{\mathsf T}=w_eb_eb_e^{\mathsf T}$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Для ненулевого $x$ докажите, что $R_L(7x)=R_L(x)$, и объясните, почему $R_L(0)$ не определено.</p><details><summary>Показать подсказку</summary><p>Числитель и знаменатель однородны степени два.</p></details><details><summary>Показать решение</summary><p>Оба выражения умножаются на $7^2$, и множители сокращаются. У нулевого вектора знаменатель равен нулю, поэтому частное не имеет значения.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Вычислите стационарное распределение случайного блуждания на пути из трёх невзвешенных вершин.</p><details><summary>Показать подсказку</summary><p>Степени равны $1,2,1$, их сумма — $4$.</p></details><details><summary>Показать решение</summary><p>$\pi=(1/4,1/2,1/4)$. Проверка: масса из середины делится пополам между концами, а вся масса каждого конца переходит в середину.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Почему это блуждание не сходится к $\pi$ из вершины конца без добавления ленивого шага?</p><details><summary>Показать подсказку</summary><p>Следите за чётностью номера шага и долей двудольного графа.</p></details><details><summary>Показать решение</summary><p>На чётных шагах путник находится в исходной доле, на нечётных — в другой. Распределение колеблется с периодом два, хотя $\pi$ стационарно. Вероятность остаться на месте разрушает периодичность.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> С помощью теоремы Кирхгофа найдите число остовных деревьев цикла $C_n$.</p><details><summary>Показать подсказку</summary><p>Можно либо вычислить трёхдиагональный кофактор, либо сначала определить деревья комбинаторно и проверить определитель.</p></details><details><summary>Показать решение</summary><p>Удаление любого одного из $n$ рёбер цикла даёт путь и остовное дерево; другие варианты невозможны. Поэтому $\tau(C_n)=n$, и любой кофактор лапласиана имеет определитель $n$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Во взвешенном треугольнике веса рёбер равны $a,b,c$. Найдите взвешенную сумму остовов.</p><details><summary>Показать подсказку</summary><p>Каждое дерево выбирает два из трёх рёбер.</p></details><details><summary>Показать решение</summary><p>Три дерева имеют веса произведений $ab$, $ac$ и $bc$, поэтому $\tau_w=ab+ac+bc$. Тот же результат даёт определитель любого кофактора $L$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Объясните, почему ненулевые сингулярные значения $W^{1/2}B^{\mathsf T}$ равны $\sqrt{\lambda_i(L)}$.</p><details><summary>Показать подсказку</summary><p>Возведите сингулярные значения в квадрат и вычислите $M^{\mathsf T}M$.</p></details><details><summary>Показать решение</summary><p>Для $M=W^{1/2}B^{\mathsf T}$ имеем $M^{\mathsf T}M=BWB^{\mathsf T}=L$. Квадраты сингулярных значений $M$ являются собственными значениями $M^{\mathsf T}M$, значит $\sigma_i=\sqrt{\lambda_i}$ для ненулевой части спектра.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Спроектируйте проверку численного спектра, не сравнивая его с заранее записанными числами.</p><details><summary>Показать подсказку</summary><p>Используйте невязки, ортогональность, след, энергию и компоненты.</p></details><details><summary>Показать решение</summary><p>Для каждой пары проверить малость $\|Lv_i-\lambda_iv_i\|$, нормы и попарные скалярные произведения векторов; проверить неотрицательность, сумму собственных значений, равную $\operatorname{tr}L$, и кратность нуля, равную числу компонент независимого обхода. На случайных $x$ дополнительно сравнить $x^{\mathsf T}Lx$ с суммой по рёбрам.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Gustav Kirchhoff, <a href="https://doi.org/10.1002/andp.18471481202" target="_blank" rel="noopener noreferrer">Ueber die Auflösung der Gleichungen, auf welche man bei der Untersuchung der linearen Vertheilung galvanischer Ströme geführt wird</a>, Annalen der Physik 148(12), 1847, 497–508 — исходная работа о линейных уравнениях токов и деревьях.</li>
+            <li>Miroslav Fiedler, <a href="https://doi.org/10.21136/CMJ.1973.101168" target="_blank" rel="noopener noreferrer">Algebraic Connectivity of Graphs</a>, Czechoslovak Mathematical Journal 23(2), 1973, 298–305 — первичная работа об алгебраической связности.</li>
+            <li>Fan R. K. Chung, <a href="https://fanchung.ucsd.edu/research/revised.html" target="_blank" rel="noopener noreferrer">Spectral Graph Theory</a>, CBMS Regional Conference Series in Mathematics 92, American Mathematical Society, 1997; страница автора с исправленными главами — систематическое изложение лапласианов и спектра графа.</li>
+            <li>Ulrike von Luxburg, <a href="https://doi.org/10.1007/s11222-007-9033-z" target="_blank" rel="noopener noreferrer">A Tutorial on Spectral Clustering</a>, Statistics and Computing 17, 2007, 395–416 — академический обзор комбинаторного и нормированных лапласианов.</li>
+            <li>Daniel A. Spielman, <a href="https://doi.org/10.48550/arXiv.1209.2855" target="_blank" rel="noopener noreferrer">Spectral Graph Theory</a>, lecture notes, 2012 — алгоритмический взгляд на энергию, спектр и разреженные графовые операторы.</li>
+            <li>László Lovász, <a href="https://cs.yale.edu/publications/techreports/tr1029.pdf" target="_blank" rel="noopener noreferrer">Random Walks on Graphs: A Survey</a>, Yale University technical report, 1993; позднее опубликовано в сборнике <em>Combinatorics, Paul Erdős is Eighty</em> — академический обзор случайных блужданий на графах.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту">
+          <div id="atlas-route-previous"></div><div id="atlas-route-next"></div>
+        </nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title">
+          <h2 id="atlas-completion-title">Сохранить локальный прогресс</h2>
+          <button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button>
+          <p id="atlas-chapter-progress-status" aria-live="polite"></p>
+        </section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
