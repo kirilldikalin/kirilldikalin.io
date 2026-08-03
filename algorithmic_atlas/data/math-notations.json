@@ -7806,8 +7806,8 @@
       "displayNotation": "|f|",
       "shortName": "значение потока",
       "explanation": "Чистый отток из истока, равный чистому притоку в сток",
-      "scope": "local",
-      "chapterId": "max-flow-min-cut",
+      "scope": "global",
+      "chapterId": null,
       "firstDefinition": {
         "chapterId": "max-flow-min-cut",
         "anchor": "model"
@@ -8187,6 +8187,114 @@
       "scope": "local",
       "chapterId": "circulations-min-cost-flow",
       "firstDefinition": {"chapterId": "circulations-min-cost-flow", "anchor": "complexity"}
+    },
+    {
+      "id": "matching-set-m",
+      "displayNotation": "M",
+      "shortName": "паросочетание",
+      "explanation": "Множество рёбер без общих концов",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "definitions"}
+    },
+    {
+      "id": "matching-symmetric-difference",
+      "displayNotation": "triangle",
+      "shortName": "симметрическая разность",
+      "explanation": "Рёбра, принадлежащие ровно одному из двух сравниваемых множеств",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "alternating"}
+    },
+    {
+      "id": "matching-augmenting-path",
+      "displayNotation": "P",
+      "shortName": "увеличивающий путь",
+      "explanation": "Чередующийся путь между двумя свободными вершинами, начинающийся и заканчивающийся незанятыми рёбрами",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "alternating"}
+    },
+    {
+      "id": "matching-comparison-n",
+      "displayNotation": "N",
+      "shortName": "сравниваемое паросочетание",
+      "explanation": "Другое паросочетание, с которым M сравнивается в доказательстве леммы Бержа",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "berge"}
+    },
+    {
+      "id": "matching-left-part",
+      "displayNotation": "L",
+      "shortName": "левая доля",
+      "explanation": "Одна из двух независимых долей двудольного графа",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "bipartite"}
+    },
+    {
+      "id": "matching-right-part",
+      "displayNotation": "R",
+      "shortName": "правая доля",
+      "explanation": "Вторая независимая доля двудольного графа",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "bipartite"}
+    },
+    {
+      "id": "matching-distance-layer",
+      "displayNotation": "dist",
+      "shortName": "слой поиска",
+      "explanation": "Расстояние до вершины в слоистом графе кратчайших увеличивающих путей",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "hopcroft-karp"}
+    },
+    {
+      "id": "matching-reachable-set",
+      "displayNotation": "Z",
+      "shortName": "достижимые вершины",
+      "explanation": "Вершины, достижимые из свободных левых вершин по чередующимся рёбрам",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "konig"}
+    },
+    {
+      "id": "matching-min-cover",
+      "displayNotation": "C",
+      "shortName": "вершинное покрытие",
+      "explanation": "Множество вершин, содержащее хотя бы один конец каждого ребра",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "konig"}
+    },
+    {
+      "id": "matching-left-subset",
+      "displayNotation": "S",
+      "shortName": "подмножество левой доли",
+      "explanation": "Произвольное множество вершин левой доли в условии Холла",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "hall"}
+    },
+    {
+      "id": "matching-neighborhood",
+      "displayNotation": "N(S)",
+      "shortName": "окрестность множества",
+      "explanation": "Все правые вершины, смежные хотя бы с одной вершиной множества S",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "hall"}
+    },
+    {
+      "id": "matching-blossom",
+      "displayNotation": "B",
+      "shortName": "цветок",
+      "explanation": "Нечётный чередующийся цикл с общей базой, который алгоритм Эдмондса временно сжимает в псевдовершину",
+      "scope": "local",
+      "chapterId": "graph-matchings",
+      "firstDefinition": {"chapterId": "graph-matchings", "anchor": "blossom"}
     }
   ]
 }

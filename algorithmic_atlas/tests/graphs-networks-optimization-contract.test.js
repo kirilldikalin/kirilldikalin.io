@@ -43,6 +43,7 @@ const publishedChapterIds = new Set([
   "minimum-spanning-trees",
   "max-flow-min-cut",
   "circulations-min-cost-flow",
+  "graph-matchings",
 ]);
 
 function canonicalChapters() {

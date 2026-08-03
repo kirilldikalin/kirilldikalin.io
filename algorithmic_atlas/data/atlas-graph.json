@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-11",
+  "datasetVersion": "2026.08.03-12",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2486,19 +2486,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "flows-and-matchings",
       "type": "algorithm",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "max-flow-min-cut"
       ],
       "related": [],
-      "route": null,
-      "minutes": 64,
-      "reading": null,
+      "route": "./chapters/graph-matchings.html",
+      "minutes": 55,
+      "reading": {
+        "words": 4168,
+        "formulaBlocks": 8,
+        "proofBlocks": 3,
+        "theoryMinutes": 29,
+        "labMinutes": 26
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 1110,
