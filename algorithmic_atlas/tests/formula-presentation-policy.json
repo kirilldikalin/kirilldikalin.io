@@ -8,10 +8,10 @@
       "algorithm-design",
       "graphs-networks-optimization"
     ],
-    "publishedChapterCount": 55,
-    "displayFormulaTotal": 498,
+    "publishedChapterCount": 56,
+    "displayFormulaTotal": 516,
     "basicFormulaTotal": 35,
-    "interactiveFormulaTotal": 463
+    "interactiveFormulaTotal": 481
   },
   "fingerprint": {
     "algorithm": "sha256",

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-16",
+  "datasetVersion": "2026.08.03-17",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -2651,19 +2651,25 @@
       "continentId": "graphs-networks-optimization",
       "regionId": "network-analysis",
       "type": "math",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "linear-algebra-for-graphs"
       ],
       "related": [],
-      "route": null,
-      "minutes": 62,
-      "reading": null,
+      "route": "./chapters/spectral-graph-algorithms.html",
+      "minutes": 63,
+      "reading": {
+        "words": 4032,
+        "formulaBlocks": 18,
+        "proofBlocks": 6,
+        "theoryMinutes": 34,
+        "labMinutes": 29
+      },
       "features": {
-        "proof": false,
-        "interactive": false,
-        "exercises": false
+        "proof": true,
+        "interactive": true,
+        "exercises": true
       },
       "position": {
         "x": 850,

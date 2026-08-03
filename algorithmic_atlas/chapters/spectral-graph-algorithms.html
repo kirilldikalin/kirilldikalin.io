@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Спектральные алгоритмы на графах — Алгоритмический атлас</title>
+  <meta name="description" content="Лапласиан, вектор Фидлера, проводимость, неравенство Чигера, спектральное разбиение, случайные блуждания и лапласиановы системы">
+  <meta property="og:title" content="Спектральные алгоритмы на графах — Алгоритмический атлас">
+  <meta property="og:description" content="Как собственные значения превращают связность, разрезы и смешивание в геометрию векторов">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/spectral-graph-algorithms.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/spectral-graph-algorithms.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/graph-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {loader: {load: ['[tex]/html']}, tex: {packages: {'[+]': ['html']}, inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true, processEnvironments: true}, options: {ignoreHtmlClass: 'tex2jax_ignore', processHtmlClass: 'tex2jax_process'}};
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/graph-lab-core.js" defer></script>
+  <script src="../labs/graph-lab-runtime.js" defer></script>
+  <script src="../labs/spectral-graph-algorithms-core.js" defer></script>
+  <script src="../labs/spectral-graph-algorithms.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="spectral-graph-algorithms" data-atlas-lab-minutes="29">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Спектральные алгоритмы на графах</span>
+  </nav>
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Графы, сети и оптимизация · ветвь 5.13</p>
+      <h1>Спектральные алгоритмы на графах</h1>
+      <p class="atlas-chapter-intro">Как тихая мода Лапласиана обнаруживает узкое место графа, превращает разрез в sweep по числовой оси и объясняет скорость случайного блуждания</p>
+      <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 29 мин</span><span>6 доказательств и схем</span><span>12 упражнений</span></div>
+    </header>
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#problem">Структура как колебание</a></li>
+          <li><a href="#laplacian-spectrum">Лапласиан и спектр</a></li>
+          <li><a href="#fiedler">Связность и вектор Фидлера</a></li>
+          <li><a href="#cut-objectives">Цели разбиения</a></li>
+          <li><a href="#normalized-laplacian">Нормализованный Лапласиан</a></li>
+          <li><a href="#cheeger">Неравенство Чигера</a></li>
+          <li><a href="#cheeger-scheme">Схема доказательства</a></li>
+          <li><a href="#sweep">Sweep cut</a></li>
+          <li><a href="#clustering">Спектральная кластеризация</a></li>
+          <li><a href="#random-walks">Случайные блуждания</a></li>
+          <li><a href="#mixing">Смешивание и щель</a></li>
+          <li><a href="#pagerank">Связь с PageRank</a></li>
+          <li><a href="#laplacian-systems">Системы Лапласиана</a></li>
+          <li><a href="#limitations">Ограничения метода</a></li>
+          <li><a href="#edge-cases">Пограничные случаи</a></li>
+          <li><a href="#pseudocode">Псевдокод</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+      <article class="atlas-chapter-content">
+        <section id="problem">
+          <h2>Граница сообщества видна как дешёвое плавное колебание</h2>
+          <p>Пусть граф состоит из двух плотных групп, соединённых одним слабым мостом. Комбинаторно мы ищем разрез: множество рёбер, пересекающих границу групп. Спектральный взгляд назначает каждой вершине число и штрафует большие различия на тяжёлых рёбрах. Внутри плотной группы значения вынуждены быть близкими, а через слабый мост могут заметно различаться почти без энергетической цены. Так дискретная связность превращается в геометрию вектора.</p>
+          <p>Этот переход является расслаблением. Вместо выбора стороны $0$ или $1$ каждой вершине разрешается любое вещественное значение. Непрерывную задачу можно решить средствами линейной алгебры, после чего значения округляют обратно в разрез. Гарантия зависит не от красивой картинки, а от связи между энергией собственного вектора и проводимостью графа.</p>
+          <p>Спектр — набор собственных значений матрицы — не является уникальным отпечатком графа: неизоморфные графы могут иметь одинаковый спектр. Зато отдельные части спектра устойчиво кодируют полезные глобальные свойства. Кратность нулевого значения Лапласиана равна числу компонент, второе значение измеряет алгебраическую связность, а нормализованная спектральная щель связана с проводимостью и смешиванием блуждания.</p>
+          <p>Нужно сразу различать обычный комбинаторный Лапласиан $L$ и нормализованный $\mathcal L$. Вектор Фидлера исторически относится ко второму наименьшему собственному значению $L$. Неравенство Чигера для проводимости удобнее формулируется через второе собственное значение $\mathcal L$. На регулярном графе объекты отличаются лишь масштабом, на графе с неодинаковыми степенями подмена меняет числа и порядок sweep.</p>
+        </section>
+
+        <section id="laplacian-spectrum">
+          <h2>Лапласиан измеряет несогласие значений на концах рёбер</h2>
+          <p>Рассматриваем неориентированный взвешенный граф с неотрицательными весами. Матрица смежности $A$ содержит суммарный вес между вершинами, а диагональная матрица $D$ — взвешенные степени. Комбинаторный Лапласиан симметричен, имеет нулевые суммы строк и не зависит от выбранной ориентации рёбер.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-laplacian-definition" data-notation-coverage="interactive" data-required-notations="spectral-laplacian,spectral-degree-matrix,spectral-adjacency-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-laplacian}{L}
+              =\class{atlas-notation-token notation-id-spectral-degree-matrix}{D}
+              -\class{atlas-notation-token notation-id-spectral-adjacency-matrix}{A}.
+            \]
+          </div>
+          <p>Главное тождество раскрывает квадратичную форму как сумму рёберных энергий. Если соседние координаты совпадают, ребро ничего не добавляет. Большой вес сильнее наказывает разрыв. Формула объясняет одновременно положительную полуопределённость и нулевые векторы компонент.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-energy" data-notation-coverage="interactive" data-required-notations="spectral-quadratic-form,spectral-vector,spectral-edge-weight">
+            \[
+              \class{atlas-notation-token notation-id-spectral-quadratic-form}{x^{\mathsf T}Lx}
+              =\sum_{\{u,v\}\in E}
+              \class{atlas-notation-token notation-id-spectral-edge-weight}{w_{uv}}
+              \bigl(\class{atlas-notation-token notation-id-spectral-vector}{x_u}-x_v\bigr)^2\ge0.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Нулевое пространство и компоненты</h3><p>Если $Lx=0$, то $x^{\mathsf T}Lx=0$. Каждый член суммы неотрицателен, поэтому на каждом ребре положительного веса выполнено $x_u=x_v$. Вдоль пути положительной поддержки равенство переносится на всю компоненту: $x$ постоянен на каждой компоненте. Обратно, любой вектор, постоянный отдельно на каждой компоненте, имеет нулевую разность на каждом ребре и лежит в ядре. Индикаторы компонент линейно независимы и образуют базис ядра. Следовательно, кратность собственного значения ноль равна числу компонент положительной поддержки.</p></section>
+          <p>Нулевое ребро не связывает координаты энергетически. Оно может присутствовать в файле данных, но не уменьшает число компонент поддержки. Петли также не влияют на обычную энергию разностей; учебная лаборатория запрещает их, чтобы степень и нормировка не зависели от выбранной конвенции.</p>
+        </section>
+
+        <section id="fiedler">
+          <h2>Второе собственное значение появляется после запрета константы</h2>
+          <p>Поскольку $L\mathbf1=0$, минимальная энергия на единичной сфере достигается константным вектором и ничего не говорит о разрезе. Запретим направление $\mathbf1$. Минимум отношения Релея в ортогональном подпространстве равен второму наименьшему собственному значению. Мирослав Фидлер назвал его алгебраической связностью; соответствующий собственный вектор теперь называют вектором Фидлера.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-order" data-notation-coverage="interactive" data-required-notations="spectral-eigenvalue,spectral-fiedler-value,spectral-vertex-count">
+            \[
+              0=\class{atlas-notation-token notation-id-spectral-eigenvalue}{\lambda_1}
+              \le\class{atlas-notation-token notation-id-spectral-fiedler-value}{\lambda_2}
+              \le\cdots\le\lambda_{\class{atlas-notation-token notation-id-spectral-vertex-count}{n}}.
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-fiedler-variational" data-notation-coverage="interactive" data-required-notations="spectral-rayleigh-quotient,spectral-fiedler-vector,spectral-orthogonality">
+            \[
+              \lambda_2=\min_{x\ne0,\,\class{atlas-notation-token notation-id-spectral-orthogonality}{x\perp\mathbf1}}
+              \class{atlas-notation-token notation-id-spectral-rayleigh-quotient}{\frac{x^{\mathsf T}Lx}{x^{\mathsf T}x}},
+              \qquad x=\class{atlas-notation-token notation-id-spectral-fiedler-vector}{f}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="theorem"><h3>Критерий связности Фидлера</h3><p>Для неориентированного графа $\lambda_2(L)>0$ тогда и только тогда, когда положительная поддержка графа связна.</p></section>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Доказательство критерия</h3><p>Если граф несвязен, ядро имеет размер хотя бы два, поэтому второе собственное значение равно нулю. Если граф связен, ядро состоит только из констант. На компактном множестве единичных векторов, ортогональных константе, непрерывная энергия достигает минимума. Этот минимум не может быть нулём, иначе минимизатор оказался бы одновременно константным и ортогональным ненулевым вектором. Значит, он положителен.</p></section>
+          <p>Сам вектор не всегда уникален. Его знак можно обратить. Если $\lambda_2$ кратно, допустимо любое ортонормированное направление соответствующего собственного подпространства; разные численные библиотеки могут вернуть разные разрезы. Значение сохраняется, но координаты и sweep-порядок становятся базис-зависимыми. Это не ошибка округления, а математическая неединственность.</p>
+          <p>Величину $\lambda_2$ можно интерпретировать как жёсткость сети. Чтобы единичный вектор сохранил нулевое среднее, часть координат должна подняться, часть опуститься. В хорошо связном графе множество тяжёлых рёбер пересекает любой такой перепад, и энергия велика. Если сеть разделена слабым мостом, почти постоянные значения на двух сторонах создают дешёвую моду. Это рассуждение качественное: абсолютное значение обычной алгебраической связности масштабируется вместе со всеми весами.</p>
+          <p>Монотонность даёт ещё одну проверку здравого смысла. Добавление ребра неотрицательного веса прибавляет к $L$ положительно полуопределённую матрицу одного ребра, поэтому отношение Релея любого вектора не уменьшается и $\lambda_2$ не может упасть. Удаление ребра способно только ослабить алгебраическую связность. Для нормализованного Лапласиана такой простой монотонности нет: добавленное ребро одновременно меняет степени и геометрию ограничения.</p>
+        </section>
+
+        <section id="cut-objectives">
+          <h2>Малый вес границы без баланса даёт бессодержательный разрез</h2>
+          <p>Для множества $S$ граница состоит из рёбер с одним концом в $S$, другим — снаружи. Минимальный вес разреза полезен для надёжности сети, но как цель кластеризации способен отделить одну вершину малой степени. Поэтому размер стороны или её взвешенный объём включают в знаменатель.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-cut-weight" data-notation-coverage="interactive" data-required-notations="spectral-cut-boundary,spectral-cut-weight">
+            \[
+              \class{atlas-notation-token notation-id-spectral-cut-weight}{w(\partial S)}
+              =\sum_{\{u,v\}\in\class{atlas-notation-token notation-id-spectral-cut-boundary}{\partial S}}w_{uv}.
+            \]
+          </div>
+          <p>Объём множества — сумма взвешенных степеней его вершин. Он учитывает не только число объектов, но и массу связей. Проводимость сравнивает границу с меньшим объёмом стороны. Она мала, когда внутри каждой стороны много веса, а между ними мало.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-conductance" data-notation-coverage="interactive" data-required-notations="spectral-volume,spectral-conductance,spectral-cut-set">
+            \[
+              \class{atlas-notation-token notation-id-spectral-volume}{\operatorname{vol}(S)}=\sum_{v\in S}d_v,
+              \qquad
+              \class{atlas-notation-token notation-id-spectral-conductance}{\phi(S)}=
+              \frac{w(\partial \class{atlas-notation-token notation-id-spectral-cut-set}{S})}
+              {\min\{\operatorname{vol}(S),\operatorname{vol}(\bar S)\}}.
+            \]
+          </div>
+          <p>Normalized cut симметрично платит долю внешнего веса для обеих сторон. Для фиксированного разреза он отличается от проводимости, но оптимизации тесно связаны. Ratio cut заменяет объёмы числом вершин и потому отвечает другой модели баланса.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-normalized-cut" data-notation-coverage="interactive" data-required-notations="spectral-normalized-cut">
+            \[
+              \class{atlas-notation-token notation-id-spectral-normalized-cut}{\operatorname{Ncut}(S,\bar S)}
+              =\frac{w(\partial S)}{\operatorname{vol}(S)}
+              +\frac{w(\partial S)}{\operatorname{vol}(\bar S)}.
+            \]
+          </div>
+          <p>Выбор цели является частью постановки. В социальной сети степень может отражать активность, и объёмный баланс разумен. В территориальном разбиении важнее число жителей или географическая площадь — этих величин в обычной степени нет. Спектральный алгоритм точно оптимизирует своё расслабление, а не неявное желание пользователя.</p>
+          <p>Проводимость всегда лежит между нулём и единицей для неотрицательного неориентированного графа: вес границы не превосходит объём каждой стороны. Ноль возникает, когда положительная поддержка распадается на компоненты. Единица означает, что меньшая сторона не имеет внутреннего веса — например, отдельный лист. Это удобная безразмерная шкала, в отличие от абсолютного веса разреза.</p>
+          <p>Normalized cut и проводимость выбирают одинаковый знаменатель не буквально. Если $S$ — меньшая сторона, то $\phi(S)=w(\partial S)/\operatorname{vol}(S)$, а Ncut добавляет меньший второй член с объёмом дополнения. Поэтому $\phi(S)\le\operatorname{Ncut}(S,\bar S)\le2\phi(S)$. Минимумы отличаются максимум постоянным множителем, но конкретные оптимальные множества могут различаться.</p>
+        </section>
+
+        <section id="normalized-laplacian">
+          <h2>Нормировка отделяет структуру переходов от абсолютной степени</h2>
+          <p>Нормализованный Лапласиан масштабирует координаты через степени. Для вершины положительной степени он имеет единицу на диагонали; для изолированной вершины в этой главе используется нулевая строка и столбец. Все его собственные значения лежат между нулём и двумя.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-normalized-definition" data-notation-coverage="interactive" data-required-notations="spectral-normalized-laplacian,spectral-degree-matrix,spectral-adjacency-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-normalized-laplacian}{\mathcal L}
+              =I-\class{atlas-notation-token notation-id-spectral-degree-matrix}{D}^{-1/2}
+              \class{atlas-notation-token notation-id-spectral-adjacency-matrix}{A}D^{-1/2}.
+            \]
+          </div>
+          <p>Второе значение обозначим $\nu_2$ во избежание смешения с $\lambda_2(L)$. Для $d$-регулярного графа $\mathcal L=L/d$, поэтому собственные векторы совпадают, а значения делятся на $d$. При неодинаковых степенях собственные векторы тоже меняются.</p>
+          <p>Симметричный собственный вектор $z_2$ нормализованного Лапласиана живёт в евклидовой геометрии и ортогонален $D^{1/2}\mathbf1$. Для sweep его переводят в координаты $g=D^{-1/2}z_2$. Тогда условие ортогональности становится взвешенным нулевым средним, а пороги сравнивают значения вершин в естественной для случайного блуждания нормировке.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-sweep-coordinate" data-notation-coverage="interactive" data-required-notations="spectral-sweep-coordinate,spectral-normalized-fiedler-vector,spectral-degree-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-sweep-coordinate}{g}
+              =\class{atlas-notation-token notation-id-spectral-degree-matrix}{D}^{-1/2}
+              \class{atlas-notation-token notation-id-spectral-normalized-fiedler-vector}{z_2}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="warning"><h3>Сортировать сырой $z_2$ неверно на нерегулярном графе</h3><p>Симметричная нормировка удобна для устойчивого вычисления собственных векторов, но проводимость связана с обобщённой задачей $Ly=\nu Dy$. Её координата $y=D^{-1/2}z$. На регулярном графе различие — общий множитель; при разных степенях порядок вершин способен измениться.</p></section>
+        </section>
+
+        <section id="cheeger">
+          <h2>Неравенство Чигера связывает лучший разрез с одной собственной модой</h2>
+          <p>Пусть граф связен, все степени положительны, веса неотрицательны, а $\phi_G$ — минимум проводимости по непустым собственным множествам. Тогда нормализованная спектральная щель и оптимальная проводимость ограничивают друг друга с квадратичной потерей в одну сторону.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-cheeger" data-notation-coverage="interactive" data-required-notations="spectral-cheeger-constant,spectral-normalized-gap">
+            \[
+              \frac{\class{atlas-notation-token notation-id-spectral-normalized-gap}{\nu_2}}{2}
+              \le \class{atlas-notation-token notation-id-spectral-cheeger-constant}{\phi_G}
+              \le\sqrt{2\nu_2}.
+            \]
+          </div>
+          <p>Левая часть говорит: если существует очень хороший узкий разрез, щель обязана быть малой. Правая часть конструктивнее: из собственного вектора можно найти sweep-разрез проводимости не больше $\sqrt{2\nu_2}$. Вместе они означают, что малое значение указывает на bottleneck, но не определяет его единственно.</p>
+          <p>Формулировка зависит от определения проводимости, нормировки Лапласиана и наличия петель в цепи. Для обычного $L$ возникают множители минимальной и максимальной степени. Для несвязного графа $\nu_2=0$ и компонентный разрез имеет нулевую границу, если обе стороны обладают положительным объёмом. При изолированных вершинах знаменатель может стать нулевым; лаборатория не заявляет теорему, пока предпосылки нарушены.</p>
+          <p>Неравенство не говорит, что sweep всегда находит оптимальный разрез. Оно даёт верхнюю гарантию через $\nu_2$. На конкретном графе sweep может совпасть с полным перебором, а может выбрать другой порог. Лаборатория вычисляет точный минимум проводимости перебором всех разрезов только потому, что ограничена десятью вершинами.</p>
+          <p>Квадратный корень в верхней границе существенен для общего спектрального округления: малое отношение Релея может распределяться по многим уровням, и переход к одному дискретному порогу теряет качество. В специальных семействах графов или при дополнительной спектральной структуре можно доказать более сильные утверждения, но базовая теорема не обещает линейной зависимости.</p>
+          <p>Теорема также работает как сертификат отсутствия слишком хорошего разреза. Если вычислено надёжное нижнее приближение к $\nu_2$, то каждый разрез имеет проводимость хотя бы $\nu_2/2$. Сам найденный sweep-разрез даёт верхнюю границу на $\phi_G$. Между ними получается проверяемый интервал, подобный нижней и верхней границам в точной комбинаторной оптимизации.</p>
+        </section>
+
+        <section id="cheeger-scheme">
+          <h2>Схема доказательства: индикатор идёт в спектр, собственный вектор возвращается в разрез</h2>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Лёгкая сторона: $\nu_2\le2\phi_G$</h3><p>Возьмём множество $S$ меньшего объёма и построим двухуровневый вектор, постоянный на $S$ и на $\bar S$, с взвешенным средним ноль. В числителе отношения Релея останутся только рёбра границы. Прямая подстановка даёт $w(\partial S)(1/\operatorname{vol}(S)+1/\operatorname{vol}(\bar S))$. Поскольку объём $S$ не больше объёма дополнения, выражение не превосходит $2w(\partial S)/\operatorname{vol}(S)=2\phi(S)$. Вариационный минимум $\nu_2$ не больше значения на этом пробном векторе. Минимизируя по $S$, получаем требуемое.</p></section>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Трудная сторона: из $z_2$ существует хороший порог</h3><p>Переходим к $g=D^{-1/2}z_2$ и сдвигаем его на взвешенную медиану. Рассматриваем положительную и отрицательную части отдельно; одна из них имеет отношение энергии к норме не больше $\nu_2$. Для неотрицательной части $h$ сортируем вершины по $h_v$ и рассматриваем все уровневые множества. Дискретная coarea-сумма выражает взвешенную сумму границ уровней через $\sum w_{uv}|h_u^2-h_v^2|$. Разлагаем разность квадратов и применяем Коши—Буняковского, получая верхнюю оценку через корень из энергии $\sum w_{uv}(h_u-h_v)^2$ и массы $\sum d_vh_v^2$. Если бы каждый уровневый разрез имел проводимость больше $\sqrt{2\nu_2}$, coarea-сумма нарушила бы эту оценку. Значит, хотя бы один sweep-порог удовлетворяет границе.</p></section>
+          <p>В предыдущем абзаце намеренно опущены три технические леммы, но не их роль. <em>Лемма о взвешенной медиане и усечении знака</em> выбирает половину объёма и контролирует отношение Релея. <em>Дискретная coarea-лемма</em> телескопирует границы вложенных уровневых множеств. <em>Лемма о разности квадратов</em> вместе с неравенством Коши—Буняковского даёт коэффициент $\sqrt2$. Полное доказательство требует аккуратно обработать равные координаты и нулевые веса; ссылка на изложение Чунг приведена в источниках.</p>
+          <p>Такой уровень детализации важен: фраза «отсортируем собственный вектор, и теорема очевидна» скрывает именно место квадратного корня. С другой стороны, переписывание нескольких страниц технических сумм отвлекло бы от алгоритмического маршрута. Схема показывает, какой объект строится и где расходуется качество.</p>
+          <p>Важно и направление логики. Сначала дискретный оптимум ограничивает вариационную задачу пробным индикатором, затем непрерывный минимизатор округляется обратно. Первая операция является расслаблением и может только улучшить нижнюю оценку; вторая возвращает допустимый разрез и платит потерю. Если поменять эти роли местами, легко ошибочно назвать собственное значение стоимостью конкретного разреза.</p>
+        </section>
+
+        <section id="sweep">
+          <h2>Sweep превращает вещественный вектор в конечный набор разрезов</h2>
+          <p>Вычислим координаты $g_v$, отсортируем вершины по возрастанию и рассмотрим $n-1$ префикс. Каждый префикс соответствует порогу между соседними координатами. Для него считаются вес границы, объёмы и проводимость. Лучший префикс возвращается как спектральный разрез.</p>
+          <p>Перебирать произвольные вещественные пороги не нужно: между соседними различными координатами множество $S$ не меняется. Если координаты равны, математически естественно включать всю группу одновременно, но детерминированный интерфейс может разрешить равенство стабильным ID и показать промежуточные префиксы. Последние зависят от tie-break и не должны выдаваться за канонический ответ.</p>
+          <p>После сортировки все границы можно обновлять инкрементально. Когда вершина переходит слева направо, внутренние рёбра к уже выбранным вершинам перестают пересекать границу, а рёбра к оставшимся начинают пересекать. При списках смежности суммарная работа обновлений $O(m)$, сортировка стоит $O(n\log n)$. Основная цена обычно находится в приближённом вычислении собственного вектора.</p>
+          <pre aria-label="Sweep по нормализованному вектору Фидлера"><code><span>вычислить z₂ для второго значения нормализованного Лапласиана</span>
+<span>для каждой вершины v положить g[v] ← z₂[v] / √d[v]</span>
+<span>упорядочить вершины по (g[v], стабильный ID)</span>
+<span>для k от 1 до n − 1:</span>
+<span>  S ← первые k вершин</span>
+<span>  вычислить φ(S), если обе стороны имеют положительный объём</span>
+<span>вернуть допустимый префикс минимальной проводимости</span></code></pre>
+          <p>Лаборатория показывает каждый префикс как playback. Цвет вершины кодирует координату, контрастные рёбра — текущую границу, а отдельный график фиксирует порог. Спектр исходного графа не меняется; дополнительно пересчитываются спектры двух индуцированных сторон, чтобы видеть, как выбор порога меняет их внутреннюю связность.</p>
+          <p>На практике координаты вычислены приближённо. Если две из них различаются меньше гарантированной погрешности eigensolver, их строгий порядок нельзя считать достоверным. Полезная реализация объединяет почти равные значения, пробует границы между блоками или проверяет несколько устойчивых tie-break. Числовая сортировка без отчёта о невязке создаёт ложную точность.</p>
+          <p>Самый дешёвый sweep можно искать и локально. Вместо глобального второго собственного вектора запускают короткое блуждание или diffusion из выбранной вершины, сортируют нормированные вероятности и делают sweep. Такие алгоритмы просматривают область, пропорциональную найденному кластеру, а не весь огромный граф. Однако их гарантия зависит от стартовой точки и отличается от глобальной схемы этой главы.</p>
+        </section>
+
+        <section id="clustering">
+          <h2>Двухсторонний разрез становится строительным блоком кластеризации</h2>
+          <p>Простейшая спектральная кластеризация рекурсивно делит граф sweep-разрезом, пока не выполнен критерий остановки. Такой подход создаёт иерархию, но ранняя ошибка уже не исправляется. Для заранее заданных $k$ кластеров чаще берут несколько первых нетривиальных собственных векторов, помещают каждую вершину в $k$-мерное пространство строк и применяют геометрическое округление, например $k$-means.</p>
+          <p>Выбор матрицы меняет геометрию. Собственные векторы $L$ соответствуют ratio-cut-подобной нормировке, обобщённая задача $Ly=\nu Dy$ и $\mathcal L$ — normalized cut. Ненормированная версия чувствительна к высокой степени, нормированная может иначе трактовать маленькие плотные группы. Универсально лучшего варианта нет.</p>
+          <p>Граф сходства тоже является частью алгоритма. Для данных в пространстве нужно решить, какие пары соединять и как превращать расстояние в вес. Слишком широкий масштаб делает граф почти полным и стирает локальную структуру; слишком узкий создаёт множество компонент. Спектральная процедура не восстанавливает информацию, потерянную на этапе построения графа.</p>
+          <p>Повторные собственные значения делают вложение определённым только с точностью до ортогонального вращения внутри подпространства. Геометрические методы, зависящие только от расстояний между строками полного подпространства, устойчивы к такому вращению. Разрез по одной выбранной координате — нет. Поэтому многокластерный метод должен брать всё нужное собственное подпространство, а не случайный вектор из него.</p>
+          <p>Число кластеров не обязано равняться числу визуально малых собственных значений, но eigengap часто используют как диагностический признак: группа из $k$ почти нулевых значений, отделённая скачком, указывает на $k$ почти компонент. Это эвристика, чувствительная к масштабу весов и шуму. Решение следует проверять стабильностью при разумных изменениях параметров графа и содержательной интерпретацией групп.</p>
+          <p>Нормализация строк спектрального вложения перед $k$-means — отдельный выбор. В некоторых вариантах она переводит точки на единичную сферу и убирает влияние их нормы; в других норма несёт полезную информацию о степени. Нельзя смешивать рецепты из разных релаксаций, сохраняя название «spectral clustering», но теряя соответствующую цель.</p>
+        </section>
+
+        <section id="random-walks">
+          <h2>Та же нормировка описывает случайный переход к соседу</h2>
+          <p>В простой случайной прогулке из $u$ выбирают соседнюю вершину пропорционально весу ребра. Строковая матрица переходов равна $D^{-1}A$. На связном неориентированном графе стационарная вероятность вершины пропорциональна её степени: чаще посещаются вершины с большим суммарным весом.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-transition" data-notation-coverage="interactive" data-required-notations="spectral-transition-matrix,spectral-degree-matrix,spectral-adjacency-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-transition-matrix}{P}
+              =\class{atlas-notation-token notation-id-spectral-degree-matrix}{D}^{-1}
+              \class{atlas-notation-token notation-id-spectral-adjacency-matrix}{A}.
+            \]
+          </div>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-stationary" data-notation-coverage="interactive" data-required-notations="spectral-stationary-distribution,spectral-volume">
+            \[
+              \class{atlas-notation-token notation-id-spectral-stationary-distribution}{\pi(v)}
+              =\frac{d_v}{\class{atlas-notation-token notation-id-spectral-volume}{\operatorname{vol}(V)}}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Детальный баланс</h3><p>Для ребра $u,v$ имеем $\pi(u)P(u,v)=d_u/\operatorname{vol}(V)\cdot w_{uv}/d_u=w_{uv}/\operatorname{vol}(V)$. Из симметрии веса это равно $\pi(v)P(v,u)$. Суммируя входящие потоки по $u$, получаем $\pi P=\pi$. Равенство сильнее стационарности и называется обратимостью.</p></section>
+          <p>На двудольном графе обычная прогулка периодична: распределение прыгает между долями и не сходится поточечно. Ленивый вариант с вероятностью $1/2$ остаётся на месте, с вероятностью $1/2$ выполняет обычный шаг. Он сохраняет стационарное распределение и убирает период два.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-lazy-walk" data-notation-coverage="interactive" data-required-notations="spectral-lazy-walk,spectral-transition-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-lazy-walk}{P_{\mathrm{lazy}}}
+              =\tfrac12\bigl(I+\class{atlas-notation-token notation-id-spectral-transition-matrix}{P}\bigr).
+            \]
+          </div>
+          <p>Степенное умножение распределения на $P$ является тем же механизмом, что power iteration для ведущего собственного вектора. Стационарная компонента сохраняется, остальные затухают согласно собственным значениям. В обратимой цепи симметризация позволяет разложить начальную ошибку по ортогональным модам и оценивать каждую независимо.</p>
+          <p>Вес ребра играет двойную роль: как проводимость электрической сети и как интенсивность перехода. Увеличение веса внутри сообщества повышает вероятность оставаться в нём, но одновременно меняет стационарную массу его вершин. Поэтому сравнивать вероятности до и после изменения графа следует относительно нового $\pi$, а не старого равномерного распределения.</p>
+        </section>
+
+        <section id="mixing">
+          <h2>Узкий разрез задерживает вероятность и замедляет смешивание</h2>
+          <p>Матрица $P$ не симметрична, но подобна симметричной $D^{-1/2}AD^{-1/2}=I-\mathcal L$. Поэтому её собственные значения вещественны. Для ленивой цепи собственная мода нормализованного Лапласиана со значением $\nu_i$ затухает с множителем $1-\nu_i/2$ за шаг. Вторая мода обычно является самой медленной нетривиальной.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-walk-gap" data-notation-coverage="interactive" data-required-notations="spectral-walk-gap,spectral-normalized-gap">
+            \[
+              \class{atlas-notation-token notation-id-spectral-walk-gap}{\gamma_{\mathrm{lazy}}}
+              =\frac{\class{atlas-notation-token notation-id-spectral-normalized-gap}{\nu_2}}{2}.
+            \]
+          </div>
+          <p>Для связной ленивой обратимой цепи расстояние до стационарного распределения убывает геометрически. Одна стандартная оценка времени смешивания содержит обратную щель и логарифм минимальной стационарной массы. Константа зависит от принятого определения порога и нормы.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-mixing-bound" data-notation-coverage="interactive" data-required-notations="spectral-mixing-time,spectral-walk-gap,spectral-stationary-minimum">
+            \[
+              \class{atlas-notation-token notation-id-spectral-mixing-time}{t_{\mathrm{mix}}(\varepsilon)}
+              \le\left\lceil\frac{1}{\class{atlas-notation-token notation-id-spectral-walk-gap}{\gamma}}
+              \log\frac{1}{2\varepsilon\sqrt{\class{atlas-notation-token notation-id-spectral-stationary-minimum}{\pi_{\min}}}}\right\rceil.
+            \]
+          </div>
+          <p>Интуиция Чигера теперь динамическая. Если множество имеет малую проводимость, стационарный поток через его границу мал относительно массы внутри. Прогулка, начавшаяся там, долго остаётся в сообществе. Малый $\nu_2$ описывает эту медленную моду. Большая проводимость не оставляет вероятности удобного убежища, и смешивание ускоряется.</p>
+          <p>На несвязном графе стационарное распределение не единственно: масса каждой компоненты сохраняется. Изолированная вершина является поглощающим состоянием при принятой конвенции. Поэтому интерфейс не обещает смешивание лишь потому, что формально вычислил несколько собственных значений.</p>
+        </section>
+
+        <section id="pagerank">
+          <h2>PageRank добавляет телепортацию к направленному блужданию</h2>
+          <p>Веб-граф ориентирован, и простой переход по исходящей ссылке может иметь висячие вершины, несколько замкнутых классов и периодичность. PageRank смешивает ссылочный переход с телепортацией по заданному распределению $v$. При $0&lt;\alpha&lt;1$ телепортация делает модифицированную цепь устойчивой при обычных предпосылках обработки висячих строк.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-pagerank" data-notation-coverage="interactive" data-required-notations="spectral-pagerank-vector,spectral-damping,spectral-personalization,spectral-transition-matrix">
+            \[
+              \class{atlas-notation-token notation-id-spectral-pagerank-vector}{p}
+              =\class{atlas-notation-token notation-id-spectral-damping}{\alpha}
+              \class{atlas-notation-token notation-id-spectral-transition-matrix}{P}^{\mathsf T}p
+              +(1-\alpha)\class{atlas-notation-token notation-id-spectral-personalization}{v}.
+            \]
+          </div>
+          <p>Это спектральная связь, но не прямое применение симметричного Лапласиана главы. Ориентированная матрица может иметь комплексный спектр и не быть обратимой. Телепортация сжимает нетривиальные моды примерно множителем $\alpha$ и задаёт единственную значимость. Персонализированный PageRank меняет $v$ и измеряет близость к выбранным источникам.</p>
+          <p>Историческая работа Page, Brin, Motwani и Winograd объясняла PageRank через «случайного веб-сёрфера». Современные поисковые системы значительно сложнее, поэтому уравнение не следует выдавать за описание текущего ранжирования Google. Здесь PageRank нужен как мост от стационарного распределения к алгоритму на направленном графе.</p>
+        </section>
+
+        <section id="laplacian-systems">
+          <h2>Решение $Lx=b$ объединяет потенциалы, потоки и предобуславливание</h2>
+          <p>Лапласиан вырожден: добавление константы к потенциалам не меняет разности. Система разрешима тогда и только тогда, когда сумма правой части равна нулю в каждой компоненте. В связном графе решение единственно с точностью до общей константы; фиксируют одну вершину или требуют нулевое среднее.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-laplacian-system" data-notation-coverage="interactive" data-required-notations="spectral-laplacian-system,spectral-potential-vector,spectral-demand-vector">
+            \[
+              \class{atlas-notation-token notation-id-spectral-laplacian-system}{L}
+              \class{atlas-notation-token notation-id-spectral-potential-vector}{x}
+              =\class{atlas-notation-token notation-id-spectral-demand-vector}{b},
+              \qquad \sum_{v\in C}b_v=0\ \text{для каждой компоненты }C.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Почему условие суммы необходимо и достаточно</h3><p>Каждый индикатор компоненты лежит в ядре $L$. Если $Lx=b$, скалярное произведение $b$ с таким индикатором равно нулю, то есть сумма в компоненте равна нулю. Обратно, для симметричной матрицы образ является ортогональным дополнением ядра. Если $b$ ортогонален всем индикаторам компонент, он принадлежит образу, и решение существует.</p></section>
+          <p>В электрической интерпретации $b$ задаёт ввод и вывод тока, $x$ — потенциалы, а $w_{uv}(x_u-x_v)$ — ток по ребру. Аналогичные системы возникают в сглаживании, полунадзорном обучении, вычислении эффективных сопротивлений и как подзадачи потоковых алгоритмов.</p>
+          <p>Плотное исключение Гаусса игнорирует разреженность. Прорывная линия работ Spielman—Teng показала почти линейные по числу рёбер приближённые решатели для симметричных диагонально доминирующих систем. Их идеи включают низкорастягивающие деревья, предобуславливание и спектральную разреженность. Это обзор связи, а не реализация промышленного решателя: лаборатория использует полное собственное разложение только на графах до десяти вершин.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="spectral-solver-error" data-notation-coverage="interactive" data-required-notations="spectral-energy-norm,spectral-approximate-solution">
+            \[
+              \class{atlas-notation-token notation-id-spectral-energy-norm}{\|\tilde x-x^*\|_L}
+              \le\varepsilon\|x^*\|_L,
+              \qquad \class{atlas-notation-token notation-id-spectral-approximate-solution}{\tilde x}\text{ — приближённое решение.}
+            \]
+          </div>
+          <p>Энергетическая норма измеряет ошибку не покоординатно, а через различия потенциалов на рёбрах. Большой общий сдвиг имеет нулевую норму, что согласуется с неединственностью решения. Для восстановления конкретного представителя после приближённого решения фиксируют gauge: например, вычитают среднее потенциалов или задают потенциал одной вершины нулём.</p>
+          <p>Предобуславливатель заменяет исходный Лапласиан похожей, но легче обращаемой матрицей. Если их квадратичные формы близки для всех векторов, итерационный метод быстро уменьшает ошибку во всех энергетических направлениях. Спектральный sparsifier следует той же идее: оставляет мало рёбер с перенастроенными весами так, чтобы энергии всех векторов сохранялись в заданных пределах.</p>
+        </section>
+
+        <section id="limitations">
+          <h2>Спектральный ответ чувствителен к тому, какую матрицу мы построили</h2>
+          <p>Добавление одного тяжёлого ребра способно резко повернуть вектор, а множество слабых рёбер — постепенно стереть bottleneck. Глобальное умножение всех весов масштабирует обычный $L$ и $\lambda_i$, но не меняет нормализованный Лапласиан и проводимость. Локальное масштабирование меняет оба. Поэтому численное значение без описания весов мало что сообщает.</p>
+          <p>Нормализация лечит доминирование высокой степени, но вводит деление на малые степени и отдельную семантику изолятов. В данных с шумными редкими вершинами спектральная кластеризация может выделять их или становиться нестабильной. Регуляризация степени, удаление выбросов и построение $k$-ближайшего графа являются модельными решениями, которые нужно валидировать отдельно.</p>
+          <p>Малая спектральная щель означает почти вырожденное собственное подпространство. Тогда малое возмущение матрицы способно сильно изменить отдельный собственный вектор, хотя само подпространство меняется умеренно. Для кластеризации безопаснее анализировать несколько близких векторов и устойчивость результата, а не полагаться на знак одной координаты.</p>
+          <p>Sweep оптимизирует среди вложенных префиксов одного порядка, а не среди всех $2^{n-1}-1$ разрезов. Теорема Чигера гарантирует качество в худшем случае, но не точность. Если бизнес-ограничение требует равного числа вершин, фиксированного терминала или связности каждой стороны, обычный sweep может вернуть недопустимый результат.</p>
+          <p>Наконец, вычисление полного спектра плотным методом стоит кубического времени и квадратичной памяти. На большом разреженном графе ищут лишь несколько крайних собственных пар итерационными методами, используют матрично-векторное умножение без хранения плотной матрицы и контролируют невязку. Слово «вычислили вектор Фидлера» должно сопровождаться точностью и критерием остановки.</p>
+          <p>Есть и статистическая чувствительность. Если граф построен по конечной шумной выборке, точный собственный вектор этой матрицы может быть неточным описанием неизвестной структуры данных. Численная ошибка eigensolver и ошибка построения графа — разные источники неопределённости. Уменьшение первой до машинного эпсилон не исправляет вторую.</p>
+          <p>Наконец, спектральный метод глобален. Даже локальное изменение может повлиять на координаты всех вершин, поэтому динамическое обновление разбиения не сводится к перекрашиванию соседей изменённого ребра. Для потоковых, распределённых и динамических графов требуются приближённые подпространства, локальные диффузии или периодический пересчёт с явным контролем дрейфа.</p>
+        </section>
+
+        <section id="edge-cases">
+          <h2>Несвязность и кратность меняют смысл координат, а не только числа</h2>
+          <p>Пустой граф и одиночная вершина не имеют содержательного двухстороннего разреза. Для несвязного графа $\lambda_2=0$, если компонент хотя бы две. Нулевая мода может выбрать любую линейную комбинацию индикаторов компонент. Разрез по ней часто отделяет компоненты идеально, но конкретные знаки зависят от базиса.</p>
+          <p>В цикле $C_4$ второе собственное значение кратно двум. Одна библиотека вернёт горизонтальное направление, другая — диагональное вращение того же подпространства. Оба вектора корректны. Детерминированный метод Якоби и tie-break по ID делают учебный кадр повторяемым, но не превращают выбранный разрез в канонический.</p>
+          <p>Изолированная вершина имеет степень и объём ноль. Выражение $D^{-1/2}$ определяется на ней нулём по соглашению, но проводимость множества нулевого объёма не определена. Если граф состоит из компоненты и изолята, нормализованная кратность нуля отражает несвязность, тогда как минимум проводимости по положительным объёмам может не увидеть изолят. Неравенство Чигера в использованной форме требует положительных степеней.</p>
+          <p>Нулевое ребро хранится в данных, но не входит в положительную поддержку и не влияет на матрицы. Отрицательные веса запрещены: энергия перестала бы быть неотрицательной, а вероятности переходов потеряли бы смысл. Параллельные рёбра допустимы математически как сумма весов, хотя редактор главы использует готовые простые примеры.</p>
+          <p>Численное ядро не сравнивает плавающие значения на точное равенство. Нулевые и кратные значения определяются с масштабированным допуском, а каждая собственная пара проверяется невязкой $\|Lv-\lambda v\|$. На известных малых графах тестируется весь спектр; на детерминированных случайных графах — ортонормированность и независимый полный перебор разрезов.</p>
+        </section>
+
+        <section id="pseudocode">
+          <h2>Алгоритм отделяет численное приближение от дискретного округления</h2>
+          <p>Практический код не обязан строить плотную $\mathcal L$. Достаточно уметь умножать вектор на неё и использовать итерационный eigensolver. Но интерфейс между этапами остаётся тем же: собственная пара с контролируемой невязкой, преобразованные координаты и полный sweep.</p>
+          <pre aria-label="Спектральное разбиение"><code><span>проверить неотрицательность весов и обработать компоненты и изоляты</span>
+<span>приближённо найти вторую собственную пару (ν₂, z₂) матрицы ℒ</span>
+<span>проверить невязку ‖ℒz₂ − ν₂z₂‖</span>
+<span>g ← D⁻¹ᐟ² z₂</span>
+<span>order ← стабильная сортировка вершин по g</span>
+<span>инкрементально проверить проводимость всех n − 1 префиксов</span>
+<span>вернуть лучший допустимый префикс и численный отчёт</span></code></pre>
+          <p>Если граф заведомо несвязен, поиск компонент дешевле и точнее спектрального распознавания нуля. Спектральный метод нужен для почти разъединённой структуры, где мост существует, но слаб. Хороший конвейер использует комбинаторную предобработку перед численной задачей.</p>
+          <p>Отчёт алгоритма должен содержать больше списка вершин. Нужны тип Лапласиана, нормировка весов, вычисленные $\nu_2$ и невязка, правило обработки равных координат, значение выбранной цели и сравнение с доступной нижней границей. Только тогда результат можно повторить другой библиотекой и отличить изменение модели от численного шума.</p>
+          <p>Для нескольких кластеров алгоритм меняется: требуется подпространство нескольких собственных векторов и отдельное округление. Нельзя рекурсивно применять двухсторонний код и автоматически приписывать ему гарантии многомерной версии. Каждая схема имеет собственную цель и анализ.</p>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что часто понимают неправильно</h2>
+          <ul>
+            <li><strong>Спектр якобы полностью определяет граф.</strong> Косpectralные неизоморфные графы существуют.</li>
+            <li><strong>$\lambda_2(L)$ смешивают с $\nu_2(\mathcal L)$.</strong> Теорема и константы зависят от нормировки.</li>
+            <li><strong>Сортируют сырой $z_2$.</strong> Для проводимости нужен $D^{-1/2}z_2$.</li>
+            <li><strong>Знак вектора считают меткой класса.</strong> Знак можно обратить целиком.</li>
+            <li><strong>Кратный вектор считают единственным.</strong> Определено подпространство, не базис.</li>
+            <li><strong>Берут порог ноль.</strong> Лучший sweep-порог может находиться между двумя положительными координатами.</li>
+            <li><strong>Минимальный разрез называют кластером.</strong> Без нормировки он часто отделяет одну слабую вершину.</li>
+            <li><strong>Чигер якобы гарантирует оптимум.</strong> Гарантия приближённая и односторонне квадратичная.</li>
+            <li><strong>Обычное блуждание всегда смешивается.</strong> Двудольность создаёт период два, несвязность — несколько классов.</li>
+            <li><strong>PageRank равен вектору Фидлера.</strong> Это стационарная задача ориентированной цепи с телепортацией.</li>
+            <li><strong>$Lx=b$ всегда имеет единственное решение.</strong> Нужна совместимость, а потенциал задаётся до константы.</li>
+            <li><strong>Малая машинная невязка доказывает правильную модель.</strong> Она проверяет численное решение выбранной матрицы, но не смысл весов.</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
+          <h2>Лаборатория: проведите порог через вектор Фидлера</h2>
+          <p>Перемещайте порог вручную или запускайте playback. Цвет каждой вершины показывает нормализованную sweep-координату, контрастные рёбра — текущую границу. Панели синхронно меняют проводимость, normalized cut и спектры индуцированных сторон. Для малого графа рядом вычислен точный минимум проводимости полным перебором. Примеры с компонентами, кратным значением, изолятом и нулевым ребром показывают, когда обычная интерпретация перестаёт быть однозначной.</p>
+          <div class="atlas-lab" data-atlas-lab="spectral-graph-algorithms"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>Упражнения</h2>
+          <div class="atlas-exercises">
+            <article><h3>1. Энергия индикатора</h3><p>Покажите, что для индикатора множества $\mathbf1_S$ энергия $\mathbf1_S^{\mathsf T}L\mathbf1_S$ равна весу границы.</p><details><summary>Подсказка</summary><p>Разность координат ненулевая только на пересекающем границу ребре.</p></details><details><summary>Решение</summary><p>Внутри каждой стороны обе координаты совпадают и вклад нулевой. На границе разность равна $1$ или $-1$, её квадрат равен единице. Сумма оставшихся весов есть $w(\partial S)$.</p></details></article>
+            <article><h3>2. Спектр пути</h3><p>Проверьте напрямую, что собственные значения $L(P_3)$ равны $0,1,3$.</p><details><summary>Подсказка</summary><p>Выпишите матрицу с диагональю $1,2,1$ и соседними элементами $-1$.</p></details><details><summary>Решение</summary><p>Характеристический многочлен равен $-\lambda(\lambda-1)(\lambda-3)$. Константа даёт нулевую моду, векторы $(1,0,-1)$ и $(1,-2,1)$ отвечают значениям 1 и 3.</p></details></article>
+            <article><h3>3. Кратность нуля</h3><p>Постройте три линейно независимых нулевых собственных вектора графа из трёх компонент.</p><details><summary>Подсказка</summary><p>Используйте индикаторы компонент.</p></details><details><summary>Решение</summary><p>Для каждой компоненты берётся вектор, равный единице на ней и нулю вне. Разности вдоль рёбер равны нулю. Непересекающиеся поддержки делают три вектора независимыми.</p></details></article>
+            <article><h3>4. Масштабирование весов</h3><p>Что произойдёт с $L$, $\lambda_2$, $\mathcal L$ и проводимостью, если все веса умножить на $c&gt;0$?</p><details><summary>Подсказка</summary><p>Степени, граница и объёмы масштабируются одинаково.</p></details><details><summary>Решение</summary><p>$L$ и все его собственные значения умножатся на $c$. В $\mathcal L$ множители сократятся, поэтому он и $\nu_2$ не изменятся. В отношении границы к объёму $c$ также сокращается, проводимость сохраняется.</p></details></article>
+            <article><h3>5. Две цели разреза</h3><p>Приведите граф, где минимальный вес разреза отделяет лист, а минимальная проводимость предпочитает две крупные группы.</p><details><summary>Подсказка</summary><p>Соедините две плотные части мостом веса 2 и добавьте к одной части лист ребром веса 1.</p></details><details><summary>Решение</summary><p>Минимальный cut выберет лист с границей 1. Но его объём также 1, проводимость равна 1. Если плотные части имеют большой внутренний объём, мост веса 2 может дать намного меньшую проводимость и стать кластерным разрезом.</p></details></article>
+            <article><h3>6. Лёгкая сторона Чигера</h3><p>Для меньшей по объёму стороны $S$ выведите отношение Релея двухуровневого вектора и докажите $\nu_2\le2\phi(S)$.</p><details><summary>Подсказка</summary><p>Возьмите значения $1/\operatorname{vol}(S)$ и $-1/\operatorname{vol}(\bar S)$ с подходящим общим масштабом.</p></details><details><summary>Решение</summary><p>После нормировки взвешенного среднего отношение равно $w(\partial S)(1/\operatorname{vol}(S)+1/\operatorname{vol}(\bar S))$. Вторая дробь не больше первой, потому что $S$ — меньшая сторона. Получаем не более $2\phi(S)$, а вариационный минимум не больше значения пробного вектора.</p></details></article>
+            <article><h3>7. Порог не обязан быть нулём</h3><p>Придумайте четыре возрастающие положительные координаты, для которых содержательный разрез получается между второй и третьей.</p><details><summary>Подсказка</summary><p>Знак всех координат можно изменить сдвигом, не сохраняя ортогональность; sweep ориентируется на порядок.</p></details><details><summary>Решение</summary><p>Например, $1,2,10,11$ естественно делятся порогом 6. Порог ноль дал бы пустую сторону. Для настоящего собственного вектора ортогональность задаётся с весами, но лучший разрыв всё равно не обязан совпадать с нулём.</p></details></article>
+            <article><h3>8. Кратное значение</h3><p>Почему отдельный вектор при кратном $\lambda_2$ неустойчив, а всё собственное подпространство устойчивее?</p><details><summary>Подсказка</summary><p>Любое ортогональное вращение базиса остаётся допустимым.</p></details><details><summary>Решение</summary><p>Матрица не различает направления внутри одного собственного подпространства. Малое возмущение или иной eigensolver может повернуть выбранный базис на большой угол. Проектор на отделённое спектральной щелью подпространство при этом меняется контролируемо.</p></details></article>
+            <article><h3>9. Периодичность</h3><p>Покажите, что прогулка на одном ребре не сходится из одного конца, и объясните, как ленивость исправляет ситуацию.</p><details><summary>Подсказка</summary><p>Распределение попеременно сосредоточено в разных концах.</p></details><details><summary>Решение</summary><p>Обычная цепь детерминированно меняет вершину каждый шаг, поэтому имеет период два. В ленивой цепи есть вероятность остаться; её нетривиальная мода получает значение ноль вместо $-1$, и после одного шага распределение становится стационарным $(1/2,1/2)$.</p></details></article>
+            <article><h3>10. Стационарность</h3><p>Для взвешенного треугольника с весами 1, 2 и 3 найдите стационарное распределение прогулки.</p><details><summary>Подсказка</summary><p>Вероятность пропорциональна взвешенной степени.</p></details><details><summary>Решение</summary><p>Степени равны суммам двух инцидентных весов: 3, 4 и 5 при соответствующем расположении. Общий объём 12, поэтому вероятности равны $3/12$, $4/12$, $5/12$.</p></details></article>
+            <article><h3>11. Совместимость системы</h3><p>Почему система $Lx=(1,0,0)^{\mathsf T}$ неразрешима на связном графе из трёх вершин?</p><details><summary>Подсказка</summary><p>Умножьте обе части слева на $\mathbf1^{\mathsf T}$.</p></details><details><summary>Решение</summary><p>$\mathbf1^{\mathsf T}L=0$, но сумма правой части равна 1. Получилось бы равенство $0=1$. Физически ток вводится, но нигде не выводится.</p></details></article>
+            <article><h3>12. PageRank и Фидлер</h3><p>Назовите два принципиальных отличия уравнения PageRank от задачи на вектор Фидлера.</p><details><summary>Подсказка</summary><p>Сравните ориентированность, телепортацию и тип уравнения.</p></details><details><summary>Решение</summary><p>PageRank обычно работает с ориентированной стохастической матрицей и решает стационарное аффинное уравнение с телепортацией. Вектор Фидлера относится к симметричному Лапласиану неориентированного графа и минимизирует квадратичную энергию при ортогональном ограничении.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники</h2>
+          <ol class="atlas-sources">
+            <li>Miroslav Fiedler, <a href="https://dml.cz/handle/10338.dmlcz/101168" target="_blank" rel="noopener noreferrer">Algebraic Connectivity of Graphs</a>, Czechoslovak Mathematical Journal 23(2), 1973, pp. 298–305, DOI 10.21136/CMJ.1973.101168.</li>
+            <li>Noga Alon, Vitali D. Milman, <a href="https://doi.org/10.1016/0095-8956(85)90092-9" target="_blank" rel="noopener noreferrer">λ₁, Isoperimetric Inequalities for Graphs, and Superconcentrators</a>, Journal of Combinatorial Theory, Series B 38(1), 1985.</li>
+            <li>Fan R. K. Chung, <a href="https://fanchung.ucsd.edu/research/cb/ch1old.pdf" target="_blank" rel="noopener noreferrer">Spectral Graph Theory, Chapter 1: Eigenvalues and the Laplacian of a Graph</a>, CBMS Regional Conference Series in Mathematics 92, AMS, 1997.</li>
+            <li>Jianbo Shi, Jitendra Malik, <a href="https://doi.org/10.1109/34.868688" target="_blank" rel="noopener noreferrer">Normalized Cuts and Image Segmentation</a>, IEEE Transactions on Pattern Analysis and Machine Intelligence 22(8), 2000.</li>
+            <li>László Lovász, <a href="https://doi.org/10.1007/978-3-662-02882-4_1" target="_blank" rel="noopener noreferrer">Random Walks on Graphs: A Survey</a>, Bolyai Society Mathematical Studies 2, 1993.</li>
+            <li>Lawrence Page, Sergey Brin, Rajeev Motwani, Terry Winograd, <a href="https://ilpubs.stanford.edu/422/" target="_blank" rel="noopener noreferrer">The PageRank Citation Ranking: Bringing Order to the Web</a>, Stanford InfoLab Technical Report, 1999.</li>
+            <li>Daniel A. Spielman, Shang-Hua Teng, <a href="https://www.cs.yale.edu/homes/spielman/Research/linsolve.html" target="_blank" rel="noopener noreferrer">Nearly-Linear Time Algorithms for Preconditioning and Solving Symmetric, Diagonally Dominant Linear Systems</a>, extended abstract STOC 2004 and journal version.</li>
+          </ol>
+        </section>
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту"><div id="atlas-route-previous"></div><div id="atlas-route-next"></div></nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title"><h2 id="atlas-completion-title">Сохранить локальный прогресс</h2><button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button><p id="atlas-chapter-progress-status" aria-live="polite"></p></section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

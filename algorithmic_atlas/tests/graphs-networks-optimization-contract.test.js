@@ -48,6 +48,7 @@ const publishedChapterIds = new Set([
   "traveling-salesman-exact",
   "dynamic-graph-algorithms",
   "linear-algebra-for-graphs",
+  "spectral-graph-algorithms",
 ]);
 
 function canonicalChapters() {

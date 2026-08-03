@@ -9078,6 +9078,339 @@
       "scope": "local",
       "chapterId": "linear-algebra-for-graphs",
       "firstDefinition": {"chapterId": "linear-algebra-for-graphs", "anchor": "computation"}
+    },
+    {
+      "id": "spectral-laplacian",
+      "displayNotation": "L",
+      "shortName": "лапласиан графа",
+      "explanation": "Матрица D−A, кодирующая взвешенную структуру графа",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-degree-matrix",
+      "displayNotation": "D",
+      "shortName": "матрица степеней",
+      "explanation": "Диагональная матрица, где D_vv равен взвешенной степени вершины v",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-adjacency-matrix",
+      "displayNotation": "A",
+      "shortName": "матрица смежности",
+      "explanation": "Симметричная матрица весов рёбер: A_uv=w_uv",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-quadratic-form",
+      "displayNotation": "x^T Lx",
+      "shortName": "энергия вектора на графе",
+      "explanation": "Квадратичная форма лапласиана, равная сумме w_uv(x_u−x_v)^2 по рёбрам",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-vector",
+      "displayNotation": "x",
+      "shortName": "вектор на вершинах",
+      "explanation": "Вещественная функция на вершинах графа, записанная как вектор",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-edge-weight",
+      "displayNotation": "w_uv",
+      "shortName": "вес ребра",
+      "explanation": "Неотрицательный вес ребра между вершинами u и v",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-spectrum"}
+    },
+    {
+      "id": "spectral-eigenvalue",
+      "displayNotation": "λ_i",
+      "shortName": "собственное значение лапласиана",
+      "explanation": "i-е собственное значение L в неубывающем порядке",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-fiedler-value",
+      "displayNotation": "λ_2",
+      "shortName": "алгебраическая связность",
+      "explanation": "Второе наименьшее собственное значение обычного лапласиана",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-vertex-count",
+      "displayNotation": "n",
+      "shortName": "число вершин",
+      "explanation": "Количество вершин рассматриваемого графа",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-rayleigh-quotient",
+      "displayNotation": "x^T Lx / x^T x",
+      "shortName": "отношение Рэлея",
+      "explanation": "Нормированная энергия ненулевого вектора x",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-fiedler-vector",
+      "displayNotation": "f",
+      "shortName": "вектор Фидлера",
+      "explanation": "Собственный вектор обычного лапласиана для λ_2",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-orthogonality",
+      "displayNotation": "x ⟂ 1",
+      "shortName": "ортогональность константе",
+      "explanation": "Условие нулевой суммы координат x, исключающее постоянный собственный вектор",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "fiedler"}
+    },
+    {
+      "id": "spectral-cut-boundary",
+      "displayNotation": "∂S",
+      "shortName": "граница разреза",
+      "explanation": "Множество рёбер с одним концом в S, а другим в дополнении",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-cut-weight",
+      "displayNotation": "w(∂S)",
+      "shortName": "вес разреза",
+      "explanation": "Суммарный вес рёбер, пересекающих границу множества S",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-volume",
+      "displayNotation": "vol(S)",
+      "shortName": "объём множества",
+      "explanation": "Сумма взвешенных степеней вершин из S",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-conductance",
+      "displayNotation": "φ(S)",
+      "shortName": "проводимость разреза",
+      "explanation": "Вес границы, делённый на меньший из объёмов двух сторон",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-cut-set",
+      "displayNotation": "S",
+      "shortName": "сторона разреза",
+      "explanation": "Непустое собственное подмножество вершин, задающее разрез",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-normalized-cut",
+      "displayNotation": "Ncut(S,S̄)",
+      "shortName": "нормализованный разрез",
+      "explanation": "Сумма веса границы, нормированного объёмом каждой из двух сторон",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cut-objectives"}
+    },
+    {
+      "id": "spectral-normalized-laplacian",
+      "displayNotation": "ℒ",
+      "shortName": "нормализованный лапласиан",
+      "explanation": "Матрица I−D^(−1/2)AD^(−1/2) для графа без изолированных вершин",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "normalized-laplacian"}
+    },
+    {
+      "id": "spectral-sweep-coordinate",
+      "displayNotation": "g",
+      "shortName": "координаты для sweep cut",
+      "explanation": "Вектор D^(−1/2)z_2, по которому сортируют вершины при спектральном разрезе",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "normalized-laplacian"}
+    },
+    {
+      "id": "spectral-normalized-fiedler-vector",
+      "displayNotation": "z_2",
+      "shortName": "нормализованный вектор Фидлера",
+      "explanation": "Собственный вектор нормализованного лапласиана для ν_2",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "normalized-laplacian"}
+    },
+    {
+      "id": "spectral-cheeger-constant",
+      "displayNotation": "φ_G",
+      "shortName": "проводимость графа",
+      "explanation": "Минимальная проводимость по всем нетривиальным разрезам графа",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cheeger"}
+    },
+    {
+      "id": "spectral-normalized-gap",
+      "displayNotation": "ν_2",
+      "shortName": "нормализованный спектральный зазор",
+      "explanation": "Второе наименьшее собственное значение нормализованного лапласиана",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "cheeger"}
+    },
+    {
+      "id": "spectral-transition-matrix",
+      "displayNotation": "P",
+      "shortName": "матрица переходов",
+      "explanation": "Матрица D^(−1)A случайного блуждания по взвешенному графу",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "random-walks"}
+    },
+    {
+      "id": "spectral-stationary-distribution",
+      "displayNotation": "π(v)",
+      "shortName": "стационарная вероятность",
+      "explanation": "Вероятность вершины v в стационарном распределении случайного блуждания",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "random-walks"}
+    },
+    {
+      "id": "spectral-lazy-walk",
+      "displayNotation": "P_lazy",
+      "shortName": "ленивое блуждание",
+      "explanation": "Матрица переходов, которая с вероятностью 1/2 остаётся на месте и с вероятностью 1/2 делает обычный шаг",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "random-walks"}
+    },
+    {
+      "id": "spectral-walk-gap",
+      "displayNotation": "γ",
+      "shortName": "спектральный зазор цепи",
+      "explanation": "Разность между единицей и вторым по модулю собственным значением матрицы переходов; для ленивого блуждания здесь ν_2/2",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "mixing"}
+    },
+    {
+      "id": "spectral-mixing-time",
+      "displayNotation": "t_mix(ε)",
+      "shortName": "время перемешивания",
+      "explanation": "Минимальное число шагов, после которого распределение близко к стационарному с точностью ε",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "mixing"}
+    },
+    {
+      "id": "spectral-stationary-minimum",
+      "displayNotation": "π_min",
+      "shortName": "минимальная стационарная масса",
+      "explanation": "Минимальное положительное значение стационарного распределения по вершинам",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "mixing"}
+    },
+    {
+      "id": "spectral-pagerank-vector",
+      "displayNotation": "p",
+      "shortName": "вектор PageRank",
+      "explanation": "Стационарный вектор вероятностей модели переходов с телепортацией",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "pagerank"}
+    },
+    {
+      "id": "spectral-damping",
+      "displayNotation": "α",
+      "shortName": "коэффициент продолжения",
+      "explanation": "Вероятность следовать ребру вместо телепортации в модели PageRank",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "pagerank"}
+    },
+    {
+      "id": "spectral-personalization",
+      "displayNotation": "v",
+      "shortName": "вектор персонализации",
+      "explanation": "Распределение, из которого выбирается вершина при телепортации PageRank",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "pagerank"}
+    },
+    {
+      "id": "spectral-laplacian-system",
+      "displayNotation": "Lx=b",
+      "shortName": "лапласианова система",
+      "explanation": "Система линейных уравнений с матрицей лапласиана графа",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
+    },
+    {
+      "id": "spectral-potential-vector",
+      "displayNotation": "x",
+      "shortName": "вектор потенциалов",
+      "explanation": "Искомые потенциалы вершин в лапласиановой системе",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
+    },
+    {
+      "id": "spectral-demand-vector",
+      "displayNotation": "b",
+      "shortName": "вектор баланса",
+      "explanation": "Правая часть лапласиановой системы с нулевой суммой в каждой компоненте",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
+    },
+    {
+      "id": "spectral-energy-norm",
+      "displayNotation": "||x||_L",
+      "shortName": "энергетическая норма",
+      "explanation": "Полунорма sqrt(x^T Lx), естественная для оценки решений лапласиановых систем",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
+    },
+    {
+      "id": "spectral-approximate-solution",
+      "displayNotation": "x̃",
+      "shortName": "приближённое решение",
+      "explanation": "Численно найденный вектор, близкий к точному решению в энергетической норме",
+      "scope": "local",
+      "chapterId": "spectral-graph-algorithms",
+      "firstDefinition": {"chapterId": "spectral-graph-algorithms", "anchor": "laplacian-systems"}
     }
   ]
 }
