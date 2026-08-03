@@ -1,12 +1,14 @@
 (function (root, factory) {
   "use strict";
   const shared = typeof module === "object" && module.exports ? require("./graph-lab-core.js") : root.AtlasGraphLabCore;
-  const api = factory(shared);
+  const matrixCore = typeof module === "object" && module.exports ? require("./graph-matrix-core.js") : root.AtlasGraphMatrixCore;
+  const api = factory(shared, matrixCore);
   if (typeof module === "object" && module.exports) module.exports = api;
   if (root) root.SpectralGraphAlgorithmsCore = api;
-})(typeof globalThis !== "undefined" ? globalThis : this, function (shared) {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (shared, matrixCore) {
   "use strict";
   if (!shared) throw new Error("AtlasGraphLabCore is unavailable");
+  if (!matrixCore) throw new Error("AtlasGraphMatrixCore is unavailable");
 
   const MAX_NODES = 10;
   const MAX_EDGES = 45;
@@ -91,99 +93,36 @@
     return normalizeGraph({ id: name, label: source.label, directed: false, nodes: nodes, edges: edges, positions: positions });
   }
 
-  function zeroMatrix(size) { return Array.from({ length: size }, function () { return Array(size).fill(0); }); }
-  function identityMatrix(size) { const result = zeroMatrix(size); for (let i = 0; i < size; i += 1) result[i][i] = 1; return result; }
-  function indexById(graph) { return new Map(graph.nodes.map(function (node, index) { return [node.id, index]; })); }
+  const dot = matrixCore.dot;
+  const norm = matrixCore.norm;
+  const multiply = matrixCore.multiply;
+  const indexById = matrixCore.indexById;
 
   function matrices(rawGraph) {
     const graph = normalizeGraph(rawGraph);
-    const n = graph.nodes.length;
-    const adjacency = zeroMatrix(n);
-    const index = indexById(graph);
-    graph.edges.forEach(function (edge) {
-      const left = index.get(edge.source); const right = index.get(edge.target);
-      adjacency[left][right] += edge.weight; adjacency[right][left] += edge.weight;
+    const data = matrixCore.undirectedMatrices(graph);
+    return shared.deepFreeze({
+      graph: graph,
+      adjacency: data.adjacency,
+      degrees: data.degrees,
+      laplacian: data.laplacian,
+      normalized: data.normalizedLaplacian,
     });
-    const degrees = adjacency.map(function (row) { return row.reduce(function (sum, value) { return sum + value; }, 0); });
-    const laplacian = adjacency.map(function (row, i) { return row.map(function (value, j) { return i === j ? degrees[i] : -value; }); });
-    const normalized = laplacian.map(function (row, i) {
-      return row.map(function (value, j) {
-        if (degrees[i] === 0 || degrees[j] === 0) return 0;
-        return value / Math.sqrt(degrees[i] * degrees[j]);
-      });
-    });
-    return shared.deepFreeze({ graph: graph, adjacency: adjacency, degrees: degrees, laplacian: laplacian, normalized: normalized });
-  }
-
-  function dot(left, right) { return left.reduce(function (sum, value, index) { return sum + value * right[index]; }, 0); }
-  function norm(vector) { return Math.sqrt(Math.max(0, dot(vector, vector))); }
-  function multiply(matrix, vector) { return matrix.map(function (row) { return dot(row, vector); }); }
-  function residual(matrix, value, vector) {
-    const image = multiply(matrix, vector);
-    return norm(image.map(function (item, index) { return item - value * vector[index]; }));
   }
 
   function symmetricEigen(rawMatrix) {
-    const n = rawMatrix.length;
-    if (!rawMatrix.every(function (row) { return Array.isArray(row) && row.length === n; })) throw new TypeError("Спектр определён только для квадратной матрицы");
-    const matrix = rawMatrix.map(function (row, i) {
-      return row.map(function (raw, j) {
-        const value = Number(raw);
-        if (!Number.isFinite(value)) throw new RangeError("Матрица содержит неконечное значение");
-        if (Math.abs(value - Number(rawMatrix[j][i])) > 1e-9) throw new RangeError("Спектральное ядро требует симметричную матрицу");
-        return value;
-      });
+    const result = matrixCore.symmetricEigen(rawMatrix);
+    const values = result.values.map(function (value) {
+      return Math.abs(value) < EPSILON ? 0 : value;
     });
-    if (!n) return shared.deepFreeze({ values: [], vectors: [], residuals: [], converged: true, iterations: 0 });
-    const vectors = identityMatrix(n);
-    const scale = Math.max(1, ...matrix.flat().map(Math.abs));
-    const tolerance = Math.max(1e-14, scale * 1e-13);
-    const maxIterations = Math.max(64, 160 * n * n);
-    let iterations = 0;
-    let converged = false;
-    for (; iterations < maxIterations; iterations += 1) {
-      let p = 0; let q = 0; let largest = 0;
-      for (let i = 0; i < n; i += 1) for (let j = i + 1; j < n; j += 1) {
-        const candidate = Math.abs(matrix[i][j]);
-        if (candidate > largest) { largest = candidate; p = i; q = j; }
-      }
-      if (largest <= tolerance) { converged = true; break; }
-      const tau = (matrix[q][q] - matrix[p][p]) / (2 * matrix[p][q]);
-      const tangent = tau === 0 ? 1 : Math.sign(tau) / (Math.abs(tau) + Math.sqrt(1 + tau * tau));
-      const cosine = 1 / Math.sqrt(1 + tangent * tangent);
-      const sine = tangent * cosine;
-      const app = matrix[p][p]; const aqq = matrix[q][q]; const apq = matrix[p][q];
-      for (let k = 0; k < n; k += 1) {
-        if (k === p || k === q) continue;
-        const mkp = matrix[k][p]; const mkq = matrix[k][q];
-        matrix[k][p] = matrix[p][k] = cosine * mkp - sine * mkq;
-        matrix[k][q] = matrix[q][k] = sine * mkp + cosine * mkq;
-      }
-      matrix[p][p] = app - tangent * apq;
-      matrix[q][q] = aqq + tangent * apq;
-      matrix[p][q] = matrix[q][p] = 0;
-      for (let row = 0; row < n; row += 1) {
-        const vip = vectors[row][p]; const viq = vectors[row][q];
-        vectors[row][p] = cosine * vip - sine * viq;
-        vectors[row][q] = sine * vip + cosine * viq;
-      }
-    }
-    if (!converged) throw new RangeError("Метод Якоби не сошёлся за безопасное число итераций");
-    const pairs = Array.from({ length: n }, function (_, column) {
-      const vector = vectors.map(function (row) { return row[column]; });
-      const vectorNorm = norm(vector);
-      vector.forEach(function (value, index) { vector[index] = value / vectorNorm; });
-      const pivot = vector.find(function (value) { return Math.abs(value) > EPSILON; });
-      if (pivot < 0) vector.forEach(function (value, index) { vector[index] = -value; });
-      const value = Math.abs(matrix[column][column]) < EPSILON ? 0 : matrix[column][column];
-      return { value: value, vector: vector, originalIndex: column };
-    }).sort(function (left, right) { return left.value - right.value || left.originalIndex - right.originalIndex; });
     return shared.deepFreeze({
-      values: pairs.map(function (pair) { return pair.value; }),
-      vectors: pairs.map(function (pair) { return pair.vector; }),
-      residuals: pairs.map(function (pair) { return residual(rawMatrix, pair.value, pair.vector); }),
+      values: values,
+      vectors: result.vectors,
+      residuals: result.vectors.map(function (vector, index) {
+        return matrixCore.residualNorm(rawMatrix, values[index], vector);
+      }),
       converged: true,
-      iterations: iterations,
+      iterations: result.iterations,
     });
   }
 
@@ -331,7 +270,7 @@
 
   function lazyWalk(rawGraph) {
     const data = matrices(rawGraph); const n = data.graph.nodes.length;
-    const transition = zeroMatrix(n);
+    const transition = matrixCore.zeroMatrix(n, n);
     for (let i = 0; i < n; i += 1) {
       if (data.degrees[i] <= EPSILON) transition[i][i] = 1;
       else {
