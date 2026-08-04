@@ -4,6 +4,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 
 const atlasRoot = path.join(__dirname, "..");
 const core = require("../atlas-core.js");
@@ -80,6 +81,22 @@ test("continent 06 contains exactly the thirteen canonical published nodes", () 
     const html = fs.readFileSync(
       path.join(atlasRoot, "chapters", node.id + ".html"),
       "utf8"
+    );
+    const mathJaxScript = html.match(
+      /<script>([\s\S]*?window\.MathJax[\s\S]*?)<\/script>/
+    )?.[1];
+    assert.ok(mathJaxScript, node.id + " must configure MathJax inline");
+    const sandbox = { window: {} };
+    vm.runInNewContext(mathJaxScript, sandbox);
+    assert.equal(
+      JSON.stringify(sandbox.window.MathJax.tex.inlineMath[1]),
+      JSON.stringify(["\\(", "\\)"]),
+      node.id + " must preserve escaped inline MathJax delimiters"
+    );
+    assert.equal(
+      JSON.stringify(sandbox.window.MathJax.tex.displayMath[1]),
+      JSON.stringify(["\\[", "\\]"]),
+      node.id + " must preserve escaped display MathJax delimiters"
     );
     assert.equal(
       html.match(/<h1>([^<]+)<\/h1>/)?.[1],

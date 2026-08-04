@@ -613,7 +613,7 @@
           "kind": "related",
           "sourceNodeId": "string-hashing-multiple-patterns",
           "position": {
-            "x": 760,
+            "x": 560,
             "y": 600
           }
         }
@@ -685,8 +685,8 @@
         "targetContinentId": "big-data-modern-models",
         "kind": "related",
         "position": {
-          "x": 1690,
-          "y": 590
+          "x": 1600,
+          "y": 620
         }
       }
     },
@@ -721,8 +721,8 @@
         "targetContinentId": "randomization-approximation",
         "kind": "route",
         "position": {
-          "x": 1740,
-          "y": 920
+          "x": 1660,
+          "y": 980
         }
       },
       "relatedContinuations": [
@@ -733,8 +733,8 @@
           "kind": "related",
           "sourceNodeId": "modular-algorithms-primality",
           "position": {
-            "x": 1260,
-            "y": 1090
+            "x": 1180,
+            "y": 1040
           }
         }
       ]
