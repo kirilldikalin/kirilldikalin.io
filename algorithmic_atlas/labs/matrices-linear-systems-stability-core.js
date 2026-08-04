@@ -76,9 +76,9 @@
     if (a0.length !== b0.length) throw new RangeError("Матрицы должны иметь одинаковый порядок.");
     const size = nextPowerOfTwo(a0.length), trace = [];
     function recurse(a, b, depth, path) {
-      if (a.length <= 2) { const result = multiplyMatrices(a, b); trace.push({ phase: "base", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), result: result }); return result; }
+      if (a.length <= 2) { const result = multiplyMatrices(a, b); trace.push({ phase: "base", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b, result: result }); return result; }
       const [a11, a12, a21, a22] = split(a), [b11, b12, b21, b22] = split(b);
-      trace.push({ phase: "split", depth: depth, size: a.length, path: path, product: path.split(".").at(-1) });
+      trace.push({ phase: "split", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b });
       const m1 = recurse(addMatrices(a11, a22), addMatrices(b11, b22), depth + 1, path + ".M1");
       const m2 = recurse(addMatrices(a21, a22), b11, depth + 1, path + ".M2");
       const m3 = recurse(a11, addMatrices(b12, b22, -1), depth + 1, path + ".M3");
@@ -89,7 +89,7 @@
       const c11 = addMatrices(addMatrices(addMatrices(m1, m4), m5, -1), m7);
       const c12 = addMatrices(m3, m5), c21 = addMatrices(m2, m4);
       const c22 = addMatrices(addMatrices(addMatrices(m1, m2, -1), m3), m6);
-      const result = join(c11, c12, c21, c22); trace.push({ phase: "combine", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), result: result }); return result;
+      const result = join(c11, c12, c21, c22); trace.push({ phase: "combine", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b, result: result }); return result;
     }
     const padded = recurse(padMatrix(a0, size), padMatrix(b0, size), 0, "A²");
     return shared.deepFreeze({ result: padded.slice(0, a0.length).map(function (row) { return row.slice(0, a0.length); }), trace: trace });
@@ -164,7 +164,8 @@
   }
   function relativeInfinityError(left, right) {
     const difference = left.map(function (value, index) { return value - right[index]; });
-    return infinityNormVector(difference) / Math.max(infinityNormVector(right), Number.MIN_VALUE);
+    const referenceNorm = infinityNormVector(right);
+    return referenceNorm === 0 ? null : infinityNormVector(difference) / referenceNorm;
   }
   function conditioningFrame(matrix, vector) {
     const a = validateMatrix(matrix, true);
@@ -193,12 +194,14 @@
       inputRelative: inputRelative,
       forwardError: forwardError,
       backwardError: backwardError,
-      amplification: inputRelative === 0 ? 0 : forwardError / inputRelative,
-      conditionBound: condition * inputRelative,
+      amplification: inputRelative === null || forwardError === null ? null : inputRelative === 0 ? 0 : forwardError / inputRelative,
+      conditionBound: inputRelative === null ? null : condition * inputRelative,
       residual: r,
       residualNorm: residualNorm,
       condition: condition,
-      message: "Возмущение правой части сопоставлено с forward error, backward error и границей κ∞·||δb||/||b||."
+      message: inputRelative === null
+        ? "Для нулевой правой части относительные входная и forward error не определены; residual и backward error остаются конечными."
+        : "Возмущение правой части сопоставлено с forward error, backward error и границей κ∞·||δb||/||b||."
     });
   }
   function iterativeRefinementFrames(matrix, vector, iterations) {
@@ -224,7 +227,7 @@
     if (mode === "gaussian") frames = gaussianFrames(matrix, vector, settings.pivoting !== false);
     else if (mode === "refinement") frames = iterativeRefinementFrames(matrix, vector, settings.iterations);
     else if (mode === "conditioning") frames = [conditioningFrame(matrix, vector)];
-    else if (mode === "strassen") { const result = strassenMultiply(matrix, matrix); frames = result.trace.map(function (frame) { return Object.assign({ mode: "strassen", matrix: frame.result || matrix, message: frame.phase === "split" ? "Блок разбит на четыре квадранта." : frame.phase === "base" ? "Базовый блок перемножен напрямую." : "Семь произведений собраны в четыре квадранта." }, frame); }); frames.push({ mode: "strassen", phase: "done", depth: 0, size: matrix.length, matrix: result.result, result: result.result, message: "Произведение A² вычислено в Number-арифметике; округление возможно." }); }
+    else if (mode === "strassen") { const result = strassenMultiply(matrix, matrix); frames = result.trace.map(function (frame) { return Object.assign({ mode: "strassen", message: frame.phase === "split" ? "Текущие блоки разбиты на четыре квадранта." : frame.phase === "base" ? "Текущая пара базовых блоков перемножена напрямую." : "Семь произведений текущих блоков собраны в четыре квадранта." }, frame); }); frames.push({ mode: "strassen", phase: "done", depth: 0, size: matrix.length, matrix: result.result, result: result.result, message: "Произведение A² вычислено в Number-арифметике; округление возможно." }); }
     else throw new RangeError("Неизвестный режим матричной лаборатории.");
     return shared.makePlayback(frames, { mode: mode, inputs: { matrix: matrix, vector: vector } });
   }

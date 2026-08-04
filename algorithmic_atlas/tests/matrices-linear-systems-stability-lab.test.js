@@ -59,6 +59,17 @@ test("режим обусловленности не смешивает прям
   assert.ok(Number.isFinite(frame.amplification));
 });
 
+test("нулевая опорная правая часть не создаёт NaN или Infinity в диагнозе", () => {
+  const frame = core.conditioningFrame([[1, 0], [0, 1]], [0, 0]);
+  assert.equal(frame.inputRelative, null);
+  assert.equal(frame.forwardError, null);
+  assert.equal(frame.amplification, null);
+  assert.equal(frame.conditionBound, null);
+  assert.ok(Number.isFinite(frame.backwardError));
+  assert.ok(Number.isFinite(frame.residualNorm));
+  assert.match(frame.message, /не определены/);
+});
+
 test("итерационное уточнение не создаёт NaN и сохраняет конечный residual", () => {
   const frames = core.iterativeRefinementFrames([[10, 7, 8], [7, 5, 6], [8, 6, 10]], [25, 18, 24], 5);
   frames.forEach((frame) => assert.ok(Number.isFinite(frame.residualNorm)));
@@ -93,6 +104,17 @@ test("трасса Strassen связывает кадры с семью прои
   assert.ok(trace.every((frame) => typeof frame.path === "string"));
 });
 
+test("вложенный кадр Strassen хранит фактические текущие блоки", () => {
+  const matrix = Array.from({ length: 8 }, (_, row) => Array.from({ length: 8 }, (_, column) => row === column ? 2 : 1));
+  const state = core.createState({ mode: "strassen", matrix, vector: new Array(8).fill(0) });
+  const nested = state.frames.find((frame) => frame.phase === "split" && frame.path === "A².M1");
+  assert.ok(nested);
+  assert.equal(nested.size, 4);
+  assert.equal(nested.left.length, 4);
+  assert.equal(nested.right.length, 4);
+  assert.notDeepEqual(nested.left, state.inputs.matrix);
+});
+
 test("playback поддерживает step, reset и конечное состояние", () => {
   let state = core.createState();
   assert.ok(Object.isFrozen(state));
@@ -117,6 +139,8 @@ test("страница и адаптер используют общий кон�
   assert.match(adapter, /drawStrassen/);
   assert.match(adapter, /drawConditioning/);
   assert.match(adapter, /drawResidualHistory/);
+  assert.match(adapter, /frame\.left/);
+  assert.doesNotMatch(adapter, /frame\.result\s*\|\|\s*state\.inputs\.matrix/);
   assert.match(adapter, /data-preset/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });
