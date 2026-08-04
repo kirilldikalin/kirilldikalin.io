@@ -121,16 +121,25 @@
         class: "atlas-geometry__query",
       });
       const visitedNodes = new Set(model.frame.visitedIds || []);
-      const prunedNodes = new Set(model.frame.prunedIds || []);
+      const prunedRoots = new Set(model.frame.prunedIds || []);
+      const prunedNodes = new Set();
       const found = new Set(model.frame.foundIds || []);
       const nodeByPoint = new Map();
+      function markPrunedSubtree(node, inheritedPruning) {
+        if (!node) return;
+        const isPruned = inheritedPruning || prunedRoots.has(node.id);
+        if (isPruned) prunedNodes.add(node.id);
+        markPrunedSubtree(node.left, isPruned);
+        markPrunedSubtree(node.right, isPruned);
+      }
+      markPrunedSubtree(model.result.tree.root, false);
       walkTree(model.result.tree.root, function (node) {
         nodeByPoint.set(node.point.id, node);
         const region = node.region;
         if (node.axis === "x") {
-          geometry.drawSegment(viewport, transform, { x: node.point.x, y: region.minY }, { x: node.point.x, y: region.maxY }, { className: visitedNodes.has(node.id) ? "is-active" : prunedNodes.has(node.id) ? "is-muted" : "is-candidate" });
+          geometry.drawSegment(viewport, transform, { x: node.point.x, y: region.minY }, { x: node.point.x, y: region.maxY }, { className: prunedNodes.has(node.id) ? "is-muted" : visitedNodes.has(node.id) ? "is-active" : "is-candidate" });
         } else {
-          geometry.drawSegment(viewport, transform, { x: region.minX, y: node.point.y }, { x: region.maxX, y: node.point.y }, { className: visitedNodes.has(node.id) ? "is-active" : prunedNodes.has(node.id) ? "is-muted" : "is-candidate" });
+          geometry.drawSegment(viewport, transform, { x: region.minX, y: node.point.y }, { x: region.maxX, y: node.point.y }, { className: prunedNodes.has(node.id) ? "is-muted" : visitedNodes.has(node.id) ? "is-active" : "is-candidate" });
         }
       });
       model.data.points.forEach(function (point) {

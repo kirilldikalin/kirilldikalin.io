@@ -59,6 +59,9 @@ test("duplicate coordinates and a collinear input have a deterministic boundary"
     { id: "c", x: 2, y: 2 }, { id: "d", x: 5, y: 5 },
   ];
   assert.deepEqual(ids(shared.convexHull(line)), ["a", "d"]);
+  const completeBoundary = shared.convexHull(line, true);
+  assert.deepEqual(completeBoundary.map(({ id }) => id), ["a", "b", "c", "d"]);
+  assert.equal(new Set(completeBoundary.map(({ id }) => id)).size, completeBoundary.length);
 });
 
 test("point movement is bounded and playback remains immutable", () => {
@@ -100,6 +103,8 @@ test("chapter and adapter use the common full-width geometry contract", () => {
   assert.ok((chapter.match(/target="_blank"/g) || []).length >= 3);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /index < model\.hull\.length - 1/);
+  assert.match(adapter, /model\.finished && model\.hull\.length > 2/);
   assert.match(runtimeSource, /pointerdown/);
   assert.match(runtimeSource, /keydown/);
   assert.match(runtimeSource, /wheel/);

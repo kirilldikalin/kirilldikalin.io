@@ -43,6 +43,7 @@
     let layers = "both";
     let mounted = null;
     let fitNeeded = true;
+    let supportVisibility = null;
     const scene = geometry.mount(figure.svg, {
       bounds: core.boundsForSites(sites),
       onViewChange: function () { if (mounted) mounted.render(); },
@@ -78,7 +79,9 @@
     }
 
     function drawTriangulation(viewport, transform, model) {
-      const byId = new Map(model.sites.map(function (site) { return [site.id, site]; }));
+      const byId = new Map(model.sites.concat(model.supportSites || []).map(function (site) {
+        return [site.id, site];
+      }));
       const bad = new Set(model.frame.badTriangleIds || []);
       const drawnEdges = new Set();
       (model.frame.triangles || []).forEach(function (triangle) {
@@ -100,6 +103,16 @@
         const left = byId.get(edge[0]); const right = byId.get(edge[1]);
         if (left && right) geometry.drawSegment(viewport, transform, left, right, { className: "is-candidate" });
       });
+      if (model.finished) {
+        (model.triangulation.edges || []).forEach(function (edge) {
+          const left = byId.get(edge.aId); const right = byId.get(edge.bId);
+          const key = [edge.aId, edge.bId].sort().join("|");
+          if (left && right && !drawnEdges.has(key)) {
+            drawnEdges.add(key);
+            geometry.drawSegment(viewport, transform, left, right, { className: "is-active" });
+          }
+        });
+      }
       if (model.frame.activeCircle && model.frame.activeCircle.radiusSquared < 5000) {
         geometry.drawCircle(viewport, transform, model.frame.activeCircle, {
           className: bad.size ? "is-bad" : "is-candidate",
@@ -110,16 +123,34 @@
 
     function render(state) {
       const model = core.visualModel(state);
-      if (fitNeeded) { scene.setBounds(model.bounds); fitNeeded = false; scene.resetView(); }
+      const frameIds = (model.frame.triangles || []).flatMap(function (candidate) { return candidate.ids; });
+      const showsSupport = frameIds.some(function (id) { return String(id).startsWith("__super-"); });
+      if (fitNeeded || showsSupport !== supportVisibility) {
+        const visiblePoints = showsSupport ? model.sites.concat(model.supportSites || []) : model.sites;
+        scene.setBounds(geometry.boundsForPoints(visiblePoints, 2));
+        fitNeeded = false;
+        supportVisibility = showsSupport;
+        scene.resetView();
+      }
       const transform = scene.transform();
       const viewport = geometry.clear(figure.svg, "Диаграмма Вороного и триангуляция Делоне", "Ячейки, двойственные рёбра и окружность текущей полости");
       geometry.drawGrid(viewport, transform, 1);
-      if (layers !== "delaunay") drawCells(viewport, transform, model);
+      if (layers === "voronoi" || (layers !== "delaunay" && model.finished)) {
+        drawCells(viewport, transform, model);
+      }
       if (layers !== "voronoi") drawTriangulation(viewport, transform, model);
       const activeId = model.frame.activeSiteId;
       model.sites.forEach(function (site) {
         geometry.drawPoint(viewport, transform, site, { className: site.id === activeId ? "is-active" : "" });
       });
+      if (showsSupport && layers !== "voronoi") {
+        (model.supportSites || []).forEach(function (site) {
+          geometry.drawPoint(viewport, transform, site, {
+            className: "is-candidate", focusable: false,
+            ariaLabel: "Искусственная вершина супертреугольника " + site.label,
+          });
+        });
+      }
       fields.cursor.max = String(model.frameCount - 1);
       fields.cursor.value = String(model.cursor);
       fields.cursorOutput.value = (model.cursor + 1) + " / " + model.frameCount;
@@ -129,7 +160,9 @@
       metrics.querySelector('[data-metric="triangles"]').textContent = String(model.triangulation.triangles.length);
       metrics.querySelector('[data-metric="violations"]').textContent = String(model.violations.length);
       panel.querySelector("[data-message]").textContent = model.frame.message;
-      panel.querySelector("[data-invariant]").textContent = model.frame.phase === "cavity"
+      panel.querySelector("[data-invariant]").textContent = layers === "voronoi" && !model.finished
+        ? "Ячейки показывают полную опорную диаграмму всех сайтов, а не промежуточный кадр вставки"
+        : model.frame.phase === "cavity"
         ? "Граница полости состоит из рёбер, встретившихся ровно один раз среди удаляемых треугольников"
         : model.finished
           ? "В открытой окружности каждого итогового треугольника нет другого сайта; кокруговые точки допускают несколько корректных диагоналей"
@@ -139,7 +172,7 @@
 
     function createState() { return core.createState(sites); }
     function bind(api) {
-      fields.preset.addEventListener("change", function () { sites = core.preset(fields.preset.value); fitNeeded = true; api.reset(); });
+      fields.preset.addEventListener("change", function () { sites = core.preset(fields.preset.value); fitNeeded = true; supportVisibility = null; api.reset(); });
       fields.layers.addEventListener("change", function () { layers = fields.layers.value; api.render(); api.announce("Набор геометрических слоёв изменён"); });
       fields.cursor.addEventListener("input", function () { api.setState(core.seek(api.getState(), Number(fields.cursor.value)), "Выбран кадр инкрементального построения"); });
       shell.controls.addEventListener("submit", function (event) { event.preventDefault(); });

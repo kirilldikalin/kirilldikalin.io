@@ -78,7 +78,7 @@
         <section id="voronoi-definition">
           <h2>Ячейка состоит из точек, для которых сайт не хуже остальных</h2>
           <p>Пусть $P$ — конечное множество сайтов в евклидовой плоскости. Ячейка сайта $p$ содержит все точки $x$, расстояние от которых до $p$ не превосходит расстояния до любого другого сайта. Неравенство нестрогое, поэтому граница принадлежит нескольким замкнутым ячейкам. Для отрисовки внутренности можно выбрать правило владельца, но математическая граница остаётся общей.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-voronoi-cell" data-notation-coverage="interactive" data-required-notations="geometry-voronoi-cell,geometry-site,geometry-distance">
+          <div id="geometry-voronoi-cell" class="atlas-math atlas-notation-formula" data-formula-id="geometry-voronoi-cell" data-notation-coverage="interactive" data-required-notations="geometry-voronoi-cell,geometry-site,geometry-distance">
             \[
               \class{atlas-notation-token notation-id-geometry-voronoi-cell}{\operatorname{Vor}(p)}
               =\{x\in\mathbb R^2:\
@@ -87,14 +87,14 @@
               \class{atlas-notation-token notation-id-geometry-site}{P}\}.
             \]
           </div>
-          <p>Сайт принадлежит собственной ячейке и строго ближе к себе, чем к любому отличному сайту. Если два сайта совпадают, их ячейки совпадают полностью и обычная диаграмма не различает записи. Поэтому геометрическое ядро обычно объединяет координаты, а прикладной слой хранит список объектов в одном месте.</p>
+          <p>Сайт принадлежит собственной ячейке и строго ближе к себе, чем к любому отличному сайту. Если два сайта совпадают, их ячейки совпадают полностью и обычная диаграмма не различает записи. Лаборатория выбирает явную политику: геометрическое ядро отклоняет совпадающие координаты, пока прикладной слой не объединит связанные с ними подписи в один сайт.</p>
           <p>Расстояние можно заменить другой метрикой, но форма ячеек изменится. В манхэттенской метрике биссектрисы состоят из ломаных, а при взвешенных расстояниях ячейка может исчезнуть. В этой главе рассматривается обычная невзвешенная евклидова диаграмма; нельзя переносить доказательства окружностей на другую метрику без проверки.</p>
         </section>
 
         <section id="bisectors">
           <h2>Каждое сравнение расстояний задаёт линейную полуплоскость</h2>
           <p>Неравенство $\|x-p\|\le\|x-q\|$ можно возвести в квадрат: обе части неотрицательны. Квадратичные члены $x_x^2+x_y^2$ сокращаются, и остаётся линейное неравенство. Граница является серединным перпендикуляром к $pq$, а нужная сторона содержит $p$.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-voronoi-halfplane" data-notation-coverage="interactive" data-required-notations="geometry-site,geometry-voronoi-halfplane">
+          <div id="geometry-voronoi-halfplane" class="atlas-math atlas-notation-formula" data-formula-id="geometry-voronoi-halfplane" data-notation-coverage="interactive" data-required-notations="geometry-site,geometry-voronoi-halfplane">
             \[
               \|x-\class{atlas-notation-token notation-id-geometry-site}{p}\|^2
               \le\|x-q\|^2
@@ -119,7 +119,7 @@
         <section id="delaunay-definition">
           <h2>Делоне соединяет сайты с общей границей ячеек</h2>
           <p>Создадим вершину для каждого сайта. Два сайта соединяем, если их замкнутые ячейки Вороного имеют общее ребро ненулевой длины. Три сайта образуют грань, если их ячейки встречаются в вершине. В общем положении — без трёх коллинеарных и четырёх кокруговых сайтов — все ограниченные грани являются треугольниками.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-delaunay-duality" data-notation-coverage="interactive" data-required-notations="geometry-delaunay-edge,geometry-voronoi-cell,geometry-site">
+          <div id="geometry-delaunay-duality" class="atlas-math atlas-notation-formula" data-formula-id="geometry-delaunay-duality" data-notation-coverage="interactive" data-required-notations="geometry-delaunay-edge,geometry-voronoi-cell,geometry-site">
             \[
               \class{atlas-notation-token notation-id-geometry-delaunay-edge}{pq\in E_{\mathrm{Del}}}
               \iff
@@ -136,7 +136,7 @@
         <section id="empty-circle">
           <h2>Треугольник Делоне имеет пустую открытую описанную окружность</h2>
           <p>Если три ячейки встречаются в точке $x$, она равноудалена от трёх сайтов. Для любого другого сайта расстояние до $x$ не меньше, иначе $x$ не принадлежал бы первым ячейкам. Значит, открытый круг с центром $x$ через три сайта не содержит других сайтов.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-empty-circumcircle" data-notation-coverage="interactive" data-required-notations="geometry-circumcircle,geometry-site">
+          <div id="geometry-empty-circumcircle" class="atlas-math atlas-notation-formula" data-formula-id="geometry-empty-circumcircle" data-notation-coverage="interactive" data-required-notations="geometry-circumcircle,geometry-site">
             \[
               abc\in\operatorname{Del}(P)
               \quad\Longrightarrow\quad
@@ -148,7 +148,7 @@
           </div>
           <p>При общем положении верно и обратное для граней: пустая окружность через три сайта задаёт вершину Вороного и треугольник Делоне. Если четвёртый сайт лежит ровно на окружности, открытый круг всё ещё пуст, но диагональ четырёхугольника не уникальна. Поэтому условие допускает равенство на границе, а уникальность требует запрета кокруговости.</p>
           <p>Предикат inCircle вычисляется determinant четвёртого порядка. Его знак зависит от ориентации тройки $a,b,c$, поэтому реализация сначала приводит треугольник к противочасовому порядку либо корректирует знак. Ошибка порядка создаёт систематическое обращение ответа, которое на симметричных тестах легко не заметить.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-incircle-determinant" data-notation-coverage="interactive" data-required-notations="geometry-incircle-determinant,geometry-point">
+          <div id="geometry-incircle-determinant" class="atlas-math atlas-notation-formula" data-formula-id="geometry-incircle-determinant" data-notation-coverage="interactive" data-required-notations="geometry-incircle-determinant,geometry-point">
             \[
               \class{atlas-notation-token notation-id-geometry-incircle-determinant}{\operatorname{incircle}(a,b,c,d)}
               =\operatorname{sgn}\det\!\begin{pmatrix}
@@ -172,7 +172,7 @@
         <section id="lifting">
           <h2>Подъём на параболоид превращает окружности в плоскости</h2>
           <p>Отобразим точку $(x,y)$ в трёхмерную точку $(x,y,x^2+y^2)$ на параболоиде. Плоскость через три поднятых сайта пересекает параболоид по поднятой окружности. Точка лежит внутри окружности на плоскости тогда и только тогда, когда её подъём лежит ниже соответствующей плоскости с учётом ориентации.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-paraboloid-lift" data-notation-coverage="interactive" data-required-notations="geometry-lifted-point,geometry-point">
+          <div id="geometry-paraboloid-lift" class="atlas-math atlas-notation-formula" data-formula-id="geometry-paraboloid-lift" data-notation-coverage="interactive" data-required-notations="geometry-lifted-point,geometry-point">
             \[
               \class{atlas-notation-token notation-id-geometry-lifted-point}{\ell(p)}
               =\bigl(p_x,p_y,p_x^2+p_y^2\bigr),
@@ -193,7 +193,7 @@
         <section id="bowyer-watson">
           <h2>Bowyer–Watson выделяет полость кратностью граничных рёбер</h2>
           <p>Для нового сайта $p$ отмечаем плохие треугольники: $p$ лежит внутри их описанной окружности. Собираем все их рёбра. Внутреннее ребро полости встречается дважды, граничное — один раз. Удаляем плохие треугольники и соединяем каждое граничное ребро с $p$.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-bowyer-boundary" data-notation-coverage="interactive" data-required-notations="geometry-cavity,geometry-triangle-edge">
+          <div id="geometry-bowyer-boundary" class="atlas-math atlas-notation-formula" data-formula-id="geometry-bowyer-boundary" data-notation-coverage="interactive" data-required-notations="geometry-cavity,geometry-triangle-edge">
             \[
               \class{atlas-notation-token notation-id-geometry-cavity}{\partial C(p)}
               =\{e:\ e\text{ входит ровно в один плохой треугольник}\},
@@ -203,7 +203,7 @@
             \]
           </div>
           <section class="atlas-block" data-atlas-block="proof"><h3>Почему заполнение полости остаётся планарным</h3><p>Плохие треугольники образуют звёздчатую относительно нового сайта полость в корректной Delaunay-триангуляции. Каждое граничное ребро видно из $p$, поэтому конусы $pe$ покрывают полость без взаимного пересечения внутренних частей. Внутренние рёбра удаляются как встречающиеся дважды, а внешняя граница остаётся. Новые окружности проходят локальную проверку по построению и свойствам старой триангуляции.</p></section>
-          <p>Учебное ядро использует точный целочисленный inCircle для настоящих сайтов и детерминированный порядок вставки. Супертреугольник выбирается конечным и достаточно большим для ограниченного диапазона лаборатории. Это не универсальный библиотечный контракт: при произвольном диапазоне координат искусственные точки и арифметика должны масштабироваться без переполнения.</p>
+          <p>Учебное ядро использует точный целочисленный inCircle для настоящих сайтов и детерминированный порядок вставки. Супертреугольник строится по фактическому диапазону координат и остаётся внутри общего числового контракта лаборатории. Перед показом результата отдельная проверка подтверждает пустоту окружностей, отсутствие пересечений, формулы Эйлера и полное покрытие выпуклой оболочки; если прозрачная вставка оставила неполную сетку, финальная триангуляция восстанавливается независимым точным перебором. Это всё ещё учебная реализация для малого числа сайтов, а не универсальная геометрическая библиотека.</p>
         </section>
 
         <section id="fortune">
@@ -241,12 +241,12 @@
 
         <section id="complexity">
           <h2>Линейный размер результата допускает $O(n\log n)$ построение</h2>
-          <p>Планарная Delaunay-триангуляция в общем положении имеет не более $3n-6$ рёбер и $2n-5-h$ треугольников, где $h$ — число вершин выпуклой оболочки. Диаграмма Вороного имеет линейное число рёбер и вершин. Сортировочная нижняя граница даёт $\Omega(n\log n)$ в алгебраическом дереве решений.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-delaunay-size" data-notation-coverage="interactive" data-required-notations="geometry-point-count,geometry-hull-size">
+          <p>Планарная Delaunay-триангуляция в общем положении имеет не более $3n-6$ рёбер и $2n-2-h$ треугольников, где $h$ — число вершин выпуклой оболочки. Диаграмма Вороного имеет линейное число рёбер и вершин. Сортировочная нижняя граница даёт $\Omega(n\log n)$ в алгебраическом дереве решений.</p>
+          <div id="geometry-delaunay-size" class="atlas-math atlas-notation-formula" data-formula-id="geometry-delaunay-size" data-notation-coverage="interactive" data-required-notations="geometry-point-count,geometry-hull-size">
             \[
               |E_{\mathrm{Del}}|\le3\class{atlas-notation-token notation-id-geometry-point-count}{n}-6,
               \qquad
-              |F_{\mathrm{Del}}|=2n-5-
+              |F_{\mathrm{Del}}|=2n-2-
               \class{atlas-notation-token notation-id-geometry-hull-size}{h}
               \quad(n\ge3).
             \]
@@ -290,7 +290,7 @@
 
         <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
           <h2>Лаборатория: двигаем сайт, меняем полость и обе двойственные структуры</h2>
-          <p>Ячейки Вороного построены последовательным пересечением полуплоскостей в видимом окне. Триангуляция появляется по кадрам Bowyer–Watson: плохие окружности, граничные рёбра полости и новые треугольники синхронизированы. Перетащите сайт или сдвиньте его стрелками, чтобы получить кокруговость либо почти коллинеарную конфигурацию. Ни один конечный кадр не объявляется единственно возможной диагональю при ничьей.</p>
+          <p>Ячейки Вороного построены последовательным пересечением полуплоскостей в видимом окне. Триангуляция появляется по кадрам Bowyer–Watson: видны супертреугольник, плохие окружности, граничные рёбра полости и новые треугольники. В совмещённом режиме полная диаграмма Вороного появляется только вместе с проверенной конечной триангуляцией, поэтому промежуточный кадр не выдаётся за синхронную двойственную структуру; отдельный режим «Вороной» показывает её как самостоятельный полный справочный слой. Перетащите сайт или сдвиньте его стрелками, чтобы получить кокруговость либо почти коллинеарную конфигурацию. Ни один конечный кадр не объявляется единственно возможной диагональю при ничьей.</p>
           <div class="atlas-lab" data-atlas-lab="voronoi-delaunay"></div>
         </section>
 

@@ -85,6 +85,8 @@ test("chapter and adapter expose the three mathematical views without unsafe eva
   assert.match(adapter, /value="sweep"/);
   assert.match(adapter, /value="closest"/);
   assert.match(adapter, /value="range"/);
+  assert.match(adapter, /markPrunedSubtree/);
+  assert.match(adapter, /inheritedPruning \|\| prunedRoots\.has/);
   assert.match(adapter, /runtime\.mount\(/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });

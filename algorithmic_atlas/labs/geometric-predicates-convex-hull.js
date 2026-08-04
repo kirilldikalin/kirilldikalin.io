@@ -105,8 +105,11 @@
         }
       }
       if (model.hull.length >= 2) {
-        for (let index = 0; index < model.hull.length; index += 1) {
-          geometry.drawSegment(viewport, transform, model.hull[index], model.hull[(index + 1) % model.hull.length], { className: "is-active" });
+        for (let index = 0; index < model.hull.length - 1; index += 1) {
+          geometry.drawSegment(viewport, transform, model.hull[index], model.hull[index + 1], { className: "is-active" });
+        }
+        if (model.finished && model.hull.length > 2) {
+          geometry.drawSegment(viewport, transform, model.hull[model.hull.length - 1], model.hull[0], { className: "is-active" });
         }
       }
 

@@ -199,6 +199,11 @@
   function convexHull(rawPoints, includeCollinear) {
     const points = uniqueCoordinates(rawPoints).slice().sort(comparePoints);
     if (points.length <= 1) return deepFreeze(points);
+    if (includeCollinear && points.every(function (point) {
+      return orientation(points[0], points[points.length - 1], point) === 0;
+    })) {
+      return deepFreeze(points);
+    }
     const shouldPop = includeCollinear
       ? function (turn) { return turn < 0; }
       : function (turn) { return turn <= 0; };

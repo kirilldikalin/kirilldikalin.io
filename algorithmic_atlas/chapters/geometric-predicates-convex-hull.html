@@ -81,7 +81,7 @@
         <section id="model">
           <h2>Точка обозначает положение, вектор — смещение</h2>
           <p>Точку на плоскости записываем парой координат $p=(p_x,p_y)$. Разность двух точек $q-p$ является вектором: она не зависит от выбора начала координат и описывает переход от $p$ к $q$. Сумма точки и вектора снова даёт точку, а сумма двух точек без дополнительной геометрической интерпретации не нужна. Это различие особенно важно в коде с богатыми типами, хотя учебная реализация хранит оба объекта одинаковыми парами чисел.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-vector-difference" data-notation-coverage="interactive" data-required-notations="geometry-point,geometry-vector">
+          <div id="geometry-vector-difference" class="atlas-math atlas-notation-formula" data-formula-id="geometry-vector-difference" data-notation-coverage="interactive" data-required-notations="geometry-point,geometry-vector">
             \[
               \class{atlas-notation-token notation-id-geometry-vector}{\overrightarrow{pq}}
               =\class{atlas-notation-token notation-id-geometry-point}{q-p}
@@ -89,7 +89,7 @@
             \]
           </div>
           <p>Скалярное произведение измеряет проекцию и угол. Оно равно нулю для перпендикулярных ненулевых векторов, положительно для острого угла и отрицательно для тупого. В этой главе оно помогает проверять положение проекции на отрезке, но главным объектом станет двумерное векторное произведение — ориентированная площадь параллелограмма.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-dot-cross" data-notation-coverage="interactive" data-required-notations="geometry-dot-product,geometry-cross-product,geometry-vector">
+          <div id="geometry-dot-cross" class="atlas-math atlas-notation-formula" data-formula-id="geometry-dot-cross" data-notation-coverage="interactive" data-required-notations="geometry-dot-product,geometry-cross-product,geometry-vector">
             \[
               \class{atlas-notation-token notation-id-geometry-dot-product}{u\cdot v}=u_xv_x+u_yv_y,
               \qquad
@@ -103,7 +103,7 @@
         <section id="orientation">
           <h2>Ориентация тройки сводится к знаку determinant</h2>
           <p>Для точек $a,b,c$ рассматриваем два вектора с общим началом $a$: $b-a$ и $c-a$. Их векторное произведение не меняется при общем переносе всех трёх точек. Поэтому ответ зависит только от взаимного положения, а не от места рисунка на экране.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-orientation-determinant" data-notation-coverage="interactive" data-required-notations="geometry-determinant,geometry-point,geometry-orientation-sign">
+          <div id="geometry-orientation-determinant" class="atlas-math atlas-notation-formula" data-formula-id="geometry-orientation-determinant" data-notation-coverage="interactive" data-required-notations="geometry-determinant,geometry-point,geometry-orientation-sign">
             \[
               \class{atlas-notation-token notation-id-geometry-determinant}{\operatorname{orient}(a,b,c)}
               =\det\!\begin{pmatrix}b_x-a_x&amp;b_y-a_y\\c_x-a_x&amp;c_y-a_y\end{pmatrix}
@@ -114,13 +114,13 @@
           </div>
           <p>Положительное значение означает левый поворот $a\to b\to c$, отрицательное — правый, ноль — коллинеарность. Алгоритму обычно нужен знак, а не численное значение площади. Однако значение полезно для диагностики: оно показывает, насколько тройка далека от вырожденности в выбранных единицах. Само по себе большое значение не гарантирует численной безопасности при огромных почти взаимно сокращающихся слагаемых.</p>
           <section class="atlas-block" data-atlas-block="proof"><h3>Почему знак совпадает с направлением поворота</h3><p>Матрица с колонками $b-a$ и $c-a$ переводит единичный квадрат в параллелограмм этих векторов. Положительный determinant сохраняет ориентацию базиса, отрицательный обращает её, нулевой сжимает площадь в отрезок. В стандартном базисе переход от первого столбца ко второму против часовой стрелки сохраняет ориентацию. Поэтому три случая determinant точно совпадают с левым поворотом, правым поворотом и коллинеарностью.</p></section>
-          <p>Ориентация антисимметрична: обмен любых двух точек меняет знак. Циклическая перестановка $(a,b,c)mapsto(b,c,a)$ знак сохраняет. Эти свойства дают дешёвые тесты реализации. Если код нарушает их на целых координатах, проблема находится в арифметике или порядке аргументов, а не в тонкости геометрии.</p>
+          <p>Ориентация антисимметрична: обмен любых двух точек меняет знак. Циклическая перестановка $(a,b,c)\mapsto(b,c,a)$ знак сохраняет. Эти свойства дают дешёвые тесты реализации. Если код нарушает их на целых координатах, проблема находится в арифметике или порядке аргументов, а не в тонкости геометрии.</p>
         </section>
 
         <section id="segments">
           <h2>Пересечение отрезков требует ориентаций и ограничивающих прямоугольников</h2>
           <p>Две бесконечные прямые пересекаются, когда их направления не параллельны. Для отрезков этого недостаточно: точка пересечения прямых может лежать за концом одного из них. У правильного пересечения концы $c,d$ находятся по разные стороны прямой $ab$, а $a,b$ — по разные стороны прямой $cd$. «По разные» означает строго противоположные знаки.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-proper-intersection" data-notation-coverage="interactive" data-required-notations="geometry-determinant,geometry-segment">
+          <div id="geometry-proper-intersection" class="atlas-math atlas-notation-formula" data-formula-id="geometry-proper-intersection" data-notation-coverage="interactive" data-required-notations="geometry-determinant,geometry-segment">
             \[
               \class{atlas-notation-token notation-id-geometry-segment}{[a,b]}\cap[c,d]\ne\varnothing
               \quad\Longleftarrow\quad
@@ -147,7 +147,7 @@
         <section id="convexity">
           <h2>Выпуклая оболочка — минимальное выпуклое множество, содержащее вход</h2>
           <p>Множество $C$ выпукло, если вместе с любыми двумя точками содержит весь соединяющий их отрезок. Выпуклая комбинация конечного набора использует неотрицательные коэффициенты с суммой один. Оболочка набора $P$ состоит из всех таких комбинаций и одновременно равна пересечению всех выпуклых множеств, содержащих $P$.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-convex-hull-definition" data-notation-coverage="interactive" data-required-notations="geometry-hull,geometry-point">
+          <div id="geometry-convex-hull-definition" class="atlas-math atlas-notation-formula" data-formula-id="geometry-convex-hull-definition" data-notation-coverage="interactive" data-required-notations="geometry-hull,geometry-point">
             \[
               \class{atlas-notation-token notation-id-geometry-hull}{\operatorname{conv}(P)}
               =\left\{\sum_{i=1}^{m}\lambda_i
@@ -170,7 +170,7 @@
           <h2>Скан Грэхема превращает оболочку в стек поворотов</h2>
           <p>Выбираем точку с минимальной y-координатой, при ничьей — с минимальной x. Она крайняя. Остальные сортируем по полярному углу вокруг неё. Вычислять угол через <code>atan2</code> необязательно: порядок двух направлений определяется ориентацией относительно опорной точки, а при равном направлении — расстоянием.</p>
           <p>Просматриваем сортированный список и поддерживаем стек кандидатов границы. Перед добавлением точки смотрим на последние две точки стека. Пока новая тройка делает правый поворот или, при политике минимальных вершин, коллинеарна, среднюю вершину удаляем. После этого новый отрезок продолжает левоповоротную цепь.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-graham-invariant" data-notation-coverage="interactive" data-required-notations="geometry-stack,geometry-determinant">
+          <div id="geometry-graham-invariant" class="atlas-math atlas-notation-formula" data-formula-id="geometry-graham-invariant" data-notation-coverage="interactive" data-required-notations="geometry-stack,geometry-determinant">
             \[
               \forall i\in\{2,\ldots,|\class{atlas-notation-token notation-id-geometry-stack}{S}|-1\}:\quad
               \class{atlas-notation-token notation-id-geometry-determinant}{\operatorname{orient}(S_{i-1},S_i,S_{i+1})}&gt;0.
@@ -197,7 +197,7 @@
         <section id="complexity">
           <h2>Сортировка даёт естественную нижнюю границу, но результат-чувствительный алгоритм её обходит на малом выходе</h2>
           <p>Грэхем и Эндрю выполняют сортировку $n$ точек и линейный скан: $O(n\log n)$ времени и $O(n)$ дополнительной памяти для результата и сортировки. При сортировке на месте стек можно хранить в том же массиве. Джарвис использует $O(nh)$ времени и $O(h)$ памяти, где $h$ — число вершин оболочки.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-hull-complexities" data-notation-coverage="interactive" data-required-notations="geometry-point-count,geometry-output-count">
+          <div id="geometry-hull-complexities" class="atlas-math atlas-notation-formula" data-formula-id="geometry-hull-complexities" data-notation-coverage="interactive" data-required-notations="geometry-point-count,geometry-output-count">
             \[
               T_{\mathrm{Graham}}(\class{atlas-notation-token notation-id-geometry-point-count}{n})
               =T_{\mathrm{Andrew}}(n)=O(n\log n),
