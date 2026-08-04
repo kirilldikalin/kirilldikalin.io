@@ -1,0 +1,96 @@
+@import url("lab-layout.css");
+
+.atlas-specialized-lab {
+  --lab-string: #9b4634;
+  --lab-window: #c3903f;
+  --lab-secondary: #44677a;
+}
+
+.atlas-specialized-lab .atlas-lab__workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.atlas-specialized-lab .atlas-lab__visual {
+  width: max(100%, 46rem);
+  min-height: 22rem;
+}
+
+.atlas-sequence-cell rect,
+.atlas-sequence-matrix-cell rect {
+  fill: var(--chapter-paper);
+  stroke: var(--chapter-line);
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-sequence-cell.is-active rect,
+.atlas-sequence-matrix-cell.is-active rect {
+  fill: color-mix(in srgb, var(--lab-window) 24%, var(--chapter-paper));
+  stroke: var(--lab-window);
+  stroke-width: 2;
+}
+
+.atlas-sequence-cell.is-window rect {
+  fill: color-mix(in srgb, var(--lab-secondary) 18%, var(--chapter-paper));
+  stroke: var(--lab-secondary);
+}
+
+.atlas-sequence-cell.is-matched rect,
+.atlas-sequence-matrix-cell.is-path rect {
+  fill: color-mix(in srgb, var(--lab-good) 20%, var(--chapter-paper));
+  stroke: var(--lab-good);
+  stroke-width: 2;
+}
+
+.atlas-sequence-cell.is-rejected rect {
+  fill: color-mix(in srgb, var(--lab-bad) 14%, var(--chapter-paper));
+  stroke: var(--lab-bad);
+}
+
+.atlas-sequence-failure {
+  fill: none;
+  stroke: var(--lab-secondary);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-specialized-lab .atlas-lab__formula-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-paper);
+}
+
+.atlas-specialized-lab .atlas-lab__formula-strip code {
+  color: inherit;
+  font-size: 1rem;
+}
+
+.atlas-specialized-lab .atlas-lab__bar {
+  height: 0.8rem;
+  border: 1px solid var(--chapter-line);
+  background: var(--chapter-soft);
+}
+
+.atlas-specialized-lab .atlas-lab__bar > span {
+  display: block;
+  height: 100%;
+  background: var(--lab-a);
+}
+
+@media (max-width: 52rem) {
+  .atlas-specialized-lab .atlas-lab__visual {
+    width: max(100%, 40rem);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .atlas-specialized-lab {
+    --lab-string: #e28a75;
+    --lab-window: #e3bb70;
+    --lab-secondary: #8cb4ca;
+  }
+}
