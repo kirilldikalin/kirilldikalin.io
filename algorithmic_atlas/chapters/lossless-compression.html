@@ -12,12 +12,12 @@
 </head>
 <body class="atlas-chapter" data-atlas-node-id="lossless-compression" data-atlas-lab-minutes="25">
   <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки"><a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span><a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span><span>Сжатие без потерь</span></nav>
-  <main class="atlas-chapter-shell"><header class="atlas-chapter-header"><p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.6</p><h1>Сжатие без потерь</h1><p class="atlas-chapter-intro">Как превратить неравномерные частоты и повторяющиеся фрагменты в короткую запись, из которой исходная последовательность восстанавливается в точности</p><div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 25 мин</span><span>3 семейства</span><span>12 упражнений</span></div></header>
-    <div class="atlas-chapter-layout"><aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title"><h2 id="chapter-toc-title">В этой главе</h2><ol><li><a href="#problem">Почему сжатие возможно</a></li><li><a href="#information">Информация и энтропия</a></li><li><a href="#prefix">Префиксные коды</a></li><li><a href="#huffman">Алгоритм Хаффмана</a></li><li><a href="#huffman-proof">Оптимальность</a></li><li><a href="#arithmetic">Арифметический интервал</a></li><li><a href="#lz77">Словарь LZ77</a></li><li><a href="#decoding">Однозначное декодирование</a></li><li><a href="#limits">Пределы и модели</a></li><li><a href="#engineering">Формат и ошибки</a></li><li><a href="#laboratory">Лаборатория</a></li><li><a href="#exercises">Упражнения</a></li><li><a href="#sources">Источники</a></li></ol></aside>
+  <main class="atlas-chapter-shell"><header class="atlas-chapter-header"><p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.6</p><h1>Сжатие без потерь</h1><p class="atlas-chapter-intro">Как превратить неравномерные частоты и повторяющиеся фрагменты в короткую запись, из которой исходная последовательность восстанавливается в точности</p><div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 25 мин</span><span>4 трассы</span><span>12 упражнений</span></div></header>
+    <div class="atlas-chapter-layout"><aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title"><h2 id="chapter-toc-title">В этой главе</h2><ol><li><a href="#problem">Почему сжатие возможно</a></li><li><a href="#information">Информация и энтропия</a></li><li><a href="#prefix">Префиксные коды</a></li><li><a href="#huffman">Алгоритм Хаффмана</a></li><li><a href="#huffman-proof">Оптимальность</a></li><li><a href="#arithmetic">Арифметический интервал</a></li><li><a href="#lz77">Словарь LZ77</a></li><li><a href="#lz78">Словарь LZ78</a></li><li><a href="#pseudocode">Псевдокод</a></li><li><a href="#decoding">Однозначное декодирование</a></li><li><a href="#limits">Пределы и модели</a></li><li><a href="#engineering">Формат и ошибки</a></li><li><a href="#laboratory">Лаборатория</a></li><li><a href="#exercises">Упражнения</a></li><li><a href="#sources">Источники</a></li></ol></aside>
       <article class="atlas-chapter-content">
         <section id="problem"><h2>Сжатие использует предсказуемость, а не удаляет «лишние байты»</h2>
           <p>Алгоритм без потерь отображает исходную конечную строку в битовую запись и позволяет восстановить каждый символ. Если все возможные строки фиксированной длины должны получить более короткие различные коды, это невозможно: коротких битовых строк просто меньше. Сжатие работает потому, что реальные источники не равномерны, формат допускает коды разной длины, а часть редких входов может даже увеличиться.</p>
-          <p>Есть два крупных вида регулярности. Статистический кодер использует неравномерные вероятности символов или контекстов: частому событию выделяется короткая запись. Словарный кодер заменяет повторившийся фрагмент ссылкой на прежний. Хаффман и арифметическое кодирование иллюстрируют первый подход, LZ77 — второй. Практические форматы соединяют их: DEFLATE сначала создаёт LZ77-токены, затем кодирует литералы, длины и расстояния кодами Хаффмана.</p>
+          <p>Есть два крупных вида регулярности. Статистический кодер использует неравномерные вероятности символов или контекстов: частому событию выделяется короткая запись. Словарный кодер заменяет повторившийся фрагмент ссылкой на прежний. Хаффман и арифметическое кодирование иллюстрируют первый подход, LZ77 со скользящим окном и LZ78 с растущим словарём фраз — второй. Практические форматы соединяют идеи: DEFLATE сначала создаёт LZ77-токены, затем кодирует литералы, длины и расстояния кодами Хаффмана.</p>
           <p>Пустой вход — полноправный граничный случай. Его payload может быть пустым, но контейнер всё равно должен указать формат и нулевую длину, чтобы декодер отличил корректный пустой архив от усечённого файла. Этот тест задевает сразу заголовок, остановку и контроль целостности.</p>
           <section class="atlas-block" data-atlas-block="history"><h3>Три идеи появились в разные десятилетия</h3><p>Дэвид Хаффман опубликовал оптимальный префиксный код в 1952 году. Арифметическое кодирование развивалось из идеи представлять сообщение вложенным интервалом; практические целочисленные реализации оформились позднее. Абрахам Лемпель и Яаков Зив в 1977 году описали универсальную словарную схему со скользящим окном, известную как LZ77. Ни одна идея не является «лучшим компрессором вообще»: каждая использует свою модель источника и оплачивает метаданные.</p></section>
         </section>
@@ -83,8 +83,8 @@
           <p>Лаборатория ограничивает сообщение и хранит рациональные границы как точные BigInt-дроби, чтобы математический интервал не зависел от округления. Это учебное представление, не производительный кодек: размеры числителей растут, тогда как реальный алгоритм постоянно нормализует диапазон и отправляет биты.</p>
         </section>
 
-        <section id="lz77"><h2>LZ77 заменяет фрагмент расстоянием назад и длиной совпадения</h2>
-          <p>В позиции $i$ словарь состоит из уже прочитанного окна $T[\max(0,i-W):i]$, а буфер вперёд ограничивает максимальную длину совпадения. Кодер ищет самый длинный префикс непрочитанного суффикса, встречающийся в окне, и выдаёт пару $(distance,length)$ или литерал. Декодер уже восстановил окно, поэтому ссылка однозначно копирует нужные символы.</p>
+        <section id="lz77"><h2>LZ77 хранит ссылку назад и следующий новый символ</h2>
+          <p>В позиции $i$ словарь состоит из уже прочитанного окна $T[\max(0,i-W):i]$, а буфер вперёд ограничивает максимальную длину совпадения. Кодер ищет самый длинный префикс непрочитанного суффикса, встречающийся в окне, и выдаёт тройку $(offset,length,nextSymbol)$. При нулевой длине это литерал $(0,0,c)$. Декодер сначала копирует $length$ символов с расстояния $offset$, затем дописывает $nextSymbol$. В конце потока следующий символ может быть специальным EOF или отсутствовать по соглашению формата.</p>
           <div id="compression-lz77-match" class="atlas-math atlas-notation-formula" data-formula-id="compression-lz77-match" data-notation-coverage="interactive" data-required-notations="compression-window,compression-distance,compression-match-length,string-text,string-index">
             \[
               \class{atlas-notation-token notation-id-compression-distance}{d}
@@ -100,6 +100,52 @@
           <p>Жадный выбор самого длинного текущего совпадения не обязан минимизировать весь битовый поток. Цена токена зависит от кодов длины и расстояния, а короткий литерал способен открыть более выгодную ссылку со следующей позиции. Оптимальный разбор можно сформулировать как кратчайший путь по позициям текста, но его поиск дороже. Поэтому lazy matching и ограничение цепочки кандидатов — осознанный компромисс, а не часть математической корректности LZ77.</p>
           <p>В начале потока окно пусто, поэтому первый токен обязан быть литералом. Ссылка с нулевым расстоянием, нулевой длиной, расстоянием больше окна или больше числа уже выведенных символов недопустима. Перекрытие не отменяет этой проверки: источник первого копируемого символа должен уже существовать, а дальнейшие символы могут браться из только что пополненного выхода.</p>
           <p>Универсальность LZ означает, что на стационарных эргодических источниках подходящие варианты асимптотически приближаются к энтропии без заранее известной модели. Это утверждение о пределе и классе источников, а не гарантия маленького архива для каждого файла. Короткие, зашифрованные или уже сжатые данные могут увеличиться.</p>
+        </section>
+
+        <section id="lz78"><h2>LZ78 строит явный словарь фраз вместо скользящего окна</h2>
+          <p>LZ78 читает самый длинный префикс непрочитанного текста, уже находящийся в словаре, и дописывает к нему следующий символ. Новая фраза получает очередной номер, а токен хранит пару $(dictionaryIndex,nextSymbol)$. Словарь начинает с пустой фразы под номером 0. Поэтому первый неизвестный символ $c$ кодируется как $(0,c)$ и добавляет фразу «c».</p>
+          <p>Для строки «abababa» сначала выходит $(0,a)$ и фраза 1 = «a», затем $(0,b)$ и фраза 2 = «b». Оставшийся текст начинается с уже известной «a», а следующий символ $b$, поэтому токен $(1,b)$ создаёт фразу 3 = «ab». Затем длиннейшая известная фраза может быть «ab» и следующий символ $a$, что создаёт «aba». Конкретный последний токен зависит от соглашения о завершении, если текст заканчивается ровно на известной фразе: формат передаёт EOF, длину исходника или отдельную ссылку без символа.</p>
+          <p>Декодер восстанавливает фразы в том же порядке: берёт уже существующую строку по индексу, дописывает символ, выводит результат и кладёт его под следующим номером. Ссылка всегда направлена на меньший индекс, поэтому циклов нет. В отличие от LZ77, старая фраза не выпадает из фиксированного окна, но словарь растёт и требует политики ограничения или сброса в конечном формате.</p>
+          <p>LZ77 и LZ78 дали начало разным практическим семействам. DEFLATE сочетает оконные ссылки LZ77 с кодами Хаффмана, LZW развивает словарь LZ78 и выводит коды фраз. Называть любой словарный компрессор «LZ» недостаточно: формат должен определять вид токена, порядок создания записей, ширину индекса, переполнение словаря и завершение потока.</p>
+        </section>
+
+        <section id="pseudocode"><h2>Псевдокод фиксирует формат токенов и порядок восстановления</h2>
+          <p>Жадный LZ77 ниже использует тройки. Перекрытие разрешено именно в декодере: каждый скопированный символ немедленно становится частью уже восстановленного префикса.</p>
+          <pre><code>ENCODE-LZ77(text, window, lookahead)
+  position ← 0
+  while position &lt; |text|
+    (offset, length) ← longest match in the previous window
+    next ← text[position+length] or EOF
+    emit (offset, length, next)
+    position ← position + length + (next ≠ EOF ? 1 : 0)
+
+DECODE-LZ77(tokens)
+  output ← empty
+  for (offset, length, next) in tokens
+    require length=0 and offset=0, or 1≤offset≤|output|
+    repeat length times
+      output.append(output[|output|-offset])
+    if next ≠ EOF
+      output.append(next)
+  return output</code></pre>
+          <p>LZ78 создаёт новую запись после каждого токена. Проверка $index&lt;nextIndex$ гарантирует, что ссылка уже определена и декодер не читает будущий словарь.</p>
+          <pre><code>ENCODE-LZ78(text)
+  dictionary[0] ← empty phrase
+  while input remains
+    phrase ← longest dictionary phrase matching input prefix
+    next ← following symbol or EOF
+    emit (index(phrase), next)
+    if next ≠ EOF
+      dictionary.append(phrase + next)
+    consume |phrase| plus the next symbol
+
+DECODE-LZ78(tokens)
+  dictionary[0] ← empty phrase
+  for (index, next) in tokens
+    require 0≤index&lt;|dictionary|
+    phrase ← dictionary[index] + next
+    output.append(phrase)
+    dictionary.append(phrase)</code></pre>
         </section>
 
         <section id="decoding"><h2>Корректность компрессора проверяется равенством decode(encode(x))</h2>
@@ -126,7 +172,7 @@
           <section class="atlas-block" data-atlas-block="warning"><h3>Распространённая ошибка: сравнивать энтропию символов с размером контейнера</h3><p>$nH_0$ — модельная средняя граница payload при известных частотах. Контейнер ещё хранит алфавит, модель, длину, границы, checksum и выравнивание. Для коротких строк эти данные могут быть больше полезного кода, и это не опровергает теорию.</p></section>
         </section>
 
-        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab"><h2>Лаборатория: дерево, интервал и скользящее окно</h2><p>Один и тот же короткий текст можно пропустить через три математически разные модели. В режиме Хаффмана каждый шаг объединяет два минимальных веса и показывает получившиеся коды. Арифметический режим сужает точный рациональный интервал. LZ77 выделяет словарь, непрочитанный буфер и ссылку с реальным перекрывающимся копированием. Управление шагом и скоростью общее, а численное состояние является единственным источником геометрии.</p><div class="atlas-lab" data-atlas-lab="lossless-compression"></div></section>
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab"><h2>Лаборатория: дерево, интервал, окно и словарь фраз</h2><p>Один короткий текст можно пропустить через четыре математически разные трассы. Хаффман объединяет минимальные веса, арифметический режим сужает точный рациональный интервал. LZ77 выделяет окно и тройку $(offset,length,nextSymbol)$ с перекрывающимся копированием. LZ78 пошагово показывает ссылку на уже созданную фразу, следующий символ и новую нумерованную запись словаря. Управление шагом и скоростью общее, а численное состояние является единственным источником геометрии.</p><div class="atlas-lab" data-atlas-lab="lossless-compression"></div></section>
 
         <section id="exercises" class="atlas-block" data-atlas-block="exercises"><h2>От частот к проверяемому формату</h2><div class="atlas-exercises">
           <article class="atlas-exercise"><p><strong>1.</strong> Почему нельзя укоротить все $2^n$ строк длины $n$?</p><details><summary>Показать подсказку</summary><p>Посчитайте все более короткие коды.</p></details><details><summary>Показать решение</summary><p>Их $2^n-1$, меньше числа входов; инъективному кодеру не хватит хотя бы одного кода.</p></details></article>
@@ -147,6 +193,7 @@
           <li>David A. Huffman, <a href="https://doi.org/10.1109/JRPROC.1952.273898" target="_blank" rel="noopener noreferrer">A Method for the Construction of Minimum-Redundancy Codes</a>, Proceedings of the IRE 40(9), 1952 — первичный жадный алгоритм.</li>
           <li>Claude E. Shannon, <a href="https://doi.org/10.1002/j.1538-7305.1948.tb01338.x" target="_blank" rel="noopener noreferrer">A Mathematical Theory of Communication</a>, Bell System Technical Journal, 1948 — энтропия и границы кодирования источника.</li>
           <li>Jacob Ziv, Abraham Lempel, <a href="https://doi.org/10.1109/TIT.1977.1055714" target="_blank" rel="noopener noreferrer">A Universal Algorithm for Sequential Data Compression</a>, IEEE Transactions on Information Theory 23(3), 1977 — первичная схема LZ77.</li>
+          <li>Jacob Ziv, Abraham Lempel, <a href="https://doi.org/10.1109/TIT.1978.1055934" target="_blank" rel="noopener noreferrer">Compression of Individual Sequences via Variable-Rate Coding</a>, IEEE Transactions on Information Theory 24(5), 1978 — первичная схема словаря LZ78.</li>
           <li>Ian H. Witten, Radford M. Neal, John G. Cleary, <a href="https://doi.org/10.1145/214762.214771" target="_blank" rel="noopener noreferrer">Arithmetic Coding for Data Compression</a>, Communications of the ACM 30(6), 1987 — практическая целочисленная реализация арифметического кодирования.</li>
           <li>Thomas M. Cover, Joy A. Thomas, <a href="https://doi.org/10.1002/047174882X" target="_blank" rel="noopener noreferrer">Elements of Information Theory</a>, 2nd edition, Wiley, 2006 — строгие теоремы кодирования источника и неравенство Крафта.</li>
         </ol></section>

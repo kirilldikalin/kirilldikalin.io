@@ -103,6 +103,27 @@
     return fraction(left.numerator * right.numerator, left.denominator * right.denominator);
   }
 
+  function intervalProjection(low, high, rawUnits) {
+    const units = Number(rawUnits);
+    if (!Number.isSafeInteger(units) || units < 1 || units > 1000000) {
+      throw new RangeError("Разрешение интервала вне допустимого диапазона.");
+    }
+    if (!low || !high || low.denominator <= 0n || high.denominator <= 0n ||
+        low.numerator < 0n || high.numerator < 0n) {
+      throw new RangeError("Некорректные границы интервала.");
+    }
+    const width = subtract(high, low);
+    if (width.numerator <= 0n) throw new RangeError("Интервал должен иметь положительную ширину.");
+    const scale = BigInt(units);
+    const start = low.numerator * scale / low.denominator;
+    const endNumerator = high.numerator * scale;
+    const end = (endNumerator + high.denominator - 1n) / high.denominator;
+    return freeze({ start: Number(start), end: Number(end),
+      pixelWidth: Math.max(1, Number(end - start)),
+      underResolution: width.numerator * scale < width.denominator,
+      width: width });
+  }
+
   function arithmeticFrames(rawText) {
     const text = chars(rawText, 24);
     const frequency = frequencies(text.join(""));
@@ -159,20 +180,114 @@
         }
       }
       if (bestLength >= 2) {
-        tokens.push({ distance: bestDistance, length: bestLength, literal: "" });
+        tokens.push({ offset: bestDistance, length: bestLength,
+          nextSymbol: text[position + bestLength] || "" });
         frames.push({ position: position, windowStart: start, matchStart: position - bestDistance,
-          matchLength: bestLength, token: tokens.at(-1), tokens: tokens.slice(), finished: false });
-        position += bestLength;
+          matchLength: bestLength, sourceStart: position - bestDistance,
+          sourceLength: Math.min(bestLength, bestDistance), targetStart: position,
+          targetLength: bestLength, overlap: bestLength > bestDistance,
+          token: tokens.at(-1), tokens: tokens.slice(), finished: false });
+        position += bestLength + (tokens.at(-1).nextSymbol ? 1 : 0);
       } else {
-        tokens.push({ distance: 0, length: 0, literal: text[position] });
+        tokens.push({ offset: 0, length: 0, nextSymbol: text[position] });
         frames.push({ position: position, windowStart: start, matchStart: position,
-          matchLength: 1, token: tokens.at(-1), tokens: tokens.slice(), finished: false });
+          matchLength: 0, sourceStart: position, sourceLength: 0,
+          targetStart: position, targetLength: 0, overlap: false,
+          token: tokens.at(-1), tokens: tokens.slice(), finished: false });
         position += 1;
       }
     }
     frames.push({ position: text.length, windowStart: Math.max(0, text.length - windowSize),
-      matchStart: text.length, matchLength: 0, token: null, tokens: tokens.slice(), finished: true });
+      matchStart: text.length, matchLength: 0, sourceStart: text.length, sourceLength: 0,
+      targetStart: text.length, targetLength: 0, overlap: false,
+      token: null, tokens: tokens.slice(), finished: true });
     return freeze({ tokens: tokens, frames: frames });
+  }
+
+  function decodeLz77(rawTokens) {
+    const tokens = Array.from(rawTokens || []);
+    const output = [];
+    tokens.forEach(function (token) {
+      if (!token || !Number.isInteger(token.offset) || !Number.isInteger(token.length) ||
+          token.offset < 0 || token.length < 0 ||
+          (token.length > 0 && (token.offset < 1 || token.offset > output.length))) {
+        throw new RangeError("Некорректная тройка LZ77.");
+      }
+      if (token.length === 0 && token.offset !== 0) throw new RangeError("Некорректная тройка LZ77.");
+      for (let index = 0; index < token.length; index += 1) {
+        output.push(output[output.length - token.offset]);
+      }
+      const next = Array.from(String(token.nextSymbol === undefined ? "" : token.nextSymbol));
+      if (next.length > 1) throw new RangeError("nextSymbol должен содержать не больше одного символа.");
+      if (token.length === 0 && next.length === 0) throw new RangeError("Пустая тройка LZ77 недопустима.");
+      if (next.length) output.push(next[0]);
+    });
+    return output.join("");
+  }
+
+  function lz78(rawText) {
+    const text = chars(rawText, 500);
+    const dictionary = [""];
+    const indexByPhrase = new Map([["", 0]]);
+    const tokens = [];
+    const frames = [];
+    let position = 0;
+    while (position < text.length) {
+      let length = 0;
+      let phrase = "";
+      let phraseIndex = 0;
+      while (position + length < text.length) {
+        const candidate = phrase + text[position + length];
+        if (!indexByPhrase.has(candidate)) break;
+        phrase = candidate;
+        phraseIndex = indexByPhrase.get(candidate);
+        length += 1;
+      }
+      const nextSymbol = position + length < text.length ? text[position + length] : "";
+      const token = { index: phraseIndex, nextSymbol: nextSymbol };
+      tokens.push(token);
+      if (nextSymbol) {
+        const newPhrase = phrase + nextSymbol;
+        indexByPhrase.set(newPhrase, dictionary.length);
+        dictionary.push(newPhrase);
+      }
+      frames.push({ position: position, phraseIndex: phraseIndex, phrase: phrase,
+        nextSymbol: nextSymbol, token: token, dictionary: dictionary.slice(),
+        tokens: tokens.slice(), finished: false });
+      position += length + (nextSymbol ? 1 : 0);
+    }
+    frames.push({ position: text.length, phraseIndex: 0, phrase: "", nextSymbol: "",
+      token: null, dictionary: dictionary.slice(), tokens: tokens.slice(), finished: true });
+    return freeze({ dictionary: dictionary, tokens: tokens, frames: frames });
+  }
+
+  function decodeLz78(rawTokens) {
+    const dictionary = [""];
+    const output = [];
+    Array.from(rawTokens || []).forEach(function (token) {
+      if (!token || !Number.isInteger(token.index) || token.index < 0 ||
+          token.index >= dictionary.length) {
+        throw new RangeError("Некорректная ссылка LZ78.");
+      }
+      const next = Array.from(String(token.nextSymbol === undefined ? "" : token.nextSymbol));
+      if (next.length > 1) throw new RangeError("nextSymbol должен содержать не больше одного символа.");
+      const phrase = dictionary[token.index] + (next[0] || "");
+      if (!phrase) throw new RangeError("Пустой токен LZ78 недопустим.");
+      output.push.apply(output, Array.from(phrase));
+      if (next.length) dictionary.push(phrase);
+    });
+    return output.join("");
+  }
+
+  function lz78Layout(entryCount) {
+    const count = Number(entryCount);
+    if (!Number.isInteger(count) || count < 0 || count > 500) {
+      throw new RangeError("Размер словаря LZ78 вне допустимого диапазона.");
+    }
+    const rows = Math.ceil(count / 5);
+    const lastCardBottom = rows ? 195 + (rows - 1) * 72 + 52 : 195;
+    const tokenY = Math.max(300, lastCardBottom + 38);
+    return freeze({ rows: rows, tokenY: tokenY, height: Math.max(560, tokenY + 52) });
   }
 
   function entropy(rawText) {
@@ -189,6 +304,7 @@
     if (mode === "huffman") frames = huffman(text).frames;
     else if (mode === "arithmetic") frames = arithmeticFrames(text);
     else if (mode === "lz77") frames = lz77(text, settings.window, settings.lookahead).frames;
+    else if (mode === "lz78") frames = lz78(text).frames;
     else throw new RangeError("Неизвестный метод сжатия.");
     return freeze({ mode: mode, text: text, options: Object.assign({}, settings),
       frames: frames, index: 0, frame: frames[0] });
@@ -201,6 +317,8 @@
   }
 
   return freeze({ frequencies: frequencies, huffman: huffman,
-    arithmeticFrames: arithmeticFrames, lz77: lz77, entropy: entropy,
-    fraction: fraction, createState: createState, step: step });
+    arithmeticFrames: arithmeticFrames, lz77: lz77, decodeLz77: decodeLz77,
+    lz78: lz78, decodeLz78: decodeLz78, entropy: entropy,
+    fraction: fraction, intervalProjection: intervalProjection, lz78Layout: lz78Layout,
+    createState: createState, step: step });
 });

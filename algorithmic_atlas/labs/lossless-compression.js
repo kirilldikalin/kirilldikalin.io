@@ -9,11 +9,11 @@
   runtime.boot("lossless-compression", function (root) {
     root.classList.add("atlas-specialized-lab");
     const shell = runtime.createShell(root, {
-      title: "Три идеи сжатия без потерь",
-      description: "Объединяйте частоты в дерево Хаффмана, сужайте точный арифметический интервал или копируйте повтор из окна LZ77",
+      title: "Четыре идеи сжатия без потерь",
+      description: "Объединяйте частоты, сужайте точный интервал, копируйте повтор LZ77 или наращивайте словарь фраз LZ78",
     });
     shell.controls.innerHTML =
-      '<label>Метод<select data-field="mode"><option value="huffman">Хаффман</option><option value="arithmetic">Арифметическое кодирование</option><option value="lz77">LZ77</option></select></label>' +
+      '<label>Метод<select data-field="mode"><option value="huffman">Хаффман</option><option value="arithmetic">Арифметическое кодирование</option><option value="lz77">LZ77</option><option value="lz78">LZ78</option></select></label>' +
       '<label class="is-wide">Сообщение<input data-field="text" value="абракадабра" maxlength="24" spellcheck="false"></label>' +
       '<label data-lz>Окно<input data-field="window" type="number" min="2" max="24" value="12"></label>' +
       '<label data-lz>Буфер вперёд<input data-field="lookahead" type="number" min="2" max="16" value="8"></label>';
@@ -131,25 +131,21 @@
       detail.querySelector("[data-detail]").textContent = "Ни одно кодовое слово не является префиксом другого: движение от корня по битам заканчивается ровно в одном листе";
     }
 
-    function ratio(fraction) {
-      return Number(fraction.numerator) / Number(fraction.denominator);
-    }
-
     function drawArithmetic(state) {
       const frame = state.frame;
-      const low = ratio(frame.low);
-      const high = ratio(frame.high);
+      const projection = core.intervalProjection(frame.low, frame.high, 740);
       drawing.append(figure.svg, "rect", { x: 90, y: 190, width: 740, height: 90,
         class: "atlas-lab__grid-line" });
-      drawing.append(figure.svg, "rect", { x: 90 + 740 * low, y: 190,
-        width: Math.max(2, 740 * (high - low)), height: 90, class: "is-a" });
+      drawing.append(figure.svg, "rect", { x: 90 + projection.start, y: 190,
+        width: projection.pixelWidth, height: 90, class: "is-a" });
       drawing.text(figure.svg, 90, 165, "0", "", "middle");
       drawing.text(figure.svg, 830, 165, "1", "", "middle");
       drawing.text(figure.svg, 460, 350,
         "[" + frame.low.numerator + "/" + frame.low.denominator + ", " +
           frame.high.numerator + "/" + frame.high.denominator + ")", "is-strong", "middle");
-      metrics.querySelector('[data-metric="output"]').textContent = "ширина ≈ " +
-        Math.max(0, high - low).toExponential(3);
+      metrics.querySelector('[data-metric="output"]').textContent = "точно " +
+        projection.width.numerator + "/" + projection.width.denominator +
+        (projection.underResolution ? " · маркер увеличен до пикселя" : "");
       metrics.querySelector('[data-metric="rule"]').textContent = frame.finished ? "интервал готов" : "сузить по «" + frame.symbol + "»";
       detail.querySelector("[data-detail]").textContent = "Любое число из финального полуинтервала вместе с моделью частот и известной длиной сообщения либо специальным символом конца восстанавливает ту же последовательность вложенных интервалов";
     }
@@ -157,32 +153,78 @@
     function drawLz(state) {
       const frame = state.frame;
       const text = Array.from(state.text);
-      const matched = [];
-      for (let index = frame.matchStart; index < frame.matchStart + frame.matchLength; index += 1) matched.push(index);
-      sequence.drawStrip(figure.svg, text, { x: 50, y: 150, width: 820, height: 58,
-        label: "Скользящее окно и буфер", window: [frame.windowStart, frame.position],
-        matched: matched, active: frame.position < text.length ? [frame.position] : [] });
-      drawing.text(figure.svg, 50, 300,
-        frame.token ? (frame.token.literal ? "Литерал «" + frame.token.literal + "»" :
-          "Ссылка (distance=" + frame.token.distance + ", length=" + frame.token.length + ")") :
+      const source = [];
+      const target = [];
+      for (let index = frame.sourceStart; index < frame.sourceStart + frame.sourceLength; index += 1) source.push(index);
+      for (let index = frame.targetStart; index < frame.targetStart + frame.targetLength; index += 1) target.push(index);
+      sequence.drawStrip(figure.svg, text, { x: 50, y: 105, width: 820, height: 54,
+        label: "Уже восстановленный источник", window: [frame.windowStart, frame.position],
+        matched: source });
+      sequence.drawStrip(figure.svg, text, { x: 50, y: 225, width: 820, height: 54,
+        label: "Цель копирования", matched: target,
+        active: frame.position + frame.matchLength < text.length
+          ? [frame.position + frame.matchLength] : [] });
+      drawing.text(figure.svg, 50, 350, frame.overlap
+        ? "Перекрытие: короткий исходный период повторяется уже в целевой области"
+        : "Источник целиком лежит в ранее восстановленном окне", "is-muted");
+      drawing.text(figure.svg, 50, 405,
+        frame.token ? "Тройка (offset=" + frame.token.offset + ", length=" + frame.token.length +
+          ", next=«" + (frame.token.nextSymbol || "EOF") + "»)" :
           "Разбор завершён", "is-strong");
-      drawing.text(figure.svg, 50, 350,
+      drawing.text(figure.svg, 50, 455,
         "Токены: " + frame.tokens.map(function (token) {
-          return token.literal || "(" + token.distance + "," + token.length + ")";
+          return "(" + token.offset + "," + token.length + "," + (token.nextSymbol || "EOF") + ")";
         }).join(" · "), "is-muted");
       metrics.querySelector('[data-metric="output"]').textContent = frame.tokens.length + " токенов";
-      metrics.querySelector('[data-metric="rule"]').textContent = frame.token && !frame.token.literal ? "копировать совпадение" : "записать литерал";
-      detail.querySelector("[data-detail]").textContent = "Декодер читает токены слева направо: ссылка всегда указывает только в уже восстановленный префикс, включая перекрывающееся копирование";
+      metrics.querySelector('[data-metric="rule"]').textContent = frame.token && frame.token.length
+        ? "скопировать и дописать символ" : "дописать следующий символ";
+      detail.querySelector("[data-detail]").textContent = "Декодер читает тройку (offset, length, nextSymbol): сначала копирует уже восстановленный фрагмент, включая перекрытие, затем добавляет следующий символ";
+    }
+
+    function drawLz78(state) {
+      const frame = state.frame;
+      const text = Array.from(state.text);
+      const consumed = Array.from({ length: Math.min(frame.position, text.length) }, function (_, index) {
+        return index;
+      });
+      sequence.drawStrip(figure.svg, text, { x: 50, y: 85, width: 820, height: 54,
+        label: "Прочитанный префикс и следующая фраза", matched: consumed,
+        active: frame.position < text.length ? [frame.position] : [] });
+      const entries = frame.dictionary.slice(1);
+      const layout = core.lz78Layout(entries.length);
+      figure.svg.setAttribute("viewBox", "0 0 920 " + layout.height);
+      const columns = 5;
+      entries.forEach(function (phrase, index) {
+        const column = index % columns;
+        const row = Math.floor(index / columns);
+        const x = 55 + column * 165;
+        const y = 195 + row * 72;
+        drawing.append(figure.svg, "rect", { x: x, y: y, width: 145, height: 52,
+          rx: 4, class: index === entries.length - 1 && !frame.finished ? "is-good" : "atlas-lab__grid-line" });
+        drawing.text(figure.svg, x + 10, y + 21, String(index + 1), "is-muted");
+        drawing.text(figure.svg, x + 72, y + 37, phrase, "is-strong", "middle");
+      });
+      drawing.text(figure.svg, 50, layout.tokenY, frame.token
+        ? "Токен (" + frame.token.index + ", «" + (frame.token.nextSymbol || "EOF") +
+          "»): словарь[" + frame.token.index + "] + следующий символ"
+        : "Разбор завершён", "is-strong");
+      metrics.querySelector('[data-metric="output"]').textContent = frame.tokens.length + " токенов";
+      metrics.querySelector('[data-metric="rule"]').textContent = frame.token
+        ? "вывести ссылку и добавить новую фразу" : "словарь готов";
+      detail.querySelector("[data-detail]").textContent =
+        "Ссылка указывает только на уже созданную фразу с меньшим индексом; декодер дописывает символ и создаёт ту же следующую запись";
     }
 
     function render(state) {
+      figure.svg.setAttribute("viewBox", "0 0 920 560");
       drawing.clear(figure.svg, "Сжатие без потерь", "Текущее точное состояние выбранного кодировщика");
       if (state.mode === "huffman") drawHuffman(state);
       else if (state.mode === "arithmetic") drawArithmetic(state);
-      else drawLz(state);
+      else if (state.mode === "lz77") drawLz(state);
+      else drawLz78(state);
       metrics.querySelector('[data-metric="frame"]').textContent = String(state.index + 1) + " / " + state.frames.length;
       metrics.querySelector('[data-metric="entropy"]').textContent = core.entropy(state.text).toFixed(3) + " бит/символ";
-      figure.caption.textContent = "Все три режима сохраняют исходное сообщение точно, но используют разные виды повторяемости";
+      figure.caption.textContent = "Все четыре режима сохраняют исходное сообщение точно, но используют разные виды повторяемости";
     }
 
     const mounted = runtime.mount(root, { createState: createState, step: core.step,
