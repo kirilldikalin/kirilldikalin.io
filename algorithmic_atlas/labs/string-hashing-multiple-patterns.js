@@ -39,6 +39,11 @@
     explanation.className = "atlas-lab__panel";
     explanation.innerHTML = '<h4>Проверяемое утверждение</h4><p data-explanation></p>';
     shell.workspace.appendChild(explanation);
+    const powers = document.createElement("section");
+    powers.className = "atlas-lab__panel atlas-string-powers";
+    powers.setAttribute("data-powers", "");
+    powers.innerHTML = '<h4>Степенные вклады текущего окна</h4><div data-power-terms></div>';
+    shell.workspace.insertBefore(powers, explanation);
 
     function patterns() {
       return fields.patterns.value.split(",").map(function (value) { return value.trim(); }).filter(Boolean);
@@ -70,6 +75,17 @@
         }) });
       drawing.text(figure.svg, 48, 230, "h(окно) = " + frame.hash.toString(), "is-a is-strong");
       drawing.text(figure.svg, 48, 270, "h(образец) = " + frame.targetHash.toString(), "is-b is-strong");
+      const contributions = frame.windowContributions || [];
+      const cellWidth = Math.min(92, 760 / Math.max(1, contributions.length));
+      const startX = 460 - cellWidth * contributions.length / 2;
+      contributions.forEach(function (term, index) {
+        const x = startX + index * cellWidth;
+        drawing.append(figure.svg, "rect", { x: x, y: 168, width: cellWidth - 5, height: 72,
+          rx: 4, class: index === 0 ? "is-b" : "atlas-lab__grid-line" });
+        drawing.text(figure.svg, x + (cellWidth - 5) / 2, 192, term.symbol, "is-strong", "middle");
+        drawing.text(figure.svg, x + (cellWidth - 5) / 2, 218,
+          "b^" + term.exponent, "is-muted", "middle");
+      });
       drawing.append(figure.svg, "line", { x1: 48, y1: 305, x2: 872, y2: 305,
         class: "atlas-lab__axis" });
       drawing.text(figure.svg, 48, 352,
@@ -81,6 +97,13 @@
       metrics.querySelector('[data-metric="state"]').textContent = frame.start + "…" + frame.end;
       metrics.querySelector('[data-metric="matches"]').textContent = String(frame.matches.length);
       metrics.querySelector('[data-metric="collisions"]').textContent = String(frame.collisions.length);
+      powers.hidden = false;
+      powers.querySelector("[data-power-terms]").textContent = contributions.length
+        ? contributions.map(function (term) {
+          return "v(" + term.symbol + ")·" + frame.base + "^" + term.exponent +
+            " ≡ " + term.residue.toString();
+        }).join(" + ") + " (mod " + frame.modulus + ")"
+        : "Окно короче образца: степенных вкладов нет";
     }
 
     function renderAho(state) {
@@ -151,6 +174,7 @@
       metrics.querySelector('[data-metric="state"]').textContent = String(frame.state);
       metrics.querySelector('[data-metric="matches"]').textContent = String(frame.matches.length);
       metrics.querySelector('[data-metric="collisions"]').textContent = "не применимо";
+      powers.hidden = true;
     }
 
     function render(state) {

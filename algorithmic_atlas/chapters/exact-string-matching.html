@@ -43,7 +43,7 @@
       <p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.1</p>
       <h1>Строки и точный поиск образца</h1>
       <p class="atlas-chapter-intro">Как превратить повторные сравнения символов в линейный поиск, запоминая не историю исполнения, а математическую структуру самого образца</p>
-      <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 20 мин</span><span>3 алгоритма</span><span>12 упражнений</span></div>
+      <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 20 мин</span><span>4 трассы</span><span>12 упражнений</span></div>
     </header>
     <div class="atlas-chapter-layout">
       <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
@@ -52,7 +52,7 @@
           <li><a href="#problem">Задача поиска</a></li><li><a href="#model">Модель строки</a></li>
           <li><a href="#naive">Полный перебор сдвигов</a></li><li><a href="#borders">Границы образца</a></li>
           <li><a href="#prefix">Префикс-функция</a></li><li><a href="#kmp">Алгоритм КМП</a></li>
-          <li><a href="#proof">Корректность и линейность</a></li><li><a href="#z-function">Z-функция</a></li>
+          <li><a href="#proof">Корректность и линейность</a></li><li><a href="#z-function">Z-функция</a></li><li><a href="#pseudocode">Псевдокод</a></li>
           <li><a href="#engineering">Контракт реальной строки</a></li><li><a href="#laboratory">Лаборатория</a></li>
           <li><a href="#exercises">Упражнения</a></li><li><a href="#sources">Источники</a></li>
         </ol>
@@ -198,9 +198,29 @@
           </ul>
         </section>
 
+        <section id="pseudocode">
+          <h2>Псевдокод разделяет предобработку и проход по тексту</h2>
+          <p>В записи ниже каждое присваивание длине границы соответствует переходу, который можно увидеть в лаборатории. Сначала строится таблица образца, затем текстовый индекс движется только вперёд. После полного совпадения используется граница всего образца, поэтому перекрывающиеся ответы не теряются.</p>
+          <pre role="region" aria-label="Псевдокод префикс-функции и КМП"><code><span>PREFIX-FUNCTION(P)</span>
+<span>  π[0] ← 0</span>
+<span>  для i ← 1,…,|P|−1:</span>
+<span>    j ← π[i−1]</span>
+<span>    пока j &gt; 0 и P[i] ≠ P[j]: j ← π[j−1]</span>
+<span>    если P[i] = P[j]: j ← j+1</span>
+<span>    π[i] ← j</span>
+<span>  вернуть π</span>
+
+<span>KMP(T,P)</span>
+<span>  π ← PREFIX-FUNCTION(P); j ← 0</span>
+<span>  для i ← 0,…,|T|−1:</span>
+<span>    пока j &gt; 0 и T[i] ≠ P[j]: j ← π[j−1]</span>
+<span>    если T[i] = P[j]: j ← j+1</span>
+<span>    если j = |P|: выдать i−|P|+1; j ← π[j−1]</span></code></pre>
+        </section>
+
         <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
-          <h2>Лаборатория: один текст, три доказуемые трассы</h2>
-          <p>Введите текст и непустой образец, выберите полный перебор, КМП или Z-функцию. «Один шаг» исполняет одно логическое решение: сравнение, откат, расширение совпадения или регистрацию ответа. В режиме КМП рядом показана вся префикс-функция, поэтому каждый прыжок можно проверить по структуре образца. Найденные позиции подсвечиваются без изменения масштаба; перекрытия остаются видимыми.</p>
+          <h2>Лаборатория: один текст, четыре доказуемые трассы</h2>
+          <p>Введите текст и непустой образец, выберите полный перебор, отдельное построение префикс-функции, КМП или Z-функцию. «Один шаг» исполняет одно логическое решение: сравнение, откат, расширение совпадения или регистрацию ответа. В режиме префикс-функции видны кандидат границы и текущее значение $\pi$; КМП затем использует ровно эти откаты. Найденные позиции подсвечиваются без изменения масштаба, перекрытия остаются видимыми.</p>
           <div class="atlas-lab" data-atlas-lab="exact-string-matching"></div>
         </section>
 
@@ -227,7 +247,9 @@
           <ol class="atlas-sources">
             <li>Donald E. Knuth, James H. Morris Jr., Vaughan R. Pratt, <a href="https://doi.org/10.1137/0206024" target="_blank" rel="noopener noreferrer">Fast Pattern Matching in Strings</a>, SIAM Journal on Computing 6(2), 1977 — первичная статья с линейным поиском и анализом периодичности.</li>
             <li>Zvi Galil, <a href="https://doi.org/10.1145/356842.356844" target="_blank" rel="noopener noreferrer">String Matching in Real Time</a>, Journal of the ACM 28(1), 1981 — строгий контекст временных границ точного сопоставления.</li>
+            <li>Michael G. Main, Richard J. Lorentz, <a href="https://doi.org/10.1016/0196-6774(84)90021-X" target="_blank" rel="noopener noreferrer">An O(n log n) Algorithm for Finding All Repetitions in a String</a>, Journal of Algorithms 5(3), 1984 — первичная работа, использующая линейное вычисление величин совпадения с префиксом, позднее систематизированных как Z-values.</li>
             <li>Dan Gusfield, <a href="https://doi.org/10.1017/CBO9780511574931" target="_blank" rel="noopener noreferrer">Algorithms on Strings, Trees, and Sequences</a>, Cambridge University Press, 1997 — границы, Z-алгоритм и единая комбинаторика строк.</li>
+            <li>Dan Gusfield, <a href="https://dmice.ohsu.edu/bedricks/courses/cs655/pdf/readings/gusfield_chap_1_2.pdf" target="_blank" rel="noopener noreferrer">Exact String Matching: The Fundamental String Algorithms</a> — авторское изложение Z-values как fundamental preprocessing и линейного Z-алгоритма.</li>
             <li>Maxime Crochemore, Wojciech Rytter, <a href="https://doi.org/10.1093/oso/9780195086096.001.0001" target="_blank" rel="noopener noreferrer">Jewels of Stringology</a>, Oxford University Press, 2002 — периоды, точный поиск и доказательства линейности.</li>
             <li>Unicode Consortium, <a href="https://www.unicode.org/reports/tr15/" target="_blank" rel="noopener noreferrer">Unicode Normalization Forms</a> — нормативное описание канонической и совместимой нормализации.</li>
           </ol>

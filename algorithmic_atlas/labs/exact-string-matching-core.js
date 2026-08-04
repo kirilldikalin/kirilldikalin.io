@@ -41,6 +41,39 @@
     return pi;
   }
 
+  function prefixFrames(rawPattern) {
+    const pattern = chars(rawPattern, "Образец", 48);
+    if (!pattern.length) throw new RangeError("Образец не должен быть пустым.");
+    const pi = Array(pattern.length).fill(0);
+    const frames = [{ patternIndex: 0, candidateIndex: 0, matched: 0,
+      fallback: null, action: "prefix-base", pi: pi.slice(), matches: [],
+      comparisons: 0, finished: false }];
+    let comparisons = 0;
+    for (let index = 1; index < pattern.length; index += 1) {
+      let border = pi[index - 1];
+      while (border > 0 && pattern[index] !== pattern[border]) {
+        comparisons += 1;
+        frames.push({ patternIndex: index, candidateIndex: border, matched: border,
+          fallback: pi[border - 1], action: "prefix-fallback", pi: pi.slice(),
+          matches: [], comparisons: comparisons, finished: false });
+        border = pi[border - 1];
+      }
+      comparisons += 1;
+      const equal = pattern[index] === pattern[border];
+      if (equal) border += 1;
+      pi[index] = border;
+      frames.push({ patternIndex: index,
+        candidateIndex: equal ? border - 1 : border,
+        matched: border, fallback: null,
+        action: equal ? "prefix-extend" : "prefix-zero", pi: pi.slice(),
+        matches: [], comparisons: comparisons, finished: false });
+    }
+    frames.push({ patternIndex: pattern.length, candidateIndex: 0,
+      matched: pi.at(-1) || 0, fallback: null, action: "done", pi: pi.slice(),
+      matches: [], comparisons: comparisons, finished: true });
+    return freeze(frames);
+  }
+
   function zFunction(rawValue) {
     const value = chars(rawValue, "Строка", 10000);
     const z = Array(value.length).fill(0);
@@ -191,6 +224,7 @@
 
   function frames(algorithm, text, pattern) {
     if (algorithm === "naive") return naiveFrames(text, pattern);
+    if (algorithm === "prefix") return prefixFrames(pattern);
     if (algorithm === "kmp") return kmpFrames(text, pattern);
     if (algorithm === "z") return zFrames(text, pattern);
     throw new RangeError("Неизвестный алгоритм точного поиска.");
@@ -214,7 +248,8 @@
       frames: state.frames, index: index, frame: state.frames[index] });
   }
 
-  return freeze({ prefixFunction: prefixFunction, zFunction: zFunction,
+  return freeze({ prefixFunction: prefixFunction, prefixFrames: prefixFrames,
+    zFunction: zFunction,
     naiveFrames: naiveFrames, kmpFrames: kmpFrames, zFrames: zFrames,
     createState: createState, step: step });
 });

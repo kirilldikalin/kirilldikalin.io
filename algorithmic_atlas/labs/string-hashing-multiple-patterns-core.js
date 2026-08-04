@@ -52,6 +52,18 @@
     return value;
   }
 
+  function hashContributions(chars, base, modulus) {
+    const b = BigInt(base);
+    const m = BigInt(modulus);
+    return chars.map(function (symbol, index) {
+      const exponent = chars.length - index - 1;
+      const power = modPow(b, BigInt(exponent), m);
+      const value = code(symbol);
+      return freeze({ index: index, symbol: symbol, code: value, exponent: exponent,
+        power: power, residue: value * power % m });
+    });
+  }
+
   function rollingHashFrames(rawText, rawPattern, rawBase, rawModulus) {
     const text = toChars(rawText, "Строка", 180);
     const pattern = toChars(rawPattern, "Образец", 48);
@@ -60,12 +72,15 @@
     const modulus = integer(rawModulus === undefined ? 1000003 : rawModulus,
       "Модуль", 3, 2147483647);
     const target = hash(pattern, base, modulus);
+    const patternContributions = hashContributions(pattern, base, modulus);
     const frames = [];
     const matches = [];
     const collisions = [];
     if (pattern.length > text.length) {
       return freeze([{ start: 0, end: 0, hash: 0n, targetHash: target,
-        verified: false, collision: false, matches: [], collisions: [], finished: true }]);
+        verified: false, collision: false, matches: [], collisions: [],
+        base: base, modulus: modulus, patternContributions: patternContributions,
+        windowContributions: [], finished: true }]);
     }
     const power = modPow(BigInt(base), BigInt(pattern.length - 1), BigInt(modulus));
     let current = hash(text.slice(0, pattern.length), base, modulus);
@@ -79,7 +94,12 @@
       frames.push({ start: start, end: start + pattern.length, hash: current,
         targetHash: target, sameHash: sameHash, verified: verified,
         collision: sameHash && !verified, matches: matches.slice(),
-        collisions: collisions.slice(), power: power, finished: false });
+        collisions: collisions.slice(), power: power, base: base, modulus: modulus,
+        outgoing: start < text.length - pattern.length ? text[start] : "",
+        incoming: start < text.length - pattern.length ? text[start + pattern.length] : "",
+        patternContributions: patternContributions,
+        windowContributions: hashContributions(text.slice(start, start + pattern.length), base, modulus),
+        finished: false });
       if (start < text.length - pattern.length) {
         current = (current - code(text[start]) * power) % BigInt(modulus);
         if (current < 0n) current += BigInt(modulus);
@@ -183,7 +203,8 @@
       index: index, frame: state.frames[index] });
   }
 
-  return freeze({ modPow: modPow, hash: hash, rollingHashFrames: rollingHashFrames,
+  return freeze({ modPow: modPow, hash: hash, hashContributions: hashContributions,
+    rollingHashFrames: rollingHashFrames,
     buildAutomaton: buildAutomaton, ahoCorasickFrames: ahoCorasickFrames,
     createState: createState, step: step });
 });

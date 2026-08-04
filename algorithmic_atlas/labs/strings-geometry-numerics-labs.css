@@ -69,6 +69,26 @@
   font-size: 1rem;
 }
 
+.atlas-string-powers [data-power-terms] {
+  overflow-x: auto;
+  padding-block: 0.25rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  scrollbar-width: thin;
+}
+
+.atlas-bwt-matrix-viewport {
+  max-height: 44rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--chapter-line);
+}
+
+.atlas-bwt-matrix-viewport .atlas-lab__visual {
+  min-width: 46rem;
+  border: 0;
+}
+
 .atlas-specialized-lab .atlas-lab__bar {
   height: 0.8rem;
   border: 1px solid var(--chapter-line);
