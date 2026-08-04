@@ -75,23 +75,23 @@
     const a0 = validateMatrix(left, true), b0 = validateMatrix(right, true);
     if (a0.length !== b0.length) throw new RangeError("Матрицы должны иметь одинаковый порядок.");
     const size = nextPowerOfTwo(a0.length), trace = [];
-    function recurse(a, b, depth) {
-      if (a.length <= 2) { const result = multiplyMatrices(a, b); trace.push({ phase: "base", depth: depth, size: a.length, result: result }); return result; }
+    function recurse(a, b, depth, path) {
+      if (a.length <= 2) { const result = multiplyMatrices(a, b); trace.push({ phase: "base", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b, result: result }); return result; }
       const [a11, a12, a21, a22] = split(a), [b11, b12, b21, b22] = split(b);
-      trace.push({ phase: "split", depth: depth, size: a.length });
-      const m1 = recurse(addMatrices(a11, a22), addMatrices(b11, b22), depth + 1);
-      const m2 = recurse(addMatrices(a21, a22), b11, depth + 1);
-      const m3 = recurse(a11, addMatrices(b12, b22, -1), depth + 1);
-      const m4 = recurse(a22, addMatrices(b21, b11, -1), depth + 1);
-      const m5 = recurse(addMatrices(a11, a12), b22, depth + 1);
-      const m6 = recurse(addMatrices(a21, a11, -1), addMatrices(b11, b12), depth + 1);
-      const m7 = recurse(addMatrices(a12, a22, -1), addMatrices(b21, b22), depth + 1);
+      trace.push({ phase: "split", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b });
+      const m1 = recurse(addMatrices(a11, a22), addMatrices(b11, b22), depth + 1, path + ".M1");
+      const m2 = recurse(addMatrices(a21, a22), b11, depth + 1, path + ".M2");
+      const m3 = recurse(a11, addMatrices(b12, b22, -1), depth + 1, path + ".M3");
+      const m4 = recurse(a22, addMatrices(b21, b11, -1), depth + 1, path + ".M4");
+      const m5 = recurse(addMatrices(a11, a12), b22, depth + 1, path + ".M5");
+      const m6 = recurse(addMatrices(a21, a11, -1), addMatrices(b11, b12), depth + 1, path + ".M6");
+      const m7 = recurse(addMatrices(a12, a22, -1), addMatrices(b21, b22), depth + 1, path + ".M7");
       const c11 = addMatrices(addMatrices(addMatrices(m1, m4), m5, -1), m7);
       const c12 = addMatrices(m3, m5), c21 = addMatrices(m2, m4);
       const c22 = addMatrices(addMatrices(addMatrices(m1, m2, -1), m3), m6);
-      const result = join(c11, c12, c21, c22); trace.push({ phase: "combine", depth: depth, size: a.length, result: result }); return result;
+      const result = join(c11, c12, c21, c22); trace.push({ phase: "combine", depth: depth, size: a.length, path: path, product: path.split(".").at(-1), left: a, right: b, result: result }); return result;
     }
-    const padded = recurse(padMatrix(a0, size), padMatrix(b0, size), 0);
+    const padded = recurse(padMatrix(a0, size), padMatrix(b0, size), 0, "A²");
     return shared.deepFreeze({ result: padded.slice(0, a0.length).map(function (row) { return row.slice(0, a0.length); }), trace: trace });
   }
 
@@ -162,10 +162,60 @@
     const a = validateMatrix(matrix, true);
     return checkedNumber(infinityNormMatrix(a) * infinityNormMatrix(inverse(a)), "Число обусловленности");
   }
+  function relativeInfinityError(left, right) {
+    const difference = left.map(function (value, index) { return value - right[index]; });
+    const referenceNorm = infinityNormVector(right);
+    return referenceNorm === 0 ? null : infinityNormVector(difference) / referenceNorm;
+  }
+  function conditioningFrame(matrix, vector) {
+    const a = validateMatrix(matrix, true);
+    const b = vector.map(function (value, index) { return shared.finiteNumber(value, "b[" + index + "]"); });
+    const condition = conditionInfinity(a);
+    const originalSolution = solve(a, b, true);
+    const inputScale = Math.max(1, infinityNormVector(b));
+    const delta = inputScale * 1e-7;
+    const perturbedVector = b.slice();
+    perturbedVector[0] = checkedNumber(perturbedVector[0] + delta, "Возмущённая правая часть");
+    const perturbedSolution = solve(a, perturbedVector, true);
+    const r = residual(a, perturbedSolution, perturbedVector);
+    const residualNorm = infinityNormVector(r);
+    const inputRelative = relativeInfinityError(perturbedVector, b);
+    const forwardError = relativeInfinityError(perturbedSolution, originalSolution);
+    const denominator = infinityNormMatrix(a) * infinityNormVector(perturbedSolution) + infinityNormVector(perturbedVector);
+    const backwardError = denominator === 0 ? 0 : residualNorm / denominator;
+    return shared.deepFreeze({
+      mode: "conditioning",
+      phase: "done",
+      matrix: a,
+      vector: perturbedVector,
+      solution: perturbedSolution,
+      originalSolution: originalSolution,
+      perturbation: delta,
+      inputRelative: inputRelative,
+      forwardError: forwardError,
+      backwardError: backwardError,
+      amplification: inputRelative === null || forwardError === null ? null : inputRelative === 0 ? 0 : forwardError / inputRelative,
+      conditionBound: inputRelative === null ? null : condition * inputRelative,
+      residual: r,
+      residualNorm: residualNorm,
+      condition: condition,
+      message: inputRelative === null
+        ? "Для нулевой правой части относительные входная и forward error не определены; residual и backward error остаются конечными."
+        : "Возмущение правой части сопоставлено с forward error, backward error и границей κ∞·||δb||/||b||."
+    });
+  }
   function iterativeRefinementFrames(matrix, vector, iterations) {
     const a = validateMatrix(matrix, true), b = vector.map(Number), count = shared.boundedInteger(iterations === undefined ? 6 : iterations, "Итерации", 1, 20);
-    let solution = solve(a, b, true); const frames = [];
-    for (let index = 0; index <= count; index += 1) { const r = residual(a, solution, b), norm = infinityNormVector(r); frames.push({ mode: "refinement", phase: index === count || norm === 0 ? "done" : "correct", iteration: index, matrix: a, solution: solution.slice(), residual: r.slice(), residualNorm: norm, message: "Итерация " + index + ": ||b−Ax||∞ = " + norm.toExponential(4) + "." }); if (index === count || norm === 0) break; const correction = solve(a, r, true); solution = solution.map(function (value, i) { return checkedNumber(value + correction[i], "Итерационное уточнение"); }); }
+    let solution = solve(a, b, true); const frames = [], history = [];
+    for (let index = 0; index <= count; index += 1) {
+      const r = residual(a, solution, b), norm = infinityNormVector(r);
+      history.push(norm);
+      const done = index === count || norm === 0;
+      const correction = done ? null : solve(a, r, true);
+      frames.push({ mode: "refinement", phase: done ? "done" : "correct", iteration: index, matrix: a, solution: solution.slice(), residual: r.slice(), residualNorm: norm, correctionNorm: correction ? infinityNormVector(correction) : 0, history: history.slice(), message: "Итерация " + index + ": ||b−Ax||∞ = " + norm.toExponential(4) + "." });
+      if (done) break;
+      solution = solution.map(function (value, i) { return checkedNumber(value + correction[i], "Итерационное уточнение"); });
+    }
     return shared.deepFreeze(frames);
   }
   function hilbert(size) { const n = shared.boundedInteger(size, "Порядок", 1, MAX_DIMENSION); return Array.from({ length: n }, function (_, i) { return Array.from({ length: n }, function (_, j) { return 1 / (i + j + 1); }); }); }
@@ -176,10 +226,10 @@
     let frames;
     if (mode === "gaussian") frames = gaussianFrames(matrix, vector, settings.pivoting !== false);
     else if (mode === "refinement") frames = iterativeRefinementFrames(matrix, vector, settings.iterations);
-    else if (mode === "conditioning") { const condition = conditionInfinity(matrix), solution = solve(matrix, vector, true), r = residual(matrix, solution, vector); frames = [{ mode: "conditioning", phase: "done", matrix: matrix, solution: solution, residual: r, residualNorm: infinityNormVector(r), condition: condition, message: "Число обусловленности κ∞ ≈ " + condition.toPrecision(6) + "; малый residual сам по себе не гарантирует малую ошибку решения." }]; }
-    else if (mode === "strassen") { const result = strassenMultiply(matrix, matrix); frames = result.trace.map(function (frame) { return Object.assign({ mode: "strassen", matrix: frame.result || matrix, message: frame.phase === "split" ? "Блок разбит на четыре квадранта." : frame.phase === "base" ? "Базовый блок перемножен напрямую." : "Семь произведений собраны в четыре квадранта." }, frame); }); frames.push({ mode: "strassen", phase: "done", depth: 0, size: matrix.length, matrix: result.result, result: result.result, message: "Произведение A² вычислено в Number-арифметике; округление возможно." }); }
+    else if (mode === "conditioning") frames = [conditioningFrame(matrix, vector)];
+    else if (mode === "strassen") { const result = strassenMultiply(matrix, matrix); frames = result.trace.map(function (frame) { return Object.assign({ mode: "strassen", message: frame.phase === "split" ? "Текущие блоки разбиты на четыре квадранта." : frame.phase === "base" ? "Текущая пара базовых блоков перемножена напрямую." : "Семь произведений текущих блоков собраны в четыре квадранта." }, frame); }); frames.push({ mode: "strassen", phase: "done", depth: 0, size: matrix.length, matrix: result.result, result: result.result, message: "Произведение A² вычислено в Number-арифметике; округление возможно." }); }
     else throw new RangeError("Неизвестный режим матричной лаборатории.");
     return shared.makePlayback(frames, { mode: mode, inputs: { matrix: matrix, vector: vector } });
   }
-  return Object.freeze({ EPSILON: EPSILON, MAX_DIMENSION: MAX_DIMENSION, parseMatrix: parseMatrix, parseVector: parseVector, multiplyMatrices: multiplyMatrices, strassenMultiply: strassenMultiply, gaussianFrames: gaussianFrames, solve: solve, residual: residual, conditionInfinity: conditionInfinity, iterativeRefinementFrames: iterativeRefinementFrames, hilbert: hilbert, createState: createState, step: shared.step, seek: shared.seek, reset: shared.reset, isFinished: function (state) { return Boolean(state && state.finished); } });
+  return Object.freeze({ EPSILON: EPSILON, MAX_DIMENSION: MAX_DIMENSION, parseMatrix: parseMatrix, parseVector: parseVector, multiplyMatrices: multiplyMatrices, strassenMultiply: strassenMultiply, gaussianFrames: gaussianFrames, solve: solve, residual: residual, conditionInfinity: conditionInfinity, conditioningFrame: conditioningFrame, relativeInfinityError: relativeInfinityError, iterativeRefinementFrames: iterativeRefinementFrames, hilbert: hilbert, createState: createState, step: shared.step, seek: shared.seek, reset: shared.reset, isFinished: function (state) { return Boolean(state && state.finished); } });
 });

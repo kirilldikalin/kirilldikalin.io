@@ -112,6 +112,51 @@
     return shared.deepFreeze(frames);
   }
 
+  function representationFrames(rawValue) {
+    const magnitude = shared.abs(rawValue);
+    const sign = rawValue < 0n ? -1 : 1;
+    const binary = magnitude.toString(2);
+    if (binary.length > 128) {
+      throw new RangeError("Для покадрового представления допустимо не более 128 бит.");
+    }
+    const decimal = magnitude.toString(10);
+    const limbs = [];
+    let remaining = magnitude;
+    do {
+      limbs.push(remaining % 1000n);
+      remaining /= 1000n;
+    } while (remaining > 0n);
+    const frames = [{
+      mode: "representation",
+      phase: "decimal",
+      value: rawValue,
+      sign: sign,
+      decimal: decimal,
+      binary: binary,
+      limbs: limbs.slice(),
+      activeBit: null,
+      reconstructed: 0n,
+      message: "Одно целое начинается как знак и конечная десятичная запись.",
+    }];
+    let reconstructed = 0n;
+    Array.from(binary).forEach(function (bit, index) {
+      reconstructed = reconstructed * 2n + BigInt(bit);
+      frames.push({
+        mode: "representation",
+        phase: index === binary.length - 1 ? "done" : "bit",
+        value: rawValue,
+        sign: sign,
+        decimal: decimal,
+        binary: binary,
+        limbs: limbs.slice(),
+        activeBit: index,
+        reconstructed: BigInt(sign) * reconstructed,
+        message: "Читаем бит " + bit + ": префикс умножается на 2 и получает новый младший бит.",
+      });
+    });
+    return shared.deepFreeze(frames);
+  }
+
   function decimalDigits(value) {
     return shared.abs(value).toString().length;
   }
@@ -154,7 +199,11 @@
     const mode = settings.mode || "euclid";
     let frames;
     let inputs;
-    if (mode === "euclid") {
+    if (mode === "representation") {
+      const value = shared.parseBigInt(settings.a === undefined ? "1234567" : settings.a, "Целое", 39);
+      frames = representationFrames(value);
+      inputs = { a: value };
+    } else if (mode === "euclid") {
       const a = shared.parseBigInt(settings.a === undefined ? "1071" : settings.a, "a");
       const b = shared.parseBigInt(settings.b === undefined ? "462" : settings.b, "b");
       frames = euclidFrames(a, b);
@@ -185,6 +234,7 @@
     euclidFrames: euclidFrames,
     binaryGcd: binaryGcd,
     powerFrames: powerFrames,
+    representationFrames: representationFrames,
     karatsubaTrace: karatsubaTrace,
     createState: createState,
     step: shared.step,

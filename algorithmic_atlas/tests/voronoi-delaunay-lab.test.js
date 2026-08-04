@@ -67,7 +67,7 @@ test("cocircular ties are deterministic and all-collinear sites produce a neighb
   assert.deepEqual(core.bowyerWatson([]).triangles, []);
 });
 
-test("final validation repairs the incomplete four-site regression", () => {
+test("Bowyer-Watson final frame is its own audited triangulation", () => {
   const sites = [
     { id: "p0", x: 8, y: -18 },
     { id: "p1", x: 4, y: 7 },
@@ -83,6 +83,43 @@ test("final validation repairs the incomplete four-site regression", () => {
   assert.equal(audit.area2, 170n);
   assert.equal(audit.hullArea2, 170n);
   assert.equal(core.triangulationAudit(sites, triangulation.triangles.slice(0, 2), triangulation.edges).valid, false);
+  assert.deepEqual(triangulation.frames.at(-1).triangles, triangulation.triangles);
+  assert.doesNotMatch(triangulation.frames.at(-1).message, /дополнен/);
+});
+
+test("adaptive supertriangle retries Bowyer-Watson instead of replacing its result", () => {
+  const sites = [
+    { id: "p0", x: 10, y: 30 }, { id: "p1", x: -30, y: -2 },
+    { id: "p2", x: 20, y: -13 }, { id: "p3", x: 15, y: 0 },
+    { id: "p4", x: 19, y: -9 }, { id: "p5", x: 2, y: -29 },
+    { id: "p6", x: -3, y: 13 }, { id: "p7", x: -17, y: -17 },
+    { id: "p8", x: 8, y: 6 },
+  ];
+  const triangulation = core.bowyerWatson(sites);
+  assert.ok(triangulation.supportScale > 8);
+  assert.equal(core.triangulationAudit(sites, triangulation.triangles, triangulation.edges).valid, true);
+  assert.deepEqual(triangulation.frames.at(-1).triangles, triangulation.triangles);
+});
+
+test("cavity counters and dual edges describe the visible current frame", () => {
+  let state = core.createState(core.preset("villages"));
+  while (!state.playback.finished && state.playback.current.phase !== "cavity") state = core.step(state);
+  const cavity = core.visualModel(state);
+  assert.equal(cavity.frame.phase, "cavity");
+  assert.equal(cavity.cavity.length, cavity.frame.badTriangleIds.length);
+  assert.ok(cavity.violations.length > 0);
+  assert.equal(cavity.frame.activeCircles.length, cavity.frame.badTriangleIds.length);
+
+  const finished = core.visualModel(finish(core.createState(core.preset("villages"))));
+  assert.deepEqual(finished.violations, []);
+  assert.ok(finished.dualEdges.length > 0);
+  const byId = new Map(finished.sites.map((site) => [site.id, site]));
+  finished.dualEdges.forEach((edge) => {
+    const left = byId.get(edge.siteAId); const right = byId.get(edge.siteBId);
+    const siteDx = right.x - left.x; const siteDy = right.y - left.y;
+    const dualDx = edge.b.x - edge.a.x; const dualDy = edge.b.y - edge.a.y;
+    assert.ok(Math.abs(siteDx * dualDx + siteDy * dualDy) < 1e-5);
+  });
 });
 
 test("incircle sign, movement and safety bounds use exact shared predicates", () => {
@@ -139,5 +176,8 @@ test("chapter and adapter use the common full-width geometry contract", () => {
   assert.match(adapter, /value="delaunay"/);
   assert.match(adapter, /model\.supportSites/);
   assert.match(adapter, /полную опорную диаграмму/);
+  assert.match(adapter, /data-field="dual"/);
+  assert.match(adapter, /model\.cavity\.length/);
+  assert.match(adapter, /activeCircles/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });

@@ -1,10 +1,22 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
 const core = require("../labs/exact-string-matching-core.js");
 
 test("prefix and Z functions preserve borders and overlaps", () => {
   assert.deepEqual(core.prefixFunction("абабака"), [0, 0, 1, 2, 3, 0, 1]);
   assert.deepEqual(core.zFunction("aaaaa"), [5, 4, 3, 2, 1]);
+});
+
+test("prefix-function playback exposes extensions and fallback candidates", () => {
+  const frames = core.prefixFrames("ababaca");
+  assert.deepEqual(frames.at(-1).pi, [0, 0, 1, 2, 3, 0, 1]);
+  assert.ok(frames.some(({ action }) => action === "prefix-extend"));
+  assert.ok(frames.some(({ action }) => action === "prefix-fallback"));
+  assert.equal(frames.at(-1).finished, true);
+  assert.equal(core.createState({ algorithm: "prefix", text: "", pattern: "ababaca" })
+    .algorithm, "prefix");
 });
 
 test("naive, KMP and Z search return the same overlapping matches", () => {
@@ -41,4 +53,11 @@ test("playback preserves an explicit empty text but never accepts an empty patte
   assert.deepEqual(state.frame.matches, []);
   assert.throws(() => core.createState({ algorithm: "kmp", text: "abc", pattern: "" }),
     /не должен быть пустым/);
+});
+
+test("browser adapter keeps KMP cells at the text scale and clips the off-screen tail", () => {
+  const adapter = fs.readFileSync(path.join(__dirname, "../labs/exact-string-matching.js"), "utf8");
+  assert.match(adapter, /pattern\.length \* cellStep - 4/);
+  assert.match(adapter, /clip-path[\s\S]*exact-pattern-viewport/);
+  assert.doesNotMatch(adapter, /Math\.min\(810 - alignmentOffset/);
 });

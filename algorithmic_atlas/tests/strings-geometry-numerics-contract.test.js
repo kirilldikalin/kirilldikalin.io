@@ -5,6 +5,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const { spawnSync } = require("node:child_process");
 
 const atlasRoot = path.join(__dirname, "..");
 const core = require("../atlas-core.js");
@@ -49,6 +50,28 @@ function canonicalChapters() {
 
 function routeIds(routeId) {
   return core.routeOrder(graph, routeId).map(({ id }) => id);
+}
+
+function edgeKey(left, right) {
+  return [left, right].sort().join("::");
+}
+
+function canonicalWorldRelatedEdges() {
+  const section = curriculum.match(
+    /## Пунктирные связи на мировой карте([\s\S]*?)(?=\n## Сверка с исходным пособием)/
+  );
+  assert.ok(section, "curriculum has no world related-edge section");
+  const worldRoute = core.mainRoute(graph, "continents");
+  const continentByNumber = new Map(core.routeOrder(graph, worldRoute.id).map(
+    (continent, index) => [String(index + 1).padStart(2, "0"), continent.id]
+  ));
+  return new Set(Array.from(
+    section[1].matchAll(/`(\d{2}) ⇢ (\d{2})`/g),
+    (match) => edgeKey(
+      continentByNumber.get(match[1]),
+      continentByNumber.get(match[2])
+    )
+  ));
 }
 
 test("continent 06 contains exactly the thirteen canonical published nodes", () => {
@@ -284,6 +307,52 @@ test("only canonical future exits remain continuation metadata", () => {
   );
   assert.equal(core.routeContinuation(graph, "edit-distance-lcs"), null);
   assert.equal(core.routeNeighbors(graph, "edit-distance-lcs").continentExit, false);
+});
+
+test("world related edges and published inbound links match the curriculum", () => {
+  const expectedWorldEdges = canonicalWorldRelatedEdges();
+  const actualWorldEdges = new Set(core.continentEdges(graph)
+    .filter(({ kind }) => kind === "related")
+    .map(({ sourceId, targetId }) => edgeKey(sourceId, targetId)));
+  assert.equal(expectedWorldEdges.size, 16);
+  assert.deepEqual(actualWorldEdges, expectedWorldEdges);
+
+  const byId = core.nodeMap(graph);
+  assert.ok(byId.get("euclidean-algorithm").related.includes(
+    "integer-arithmetic-number-theory"
+  ));
+  assert.ok(byId.get("sums-products-recurrences").related.includes(
+    "polynomials-fft-ntt"
+  ));
+});
+
+test("all continent 06 chapters meet the production depth and pseudocode contract", () => {
+  const repositoryRoot = path.join(atlasRoot, "..");
+  const result = spawnSync(
+    "python3",
+    ["scripts/check_site.py", "--atlas-metrics"],
+    { cwd: repositoryRoot, encoding: "utf8" }
+  );
+  assert.equal(result.status, 0, result.stderr);
+  const metrics = JSON.parse(result.stdout);
+
+  for (const [curriculumId, slug] of expectedIds) {
+    const minimumWords = ["6.1", "6.6"].includes(curriculumId) ? 2500 : 4000;
+    assert.ok(metrics[slug], slug + " has no production reading metrics");
+    assert.ok(
+      metrics[slug].words >= minimumWords,
+      slug + " theory must contain at least " + minimumWords + " words"
+    );
+    const html = fs.readFileSync(
+      path.join(atlasRoot, "chapters", slug + ".html"),
+      "utf8"
+    );
+    assert.match(
+      html,
+      /<pre\b[^>]*>[\s\S]*?<code\b[^>]*>[\s\S]+<\/code>\s*<\/pre>/,
+      slug + " must include structured pseudocode"
+    );
+  }
 });
 
 test("mapArea validation rejects incomplete region geometry", () => {

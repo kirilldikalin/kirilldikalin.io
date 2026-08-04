@@ -20,6 +20,15 @@
     return shared.mod(result.x, modulus);
   }
 
+  function aggregateResidueSector(residue, modulus, sectorCount) {
+    const count = shared.boundedInteger(sectorCount, "Число секторов", 1, 256);
+    if (typeof modulus !== "bigint" || modulus <= 0n) {
+      throw new RangeError("Модуль секторной проекции должен быть положительным BigInt.");
+    }
+    const normalized = shared.mod(BigInt(residue), modulus);
+    return Number(normalized * BigInt(count) / modulus);
+  }
+
   function combineCongruences(left, right) {
     const a = shared.mod(left.residue, left.modulus);
     const b = shared.mod(right.residue, right.modulus);
@@ -128,6 +137,91 @@
     return Object.freeze(primes);
   }
 
+  function integerSqrt(value) {
+    if (value < 0n) throw new RangeError("Квадратный корень требует неотрицательное число.");
+    if (value < 2n) return value;
+    let x = 1n << BigInt(Math.ceil(shared.bitLength(value) / 2));
+    while (true) {
+      const next = (x + value / x) >> 1n;
+      if (next >= x) return x;
+      x = next;
+    }
+  }
+
+  function smallTrialDivisor(n, limit) {
+    if (n === 2n || n === 3n) return 1n;
+    if (n % 2n === 0n) return 2n;
+    const maximum = limit === undefined ? 100000n : BigInt(limit);
+    const root = integerSqrt(n);
+    if (root > maximum) return null;
+    for (let divisor = 3n; divisor <= root; divisor += 2n) {
+      if (n % divisor === 0n) return divisor;
+    }
+    return 1n;
+  }
+
+  function comparisonFrames(rawN, rawBase) {
+    const n = typeof rawN === "bigint" ? rawN : shared.parseBigInt(rawN, "n", 200);
+    const base = typeof rawBase === "bigint" ? rawBase : shared.parseBigInt(rawBase === undefined ? "2" : rawBase, "Основание", 200);
+    if (n < 2n) throw new RangeError("Сравнение методов требует n ≥ 2.");
+    const root = integerSqrt(n);
+    const trial = smallTrialDivisor(n, 100000n);
+    const trialResult = trial === null
+      ? "только оценка: полный проход длиннее 100 000 делителей"
+      : trial === 1n ? "точно простое после полного прохода" : "точно составное: делитель " + trial;
+    const sieveApplicable = n <= 1000000n;
+    const normalizedBase = shared.mod(base, n);
+    const coprime = shared.gcd(normalizedBase, n) === 1n;
+    const fermatPass = n === 2n || (coprime && shared.modPow(normalizedBase, n - 1n, n) === 1n);
+    let millerResult;
+    if (n === 2n || n === 3n) millerResult = "малое простое обработано точно";
+    else if ((n & 1n) === 0n) millerResult = "точно составное: чётное";
+    else {
+      const witnessBase = normalizedBase < 2n || normalizedBase > n - 2n ? 2n : normalizedBase;
+      millerResult = witnessTrace(n, witnessBase).at(-1).composite
+        ? "точно составное: witness найден"
+        : n < UINT64_LIMIT && isPrime64(n)
+          ? "простое в 64-битном диапазоне после полного набора оснований"
+          : "один witness не обнаружил составность";
+    }
+    return shared.deepFreeze([
+      {
+        mode: "comparison", phase: "trial", method: "Пробное деление",
+        guarantee: "точная", work: "до ⌊√n⌋ = " + root + " кандидатов",
+        result: trialResult, n: n, base: base,
+        message: "Пробное деление даёт сертификат, но растёт экспоненциально по битовой длине.",
+      },
+      {
+        mode: "comparison", phase: "sieve", method: "Решето",
+        guarantee: "точная для всего диапазона", work: "память и проход до n",
+        result: sieveApplicable ? (sieve(Number(n)).includes(Number(n)) ? "n входит в список простых" : "n вычеркнуто") : "схематически: массив до n не строится",
+        n: n, base: base,
+        message: "Решето выгодно для диапазона, но не для одного огромного кандидата.",
+      },
+      {
+        mode: "comparison", phase: "fermat", method: "Тест Ферма",
+        guarantee: "односторонний слабый фильтр", work: "одна модульная степень",
+        result: n === 2n || n === 3n ? "малое простое обработано до общего теста" : fermatPass ? "условие выполнено; простота не доказана" : "точно составное для выбранного основания",
+        n: n, base: base,
+        message: "Числа Кармайкла показывают, почему успешный Fermat round ненадёжен.",
+      },
+      {
+        mode: "comparison", phase: "miller-rabin", method: "Miller–Rabin",
+        guarantee: n < UINT64_LIMIT ? "детерминированная возможна полным набором оснований" : "вероятностная серия раундов",
+        work: "O(log n) модульных умножений на основание",
+        result: millerResult, n: n, base: base,
+        message: "Witness составности точен; успешный одиночный раунд остаётся ограниченным утверждением.",
+      },
+      {
+        mode: "comparison", phase: "aks", method: "AKS",
+        guarantee: "детерминированная полиномиальная", work: "концептуальная оценка, без запуска тяжёлой трассы",
+        result: "показывается математическая роль, а не фиктивный benchmark",
+        n: n, base: base,
+        message: "AKS доказывает PRIMES ∈ P, но лаборатория не выдаёт концептуальную строку за исполнение.",
+      },
+    ]);
+  }
+
   function createState(options) {
     const settings = options || {};
     const mode = settings.mode || "miller-rabin";
@@ -146,6 +240,11 @@
       ];
       frames = crtFrames(congruences);
       inputs = { congruences: congruences };
+    } else if (mode === "comparison") {
+      const n = shared.parseBigInt(settings.n === undefined ? "561" : settings.n, "n", 200);
+      const base = shared.parseBigInt(settings.base === undefined ? "2" : settings.base, "Основание", 200);
+      frames = comparisonFrames(n, base);
+      inputs = { n: n, base: base };
     } else {
       throw new RangeError("Неизвестный режим модульной лаборатории.");
     }
@@ -157,6 +256,7 @@
     DETERMINISTIC_BASES_64: DETERMINISTIC_BASES_64,
     MAX_CRT_CONGRUENCES: MAX_CRT_CONGRUENCES,
     MAX_WITNESS_FRAMES: MAX_WITNESS_FRAMES,
+    aggregateResidueSector: aggregateResidueSector,
     modularInverse: modularInverse,
     combineCongruences: combineCongruences,
     crtFrames: crtFrames,
@@ -164,6 +264,8 @@
     witnessTrace: witnessTrace,
     isPrime64: isPrime64,
     sieve: sieve,
+    integerSqrt: integerSqrt,
+    comparisonFrames: comparisonFrames,
     createState: createState,
     step: shared.step,
     seek: shared.seek,

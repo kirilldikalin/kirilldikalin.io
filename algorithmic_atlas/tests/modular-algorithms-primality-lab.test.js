@@ -52,9 +52,47 @@ test("число сравнений и длина видимой witness-цеп�
   assert.throws(() => core.witnessTrace(highPowerOfTwo, 2n), /слишком много/);
 });
 
+test("агрегированная окружность сохраняет относительное положение остатка", () => {
+  assert.equal(core.aggregateResidueSector(0n, 25n, 16), 0);
+  assert.equal(core.aggregateResidueSector(12n, 25n, 16), 7);
+  assert.equal(core.aggregateResidueSector(24n, 25n, 16), 15);
+  assert.equal(core.aggregateResidueSector(-1n, 25n, 16), 15);
+});
+
+test("максимальная допустимая witness-цепочка помещается в шесть строк", () => {
+  const n = (1n << 94n) + 1n;
+  const trace = core.witnessTrace(n, 2n);
+  assert.equal(trace.length, 95);
+  assert.ok(Math.ceil(trace.length / 16) <= 6);
+});
+
 test("решето воспроизводит простые до 30 и проверяет границу", () => {
   assert.deepEqual(core.sieve(30), [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]);
   assert.throws(() => core.sieve(1000001), /1000000/);
+});
+
+test("сравнение методов отделяет точную проверку, вероятностный раунд и концептуальный AKS", () => {
+  const carmichael = core.comparisonFrames(561n, 2n);
+  assert.deepEqual(carmichael.map((frame) => frame.phase), [
+    "trial", "sieve", "fermat", "miller-rabin", "aks",
+  ]);
+  assert.match(carmichael[0].result, /делитель 3/);
+  assert.match(carmichael[2].result, /простота не доказана/);
+  assert.match(carmichael[3].result, /составное/);
+  assert.match(carmichael[4].result, /не фиктивный benchmark/);
+
+  const prime = core.comparisonFrames(97n, 5n);
+  assert.match(prime[0].result, /точно простое/);
+  assert.match(prime[3].result, /простое в 64-битном диапазоне/);
+  assert.equal(core.integerSqrt(10n), 3n);
+});
+
+test("аналитический режим не запускает огромный пробный цикл", () => {
+  const large = 18446744073709551557n;
+  const frames = core.comparisonFrames(large, 2n);
+  assert.match(frames[0].result, /только оценка/);
+  assert.equal(frames.length, 5);
+  assert.throws(() => core.comparisonFrames(1n, 2n), /n ≥ 2/);
 });
 
 test("оба режима используют общий неизменяемый playback", () => {
@@ -77,5 +115,9 @@ test("страница и адаптер используют общий кон�
   assert.ok((chapter.match(/target="_blank"/g) || []).length >= 3);
   assert.doesNotMatch(chapter.match(/class="atlas-chapter-intro">([^<]+)/)[1], /[.!?…]$/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /drawWitnessChain/);
+  assert.match(adapter, /role:\s*"listitem"/);
+  assert.match(adapter, /aria-label.*exactLabel/);
+  assert.doesNotMatch(adapter, /residue\s*%\s*16n/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });

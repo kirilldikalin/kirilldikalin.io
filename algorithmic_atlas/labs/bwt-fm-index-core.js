@@ -92,8 +92,19 @@
         occ[candidate].push(occ[candidate].at(-1) + (candidate === symbol ? 1 : 0));
       });
     });
+    const firstColumn = last.slice().sort(compareSymbols);
+    const lf = last.map(function (symbol, index) {
+      return first[symbol] + occ[symbol][index];
+    });
+    const lfPath = [];
+    let row = last.indexOf(SENTINEL);
+    for (let step = 0; step < last.length; step += 1) {
+      lfPath.push(row);
+      row = lf[row];
+    }
     return freeze({ text: String(rawText), last: result.last, rotations: result.rotations,
-      alphabet: alphabet, first: first, occ: occ });
+      firstColumn: firstColumn.join(""), alphabet: alphabet, first: first, occ: occ,
+      lf: lf, lfPath: lfPath });
   }
 
   function backwardSearch(rawText, rawPattern) {
@@ -136,6 +147,14 @@
     return freeze(runs);
   }
 
+  function matrixViewportHeight(rowCount) {
+    const rows = Number(rowCount);
+    if (!Number.isInteger(rows) || rows < 1 || rows > 121) {
+      throw new RangeError("Число строк матрицы BWT вне допустимого диапазона.");
+    }
+    return Math.max(600, 77 + (rows - 1) * 38 + 76);
+  }
+
   function createState(options) {
     const settings = options || {};
     const text = settings.text === undefined ? "банан" : String(settings.text);
@@ -153,5 +172,6 @@
 
   return freeze({ compareSymbols: compareSymbols, rotations: rotations, transform: transform, inverse: inverse,
     buildIndex: buildIndex, backwardSearch: backwardSearch, runLength: runLength,
+    matrixViewportHeight: matrixViewportHeight,
     createState: createState, step: step });
 });

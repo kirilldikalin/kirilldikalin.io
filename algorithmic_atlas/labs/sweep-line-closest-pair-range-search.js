@@ -37,7 +37,7 @@
     });
     const panel = document.createElement("section");
     panel.className = "atlas-lab__panel";
-    panel.innerHTML = '<h4>Почему следующий шаг безопасен</h4><p data-message></p><p class="atlas-lab__note" data-invariant></p>';
+    panel.innerHTML = '<h4>Почему следующий шаг безопасен</h4><p data-message></p><p class="atlas-lab__note" data-invariant></p><p data-status-order></p>';
     shell.workspace.appendChild(panel);
 
     let data = core.preset("city");
@@ -95,6 +95,24 @@
       }
       if (model.frame.best) {
         geometry.drawSegment(viewport, transform, model.frame.best.a, model.frame.best.b, { className: "is-good" });
+      }
+      if (model.frame.anchorId && model.frame.best && Number.isFinite(model.frame.splitX)) {
+        const anchor = model.data.points.find(function (point) { return point.id === model.frame.anchorId; });
+        const delta = Math.sqrt(Number(model.frame.best.distanceSquared));
+        if (anchor && Number.isFinite(delta) && delta > 0) {
+          const xValues = [-1, -0.5, 0, 0.5, 1].map(function (factor) {
+            return model.frame.splitX + factor * delta;
+          });
+          const yValues = [anchor.y, anchor.y + delta / 2, anchor.y + delta];
+          xValues.forEach(function (x) {
+            geometry.drawSegment(viewport, transform,
+              { x: x, y: yValues[0] }, { x: x, y: yValues[2] }, { className: "is-packing" });
+          });
+          yValues.forEach(function (y) {
+            geometry.drawSegment(viewport, transform,
+              { x: xValues[0], y: y }, { x: xValues[xValues.length - 1], y: y }, { className: "is-packing" });
+          });
+        }
       }
       if (model.frame.candidate) {
         geometry.drawSegment(viewport, transform, model.frame.candidate.a, model.frame.candidate.b, { className: "is-candidate" });
@@ -170,16 +188,31 @@
         metrics.querySelector('[data-metric="found"]').textContent = String((model.frame.intersections || []).length);
         metrics.querySelector('[data-metric="value"]').textContent = "x = " + String(model.frame.sweepX || 0);
         panel.querySelector("[data-invariant]").textContent = "В статусе остаются только отрезки, чьи x-проекции пересекают текущую вертикаль";
+        const active = new Set(model.frame.activeIds || []);
+        const sweepX = model.frame.sweepX || 0;
+        const ordered = model.data.segments.filter(function (segment) { return active.has(segment.id); }).map(function (segment) {
+          const dx = segment.b.x - segment.a.x;
+          const y = dx === 0 ? Math.min(segment.a.y, segment.b.y) :
+            segment.a.y + (sweepX - segment.a.x) * (segment.b.y - segment.a.y) / dx;
+          return { id: segment.id, y: y };
+        }).sort(function (left, right) { return left.y - right.y || left.id.localeCompare(right.id); });
+        panel.querySelector("[data-status-order]").textContent = ordered.length
+          ? "Порядок статуса снизу вверх: " + ordered.map(function (entry) { return entry.id; }).join(" → ")
+          : "Статус пуст";
       } else if (model.mode === "closest") {
         metrics.querySelector('[data-metric="active"]').textContent = String((model.frame.stripIds || []).length);
         metrics.querySelector('[data-metric="found"]').textContent = model.frame.best ? model.frame.best.a.id + "–" + model.frame.best.b.id : "—";
         metrics.querySelector('[data-metric="value"]').textContent = model.frame.best ? "δ² = " + String(model.frame.best.distanceSquared) : "—";
         panel.querySelector("[data-invariant]").textContent = "После решений половин новая лучшая пара может пересекать границу только внутри полосы ширины 2δ";
+        panel.querySelector("[data-status-order]").textContent = model.frame.anchorId
+          ? "Сетка показывает окно 2δ × δ вперёд по y: оно делится на постоянное число ячеек"
+          : "y-порядок передаётся в рекурсию без повторной сортировки";
       } else {
         metrics.querySelector('[data-metric="active"]').textContent = String((model.frame.visitedIds || []).length);
         metrics.querySelector('[data-metric="found"]').textContent = String((model.frame.foundIds || []).length);
         metrics.querySelector('[data-metric="value"]').textContent = "отсечено " + String((model.frame.prunedIds || []).length);
         panel.querySelector("[data-invariant]").textContent = "Поддерево можно отбросить лишь когда его ограничивающий прямоугольник не пересекает запрос";
+        panel.querySelector("[data-status-order]").textContent = "Толстая рамка — запрос; бледные разбиения целиком отсечены";
       }
       panel.querySelector("[data-message]").textContent = model.frame.message;
       figure.caption.textContent = "Сцена поддерживает панорамирование, масштабирование колесом и клавиши +, −, 0 и стрелки";

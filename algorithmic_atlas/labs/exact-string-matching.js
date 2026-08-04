@@ -9,13 +9,13 @@
   runtime.boot("exact-string-matching", function (root) {
     root.classList.add("atlas-specialized-lab");
     const shell = runtime.createShell(root, {
-      title: "Три способа найти один образец",
-      description: "Сравните полный перебор, КМП и Z-функцию на одной строке: вы увидите сравнение символов, откат границы и найденные вхождения",
+      title: "Четыре трассы точного сопоставления",
+      description: "Сравните полный перебор, построение префикс-функции, КМП и Z-функцию: каждый кадр показывает выполненное сравнение и сохранённое знание",
     });
     shell.controls.innerHTML =
       '<label class="is-wide">Текст<input data-field="text" value="абракадабра абра" maxlength="160" spellcheck="false"></label>' +
       '<label>Образец<input data-field="pattern" value="абра" maxlength="48" spellcheck="false"></label>' +
-      '<label>Алгоритм<select data-field="algorithm"><option value="naive">Наивный сдвиг</option><option value="kmp" selected>КМП</option><option value="z">Z-функция</option></select></label>';
+      '<label>Алгоритм<select data-field="algorithm"><option value="naive">Наивный сдвиг</option><option value="prefix">Префикс-функция</option><option value="kmp" selected>КМП</option><option value="z">Z-функция</option></select></label>';
     const fields = {
       text: shell.controls.querySelector('[data-field="text"]'),
       pattern: shell.controls.querySelector('[data-field="pattern"]'),
@@ -50,6 +50,34 @@
       const pattern = Array.from(state.pattern);
       drawing.clear(figure.svg, "Пошаговый точный поиск",
         "Текст, образец и сравниваемые символы в текущем кадре");
+      if (state.algorithm === "prefix") {
+        const matched = [];
+        for (let index = 0; index < (frame.matched || 0); index += 1) matched.push(index);
+        sequence.drawStrip(figure.svg, pattern, { x: 54, y: 84, width: 810, height: 52,
+          label: "Образец", active: frame.patternIndex < pattern.length ? [frame.patternIndex] : [],
+          matched: matched });
+        sequence.drawStrip(figure.svg, pattern, { x: 54, y: 218, width: 810, height: 52,
+          label: "Кандидат границы",
+          active: frame.candidateIndex < pattern.length ? [frame.candidateIndex] : [],
+          matched: matched });
+        drawing.text(figure.svg, 54, 360,
+          "Действие: " + ({ "prefix-base": "π[0] = 0 — базовый случай",
+            "prefix-fallback": "несовпадение, переход к более короткой границе",
+            "prefix-extend": "граница продолжена текущим символом",
+            "prefix-zero": "ненулевой границы для префикса нет",
+            done: "префикс-функция построена" }[frame.action] || frame.action), "is-strong");
+        figure.caption.textContent = "Верхняя активная клетка — новый символ префикса; нижняя — символ проверяемой границы";
+        metrics.querySelector('[data-metric="frame"]').textContent =
+          String(state.index + 1) + " / " + state.frames.length;
+        metrics.querySelector('[data-metric="comparisons"]').textContent = String(frame.comparisons || 0);
+        metrics.querySelector('[data-metric="matched"]').textContent = String(frame.matched || 0);
+        metrics.querySelector('[data-metric="matches"]').textContent = "не применимо";
+        detail.querySelector("[data-rule]").textContent = frame.action === "prefix-fallback"
+          ? "Кандидат длины " + frame.matched + " отвергнут; следующий кандидат имеет длину " + frame.fallback
+          : "После кадра π для всех уже открытых позиций окончательно и больше не изменяется";
+        detail.querySelector("[data-prefix]").textContent = frame.pi.join(" · ");
+        return;
+      }
       const activeText = frame.textIndex >= 0 && frame.textIndex < text.length ? [frame.textIndex] : [];
       const activePattern = frame.patternIndex >= 0 && frame.patternIndex < pattern.length
         ? [frame.patternIndex] : [];
@@ -69,11 +97,19 @@
         ? textGeometry[1].x - textGeometry[0].x
         : textGeometry[0].width;
       const alignmentOffset = Math.min(810, alignment * cellStep);
-      sequence.drawStrip(figure.svg, pattern, {
+      const patternWidth = state.algorithm === "kmp" || state.algorithm === "z"
+        ? Math.max(0, pattern.length * cellStep - 4)
+        : Math.max(0, Math.min(810, pattern.length * cellStep - 4));
+      const definitions = drawing.append(figure.svg, "defs", {});
+      const viewport = drawing.append(definitions, "clipPath", { id: "exact-pattern-viewport" });
+      drawing.append(viewport, "rect", { x: 54, y: 185, width: 810, height: 115 });
+      drawing.text(figure.svg, 28, 208, "Образец", "atlas-sequence-label is-strong");
+      const patternStrip = sequence.drawStrip(figure.svg, pattern, {
         x: 54 + alignmentOffset, y: 218,
-        width: Math.max(0, Math.min(810 - alignmentOffset, pattern.length * cellStep)),
-        height: 52, label: "Образец", active: activePattern,
+        width: patternWidth,
+        height: 52, active: activePattern,
       });
+      patternStrip.setAttribute("clip-path", "url(#exact-pattern-viewport)");
       drawing.text(figure.svg, 54, 360,
         "Действие: " + ({ equal: "символы равны", mismatch: "несовпадение",
           fallback: "откат по π", advance: "префикс удлинён", match: "вхождение найдено",
@@ -82,7 +118,7 @@
           "z-mismatch": "расширение Z-блока остановлено несовпадением",
           done: "поиск завершён", "too-long": "образец длиннее текста" }[frame.action] || frame.action),
         "is-strong");
-      figure.caption.textContent = "Масштаб строки не меняется между шагами; чёрно-зелёные клетки входят в уже подтверждённые вхождения";
+      figure.caption.textContent = "Масштаб строки и образца не меняется между шагами; часть образца за правой границей остаётся за окном, а не сжимается";
       metrics.querySelector('[data-metric="frame"]').textContent =
         String(state.index + 1) + " / " + state.frames.length;
       metrics.querySelector('[data-metric="comparisons"]').textContent =

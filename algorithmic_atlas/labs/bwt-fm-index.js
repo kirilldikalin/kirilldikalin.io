@@ -30,6 +30,13 @@
     const figure = runtime.createFigure(shell.workspace, {
       id: "bwt-fm-index-visual", title: "BWT и LF-отображение", viewBox: "0 0 920 600",
     });
+    const matrixViewport = document.createElement("div");
+    matrixViewport.className = "atlas-bwt-matrix-viewport";
+    matrixViewport.tabIndex = 0;
+    matrixViewport.setAttribute("role", "region");
+    matrixViewport.setAttribute("aria-label", "Прокручиваемая матрица BWT");
+    figure.svg.before(matrixViewport);
+    matrixViewport.appendChild(figure.svg);
     const detail = document.createElement("section");
     detail.className = "atlas-lab__panel";
     detail.innerHTML = '<h4>Шаг backward search</h4><p data-step></p>' +
@@ -42,13 +49,23 @@
 
     function drawBwt(state) {
       const rotations = state.indexData.rotations;
+      const canvasHeight = core.matrixViewportHeight(rotations.length);
+      figure.svg.setAttribute("viewBox", "0 0 920 " + canvasHeight);
+      const lfPath = state.indexData.lfPath;
+      const lfSource = lfPath[state.index % lfPath.length];
+      const lfTarget = state.indexData.lf[lfSource];
       const visibleRows = fields.view.value === "bwt" ? rotations.length : state.frame.right;
       const cell = Math.min(34, 720 / Math.max(1, rotations[0].length));
       rotations.forEach(function (row, rowIndex) {
         const active = rowIndex >= state.frame.left && rowIndex < state.frame.right;
         Array.from(row).forEach(function (symbol, column) {
+          const isFirst = column === 0;
+          const isLast = column === row.length - 1;
+          let cellClass = active ? "is-a" : "atlas-lab__grid-line";
+          if (isFirst) cellClass = rowIndex === lfTarget ? "is-good" : "is-b";
+          if (isLast) cellClass = rowIndex === lfSource ? "is-c" : "is-a";
           drawing.append(figure.svg, "rect", { x: 100 + column * cell, y: 55 + rowIndex * 38,
-            width: cell, height: 32, class: active ? "is-a" : "atlas-lab__grid-line",
+            width: cell, height: 32, class: cellClass,
             opacity: rowIndex < visibleRows || fields.view.value === "bwt" ? 1 : 0.22 });
           drawing.text(figure.svg, 100 + column * cell + cell / 2, 77 + rowIndex * 38,
             symbol, column === row.length - 1 ? "is-strong" : "", "middle");
@@ -57,9 +74,22 @@
       drawing.text(figure.svg, 56, 78, "F", "is-strong", "middle");
       drawing.text(figure.svg, 100 + (rotations[0].length - 1) * cell + cell / 2,
         35, "L", "is-strong", "middle");
+      const sourceX = 100 + (rotations[0].length - 1) * cell + cell;
+      const sourceY = 71 + lfSource * 38;
+      const targetX = 100;
+      const targetY = 71 + lfTarget * 38;
+      drawing.append(figure.svg, "path", { d: "M " + sourceX + " " + sourceY +
+        " C " + (sourceX + 90) + " " + sourceY + ", " + (targetX + 90) + " " + targetY +
+        ", " + targetX + " " + targetY, class: "is-c", fill: "none" });
+      drawing.append(figure.svg, "path", { d: "M " + targetX + " " + targetY +
+        " l 12 -7 l 0 14 z", class: "is-c" });
+      drawing.text(figure.svg, 455, canvasHeight - 30,
+        "LF(" + lfSource + ") = " + lfTarget + ": одинаковый символ и одинаковый ранг",
+        "is-strong", "middle");
     }
 
     function drawRuns(state) {
+      figure.svg.setAttribute("viewBox", "0 0 920 600");
       const runs = core.runLength(state.indexData.last);
       let x = 70;
       runs.forEach(function (run, index) {

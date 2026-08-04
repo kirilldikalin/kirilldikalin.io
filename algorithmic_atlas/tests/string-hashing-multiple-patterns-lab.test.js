@@ -8,6 +8,16 @@ test("rolling hash verifies candidates and preserves overlapping matches", () =>
   assert.deepEqual(frames.at(-1).collisions, []);
 });
 
+test("rolling hash exposes exact positional power contributions", () => {
+  const frame = core.rollingHashFrames("abcd", "abc", 7, 101)[0];
+  assert.deepEqual(frame.windowContributions.map((term) => term.exponent), [2, 1, 0]);
+  const reconstructed = frame.windowContributions.reduce((sum, term) =>
+    (sum + term.residue) % 101n, 0n);
+  assert.equal(reconstructed, frame.hash);
+  assert.equal(frame.outgoing, "a");
+  assert.equal(frame.incoming, "d");
+});
+
 test("small modulus can expose a collision without reporting a match", () => {
   let found = false;
   const alphabet = ["a", "b", "c", "d"];

@@ -34,6 +34,48 @@
     ],
   });
 
+  const INITIAL_SUPER_SCALE = 8;
+  const MAXIMUM_SUPER_SCALE = 268435456;
+
+  function exactDeterminant(a, b, c) {
+    return (BigInt(b.x) - BigInt(a.x)) * (BigInt(c.y) - BigInt(a.y)) -
+      (BigInt(b.y) - BigInt(a.y)) * (BigInt(c.x) - BigInt(a.x));
+  }
+
+  function exactOrientation(a, b, c) {
+    const value = exactDeterminant(a, b, c);
+    return value < 0n ? -1 : value > 0n ? 1 : 0;
+  }
+
+  function exactInCircle(a, b, c, point) {
+    function shifted(candidate) {
+      const x = BigInt(candidate.x) - BigInt(point.x);
+      const y = BigInt(candidate.y) - BigInt(point.y);
+      return { x: x, y: y, q: x * x + y * y };
+    }
+    const p = shifted(a); const q = shifted(b); const r = shifted(c);
+    const value =
+      p.x * (q.y * r.q - q.q * r.y) -
+      p.y * (q.x * r.q - q.q * r.x) +
+      p.q * (q.x * r.y - q.y * r.x);
+    const oriented = exactOrientation(a, b, c) >= 0 ? value : -value;
+    return oriented < 0n ? -1 : oriented > 0n ? 1 : 0;
+  }
+
+  function approximateCircumcircle(a, b, c) {
+    const divisor = 2 * (
+      a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)
+    );
+    if (!Number.isFinite(divisor) || divisor === 0) return null;
+    const aa = a.x * a.x + a.y * a.y;
+    const bb = b.x * b.x + b.y * b.y;
+    const cc = c.x * c.x + c.y * c.y;
+    const x = (aa * (b.y - c.y) + bb * (c.y - a.y) + cc * (a.y - b.y)) / divisor;
+    const y = (aa * (c.x - b.x) + bb * (a.x - c.x) + cc * (b.x - a.x)) / divisor;
+    const radiusSquared = (x - a.x) * (x - a.x) + (y - a.y) * (y - a.y);
+    return [x, y, radiusSquared].every(Number.isFinite) ? { x: x, y: y, radiusSquared: radiusSquared } : null;
+  }
+
   function normalizeSites(rawSites) {
     const sites = shared.normalizePoints(rawSites, { maxPoints: 18 });
     const coordinates = new Set();
@@ -95,9 +137,64 @@
     }));
   }
 
+  function voronoiDualEdges(rawCells, rawEdges, rawBounds) {
+    const cells = Array.isArray(rawCells) ? rawCells : [];
+    const edges = Array.isArray(rawEdges) ? rawEdges : [];
+    const bounds = rawBounds || { minX: -10, maxX: 10, minY: -10, maxY: 10 };
+    const scale = Math.max(1, bounds.maxX - bounds.minX, bounds.maxY - bounds.minY);
+    const tolerance = scale * 1e-7;
+    const bySite = new Map(cells.map(function (cell) { return [cell.siteId, cell]; }));
+
+    function close(left, right) {
+      return Math.abs(left.x - right.x) <= tolerance && Math.abs(left.y - right.y) <= tolerance;
+    }
+
+    function commonVertices(leftPolygon, rightPolygon) {
+      const values = [];
+      leftPolygon.forEach(function (point) {
+        if (rightPolygon.some(function (candidate) { return close(point, candidate); }) &&
+            !values.some(function (candidate) { return close(point, candidate); })) {
+          values.push({ x: point.x, y: point.y });
+        }
+      });
+      rightPolygon.forEach(function (point) {
+        if (leftPolygon.some(function (candidate) { return close(point, candidate); }) &&
+            !values.some(function (candidate) { return close(point, candidate); })) {
+          values.push({ x: point.x, y: point.y });
+        }
+      });
+      return values;
+    }
+
+    return shared.deepFreeze(edges.map(function (edge) {
+      const left = bySite.get(edge.aId);
+      const right = bySite.get(edge.bId);
+      if (!left || !right) return null;
+      const common = commonVertices(left.polygon || [], right.polygon || []);
+      if (common.length < 2) return null;
+      let best = null;
+      for (let first = 0; first < common.length; first += 1) {
+        for (let second = first + 1; second < common.length; second += 1) {
+          const dx = common[first].x - common[second].x;
+          const dy = common[first].y - common[second].y;
+          const distanceSquared = dx * dx + dy * dy;
+          if (!best || distanceSquared > best.distanceSquared) {
+            best = { a: common[first], b: common[second], distanceSquared: distanceSquared };
+          }
+        }
+      }
+      return best && best.distanceSquared > tolerance * tolerance ? {
+        siteAId: edge.aId,
+        siteBId: edge.bId,
+        a: best.a,
+        b: best.b,
+      } : null;
+    }).filter(Boolean));
+  }
+
   function triangle(id, a, b, c) {
-    if (shared.orientation(a, b, c) === 0) return null;
-    const vertices = shared.orientation(a, b, c) > 0 ? [a, b, c] : [a, c, b];
+    if (exactOrientation(a, b, c) === 0) return null;
+    const vertices = exactOrientation(a, b, c) > 0 ? [a, b, c] : [a, c, b];
     return { id: id, a: vertices[0], b: vertices[1], c: vertices[2] };
   }
 
@@ -304,7 +401,7 @@
     });
   }
 
-  function superTriangleForSites(sites) {
+  function superTriangleForSites(sites, scale) {
     const minX = Math.min.apply(null, sites.map(function (site) { return site.x; }));
     const maxX = Math.max.apply(null, sites.map(function (site) { return site.x; }));
     const minY = Math.min.apply(null, sites.map(function (site) { return site.y; }));
@@ -312,45 +409,31 @@
     const centerX = Math.round((minX + maxX) / 2);
     const centerY = Math.round((minY + maxY) / 2);
     const span = Math.max(2, maxX - minX, maxY - minY);
-    const radius = Math.max(20, span * 8);
+    const radius = Math.max(20, span * scale);
+    const coordinates = [centerX - 2 * radius, centerX + 2 * radius, centerY - radius, centerY + 2 * radius];
+    if (!coordinates.every(Number.isSafeInteger)) {
+      throw new RangeError("Не удалось построить безопасный супертреугольник в диапазоне точных целых Number");
+    }
     return [
-      shared.normalizePoint({ id: "__super-a", label: "S₁", x: centerX - 2 * radius, y: centerY - radius }, 0),
-      shared.normalizePoint({ id: "__super-b", label: "S₂", x: centerX + 2 * radius, y: centerY - radius }, 1),
-      shared.normalizePoint({ id: "__super-c", label: "S₃", x: centerX, y: centerY + 2 * radius }, 2),
+      { id: "__super-a", label: "S₁", x: centerX - 2 * radius, y: centerY - radius },
+      { id: "__super-b", label: "S₂", x: centerX + 2 * radius, y: centerY - radius },
+      { id: "__super-c", label: "S₃", x: centerX, y: centerY + 2 * radius },
     ];
   }
 
-  function bowyerWatson(rawSites) {
-    const sites = normalizeSites(rawSites).slice().sort(function (left, right) {
-      return left.x - right.x || left.y - right.y || left.id.localeCompare(right.id);
-    });
-    if (sites.length < 3 || allCollinear(sites)) {
-      const exact = exactDelaunay(sites);
-      const exactAudit = triangulationAudit(sites, exact.triangles, exact.edges);
-      if (!exactAudit.valid) {
-        throw new Error("Точный контроль Delaunay-графа не пройден: " + exactAudit.reasons.join(", "));
-      }
-      return shared.deepFreeze({
-        sites: sites, supportSites: [], triangles: exact.triangles, edges: exact.edges,
-        frames: [{
-          phase: "finished", triangles: exact.triangles, activeSiteId: null,
-          message: sites.length < 3
-            ? "Двумерных граней нет; Delaunay-граф сохраняет линейное соседство"
-            : "Коллинеарные сайты образуют Delaunay-цепь без двумерных треугольников",
-          finished: true,
-        }],
-      });
-    }
-    const supportSites = superTriangleForSites(sites);
+  function bowyerAttempt(sites, scale) {
+    const supportSites = superTriangleForSites(sites, scale);
     const superA = supportSites[0]; const superB = supportSites[1]; const superC = supportSites[2];
     let serial = 0;
     let triangles = [triangle("t" + (++serial), superA, superB, superC)];
-    const frames = [{ phase: "ready", activeSiteId: null, badTriangleIds: [], boundaryEdges: [], triangles: triangles.map(publicTriangle), message: "Супертреугольник содержит все сайты" }];
+    const frames = [{ phase: "ready", activeSiteId: null, badTriangleIds: [], boundaryEdges: [], cavityTests: [], activeCircles: [], triangles: triangles.map(publicTriangle), message: "Супертреугольник содержит все сайты" }];
 
     sites.forEach(function (site) {
-      const bad = triangles.filter(function (candidate) {
-        return shared.inCircle(candidate.a, candidate.b, candidate.c, site) >= 0;
+      const tested = triangles.map(function (candidate) {
+        return { triangle: candidate, relation: exactInCircle(candidate.a, candidate.b, candidate.c, site) };
       });
+      const badTests = tested.filter(function (entry) { return entry.relation >= 0; });
+      const bad = badTests.map(function (entry) { return entry.triangle; });
       const badIds = new Set(bad.map(function (candidate) { return candidate.id; }));
       const counts = new Map();
       bad.forEach(function (candidate) {
@@ -364,8 +447,14 @@
       frames.push({
         phase: "cavity", activeSiteId: site.id, badTriangleIds: Array.from(badIds),
         boundaryEdges: boundary.map(function (edge) { return [edge[0].id, edge[1].id]; }),
+        cavityTests: badTests.map(function (entry) {
+          return { triangleId: entry.triangle.id, relation: entry.relation > 0 ? "inside" : "boundary" };
+        }),
         triangles: triangles.map(publicTriangle),
-        activeCircle: bad.length ? shared.circumcircle(bad[0].a, bad[0].b, bad[0].c) : null,
+        activeCircles: bad.map(function (candidate) {
+          const circle = approximateCircumcircle(candidate.a, candidate.b, candidate.c);
+          return circle ? Object.assign({ triangleId: candidate.id }, circle) : null;
+        }).filter(Boolean),
         message: "Удаляем треугольники, чьи окружности содержат " + site.id,
       });
       triangles = triangles.filter(function (candidate) { return !badIds.has(candidate.id); });
@@ -375,6 +464,7 @@
       });
       frames.push({
         phase: "insert", activeSiteId: site.id, badTriangleIds: [],
+        cavityTests: [], activeCircles: [],
         boundaryEdges: boundary.map(function (edge) { return [edge[0].id, edge[1].id]; }),
         triangles: triangles.map(publicTriangle),
         message: "Полость соединена с новым сайтом " + site.id,
@@ -396,24 +486,52 @@
     const preliminaryEdges = Array.from(edgeMap.values()).sort(function (left, right) {
       return (left.aId + left.bId).localeCompare(right.aId + right.bId);
     });
-    const exact = exactDelaunay(sites, preliminaryTriangles);
     const preliminaryAudit = triangulationAudit(sites, preliminaryTriangles, preliminaryEdges);
-    const exactAudit = triangulationAudit(sites, exact.triangles, exact.edges);
-    if (!exactAudit.valid) {
-      throw new Error("Точный контроль триангуляции не пройден: " + exactAudit.reasons.join(", "));
-    }
     frames.push({
-      phase: "finished", activeSiteId: null, badTriangleIds: [], boundaryEdges: [],
-      triangles: exact.triangles,
-      message: preliminaryAudit.valid
-        ? "Супертреугольник удалён; покрытие, планарность и пустые окружности сверены"
-        : "Конечный результат дополнен точным контролем покрытия и пустых окружностей",
+      phase: "finished", activeSiteId: null, badTriangleIds: [], boundaryEdges: [], cavityTests: [], activeCircles: [],
+      triangles: preliminaryTriangles,
+      message: "Супертреугольник удалён; именно построенный Bowyer–Watson результат прошёл проверку покрытия, планарности и пустых окружностей",
       finished: true,
     });
-    return shared.deepFreeze({
+    return {
+      valid: preliminaryAudit.valid,
+      audit: preliminaryAudit,
       sites: sites, supportSites: supportSites,
-      triangles: exact.triangles, edges: exact.edges, frames: frames,
+      triangles: preliminaryTriangles, edges: preliminaryEdges, frames: frames,
+      supportScale: scale,
+    };
+  }
+
+  function bowyerWatson(rawSites) {
+    const sites = normalizeSites(rawSites).slice().sort(function (left, right) {
+      return left.x - right.x || left.y - right.y || left.id.localeCompare(right.id);
     });
+    if (sites.length < 3 || allCollinear(sites)) {
+      const edges = collinearEdges(sites);
+      const audit = triangulationAudit(sites, [], edges);
+      if (!audit.valid) throw new Error("Контроль вырождённого Delaunay-графа не пройден: " + audit.reasons.join(", "));
+      return shared.deepFreeze({
+        sites: sites, supportSites: [], triangles: [], edges: edges, supportScale: null,
+        frames: [{
+          phase: "finished", triangles: [], activeSiteId: null, badTriangleIds: [], boundaryEdges: [], cavityTests: [], activeCircles: [],
+          message: sites.length < 3
+            ? "Двумерных граней нет; Delaunay-граф сохраняет линейное соседство"
+            : "Коллинеарные сайты образуют Delaunay-цепь без двумерных треугольников",
+          finished: true,
+        }],
+      });
+    }
+
+    let scale = INITIAL_SUPER_SCALE;
+    let lastAudit = null;
+    while (scale <= MAXIMUM_SUPER_SCALE) {
+      const attempt = bowyerAttempt(sites, scale);
+      if (attempt.valid) return shared.deepFreeze(attempt);
+      lastAudit = attempt.audit;
+      scale *= 2;
+    }
+    throw new Error("Пошаговый Bowyer–Watson не прошёл точный контроль: " +
+      (lastAudit ? lastAudit.reasons.join(", ") : "неизвестная ошибка"));
   }
 
   function emptyCircleViolations(rawSites, rawTriangles) {
@@ -439,10 +557,13 @@
   function createState(rawSites) {
     const sites = normalizeSites(rawSites);
     const triangulation = bowyerWatson(sites);
+    const bounds = boundsForSites(sites);
+    const cells = voronoiCells(sites, bounds);
     return shared.deepFreeze({
       sites: sites,
-      bounds: boundsForSites(sites),
-      cells: voronoiCells(sites, boundsForSites(sites)),
+      bounds: bounds,
+      cells: cells,
+      dualEdges: voronoiDualEdges(cells, triangulation.edges, bounds),
       triangulation: triangulation,
       playback: shared.createPlayback(triangulation.frames),
     });
@@ -466,17 +587,26 @@
   }
 
   function visualModel(state) {
+    const frame = state.playback.current;
+    const cavity = frame.phase === "cavity" ? (frame.cavityTests || []) : [];
+    const violations = state.playback.finished
+      ? emptyCircleViolations(state.sites, state.triangulation.triangles)
+      : cavity.filter(function (entry) { return entry.relation === "inside"; }).map(function (entry) {
+        return { triangleId: entry.triangleId, siteId: frame.activeSiteId, reason: "inside" };
+      });
     return shared.deepFreeze({
       sites: state.sites,
       supportSites: state.triangulation.supportSites,
       bounds: state.bounds,
       cells: state.cells,
+      dualEdges: state.dualEdges,
       triangulation: state.triangulation,
-      frame: state.playback.current,
+      frame: frame,
       cursor: state.playback.cursor,
       frameCount: state.playback.frames.length,
       finished: state.playback.finished,
-      violations: emptyCircleViolations(state.sites, state.triangulation.triangles),
+      cavity: cavity,
+      violations: violations,
     });
   }
 
@@ -486,6 +616,7 @@
     normalizeSites: normalizeSites,
     boundsForSites: boundsForSites,
     voronoiCells: voronoiCells,
+    voronoiDualEdges: voronoiDualEdges,
     bowyerWatson: bowyerWatson,
     exactDelaunay: exactDelaunay,
     triangulationAudit: triangulationAudit,

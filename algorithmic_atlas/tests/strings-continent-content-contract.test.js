@@ -58,7 +58,12 @@ for (const [curriculumId, slug] of chapters) {
     assert.match(source, /id="atlas-mark-complete"/);
     assert.ok((source.match(/class="atlas-exercise"/g) || []).length >= 10);
     assert.ok((source.match(/<li>[^<]*.*target="_blank" rel="noopener noreferrer"/g) || []).length >= 4);
-    assert.ok(theoryWords(source) >= 2500, slug + " theory must contain at least 2500 words");
+    const minimumWords = ["string-hashing-multiple-patterns", "suffix-indexes",
+      "bwt-fm-index", "edit-distance-lcs"].includes(slug) ? 4000 : 2500;
+    assert.ok(theoryWords(source) >= minimumWords,
+      slug + " theory must contain at least " + minimumWords + " words");
+    assert.match(source, /<pre\b[^>]*>[\s\S]*?<code\b[^>]*>[\s\S]+<\/code>\s*<\/pre>/,
+      slug + " must include structured pseudocode");
   });
 }
 
@@ -100,4 +105,58 @@ test("corrected string formulas state the intended mathematical contracts", () =
     path.join(atlasRoot, "labs", "lossless-compression.js"), "utf8"
   );
   assert.match(compressionAdapter, /известной длиной сообщения либо специальным символом конца/);
+});
+
+test("all six laboratories expose the required explanatory views", () => {
+  const exact = fs.readFileSync(path.join(atlasRoot, "labs", "exact-string-matching.js"), "utf8");
+  assert.match(exact, /option value="prefix">Префикс-функция/);
+
+  const hashing = fs.readFileSync(path.join(atlasRoot, "labs", "string-hashing-multiple-patterns.js"), "utf8");
+  assert.match(hashing, /data-powers/);
+  assert.match(hashing, /Степенные вклады текущего окна/);
+
+  const suffixes = fs.readFileSync(path.join(atlasRoot, "labs", "suffix-indexes.js"), "utf8");
+  assert.doesNotMatch(suffixes, /data-field="mode"/);
+  assert.match(suffixes, /Пять синхронных суффиксных представлений/);
+  assert.match(suffixes, /Сжатое суффиксное дерево/);
+  assert.match(suffixes, /Суффиксный автомат/);
+
+  const bwt = fs.readFileSync(path.join(atlasRoot, "labs", "bwt-fm-index.js"), "utf8");
+  assert.match(bwt, /LF\(" \+ lfSource/);
+  assert.match(bwt, /isFirst/);
+  assert.match(bwt, /isLast/);
+
+  const edit = fs.readFileSync(path.join(atlasRoot, "labs", "edit-distance-lcs.js"), "utf8");
+  for (const mode of ["edit", "lcs", "global", "local"]) {
+    assert.match(edit, new RegExp('option value="' + mode + '"'));
+  }
+  for (const field of ["insert", "delete", "substitute", "match", "mismatch", "gap"]) {
+    assert.match(edit, new RegExp('data-field="' + field + '"'));
+  }
+
+  const compression = fs.readFileSync(path.join(atlasRoot, "labs", "lossless-compression.js"), "utf8");
+  assert.match(compression, /offset=[\s\S]*length=[\s\S]*next=/);
+  assert.match(compression, /option value="lz78">LZ78/);
+  assert.match(compression, /drawLz78/);
+});
+
+test("advanced string topics and their primary sources remain explicit", () => {
+  const bwt = readChapter("bwt-fm-index");
+  assert.match(bwt, /id="read-alignment"/);
+  assert.match(bwt, /выравнивании чтений/);
+
+  const edit = readChapter("edit-distance-lcs");
+  assert.match(edit, /Укконен/);
+  assert.match(edit, /Strong Exponential Time Hypothesis/);
+  assert.match(edit, /10\.1145\/2746539\.2746612/);
+
+  const compression = readChapter("lossless-compression");
+  assert.match(compression, /id="lz78"/);
+  assert.match(compression, /\$\(dictionaryIndex,nextSymbol\)\$/);
+  assert.match(compression, /\$\(offset,length,nextSymbol\)\$/);
+  assert.match(compression, /10\.1109\/TIT\.1978\.1055934/);
+
+  const exact = readChapter("exact-string-matching");
+  assert.match(exact, /Exact String Matching: The Fundamental String Algorithms/);
+  assert.match(exact, /10\.1016\/0196-6774\(84\)90021-X/);
 });

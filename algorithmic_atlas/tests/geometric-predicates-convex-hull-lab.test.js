@@ -38,6 +38,8 @@ test("segment predicate distinguishes a crossing, endpoint touch, overlap and ab
   assert.equal(shared.segmentIntersection(p("a", 0, 0), p("b", 3, 0), p("c", 3, 0), p("d", 3, 4)).type, "touch");
   assert.equal(shared.segmentIntersection(p("a", 0, 0), p("b", 5, 0), p("c", 2, 0), p("d", 8, 0)).type, "overlap");
   assert.equal(shared.segmentIntersection(p("a", 0, 0), p("b", 1, 0), p("c", 2, 0), p("d", 3, 0)).type, "none");
+  assert.equal(shared.segmentIntersection(p("a", 2, 0), p("b", 2, 0), p("c", 0, 0), p("d", 4, 0)).type, "touch");
+  assert.equal(shared.segmentIntersection(p("a", 2, 1), p("b", 2, 1), p("c", 0, 0), p("d", 4, 0)).type, "none");
 });
 
 test("Andrew, Graham and Jarvis agree with the canonical hull on every preset", () => {
@@ -49,6 +51,13 @@ test("Andrew, Graham and Jarvis agree with the canonical hull on every preset", 
       assert.deepEqual(state.playback.current.hullIds.slice().sort(), expected, `${name}/${algorithm}`);
     });
   });
+});
+
+test("Graham publishes the stack it actually constructed", () => {
+  const frames = core.grahamTrace(core.preset("cloud"));
+  const lastPush = frames.slice(0, -1).reverse().find((frame) => frame.phase === "push");
+  assert.ok(lastPush);
+  assert.deepEqual(frames.at(-1).hullIds, lastPush.hullIds);
 });
 
 test("duplicate coordinates and a collinear input have a deterministic boundary", () => {
@@ -78,6 +87,15 @@ test("point movement is bounded and playback remains immutable", () => {
   assert.equal(next.playback.cursor, 1);
   assert.ok(Object.isFrozen(next));
   assert.equal(core.seek(next, next.playback.frames.length - 1).playback.finished, true);
+});
+
+test("empty, singleton, pair and non-finite coordinates follow the documented boundary contract", () => {
+  assert.deepEqual(core.andrewTrace([]).at(-1).hullIds, []);
+  assert.deepEqual(core.andrewTrace([{ id: "a", x: 0, y: 0 }]).at(-1).hullIds, ["a"]);
+  assert.deepEqual(ids(shared.convexHull([{ id: "a", x: -1, y: 0 }, { id: "b", x: 1, y: 0 }])), ["a", "b"]);
+  [NaN, Infinity, -Infinity].forEach((value) => {
+    assert.throws(() => core.movePoint(core.preset("cloud"), "A", value, 0), /целое число/);
+  });
 });
 
 test("shared world/canvas transform is finite and reversible", () => {

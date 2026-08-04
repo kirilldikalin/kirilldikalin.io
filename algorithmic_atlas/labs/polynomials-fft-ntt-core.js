@@ -73,7 +73,7 @@
           const odd = multiply(values[right], omega);
           values[left] = add(even, odd);
           values[right] = subtract(even, odd);
-          frames.push({ mode: "fft", phase: "butterfly", stage: stage, size: size, values: values.map(function (z) { return complex(z.re, z.im); }), active: [left, right], omega: complex(omega.re, omega.im), message: "Butterfly объединяет позиции " + left + " и " + right + " корнем порядка " + size + "." });
+          frames.push({ mode: "fft", phase: "butterfly", stage: stage, size: size, blockStart: start, offset: offset, omegaExponent: offset, values: values.map(function (z) { return complex(z.re, z.im); }), active: [left, right], omega: complex(omega.re, omega.im), message: "Butterfly объединяет позиции " + left + " и " + right + " корнем порядка " + size + "." });
           omega = multiply(omega, root);
         }
       }
@@ -149,7 +149,7 @@
           const odd = values[right] * omega % p;
           values[left] = (even + odd) % p;
           values[right] = shared.mod(even - odd, p);
-          frames.push({ mode: "ntt", phase: "butterfly", stage: stage, size: size, values: values.slice(), active: [left, right], omega: omega, modulus: p, message: "Точный butterfly modulo " + p + " объединяет позиции " + left + " и " + right + "." });
+          frames.push({ mode: "ntt", phase: "butterfly", stage: stage, size: size, blockStart: start, offset: offset, omegaExponent: offset, values: values.slice(), active: [left, right], omega: omega, modulus: p, message: "Точный butterfly modulo " + p + " объединяет позиции " + left + " и " + right + "." });
           omega = omega * root % p;
         }
       }
