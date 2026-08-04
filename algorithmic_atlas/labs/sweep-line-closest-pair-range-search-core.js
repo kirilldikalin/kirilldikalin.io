@@ -185,8 +185,11 @@
 
   function closestPairTrace(rawPoints) {
     const points = shared.normalizePoints(rawPoints, { maxPoints: 48 });
-    const sorted = points.slice().sort(function (left, right) {
+    const sortedByX = points.slice().sort(function (left, right) {
       return left.x - right.x || left.y - right.y || left.id.localeCompare(right.id);
+    });
+    const sortedByY = points.slice().sort(function (left, right) {
+      return left.y - right.y || left.x - right.x || left.id.localeCompare(right.id);
     });
     const frames = [{ phase: "ready", activeIds: [], stripIds: [], best: null, message: "Точки упорядочены по x" }];
 
@@ -197,29 +200,36 @@
       return (left.a.id + left.b.id) <= (right.a.id + right.b.id) ? left : right;
     }
 
-    function solve(sequence) {
-      if (sequence.length <= 3) {
-        const best = bruteClosestPair(sequence);
-        frames.push({ phase: "base", activeIds: sequence.map(function (point) { return point.id; }), stripIds: [], best: best, message: "Базовый случай проверяет все пары" });
+    function solve(sequenceByX, sequenceByY) {
+      if (sequenceByX.length <= 3) {
+        const best = bruteClosestPair(sequenceByX);
+        frames.push({ phase: "base", activeIds: sequenceByX.map(function (point) { return point.id; }), stripIds: [], best: best, message: "Базовый случай проверяет все пары" });
         return best;
       }
-      const middle = Math.floor(sequence.length / 2);
-      const left = sequence.slice(0, middle); const right = sequence.slice(middle);
-      const splitX = (left[left.length - 1].x + right[0].x) / 2;
-      frames.push({ phase: "split", splitX: splitX, activeIds: sequence.map(function (point) { return point.id; }), stripIds: [], best: null, message: "Разделяем набор вертикальной прямой" });
-      let best = better(solve(left), solve(right));
+      const middle = Math.floor(sequenceByX.length / 2);
+      const leftByX = sequenceByX.slice(0, middle);
+      const rightByX = sequenceByX.slice(middle);
+      const leftIds = new Set(leftByX.map(function (point) { return point.id; }));
+      const leftByY = [];
+      const rightByY = [];
+      sequenceByY.forEach(function (point) {
+        (leftIds.has(point.id) ? leftByY : rightByY).push(point);
+      });
+      const splitX = (leftByX[leftByX.length - 1].x + rightByX[0].x) / 2;
+      frames.push({ phase: "split", splitX: splitX, activeIds: sequenceByX.map(function (point) { return point.id; }), stripIds: [], best: null, message: "Разделяем набор вертикальной прямой и линейно разносим y-порядок" });
+      let best = better(solve(leftByX, leftByY), solve(rightByX, rightByY));
       if (!best) return null;
-      const strip = sequence.filter(function (point) {
+      const strip = sequenceByY.filter(function (point) {
         const dx = BigInt(2 * point.x) - BigInt(Math.round(2 * splitX));
         return dx * dx < 4n * best.distanceSquared;
-      }).sort(function (a, b) { return a.y - b.y || a.x - b.x || a.id.localeCompare(b.id); });
+      });
       frames.push({ phase: "strip", splitX: splitX, activeIds: [], stripIds: strip.map(function (point) { return point.id; }), best: best, message: "Проверяем полосу ширины 2δ" });
       for (let first = 0; first < strip.length; first += 1) {
         for (let second = first + 1; second < strip.length; second += 1) {
           const dy = BigInt(strip[second].y - strip[first].y);
           if (dy * dy >= best.distanceSquared) break;
           const candidate = { a: strip[first], b: strip[second], distanceSquared: shared.squaredDistance(strip[first], strip[second]) };
-          frames.push({ phase: "compare", splitX: splitX, activeIds: [candidate.a.id, candidate.b.id], stripIds: strip.map(function (point) { return point.id; }), best: best, candidate: candidate, message: "Сравниваем соседей в полосе" });
+          frames.push({ phase: "compare", splitX: splitX, activeIds: [candidate.a.id, candidate.b.id], stripIds: strip.map(function (point) { return point.id; }), best: best, candidate: candidate, anchorId: strip[first].id, message: "Сравниваем точки в y-окне высоты δ; за его границей новая лучшая пара невозможна" });
           best = better(best, candidate);
         }
       }
@@ -227,9 +237,14 @@
       return best;
     }
 
-    const best = solve(sorted);
+    const best = solve(sortedByX, sortedByY);
     frames.push({ phase: "finished", activeIds: best ? [best.a.id, best.b.id] : [], stripIds: [], best: best, finished: true, message: best ? "Ближайшая пара найдена" : "Для пары нужны хотя бы две точки" });
-    return shared.deepFreeze({ points: points, best: best, frames: frames });
+    return shared.deepFreeze({
+      points: points,
+      best: best,
+      frames: frames,
+      orderContract: { preprocessingSorts: 2, recursiveSorts: 0 },
+    });
   }
 
   function boundsOf(points) {

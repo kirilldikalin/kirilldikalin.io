@@ -40,6 +40,19 @@ test("divide-and-conquer closest pair agrees with exact quadratic control", () =
   });
   assert.equal(core.closestPairTrace([]).best, null);
   assert.equal(core.closestPairTrace([{ id: "a", x: 0, y: 0 }]).best, null);
+  assert.deepEqual(core.closestPairTrace(core.preset("city").points).orderContract, {
+    preprocessingSorts: 2,
+    recursiveSorts: 0,
+  });
+});
+
+test("closest-pair recursion carries y-order instead of sorting every strip", () => {
+  const source = fs.readFileSync(path.join(__dirname, "../labs/sweep-line-closest-pair-range-search-core.js"), "utf8");
+  const recursiveBody = source.slice(source.indexOf("function solve(sequenceByX, sequenceByY)"), source.indexOf("const best = solve(sortedByX, sortedByY)"));
+  assert.ok(recursiveBody.length > 0);
+  assert.doesNotMatch(recursiveBody, /\.sort\s*\(/);
+  assert.match(recursiveBody, /sequenceByY\.forEach/);
+  assert.match(recursiveBody, /sequenceByY\.filter/);
 });
 
 test("kd range report equals direct rectangle filtering and really prunes regions", () => {
@@ -88,5 +101,7 @@ test("chapter and adapter expose the three mathematical views without unsafe eva
   assert.match(adapter, /markPrunedSubtree/);
   assert.match(adapter, /inheritedPruning \|\| prunedRoots\.has/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /is-packing/);
+  assert.match(adapter, /data-status-order/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });
