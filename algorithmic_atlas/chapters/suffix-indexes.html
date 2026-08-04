@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Суффиксные массивы, LCP, деревья и автоматы — Алгоритмический атлас</title>
+  <meta name="description" content="Суффиксный массив, doubling, LCP и алгоритм Касаи, suffix tree и suffix automaton с доказательствами и интерактивным индексом">
+  <meta property="og:title" content="Суффиксные массивы, LCP, деревья и автоматы — Алгоритмический атлас">
+  <meta property="og:description" content="Четыре представления всех подстрок одного текста: порядок суффиксов, общие префиксы, сжатое дерево и минимальный автомат">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/suffix-indexes.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/suffix-indexes.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/strings-geometry-numerics-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>
+    window.MathJax = {loader:{load:['[tex]/html']},tex:{packages:{'[+]':['html']},inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true},options:{ignoreHtmlClass:'tex2jax_ignore',processHtmlClass:'tex2jax_process'}};
+  </script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/suffix-indexes-core.js" defer></script>
+  <script src="../labs/suffix-indexes.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="suffix-indexes" data-atlas-lab-minutes="28">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки">
+    <a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span>
+    <a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span>
+    <span>Суффиксные массивы, LCP, деревья и автоматы</span>
+  </nav>
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.3</p>
+      <h1>Суффиксные массивы, LCP, деревья и автоматы</h1>
+      <p class="atlas-chapter-intro">Как один раз организовать все хвосты текста, чтобы поиск подстрок, повторов и общих продолжений превратился в навигацию по порядку, дереву или минимальному автомату</p>
+      <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 28 мин</span><span>4 представления</span><span>12 упражнений</span></div>
+    </header>
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#suffixes">Почему достаточно суффиксов</a></li>
+          <li><a href="#suffix-array">Суффиксный массив и поиск</a></li>
+          <li><a href="#doubling">Построение удвоением</a></li>
+          <li><a href="#linear-sa">Линейные построения</a></li>
+          <li><a href="#lcp">LCP и алгоритм Касаи</a></li>
+          <li><a href="#rmq">RMQ над LCP</a></li>
+          <li><a href="#suffix-tree">Сжатое суффиксное дерево</a></li>
+          <li><a href="#suffix-automaton">Суффиксный автомат</a></li>
+          <li><a href="#queries">Запросы и сравнение</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+      <article class="atlas-chapter-content">
+        <section id="suffixes">
+          <h2>Каждая подстрока является префиксом некоторого суффикса</h2>
+          <p>Для текста $T=t_0t_1\ldots t_{n-1}$ суффикс с началом $i$ — строка $T[i:n]$. Всего непустых суффиксов ровно $n$. На первый взгляд индексировать все хвосты расточительно: их суммарная выписанная длина равна $n+(n-1)+\cdots+1=\Theta(n^2)$. Но сами суффиксы разделяют один исходный массив символов. Достаточно хранить начальные позиции и структуру общих префиксов.</p>
+          <p>Почему это помогает искать произвольную подстроку $P$? Если $P=T[l:r]$, то она является префиксом суффикса $T[l:n]$. Обратно, всякий префикс любого суффикса является подстрокой текста. Поэтому множество всех подстрок можно изучать через множество суффиксов, не материализуя $\Theta(n^2)$ строк. Это редкий случай, когда правильный выбор «краевых» объектов кодирует все внутренние фрагменты.</p>
+          <div id="suffix-substring-equivalence" class="atlas-math atlas-notation-formula" data-formula-id="suffix-substring-equivalence" data-notation-coverage="interactive" data-required-notations="suffix-text,suffix-pattern,suffix-start">
+            \[
+              \class{atlas-notation-token notation-id-suffix-pattern}{P}\text{ входит в }\class{atlas-notation-token notation-id-suffix-text}{T}
+              \iff \exists\,\class{atlas-notation-token notation-id-suffix-start}{i}\in[0,n):
+              P\text{ — префикс }T[i:n].
+            \]
+          </div>
+          <p>Суффиксный индекс строится ради многих запросов к неизменному или редко меняющемуся тексту. Для одного образца линейный КМП обычно проще и не требует $O(n)$ дополнительной памяти. Индекс окупает предобработку, когда запросов много, когда нужны не только точные вхождения, но и повторы, лексикографический порядок подстрок, longest common extension или статистика всех различных фрагментов.</p>
+          <section class="atlas-block" data-atlas-block="history">
+            <h3>Массив появился как более компактная альтернатива дереву</h3>
+            <p>Уди Манбер и Джин Майерс представили suffix array сначала на SODA 1990, а журнальная версия вышла в SIAM Journal on Computing в 1993 году. Авторы подчёркивали практическую экономию памяти по сравнению с suffix tree и сводили индексирование к сортировке и бинарному поиску. Термины и конкретные способы построения развивались дальше; потому полезно отделять определение массива от любого одного алгоритма его вычисления.</p>
+          </section>
+        </section>
+
+        <section id="suffix-array">
+          <h2>Суффиксный массив хранит лексикографический порядок начал</h2>
+          <p>Лексикографический порядок сравнивает строки по первому различающемуся символу; если одна строка является префиксом другой, более короткая идёт раньше. Суффиксный массив $SA$ — перестановка позиций $0,\ldots,n-1$, при которой соответствующие суффиксы возрастают. Для «banana» порядок начал равен $(5,3,1,0,4,2)$: «a», «ana», «anana», «banana», «na», «nana».</p>
+          <div id="suffix-array-definition" class="atlas-math atlas-notation-formula" data-formula-id="suffix-array-definition" data-notation-coverage="interactive" data-required-notations="suffix-array,suffix-text,suffix-rank">
+            \[
+              \class{atlas-notation-token notation-id-suffix-array}{SA}[0],\ldots,SA[n-1]
+              \text{ — перестановка,}\qquad
+              \class{atlas-notation-token notation-id-suffix-text}{T[SA[r]:n]}
+              &lt;_{\mathrm{lex}}T[SA[r+1]:n]
+              \quad(0\le \class{atlas-notation-token notation-id-suffix-rank}{r}&lt;n-1).
+            \]
+          </div>
+          <p>Все суффиксы, начинающиеся с фиксированного образца $P$, образуют непрерывный интервал массива. Действительно, если две строки имеют префикс $P$, всякая лексикографически промежуточная строка тоже обязана совпадать с ними на $|P|$ первых символах: иначе первый отличающийся символ поместил бы её по одну сторону от обеих. Нижняя граница интервала находится первым суффиксом, не меньшим $P$, верхняя — первым суффиксом, который строго больше всех строк с префиксом $P$.</p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему бинарный поиск не теряет вхождения</h3>
+            <p>Предикат «суффикс лексикографически меньше $P$» монотонен по $SA$, поэтому стандартная нижняя граница корректна. Для верхней границы сравнение трактует совпадение первых $|P|$ символов как принадлежность интервалу, а не как обычное равенство строк. После двух поисков каждая позиция внутри $[L,R)$ имеет префикс $P$, а вне интервала такого префикса нет. Координаты $SA[L:R]$ и есть все вхождения, хотя для выдачи в порядке текста их придётся отсортировать.</p>
+          </section>
+          <p>Наивное сравнение образца с суффиксом читает до $m=|P|$ символов, поэтому два бинарных поиска стоят $O(m\log n)$ в худшем случае. Более аккуратное использование уже известных общих префиксов снижает число чтений до $O(m+\log n)$. С LCP и дополнительными структурами доступны другие компромиссы, но само наличие массива не делает каждое сравнение постоянным.</p>
+        </section>
+
+        <section id="doubling">
+          <h2>Удвоение сортирует префиксы длины $1,2,4,8,\ldots$</h2>
+          <p>Прямая сортировка $n$ суффиксов сравнительным алгоритмом может стоить $O(n^2\log n)$ посимвольных проверок. Doubling algorithm заменяет длинные строки целочисленными классами. После раунда $k$ класс $c_k[i]$ однозначно задаёт лексикографический ранг блока длины $2^k$, начинающегося в $i$. Чтобы упорядочить блок длины $2^{k+1}$, достаточно пары рангов его половин.</p>
+          <div id="suffix-doubling-key" class="atlas-math atlas-notation-formula" data-formula-id="suffix-doubling-key" data-notation-coverage="interactive" data-required-notations="suffix-class,suffix-doubling-round,suffix-start">
+            \[
+              \operatorname{key}_{k+1}(\class{atlas-notation-token notation-id-suffix-start}{i})=
+              \left(\class{atlas-notation-token notation-id-suffix-class}{c_k[i]},
+              c_k[i+2^{\class{atlas-notation-token notation-id-suffix-doubling-round}{k}}]\right).
+            \]
+          </div>
+          <p>Границу строки можно обрабатывать специальным минимальным символом \(\mathtt{\$}\), которого нет в алфавите. Добавим его в конец и будем сортировать циклические сдвиги строки \(T\mathtt{\$}\). Из-за уникального минимального sentinel каждый циклический сдвиг соответствует суффиксу: после \(\mathtt{\$}\) продолжение уже не влияет на порядок, а сдвиг, начинающийся с \(\mathtt{\$}\), первый. Удалив его позицию, получим suffix array исходного текста.</p>
+          <p>На нулевом раунде сортируются одиночные символы и назначаются одинаковые классы равным символам. На следующем раунде сравниваются пары классов половин. В циклической форме второй индекс берётся по модулю $N=n+1$. Если пары равны, новые блоки эквивалентны; иначе следующий элемент получает новый класс. Раунды продолжаются, пока $2^k\ge N$.</p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Инвариант классов удвоения</h3>
+            <p>Индукционная гипотеза утверждает: $c_k[i]=c_k[j]$ тогда и только тогда, когда блоки длины $2^k$ из $i$ и $j$ равны; порядок классов совпадает с лексикографическим порядком блоков. Блок длины $2^{k+1}$ является конкатенацией двух половин длины $2^k$. Две конкатенации сравниваются сначала по первой половине, при равенстве — по второй. Значит, лексикографическое сравнение пар старых классов в точности сравнивает новые блоки. Назначение новых классов равным парам сохраняет обе части инварианта.</p>
+          </section>
+          <p>Если пары сортируются обычной comparison sort, один раунд стоит $O(n\log n)$, а раундов $O(\log n)$: получается $O(n\log^2 n)$. Но компоненты пары — целые классы от 0 до $n-1$. Стабильная сортировка подсчётом сначала по второй, затем по первой компоненте стоит $O(n)$ на раунд. Тогда общее время $O(n\log n)$ и память $O(n)$. Поэтому фраза «doubling работает за $O(n\log n)$» содержит скрытое условие о сортировке рангов.</p>
+          <p>Практическая реализация также должна различать байты и символы. Начальные классы можно получить сортировкой кодов алфавита; если алфавит огромен, его сначала координатно сжимают. Sentinel обязан быть строго меньше любого реального символа и встречаться ровно один раз. Если пользовательский текст уже содержит выбранный знак доллара, нужен отдельный внутренний код, а не надежда на редкость символа.</p>
+        </section>
+
+        <section id="linear-sa">
+          <h2>Линейное построение возможно, но его константы и модель важны</h2>
+          <p>Существуют алгоритмы построения suffix array за $O(n)$ для целочисленного алфавита подходящего размера. DC3, известный также как skew algorithm, рекурсивно сортирует суффиксы позиций, не кратных трём, присваивает им имена, отдельно сортирует оставшиеся позиции и линейно сливает последовательности. SA-IS делит суффиксы на типы, выбирает LMS-подстроки и индуцирует порядок остальных суффиксов из уже размещённых.</p>
+          <p>Обзор этих методов нужен для честной границы: $O(n\log n)$ не является теоретическим пределом suffix sorting. Но линейная асимптотика не гарантирует более быстрый код на обычных размерах. Induced sorting сложнее, чувствительнее к расположению памяти и требует тщательно доказанных соглашений о типах, sentinel и рекурсивных именах. Doubling проще проверить, а сортировка целых рангов обычно хорошо работает на практике.</p>
+          <p>Утверждение о линейности предполагает, что символы представлены целыми числами из диапазона, допускающего линейную сортировку, и что операции с машинным словом постоянны. Для произвольного сравнимого алфавита уже получение порядка различных символов может требовать $\Omega(n\log n)$ сравнений. Поэтому сложность всегда относится к модели входа, а не только к названию алгоритма.</p>
+          <section class="atlas-block" data-atlas-block="warning"><h3>Распространённая ошибка: приписать библиотеке асимптотику по её названию</h3><p>Две реализации suffix array могут использовать doubling, SA-IS, DC3 или гибрид, переключаться на малых блоках и хранить индексы разной ширины. Для оценки конкретной системы нужно знать алгоритм, тип алфавита, пиковую память и единицу индекса. Теоретическое существование линейного построения не доказывает линейность неизвестного вызова API.</p></section>
+        </section>
+
+        <section id="lcp">
+          <h2>LCP сохраняет длины общих префиксов соседних суффиксов</h2>
+          <p>Массив $LCP$ дополняет лексикографический порядок. Положим $LCP[0]=0$, а для $r&gt;0$ значение $LCP[r]$ равно длине наибольшего общего префикса суффиксов с рангами $r-1$ и $r$. Для «banana» при $SA=(5,3,1,0,4,2)$ получаем $(0,1,3,0,0,2)$. Максимум 3 соответствует повтору «ana».</p>
+          <div id="suffix-lcp-definition" class="atlas-math atlas-notation-formula" data-formula-id="suffix-lcp-definition" data-notation-coverage="interactive" data-required-notations="suffix-lcp,suffix-array,suffix-text,suffix-rank">
+            \[
+              \class{atlas-notation-token notation-id-suffix-lcp}{LCP[r]}=
+              \operatorname{lcp}\!\left(
+              \class{atlas-notation-token notation-id-suffix-text}{T}[\class{atlas-notation-token notation-id-suffix-array}{SA}[r-1]:n],
+              T[SA[\class{atlas-notation-token notation-id-suffix-rank}{r}]:n]\right).
+            \]
+          </div>
+          <p>Независимое сравнение каждой соседней пары может снова занять квадратичное время. Алгоритм Касаи идёт по началам суффиксов в текстовом порядке и хранит обратный массив $rank[i]$, где $SA[rank[i]]=i$. Пусть для суффикса $i$ уже известен общий префикс длины $h$ с его лексикографическим предшественником. После перехода к суффиксу $i+1$ первые $h-1$ символов прежнего совпадения всё ещё совпадают у соответствующих обрезанных суффиксов.</p>
+          <p>Лексикографическим предшественником $i+1$ может быть не просто прежний предшественник плюс один. Однако среди суффиксов перед $i+1$ существует этот обрезанный кандидат, поэтому непосредственный предшественник имеет общий префикс не короче $h-1$: все суффиксы с данным префиксом образуют непрерывный интервал. Можно начать сравнение с $\max(h-1,0)$, не перечитывая доказанные символы, затем увеличить $h$ до первого несовпадения и записать значение для текущего ранга.</p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Почему Касаи работает за линейное время</h3>
+            <p>Внешний цикл выполняется $n$ раз. Переменная $h$ после каждой итерации уменьшается максимум на единицу. Каждое успешное новое сравнение увеличивает $h$ на единицу, а $h$ никогда не превосходит $n$. Суммарное число увеличений за весь проход не больше числа уменьшений плюс максимальное конечное значение, то есть $O(n)$. Неуспешных завершающих сравнений не больше одного на итерацию. Следовательно, после готовых $SA$ и $rank$ массив LCP строится за $O(n)$ времени и $O(n)$ памяти.</p>
+          </section>
+          <p>Случай первого ранга обрабатывается отдельно: у него нет лексикографического предшественника, поэтому $LCP[0]=0$. Sentinel можно оставить в структуре или удалить согласованно; смешивание двух соглашений создаёт сдвиг индексов. При Unicode длины LCP относятся к тем элементам последовательности, по которым строился массив: байтам, code points или заранее выделенным графемам.</p>
+        </section>
+
+        <section id="rmq">
+          <h2>Общий префикс любых двух суффиксов сводится к минимуму на интервале</h2>
+          <p>Пусть суффиксы занимают ранги $a&lt;b$. Их longest common prefix равен минимуму $LCP[a+1],\ldots,LCP[b]$. Интуиция такова: чтобы все суффиксы между двумя крайними оставались внутри одного префиксного блока длины $k$, каждая соседняя пара должна совпадать хотя бы на $k$ символов. Самое короткое соседнее совпадение является границей, через которую общий префикс крайних пройти не может.</p>
+          <div id="suffix-lcp-rmq" class="atlas-math atlas-notation-formula" data-formula-id="suffix-lcp-rmq" data-notation-coverage="interactive" data-required-notations="suffix-lce,suffix-rank,suffix-lcp">
+            \[
+              \class{atlas-notation-token notation-id-suffix-lce}{\operatorname{lcp}(T[i:n],T[j:n])}
+              =\min_{\class{atlas-notation-token notation-id-suffix-rank}{r}\in(rank[i],rank[j]]}
+              \class{atlas-notation-token notation-id-suffix-lcp}{LCP[r]}
+              \quad\text{после упорядочивания рангов}.
+            \]
+          </div>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Две стороны равенства RMQ</h3>
+            <p>Если минимум равен $k$, каждая соседняя пара на интервале имеет одинаковый префикс длины $k$. Равенство символов транзитивно, поэтому все суффиксы интервала, включая крайние, имеют этот префикс. С другой стороны, если крайние совпадают на $k+1$ символах, все строки между ними в лексикографическом порядке также начинаются тем же префиксом; тогда каждое LCP на интервале было бы не меньше $k+1$, что противоречит минимуму $k$.</p>
+          </section>
+          <p>После предобработки LCP для range minimum query запрос LCE двух позиций может выполняться за $O(1)$, например через связь RMQ и задачей lowest common ancestor, либо за $O(\log n)$ простой сегментной структурой. Sparse table даёт $O(1)$ запрос и $O(n\log n)$ память; линейные структуры сложнее. Выбор зависит от количества запросов и допустимой памяти.</p>
+          <p>LCE ускоряет сравнение подстрок, поиск повторов и многие строковые алгоритмы, но результат ограничивается концом интересующих фрагментов. Если нужно сравнить $T[l_1:r_1]$ и $T[l_2:r_2]$, ответ равен минимуму LCE суффиксов и длин двух подстрок. Иначе индекс честно продолжит совпадение за правой границей запроса.</p>
+        </section>
+
+        <section id="suffix-tree">
+          <h2>Суффиксное дерево сжимает одноцепочечные участки trie</h2>
+          <p>Вообразим trie всех суффиксов \(T\mathtt{\$}\). Он точно представляет подстроки, но способен иметь квадратично много вершин. Сжатие каждой максимальной цепочки вершин степени один в одно ребро сохраняет ветвления и листья. Получается suffix tree с $O(n)$ явных вершин и рёбер. Метка ребра не копируется: хранится пара индексов $[l,r)$ исходного текста.</p>
+          <p>Sentinel делает каждый суффикс отдельным листом и не позволяет одному суффиксу закончиться внутри ребра другого. Путь от корня читает конкатенацию меток рёбер. Образец найден, если его символы можно прочитать по пути, даже когда конец образца лежит внутри ребра. Листья под достигнутой точкой дают все позиции вхождений.</p>
+          <div id="suffix-tree-edge-label" class="atlas-math atlas-notation-formula" data-formula-id="suffix-tree-edge-label" data-notation-coverage="interactive" data-required-notations="suffix-tree-edge,suffix-text,suffix-edge-interval">
+            \[
+              \class{atlas-notation-token notation-id-suffix-tree-edge}{\operatorname{label}(e)}
+              =\class{atlas-notation-token notation-id-suffix-text}{T}
+              [\class{atlas-notation-token notation-id-suffix-edge-interval}{l_e:r_e}],
+              \qquad\text{метка хранит два индекса, а не копию строки}.
+            \]
+          </div>
+          <p>Suffix links соединяют внутреннюю вершину с путём, у которого удалён первый символ: если вершина представляет $a\alpha$, ссылка ведёт к вершине или явной точке для $\alpha$. Они позволяют онлайн-построениям переиспользовать уже найденные контексты. Алгоритм Укконена строит дерево слева направо за линейное время при подходящей модели алфавита, поддерживая активную точку, remainder незавершённых суффиксов и общие открытые концы листовых рёбер.</p>
+          <p>Полное доказательство Укконена заслуживает отдельной лаборатории; здесь важен контракт структуры. Линейное число рёбер не означает маленькую память: каждая вершина хранит контейнер переходов, suffix link, индексы и служебные поля. В языках с объектной моделью накладные расходы часто значительно выше, чем у нескольких плотных массивов суффиксного массива. Зато дерево естественно поддерживает навигацию по префиксам и топологические запросы.</p>
+        </section>
+
+        <section id="suffix-automaton">
+          <h2>Суффиксный автомат объединяет подстроки с одинаковыми правыми контекстами</h2>
+          <p>Suffix automaton — минимальный частичный детерминированный автомат, распознающий все подстроки фиксированного текста. Из начального состояния читаем символы образца; если все переходы существуют, образец является подстрокой. В отличие от suffix tree, состояние обычно не соответствует одной строке. Оно представляет класс подстрок, у которых одинаковое множество конечных позиций <em>endpos</em> в тексте.</p>
+          <p>Для состояния $v$ хранят $len[v]$ — максимальную длину строки класса и suffix link $link[v]$ к классу самого длинного собственного суффикса с другим endpos. Минимальная длина в классе равна $len[link[v]]+1$. Поэтому одно состояние отвечает целому непрерывному диапазону длин.</p>
+          <div id="suffix-automaton-length-interval" class="atlas-math atlas-notation-formula" data-formula-id="suffix-automaton-length-interval" data-notation-coverage="interactive" data-required-notations="suffix-automaton-state,suffix-state-length,suffix-state-link">
+            \[
+              \class{atlas-notation-token notation-id-suffix-automaton-state}{v}:\qquad
+              len[\class{atlas-notation-token notation-id-suffix-state-link}{link[v]}]+1
+              \le |x|\le
+              \class{atlas-notation-token notation-id-suffix-state-length}{len[v]}
+              \quad\Longleftrightarrow\quad x\text{ принадлежит классу состояния }v.
+            \]
+          </div>
+          <p>Онлайн-построение добавляет очередной символ $a$ и создаёт состояние <code>cur</code> для всего нового префикса. Идя по suffix links прежнего последнего состояния, добавляем отсутствующие переходы по $a$ в <code>cur</code>. Если дошли до фиктивного состояния, ссылка <code>cur</code> ведёт в корень. Иначе найден переход $p\xrightarrow{a}q$.</p>
+          <p>Если $len[p]+1=len[q]$, состояние $q$ уже имеет правильную минимальную длину, и <code>cur</code> ссылается на него. Иначе нужен clone: копия переходов и suffix link $q$ с длиной $len[p]+1$. Переходы предков, которые раньше вели в $q$ по $a$, перенаправляются в clone; ссылки $q$ и <code>cur</code> также идут в clone. Clone не обозначает новый конец префикса — он разделяет прежний класс endpos на два класса с разными диапазонами длин.</p>
+          <section class="atlas-block" data-atlas-block="proof">
+            <h3>Содержательный смысл минимальности</h3>
+            <p>Две прочитанные подстроки можно оставить в одном состоянии тогда и только тогда, когда любое дальнейшее продолжение допустимо после обеих либо после ни одной. Для подстрок фиксированного текста эти правые контексты определяются позициями окончания: продолжение возможно ровно там, где после соответствующего endpos стоят нужные символы. Равные endpos дают неразличимые будущие поведения; разные endpos порождают различающее продолжение. Это отношение Майхилла — Нероуда, поэтому классы нельзя дополнительно склеить без изменения языка.</p>
+          </section>
+          <p>Для текста длины $n&gt;1$ автомат имеет не больше $2n-1$ состояний и линейное число переходов при фиксированном алфавите; каждый добавленный символ создаёт одно обычное состояние и не более одного clone. Линейность построения требует амортизированного анализа проходов по suffix links и подходящей стоимости словаря переходов. Как и у trie, огромный алфавит меняет константы и может добавить логарифмический множитель.</p>
+        </section>
+
+        <section id="queries">
+          <h2>Одна строка порождает разные индексы для разных вопросов</h2>
+          <p>Проверка существования подстроки в suffix automaton занимает $O(m)$ переходов; в suffix tree — $O(m)$ чтений меток; в suffix array — два бинарных поиска, обычно $O(m\log n)$ без LCP-ускорения. Перечисление всех позиций требует дополнительной информации: диапазона листьев дерева, интервала массива либо endpos-множества, которое нельзя хранить явно в каждом состоянии автомата без квадратичной памяти.</p>
+          <p>Число различных непустых подстрок особенно естественно считать автоматом. Каждое состояние $v\ne root$ представляет длины от $len[link[v]]+1$ до $len[v]$, и эти классы не пересекаются. Поэтому вклад состояния равен разности границ.</p>
+          <div id="suffix-distinct-substrings" class="atlas-math atlas-notation-formula" data-formula-id="suffix-distinct-substrings" data-notation-coverage="interactive" data-required-notations="suffix-distinct-count,suffix-state-length,suffix-state-link">
+            \[
+              \class{atlas-notation-token notation-id-suffix-distinct-count}{\#\operatorname{substrings}(T)}
+              =\sum_{v\ne root}\left(
+              \class{atlas-notation-token notation-id-suffix-state-length}{len[v]}-
+              \class{atlas-notation-token notation-id-suffix-state-link}{len[link[v]]}\right).
+            \]
+          </div>
+          <p>Самая длинная повторяющаяся подстрока имеет длину $\max LCP$: любые два вхождения соответствуют двум суффиксам, а максимальный общий префикс некоторой пары достигается у соседней пары в лексикографическом порядке. В автомате можно распространить число посещений конечных состояний префиксов по suffix links в убывающем порядке $len$; максимальное $len[v]$ при количестве окончаний не меньше двух даёт ту же длину.</p>
+          <p>Suffix tree делает явными интервалы общих префиксов и хорошо поддерживает топологические обходы. SA и LCP компактны, последовательны в памяти и удобны для внешнего хранения. Suffix automaton минимизирует состояния для языка подстрок и прекрасно считает различные фрагменты, но позиции требуют дополнительной агрегации. Несжатый suffix trie полезен как учебный эталон, но его квадратичный размер исключает большие тексты.</p>
+          <div class="atlas-lab__table-wrap" tabindex="0">
+            <table>
+              <thead><tr><th>Структура</th><th>Память</th><th>Сильная сторона</th><th>Главная цена</th></tr></thead>
+              <tbody>
+                <tr><td>SA</td><td>$O(n)$ индексов</td><td>Компактность и бинарный поиск</td><td>Сравнения образца и менее явная топология</td></tr>
+                <tr><td>SA + LCP/RMQ</td><td>$O(n)$ или больше по RMQ</td><td>Быстрые LCE и повторы</td><td>Дополнительная предобработка</td></tr>
+                <tr><td>Suffix tree</td><td>$O(n)$ тяжёлых узлов и рёбер</td><td>Навигация по префиксам</td><td>Большие константы памяти</td></tr>
+                <tr><td>Suffix automaton</td><td>$O(n)$ состояний и переходов</td><td>Язык всех подстрок и подсчёты</td><td>Позиции не хранятся бесплатно</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Ни одна структура не отменяет модель символа. Если массив строится по UTF-8 байтам, лексикографический порядок и позиции относятся к байтам. Нормализация может изменить длину и порядок кодовых точек. Для коллекции документов используют уникальные sentinel или generalized suffix structures, иначе подстрока способна пересечь границу документов. Индекс корректен только относительно точно объявленной последовательности.</p>
+          <p>Обновления — отдельная ось выбора. Все рассмотренные структуры естественно строятся для статического текста; вставка символа в середину меняет множество почти всех суффиксов и их ранги. Онлайн suffix tree и suffix automaton умеют эффективно дописывать символы в конец, но это не означает дешёвое произвольное редактирование. Для меняющихся коллекций применяют пакетную перестройку, несколько уровней индексов или специализированные динамические структуры. Поэтому слово «онлайн» в названии алгоритма построения описывает порядок чтения текста, а не любой возможный интерфейс редактирования.</p>
+        </section>
+
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
+          <h2>Лаборатория: одна строка в трёх представлениях</h2>
+          <p>Введите короткую строку и образец. Режим SA + LCP постепенно открывает лексикографически отсортированные суффиксы, их начальные позиции и общие префиксы. Режим suffix trie показывает несжатый учебный эталон, а режим suffix automaton — переходы, suffix links и clone-состояния. Список найденных позиций вычисляется одним и тем же проверяемым ядром, поэтому визуальное представление не меняет математический ответ.</p>
+          <div class="atlas-lab" data-atlas-lab="suffix-indexes"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>От ручной сортировки к инвариантам индекса</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Выпишите все суффиксы «abracadabra» и объясните, почему каждая подстрока является префиксом одного из них.</p><details><summary>Показать подсказку</summary><p>Для подстроки зафиксируйте её левую границу.</p></details><details><summary>Показать решение</summary><p>Суффиксы начинаются в позициях 0–10. Подстрока $T[l:r]$ совпадает с префиксом длины $r-l$ суффикса $T[l:n]$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Постройте $SA$ строки «mississippi» вручную или проверяемой сортировкой.</p><details><summary>Показать подсказку</summary><p>Сначала сгруппируйте суффиксы по первому символу.</p></details><details><summary>Показать решение</summary><p>При нулевой индексации $SA=(10,7,4,1,0,9,8,6,3,5,2)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Докажите непрерывность интервала суффиксов с префиксом $P$.</p><details><summary>Показать подсказку</summary><p>Предположите, что между двумя такими суффиксами находится строка без префикса $P$.</p></details><details><summary>Показать решение</summary><p>На первой отличающейся позиции промежуточная строка станет либо меньше обеих строк с префиксом $P$, либо больше обеих, что противоречит её положению между ними.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Почему для doubling недостаточно отсортировать пары классов нестабильно только по первой компоненте?</p><details><summary>Показать подсказку</summary><p>При равной первой половине порядок решает вторая.</p></details><details><summary>Показать решение</summary><p>Ключ пары лексикографический. Сортировка лишь по первой компоненте смешает блоки с одинаковым префиксом и различными вторыми половинами; нужны обе компоненты или стабильные radix-проходы.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Объясните роль уникального sentinel в сортировке циклических сдвигов.</p><details><summary>Показать подсказку</summary><p>Он должен завершать суффикс раньше любого реального символа.</p></details><details><summary>Показать решение</summary><p>Уникальный минимальный символ делает каждый суффикс отличимым и гарантирует, что продолжение после конца не изменит его порядок; циклический сдвиг однозначно кодирует суффикс.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Вычислите LCP для $SA$ строки «banana».</p><details><summary>Показать подсказку</summary><p>Сравните соседние суффиксы «a», «ana», «anana», «banana», «na», «nana».</p></details><details><summary>Показать решение</summary><p>$LCP=(0,1,3,0,0,2)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Докажите амортизированную линейность Касаи с потенциалом $h$.</p><details><summary>Показать подсказку</summary><p>После итерации $h$ уменьшается максимум на единицу.</p></details><details><summary>Показать решение</summary><p>Каждое успешное сравнение увеличивает $h$, суммарные уменьшения не превосходят $n$, а неуспешных сравнений по одному на суффикс. Следовательно, всего $O(n)$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Найдите LCP суффиксов рангов 2 и 5 по массиву $(0,1,3,0,0,2)$.</p><details><summary>Показать подсказку</summary><p>Возьмите минимум значений между рангами.</p></details><details><summary>Показать решение</summary><p>$\min(LCP[3],LCP[4],LCP[5])=\min(0,0,2)=0$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Почему метку ребра suffix tree следует хранить интервалом исходного текста?</p><details><summary>Показать подсказку</summary><p>Оцените суммарную длину явно скопированных меток.</p></details><details><summary>Показать решение</summary><p>Копирование длинных фрагментов способно вернуть квадратичную память. Два индекса описывают метку за $O(1)$ слов и сохраняют линейный размер дерева.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Что именно разделяет clone в suffix automaton?</p><details><summary>Показать подсказку</summary><p>Сравните правые контексты и диапазоны длин.</p></details><details><summary>Показать решение</summary><p>Clone отделяет класс подстрок с другим набором допустимых длин и правых контекстов, копируя переходы старого состояния и перенаправляя suffix links без добавления нового окончания префикса.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Выведите формулу числа различных подстрок через состояния автомата.</p><details><summary>Показать подсказку</summary><p>В состоянии представлены все длины после длины suffix link и до $len[v]$.</p></details><details><summary>Показать решение</summary><p>Состояние $v\ne root$ добавляет $len[v]-len[link[v]]$ различных строк; сумма этих непересекающихся вкладов даёт ответ.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Выберите структуру для миллиона запросов существования подстроки в неизменном тексте и обоснуйте выбор.</p><details><summary>Показать подсказку</summary><p>Однозначного ответа нет: назовите память, алфавит и необходимость позиций.</p></details><details><summary>Показать решение</summary><p>Suffix automaton даёт $O(m)$ проверку существования, если допустима его память. SA часто компактнее и проще хранится, но требует бинарного поиска. Если нужны все позиции и префиксная навигация, удобнее SA-интервалы или suffix tree. Выбор должен следовать контракту запросов.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники и дальнейшее чтение</h2>
+          <ol class="atlas-sources">
+            <li>Udi Manber, Gene Myers, <a href="https://doi.org/10.1137/0222058" target="_blank" rel="noopener noreferrer">Suffix Arrays: A New Method for On-Line String Searches</a>, SIAM Journal on Computing 22(5), 1993 — первичная журнальная статья о suffix array и поиске.</li>
+            <li>Toru Kasai, Gunho Lee, Hiroki Arimura, Setsuo Arikawa, Kunsoo Park, <a href="https://doi.org/10.1007/3-540-48194-X_17" target="_blank" rel="noopener noreferrer">Linear-Time Longest-Common-Prefix Computation in Suffix Arrays and Its Applications</a>, CPM 2001 — первичное описание линейного построения LCP.</li>
+            <li>Juha Kärkkäinen, Peter Sanders, <a href="https://doi.org/10.1007/3-540-45061-0_73" target="_blank" rel="noopener noreferrer">Simple Linear Work Suffix Array Construction</a>, ICALP 2003 — алгоритм DC3/skew.</li>
+            <li>Ge Nong, Sen Zhang, Wai Hong Chan, <a href="https://doi.org/10.1109/DCC.2009.42" target="_blank" rel="noopener noreferrer">Linear Suffix Array Construction by Almost Pure Induced-Sorting</a>, Data Compression Conference 2009 — SA-IS и индуцированная сортировка.</li>
+            <li>Esko Ukkonen, <a href="https://doi.org/10.1007/BF01206331" target="_blank" rel="noopener noreferrer">On-Line Construction of Suffix Trees</a>, Algorithmica 14, 1995 — линейное онлайн-построение suffix tree.</li>
+            <li>Anselm Blumer et al., <a href="https://doi.org/10.1016/0304-3975(85)90157-4" target="_blank" rel="noopener noreferrer">The Smallest Automaton Recognizing the Subwords of a Text</a>, Theoretical Computer Science 40, 1985 — минимальный автомат подстрок и линейные границы размера.</li>
+            <li>Dan Gusfield, <a href="https://doi.org/10.1017/CBO9780511574931" target="_blank" rel="noopener noreferrer">Algorithms on Strings, Trees, and Sequences</a>, Cambridge University Press, 1997 — академическая связь suffix array, LCP и suffix tree.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту"><div id="atlas-route-previous"></div><div id="atlas-route-next"></div></nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title"><h2 id="atlas-completion-title">Сохранить локальный прогресс</h2><button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button><p id="atlas-chapter-progress-status" aria-live="polite"></p></section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
