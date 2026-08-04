@@ -108,7 +108,7 @@
 
   function buildSuffixTrie(rawText) {
     const text = symbols(rawText, 80);
-    const nodes = [{ id: 0, next: Object.create(null), suffixStarts: [] }];
+    const nodes = [{ id: 0, next: Object.create(null), suffixStarts: [], terminal: false }];
     for (let start = 0; start < text.length; start += 1) {
       let state = 0;
       nodes[state].suffixStarts.push(start);
@@ -116,13 +116,46 @@
         const symbol = text[index];
         if (nodes[state].next[symbol] === undefined) {
           nodes[state].next[symbol] = nodes.length;
-          nodes.push({ id: nodes.length, next: Object.create(null), suffixStarts: [] });
+          nodes.push({ id: nodes.length, next: Object.create(null), suffixStarts: [], terminal: false });
         }
         state = nodes[state].next[symbol];
         nodes[state].suffixStarts.push(start);
       }
+      nodes[state].terminal = true;
     }
     return freeze(nodes);
+  }
+
+  function buildCompressedSuffixTree(rawText) {
+    const text = symbols(rawText, 80);
+    if (!text.length) throw new RangeError("Строка не должна быть пустой.");
+    const trie = buildSuffixTrie(text.join(""));
+    const nodes = [];
+
+    function compact(trieId, depth) {
+      const compactId = nodes.length;
+      const compactNode = { id: compactId, terminal: trie[trieId].terminal,
+        suffixStarts: trie[trieId].suffixStarts.slice(), edges: [] };
+      nodes.push(compactNode);
+      Object.keys(trie[trieId].next).sort(compareSymbols).forEach(function (symbol) {
+        const firstTrieId = trie[trieId].next[symbol];
+        let targetTrieId = firstTrieId;
+        const label = [symbol];
+        while (!trie[targetTrieId].terminal && Object.keys(trie[targetTrieId].next).length === 1) {
+          const nextSymbol = Object.keys(trie[targetTrieId].next)[0];
+          label.push(nextSymbol);
+          targetTrieId = trie[targetTrieId].next[nextSymbol];
+        }
+        const start = trie[firstTrieId].suffixStarts[0] + depth;
+        const target = compact(targetTrieId, depth + label.length);
+        compactNode.edges.push({ target: target, start: start, end: start + label.length,
+          label: label.join("") });
+      });
+      return compactId;
+    }
+
+    compact(0, 0);
+    return freeze({ text: text.join(""), root: 0, nodes: nodes });
   }
 
   function buildSuffixAutomaton(rawText) {
@@ -175,6 +208,18 @@
       }).concat([{ index: sa.length, start: null, suffix: "", lcp: 0,
         visible: sa.length, finished: true }]));
     }
+    if (mode === "synchronized") {
+      const sa = suffixArray(text);
+      const lcp = lcpArray(text, sa);
+      const tree = buildCompressedSuffixTree(text);
+      const automaton = buildSuffixAutomaton(text);
+      const total = Math.max(sa.length, tree.nodes.length, automaton.length);
+      return freeze(Array.from({ length: total }, function (_, index) {
+        return { index: index, visible: index + 1, sa: sa, lcp: lcp,
+          tree: tree, automaton: automaton, finished: false };
+      }).concat([{ index: total, visible: total, sa: sa, lcp: lcp,
+        tree: tree, automaton: automaton, finished: true }]));
+    }
     const structures = mode === "trie" ? buildSuffixTrie(text) : buildSuffixAutomaton(text);
     return freeze(structures.map(function (state, index) {
       return { index: index, visible: index + 1, state: state,
@@ -185,8 +230,10 @@
 
   function createState(options) {
     const settings = options || {};
-    const mode = settings.mode || "array";
-    if (!["array", "trie", "automaton"].includes(mode)) throw new RangeError("Неизвестная структура суффиксов.");
+    const mode = settings.mode || "synchronized";
+    if (!["array", "trie", "automaton", "synchronized"].includes(mode)) {
+      throw new RangeError("Неизвестная структура суффиксов.");
+    }
     const text = settings.text === undefined ? "банан" : symbols(settings.text, 80).join("");
     const trace = frames(text, mode);
     return freeze({ mode: mode, text: text, frames: trace,
@@ -201,6 +248,7 @@
 
   return freeze({ compareSymbols: compareSymbols, suffixArray: suffixArray,
     lcpArray: lcpArray, search: search,
-    buildSuffixTrie: buildSuffixTrie, buildSuffixAutomaton: buildSuffixAutomaton,
+    buildSuffixTrie: buildSuffixTrie, buildCompressedSuffixTree: buildCompressedSuffixTree,
+    buildSuffixAutomaton: buildSuffixAutomaton,
     frames: frames, createState: createState, step: step });
 });
