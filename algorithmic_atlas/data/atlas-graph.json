@@ -3225,12 +3225,12 @@
       ],
       "related": [],
       "route": "./chapters/modular-algorithms-primality.html",
-      "minutes": 48,
+      "minutes": 58,
       "reading": {
-        "words": 2503,
+        "words": 4012,
         "formulaBlocks": 6,
-        "proofBlocks": 3,
-        "theoryMinutes": 19,
+        "proofBlocks": 5,
+        "theoryMinutes": 29,
         "labMinutes": 29
       },
       "features": {

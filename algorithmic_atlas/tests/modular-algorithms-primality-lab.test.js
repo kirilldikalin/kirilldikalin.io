@@ -57,6 +57,30 @@ test("решето воспроизводит простые до 30 и пров
   assert.throws(() => core.sieve(1000001), /1000000/);
 });
 
+test("сравнение методов отделяет точную проверку, вероятностный раунд и концептуальный AKS", () => {
+  const carmichael = core.comparisonFrames(561n, 2n);
+  assert.deepEqual(carmichael.map((frame) => frame.phase), [
+    "trial", "sieve", "fermat", "miller-rabin", "aks",
+  ]);
+  assert.match(carmichael[0].result, /делитель 3/);
+  assert.match(carmichael[2].result, /простота не доказана/);
+  assert.match(carmichael[3].result, /составное/);
+  assert.match(carmichael[4].result, /не фиктивный benchmark/);
+
+  const prime = core.comparisonFrames(97n, 5n);
+  assert.match(prime[0].result, /точно простое/);
+  assert.match(prime[3].result, /простое в 64-битном диапазоне/);
+  assert.equal(core.integerSqrt(10n), 3n);
+});
+
+test("аналитический режим не запускает огромный пробный цикл", () => {
+  const large = 18446744073709551557n;
+  const frames = core.comparisonFrames(large, 2n);
+  assert.match(frames[0].result, /только оценка/);
+  assert.equal(frames.length, 5);
+  assert.throws(() => core.comparisonFrames(1n, 2n), /n ≥ 2/);
+});
+
 test("оба режима используют общий неизменяемый playback", () => {
   [core.createState(), core.createState({ mode: "crt" })].forEach((state) => {
     assert.ok(Object.isFrozen(state));
