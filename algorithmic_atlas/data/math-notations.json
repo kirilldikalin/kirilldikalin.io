@@ -9546,6 +9546,816 @@
       "scope": "local",
       "chapterId": "parallel-distributed-graphs",
       "firstDefinition": {"chapterId": "parallel-distributed-graphs", "anchor": "partitioning"}
+    },
+    {
+      "id": "geometry-point",
+      "displayNotation": "p=(p_x,p_y)",
+      "shortName": "точка плоскости",
+      "explanation": "Положение на плоскости, заданное парой координат; вектор между точками получается их разностью",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-vector-difference"}
+    },
+    {
+      "id": "geometry-vector",
+      "displayNotation": "\\overrightarrow{pq}",
+      "shortName": "вектор смещения",
+      "explanation": "Направленное смещение от точки p к точке q, равное покоординатной разности q-p",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-vector-difference"}
+    },
+    {
+      "id": "geometry-dot-product",
+      "displayNotation": "u\\cdot v",
+      "shortName": "скалярное произведение",
+      "explanation": "Сумма произведений соответствующих координат двух векторов, измеряющая их взаимное направление",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-dot-cross"}
+    },
+    {
+      "id": "geometry-cross-product",
+      "displayNotation": "u\\times v",
+      "shortName": "двумерное векторное произведение",
+      "explanation": "Ориентированная площадь параллелограмма на векторах u и v; её знак задаёт направление поворота",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-dot-cross"}
+    },
+    {
+      "id": "geometry-determinant",
+      "displayNotation": "\\operatorname{orient}(a,b,c)",
+      "shortName": "предикат ориентации",
+      "explanation": "Определитель векторов b-a и c-a, знак которого различает левый поворот, коллинеарность и правый поворот",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-orientation-determinant"}
+    },
+    {
+      "id": "geometry-orientation-sign",
+      "displayNotation": "\\operatorname{sgn}",
+      "shortName": "знак ориентации",
+      "explanation": "Знак определителя ориентации: положительный для левого поворота, нулевой для коллинеарных точек и отрицательный для правого",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-orientation-determinant"}
+    },
+    {
+      "id": "geometry-segment",
+      "displayNotation": "[a,b]",
+      "shortName": "отрезок",
+      "explanation": "Замкнутый прямолинейный отрезок с концами a и b",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-proper-intersection"}
+    },
+    {
+      "id": "geometry-hull",
+      "displayNotation": "\\operatorname{conv}(P)",
+      "shortName": "выпуклая оболочка",
+      "explanation": "Наименьшее выпуклое множество, содержащее все точки конечного набора P",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-convex-hull-definition"}
+    },
+    {
+      "id": "geometry-stack",
+      "displayNotation": "S",
+      "shortName": "стек границы оболочки",
+      "explanation": "Упорядоченная цепь уже принятых кандидатов на границу выпуклой оболочки",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-graham-invariant"}
+    },
+    {
+      "id": "geometry-point-count",
+      "displayNotation": "n",
+      "shortName": "число входных точек",
+      "explanation": "Количество точек во входном геометрическом наборе",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-hull-complexities"}
+    },
+    {
+      "id": "geometry-output-count",
+      "displayNotation": "h",
+      "shortName": "число вершин оболочки",
+      "explanation": "Количество точек входа, оказавшихся вершинами выпуклой оболочки",
+      "scope": "local",
+      "chapterId": "geometric-predicates-convex-hull",
+      "firstDefinition": {"chapterId": "geometric-predicates-convex-hull", "anchor": "geometry-hull-complexities"}
+    },
+    {
+      "id": "geometry-sweep-event",
+      "displayNotation": "Q",
+      "shortName": "очередь событий",
+      "explanation": "События замета, упорядоченные по координате, дополнительным координатам и типу",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-sweep-state"}
+    },
+    {
+      "id": "geometry-sweep-status",
+      "displayNotation": "T(\\xi)",
+      "shortName": "состояние линии замета",
+      "explanation": "Упорядоченная структура объектов, пересекающих текущую линию x=xi",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-sweep-state"}
+    },
+    {
+      "id": "geometry-segment-count",
+      "displayNotation": "n",
+      "shortName": "число отрезков",
+      "explanation": "Количество отрезков во входе алгоритма замета",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-sweep-complexity"}
+    },
+    {
+      "id": "geometry-intersection-count",
+      "displayNotation": "k",
+      "shortName": "число пересечений",
+      "explanation": "Количество пересечений отрезков, перечисляемых алгоритмом",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-sweep-complexity"}
+    },
+    {
+      "id": "geometry-closest-distance",
+      "displayNotation": "\\delta^2(p,q)",
+      "shortName": "квадрат расстояния",
+      "explanation": "Квадрат евклидова расстояния между точками p и q, используемый для точного сравнения без извлечения корня",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-closest-distance"}
+    },
+    {
+      "id": "geometry-closest-strip",
+      "displayNotation": "S",
+      "shortName": "полоса ближайшей пары",
+      "explanation": "Точки на расстоянии меньше текущей границы delta по горизонтали от разделяющей прямой",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-closest-strip"}
+    },
+    {
+      "id": "geometry-range-query",
+      "displayNotation": "R",
+      "shortName": "ортогональный диапазон",
+      "explanation": "Осевой прямоугольник запроса, задаваемый интервалами по координатам x и y",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-orthogonal-query"}
+    },
+    {
+      "id": "geometry-dimension",
+      "displayNotation": "d",
+      "shortName": "размерность пространства",
+      "explanation": "Число координат у каждой точки многомерного геометрического пространства",
+      "scope": "local",
+      "chapterId": "sweep-line-closest-pair-range-search",
+      "firstDefinition": {"chapterId": "sweep-line-closest-pair-range-search", "anchor": "geometry-kd-dimensional-cost"}
+    },
+    {
+      "id": "geometry-voronoi-cell",
+      "displayNotation": "\\operatorname{Vor}(p)",
+      "shortName": "ячейка Вороного",
+      "explanation": "Множество точек плоскости, не более удалённых от сайта p, чем от любого другого сайта",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-voronoi-cell"}
+    },
+    {
+      "id": "geometry-site",
+      "displayNotation": "P",
+      "shortName": "множество сайтов",
+      "explanation": "Конечный набор исходных точек, для которых строится диаграмма Вороного",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-voronoi-cell"}
+    },
+    {
+      "id": "geometry-distance",
+      "displayNotation": "\\|x-p\\|",
+      "shortName": "евклидово расстояние",
+      "explanation": "Длина прямолинейного отрезка между точкой x и сайтом p",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-voronoi-cell"}
+    },
+    {
+      "id": "geometry-voronoi-halfplane",
+      "displayNotation": "2(q-p)\\cdot x",
+      "shortName": "полуплоскость сравнения сайтов",
+      "explanation": "Линейное неравенство, полученное сравнением квадратов расстояний до двух сайтов",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-voronoi-halfplane"}
+    },
+    {
+      "id": "geometry-delaunay-edge",
+      "displayNotation": "pq\\in E_{\\mathrm{Del}}",
+      "shortName": "ребро Делоне",
+      "explanation": "Ребро между сайтами p и q, ячейки Вороного которых имеют общую границу",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-delaunay-duality"}
+    },
+    {
+      "id": "geometry-circumcircle",
+      "displayNotation": "\\operatorname{circ}(a,b,c)",
+      "shortName": "описанная окружность",
+      "explanation": "Окружность, проходящая через три неколлинеарные вершины треугольника",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-empty-circumcircle"}
+    },
+    {
+      "id": "geometry-incircle-determinant",
+      "displayNotation": "\\operatorname{incircle}(a,b,c,d)",
+      "shortName": "предикат принадлежности окружности",
+      "explanation": "Определитель, знак которого показывает положение точки d относительно окружности через a, b и c при фиксированной ориентации",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-incircle-determinant"}
+    },
+    {
+      "id": "geometry-lifted-point",
+      "displayNotation": "\\ell(p)",
+      "shortName": "поднятая точка",
+      "explanation": "Образ точки p на параболоиде z=x^2+y^2, связывающий Делоне с нижней выпуклой оболочкой",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-paraboloid-lift"}
+    },
+    {
+      "id": "geometry-cavity",
+      "displayNotation": "\\partial C(p)",
+      "shortName": "граница полости",
+      "explanation": "Граница объединения треугольников, чьи описанные окружности содержат вставляемую точку p",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-bowyer-boundary"}
+    },
+    {
+      "id": "geometry-triangle-edge",
+      "displayNotation": "e",
+      "shortName": "ребро треугольника",
+      "explanation": "Ребро удаляемого треугольника, которое принадлежит границе полости ровно при единственном вхождении",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-bowyer-boundary"}
+    },
+    {
+      "id": "geometry-hull-size",
+      "displayNotation": "h",
+      "shortName": "число точек на оболочке",
+      "explanation": "Количество сайтов на выпуклой оболочке множества P",
+      "scope": "local",
+      "chapterId": "voronoi-delaunay",
+      "firstDefinition": {"chapterId": "voronoi-delaunay", "anchor": "geometry-delaunay-size"}
+    },
+    {
+      "id": "integer-value-a",
+      "displayNotation": "a",
+      "shortName": "целое значение",
+      "explanation": "Целое число, представленное конечной последовательностью разрядов в выбранном основании",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-radix-representation"}
+    },
+    {
+      "id": "integer-base-b",
+      "displayNotation": "B",
+      "shortName": "основание записи",
+      "explanation": "Основание позиционной системы счисления; каждый разряд принимает значение от нуля до B-1",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-radix-representation"}
+    },
+    {
+      "id": "integer-digit-ai",
+      "displayNotation": "a_i",
+      "shortName": "разряд числа",
+      "explanation": "Коэффициент при степени B^i в позиционной записи целого числа",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-radix-representation"}
+    },
+    {
+      "id": "integer-bit-length-n",
+      "displayNotation": "\\ell(a)",
+      "shortName": "двоичная длина числа",
+      "explanation": "Количество бит в канонической двоичной записи модуля целого числа, с отдельным соглашением для нуля",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-bit-length"}
+    },
+    {
+      "id": "integer-euclid-current-a",
+      "displayNotation": "a",
+      "shortName": "первый аргумент Евклида",
+      "explanation": "Первый компонент текущей пары в трассе алгоритма Евклида над большими целыми числами",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-euclid-invariant"}
+    },
+    {
+      "id": "integer-euclid-current-b",
+      "displayNotation": "b",
+      "shortName": "второй аргумент Евклида",
+      "explanation": "Второй компонент текущей пары, который заменяется остатком и строго уменьшается до нуля",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-euclid-invariant"}
+    },
+    {
+      "id": "integer-euclid-quotient-q",
+      "displayNotation": "q",
+      "shortName": "частное шага Евклида",
+      "explanation": "Целое частное в разложении a=qb+r на текущем шаге алгоритма Евклида",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-euclid-invariant"}
+    },
+    {
+      "id": "integer-euclid-remainder-r",
+      "displayNotation": "r",
+      "shortName": "остаток шага Евклида",
+      "explanation": "Неотрицательный остаток a mod b, который меньше текущего положительного b",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-euclid-invariant"}
+    },
+    {
+      "id": "integer-bezout-coefficient",
+      "displayNotation": "x,y",
+      "shortName": "коэффициенты Безу",
+      "explanation": "Целые коэффициенты линейного представления НОД исходных чисел",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-bezout"}
+    },
+    {
+      "id": "integer-power-result",
+      "displayNotation": "R",
+      "shortName": "аккумулятор степени",
+      "explanation": "Накопленная часть результата в итерационном двоичном возведении в степень",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-power-invariant"}
+    },
+    {
+      "id": "integer-power-factor",
+      "displayNotation": "A",
+      "shortName": "текущий множитель степени",
+      "explanation": "Последовательно возводимая в квадрат степень исходного основания",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-power-invariant"}
+    },
+    {
+      "id": "integer-power-remaining",
+      "displayNotation": "e'",
+      "shortName": "необработанный показатель",
+      "explanation": "Оставшаяся часть показателя, которая на каждом шаге делится пополам",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-power-invariant"}
+    },
+    {
+      "id": "integer-karatsuba-z0",
+      "displayNotation": "z_0",
+      "shortName": "младшее произведение Карацубы",
+      "explanation": "Произведение младших половин двух множителей",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-karatsuba-identity"}
+    },
+    {
+      "id": "integer-karatsuba-z1",
+      "displayNotation": "z_1",
+      "shortName": "средний коэффициент Карацубы",
+      "explanation": "Сумма перекрёстных произведений, восстановленная из произведения сумм и двух крайних произведений",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-karatsuba-identity"}
+    },
+    {
+      "id": "integer-karatsuba-z2",
+      "displayNotation": "z_2",
+      "shortName": "старшее произведение Карацубы",
+      "explanation": "Произведение старших половин двух множителей",
+      "scope": "local",
+      "chapterId": "integer-arithmetic-number-theory",
+      "firstDefinition": {"chapterId": "integer-arithmetic-number-theory", "anchor": "integer-karatsuba-identity"}
+    },
+    {
+      "id": "modular-value-a",
+      "displayNotation": "a",
+      "shortName": "первый сравниваемый остаток",
+      "explanation": "Первое целое число в сравнении по модулю m",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-congruence"}
+    },
+    {
+      "id": "modular-value-b",
+      "displayNotation": "b",
+      "shortName": "второй сравниваемый остаток",
+      "explanation": "Второе целое число в сравнении по модулю m",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-congruence"}
+    },
+    {
+      "id": "modular-modulus-m",
+      "displayNotation": "m",
+      "shortName": "модуль",
+      "explanation": "Положительное целое число, задающее классы сравнимых остатков",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-congruence"}
+    },
+    {
+      "id": "modular-inverse",
+      "displayNotation": "a^{-1}",
+      "shortName": "обратный элемент по модулю",
+      "explanation": "Класс остатка, произведение которого на a сравнимо с единицей по модулю m",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-inverse"}
+    },
+    {
+      "id": "crt-residue",
+      "displayNotation": "a_i",
+      "shortName": "остаток системы сравнений",
+      "explanation": "Заданное значение x по модулю соответствующего взаимно простого m_i",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-crt-construction"}
+    },
+    {
+      "id": "crt-partial-modulus",
+      "displayNotation": "M_i",
+      "shortName": "частичный модуль CRT",
+      "explanation": "Произведение всех модулей системы, делённое на m_i",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-crt-construction"}
+    },
+    {
+      "id": "crt-inverse",
+      "displayNotation": "M_i^{-1}\\bmod m_i",
+      "shortName": "обратный частичный модуль",
+      "explanation": "Обратный к M_i класс по модулю m_i в конструктивной формуле китайской теоремы об остатках",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-crt-construction"}
+    },
+    {
+      "id": "crt-total-modulus",
+      "displayNotation": "M",
+      "shortName": "общий модуль CRT",
+      "explanation": "Произведение всех попарно взаимно простых модулей системы сравнений",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-crt-construction"}
+    },
+    {
+      "id": "modular-base-a",
+      "displayNotation": "a",
+      "shortName": "основание модульной степени",
+      "explanation": "Целое основание, класс которого возводится в степень по модулю кандидата на простоту",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-fermat"}
+    },
+    {
+      "id": "primality-candidate-p",
+      "displayNotation": "p",
+      "shortName": "простой кандидат",
+      "explanation": "Число, рассматриваемое как простое в формулировке малой теоремы Ферма",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "modular-fermat"}
+    },
+    {
+      "id": "primality-candidate-n",
+      "displayNotation": "n",
+      "shortName": "кандидат на простоту",
+      "explanation": "Нечётное целое число, которое проверяет вероятностный или детерминированный тест простоты",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "miller-rabin-decomposition"}
+    },
+    {
+      "id": "miller-rabin-s",
+      "displayNotation": "s",
+      "shortName": "степень двойки в n-1",
+      "explanation": "Максимальный показатель s в разложении n-1=2^s d с нечётным d",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "miller-rabin-decomposition"}
+    },
+    {
+      "id": "miller-rabin-d",
+      "displayNotation": "d",
+      "shortName": "нечётная часть n-1",
+      "explanation": "Нечётный множитель d в разложении n-1=2^s d",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "miller-rabin-decomposition"}
+    },
+    {
+      "id": "miller-rabin-witness-a",
+      "displayNotation": "a",
+      "shortName": "основание теста Миллера — Рабина",
+      "explanation": "Проверяемое основание, которое может стать свидетелем составности числа n",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "miller-rabin-decomposition"}
+    },
+    {
+      "id": "aks-polynomial-x",
+      "displayNotation": "X",
+      "shortName": "формальная переменная AKS",
+      "explanation": "Формальная переменная полиномиального сравнения в тесте простоты AKS",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "aks-identity"}
+    },
+    {
+      "id": "aks-shift-a",
+      "displayNotation": "a",
+      "shortName": "сдвиг полинома AKS",
+      "explanation": "Целая константа в полиномиальном сравнении (X+a)^n и X^n+a",
+      "scope": "local",
+      "chapterId": "modular-algorithms-primality",
+      "firstDefinition": {"chapterId": "modular-algorithms-primality", "anchor": "aks-identity"}
+    },
+    {
+      "id": "polynomial-a",
+      "displayNotation": "A(x)",
+      "shortName": "полином A",
+      "explanation": "Полином, заданный конечной последовательностью коэффициентов при степенях формальной переменной x",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-coefficients"}
+    },
+    {
+      "id": "polynomial-variable-x",
+      "displayNotation": "x",
+      "shortName": "формальная переменная полинома",
+      "explanation": "Символ, степени которого индексируют коэффициенты полинома",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-coefficients"}
+    },
+    {
+      "id": "polynomial-coefficient-ai",
+      "displayNotation": "a_i",
+      "shortName": "коэффициент полинома A",
+      "explanation": "Коэффициент полинома A при степени x^i",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-coefficients"}
+    },
+    {
+      "id": "convolution-output-ck",
+      "displayNotation": "c_k",
+      "shortName": "коэффициент свёртки",
+      "explanation": "Коэффициент произведения полиномов при x^k, равный сумме a_i b_j по индексам i+j=k",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-convolution"}
+    },
+    {
+      "id": "polynomial-coefficient-bi",
+      "displayNotation": "b_j",
+      "shortName": "коэффициент полинома B",
+      "explanation": "Коэффициент второго полинома B при степени x^j",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-convolution"}
+    },
+    {
+      "id": "dft-output-yk",
+      "displayNotation": "y_k",
+      "shortName": "коэффициент дискретного преобразования",
+      "explanation": "Значение дискретного преобразования Фурье входной последовательности на частоте k",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-dft"}
+    },
+    {
+      "id": "polynomial-coefficient-aj",
+      "displayNotation": "a_j",
+      "shortName": "элемент входной последовательности",
+      "explanation": "Коэффициент полинома или элемент последовательности с индексом j во входе преобразования",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-dft"}
+    },
+    {
+      "id": "dft-root-omega",
+      "displayNotation": "\\omega_n",
+      "shortName": "первичный корень единицы",
+      "explanation": "Комплексное число e^{-2 pi i/n}, степени которого задают матрицу дискретного преобразования Фурье",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-dft"}
+    },
+    {
+      "id": "fft-even-value",
+      "displayNotation": "E_k",
+      "shortName": "преобразование чётных коэффициентов",
+      "explanation": "Значение преобразования подпоследовательности коэффициентов с чётными индексами на частоте k",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "fft-even-odd"}
+    },
+    {
+      "id": "fft-odd-value",
+      "displayNotation": "O_k",
+      "shortName": "преобразование нечётных коэффициентов",
+      "explanation": "Значение преобразования подпоследовательности коэффициентов с нечётными индексами на частоте k",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "fft-even-odd"}
+    },
+    {
+      "id": "ntt-output-yk",
+      "displayNotation": "Y_k",
+      "shortName": "коэффициент NTT",
+      "explanation": "Значение теоретико-числового преобразования на частоте k в конечном поле",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-ntt"}
+    },
+    {
+      "id": "ntt-root-omega",
+      "displayNotation": "\\omega",
+      "shortName": "корень единицы NTT",
+      "explanation": "Элемент конечного поля требуемого порядка, степени которого задают теоретико-числовое преобразование",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-ntt"}
+    },
+    {
+      "id": "ntt-modulus-p",
+      "displayNotation": "p",
+      "shortName": "модуль NTT",
+      "explanation": "Простой модуль конечного поля, в котором существуют корни единицы нужного порядка",
+      "scope": "local",
+      "chapterId": "polynomials-fft-ntt",
+      "firstDefinition": {"chapterId": "polynomials-fft-ntt", "anchor": "polynomial-ntt"}
+    },
+    {
+      "id": "matrix-a",
+      "displayNotation": "A",
+      "shortName": "матрица коэффициентов",
+      "explanation": "Линейный оператор или матрица коэффициентов рассматриваемой линейной системы",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-vector-product"}
+    },
+    {
+      "id": "matrix-vector-x",
+      "displayNotation": "x",
+      "shortName": "вектор аргумента или решения",
+      "explanation": "Вектор, на который действует матрица A; в системе Ax=b он является искомым решением",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-vector-product"}
+    },
+    {
+      "id": "matrix-vector-b",
+      "displayNotation": "b",
+      "shortName": "вектор результата",
+      "explanation": "Результат матрично-векторного произведения или правая часть линейной системы",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-vector-product"}
+    },
+    {
+      "id": "matrix-c-entry",
+      "displayNotation": "c_{ij}",
+      "shortName": "элемент произведения матриц",
+      "explanation": "Элемент строки i и столбца j матрицы C=AB",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-product-entry"}
+    },
+    {
+      "id": "matrix-a-entry",
+      "displayNotation": "a_{it}",
+      "shortName": "элемент первой матрицы",
+      "explanation": "Элемент строки i и суммируемого столбца t первой матрицы A",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-product-entry"}
+    },
+    {
+      "id": "matrix-b-entry",
+      "displayNotation": "b_{tj}",
+      "shortName": "элемент второй матрицы",
+      "explanation": "Элемент суммируемой строки t и столбца j второй матрицы B",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-product-entry"}
+    },
+    {
+      "id": "matrix-time-function",
+      "displayNotation": "T(n)",
+      "shortName": "стоимость умножения матриц",
+      "explanation": "Число арифметических операций рекурсивного алгоритма умножения квадратных матриц порядка n",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "strassen-recurrence"}
+    },
+    {
+      "id": "matrix-size-n",
+      "displayNotation": "n",
+      "shortName": "порядок квадратной матрицы",
+      "explanation": "Число строк и столбцов квадратной матрицы",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "strassen-recurrence"}
+    },
+    {
+      "id": "matrix-elimination-factor",
+      "displayNotation": "m_{ik}",
+      "shortName": "множитель исключения",
+      "explanation": "Отношение элемента под ведущим к ведущему элементу, используемое для зануления позиции i,k",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "gaussian-elimination-step"}
+    },
+    {
+      "id": "matrix-pivot",
+      "displayNotation": "a_{kk}",
+      "shortName": "ведущий элемент",
+      "explanation": "Ненулевой опорный элемент текущего столбца исключения Гаусса",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "gaussian-elimination-step"}
+    },
+    {
+      "id": "floating-result",
+      "displayNotation": "\\operatorname{fl}(x\\circ y)",
+      "shortName": "округлённый результат операции",
+      "explanation": "Представимое машинное число, полученное округлением точного результата арифметической операции",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "floating-point-model"}
+    },
+    {
+      "id": "floating-roundoff",
+      "displayNotation": "\\delta",
+      "shortName": "относительная ошибка округления",
+      "explanation": "Относительное возмущение одной операции в стандартной модели плавающей точки, ограниченное unit roundoff",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "floating-point-model"}
+    },
+    {
+      "id": "matrix-residual",
+      "displayNotation": "r=b-A\\widehat x",
+      "shortName": "невязка линейной системы",
+      "explanation": "Разность между правой частью и результатом подстановки вычисленного решения в систему",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "linear-system-residual"}
+    },
+    {
+      "id": "matrix-condition",
+      "displayNotation": "\\kappa(A)",
+      "shortName": "число обусловленности",
+      "explanation": "Произведение нормы обратимой матрицы и нормы её обратной, измеряющее чувствительность решения к возмущениям",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "matrix-condition-number"}
+    },
+    {
+      "id": "matrix-iterate",
+      "displayNotation": "x_k",
+      "shortName": "текущее приближение решения",
+      "explanation": "Приближённое решение линейной системы перед k-м шагом итерационного уточнения",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "iterative-refinement"}
+    },
+    {
+      "id": "matrix-correction",
+      "displayNotation": "d_k",
+      "shortName": "поправка решения",
+      "explanation": "Решение системы с текущей невязкой, добавляемое к приближению на шаге уточнения",
+      "scope": "local",
+      "chapterId": "matrices-linear-systems-stability",
+      "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "iterative-refinement"}
     }
   ]
 }
