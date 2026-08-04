@@ -3260,12 +3260,12 @@
         "divide-and-conquer"
       ],
       "route": "./chapters/polynomials-fft-ntt.html",
-      "minutes": 51,
+      "minutes": 59,
       "reading": {
-        "words": 2597,
+        "words": 4001,
         "formulaBlocks": 6,
-        "proofBlocks": 5,
-        "theoryMinutes": 21,
+        "proofBlocks": 6,
+        "theoryMinutes": 29,
         "labMinutes": 30
       },
       "features": {

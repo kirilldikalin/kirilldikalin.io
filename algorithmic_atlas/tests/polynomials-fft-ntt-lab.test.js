@@ -71,6 +71,11 @@ test("комплексная FFT явно сообщает о переполне
 test("playback проходит каждую butterfly-стадию и остаётся неизменяемым", () => {
   let state = core.createState({ coefficients: "1,2,3,4" });
   assert.ok(Object.isFrozen(state));
+  const firstButterfly = state.frames.find((frame) => frame.phase === "butterfly");
+  assert.deepEqual(
+    { stage: firstButterfly.stage, size: firstButterfly.size, blockStart: firstButterfly.blockStart, offset: firstButterfly.offset, omegaExponent: firstButterfly.omegaExponent },
+    { stage: 1, size: 2, blockStart: 0, offset: 0, omegaExponent: 0 }
+  );
   while (!state.finished) state = core.step(state);
   assert.equal(state.current.phase, "done");
   assert.equal(core.reset(state).cursor, 0);
@@ -88,5 +93,9 @@ test("страница и адаптер используют общий кон�
   assert.ok((chapter.match(/target="_blank"/g) || []).length >= 3);
   assert.doesNotMatch(chapter.match(/class="atlas-chapter-intro">([^<]+)/)[1], /[.!?…]$/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /data-visual-part/);
+  assert.match(adapter, /root-cycle/);
+  assert.match(adapter, /drawStages/);
+  assert.match(adapter, /drawButterflyEquation/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });
