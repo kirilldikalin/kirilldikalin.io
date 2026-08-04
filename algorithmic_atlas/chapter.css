@@ -923,11 +923,21 @@ mjx-container .atlas-notation-token:focus-visible {
 }
 
 @media (min-width: 50.0625rem) {
-  .atlas-chapter-header h1 {
+  .atlas-chapter-header h1,
+  .atlas-chapter-kicker,
+  .atlas-chapter-intro {
     width: min(
       var(--chapter-title-max-width),
       calc(100% - var(--chapter-title-toc-gutter))
     );
+  }
+
+  .atlas-chapter-intro {
+    max-width: 52rem;
+  }
+
+  .atlas-chapter-kicker {
+    margin-inline: auto;
   }
 }
 
