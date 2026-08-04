@@ -15,6 +15,15 @@ test("Евклид и коэффициенты Безу согласованы �
   });
 });
 
+test("разрядная трасса точно связывает десятичную запись, limbs и двоичные биты", () => {
+  const frames = core.representationFrames(-1234567n);
+  assert.equal(frames[0].binary, (1234567n).toString(2));
+  assert.deepEqual(frames[0].limbs, [567n, 234n, 1n]);
+  assert.equal(frames.at(-1).reconstructed, -1234567n);
+  assert.equal(frames.at(-1).phase, "done");
+  assert.throws(() => core.representationFrames(1n << 128n), /128 бит/);
+});
+
 test("binary GCD совпадает с классическим на сетке малых значений", () => {
   for (let a = -40n; a <= 40n; a += 1n) for (let b = -40n; b <= 40n; b += 1n) {
     assert.equal(core.binaryGcd(a, b), core.euclidFrames(a, b).at(-1).gcd);

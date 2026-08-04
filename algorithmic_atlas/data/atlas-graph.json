@@ -3192,12 +3192,12 @@
       ],
       "related": [],
       "route": "./chapters/integer-arithmetic-number-theory.html",
-      "minutes": 47,
+      "minutes": 57,
       "reading": {
-        "words": 2602,
+        "words": 4000,
         "formulaBlocks": 6,
-        "proofBlocks": 3,
-        "theoryMinutes": 19,
+        "proofBlocks": 5,
+        "theoryMinutes": 29,
         "labMinutes": 28
       },
       "features": {
