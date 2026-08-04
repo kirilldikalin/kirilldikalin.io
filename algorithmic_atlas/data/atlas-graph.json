@@ -749,6 +749,8 @@
       "allowFreeExplore": true,
       "prerequisites": [],
       "related": [
+        "strings-geometry-numerics",
+        "big-data-modern-models",
         "complexity-limits"
       ],
       "worldPosition": {
@@ -1033,7 +1035,8 @@
         "strings-geometry-numerics"
       ],
       "related": [
-        "algorithm-design"
+        "algorithm-design",
+        "complexity-limits"
       ],
       "worldPosition": {
         "x": 874,
@@ -1057,7 +1060,8 @@
         "randomization-approximation"
       ],
       "related": [
-        "origins-efficiency"
+        "origins-efficiency",
+        "big-data-modern-models"
       ],
       "worldPosition": {
         "x": 650,
@@ -1137,7 +1141,8 @@
         "before-computers"
       ],
       "related": [
-        "input-size-and-cost"
+        "input-size-and-cost",
+        "integer-arithmetic-number-theory"
       ],
       "route": "./chapters/euclidean-algorithm.html",
       "minutes": 50,
@@ -1272,7 +1277,9 @@
       "prerequisites": [
         "growth-rates"
       ],
-      "related": [],
+      "related": [
+        "polynomials-fft-ntt"
+      ],
       "route": "./chapters/sums-products-recurrences.html",
       "minutes": 85,
       "features": {
@@ -2895,7 +2902,7 @@
       "route": "./chapters/exact-string-matching.html",
       "minutes": 40,
       "reading": {
-        "words": 2574,
+        "words": 2700,
         "formulaBlocks": 5,
         "proofBlocks": 4,
         "theoryMinutes": 20,
@@ -2926,12 +2933,12 @@
       ],
       "related": [],
       "route": "./chapters/string-hashing-multiple-patterns.html",
-      "minutes": 43,
+      "minutes": 52,
       "reading": {
-        "words": 2511,
+        "words": 4095,
         "formulaBlocks": 7,
         "proofBlocks": 3,
-        "theoryMinutes": 19,
+        "theoryMinutes": 28,
         "labMinutes": 24
       },
       "features": {
@@ -2959,12 +2966,12 @@
       ],
       "related": [],
       "route": "./chapters/suffix-indexes.html",
-      "minutes": 49,
+      "minutes": 58,
       "reading": {
-        "words": 2591,
+        "words": 4124,
         "formulaBlocks": 8,
         "proofBlocks": 5,
-        "theoryMinutes": 21,
+        "theoryMinutes": 30,
         "labMinutes": 28
       },
       "features": {
@@ -2992,12 +2999,12 @@
       ],
       "related": [],
       "route": "./chapters/bwt-fm-index.html",
-      "minutes": 41,
+      "minutes": 50,
       "reading": {
-        "words": 2563,
+        "words": 4091,
         "formulaBlocks": 3,
         "proofBlocks": 3,
-        "theoryMinutes": 18,
+        "theoryMinutes": 27,
         "labMinutes": 23
       },
       "features": {
@@ -3027,12 +3034,12 @@
         "advanced-dynamic-programming"
       ],
       "route": "./chapters/edit-distance-lcs.html",
-      "minutes": 43,
+      "minutes": 51,
       "reading": {
-        "words": 2579,
+        "words": 4067,
         "formulaBlocks": 5,
         "proofBlocks": 3,
-        "theoryMinutes": 19,
+        "theoryMinutes": 27,
         "labMinutes": 24
       },
       "features": {
@@ -3060,12 +3067,12 @@
       ],
       "related": [],
       "route": "./chapters/lossless-compression.html",
-      "minutes": 44,
+      "minutes": 47,
       "reading": {
-        "words": 2548,
+        "words": 2992,
         "formulaBlocks": 4,
         "proofBlocks": 4,
-        "theoryMinutes": 19,
+        "theoryMinutes": 22,
         "labMinutes": 25
       },
       "features": {
@@ -3093,12 +3100,12 @@
       ],
       "related": [],
       "route": "./chapters/geometric-predicates-convex-hull.html",
-      "minutes": 49,
+      "minutes": 56,
       "reading": {
-        "words": 2777,
+        "words": 4020,
         "formulaBlocks": 7,
-        "proofBlocks": 3,
-        "theoryMinutes": 21,
+        "proofBlocks": 4,
+        "theoryMinutes": 28,
         "labMinutes": 28
       },
       "features": {
@@ -3126,12 +3133,12 @@
       ],
       "related": [],
       "route": "./chapters/sweep-line-closest-pair-range-search.html",
-      "minutes": 50,
+      "minutes": 59,
       "reading": {
-        "words": 2549,
+        "words": 4008,
         "formulaBlocks": 6,
-        "proofBlocks": 3,
-        "theoryMinutes": 19,
+        "proofBlocks": 4,
+        "theoryMinutes": 28,
         "labMinutes": 31
       },
       "features": {
@@ -3159,12 +3166,12 @@
       ],
       "related": [],
       "route": "./chapters/voronoi-delaunay.html",
-      "minutes": 54,
+      "minutes": 62,
       "reading": {
-        "words": 2643,
+        "words": 4018,
         "formulaBlocks": 8,
-        "proofBlocks": 5,
-        "theoryMinutes": 22,
+        "proofBlocks": 6,
+        "theoryMinutes": 30,
         "labMinutes": 32
       },
       "features": {
