@@ -50,19 +50,84 @@
 
     function drawHuffman(state) {
       const data = core.huffman(state.text);
-      const leaves = Object.keys(data.codes);
-      leaves.forEach(function (symbol, index) {
-        const x = 90 + index * 740 / Math.max(1, leaves.length - 1);
-        drawing.append(figure.svg, "circle", { cx: x, cy: 420, r: 28, class: "is-a" });
-        drawing.text(figure.svg, x, 418, symbol, "is-strong", "middle");
-        drawing.text(figure.svg, x, 455, data.codes[symbol], "", "middle");
-        drawing.append(figure.svg, "line", { x1: 460, y1: 90, x2: x, y2: 392,
-          class: "atlas-lab__grid-line", opacity: index < state.frame.queue.length ? 1 : 0.35 });
+      if (!data.root) {
+        drawing.text(figure.svg, 460, 250,
+          "Пустое сообщение кодируется пустой битовой строкой", "is-strong", "middle");
+        metrics.querySelector('[data-metric="output"]').textContent = "0 бит";
+        metrics.querySelector('[data-metric="rule"]').textContent = "ничего не объединять";
+        detail.querySelector("[data-detail]").textContent =
+          "Граница пустого сообщения задаётся внешним контрактом формата; символов и кодовых слов в дереве нет";
+        return;
+      }
+      const nodes = Object.create(null);
+      function collect(node) {
+        nodes[node.id] = node;
+        if (node.left) collect(node.left);
+        if (node.right) collect(node.right);
+      }
+      collect(data.root);
+      const roots = state.frame.queue.map(function (id) { return nodes[id]; }).filter(Boolean);
+      function leafCount(node) {
+        return node.symbol !== null ? 1 : leafCount(node.left) + leafCount(node.right);
+      }
+      function depth(node) {
+        return node.symbol !== null ? 0 : 1 + Math.max(depth(node.left), depth(node.right));
+      }
+      const totalLeaves = roots.reduce(function (sum, node) { return sum + leafCount(node); }, 0);
+      const maximumDepth = roots.reduce(function (maximum, node) {
+        return Math.max(maximum, depth(node));
+      }, 0);
+      const positions = Object.create(null);
+      const leafSpacing = 780 / Math.max(1, totalLeaves);
+      const verticalStep = maximumDepth ? 330 / maximumDepth : 60;
+      const radius = Math.max(5, Math.min(23, leafSpacing * 0.3, verticalStep * 0.3));
+      function place(node, level, firstLeaf) {
+        if (node.symbol !== null) {
+          positions[node.id] = { x: 70 + (firstLeaf + 0.5) * leafSpacing,
+            y: 90 + level * verticalStep };
+          return firstLeaf + 1;
+        }
+        const afterLeft = place(node.left, level + 1, firstLeaf);
+        const afterRight = place(node.right, level + 1, afterLeft);
+        positions[node.id] = { x: (positions[node.left.id].x + positions[node.right.id].x) / 2,
+          y: 90 + level * verticalStep };
+        return afterRight;
+      }
+      let nextLeaf = 0;
+      roots.forEach(function (node) { nextLeaf = place(node, 0, nextLeaf); });
+      function drawEdges(node) {
+        [node.left, node.right].filter(Boolean).forEach(function (child) {
+          drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y,
+            x2: positions[child.id].x, y2: positions[child.id].y,
+            class: node.id === state.frame.parent ? "is-a" : "atlas-lab__grid-line" });
+          drawEdges(child);
+        });
+      }
+      roots.forEach(drawEdges);
+      Object.keys(positions).forEach(function (id) {
+        const node = nodes[id];
+        const point = positions[id];
+        const nodeClass = node.id === state.frame.parent ? "is-good" :
+          (node.id === state.frame.left || node.id === state.frame.right ? "is-a" : "atlas-lab__grid-line");
+        drawing.append(figure.svg, "circle", { cx: point.x, cy: point.y, r: radius, class: nodeClass });
+        if (radius >= 8) {
+          drawing.text(figure.svg, point.x, point.y + 5,
+            node.symbol === null ? String(node.weight) : node.symbol + ":" + node.weight,
+            "is-strong", "middle");
+        }
+        if (state.frame.finished && node.symbol !== null) {
+          drawing.text(figure.svg, point.x, point.y + radius + 18,
+            data.codes[node.symbol], "is-muted", "middle");
+        }
       });
-      drawing.append(figure.svg, "circle", { cx: 460, cy: 90, r: 34, class: "is-good" });
-      drawing.text(figure.svg, 460, 95, String(data.root.weight), "is-strong", "middle");
-      metrics.querySelector('[data-metric="output"]').textContent = data.encoded.length + " бит";
-      metrics.querySelector('[data-metric="rule"]').textContent = state.frame.finished ? "коды готовы" : "слить два минимума";
+      metrics.querySelector('[data-metric="output"]').textContent = state.frame.finished
+        ? data.encoded.length + " бит"
+        : "после построения";
+      const left = nodes[state.frame.left];
+      const right = nodes[state.frame.right];
+      metrics.querySelector('[data-metric="rule"]').textContent = state.frame.finished
+        ? "коды готовы"
+        : "слить веса " + left.weight + " и " + right.weight;
       detail.querySelector("[data-detail]").textContent = "Ни одно кодовое слово не является префиксом другого: движение от корня по битам заканчивается ровно в одном листе";
     }
 
@@ -86,7 +151,7 @@
       metrics.querySelector('[data-metric="output"]').textContent = "ширина ≈ " +
         Math.max(0, high - low).toExponential(3);
       metrics.querySelector('[data-metric="rule"]').textContent = frame.finished ? "интервал готов" : "сузить по «" + frame.symbol + "»";
-      detail.querySelector("[data-detail]").textContent = "Любое число из финального полуинтервала вместе с моделью частот восстанавливает ту же последовательность вложенных интервалов";
+      detail.querySelector("[data-detail]").textContent = "Любое число из финального полуинтервала вместе с моделью частот и известной длиной сообщения либо специальным символом конца восстанавливает ту же последовательность вложенных интервалов";
     }
 
     function drawLz(state) {

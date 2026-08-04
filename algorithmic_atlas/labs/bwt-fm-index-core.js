@@ -18,17 +18,35 @@
     return result;
   }
 
+  const SENTINEL = "$";
+
+  function compareSymbols(left, right) {
+    if (left === right) return 0;
+    if (left === SENTINEL) return -1;
+    if (right === SENTINEL) return 1;
+    return left.codePointAt(0) - right.codePointAt(0);
+  }
+
+  function compareRows(left, right) {
+    const length = Math.min(left.length, right.length);
+    for (let index = 0; index < length; index += 1) {
+      const comparison = compareSymbols(left[index], right[index]);
+      if (comparison !== 0) return comparison;
+    }
+    return left.length - right.length;
+  }
+
   function withSentinel(rawText) {
     const text = chars(rawText, 120);
-    if (text.includes("$")) throw new RangeError("Символ $ зарезервирован как уникальный конец строки.");
-    return text.concat(["$"]);
+    if (text.includes(SENTINEL)) throw new RangeError("Символ $ зарезервирован как уникальный конец строки.");
+    return text.concat([SENTINEL]);
   }
 
   function rotations(rawText) {
     const text = withSentinel(rawText);
     return text.map(function (_, start) {
       return text.slice(start).concat(text.slice(0, start));
-    }).sort(function (left, right) { return left.join("").localeCompare(right.join("")); });
+    }).sort(compareRows);
   }
 
   function transform(rawText) {
@@ -41,21 +59,26 @@
 
   function inverse(rawLast) {
     const last = chars(rawLast, 121);
-    if (last.filter(function (symbol) { return symbol === "$"; }).length !== 1) {
+    if (last.filter(function (symbol) { return symbol === SENTINEL; }).length !== 1) {
       throw new RangeError("BWT должна содержать ровно один символ $.");
     }
     let table = last.map(function () { return []; });
     for (let iteration = 0; iteration < last.length; iteration += 1) {
       table = table.map(function (row, index) { return [last[index]].concat(row); })
-        .sort(function (left, right) { return left.join("").localeCompare(right.join("")); });
+        .sort(compareRows);
     }
-    return table.find(function (row) { return row.at(-1) === "$"; }).slice(0, -1).join("");
+    const originalRow = table.find(function (row) { return row.at(-1) === SENTINEL; });
+    const candidate = originalRow ? originalRow.slice(0, -1).join("") : "";
+    if (!originalRow || candidate.includes(SENTINEL) || transform(candidate).last !== last.join("")) {
+      throw new RangeError("Строка не является корректным BWT с выбранным сентинелом.");
+    }
+    return candidate;
   }
 
   function buildIndex(rawText) {
     const result = transform(rawText);
     const last = chars(result.last, 121);
-    const alphabet = Array.from(new Set(last)).sort(function (a, b) { return a.localeCompare(b); });
+    const alphabet = Array.from(new Set(last)).sort(compareSymbols);
     const counts = Object.create(null);
     alphabet.forEach(function (symbol) { counts[symbol] = 0; });
     last.forEach(function (symbol) { counts[symbol] += 1; });
@@ -76,9 +99,12 @@
   function backwardSearch(rawText, rawPattern) {
     const pattern = chars(rawPattern, 48);
     if (!pattern.length) throw new RangeError("Образец не должен быть пустым.");
+    if (pattern.includes(SENTINEL)) {
+      throw new RangeError("Символ $ зарезервирован и не может входить в поисковый образец.");
+    }
     const index = buildIndex(rawText);
     let left = 0;
-    let right = index.last.length;
+    let right = chars(index.last, 121).length;
     const frames = [];
     for (let position = pattern.length - 1; position >= 0; position -= 1) {
       const symbol = pattern[position];
@@ -112,8 +138,10 @@
 
   function createState(options) {
     const settings = options || {};
-    const result = backwardSearch(settings.text || "банан", settings.pattern || "ана");
-    return freeze({ text: settings.text || "банан", pattern: settings.pattern || "ана",
+    const text = settings.text === undefined ? "банан" : String(settings.text);
+    const pattern = settings.pattern === undefined ? "ана" : String(settings.pattern);
+    const result = backwardSearch(text, pattern);
+    return freeze({ text: text, pattern: pattern,
       indexData: result.index, frames: result.frames, index: 0, frame: result.frames[0] });
   }
 
@@ -123,7 +151,7 @@
       frames: state.frames, index: index, frame: state.frames[index] });
   }
 
-  return freeze({ rotations: rotations, transform: transform, inverse: inverse,
+  return freeze({ compareSymbols: compareSymbols, rotations: rotations, transform: transform, inverse: inverse,
     buildIndex: buildIndex, backwardSearch: backwardSearch, runLength: runLength,
     createState: createState, step: step });
 });

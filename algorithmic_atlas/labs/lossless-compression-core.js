@@ -14,7 +14,6 @@
 
   function chars(value, maximum) {
     const result = Array.from(String(value === undefined ? "" : value));
-    if (!result.length) throw new RangeError("Сообщение не должно быть пустым.");
     if (result.length > maximum) throw new RangeError("Сообщение слишком длинное.");
     return result;
   }
@@ -44,6 +43,10 @@
       });
     }
     sortQueue();
+    if (!queue.length) {
+      frames.push({ left: null, right: null, parent: null, queue: [], finished: true });
+      return freeze({ root: null, codes: Object.create(null), frames: frames, encoded: "" });
+    }
     while (queue.length > 1) {
       const left = queue.shift();
       const right = queue.shift();
@@ -181,7 +184,7 @@
   function createState(options) {
     const settings = options || {};
     const mode = settings.mode || "huffman";
-    const text = settings.text || "абракадабра";
+    const text = settings.text === undefined ? "абракадабра" : settings.text;
     let frames;
     if (mode === "huffman") frames = huffman(text).frames;
     else if (mode === "arithmetic") frames = arithmeticFrames(text);

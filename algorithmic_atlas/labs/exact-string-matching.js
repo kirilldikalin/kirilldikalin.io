@@ -62,18 +62,25 @@
       const alignment = state.algorithm === "naive"
         ? frame.alignment || 0
         : Math.max(0, (frame.textIndex || 0) - (frame.patternIndex || 0));
-      const textCell = sequence.stripGeometry(Math.max(text.length, 1), {
+      const textGeometry = sequence.stripGeometry(Math.max(text.length, 1), {
         x: 54, width: 810, gap: 4, height: 52,
-      })[0];
+      });
+      const cellStep = textGeometry.length > 1
+        ? textGeometry[1].x - textGeometry[0].x
+        : textGeometry[0].width;
+      const alignmentOffset = Math.min(810, alignment * cellStep);
       sequence.drawStrip(figure.svg, pattern, {
-        x: 54 + alignment * (textCell ? textCell.width + 4 : 36), y: 218,
-        width: Math.max(180, 810 - alignment * (textCell ? textCell.width + 4 : 36)),
+        x: 54 + alignmentOffset, y: 218,
+        width: Math.max(0, Math.min(810 - alignmentOffset, pattern.length * cellStep)),
         height: 52, label: "Образец", active: activePattern,
       });
       drawing.text(figure.svg, 54, 360,
         "Действие: " + ({ equal: "символы равны", mismatch: "несовпадение",
           fallback: "откат по π", advance: "префикс удлинён", match: "вхождение найдено",
-          inspect: "проверено значение Z", done: "поиск завершён", "too-long": "образец длиннее текста" }[frame.action] || frame.action),
+          inspect: "значение Z зафиксировано", "z-copy": "начальное значение скопировано из Z-блока",
+          "z-extend": "Z-блок расширен реальным сравнением",
+          "z-mismatch": "расширение Z-блока остановлено несовпадением",
+          done: "поиск завершён", "too-long": "образец длиннее текста" }[frame.action] || frame.action),
         "is-strong");
       figure.caption.textContent = "Масштаб строки не меняется между шагами; чёрно-зелёные клетки входят в уже подтверждённые вхождения";
       metrics.querySelector('[data-metric="frame"]').textContent =
@@ -86,6 +93,10 @@
       detail.querySelector("[data-rule]").textContent = frame.action === "fallback"
         ? "Несовпавший символ текста не перечитывается: длина границы меняется с " +
           frame.matched + " на " + frame.fallback
+        : frame.action === "z-copy"
+          ? "Позиция лежит внутри уже известного Z-блока: сначала используем доказанное значение, затем при необходимости сравниваем за его границей"
+          : frame.action === "z-extend" || frame.action === "z-mismatch"
+            ? "Кадр соответствует одному фактическому сравнению символа префикса с символом объединённой строки"
         : "Кадр фиксирует одно логическое решение алгоритма, а не декоративный такт анимации";
       detail.querySelector("[data-prefix]").textContent = frame.pi ? frame.pi.join(" · ") : "используется только КМП";
     }
@@ -95,7 +106,7 @@
       step: core.step,
       render: render,
       isFinished: function (state) { return state.frame.finished; },
-      maxAutomaticSteps: 400,
+      maxAutomaticSteps: 1000,
     });
     shell.controls.addEventListener("change", mounted.reset);
     fields.text.addEventListener("input", mounted.reset);

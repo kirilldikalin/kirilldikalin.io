@@ -166,11 +166,12 @@
     const mode = settings.mode || "rolling";
     let trace;
     if (mode === "rolling") {
-      trace = rollingHashFrames(settings.text || "абракадабра", settings.pattern || "абра",
+      trace = rollingHashFrames(settings.text === undefined ? "абракадабра" : settings.text,
+        settings.pattern === undefined ? "абра" : settings.pattern,
         settings.base, settings.modulus);
     } else if (mode === "aho") {
-      trace = ahoCorasickFrames(settings.text || "абракадабра",
-        settings.patterns || ["абра", "када", "бра"]).frames;
+      trace = ahoCorasickFrames(settings.text === undefined ? "абракадабра" : settings.text,
+        settings.patterns === undefined ? ["абра", "када", "бра"] : settings.patterns).frames;
     } else throw new RangeError("Неизвестный режим строковой лаборатории.");
     return freeze({ mode: mode, options: Object.assign({}, settings), frames: trace,
       index: 0, frame: trace[0] });

@@ -88,17 +88,34 @@
       const automaton = result.automaton;
       const frame = state.frame;
       const levels = Object.create(null);
+      const depths = [0];
+      const queue = [0];
+      for (let head = 0; head < queue.length; head += 1) {
+        const node = automaton.nodes[queue[head]];
+        Object.keys(node.next).forEach(function (symbol) {
+          const target = node.next[symbol];
+          depths[target] = depths[node.id] + 1;
+          queue.push(target);
+        });
+      }
       automaton.nodes.forEach(function (node) {
-        const level = node.id === 0 ? 0 : Math.max(1, Math.ceil(Math.log2(node.id + 1)));
+        const level = depths[node.id];
         if (!levels[level]) levels[level] = [];
         levels[level].push(node);
       });
+      const maximumDepth = Math.max.apply(null, depths);
+      const widestLevel = Math.max.apply(null, Object.keys(levels).map(function (key) {
+        return levels[key].length;
+      }));
+      const horizontalStep = maximumDepth ? 770 / maximumDepth : 60;
+      const verticalStep = 360 / (widestLevel + 1);
+      const radius = Math.max(3, Math.min(22, horizontalStep * 0.24, verticalStep * 0.38));
       const positions = Object.create(null);
       Object.keys(levels).forEach(function (key) {
         const level = Number(key);
         levels[key].forEach(function (node, index) {
-          positions[node.id] = { x: 90 + level * 190,
-            y: 80 + (index + 1) * 340 / (levels[key].length + 1) };
+          positions[node.id] = { x: maximumDepth ? 75 + level * horizontalStep : 460,
+            y: 55 + (index + 1) * 360 / (levels[key].length + 1) };
         });
       });
       automaton.nodes.forEach(function (node) {
@@ -107,21 +124,25 @@
           drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y,
             x2: positions[target].x, y2: positions[target].y,
             class: target === frame.state ? "is-a" : "atlas-lab__grid-line" });
-          drawing.text(figure.svg, (positions[node.id].x + positions[target].x) / 2,
-            (positions[node.id].y + positions[target].y) / 2 - 5, symbol, "is-muted", "middle");
+          if (radius >= 8) {
+            drawing.text(figure.svg, (positions[node.id].x + positions[target].x) / 2,
+              (positions[node.id].y + positions[target].y) / 2 - 5, symbol, "is-muted", "middle");
+          }
         });
         if (node.id !== 0) {
           const target = node.failure;
-          drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y + 8,
-            x2: positions[target].x, y2: positions[target].y + 8,
+          drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y + radius * 0.35,
+            x2: positions[target].x, y2: positions[target].y + radius * 0.35,
             class: "atlas-sequence-failure" });
         }
       });
       automaton.nodes.forEach(function (node) {
         drawing.append(figure.svg, "circle", { cx: positions[node.id].x, cy: positions[node.id].y,
-          r: 25, class: node.id === frame.state ? "is-a" : (node.outputs.length ? "is-good" : "atlas-lab__grid-line") });
-        drawing.text(figure.svg, positions[node.id].x, positions[node.id].y + 5,
-          String(node.id), "is-strong", "middle");
+          r: radius, class: node.id === frame.state ? "is-a" : (node.outputs.length ? "is-good" : "atlas-lab__grid-line") });
+        if (radius >= 8) {
+          drawing.text(figure.svg, positions[node.id].x, positions[node.id].y + 5,
+            String(node.id), "is-strong", "middle");
+        }
       });
       drawing.text(figure.svg, 48, 475, "Обработан символ: " + (frame.symbol || "—") +
         "; состояние: " + frame.state, "is-strong");

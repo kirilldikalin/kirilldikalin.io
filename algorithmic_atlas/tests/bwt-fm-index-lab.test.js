@@ -8,6 +8,14 @@ test("BWT is reversible with a unique sentinel", () => {
   assert.equal(core.inverse(transformed.last), "banana");
 });
 
+test("BWT uses a stable code-point order and keeps the sentinel strictly minimal", () => {
+  for (const text of ["", "\u0301", "ÅaÅ"]) {
+    assert.equal(core.inverse(core.transform(text).last), text);
+  }
+  assert.equal(core.backwardSearch("ÅaÅ", "ÅÅ").frames.at(-1).count, 0);
+  assert.equal(core.backwardSearch("🙂🙂", "🙂").frames.at(-1).count, 2);
+});
+
 test("FM backward search returns the exact interval size", () => {
   const result = core.backwardSearch("banana", "ana");
   assert.equal(result.frames.at(-1).count, 2);
@@ -25,4 +33,13 @@ test("Occ counts prefixes and RLE preserves the transformed length", () => {
 
 test("sentinel contract rejects ambiguous input", () => {
   assert.throws(() => core.transform("a$b"), /зарезервирован/);
+  assert.throws(() => core.backwardSearch("banana", "$"), /не может входить/);
+  assert.throws(() => core.inverse("$a"), /корректным BWT/);
+});
+
+test("playback preserves explicit empty text and rejects an empty pattern", () => {
+  const state = core.createState({ text: "", pattern: "a" });
+  assert.equal(state.text, "");
+  assert.equal(state.indexData.last, "$");
+  assert.throws(() => core.createState({ text: "banana", pattern: "" }), /не должен быть пустым/);
 });

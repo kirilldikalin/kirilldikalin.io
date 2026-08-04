@@ -29,3 +29,14 @@ test("Aho-Corasick reports suffix outputs through failure links", () => {
 test("modular power uses exact BigInt arithmetic", () => {
   assert.equal(core.modPow(7n, 560n, 561n), 1n);
 });
+
+test("playback preserves empty texts and rejects empty search patterns", () => {
+  const rolling = core.createState({ mode: "rolling", text: "", pattern: "a" });
+  assert.deepEqual(rolling.frames.at(-1).matches, []);
+  const aho = core.createState({ mode: "aho", text: "", patterns: ["a"] });
+  assert.deepEqual(aho.frames.at(-1).matches, []);
+  assert.throws(() => core.createState({ mode: "rolling", text: "abc", pattern: "" }),
+    /не должен быть пустым/);
+  assert.throws(() => core.createState({ mode: "aho", text: "abc", patterns: [] }),
+    /хотя бы один/);
+});

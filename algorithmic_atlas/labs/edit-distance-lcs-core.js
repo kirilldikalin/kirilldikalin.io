@@ -159,8 +159,8 @@
     const settings = options || {};
     const mode = settings.mode || "edit";
     if (!["edit", "lcs"].includes(mode)) throw new RangeError("Неизвестный режим выравнивания.");
-    const left = settings.left || "алгоритм";
-    const right = settings.right || "логарифм";
+    const left = settings.left === undefined ? "алгоритм" : settings.left;
+    const right = settings.right === undefined ? "логарифм" : settings.right;
     const trace = frames(left, right, mode);
     return freeze({ mode: mode, left: left, right: right, frames: trace,
       index: 0, frame: trace[0] });

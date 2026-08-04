@@ -16,6 +16,16 @@ test("strip geometry is deterministic and remains inside its width", () => {
   assert.deepEqual(cells, runtime.stripGeometry(8, { x: 10, width: 300, gap: 2 }));
 });
 
+test("strip geometry remains bounded for every supported long input", () => {
+  for (const length of [48, 160, 10000]) {
+    const cells = runtime.stripGeometry(length, { x: 37, width: 704, gap: 4 });
+    assert.equal(cells.length, length);
+    assert.ok(cells.every(({ x, width }) => x >= 37 && width >= 0));
+    assert.ok(cells.at(-1).x + cells.at(-1).width <= 741.001,
+      "right edge escaped for length " + length);
+  }
+});
+
 test("matrix geometry preserves row and column coordinates", () => {
   const matrix = runtime.matrixGeometry(3, 4, { x: 5, y: 7, cell: 20 });
   assert.deepEqual(matrix[2][3], {

@@ -13,6 +13,17 @@ test("binary interval finds all suffixes starting with pattern", () => {
   assert.deepEqual(core.search("banana", "xyz").positions, []);
 });
 
+test("suffix ordering compares exact code points rather than locale-equivalent symbols", () => {
+  assert.deepEqual(core.suffixArray("ÅÅ"), [1, 0]);
+  assert.deepEqual(core.search("Å", "Å").positions, []);
+});
+
+test("caller-supplied suffix arrays must be a sorted permutation", () => {
+  assert.throws(() => core.lcpArray("banana", [0, 1, 2, 3, 4, 5]), /не упорядочен/);
+  assert.throws(() => core.search("banana", "ana", [0, 1, 2, 3, 4, 5]), /не упорядочен/);
+  assert.throws(() => core.search("banana", "ana", [5, 3, 1, 0, 4, 4]), /перестановкой/);
+});
+
 test("suffix automaton has at most 2n-1 states and accepts every substring", () => {
   const text = "ababa";
   const states = core.buildSuffixAutomaton(text);
@@ -29,4 +40,9 @@ test("playback exposes every suffix without changing the source", () => {
   while (!state.frame.finished) state = core.step(state);
   assert.equal(state.frame.visible, 5);
   assert.equal(state.text, "банан");
+});
+
+test("playback distinguishes an omitted text from an explicitly empty text", () => {
+  assert.throws(() => core.createState({ mode: "array", text: "" }), /не должна быть пустой/);
+  assert.equal(core.createState({ mode: "array" }).text, "банан");
 });

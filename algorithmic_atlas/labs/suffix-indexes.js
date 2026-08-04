@@ -56,10 +56,11 @@
       table.appendChild(body);
       tableWrap.querySelector("[data-table]").replaceChildren(table);
       const barWidth = 720 / Math.max(1, sa.length);
+      const textLength = Array.from(state.text).length;
       sa.forEach(function (start, index) {
-        const height = 30 + Array.from(state.text).length - start;
-        drawing.append(figure.svg, "rect", { x: 100 + index * barWidth, y: 430 - height * 22,
-          width: Math.max(3, barWidth - 4), height: height * 22,
+        const height = 35 + 300 * (textLength - start) / Math.max(1, textLength);
+        drawing.append(figure.svg, "rect", { x: 100 + index * barWidth, y: 430 - height,
+          width: Math.max(3, barWidth - 4), height: height,
           class: index < state.frame.visible ? "is-a" : "atlas-lab__grid-line" });
         drawing.text(figure.svg, 100 + index * barWidth + barWidth / 2, 455,
           String(start), "is-muted", "middle");
@@ -72,10 +73,15 @@
       const structure = state.frame.structure;
       const visible = Math.min(state.frame.visible, structure.length);
       const columns = Math.max(1, Math.ceil(Math.sqrt(visible)));
+      const rows = Math.max(1, Math.ceil(visible / columns));
+      const xStep = columns > 1 ? 760 / (columns - 1) : 0;
+      const yStep = rows > 1 ? 400 / (rows - 1) : 0;
+      const radius = Math.max(3, Math.min(24,
+        Math.min(xStep || 60, yStep || 60) * 0.34));
       const positions = Object.create(null);
       structure.slice(0, visible).forEach(function (node, index) {
-        positions[node.id] = { x: 90 + (index % columns) * (740 / Math.max(1, columns - 1)),
-          y: 80 + Math.floor(index / columns) * 105 };
+        positions[node.id] = { x: columns > 1 ? 80 + (index % columns) * xStep : 460,
+          y: rows > 1 ? 70 + Math.floor(index / columns) * yStep : 270 };
       });
       structure.slice(0, visible).forEach(function (node) {
         Object.keys(node.next || {}).forEach(function (symbol) {
@@ -83,19 +89,24 @@
           if (!positions[target]) return;
           drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y,
             x2: positions[target].x, y2: positions[target].y, class: "atlas-lab__grid-line" });
-          drawing.text(figure.svg, (positions[node.id].x + positions[target].x) / 2,
-            (positions[node.id].y + positions[target].y) / 2, symbol, "is-muted", "middle");
+          if (radius >= 8) {
+            drawing.text(figure.svg, (positions[node.id].x + positions[target].x) / 2,
+              (positions[node.id].y + positions[target].y) / 2, symbol, "is-muted", "middle");
+          }
         });
         if (fields.mode.value === "automaton" && node.link >= 0 && positions[node.link]) {
-          drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y + 7,
-            x2: positions[node.link].x, y2: positions[node.link].y + 7, class: "atlas-sequence-failure" });
+          drawing.append(figure.svg, "line", { x1: positions[node.id].x, y1: positions[node.id].y + radius * 0.3,
+            x2: positions[node.link].x, y2: positions[node.link].y + radius * 0.3,
+            class: "atlas-sequence-failure" });
         }
       });
       structure.slice(0, visible).forEach(function (node) {
         drawing.append(figure.svg, "circle", { cx: positions[node.id].x, cy: positions[node.id].y,
-          r: 25, class: node.terminal ? "is-good" : (node.clone ? "is-c" : "atlas-lab__grid-line") });
-        drawing.text(figure.svg, positions[node.id].x, positions[node.id].y + 5,
-          String(node.id), "is-strong", "middle");
+          r: radius, class: node.terminal ? "is-good" : (node.clone ? "is-c" : "atlas-lab__grid-line") });
+        if (radius >= 8) {
+          drawing.text(figure.svg, positions[node.id].x, positions[node.id].y + 5,
+            String(node.id), "is-strong", "middle");
+        }
       });
       tableWrap.querySelector("[data-table]").textContent = fields.mode.value === "trie"
         ? "Каждый путь из корня читает префикс некоторого суффикса"

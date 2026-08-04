@@ -38,3 +38,24 @@ test("entropy is zero for a constant source and finite otherwise", () => {
   assert.equal(core.entropy("aaaa"), 0);
   assert.ok(Number.isFinite(core.entropy("abracadabra")));
 });
+
+test("all three codecs preserve the empty-message boundary", () => {
+  const huffman = core.huffman("");
+  assert.equal(huffman.root, null);
+  assert.equal(huffman.encoded, "");
+  assert.deepEqual(huffman.frames.at(-1).queue, []);
+  const arithmetic = core.arithmeticFrames("").at(-1);
+  assert.deepEqual(arithmetic.low, { numerator: 0n, denominator: 1n });
+  assert.deepEqual(arithmetic.high, { numerator: 1n, denominator: 1n });
+  assert.deepEqual(core.lz77("", 8, 8).tokens, []);
+  assert.equal(core.entropy(""), 0);
+});
+
+test("compression playback distinguishes omitted and explicitly empty messages", () => {
+  for (const mode of ["huffman", "arithmetic", "lz77"]) {
+    const state = core.createState({ mode, text: "" });
+    assert.equal(state.text, "");
+    assert.equal(state.frame.finished, true);
+  }
+  assert.equal(core.createState({ mode: "huffman" }).text, "абракадабра");
+});

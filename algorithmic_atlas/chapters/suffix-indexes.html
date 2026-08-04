@@ -190,13 +190,15 @@
           <p>Для состояния $v$ хранят $len[v]$ — максимальную длину строки класса и suffix link $link[v]$ к классу самого длинного собственного суффикса с другим endpos. Минимальная длина в классе равна $len[link[v]]+1$. Поэтому одно состояние отвечает целому непрерывному диапазону длин.</p>
           <div id="suffix-automaton-length-interval" class="atlas-math atlas-notation-formula" data-formula-id="suffix-automaton-length-interval" data-notation-coverage="interactive" data-required-notations="suffix-automaton-state,suffix-state-length,suffix-state-link">
             \[
-              \class{atlas-notation-token notation-id-suffix-automaton-state}{v}:\qquad
+              \left\{|x|:x\text{ принадлежит классу состояния }
+              \class{atlas-notation-token notation-id-suffix-automaton-state}{v}\right\}
+              =\left\{k\in\mathbb N:
               len[\class{atlas-notation-token notation-id-suffix-state-link}{link[v]}]+1
-              \le |x|\le
-              \class{atlas-notation-token notation-id-suffix-state-length}{len[v]}
-              \quad\Longleftrightarrow\quad x\text{ принадлежит классу состояния }v.
+              \le k\le
+              \class{atlas-notation-token notation-id-suffix-state-length}{len[v]}\right\}.
             \]
           </div>
+          <p>Этот интервал описывает длины только после того, как класс состояния $v$ уже зафиксирован. Он не утверждает, что любая строка подходящей длины принадлежит этому классу.</p>
           <p>Онлайн-построение добавляет очередной символ $a$ и создаёт состояние <code>cur</code> для всего нового префикса. Идя по suffix links прежнего последнего состояния, добавляем отсутствующие переходы по $a$ в <code>cur</code>. Если дошли до фиктивного состояния, ссылка <code>cur</code> ведёт в корень. Иначе найден переход $p\xrightarrow{a}q$.</p>
           <p>Если $len[p]+1=len[q]$, состояние $q$ уже имеет правильную минимальную длину, и <code>cur</code> ссылается на него. Иначе нужен clone: копия переходов и suffix link $q$ с длиной $len[p]+1$. Переходы предков, которые раньше вели в $q$ по $a$, перенаправляются в clone; ссылки $q$ и <code>cur</code> также идут в clone. Clone не обозначает новый конец префикса — он разделяет прежний класс endpos на два класса с разными диапазонами длин.</p>
           <section class="atlas-block" data-atlas-block="proof">

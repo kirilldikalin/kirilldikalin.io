@@ -141,17 +141,51 @@
       throw new RangeError("Нулевой символ зарезервирован как разделитель.");
     }
     const combined = input.pattern.concat([separator], input.text);
-    const z = zFunction(combined);
+    const z = Array(combined.length).fill(0);
+    if (combined.length) z[0] = combined.length;
     const matches = [];
     const frames = [];
-    for (let index = input.pattern.length + 1; index < combined.length; index += 1) {
-      if (z[index] >= input.pattern.length) matches.push(index - input.pattern.length - 1);
-      frames.push({ textIndex: index - input.pattern.length - 1, patternIndex: 0,
-        zValue: z[index], action: z[index] >= input.pattern.length ? "match" : "inspect",
-        matches: matches.slice(), comparisons: null, z: z.slice(), finished: false });
+    const textOffset = input.pattern.length + 1;
+    let left = 0;
+    let right = 0;
+    let comparisons = 0;
+
+    function pushFrame(index, patternIndex, action) {
+      const comparedIndex = index + patternIndex;
+      frames.push({ combinedIndex: index,
+        textIndex: comparedIndex >= textOffset ? comparedIndex - textOffset : -1,
+        patternIndex: patternIndex, zValue: z[index], left: left, right: right,
+        action: action, matches: matches.slice(), comparisons: comparisons,
+        z: z.slice(), finished: false });
+    }
+
+    for (let index = 1; index < combined.length; index += 1) {
+      if (index <= right) {
+        z[index] = Math.min(right - index + 1, z[index - left]);
+        pushFrame(index, 0, "z-copy");
+      }
+      while (index + z[index] < combined.length) {
+        const patternIndex = z[index];
+        comparisons += 1;
+        if (combined[patternIndex] !== combined[index + patternIndex]) {
+          pushFrame(index, patternIndex, "z-mismatch");
+          break;
+        }
+        z[index] += 1;
+        pushFrame(index, patternIndex, "z-extend");
+      }
+      if (index + z[index] - 1 > right) {
+        left = index;
+        right = index + z[index] - 1;
+      }
+      if (index >= textOffset) {
+        if (z[index] >= input.pattern.length) matches.push(index - textOffset);
+        pushFrame(index, 0, z[index] >= input.pattern.length ? "match" : "inspect");
+      }
     }
     frames.push({ textIndex: input.text.length, patternIndex: 0, zValue: 0,
-      action: "done", matches: matches.slice(), comparisons: null, z: z.slice(), finished: true });
+      left: left, right: right, action: "done", matches: matches.slice(),
+      comparisons: comparisons, z: z.slice(), finished: true });
     return freeze(frames);
   }
 
@@ -165,7 +199,9 @@
   function createState(options) {
     const settings = options || {};
     const algorithm = settings.algorithm || "kmp";
-    const input = validateInput(settings.text || "абракадабра", settings.pattern || "абра");
+    const text = settings.text === undefined ? "абракадабра" : settings.text;
+    const pattern = settings.pattern === undefined ? "абра" : settings.pattern;
+    const input = validateInput(text, pattern);
     const trace = frames(algorithm, input.text, input.pattern);
     return freeze({ algorithm: algorithm, text: input.text.join(""), pattern: input.pattern.join(""),
       frames: trace, index: 0, frame: trace[0] });

@@ -18,10 +18,15 @@
     return result;
   }
 
+  function compareSymbols(left, right) {
+    if (left === right) return 0;
+    return left.codePointAt(0) - right.codePointAt(0);
+  }
+
   function compareSuffixes(text, left, right) {
     let offset = 0;
     while (left + offset < text.length && right + offset < text.length) {
-      const comparison = text[left + offset].localeCompare(text[right + offset]);
+      const comparison = compareSymbols(text[left + offset], text[right + offset]);
       if (comparison !== 0) return comparison;
       offset += 1;
     }
@@ -34,13 +39,25 @@
       .sort(function (left, right) { return compareSuffixes(text, left, right); });
   }
 
-  function lcpArray(rawText, rawSuffixArray) {
-    const text = symbols(rawText, 5000);
-    const sa = rawSuffixArray ? rawSuffixArray.slice() : suffixArray(text.join(""));
+  function validateSuffixArray(text, rawSuffixArray) {
+    const sa = Array.from(rawSuffixArray || []);
     if (sa.length !== text.length || new Set(sa).size !== sa.length ||
         sa.some(function (value) { return !Number.isInteger(value) || value < 0 || value >= text.length; })) {
       throw new RangeError("Суффиксный массив не является перестановкой позиций.");
     }
+    for (let index = 1; index < sa.length; index += 1) {
+      if (compareSuffixes(text, sa[index - 1], sa[index]) >= 0) {
+        throw new RangeError("Суффиксный массив не упорядочен лексикографически.");
+      }
+    }
+    return sa;
+  }
+
+  function lcpArray(rawText, rawSuffixArray) {
+    const text = symbols(rawText, 5000);
+    const sa = rawSuffixArray === undefined
+      ? suffixArray(text.join(""))
+      : validateSuffixArray(text, rawSuffixArray);
     const rank = Array(text.length).fill(0);
     sa.forEach(function (position, index) { rank[position] = index; });
     const lcp = Array(text.length).fill(0);
@@ -60,7 +77,7 @@
   function comparePrefix(text, start, pattern) {
     for (let index = 0; index < pattern.length; index += 1) {
       if (start + index >= text.length) return -1;
-      const comparison = text[start + index].localeCompare(pattern[index]);
+      const comparison = compareSymbols(text[start + index], pattern[index]);
       if (comparison !== 0) return comparison;
     }
     return 0;
@@ -70,7 +87,9 @@
     const text = symbols(rawText, 5000);
     const pattern = symbols(rawPattern, 500);
     if (!pattern.length) throw new RangeError("Образец не должен быть пустым.");
-    const sa = rawSuffixArray ? rawSuffixArray.slice() : suffixArray(text.join(""));
+    const sa = rawSuffixArray === undefined
+      ? suffixArray(text.join(""))
+      : validateSuffixArray(text, rawSuffixArray);
     function lower(strictUpper) {
       let left = 0;
       let right = sa.length;
@@ -168,8 +187,9 @@
     const settings = options || {};
     const mode = settings.mode || "array";
     if (!["array", "trie", "automaton"].includes(mode)) throw new RangeError("Неизвестная структура суффиксов.");
-    const trace = frames(settings.text || "банан", mode);
-    return freeze({ mode: mode, text: settings.text || "банан", frames: trace,
+    const text = settings.text === undefined ? "банан" : symbols(settings.text, 80).join("");
+    const trace = frames(text, mode);
+    return freeze({ mode: mode, text: text, frames: trace,
       index: 0, frame: trace[0] });
   }
 
@@ -179,7 +199,8 @@
       index: index, frame: state.frames[index] });
   }
 
-  return freeze({ suffixArray: suffixArray, lcpArray: lcpArray, search: search,
+  return freeze({ compareSymbols: compareSymbols, suffixArray: suffixArray,
+    lcpArray: lcpArray, search: search,
     buildSuffixTrie: buildSuffixTrie, buildSuffixAutomaton: buildSuffixAutomaton,
     frames: frames, createState: createState, step: step });
 });

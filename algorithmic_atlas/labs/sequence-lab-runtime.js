@@ -38,15 +38,20 @@
     const count = boundedInteger(length, "Длина строки", 0, 10000);
     const x = Number.isFinite(settings.x) ? settings.x : 28;
     const y = Number.isFinite(settings.y) ? settings.y : 28;
-    const width = Number.isFinite(settings.width) ? settings.width : 704;
+    const width = Math.max(0, Number.isFinite(settings.width) ? settings.width : 704);
     const height = Number.isFinite(settings.height) ? settings.height : 54;
-    const gap = Number.isFinite(settings.gap) ? settings.gap : 4;
-    const readable = Number.isFinite(settings.readableCellWidth)
+    const requestedGap = Math.max(0, Number.isFinite(settings.gap) ? settings.gap : 4);
+    const readable = Math.max(0, Number.isFinite(settings.readableCellWidth)
       ? settings.readableCellWidth
-      : 36;
+      : 36);
+    const minimumCellWidth = count === 0 ? readable : Math.min(12, width / count);
+    const maximumGap = count > 1
+      ? Math.max(0, (width - minimumCellWidth * count) / (count - 1))
+      : 0;
+    const gap = count > 1 ? Math.min(requestedGap, maximumGap) : 0;
     const cellWidth = count === 0
       ? readable
-      : Math.max(12, Math.min(readable, (width - gap * Math.max(0, count - 1)) / count));
+      : Math.max(0, Math.min(readable, (width - gap * (count - 1)) / count));
     return Object.freeze(Array.from({ length: count }, function (_, index) {
       return Object.freeze({
         index: index,
@@ -122,8 +127,10 @@
         height: cell.height,
         rx: 4,
       });
-      drawing.text(cellGroup, cell.centerX, cell.centerY + 5, items[index], "", "middle");
-      if (settings.showIndices !== false) {
+      if (cell.width >= 8) {
+        drawing.text(cellGroup, cell.centerX, cell.centerY + 5, items[index], "", "middle");
+      }
+      if (settings.showIndices !== false && cell.width >= 14) {
         drawing.text(cellGroup, cell.centerX, cell.y + cell.height + 17,
           String(index), "is-muted", "middle");
       }

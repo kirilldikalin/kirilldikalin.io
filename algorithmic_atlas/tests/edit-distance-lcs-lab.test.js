@@ -27,3 +27,10 @@ test("playback fills a finite matrix and reaches the traceback", () => {
   while (!state.frame.finished) state = core.step(state);
   assert.equal(state.frame.matrix.at(-1).at(-1), 1);
 });
+
+test("playback does not replace explicitly empty strings with examples", () => {
+  const state = core.createState({ mode: "edit", left: "", right: "x" });
+  assert.equal(state.left, "");
+  assert.equal(state.right, "x");
+  assert.equal(state.frames.at(-1).matrix.at(-1).at(-1), 1);
+});
