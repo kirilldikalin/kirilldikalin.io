@@ -413,7 +413,7 @@ test("wide chapter titles stay inside the content column beside the TOC", () => 
 
   assert.match(
     chapterStyles,
-    /--chapter-title-max-width:\s*42rem;[\s\S]*?--chapter-title-toc-gutter:\s*14rem;/
+    /--chapter-title-max-width:\s*38rem;[\s\S]*?--chapter-title-toc-gutter:\s*18rem;/
   );
   assert.match(
     chapterStyles,

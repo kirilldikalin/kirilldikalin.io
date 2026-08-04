@@ -12,8 +12,8 @@
   --chapter-warning: #f1dfd7;
   --chapter-lab: #dfe8e6;
   --chapter-focus: #1b6e78;
-  --chapter-title-max-width: 42rem;
-  --chapter-title-toc-gutter: 14rem;
+  --chapter-title-max-width: 38rem;
+  --chapter-title-toc-gutter: 18rem;
 }
 
 * {
