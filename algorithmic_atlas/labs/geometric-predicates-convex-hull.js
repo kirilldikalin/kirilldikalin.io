@@ -95,8 +95,29 @@
           className: model.predicates.orientation === 0 ? "is-bad" : "is-candidate",
           ariaLabel: "Ориентированный треугольник первых трёх точек",
         });
+        const centroid = {
+          x: model.predicates.triple.reduce(function (sum, point) { return sum + point.x; }, 0) / 3,
+          y: model.predicates.triple.reduce(function (sum, point) { return sum + point.y; }, 0) / 3,
+        };
+        geometry.drawText(viewport, transform, centroid,
+          "det = " + String(model.predicates.determinant), "is-metric", "middle");
       }
       if (model.predicates.segments.length === 2) {
+        model.predicates.segments.forEach(function (segment) {
+          const first = transform.toCanvas({
+            x: Math.min(segment[0].x, segment[1].x),
+            y: Math.max(segment[0].y, segment[1].y),
+          });
+          const second = transform.toCanvas({
+            x: Math.max(segment[0].x, segment[1].x),
+            y: Math.min(segment[0].y, segment[1].y),
+          });
+          geometry.append(viewport, "rect", {
+            x: Math.min(first.x, second.x), y: Math.min(first.y, second.y),
+            width: Math.abs(second.x - first.x), height: Math.abs(second.y - first.y),
+            class: "atlas-geometry__bbox",
+          });
+        });
         geometry.drawSegment(viewport, transform, model.predicates.segments[0][0], model.predicates.segments[0][1], { className: "is-good" });
         geometry.drawSegment(viewport, transform, model.predicates.segments[1][0], model.predicates.segments[1][1], { className: "is-bad" });
         const intersection = model.predicates.intersection;

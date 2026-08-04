@@ -146,9 +146,8 @@
         phase: "push", activeIds: [point.id], hullIds: stack.map(function (item) { return item.id; }),
       }));
     });
-    const canonical = shared.convexHull(points);
     frames.push(frame("Стек содержит вершины оболочки в циклическом порядке", {
-      phase: "finished", hullIds: canonical.map(function (point) { return point.id; }), finished: true,
+      phase: "finished", hullIds: stack.map(function (point) { return point.id; }), finished: true,
     }));
     return frames;
   }
