@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Матрицы, линейные системы и устойчивость — Алгоритмический атлас</title>
+  <meta name="description" content="Матричное умножение, исключение Гаусса, обусловленность, устойчивость и итерационное уточнение">
+  <meta property="og:title" content="Матрицы, линейные системы и устойчивость — Алгоритмический атлас">
+  <meta property="og:description" content="Почему быстрый матричный алгоритм, точная задача и надёжный численный ответ — три разных вопроса">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/matrices-linear-systems-stability.html">
+  <link rel="canonical" href="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/matrices-linear-systems-stability.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../chapter.css">
+  <link rel="stylesheet" href="../labs/lab-common.css">
+  <link rel="stylesheet" href="../labs/numeric-labs.css">
+  <link rel="icon" href="../../images/favicon.ico" type="image/x-icon">
+  <script>window.MathJax={loader:{load:['[tex]/html']},tex:{packages:{'[+]':['html']},inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']],processEscapes:true,processEnvironments:true},options:{ignoreHtmlClass:'tex2jax_ignore',processHtmlClass:'tex2jax_process'}};</script>
+  <script id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script src="../atlas-core.js" defer></script>
+  <script src="../chapter-core.js" defer></script>
+  <script src="../labs/lab-controls-core.js" defer></script>
+  <script src="../labs/lab-runtime.js" defer></script>
+  <script src="../labs/lab-svg.js" defer></script>
+  <script src="../labs/numeric-lab-core.js" defer></script>
+  <script src="../labs/numeric-lab-runtime.js" defer></script>
+  <script src="../labs/matrices-linear-systems-stability-core.js" defer></script>
+  <script src="../labs/matrices-linear-systems-stability.js" defer></script>
+  <script src="../chapter.js" defer></script>
+</head>
+<body class="atlas-chapter" data-atlas-node-id="matrices-linear-systems-stability" data-atlas-lab-minutes="32">
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки"><a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span><a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span><span>Матрицы, линейные системы и устойчивость</span></nav>
+  <main class="atlas-chapter-shell">
+    <header class="atlas-chapter-header">
+      <p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.13</p>
+      <h1>Матрицы, линейные системы и устойчивость</h1>
+      <p class="atlas-chapter-intro">Как отличить число арифметических операций от точности задачи и надёжности вычисленного ответа</p>
+      <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 32 мин</span><span>7 доказательств</span><span>12 упражнений</span></div>
+    </header>
+    <div class="atlas-chapter-layout">
+      <aside class="atlas-chapter-toc" aria-labelledby="chapter-toc-title">
+        <h2 id="chapter-toc-title">В этой главе</h2>
+        <ol>
+          <li><a href="#matrix-model">Матрица как оператор</a></li>
+          <li><a href="#multiplication">Умножение</a></li>
+          <li><a href="#blocks">Блоки</a></li>
+          <li><a href="#strassen">Алгоритм Штрассена</a></li>
+          <li><a href="#theory-practice">Теория и практика</a></li>
+          <li><a href="#systems">Линейные системы</a></li>
+          <li><a href="#gaussian">Исключение Гаусса</a></li>
+          <li><a href="#pivoting">Выбор главного элемента</a></li>
+          <li><a href="#factorizations">Факторизации</a></li>
+          <li><a href="#floating-point">Плавающая точка</a></li>
+          <li><a href="#errors">Ошибки</a></li>
+          <li><a href="#conditioning">Обусловленность</a></li>
+          <li><a href="#hilbert">Матрица Гильберта</a></li>
+          <li><a href="#stability">Устойчивость</a></li>
+          <li><a href="#refinement">Уточнение</a></li>
+          <li><a href="#sparse">Разреженные системы</a></li>
+          <li><a href="#iterative">Итерационные методы</a></li>
+          <li><a href="#three-questions">Три независимых вопроса</a></li>
+          <li><a href="#pseudocode">Псевдокод</a></li>
+          <li><a href="#mistakes">Типичные ошибки</a></li>
+          <li><a href="#laboratory">Лаборатория</a></li>
+          <li><a href="#exercises">Упражнения</a></li>
+          <li><a href="#sources">Источники</a></li>
+        </ol>
+      </aside>
+      <article class="atlas-chapter-content">
+        <section id="matrix-model">
+          <h2>Матрица хранит линейное преобразование, а не просто таблицу</h2>
+          <p>Матрица $A\in\mathbb R^{m\times n}$ задаёт линейное отображение из $\mathbb R^n$ в $\mathbb R^m$. Столбцы показывают, куда переходят базисные векторы, а строка описывает одну линейную форму. Такое чтение сразу объясняет размеры: в произведении $Ax$ число координат $x$ должно совпадать с числом столбцов $A$, а результат имеет по одной координате на строку.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-vector-product" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-vector-b}{b}=\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x},\qquad b_i=\sum_{j=1}^{n}a_{ij}x_j.\]</p></div>
+          <p>В вычислительной задаче одной формулы недостаточно. Нужно назвать поле или тип чисел, способ хранения, размеры, норму для измерения ошибок и требуемую точность. Матрица из целых коэффициентов может умножаться точно через <code>BigInt</code>, но решение системы обычно рационально. Матрица из <code>Number</code> использует приближённую двоичную арифметику даже тогда, когда все напечатанные числа выглядят десятичными целыми.</p>
+          <p>Матрицы связывают предыдущие темы: быстрое умножение больших чисел используется внутри длинной арифметики, модульные матрицы работают в конечном поле, полиномиальные преобразования сами являются умножениями на структурированные матрицы. Здесь главный новый вопрос — как цена вычисления взаимодействует с ошибкой представления.</p>
+        </section>
+
+        <section id="multiplication">
+          <h2>Обычное умножение собирает скалярные произведения</h2>
+          <p>Для $A\in\mathbb R^{m\times k}$ и $B\in\mathbb R^{k\times n}$ элемент произведения берёт строку первой матрицы и столбец второй. Прямой алгоритм выполняет $mkn$ умножений с накоплением. Для квадратных матриц порядка $n$ получается $\Theta(n^3)$ арифметических операций и $\Theta(n^2)$ элементов результата.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-product-entry" data-notation-coverage="interactive" data-required-notations="matrix-c-entry,matrix-a-entry,matrix-b-entry"><p>\[\class{atlas-notation-token notation-id-matrix-c-entry}{c_{ij}}=\sum_{t=1}^{k}\class{atlas-notation-token notation-id-matrix-a-entry}{a_{it}}\class{atlas-notation-token notation-id-matrix-b-entry}{b_{tj}}.\]</p></div>
+          <p>Перестановка трёх циклов не меняет формулу и асимптотику, но заметно меняет последовательность обращений к памяти. В строковом хранении один порядок может читать соседние элементы, другой — перескакивать между удалёнными строками. Поэтому одинаковое число операций не означает одинаковое время на реальном процессоре.</p>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Почему произведение соответствует композиции</h3><p>Пусть сначала действует $B$, затем $A$. Координата $i$ результата равна $\sum_t a_{it}(Bx)_t=\sum_ta_{it}\sum_jb_{tj}x_j$. После перестановки конечных сумм коэффициент при $x_j$ равен $\sum_ta_{it}b_{tj}=c_{ij}$. Значит, матрица композиции именно $AB$, причём порядок множителей отражает порядок применения справа налево.</p></section>
+        </section>
+
+        <section id="blocks">
+          <h2>Блоки сохраняют алгебру и улучшают работу с памятью</h2>
+          <p>Если согласованно разбить матрицы на прямоугольные блоки, формула произведения остаётся той же, только отдельные числа заменяются подматрицами. Например, $C_{11}=A_{11}B_{11}+A_{12}B_{21}$. Это не эвристика: равенство следует из того же разбиения внутренней суммы по индексам.</p>
+          <p>Blocked multiplication загружает небольшие плитки в быстрый уровень памяти и многократно использует их до вытеснения. Размер блока выбирается под иерархию cache, регистры и vector units. Арифметических операций по-прежнему кубически много, но движение данных становится существенно дешевле. На практике этот эффект часто важнее, чем уменьшение показателя степени для умеренных размеров.</p>
+          <p>Блоковая запись также готовит переход к рекурсивным алгоритмам. Если порядок не является степенью двойки, матрицу можно дополнить нулевыми строками и столбцами или делить неравными блоками. Дополнение удобно для доказательства, однако чрезмерное дополнение тратит память; промышленная библиотека обрабатывает хвосты отдельно.</p>
+        </section>
+
+        <section id="strassen">
+          <h2>Штрассен заменяет одно блочное умножение сложениями</h2>
+          <p>Обычная формула для четырёх квадрантов использует восемь произведений половинного размера. В 1969 году Фолькер Штрассен показал, как получить те же четыре блока из семи произведений специально подобранных сумм и разностей. Число сложений увеличивается, зато дорогая рекурсивная операция встречается реже.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="strassen-recurrence" data-notation-coverage="interactive" data-required-notations="matrix-time-function,matrix-size-n"><p>\[\class{atlas-notation-token notation-id-matrix-time-function}{T}(\class{atlas-notation-token notation-id-matrix-size-n}{n})=7T(n/2)+\Theta(n^2)=\Theta\!\left(n^{\log_2 7}\right),\qquad \log_2 7\approx2{,}807.\]</p></div>
+          <p>Семь промежуточных произведений обычно обозначают $M_1,\ldots,M_7$. Их конкретная схема важна меньше принципа: линейные комбинации входных блоков кодируют достаточно информации для восстановления всех четырёх выходных блоков. Проверить схему можно раскрытием скобок; каждый нежелательный член сокращается, а четыре нужные пары остаются.</p>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Почему показатель равен $\log_2 7$</h3><p>На глубине $d$ есть $7^d$ задач размера $n/2^d$. Рекурсия останавливается при $d=\log_2n$, поэтому число листьев равно $7^{\log_2 n}=n^{\log_2 7}$. Суммарные сложения по уровням образуют геометрическую сумму того же порядка. Это доказательство считает арифметические операции и не учитывает cache, округление и стоимость выделения временных буферов.</p></section>
+          <p>Лаборатория строит трассу рекурсивного разбиения и сборки для $A^2$. На малом блоке она сознательно возвращается к прямому умножению: это crossover point. В реальной реализации порог измеряют для конкретного оборудования и типа данных, а не выводят только из асимптотики.</p>
+        </section>
+
+        <section id="theory-practice">
+          <h2>Рекордный показатель и лучший практический алгоритм — разные понятия</h2>
+          <p>Показатель матричного умножения $\omega$ — инфимум таких чисел, для которых квадратные матрицы можно умножать за $O(n^{\omega+\varepsilon})$ операций для любого $\varepsilon&gt;0$. Опубликованная на SODA 2025 работа даёт верхнюю границу $\omega&lt;2{,}371339$. Это результат о существовании асимптотического алгоритма в выбранной алгебраической модели, а не рекомендация заменить им BLAS в обычной программе.</p>
+          <p>У рекордных конструкций огромны константы, пороги и объёмы вспомогательной работы. Они могут быть численно неудобны и проигрывать классическому blocked kernel на всех достижимых размерах. Даже Strassen используют выборочно: он начинает выигрывать раньше рекордных методов, но требует дополнительной памяти и сложений и может усиливать ошибку.</p>
+          <p>Практический отчёт должен разделять хотя бы четыре величины: арифметическую сложность, объём передачи данных, фактическое время и численную ошибку. Фраза «алгоритм быстрее» без размеров, типа матриц, точности и платформы недостаточна. Точно так же одна benchmark table не устанавливает асимптотический показатель.</p>
+        </section>
+
+        <section id="systems">
+          <h2>Линейная система спрашивает не об обратной матрице</h2>
+          <p>Задача $Ax=b$ требует найти вектор $x$. Если $A$ квадратна и невырождена, решение единственно. Формально можно написать $x=A^{-1}b$, но вычислять всю обратную матрицу обычно дороже и менее содержательно, чем факторизовать $A$ и решить систему.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="linear-system" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}.\]</p></div>
+          <p>Система может не иметь решений или иметь бесконечно много, если матрица прямоугольна или вырождена. Ранг описывает число независимых ограничений. Для квадратной матрицы ненулевой determinant эквивалентен обратимости в точной арифметике, но вычисление determinant отдельно не является хорошим численным тестом: значение может быть очень малым из-за масштаба, не отражая напрямую чувствительность решения.</p>
+          <p>Политика главы: лаборатория принимает квадратные матрицы порядка от 1 до 8 и конечные числа. Вырожденный или численно неразличимый pivot отклоняется понятным сообщением. Ограничение связано с видимой трассой, а не с математическим пределом метода.</p>
+        </section>
+
+        <section id="gaussian">
+          <h2>Исключение Гаусса превращает систему в треугольную</h2>
+          <p>Элементарные операции над строками сохраняют множество решений: перестановка уравнений, умножение уравнения на ненулевое число и добавление кратного другого уравнения. На шаге $k$ алгоритм выбирает pivot в столбце $k$ и обнуляет элементы ниже него. После прямого хода остаётся верхнетреугольная система, решаемая обратной подстановкой.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="gaussian-elimination-step" data-notation-coverage="interactive" data-required-notations="matrix-elimination-factor,matrix-pivot"><p>\[\class{atlas-notation-token notation-id-matrix-elimination-factor}{m_{ik}}=\frac{a_{ik}}{\class{atlas-notation-token notation-id-matrix-pivot}{a_{kk}}},\qquad R_i\leftarrow R_i-m_{ik}R_k.\]</p></div>
+          <p>На первом шаге обновляется примерно $(n-1)^2$ элементов, затем $(n-2)^2$ и так далее. Сумма квадратов даёт $\Theta(n^3)$ операций. Обратная подстановка требует только $\Theta(n^2)$. Для нескольких правых частей факторизацию выгодно выполнить один раз, а затем повторять дешёвые треугольные решения.</p>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Инвариант прямого хода</h3><p>После завершения столбцов $0,\ldots,k-1$ все элементы ниже диагонали в этих столбцах равны нулю, а новая расширенная матрица задаёт то же множество решений. Новый шаг использует допустимые операции строк и не меняет уже обнулённые позиции, потому что pivot-строка сама имеет нули в предыдущих столбцах. Индукция приводит к эквивалентной верхнетреугольной системе.</p></section>
+        </section>
+
+        <section id="pivoting">
+          <h2>Частичный выбор главного элемента избегает опасного деления</h2>
+          <p>Если диагональный элемент равен нулю, но ниже есть ненулевой, строки необходимо переставить. В плавающей арифметике опасен и очень малый pivot: коэффициент исключения становится огромным, промежуточные числа растут, а округления усиливаются. Partial pivoting выбирает в текущем столбце доступный элемент с максимальным модулем.</p>
+          <p>Перестановки записывают матрицей $P$, и факторизация принимает вид $PA=LU$. Partial pivoting не является абсолютной гарантией малого роста для всякой искусственно построенной матрицы, но на практике чрезвычайно надёжен. Complete pivoting ищет максимум во всей оставшейся подматрице и переставляет также столбцы; это дороже и меняет порядок неизвестных.</p>
+          <p>Выбор pivot должен быть синхронизирован с правой частью. Переставить строки $A$ и забыть переставить соответствующие элементы $b$ означает решить другую систему. В лаборатории расширенная матрица рисуется целиком, поэтому перестановка видна вместе с правым столбцом.</p>
+        </section>
+
+        <section id="factorizations">
+          <h2>LU и QR отделяют подготовку от решения</h2>
+          <p>Множители исключения образуют нижнетреугольную матрицу $L$, итог прямого хода — верхнетреугольную $U$. С перестановками получается $PA=LU$. Сначала решают $Ly=Pb$ прямой подстановкой, затем $Ux=y$ обратной. Эта запись позволяет хранить $L$ и $U$ в одном массиве и применять факторизацию к многим правым частям.</p>
+          <p>QR-factorization представляет $A=QR$, где столбцы $Q$ ортонормированы, а $R$ верхнетреугольна. Householder reflections обычно устойчивее классического Gram–Schmidt и являются стандартным выбором для least squares. Цена плотной квадратной QR остаётся кубической, но константа выше LU.</p>
+          <p>Cholesky factorization $A=LL^{\mathsf T}$ использует симметричность и положительную определённость. Она примерно вдвое дешевле общей LU и не требует pivoting при точных предпосылках. Применять её к матрице, которая лишь выглядит симметричной после округления, нельзя без проверки модели задачи.</p>
+        </section>
+
+        <section id="floating-point">
+          <h2>Плавающая точка хранит ближайшее представимое число</h2>
+          <p>Упрощённая модель одной базовой операции записывается как $\operatorname{fl}(x\circ y)=(x\circ y)(1+\delta)$, где $|\delta|\le u$ и результат не вызывает overflow или underflow. Здесь $u$ — unit roundoff. Модель относительной ошибки удобна, но не описывает операции около нуля и специальные значения сама по себе.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="floating-point-model" data-notation-coverage="interactive" data-required-notations="floating-result,floating-roundoff"><p>\[\class{atlas-notation-token notation-id-floating-result}{\operatorname{fl}(x\circ y)}=(x\circ y)(1+\class{atlas-notation-token notation-id-floating-roundoff}{\delta}),\qquad |\delta|\le u.\]</p></div>
+          <p>При сложении близких чисел противоположных знаков возникает cancellation: абсолютная ошибка может остаться малой, а относительная ошибка результата стать большой, потому что точный результат почти нулевой. Overflow превращает конечный результат в бесконечность, underflow теряет младшие разряды около нуля. Масштабирование строк и столбцов иногда помогает, но не исправляет плохую обусловленность исходной задачи.</p>
+          <p>JavaScript <code>Number</code> следует двоичной 64-битной арифметике IEEE 754. Он точно представляет целые только до $2^{53}-1$. Матричная лаборатория запрещает <code>NaN</code> и бесконечности, ограничивает размер визуализации, но не изображает результат символически точным. Для рационального эталона понадобилось бы другое ядро.</p>
+        </section>
+
+        <section id="errors">
+          <h2>Residual, forward error и backward error отвечают на разные вопросы</h2>
+          <p>Для вычисленного $\widehat x$ residual равен $r=b-A\widehat x$. Малый residual означает, что $\widehat x$ почти удовлетворяет записанным уравнениям. Forward error сравнивает $\widehat x$ с неизвестным точным решением $x$. Эти величины могут резко различаться в плохо обусловленной задаче.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="linear-system-residual" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}-\class{atlas-notation-token notation-id-matrix-a}{A}\widehat{\class{atlas-notation-token notation-id-matrix-vector-x}{x}}.\]</p></div>
+          <p>Backward error спрашивает, для какой близкой задачи вычисленный ответ был бы точным. Устойчивый алгоритм обычно гарантирует малую обратную ошибку. Затем обусловленность переводит её в возможную прямую ошибку. Так отделяется поведение алгоритма от чувствительности математической постановки.</p>
+          <p>Residual нужно нормировать относительно масштаба $A$, $x$ и $b$. Абсолютное значение $10^{-8}$ великолепно для данных порядка единицы, но плохо для системы с коэффициентами $10^{-12}$. В лаборатории показывается норма $\|r\|_\infty$ как понятный индикатор, а текст главы предупреждает, что одной этой цифры недостаточно.</p>
+        </section>
+
+        <section id="conditioning">
+          <h2>Число обусловленности измеряет чувствительность задачи</h2>
+          <p>Для обратимой матрицы в согласованной операторной норме число обусловленности равно $\kappa(A)=\|A\|\,\|A^{-1}\|$. Оно не меньше единицы. Большое значение означает, что малое относительное возмущение данных может привести к заметному относительному изменению решения.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-condition-number" data-notation-coverage="interactive" data-required-notations="matrix-condition,matrix-a"><p>\[\class{atlas-notation-token notation-id-matrix-condition}{\kappa(A)}=\|\class{atlas-notation-token notation-id-matrix-a}{A}\|\,\|A^{-1}\|.\]</p></div>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Почему масштаб не меняет обусловленность</h3><p>Для ненулевого $\alpha$ имеем $(\alpha A)^{-1}=\alpha^{-1}A^{-1}$. Однородность нормы даёт $\|\alpha A\|\,\|(\alpha A)^{-1}\|=|\alpha|\|A\|\cdot|\alpha|^{-1}\|A^{-1}\|=\kappa(A)$. Поэтому малый determinant из-за общего масштаба не доказывает плохую обусловленность.</p></section>
+          <p>Оценка вида $\|\delta x\|/\|x\|\lesssim\kappa(A)\,\|\delta b\|/\|b\|$ показывает худшее возможное усиление малых возмущений правой части при фиксированной $A$. Это верхняя граница, а не обещание, что каждый шум усилится ровно во столько раз. Направление возмущения имеет значение.</p>
+        </section>
+
+        <section id="hilbert">
+          <h2>Матрица Гильберта выглядит безобидно и быстро становится трудной</h2>
+          <p>Элементы матрицы Гильберта равны $h_{ij}=1/(i+j-1)$. Все числа положительны, матрица симметрична и положительно определена. Тем не менее её столбцы при росте порядка становятся почти линейно зависимыми, а число обусловленности растёт очень быстро.</p>
+          <p>Это полезный контрольный пример: малое изменение правой части или округление коэффициентов способно заметно изменить решение. При этом устойчивый решатель может иметь крошечный residual. Противоречия нет: алгоритм хорошо решил немного возмущённую систему, но сама задача не позволяет надёжно восстановить исходный $x$ из ограниченно точных данных.</p>
+          <p>Hilbert matrices не следует использовать как единственный benchmark. Они выявляют конкретный вид плохой обусловленности, но не покрывают sparse patterns, масштабные различия, nonnormal matrices и growth factor исключения. Хороший набор тестов отделяет структурные семейства от случайных примеров.</p>
+        </section>
+
+        <section id="stability">
+          <h2>Устойчивость — свойство алгоритма вместе с арифметикой</h2>
+          <p>Backward stable алгоритм возвращает точный ответ для входа, близкого к заданному. Это сильная и практичная гарантия, но она не обещает малую forward error при большом $\kappa$. Напротив, хорошо обусловленная задача может быть испорчена неустойчивым алгоритмом.</p>
+          <p>Gaussian elimination with partial pivoting обычно backward stable с поправкой на growth factor. Фактор роста сравнивает крупнейший промежуточный элемент с крупнейшим исходным. Для специально построенных матриц он может быть большим, хотя типичное поведение гораздо лучше худшей границы.</p>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Связка «устойчивость плюс обусловленность»</h3><p>Пусть вычисленный ответ точен для $(A+\Delta A)\widehat x=b+\Delta b$, где возмущения малы. Вычитая $Ax=b$, получаем уравнение для ошибки, в котором действует $A^{-1}$. Норма обратной матрицы усиливает возмущение, а после относительной нормировки появляется $\kappa(A)$. Следовательно, малая backward error превращается в малую forward error только при умеренной обусловленности.</p></section>
+          <p>Фраза «метод устойчив» должна сопровождаться нормой, видом возмущений и предпосылками. Устойчивость к округлению не означает устойчивость к ошибке модели или шуму измерений. Она также не равна convergence итерационного метода.</p>
+        </section>
+
+        <section id="refinement">
+          <h2>Итерационное уточнение использует residual как поправку</h2>
+          <p>После приближённого решения $x_k$ вычислим $r_k=b-Ax_k$ и решим систему $Ad_k=r_k$. Тогда $x_{k+1}=x_k+d_k$. В точной арифметике одна такая поправка устранила бы всю ошибку, потому что $A(x-x_k)=r_k$. В плавающей точке остаётся новая ошибка, и шаг можно повторить.</p>
+          <div class="atlas-math atlas-notation-formula" data-formula-id="iterative-refinement" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-correction,matrix-iterate"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r_k}=b-A\class{atlas-notation-token notation-id-matrix-iterate}{x_k},\quad A\class{atlas-notation-token notation-id-matrix-correction}{d_k}=r_k,\quad x_{k+1}=x_k+d_k.\]</p></div>
+          <p>Классический вариант повторно использует одну LU-factorization. Особенно полезно вычислять residual в более высокой точности, чем сам solve. Уточнение может улучшить ответ, но не является магическим лекарством: при слишком плохой обусловленности, неверной факторизации или stagnation correction перестаёт помогать.</p>
+          <p>Лаборатория показывает норму residual после каждого шага и ограничивает число итераций. Автоматический запуск имеет паузу, пошаговый режим и предельное число кадров; длинная или не сходящаяся последовательность не блокирует основной поток страницы.</p>
+        </section>
+
+        <section id="sparse">
+          <h2>Разреженность меняет стоимость и порядок операций</h2>
+          <p>Матрица называется sparse, когда число ненулевых элементов существенно меньше $mn$. Хранить все нули и выполнять над ними операции расточительно. Форматы CSR и CSC хранят значения, индексы и границы строк или столбцов. Умножение sparse matrix на vector стоит порядка числа ненулевых элементов.</p>
+          <p>Прямое исключение может породить fill-in: позиции, бывшие нулевыми, становятся ненулевыми. Перестановка строк и столбцов до factorization уменьшает заполнение и память. Это комбинаторная задача, связанная с графом ненулевого шаблона; выбор только самого большого pivot не решает её.</p>
+          <p>Для banded, symmetric positive definite и других структур существуют специализированные factorization. Называть алгоритм $O(n^3)$ без параметра sparsity часто слишком грубо. Но и писать $O(\operatorname{nnz}(A))$ для полного решения неверно: это цена одного matrix-vector product, а число итераций и preconditioner требуют отдельного анализа.</p>
+        </section>
+
+        <section id="iterative">
+          <h2>Итерационные методы заменяют точное исключение последовательностью приближений</h2>
+          <p>Conjugate gradient method решает symmetric positive definite systems, строя взаимно сопряжённые направления. В точной арифметике он завершился бы не более чем за $n$ шагов, но смысл метода — получить полезную точность раньше, используя только matrix-vector products и скалярные операции.</p>
+          <p>GMRES работает с общими nonsymmetric matrices и минимизирует residual в растущем Krylov subspace. Без restart память и ортогонализация растут с числом шагов; restart ограничивает ресурсы, но может замедлить convergence. Условие остановки должно учитывать относительный residual и масштаб задачи.</p>
+          <p>Preconditioner $M$ заменяет систему на эквивалентную, спектрально более удобную. Его применение должно быть дешёвым по сравнению с исходным solve. Хороший preconditioner — часть алгоритма, поэтому сравнение числа итераций без цены его построения и применения неполно.</p>
+          <section class="atlas-block" data-atlas-block="proof"><h3>Почему малый residual естествен для Krylov methods</h3><p>На шаге $k$ поправка ищется в пространстве, порождённом $r_0,Ar_0,\ldots,A^{k-1}r_0$. Тогда новый residual равен $p_k(A)r_0$ для полинома $p_k$ степени $k$ с $p_k(0)=1$. Convergence определяется тем, насколько такой полином может быть мал на важных частях спектра, а не только размером матрицы.</p></section>
+        </section>
+
+        <section id="three-questions">
+          <h2>Сложность, устойчивость и обусловленность нельзя склеить в одну оценку</h2>
+          <p><strong>Сложность</strong> спрашивает, сколько ресурсов использует алгоритм в выбранной модели. <strong>Устойчивость</strong> спрашивает, как округления и другие малые вычислительные возмущения влияют на результат метода. <strong>Обусловленность</strong> относится к самой математической задаче и измеряет реакцию точного ответа на изменение данных.</p>
+          <p>Быстрый неустойчивый алгоритм может дать бесполезный ответ. Устойчивый алгоритм не спасает информацию, которой нет в плохо обусловленных данных. Медленный точный рациональный расчёт устраняет округление, но не исправляет шум исходных измерений. Выбор метода начинается с того, какая гарантия действительно нужна.</p>
+          <p>Полезный численный отчёт указывает residual, нормировку, estimate of condition, precision, pivoting strategy и stopping criterion. Для производительности добавляются размеры, sparsity, число правых частей, объём памяти и платформа. Только после этого слово «лучше» приобретает проверяемый смысл.</p>
+        </section>
+
+        <section id="pseudocode">
+          <h2>Псевдокод разделяет факторизацию, решение и проверку</h2>
+          <pre role="region" aria-label="Исключение Гаусса с частичным выбором главного элемента"><code><span>для k = 0,…,n−1:</span>
+<span>  p ← индекс максимального |A[i,k]| среди i ≥ k</span>
+<span>  переставить строки k и p в A и b</span>
+<span>  если A[k,k] численно равно нулю: сообщить о вырождении</span>
+<span>  для i = k+1,…,n−1:</span>
+<span>    m ← A[i,k] / A[k,k]</span>
+<span>    строка i ← строка i − m · строка k</span>
+<span>x ← обратная подстановка</span>
+<span>r ← b − A_original x</span></code></pre>
+          <pre role="region" aria-label="Итерационное уточнение"><code><span>один раз построить PA = LU</span>
+<span>x ← solve(L,U,Pb)</span>
+<span>пока критерий остановки не выполнен:</span>
+<span>  r ← b − Ax, желательно в большей точности</span>
+<span>  d ← solve(L,U,Pr)</span>
+<span>  x ← x + d</span>
+<span>вернуть x вместе с residual и диагнозом</span></code></pre>
+        </section>
+
+        <section id="mistakes">
+          <h2>Что часто понимают неправильно</h2>
+          <ul>
+            <li>Вычисляют $A^{-1}$, хотя нужна только одна система $Ax=b$</li>
+            <li>Считают малый determinant достаточным доказательством плохой обусловленности</li>
+            <li>Путают малый residual с малой ошибкой решения</li>
+            <li>Переставляют строки $A$, но не соответствующие элементы $b$</li>
+            <li>Делят на первый ненулевой pivot без оценки его масштаба</li>
+            <li>Сравнивают $O(n^3)$ и Strassen без crossover point и памяти</li>
+            <li>Выдают рекордную верхнюю границу $\omega$ за готовый практический kernel</li>
+            <li>Считают <code>Number</code> точным для всех напечатанных целых</li>
+            <li>Игнорируют overflow, underflow и cancellation</li>
+            <li>Применяют Cholesky без симметрии и положительной определённости</li>
+            <li>Оценивают sparse solve только числом строк, забывая ненулевые элементы и fill-in</li>
+            <li>Останавливают итерационный метод по абсолютному residual без масштаба</li>
+          </ul>
+        </section>
+
+        <section id="laboratory" class="atlas-block atlas-block--fullwidth" data-atlas-block="lab">
+          <h2>Лаборатория: матрица, pivot и ошибка решения</h2>
+          <p>Введите квадратную матрицу и правую часть. В режиме Гаусса каждый кадр показывает перестановку или исключение в расширенной матрице. Режим обусловленности сопоставляет решение, residual и $\kappa_\infty$; уточнение повторно решает уравнение для поправки; Strassen раскрывает рекурсивные блоки при вычислении $A^2$. Все режимы используют одни входные данные и общее управление шагом, запуском, паузой, сбросом и скоростью.</p>
+          <div class="atlas-lab" data-atlas-lab="matrices-linear-systems-stability"></div>
+        </section>
+
+        <section id="exercises" class="atlas-block" data-atlas-block="exercises">
+          <h2>От одной строки до диагноза устойчивости</h2>
+          <div class="atlas-exercises">
+            <article class="atlas-exercise"><p><strong>1.</strong> Перемножьте матрицы $\begin{pmatrix}1&amp;2\\0&amp;1\end{pmatrix}$ и $\begin{pmatrix}3&amp;0\\4&amp;5\end{pmatrix}$.</p><details><summary>Подсказка</summary><p>Берите строку первой матрицы и столбец второй.</p></details><details><summary>Решение</summary><p>Получается $\begin{pmatrix}11&amp;10\\4&amp;5\end{pmatrix}$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>2.</strong> Докажите согласованность размеров произведения $A_{m\times k}B_{k\times n}$.</p><details><summary>Подсказка</summary><p>Интерпретируйте матрицы как последовательные отображения.</p></details><details><summary>Решение</summary><p>$B$ переводит $\mathbb R^n$ в $\mathbb R^k$, затем $A$ переводит $\mathbb R^k$ в $\mathbb R^m$, поэтому композиция имеет размер $m\times n$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>3.</strong> Решите рекуррентность Штрассена и объясните роль сложений.</p><details><summary>Подсказка</summary><p>Сравните семь подзадач половинного размера с $O(n^2)$ работой уровня.</p></details><details><summary>Решение</summary><p>$T(n)=7T(n/2)+O(n^2)=\Theta(n^{\log_2 7})$; сложения не доминируют, потому что $\log_2 7&gt;2$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>4.</strong> Выполните один шаг исключения для системы $2x+y=5$, $4x+3y=11$.</p><details><summary>Подсказка</summary><p>С partial pivoting сначала переставьте строки.</p></details><details><summary>Решение</summary><p>После перестановки и вычитания половины первой строки из второй получаем $-\tfrac12y=-\tfrac12$, то есть $y=1$, затем $x=2$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>5.</strong> Почему операция $R_i\leftarrow R_i-mR_k$ сохраняет решения?</p><details><summary>Подсказка</summary><p>Восстановите исходное уравнение обратной операцией.</p></details><details><summary>Решение</summary><p>Любой вектор, удовлетворяющий обоим исходным уравнениям, удовлетворяет их линейной комбинации; обратно добавление $mR_k$ восстанавливает исходное $R_i$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>6.</strong> Постройте пример, где деление на первый диагональный элемент невозможно, но система имеет единственное решение.</p><details><summary>Подсказка</summary><p>Начните матрицу со строки $(0,1)$.</p></details><details><summary>Решение</summary><p>Матрица $\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}$ обратима; перестановка строк даёт ненулевой pivot.</p></details></article>
+            <article class="atlas-exercise"><p><strong>7.</strong> Объясните, почему умножение всей матрицы на $10^{-12}$ не меняет $\kappa(A)$.</p><details><summary>Подсказка</summary><p>Обратная матрица получает обратный множитель.</p></details><details><summary>Решение</summary><p>Однородность нормы сокращает $10^{-12}$ и $10^{12}$ в произведении $\|A\|\|A^{-1}\|$.</p></details></article>
+            <article class="atlas-exercise"><p><strong>8.</strong> Может ли $\|b-A\widehat x\|$ быть малой при большой $\|x-\widehat x\|$?</p><details><summary>Подсказка</summary><p>Рассмотрите плохо обусловленную матрицу.</p></details><details><summary>Решение</summary><p>Да. Почти нулевой residual соответствует малой backward error, но $A^{-1}$ может сильно усилить её в forward error.</p></details></article>
+            <article class="atlas-exercise"><p><strong>9.</strong> Выведите идеальный шаг iterative refinement в точной арифметике.</p><details><summary>Подсказка</summary><p>$r=b-Ax_k=A(x-x_k)$.</p></details><details><summary>Решение</summary><p>Решение $Ad=r$ даёт $d=x-x_k$, поэтому $x_{k+1}=x$ за один шаг. Повторения нужны из-за приближённой арифметики.</p></details></article>
+            <article class="atlas-exercise"><p><strong>10.</strong> Почему $O(\operatorname{nnz}(A))$ корректно для одного sparse matrix-vector product, но не обязательно для решения?</p><details><summary>Подсказка</summary><p>Добавьте число итераций и preconditioner.</p></details><details><summary>Решение</summary><p>Каждая итерация может стоить линейно по ненулевым элементам, но их количество зависит от спектра и предобусловливания; построение preconditioner тоже имеет цену.</p></details></article>
+            <article class="atlas-exercise"><p><strong>11.</strong> Найдите ошибку в утверждении: «Strassen имеет меньшую степень, значит быстрее для матриц $2\times2$».</p><details><summary>Подсказка</summary><p>Асимптотика не задаёт crossover point.</p></details><details><summary>Решение</summary><p>Семь умножений сопровождаются многими сложениями и временными блоками. На малом размере прямой kernel почти наверняка дешевле.</p></details></article>
+            <article class="atlas-exercise"><p><strong>12.</strong> Спроектируйте отчёт для сравнения двух решателей.</p><details><summary>Подсказка</summary><p>Разделите время, residual, forward error и condition estimate.</p></details><details><summary>Решение</summary><p>Укажите семейство и размеры матриц, precision, sparsity, платформу, factorization/pivoting, время и память, нормированный residual, доступный эталон forward error, estimate $\kappa$ и критерий остановки.</p></details></article>
+          </div>
+        </section>
+
+        <section id="sources" class="atlas-block" data-atlas-block="sources">
+          <h2>Источники</h2>
+          <ol class="atlas-sources">
+            <li>Volker Strassen, <a href="https://doi.org/10.1007/BF02165411" target="_blank" rel="noopener noreferrer">Gaussian Elimination is Not Optimal</a>, Numerische Mathematik 13, 1969.</li>
+            <li>Josh Alman, Hantao Yu, <a href="https://doi.org/10.1137/1.9781611978322.61" target="_blank" rel="noopener noreferrer">Improving the Leading Constant of Matrix Multiplication</a>, SODA 2025.</li>
+            <li>Josh Alman, Ran Duan, Virginia Vassilevska Williams, Yinzhan Xu, Zixuan Xu, Renfei Zhou, <a href="https://doi.org/10.1137/1.9781611978322.63" target="_blank" rel="noopener noreferrer">More Asymmetry Yields Faster Matrix Multiplication</a>, SODA 2025 — опубликованная граница $\omega&lt;2{,}371339$.</li>
+            <li>Nicholas J. Higham, <a href="https://doi.org/10.1137/1.9780898718027" target="_blank" rel="noopener noreferrer">Accuracy and Stability of Numerical Algorithms</a>, SIAM, 2002.</li>
+            <li>Gene H. Golub, Charles F. Van Loan, <a href="https://jhupbooks.press.jhu.edu/title/matrix-computations" target="_blank" rel="noopener noreferrer">Matrix Computations</a>, Johns Hopkins University Press, 4th edition, 2013.</li>
+            <li>M. R. Hestenes, E. Stiefel, <a href="https://doi.org/10.6028/jres.049.044" target="_blank" rel="noopener noreferrer">Methods of Conjugate Gradients for Solving Linear Systems</a>, Journal of Research of the National Bureau of Standards 49, 1952.</li>
+            <li>Yousef Saad, Martin H. Schultz, <a href="https://doi.org/10.1137/0907058" target="_blank" rel="noopener noreferrer">GMRES: A Generalized Minimal Residual Algorithm for Solving Nonsymmetric Linear Systems</a>, SIAM Journal on Scientific and Statistical Computing 7, 1986.</li>
+          </ol>
+        </section>
+
+        <nav class="atlas-route-nav" aria-label="Переходы по маршруту"><div id="atlas-route-previous"></div><div id="atlas-route-next"></div></nav>
+        <section class="atlas-completion" aria-labelledby="atlas-completion-title"><h2 id="atlas-completion-title">Сохранить локальный прогресс</h2><button id="atlas-mark-complete" type="button" aria-pressed="false">Отметить главу пройденной</button><p id="atlas-chapter-progress-status" aria-live="polite"></p></section>
+      </article>
+    </div>
+  </main>
+</body>
+</html>
