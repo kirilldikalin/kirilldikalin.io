@@ -34,6 +34,13 @@ test("нулевая степень и отрицательное основан
   assert.throws(() => core.powerFrames(2n, -1n, 7n), /неотрицательным/);
 });
 
+test("безмодульная степень отклоняется до построения чрезмерного BigInt", () => {
+  const excessiveExponent = core.MAX_UNMODULAR_POWER_BITS + 1n;
+  assert.throws(() => core.powerFrames(2n, excessiveExponent, null), /безопасную границу/);
+  assert.equal(core.powerFrames(2n, 64n, null).at(-1).result, 1n << 64n);
+  assert.equal(core.powerFrames(-1n, excessiveExponent, null).at(-1).result, -1n);
+});
+
 test("Карацуба совпадает с BigInt на разных длинах и знаках", () => {
   const pairs = [[0n, 99n], [12n, 34n], [12345678n, 87654321n], [-999999999999n, 123456789n]];
   pairs.forEach(([a, b]) => assert.equal(core.karatsubaTrace(a, b).result, a * b));

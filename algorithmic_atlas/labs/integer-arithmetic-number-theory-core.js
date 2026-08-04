@@ -10,6 +10,7 @@
   "use strict";
   if (!shared) throw new Error("AtlasNumericLabCore is unavailable");
   const MAX_FRAMES = 320;
+  const MAX_UNMODULAR_POWER_BITS = 200000n;
 
   function euclidFrames(rawA, rawB) {
     let oldR = shared.abs(rawA);
@@ -72,6 +73,18 @@
     if (exponent < 0n) throw new RangeError("Показатель должен быть неотрицательным.");
     if (exponent.toString(2).length > 320) throw new RangeError("Для покадрового режима допустимо не более 320 бит показателя.");
     if (modulus !== null && modulus <= 0n) throw new RangeError("Модуль должен быть положительным.");
+    const magnitude = shared.abs(base);
+    if (
+      modulus === null &&
+      exponent > 0n &&
+      magnitude > 1n &&
+      BigInt(shared.bitLength(magnitude)) * exponent > MAX_UNMODULAR_POWER_BITS
+    ) {
+      throw new RangeError(
+        "Консервативная оценка результата степени без модуля превышает безопасную границу " +
+        MAX_UNMODULAR_POWER_BITS + " бит. Уменьшите показатель или укажите модуль."
+      );
+    }
     let result = modulus === null ? 1n : 1n % modulus;
     let factor = modulus === null ? base : shared.mod(base, modulus);
     let remaining = exponent;
@@ -168,6 +181,7 @@
 
   return Object.freeze({
     MAX_FRAMES: MAX_FRAMES,
+    MAX_UNMODULAR_POWER_BITS: MAX_UNMODULAR_POWER_BITS,
     euclidFrames: euclidFrames,
     binaryGcd: binaryGcd,
     powerFrames: powerFrames,

@@ -89,11 +89,47 @@
     return shared.mod(result.x, modulus);
   }
 
+  function validateNttParameters(length, modulus, primitiveRoot) {
+    const n = BigInt(length);
+    if (modulus <= 1n) throw new RangeError("Модуль NTT должен быть больше единицы.");
+    if ((modulus - 1n) % n !== 0n) {
+      throw new RangeError("Длина не делит p−1: корня нужного порядка нет.");
+    }
+    if (shared.gcd(n, modulus) !== 1n) {
+      throw new RangeError("Длина NTT должна быть обратима по выбранному модулю.");
+    }
+    if (length === 1) return shared.deepFreeze({ root: 1n });
+
+    const root = shared.modPow(primitiveRoot, (modulus - 1n) / n, modulus);
+    if (
+      shared.modPow(root, n, modulus) !== 1n ||
+      shared.modPow(root, n / 2n, modulus) === 1n
+    ) {
+      throw new RangeError("Выбранный генератор не даёт корень точного порядка NTT.");
+    }
+
+    // Точный порядок недостаточен в произвольном кольце: проверяем ту же
+    // ортогональность степеней, которой пользуется обратное преобразование.
+    for (let frequency = 1; frequency < length; frequency += 1) {
+      const step = shared.modPow(root, BigInt(frequency), modulus);
+      let term = 1n;
+      let sum = 0n;
+      for (let index = 0; index < length; index += 1) {
+        sum = (sum + term) % modulus;
+        term = term * step % modulus;
+      }
+      if (sum !== 0n) {
+        throw new RangeError("Модуль и корень не обеспечивают обратимую NTT.");
+      }
+    }
+    return shared.deepFreeze({ root: root });
+  }
+
   function nttFrames(rawValues, inverse, modulus, primitiveRoot) {
     const p = modulus || NTT_MODULUS;
     const generator = primitiveRoot || NTT_ROOT;
     const n = nextPowerOfTwo(rawValues.length);
-    if ((p - 1n) % BigInt(n) !== 0n) throw new RangeError("Длина не делит p−1: корня нужного порядка нет.");
+    const parameters = validateNttParameters(n, p, generator);
     const values = rawValues.map(function (value) { return shared.mod(BigInt(value), p); });
     while (values.length < n) values.push(0n);
     const bits = Math.log2(n);
@@ -102,7 +138,7 @@
     for (let index = 0; index < n; index += 1) values[index] = permuted[index];
     const frames = [{ mode: "ntt", phase: "bit-reversal", stage: 0, size: 1, values: values.slice(), active: [], modulus: p, message: "Точные остатки переставлены в bit-reversal порядке." }];
     for (let size = 2, stage = 1; size <= n; size <<= 1, stage += 1) {
-      let root = shared.modPow(generator, (p - 1n) / BigInt(size), p);
+      let root = shared.modPow(parameters.root, BigInt(n / size), p);
       if (inverse) root = modularInverse(root, p);
       for (let start = 0; start < n; start += size) {
         let omega = 1n;
@@ -173,6 +209,7 @@
     MAX_SIZE: MAX_SIZE,
     nextPowerOfTwo: nextPowerOfTwo,
     parseCoefficients: parseCoefficients,
+    validateNttParameters: validateNttParameters,
     fftFrames: fftFrames,
     nttFrames: nttFrames,
     naiveConvolution: naiveConvolution,

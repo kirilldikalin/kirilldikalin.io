@@ -47,6 +47,17 @@ test("неподходящий модуль явно отклоняет отсу
   assert.throws(() => core.nttFrames([1n, 2n, 3n, 4n], false, 11n, 2n), /не делит/);
 });
 
+test("NTT отклоняет генератор с корнем меньшего порядка", () => {
+  assert.throws(
+    () => core.nttFrames([1n, 2n, 3n, 4n], false, 17n, 4n),
+    /точного порядка/
+  );
+});
+
+test("подходящий корень даёт точную свёртку и для малого поля", () => {
+  assert.deepEqual(core.nttConvolution([1n, 2n], [3n, 4n], 17n), [3n, 10n, 8n]);
+});
+
 test("парсер различает Number и BigInt и запрещает NaN", () => {
   assert.deepEqual(core.parseCoefficients("1, -2, 3", false), [1, -2, 3]);
   assert.deepEqual(core.parseCoefficients("1, -2, 3", true), [1n, -2n, 3n]);

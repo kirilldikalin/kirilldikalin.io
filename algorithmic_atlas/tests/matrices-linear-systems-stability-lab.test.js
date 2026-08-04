@@ -29,6 +29,13 @@ test("частичный выбор pivot спасает систему с ну�
   close(solution[0], 1); close(solution[1], 1);
 });
 
+test("критерий pivot сохраняет хорошо обусловленную систему при масштабировании", () => {
+  const scale = 1e-12;
+  const solution = core.solve([[scale, 0], [0, scale]], [scale, scale], true);
+  close(solution[0], 1);
+  close(solution[1], 1);
+});
+
 test("вырожденная матрица не выдаёт ложного решения", () => {
   assert.throws(() => core.solve([[1, 2], [2, 4]], [3, 6], true), /вырождена/);
 });
@@ -52,6 +59,20 @@ test("парсер ловит несовпадающие размеры и бе�
   assert.throws(() => core.parseMatrix("1,2;3"), /одинаковую/);
   assert.throws(() => core.parseVector("1,2,3", 2), /ровно 2/);
   assert.throws(() => core.parseMatrix("1,Infinity;0,1"), /конечным/);
+});
+
+test("матричные операции отклоняют промежуточное переполнение Number", () => {
+  assert.throws(() => core.multiplyMatrices([[1e308]], [[1e308]]), /диапазон Number/);
+  assert.throws(
+    () => core.solve([[1e308, 1e308], [1e308, -1e308]], [1, 1], true),
+    /диапазон Number/
+  );
+});
+
+test("режим Strassen честно сообщает о возможном округлении", () => {
+  const frame = core.createState({ mode: "strassen", matrix: [[1, 2], [3, 4]], vector: [0, 0] }).frames.at(-1);
+  assert.match(frame.message, /округление возможно/);
+  assert.doesNotMatch(frame.message, /точное/);
 });
 
 test("playback поддерживает step, reset и конечное состояние", () => {
