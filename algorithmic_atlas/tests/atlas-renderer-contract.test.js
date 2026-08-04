@@ -42,6 +42,17 @@ test("the renderer discovers main routes from graph fields", () => {
   assert.match(atlasScript, /core\.mainRoute\(graph, "nodes", continentId\)/);
 });
 
+test("parallel continent regions render map areas and accessible progress", () => {
+  assert.match(atlasHtml, /id="atlas-region-progress"/);
+  assert.match(atlasScript, /core\.regionProgressSummary\(/);
+  assert.match(atlasScript, /region\.mapArea\.path/);
+  assert.match(atlasScript, /class: "atlas-region-area is-region-/);
+  assert.match(atlasScript, /class: "atlas-region-label is-region-/);
+  assert.match(atlasStyles, /\.atlas-region-progress\s*\{/);
+  assert.match(atlasStyles, /\.atlas-region-area\s*\{/);
+  assert.match(atlasStyles, /pointer-events:\s*none/);
+});
+
 test("the last chapter returns to the world map and names the next continent", () => {
   assert.match(chapterScript, /atlasCore\.routeForContinent\(graph, node\.continentId\)/);
   assert.match(chapterScript, /mapLink\.href = "\.\.\/index\.html"/);
@@ -49,6 +60,8 @@ test("the last chapter returns to the world map and names the next continent", (
   assert.match(chapterScript, /"Следующий материк: " \+ continent\.name/);
   assert.match(chapterScript, /atlasCore\.routeContinuation\(graph, nodeId\)/);
   assert.match(chapterScript, /continuation\.curriculumId \+ " · "/);
+  assert.match(chapterScript, /if \(!neighbors\.continentExit\)/);
+  assert.match(chapterScript, /Конец области · выберите следующий маршрут на карте/);
 });
 
 test("feature metadata has no chip UI on the map page", () => {
@@ -115,17 +128,17 @@ test("free exploration removes route fog but never development fog", () => {
   assert.deepEqual(
     core.continentContinuations(graph, "data-structures")
       .map(({ continuation }) => continuation.curriculumId),
-    ["9.8", "6.3", "7.3", "9.13"]
+    ["9.8", "7.3", "9.13"]
   );
   assert.deepEqual(
     new Set(core.continentContinuations(graph, "algorithm-design")
       .map(({ continuation }) => continuation.curriculumId)),
-    new Set(["6.5", "7.13", "8.4", "8.9", "8.14"])
+    new Set(["7.13", "8.4", "8.9", "8.14"])
   );
   assert.deepEqual(
     new Set(core.continentContinuations(graph, "graphs-networks-optimization")
       .map(({ continuation }) => continuation.curriculumId)),
-    new Set(["6.1", "7.9", "7.11", "8.10", "9.3", "9.4"])
+    new Set(["7.9", "7.11", "8.10", "9.3", "9.4"])
   );
   assert.match(
     atlasScript,

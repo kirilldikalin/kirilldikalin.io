@@ -273,7 +273,7 @@ test("continent 05 core and branch routes match the curriculum", () => {
   assert.equal(edge("linear-algebra-for-graphs", "spectral-graph-algorithms").kind, "route");
 });
 
-test("continent 05 exposes all six canonical future exits from exact sources", () => {
+test("continent 05 keeps only unresolved canonical future exits", () => {
   const continuations = core.continentContinuations(
     graph,
     "graphs-networks-optimization"
@@ -283,7 +283,6 @@ test("continent 05 exposes all six canonical future exits from exact sources", (
     { sourceId: source.id, kind: continuation.kind },
   ]));
   assert.deepEqual(sources, new Map([
-    ["6.1", { sourceId: "parallel-distributed-graphs", kind: "route" }],
     ["7.9", { sourceId: "max-flow-min-cut", kind: "related" }],
     ["7.11", { sourceId: "traveling-salesman-exact", kind: "related" }],
     ["9.3", { sourceId: "parallel-distributed-graphs", kind: "related" }],
@@ -365,48 +364,27 @@ test("each graph branch opens only after its canonical entry prerequisite", () =
   });
 });
 
-test("the 6.1 continuation waits for the core while planned material keeps development fog", () => {
+test("the published continent 06 waits for the graph core while free exploration stays optional", () => {
   const previousCore = new Set(routeIds("algorithm-design-main"));
   const graphCore = routeIds("graphs-main");
   const completedCore = new Set(previousCore);
   graphCore.forEach((id) => completedCore.add(id));
-  const continuation = core.routeContinuation(
-    graph,
-    "parallel-distributed-graphs"
-  );
-  assert.equal(continuation.curriculumId, "6.1");
-  assert.equal(continuation.targetContinentId, "strings-geometry-numerics");
+  assert.equal(core.routeContinuation(graph, "parallel-distributed-graphs"), null);
+  const first = core.nodeMap(graph).get("exact-string-matching");
+  assert.equal(first.curriculumId, "6.1");
+  assert.deepEqual(first.prerequisites, ["parallel-distributed-graphs"]);
 
-  const planned = core.continentMap(graph).get("strings-geometry-numerics");
+  const published = core.continentMap(graph).get("strings-geometry-numerics");
   assert.equal(
-    core.continentAccessState(graph, planned, completedCore, false),
-    "planned"
-  );
-  assert.equal(
-    core.continentAccessState(graph, planned, completedCore, true),
-    "planned"
-  );
-
-  const publishedFuture = JSON.parse(JSON.stringify(graph));
-  const nextContinent = core.continentMap(publishedFuture)
-    .get("strings-geometry-numerics");
-  nextContinent.publication = "published";
-  assert.equal(
-    core.continentAccessState(
-      publishedFuture,
-      nextContinent,
-      previousCore,
-      false
-    ),
+    core.continentAccessState(graph, published, previousCore, false),
     "published-gated"
   );
   assert.equal(
-    core.continentAccessState(
-      publishedFuture,
-      nextContinent,
-      completedCore,
-      false
-    ),
+    core.continentAccessState(graph, published, previousCore, true),
+    "published-unlocked"
+  );
+  assert.equal(
+    core.continentAccessState(graph, published, completedCore, false),
     "published-unlocked"
   );
 });

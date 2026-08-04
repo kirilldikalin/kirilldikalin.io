@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "datasetVersion": "2026.08.03-18",
+  "datasetVersion": "2026.08.04-01",
   "title": "Алгоритмический атлас",
   "routes": [
     {
@@ -236,17 +236,7 @@
           "nodeId": "persistent-succinct-structures",
           "position": 20
         }
-      ],
-      "continuation": {
-        "curriculumId": "6.3",
-        "title": "Суффиксные массивы, LCP, деревья и автоматы",
-        "targetContinentId": "strings-geometry-numerics",
-        "kind": "related",
-        "position": {
-          "x": 650,
-          "y": 820
-        }
-      }
+      ]
     },
     {
       "id": "data-structures-filters",
@@ -385,17 +375,7 @@
           "nodeId": "advanced-dynamic-programming",
           "position": 10
         }
-      ],
-      "continuation": {
-        "curriculumId": "6.5",
-        "title": "Редакционное расстояние, LCS и выравнивание последовательностей",
-        "targetContinentId": "strings-geometry-numerics",
-        "kind": "related",
-        "position": {
-          "x": 930,
-          "y": 875
-        }
-      }
+      ]
     },
     {
       "id": "algorithm-design-meet-in-the-middle",
@@ -491,16 +471,6 @@
           "position": 90
         }
       ],
-      "continuation": {
-        "curriculumId": "6.1",
-        "title": "Строки и точный поиск образца",
-        "targetContinentId": "strings-geometry-numerics",
-        "kind": "route",
-        "position": {
-          "x": 1680,
-          "y": 560
-        }
-      },
       "relatedContinuations": [
         {
           "curriculumId": "7.9",
@@ -611,6 +581,161 @@
         {
           "nodeId": "spectral-graph-algorithms",
           "position": 20
+        }
+      ]
+    },
+    {
+      "id": "strings-geometry-numerics-strings-main",
+      "title": "Основной маршрут строковых алгоритмов",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "strings-geometry-numerics",
+      "position": 10,
+      "entries": [
+        {
+          "nodeId": "exact-string-matching",
+          "position": 10
+        },
+        {
+          "nodeId": "string-hashing-multiple-patterns",
+          "position": 20
+        },
+        {
+          "nodeId": "edit-distance-lcs",
+          "position": 30
+        }
+      ],
+      "relatedContinuations": [
+        {
+          "curriculumId": "7.4",
+          "title": "Отпечатки и вероятностная проверка тождеств",
+          "targetContinentId": "randomization-approximation",
+          "kind": "related",
+          "sourceNodeId": "string-hashing-multiple-patterns",
+          "position": {
+            "x": 760,
+            "y": 600
+          }
+        }
+      ]
+    },
+    {
+      "id": "strings-geometry-numerics-indexes",
+      "title": "Суффиксные и сжатые индексы",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "strings-geometry-numerics",
+      "entries": [
+        {
+          "nodeId": "suffix-indexes",
+          "position": 10
+        },
+        {
+          "nodeId": "bwt-fm-index",
+          "position": 20
+        }
+      ]
+    },
+    {
+      "id": "strings-geometry-numerics-compression",
+      "title": "Сжатие без потерь",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "strings-geometry-numerics",
+      "entries": [
+        {
+          "nodeId": "lossless-compression",
+          "position": 10
+        }
+      ]
+    },
+    {
+      "id": "strings-geometry-numerics-geometry-main",
+      "title": "Основной маршрут вычислительной геометрии",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "strings-geometry-numerics",
+      "position": 20,
+      "entries": [
+        {
+          "nodeId": "geometric-predicates-convex-hull",
+          "position": 10
+        },
+        {
+          "nodeId": "sweep-line-closest-pair-range-search",
+          "position": 20
+        }
+      ]
+    },
+    {
+      "id": "strings-geometry-numerics-voronoi",
+      "title": "Диаграммы Вороного и триангуляция Делоне",
+      "scope": "nodes",
+      "kind": "branch",
+      "continentId": "strings-geometry-numerics",
+      "entries": [
+        {
+          "nodeId": "voronoi-delaunay",
+          "position": 10
+        }
+      ],
+      "continuation": {
+        "curriculumId": "9.11",
+        "title": "Поиск ближайших соседей и LSH",
+        "targetContinentId": "big-data-modern-models",
+        "kind": "related",
+        "position": {
+          "x": 1690,
+          "y": 590
+        }
+      }
+    },
+    {
+      "id": "strings-geometry-numerics-numerics-main",
+      "title": "Основной маршрут численных и алгебраических алгоритмов",
+      "scope": "nodes",
+      "kind": "main",
+      "continentId": "strings-geometry-numerics",
+      "position": 30,
+      "entries": [
+        {
+          "nodeId": "integer-arithmetic-number-theory",
+          "position": 10
+        },
+        {
+          "nodeId": "modular-algorithms-primality",
+          "position": 20
+        },
+        {
+          "nodeId": "polynomials-fft-ntt",
+          "position": 30
+        },
+        {
+          "nodeId": "matrices-linear-systems-stability",
+          "position": 40
+        }
+      ],
+      "continuation": {
+        "curriculumId": "7.1",
+        "title": "Модели рандомизированных алгоритмов",
+        "targetContinentId": "randomization-approximation",
+        "kind": "route",
+        "position": {
+          "x": 1740,
+          "y": 920
+        }
+      },
+      "relatedContinuations": [
+        {
+          "curriculumId": "7.7",
+          "title": "Дерандомизация",
+          "targetContinentId": "randomization-approximation",
+          "kind": "related",
+          "sourceNodeId": "modular-algorithms-primality",
+          "position": {
+            "x": 1260,
+            "y": 1090
+          }
         }
       ]
     }
@@ -840,12 +965,15 @@
       "id": "strings-geometry-numerics",
       "name": "Строки, геометрия и численные алгоритмы",
       "description": "Специализированные модели данных и вычисления над непрерывными величинами",
-      "publication": "planned",
+      "publication": "published",
       "allowFreeExplore": true,
       "prerequisites": [
         "graphs-networks-optimization"
       ],
-      "related": [],
+      "related": [
+        "randomization-approximation",
+        "big-data-modern-models"
+      ],
       "worldPosition": {
         "x": 858,
         "y": 154
@@ -855,8 +983,45 @@
         "height": 112
       },
       "shapeVariant": 1,
-      "localMap": null,
-      "regions": []
+      "localMap": {
+        "viewBox": "0 0 1800 1200",
+        "landPath": "M54 438 C25 268 103 111 252 59 C386 12 505 78 632 48 C772 15 904 79 1034 48 C1181 13 1360 53 1504 132 C1650 212 1779 345 1745 499 C1720 612 1775 728 1703 837 C1623 958 1481 951 1340 977 C1198 1003 1084 1112 929 1071 C787 1034 672 1116 523 1048 C388 987 260 1013 158 913 C61 817 82 646 54 438 Z"
+      },
+      "regions": [
+        {
+          "id": "string-algorithms",
+          "name": "Строковые алгоритмы",
+          "mapArea": {
+            "path": "M92 176 C188 98 346 92 473 117 C593 141 738 104 791 205 L796 566 C677 615 530 596 402 620 C260 647 133 605 82 510 Z",
+            "labelPosition": {
+              "x": 118,
+              "y": 142
+            }
+          }
+        },
+        {
+          "id": "computational-geometry",
+          "name": "Вычислительная геометрия",
+          "mapArea": {
+            "path": "M848 175 C959 96 1109 111 1230 99 C1376 85 1570 117 1684 219 L1710 548 C1581 613 1450 583 1320 610 C1166 642 994 602 862 545 Z",
+            "labelPosition": {
+              "x": 890,
+              "y": 142
+            }
+          }
+        },
+        {
+          "id": "numerical-algebraic-algorithms",
+          "name": "Численные и алгебраические алгоритмы",
+          "mapArea": {
+            "path": "M713 688 C845 625 997 657 1118 641 C1289 619 1504 645 1691 743 L1692 956 C1519 1034 1338 984 1170 1023 C1012 1060 829 1027 710 933 Z",
+            "labelPosition": {
+              "x": 758,
+              "y": 671
+            }
+          }
+        }
+      ]
     },
     {
       "id": "randomization-approximation",
@@ -1697,7 +1862,9 @@
       "prerequisites": [
         "tries-radix-trees"
       ],
-      "related": [],
+      "related": [
+        "suffix-indexes"
+      ],
       "route": "./chapters/persistent-succinct-structures.html",
       "minutes": 39,
       "reading": {
@@ -2029,7 +2196,9 @@
       "prerequisites": [
         "dynamic-programming"
       ],
-      "related": [],
+      "related": [
+        "edit-distance-lcs"
+      ],
       "route": "./chapters/advanced-dynamic-programming.html",
       "minutes": 44,
       "reading": {
@@ -2707,6 +2876,361 @@
       "position": {
         "x": 1630,
         "y": 280
+      }
+    },
+    {
+      "id": "exact-string-matching",
+      "curriculumId": "6.1",
+      "title": "Строки и точный поиск образца",
+      "description": "Как prefix function, KMP и Z-function устраняют повторное сравнение уже известного префикса",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "parallel-distributed-graphs"
+      ],
+      "related": [],
+      "route": "./chapters/exact-string-matching.html",
+      "minutes": 42,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 180,
+        "y": 280
+      }
+    },
+    {
+      "id": "string-hashing-multiple-patterns",
+      "curriculumId": "6.2",
+      "title": "Хеширование строк и поиск множества образцов",
+      "description": "Как rolling hash, trie и Aho–Corasick обрабатывают одно окно или множество образцов",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "exact-string-matching"
+      ],
+      "related": [],
+      "route": "./chapters/string-hashing-multiple-patterns.html",
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 440,
+        "y": 210
+      }
+    },
+    {
+      "id": "suffix-indexes",
+      "curriculumId": "6.3",
+      "title": "Суффиксные массивы, LCP, деревья и автоматы",
+      "description": "Как четыре суффиксные структуры представляют одни подстроки с разными компромиссами памяти и запросов",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "string-hashing-multiple-patterns"
+      ],
+      "related": [],
+      "route": "./chapters/suffix-indexes.html",
+      "minutes": 62,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 420,
+        "y": 500
+      }
+    },
+    {
+      "id": "bwt-fm-index",
+      "curriculumId": "6.4",
+      "title": "BWT, FM-index и сжатый полнотекстовый поиск",
+      "description": "Как перестановка символов, rank и backward search превращаются в сжатый полнотекстовый индекс",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "suffix-indexes"
+      ],
+      "related": [],
+      "route": "./chapters/bwt-fm-index.html",
+      "minutes": 60,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 680,
+        "y": 500
+      }
+    },
+    {
+      "id": "edit-distance-lcs",
+      "curriculumId": "6.5",
+      "title": "Редакционное расстояние, LCS и выравнивание последовательностей",
+      "description": "Как одна динамическая таблица описывает правки, общие подпоследовательности и выравнивание",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "string-hashing-multiple-patterns"
+      ],
+      "related": [
+        "advanced-dynamic-programming"
+      ],
+      "route": "./chapters/edit-distance-lcs.html",
+      "minutes": 61,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 700,
+        "y": 250
+      }
+    },
+    {
+      "id": "lossless-compression",
+      "curriculumId": "6.6",
+      "title": "Сжатие без потерь",
+      "description": "Как вероятностная модель, префиксный код и словарь устраняют разные виды избыточности",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "string-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "exact-string-matching"
+      ],
+      "related": [],
+      "route": "./chapters/lossless-compression.html",
+      "minutes": 48,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 160,
+        "y": 520
+      }
+    },
+    {
+      "id": "geometric-predicates-convex-hull",
+      "curriculumId": "6.7",
+      "title": "Геометрические предикаты и выпуклая оболочка",
+      "description": "Как знак определителя превращает координаты в надёжные решения об ориентации, пересечении и оболочке",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "computational-geometry",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "parallel-distributed-graphs"
+      ],
+      "related": [],
+      "route": "./chapters/geometric-predicates-convex-hull.html",
+      "minutes": 58,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 980,
+        "y": 260
+      }
+    },
+    {
+      "id": "sweep-line-closest-pair-range-search",
+      "curriculumId": "6.8",
+      "title": "Sweep line, ближайшая пара и диапазонный поиск",
+      "description": "Как порядок событий и геометрическое отсечение уменьшают число кандидатов",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "computational-geometry",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "geometric-predicates-convex-hull"
+      ],
+      "related": [],
+      "route": "./chapters/sweep-line-closest-pair-range-search.html",
+      "minutes": 61,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1260,
+        "y": 220
+      }
+    },
+    {
+      "id": "voronoi-delaunay",
+      "curriculumId": "6.9",
+      "title": "Диаграммы Вороного и триангуляция Делоне",
+      "description": "Как ближайшие центры, пустые окружности и двойственность задают две согласованные структуры",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "computational-geometry",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "sweep-line-closest-pair-range-search"
+      ],
+      "related": [],
+      "route": "./chapters/voronoi-delaunay.html",
+      "minutes": 60,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1510,
+        "y": 440
+      }
+    },
+    {
+      "id": "integer-arithmetic-number-theory",
+      "curriculumId": "6.10",
+      "title": "Теория чисел и быстрая целочисленная арифметика",
+      "description": "Как битовая длина меняет цену НОД, возведения в степень и умножения больших чисел",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "numerical-algebraic-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "parallel-distributed-graphs"
+      ],
+      "related": [],
+      "route": "./chapters/integer-arithmetic-number-theory.html",
+      "minutes": 61,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 850,
+        "y": 820
+      }
+    },
+    {
+      "id": "modular-algorithms-primality",
+      "curriculumId": "6.11",
+      "title": "Модульные алгоритмы и проверка простоты",
+      "description": "Как сравнения, CRT и свидетели Miller–Rabin дают точные и вероятностные решения",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "numerical-algebraic-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "integer-arithmetic-number-theory"
+      ],
+      "related": [],
+      "route": "./chapters/modular-algorithms-primality.html",
+      "minutes": 62,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1090,
+        "y": 760
+      }
+    },
+    {
+      "id": "polynomials-fft-ntt",
+      "curriculumId": "6.12",
+      "title": "Полиномы, FFT и NTT",
+      "description": "Как корни из единицы и рекурсивные butterfly превращают свёртку в почти линейное вычисление",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "numerical-algebraic-algorithms",
+      "type": "algorithm",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "modular-algorithms-primality"
+      ],
+      "related": [
+        "divide-and-conquer"
+      ],
+      "route": "./chapters/polynomials-fft-ntt.html",
+      "minutes": 63,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1350,
+        "y": 820
+      }
+    },
+    {
+      "id": "matrices-linear-systems-stability",
+      "curriculumId": "6.13",
+      "title": "Матрицы, линейные системы и численная устойчивость",
+      "description": "Как сложность, обусловленность и устойчивость независимо влияют на решение линейной системы",
+      "continentId": "strings-geometry-numerics",
+      "regionId": "numerical-algebraic-algorithms",
+      "type": "math",
+      "publication": "published",
+      "allowFreeExplore": true,
+      "prerequisites": [
+        "polynomials-fft-ntt"
+      ],
+      "related": [],
+      "route": "./chapters/matrices-linear-systems-stability.html",
+      "minutes": 64,
+      "reading": null,
+      "features": {
+        "proof": true,
+        "interactive": true,
+        "exercises": true
+      },
+      "position": {
+        "x": 1580,
+        "y": 760
       }
     }
   ]

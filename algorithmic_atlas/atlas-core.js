@@ -139,6 +139,18 @@
         assertString(region.id, "region id is required: " + continent.id);
         assert(!regionOwner.has(region.id), "duplicate region id: " + region.id);
         assertString(region.name, "region name is required: " + region.id);
+        if (region.mapArea !== undefined) {
+          assert(region.mapArea && typeof region.mapArea === "object",
+            "region mapArea must be an object: " + region.id);
+          assertString(region.mapArea.path,
+            "region mapArea path is required: " + region.id);
+          assert(
+            region.mapArea.labelPosition &&
+              Number.isFinite(region.mapArea.labelPosition.x) &&
+              Number.isFinite(region.mapArea.labelPosition.y),
+            "region mapArea needs a label position: " + region.id
+          );
+        }
         regionOwner.set(region.id, continent.id);
       });
 
@@ -265,6 +277,8 @@
     const routeIds = new Set();
     const continentMemberships = new Map();
     const nodeMemberships = new Map();
+    const continuationTargets = new Map();
+    const continuationReferences = new Set();
 
     function validateContinuation(route, continuation, fieldLabel) {
       assert(route.scope === "nodes",
@@ -276,9 +290,12 @@
       assert(/^\d+\.\d+$/.test(continuation.curriculumId),
         "invalid " + fieldLabel + " curriculumId: " + route.id);
       assert(!curriculumIds.has(continuation.curriculumId),
-        fieldLabel + " duplicates a published node or continuation: " +
+        fieldLabel + " duplicates a graph node: " + continuation.curriculumId);
+      const referenceKey = route.id + "::" + continuation.curriculumId;
+      assert(!continuationReferences.has(referenceKey),
+        fieldLabel + " repeats a target in route " + route.id + ": " +
           continuation.curriculumId);
-      curriculumIds.add(continuation.curriculumId);
+      continuationReferences.add(referenceKey);
       assertString(continuation.title,
         fieldLabel + " title is required: " + route.id);
       assert(continentIds.has(continuation.targetContinentId),
@@ -287,6 +304,19 @@
         fieldLabel + " must leave its continent: " + route.id);
       assert(CONTINUATION_KINDS.has(continuation.kind),
         "unknown " + fieldLabel + " kind: " + route.id);
+      const knownTarget = continuationTargets.get(continuation.curriculumId);
+      if (knownTarget) {
+        assert(
+          knownTarget.title === continuation.title &&
+            knownTarget.targetContinentId === continuation.targetContinentId,
+          "conflicting continuation target: " + continuation.curriculumId
+        );
+      } else {
+        continuationTargets.set(continuation.curriculumId, {
+          title: continuation.title,
+          targetContinentId: continuation.targetContinentId,
+        });
+      }
       assert(
         continuation.position &&
           Number.isFinite(continuation.position.x) &&
@@ -418,8 +448,19 @@
           route.kind === "main" &&
           route.continentId === continent.id;
       });
-      assert(mainNodeRoutes.length === 1,
-        "continent with nodes needs exactly one main route: " + continent.id);
+      assert(mainNodeRoutes.length >= 1,
+        "continent with nodes needs at least one main route: " + continent.id);
+      if (mainNodeRoutes.length > 1) {
+        const positions = new Set();
+        mainNodeRoutes.forEach(function (route) {
+          assert(Number.isInteger(route.position) && route.position > 0,
+            "parallel main route needs a positive position: " + route.id);
+          assert(!positions.has(route.position),
+            "duplicate parallel main route position " + route.position +
+              " in " + continent.id);
+          positions.add(route.position);
+        });
+      }
     });
   }
 
@@ -473,13 +514,25 @@
     }) || null;
   }
 
-  function mainRoute(graph, scope, continentId) {
-    return graph.routes.find(function (route) {
+  function mainRoutes(graph, scope, continentId) {
+    return graph.routes.filter(function (route) {
       if (route.scope !== scope || route.kind !== "main") {
         return false;
       }
       return scope !== "nodes" || route.continentId === continentId;
-    }) || null;
+    }).sort(function (left, right) {
+      const leftPosition = Number.isInteger(left.position)
+        ? left.position
+        : Number.MAX_SAFE_INTEGER;
+      const rightPosition = Number.isInteger(right.position)
+        ? right.position
+        : Number.MAX_SAFE_INTEGER;
+      return leftPosition - rightPosition || left.id.localeCompare(right.id);
+    });
+  }
+
+  function mainRoute(graph, scope, continentId) {
+    return mainRoutes(graph, scope, continentId)[0] || null;
   }
 
   function routeRank(graph, nodeId) {
@@ -545,6 +598,7 @@
         previousAll: [],
         nextAll: [],
         route: null,
+        continentExit: false,
       };
     }
     const ordered = routeOrder(graph, route.id);
@@ -557,7 +611,13 @@
     const routePrevious = index > 0 ? ordered[index - 1] : null;
     const routeNext = index < ordered.length - 1 ? ordered[index + 1] : null;
     let nextContinentMainStart = null;
-    if (!routeNext && route.kind === "main") {
+    const parallelMainRoutes = route.kind === "main"
+      ? mainRoutes(graph, "nodes", route.continentId)
+      : [];
+    const mayLeaveContinent = route.kind === "main" &&
+      (parallelMainRoutes.length === 1 ||
+        Boolean(route.continuation && route.continuation.kind === "route"));
+    if (!routeNext && mayLeaveContinent) {
       const worldRoute = mainRoute(graph, "continents");
       const continents = worldRoute ? routeOrder(graph, worldRoute.id) : [];
       const continentIndex = continents.findIndex(function (continent) {
@@ -611,6 +671,7 @@
       previousAll: previousAll,
       nextAll: nextAll,
       route: route,
+      continentExit: mayLeaveContinent,
     };
   }
 
@@ -763,10 +824,11 @@
   }
 
   function continentCoreNodeIds(graph, continentId) {
-    const route = mainRoute(graph, "nodes", continentId);
-    return route ? routeOrder(graph, route.id).map(function (node) {
-      return node.id;
-    }) : [];
+    return mainRoutes(graph, "nodes", continentId).flatMap(function (route) {
+      return routeOrder(graph, route.id).map(function (node) {
+        return node.id;
+      });
+    });
   }
 
   function continentCoreCompleted(graph, continentId, completedNodeIds) {
@@ -794,6 +856,52 @@
     });
     const completed = Array.from(completedNodeIds).filter(function (id) {
       return publishedIds.has(id);
+    }).length;
+    const coreCompleted = coreIds.filter(function (id) {
+      return completedNodeIds.has(id);
+    }).length;
+    const branchCompleted = branchIds.filter(function (id) {
+      return completedNodeIds.has(id);
+    }).length;
+    return {
+      completed: completed,
+      total: published.length,
+      percent: published.length ? Math.round(completed * 100 / published.length) : 0,
+      coreCompleted: coreCompleted,
+      coreTotal: coreIds.length,
+      branchCompleted: branchCompleted,
+      branchTotal: branchIds.length,
+      coreReady: coreIds.length > 0 && coreCompleted === coreIds.length,
+      complete: published.length > 0 && completed === published.length,
+    };
+  }
+
+  function regionProgressSummary(graph, continentId, regionId, completedNodeIds) {
+    const continent = continentMap(graph).get(continentId);
+    assert(continent, "unknown continent for region progress: " + continentId);
+    assert(continent.regions.some(function (region) {
+      return region.id === regionId;
+    }), "unknown region for progress: " + regionId);
+
+    const published = graph.nodes.filter(function (node) {
+      return node.continentId === continentId &&
+        node.regionId === regionId &&
+        node.publication === "published";
+    });
+    const publishedIds = new Set(published.map(function (node) {
+      return node.id;
+    }));
+    const coreIds = continentCoreNodeIds(graph, continentId).filter(function (id) {
+      return publishedIds.has(id);
+    });
+    const coreSet = new Set(coreIds);
+    const branchIds = published.filter(function (node) {
+      return !coreSet.has(node.id);
+    }).map(function (node) {
+      return node.id;
+    });
+    const completed = published.filter(function (node) {
+      return completedNodeIds.has(node.id);
     }).length;
     const coreCompleted = coreIds.filter(function (id) {
       return completedNodeIds.has(id);
@@ -1043,6 +1151,7 @@
     routeOrder: routeOrder,
     routeForNode: routeForNode,
     routeForContinent: routeForContinent,
+    mainRoutes: mainRoutes,
     mainRoute: mainRoute,
     visibleNodes: visibleNodes,
     graphEdges: graphEdges,
@@ -1056,6 +1165,7 @@
     continentCoreNodeIds: continentCoreNodeIds,
     continentCoreCompleted: continentCoreCompleted,
     continentProgressSummary: continentProgressSummary,
+    regionProgressSummary: regionProgressSummary,
     continentAccessState: continentAccessState,
     nodeAccessState: nodeAccessState,
     loadProgress: loadProgress,

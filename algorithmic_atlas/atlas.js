@@ -76,6 +76,7 @@
     elements.mapTitle = document.getElementById("atlas-map-title");
     elements.mapHelp = document.getElementById("atlas-map-help");
     elements.continentProgress = document.getElementById("atlas-continent-progress");
+    elements.regionProgress = document.getElementById("atlas-region-progress");
     elements.worldBack = document.getElementById("atlas-world-back");
     elements.viewStatus = document.getElementById("atlas-view-status");
     elements.continentList = document.getElementById("atlas-continent-list");
@@ -219,6 +220,8 @@
     elements.mapKicker.textContent = "Карта мира";
     elements.mapTitle.textContent = "Все материки";
     elements.continentProgress.hidden = true;
+    elements.regionProgress.replaceChildren();
+    elements.regionProgress.hidden = true;
     elements.worldBack.hidden = true;
     elements.continentList.hidden = false;
     elements.mapHelp.textContent =
@@ -580,6 +583,7 @@
       continentProgress.branchTotal + " · Всего: " +
       continentProgress.completed + " / " + continentProgress.total +
       " · " + continentProgress.percent + "%";
+    renderRegionProgress(continent);
     elements.worldBack.hidden = false;
     elements.continentList.hidden = true;
     elements.mapHelp.textContent =
@@ -598,10 +602,28 @@
       d: continent.localMap.landPath,
       class: "atlas-land",
     }));
+    const regionLabels = [];
+    continent.regions.forEach(function (region, regionIndex) {
+      if (!region.mapArea) {
+        return;
+      }
+      elements.lands.appendChild(createSvg("path", {
+        d: region.mapArea.path,
+        class: "atlas-region-area is-region-" + String(regionIndex + 1),
+      }));
+      regionLabels.push({ region: region, index: regionIndex });
+    });
     elements.lands.appendChild(createSvg("path", {
       d: continent.localMap.landPath,
       class: "atlas-contours",
     }));
+    regionLabels.forEach(function (item) {
+      elements.lands.appendChild(renderRegionLabel(
+        continent,
+        item.region,
+        item.index
+      ));
+    });
 
     const byId = core.nodeMap(graph);
     core.graphEdges(graph, continentId).forEach(function (edge) {
@@ -641,6 +663,68 @@
     if (focusView) {
       focusMapView();
     }
+  }
+
+  function renderRegionProgress(continent) {
+    elements.regionProgress.replaceChildren();
+    continent.regions.forEach(function (region) {
+      const summary = core.regionProgressSummary(
+        graph,
+        continent.id,
+        region.id,
+        progress.completedNodeIds
+      );
+      const item = document.createElement("li");
+      const title = document.createElement("strong");
+      title.textContent = region.name;
+      const details = document.createElement("span");
+      details.textContent =
+        "Ядро " + summary.coreCompleted + " / " + summary.coreTotal +
+        " · ветви " + summary.branchCompleted + " / " + summary.branchTotal +
+        " · всего " + summary.completed + " / " + summary.total;
+      item.append(title, details);
+      elements.regionProgress.appendChild(item);
+    });
+    elements.regionProgress.hidden = continent.regions.length === 0;
+  }
+
+  function renderRegionLabel(continent, region, regionIndex) {
+    const position = region.mapArea.labelPosition;
+    const summary = core.regionProgressSummary(
+      graph,
+      continent.id,
+      region.id,
+      progress.completedNodeIds
+    );
+    const group = createSvg("g", {
+      class: "atlas-region-label is-region-" + String(regionIndex + 1),
+      transform: "translate(" + position.x + " " + position.y + ")",
+      "aria-hidden": "true",
+    });
+    const title = createSvg("text", {
+      class: "atlas-region-label__title",
+      x: "0",
+      y: "0",
+    });
+    const lines = splitTitle(region.name, 30, 2);
+    lines.forEach(function (line, lineIndex) {
+      const span = createSvg("tspan", {
+        x: "0",
+        dy: lineIndex === 0 ? "0" : "18",
+      });
+      span.textContent = line;
+      title.appendChild(span);
+    });
+    const value = createSvg("text", {
+      class: "atlas-region-label__progress",
+      x: "0",
+      y: String(20 + lines.length * 18),
+    });
+    value.textContent =
+      "ядро " + summary.coreCompleted + "/" + summary.coreTotal +
+      " · ветви " + summary.branchCompleted + "/" + summary.branchTotal;
+    group.append(title, value);
+    return group;
   }
 
   function renderNode(node) {

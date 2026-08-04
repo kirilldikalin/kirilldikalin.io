@@ -37,8 +37,8 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   assert.equal(core.validateGraph(graph), graph);
   assert.equal(graph.schemaVersion, 2);
   assert.equal(graph.continents.length, 9);
-  assert.equal(graph.nodes.length, 57);
-  assert.equal(graph.routes.length, 20);
+  assert.equal(graph.nodes.length, 70);
+  assert.equal(graph.routes.length, 26);
   assert.deepEqual(
     graph.continents.map(({ name }) => name),
     [
@@ -55,7 +55,7 @@ test("the graph uses schema v2 and contains the complete world outline", () => {
   );
   assert.equal(
     graph.continents.filter(({ publication }) => publication === "published").length,
-    5
+    6
   );
 });
 
@@ -186,6 +186,63 @@ test("main routes are discovered by model fields rather than hardcoded ids", () 
   assert.equal(
     core.routeForContinent(renamed, "origins-efficiency").id,
     "renamed-world"
+  );
+});
+
+test("a continent can expose several explicitly ordered main routes", () => {
+  assert.deepEqual(
+    core.mainRoutes(graph, "nodes", "strings-geometry-numerics")
+      .map(({ id }) => id),
+    [
+      "strings-geometry-numerics-strings-main",
+      "strings-geometry-numerics-geometry-main",
+      "strings-geometry-numerics-numerics-main",
+    ]
+  );
+  assert.equal(
+    core.mainRoute(graph, "nodes", "strings-geometry-numerics").id,
+    "strings-geometry-numerics-strings-main"
+  );
+  assert.deepEqual(
+    core.continentCoreNodeIds(graph, "strings-geometry-numerics"),
+    [
+      "exact-string-matching",
+      "string-hashing-multiple-patterns",
+      "edit-distance-lcs",
+      "geometric-predicates-convex-hull",
+      "sweep-line-closest-pair-range-search",
+      "integer-arithmetic-number-theory",
+      "modular-algorithms-primality",
+      "polynomials-fft-ntt",
+      "matrices-linear-systems-stability",
+    ]
+  );
+
+  const duplicatePosition = cloneGraph();
+  duplicatePosition.routes.find(({ id }) =>
+    id === "strings-geometry-numerics-geometry-main"
+  ).position = 10;
+  assert.throws(
+    () => core.validateGraph(duplicatePosition),
+    /duplicate parallel main route position 10/
+  );
+});
+
+test("only the explicit continent exit leaves a parallel main route", () => {
+  const stringTail = core.routeNeighbors(graph, "edit-distance-lcs");
+  assert.equal(stringTail.next, null);
+  assert.equal(stringTail.continentExit, false);
+  assert.equal(core.routeContinuation(graph, "edit-distance-lcs"), null);
+
+  const numericalTail = core.routeNeighbors(
+    graph,
+    "matrices-linear-systems-stability"
+  );
+  assert.equal(numericalTail.next, null);
+  assert.equal(numericalTail.continentExit, true);
+  assert.equal(
+    core.routeContinuation(graph, "matrices-linear-systems-stability").curriculumId,
+    "7.1"
   );
 });
 
@@ -769,7 +826,7 @@ test("continent two has eleven unique canonical curriculum ids", () => {
   const nodes = core.visibleNodes(graph, "mathematical-tools");
   const ids = nodes.map(({ curriculumId }) => curriculumId);
   assert.equal(nodes.length, 11);
-  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 57);
+  assert.equal(new Set(graph.nodes.map(({ curriculumId }) => curriculumId)).size, 70);
   assert.deepEqual(ids.slice().sort((left, right) => {
     const leftNumber = Number(left.split(".")[1]);
     const rightNumber = Number(right.split(".")[1]);
@@ -873,7 +930,7 @@ test("published inter-continent steps replace continuations while future exits s
   assert.deepEqual(
     core.continentContinuations(graph, "data-structures")
       .map(({ continuation }) => continuation.curriculumId),
-    ["9.8", "6.3", "7.3", "9.13"]
+    ["9.8", "7.3", "9.13"]
   );
   assert.equal(
     core.routeNeighbors(graph, "range-query-structures").next.id,
@@ -885,11 +942,13 @@ test("published inter-continent steps replace continuations while future exits s
     .continuation.curriculumId = "2.11";
   assert.throws(
     () => core.validateGraph(duplicate),
-    /continuation duplicates a published node/
+    /continuation duplicates a graph node/
   );
 
   const unknownTarget = cloneGraph();
-  unknownTarget.routes.find(({ id }) => id === "graphs-main")
+  unknownTarget.routes.find(({ id }) =>
+    id === "strings-geometry-numerics-numerics-main"
+  )
     .continuation.targetContinentId = "missing-continent";
   assert.throws(
     () => core.validateGraph(unknownTarget),

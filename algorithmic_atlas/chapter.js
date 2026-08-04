@@ -640,10 +640,35 @@
       );
       return;
     }
+    if (!neighbors.continentExit) {
+      renderRegionEnd(document.getElementById("atlas-route-next"));
+      return;
+    }
     renderAtlasTransition(
       document.getElementById("atlas-route-next"),
       nextContinent()
     );
+  }
+
+  function renderRegionEnd(container) {
+    if (!container) {
+      return;
+    }
+    container.replaceChildren();
+    container.classList.remove("is-disabled");
+
+    const eyebrow = document.createElement("span");
+    eyebrow.className = "atlas-route-nav__direction";
+    eyebrow.textContent = "Дальше";
+
+    const mapLink = document.createElement("a");
+    mapLink.href = "../index.html";
+    mapLink.textContent = "Карта материка";
+
+    const note = document.createElement("span");
+    note.className = "atlas-route-nav__locked";
+    note.textContent = "Конец области · выберите следующий маршрут на карте";
+    container.append(eyebrow, mapLink, note);
   }
 
   function renderRouteContinuation(container, continuation) {

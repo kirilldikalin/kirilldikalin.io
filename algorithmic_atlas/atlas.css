@@ -15,6 +15,9 @@
   --atlas-route-fog: #fffdf7;
   --atlas-development-fog: #ded8cc;
   --atlas-focus: #1b6e78;
+  --atlas-region-one: rgba(139, 63, 47, 0.11);
+  --atlas-region-two: rgba(27, 110, 120, 0.1);
+  --atlas-region-three: rgba(138, 109, 59, 0.12);
 }
 
 * {
@@ -424,6 +427,43 @@ body {
   stroke: none;
 }
 
+.atlas-region-area {
+  stroke: color-mix(in srgb, var(--atlas-muted) 46%, transparent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.atlas-region-area.is-region-1 {
+  fill: var(--atlas-region-one);
+}
+
+.atlas-region-area.is-region-2 {
+  fill: var(--atlas-region-two);
+}
+
+.atlas-region-area.is-region-3 {
+  fill: var(--atlas-region-three);
+}
+
+.atlas-region-label {
+  color: var(--atlas-ink);
+  pointer-events: none;
+}
+
+.atlas-region-label__title {
+  fill: currentColor;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.atlas-region-label__progress {
+  fill: var(--atlas-muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .atlas-edge {
   fill: none;
   stroke: var(--atlas-muted);
@@ -589,6 +629,34 @@ body {
 
 .atlas-continent-progress[hidden] {
   display: none;
+}
+
+.atlas-region-progress {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  padding: 0;
+  margin: 0.65rem 0 0;
+  list-style: none;
+}
+
+.atlas-region-progress[hidden] {
+  display: none;
+}
+
+.atlas-region-progress li {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+  border: 1px solid var(--atlas-line);
+  padding: 0.55rem 0.65rem;
+  background: color-mix(in srgb, var(--atlas-paper) 88%, transparent);
+  font-size: 0.73rem;
+  line-height: 1.35;
+}
+
+.atlas-region-progress span {
+  color: var(--atlas-muted);
 }
 
 .atlas-mobile-continent-list {
@@ -796,6 +864,10 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .atlas-region-progress {
+    grid-template-columns: 1fr;
+  }
+
   .atlas-map {
     min-height: 20rem;
   }
@@ -870,6 +942,9 @@ body {
     --atlas-route-fog: #4d5049;
     --atlas-development-fog: #262823;
     --atlas-focus: #80d8e2;
+    --atlas-region-one: rgba(225, 140, 117, 0.13);
+    --atlas-region-two: rgba(128, 216, 226, 0.1);
+    --atlas-region-three: rgba(209, 181, 122, 0.12);
   }
 
   .atlas-map-frame {

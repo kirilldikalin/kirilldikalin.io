@@ -138,7 +138,11 @@ test("continent 03 routes and continuations match the curriculum", () => {
     ["range-query-structures"]
   );
   assert.equal(continuation("data-structures-randomized").curriculumId, "7.3");
-  assert.equal(continuation("data-structures-prefix-persistence").curriculumId, "6.3");
+  assert.equal(continuation("data-structures-prefix-persistence"), undefined);
+  assert.ok(byId.get("persistent-succinct-structures").related.includes(
+    "suffix-indexes"
+  ));
+  assert.equal(byId.get("suffix-indexes").curriculumId, "6.3");
   assert.equal(continuation("data-structures-filters").curriculumId, "9.8");
   assert.equal(continuation("data-structures-storage").curriculumId, "9.13");
 });

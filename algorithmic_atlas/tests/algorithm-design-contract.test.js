@@ -175,9 +175,9 @@ test("continent 04 keeps only unresolved canonical future exits", () => {
   ]));
   assert.deepEqual(
     Array.from(byCurriculumId.keys()).sort(),
-    ["6.5", "7.13", "8.14", "8.4", "8.9"].sort()
+    ["7.13", "8.14", "8.4", "8.9"].sort()
   );
-  ["6.5", "7.13", "8.4", "8.9", "8.14"].forEach((id) => {
+  ["7.13", "8.4", "8.9", "8.14"].forEach((id) => {
     assert.equal(byCurriculumId.get(id).continuation.kind, "related");
   });
   assert.equal(
@@ -186,6 +186,9 @@ test("continent 04 keeps only unresolved canonical future exits", () => {
   );
   assert.ok(core.nodeMap(graph).get("matroids").related.includes(
     "minimum-spanning-trees"
+  ));
+  assert.ok(core.nodeMap(graph).get("advanced-dynamic-programming").related.includes(
+    "edit-distance-lcs"
   ));
   assert.equal(byCurriculumId.get("8.4").source.id, "reductions-and-formulations");
   assert.equal(byCurriculumId.get("8.14").source.id, "reductions-and-formulations");
@@ -213,7 +216,7 @@ test("published chapters enter progress while planned chapters stay outside", ()
   );
   assert.equal(
     core.progressSummary(graph, new Set()).total,
-    57
+    70
   );
 });
 
