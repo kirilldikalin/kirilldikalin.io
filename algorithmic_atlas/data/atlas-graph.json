@@ -3293,12 +3293,12 @@
       ],
       "related": [],
       "route": "./chapters/matrices-linear-systems-stability.html",
-      "minutes": 55,
+      "minutes": 65,
       "reading": {
-        "words": 2741,
+        "words": 4205,
         "formulaBlocks": 9,
-        "proofBlocks": 6,
-        "theoryMinutes": 23,
+        "proofBlocks": 8,
+        "theoryMinutes": 33,
         "labMinutes": 32
       },
       "features": {

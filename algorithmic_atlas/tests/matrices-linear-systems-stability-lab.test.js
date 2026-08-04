@@ -49,9 +49,20 @@ test("матрицы Гильберта демонстрируют рост об
   assert.ok(core.conditionInfinity(core.hilbert(5)) > core.conditionInfinity(core.hilbert(2)));
 });
 
+test("режим обусловленности не смешивает прямую и обратную ошибки", () => {
+  const frame = core.conditioningFrame([[10, 7, 8], [7, 5, 6], [8, 6, 10]], [1, 2, 3]);
+  assert.ok(frame.inputRelative > 0);
+  assert.ok(frame.forwardError > 0);
+  assert.ok(frame.backwardError >= 0);
+  assert.ok(frame.condition > 700);
+  assert.ok(frame.conditionBound >= frame.inputRelative);
+  assert.ok(Number.isFinite(frame.amplification));
+});
+
 test("итерационное уточнение не создаёт NaN и сохраняет конечный residual", () => {
   const frames = core.iterativeRefinementFrames([[10, 7, 8], [7, 5, 6], [8, 6, 10]], [25, 18, 24], 5);
   frames.forEach((frame) => assert.ok(Number.isFinite(frame.residualNorm)));
+  frames.forEach((frame, index) => assert.equal(frame.history.length, index + 1));
   assert.ok(frames.at(-1).residualNorm <= frames[0].residualNorm + 1e-15);
 });
 
@@ -75,6 +86,13 @@ test("режим Strassen честно сообщает о возможном о
   assert.doesNotMatch(frame.message, /точное/);
 });
 
+test("трасса Strassen связывает кадры с семью произведениями", () => {
+  const trace = core.strassenMultiply([[1, 2, 3], [4, 5, 6], [7, 8, 10]], [[1, 2, 3], [4, 5, 6], [7, 8, 10]]).trace;
+  const products = new Set(trace.map((frame) => frame.product));
+  for (let index = 1; index <= 7; index += 1) assert.ok(products.has("M" + index));
+  assert.ok(trace.every((frame) => typeof frame.path === "string"));
+});
+
 test("playback поддерживает step, reset и конечное состояние", () => {
   let state = core.createState();
   assert.ok(Object.isFrozen(state));
@@ -96,5 +114,9 @@ test("страница и адаптер используют общий кон�
   assert.ok((chapter.match(/target="_blank"/g) || []).length >= 3);
   assert.doesNotMatch(chapter.match(/class="atlas-chapter-intro">([^<]+)/)[1], /[.!?…]$/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /drawStrassen/);
+  assert.match(adapter, /drawConditioning/);
+  assert.match(adapter, /drawResidualHistory/);
+  assert.match(adapter, /data-preset/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });
