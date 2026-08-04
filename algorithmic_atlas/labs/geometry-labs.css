@@ -1,0 +1,230 @@
+@import url("lab-layout.css");
+
+.atlas-geometry-lab {
+  --geometry-point: var(--chapter-ink);
+  --geometry-edge: color-mix(in srgb, var(--chapter-ink) 68%, transparent);
+  --geometry-active: var(--chapter-accent);
+  --geometry-candidate: #86661f;
+  --geometry-good: #356b45;
+  --geometry-bad: #9b3d32;
+  width: 100%;
+  min-width: 0;
+}
+
+.atlas-geometry-lab .atlas-lab__workspace {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.atlas-geometry-lab .atlas-lab__figure {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.atlas-geometry-lab .atlas-lab__visual {
+  display: block;
+  width: max(100%, 44rem);
+  max-width: none;
+  min-height: clamp(23rem, 58vw, 39rem);
+  overflow: hidden;
+  background:
+    linear-gradient(color-mix(in srgb, var(--chapter-line) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--chapter-line) 12%, transparent) 1px, transparent 1px),
+    var(--chapter-bg);
+  background-size: 2rem 2rem;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: grab;
+}
+
+.atlas-geometry-lab .atlas-lab__visual:active {
+  cursor: grabbing;
+}
+
+.atlas-geometry__grid,
+.atlas-geometry__axis,
+.atlas-geometry__segment,
+.atlas-geometry__circle,
+.atlas-geometry__polygon {
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-geometry__grid {
+  stroke: color-mix(in srgb, var(--chapter-line) 60%, transparent);
+  stroke-width: 1;
+}
+
+.atlas-geometry__axis {
+  stroke: color-mix(in srgb, var(--chapter-ink) 55%, transparent);
+  stroke-width: 1.35;
+}
+
+.atlas-geometry__segment {
+  fill: none;
+  stroke: var(--geometry-edge);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+.atlas-geometry__segment.is-active,
+.atlas-geometry__circle.is-active,
+.atlas-geometry__polygon.is-active {
+  stroke: var(--geometry-active);
+  stroke-width: 4;
+}
+
+.atlas-geometry__segment.is-candidate,
+.atlas-geometry__circle.is-candidate,
+.atlas-geometry__polygon.is-candidate {
+  stroke: var(--geometry-candidate);
+  stroke-dasharray: 8 5;
+}
+
+.atlas-geometry__segment.is-good,
+.atlas-geometry__circle.is-good,
+.atlas-geometry__polygon.is-good {
+  stroke: var(--geometry-good);
+}
+
+.atlas-geometry__segment.is-bad,
+.atlas-geometry__circle.is-bad,
+.atlas-geometry__polygon.is-bad {
+  stroke: var(--geometry-bad);
+  stroke-dasharray: 4 4;
+}
+
+.atlas-geometry__segment.is-muted,
+.atlas-geometry__polygon.is-muted {
+  opacity: 0.28;
+}
+
+.atlas-geometry__polygon {
+  fill: color-mix(in srgb, var(--geometry-active) 8%, transparent);
+  stroke: var(--geometry-edge);
+  stroke-width: 2;
+}
+
+.atlas-geometry__polygon.is-cell-0 { fill: color-mix(in srgb, #4677a8 15%, transparent); }
+.atlas-geometry__polygon.is-cell-1 { fill: color-mix(in srgb, #b75b4b 14%, transparent); }
+.atlas-geometry__polygon.is-cell-2 { fill: color-mix(in srgb, #5f8d58 14%, transparent); }
+.atlas-geometry__polygon.is-cell-3 { fill: color-mix(in srgb, #9c7a31 14%, transparent); }
+.atlas-geometry__polygon.is-cell-4 { fill: color-mix(in srgb, #805c9d 14%, transparent); }
+.atlas-geometry__polygon.is-cell-5 { fill: color-mix(in srgb, #3c8b89 14%, transparent); }
+
+.atlas-geometry__circle {
+  fill: none;
+  stroke: var(--geometry-candidate);
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+}
+
+.atlas-geometry__point {
+  cursor: move;
+}
+
+.atlas-geometry__point-shape {
+  fill: var(--chapter-paper);
+  stroke: var(--geometry-point);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+  transition: fill 140ms ease-out, stroke 140ms ease-out, r 140ms ease-out;
+}
+
+.atlas-geometry__point:hover .atlas-geometry__point-shape,
+.atlas-geometry__point:focus .atlas-geometry__point-shape {
+  fill: color-mix(in srgb, var(--chapter-focus) 18%, var(--chapter-paper));
+  stroke: var(--chapter-focus);
+}
+
+.atlas-geometry__point.is-active .atlas-geometry__point-shape {
+  fill: color-mix(in srgb, var(--geometry-active) 18%, var(--chapter-paper));
+  stroke: var(--geometry-active);
+  stroke-width: 4;
+}
+
+.atlas-geometry__point.is-candidate .atlas-geometry__point-shape {
+  fill: color-mix(in srgb, var(--geometry-candidate) 18%, var(--chapter-paper));
+  stroke: var(--geometry-candidate);
+}
+
+.atlas-geometry__point.is-rejected .atlas-geometry__point-shape {
+  fill: color-mix(in srgb, var(--geometry-bad) 12%, var(--chapter-paper));
+  stroke: var(--geometry-bad);
+}
+
+.atlas-geometry__label {
+  fill: var(--chapter-ink);
+  font-family: "Courier Prime", monospace;
+  font-size: 14px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--chapter-bg);
+  stroke-linejoin: round;
+  stroke-width: 5px;
+}
+
+.atlas-geometry__sweep {
+  stroke: var(--geometry-active);
+  stroke-width: 3;
+  stroke-dasharray: 10 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-geometry__query {
+  fill: color-mix(in srgb, var(--geometry-active) 9%, transparent);
+  stroke: var(--geometry-active);
+  stroke-width: 3;
+  stroke-dasharray: 9 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.atlas-geometry__event-log {
+  display: grid;
+  gap: 0.35rem;
+  max-height: 18rem;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.atlas-geometry__event-log li {
+  padding: 0.45rem 0.55rem;
+  border-inline-start: 3px solid var(--chapter-line);
+  background: var(--chapter-bg);
+}
+
+.atlas-geometry__event-log li.is-current {
+  border-inline-start-color: var(--geometry-active);
+  font-weight: 700;
+}
+
+@media (max-width: 42rem) {
+  .atlas-geometry-lab .atlas-lab__visual {
+    width: max(100%, 39rem);
+    min-height: 24rem;
+  }
+
+  .atlas-geometry-lab .atlas-lab__controls {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .atlas-geometry__label {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .atlas-geometry-lab {
+    --geometry-candidate: #e0ba71;
+    --geometry-good: #7dca91;
+    --geometry-bad: #ef8e83;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-geometry__point-shape {
+    transition: none;
+  }
+}
