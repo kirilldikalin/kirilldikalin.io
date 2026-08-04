@@ -10356,6 +10356,738 @@
       "scope": "local",
       "chapterId": "matrices-linear-systems-stability",
       "firstDefinition": {"chapterId": "matrices-linear-systems-stability", "anchor": "iterative-refinement"}
+    },
+    {
+      "id": "string-text",
+      "displayNotation": "T",
+      "shortName": "текст",
+      "explanation": "Последовательность символов, внутри которой выполняется поиск или кодирование",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-exact-occurrence"
+      }
+    },
+    {
+      "id": "string-pattern",
+      "displayNotation": "P",
+      "shortName": "образец",
+      "explanation": "Последовательность символов, точные вхождения которой ищутся в тексте",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-exact-occurrence"
+      }
+    },
+    {
+      "id": "string-length",
+      "displayNotation": "n, m, N",
+      "shortName": "длина последовательности",
+      "explanation": "Число символов в соответствующей текстовой последовательности",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-exact-occurrence"
+      }
+    },
+    {
+      "id": "string-occurrence-position",
+      "displayNotation": "i",
+      "shortName": "позиция вхождения",
+      "explanation": "Начальный индекс точного вхождения образца в текст",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-exact-occurrence"
+      }
+    },
+    {
+      "id": "string-prefix-function",
+      "displayNotation": "\\pi",
+      "shortName": "префикс-функция",
+      "explanation": "Длина наибольшей собственной границы префикса, заканчивающегося в данной позиции",
+      "scope": "local",
+      "chapterId": "exact-string-matching",
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-prefix-function"
+      }
+    },
+    {
+      "id": "string-border",
+      "displayNotation": "k",
+      "shortName": "длина границы",
+      "explanation": "Длина строки, которая одновременно является собственным префиксом и суффиксом",
+      "scope": "local",
+      "chapterId": "exact-string-matching",
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-prefix-function"
+      }
+    },
+    {
+      "id": "string-index",
+      "displayNotation": "i, j",
+      "shortName": "индекс символа",
+      "explanation": "Целочисленная позиция или граница внутри последовательности",
+      "scope": "global",
+      "chapterId": null,
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-kmp-invariant"
+      }
+    },
+    {
+      "id": "string-z-function",
+      "displayNotation": "Z",
+      "shortName": "Z-функция",
+      "explanation": "Длина совпадения префикса строки с суффиксом, начинающимся в данной позиции",
+      "scope": "local",
+      "chapterId": "exact-string-matching",
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-z-function"
+      }
+    },
+    {
+      "id": "string-hash-h",
+      "displayNotation": "h(S)",
+      "shortName": "хеш строки",
+      "explanation": "Модульный числовой отпечаток последовательности S",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-polynomial-hash"
+      }
+    },
+    {
+      "id": "string-hash-base-b",
+      "displayNotation": "b",
+      "shortName": "основание хеша",
+      "explanation": "Основание степеней в полиномиальном хеше строки",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-polynomial-hash"
+      }
+    },
+    {
+      "id": "string-hash-modulus-p",
+      "displayNotation": "p",
+      "shortName": "модуль хеша",
+      "explanation": "Модуль, по которому вычисляется полиномиальный хеш",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-polynomial-hash"
+      }
+    },
+    {
+      "id": "string-prefix-hash",
+      "displayNotation": "H[k]",
+      "shortName": "префиксный хеш",
+      "explanation": "Хеш первых k символов строки в выбранном соглашении о степенях",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-prefix-substring-hash"
+      }
+    },
+    {
+      "id": "string-hash-substring",
+      "displayNotation": "h(S[l:r])",
+      "shortName": "хеш подстроки",
+      "explanation": "Хеш полуинтервала строки от l включительно до r исключительно",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-prefix-substring-hash"
+      }
+    },
+    {
+      "id": "string-hash-collision",
+      "displayNotation": "\\Pr[h(S)=h(T)]",
+      "shortName": "вероятность коллизии",
+      "explanation": "Вероятность равенства отпечатков разных строк при выбранной случайной модели параметров",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-hash-collision-bound"
+      }
+    },
+    {
+      "id": "aho-state",
+      "displayNotation": "q",
+      "shortName": "состояние автомата",
+      "explanation": "Текущая вершина автомата Ахо — Корасик",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-state-invariant"
+      }
+    },
+    {
+      "id": "aho-trie-prefix",
+      "displayNotation": "str(q)",
+      "shortName": "префикс состояния",
+      "explanation": "Строка вдоль пути от корня trie до состояния q",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-state-invariant"
+      }
+    },
+    {
+      "id": "aho-failure",
+      "displayNotation": "fail(q)",
+      "shortName": "суффиксная ссылка",
+      "explanation": "Переход к состоянию самого длинного собственного суффикса, присутствующего в trie",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-failure-link"
+      }
+    },
+    {
+      "id": "aho-dictionary-length",
+      "displayNotation": "L_D",
+      "shortName": "суммарная длина словаря",
+      "explanation": "Общее число символов во всех образцах перед построением автомата",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-complexity"
+      }
+    },
+    {
+      "id": "aho-text-length",
+      "displayNotation": "n",
+      "shortName": "длина просматриваемого текста",
+      "explanation": "Число символов входного текста для многопоиска",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-complexity"
+      }
+    },
+    {
+      "id": "aho-output-count",
+      "displayNotation": "z",
+      "shortName": "число найденных ответов",
+      "explanation": "Количество перечисленных вхождений всех образцов",
+      "scope": "local",
+      "chapterId": "string-hashing-multiple-patterns",
+      "firstDefinition": {
+        "chapterId": "string-hashing-multiple-patterns",
+        "anchor": "string-aho-complexity"
+      }
+    },
+    {
+      "id": "suffix-text",
+      "displayNotation": "T",
+      "shortName": "индексируемый текст",
+      "explanation": "Строка, для которой строятся суффиксные структуры",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-substring-equivalence"
+      }
+    },
+    {
+      "id": "suffix-pattern",
+      "displayNotation": "P",
+      "shortName": "поисковый образец",
+      "explanation": "Строка, совпадение которой сравнивается с префиксами суффиксов",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-substring-equivalence"
+      }
+    },
+    {
+      "id": "suffix-start",
+      "displayNotation": "i",
+      "shortName": "начало суффикса",
+      "explanation": "Позиция первого символа рассматриваемого суффикса текста",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-substring-equivalence"
+      }
+    },
+    {
+      "id": "suffix-array",
+      "displayNotation": "SA",
+      "shortName": "суффиксный массив",
+      "explanation": "Перестановка начальных позиций суффиксов в лексикографическом порядке",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-array-definition"
+      }
+    },
+    {
+      "id": "suffix-rank",
+      "displayNotation": "rank",
+      "shortName": "ранг суффикса",
+      "explanation": "Позиция суффикса в лексикографически отсортированном суффиксном массиве",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-array-definition"
+      }
+    },
+    {
+      "id": "suffix-class",
+      "displayNotation": "c_k(i)",
+      "shortName": "класс эквивалентности",
+      "explanation": "Ранг префикса суффикса длины 2^k на раунде doubling",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-doubling-key"
+      }
+    },
+    {
+      "id": "suffix-doubling-round",
+      "displayNotation": "k",
+      "shortName": "раунд удвоения",
+      "explanation": "Номер шага, на котором сравниваются блоки длины 2^k",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-doubling-key"
+      }
+    },
+    {
+      "id": "suffix-lcp",
+      "displayNotation": "LCP",
+      "shortName": "массив общих префиксов",
+      "explanation": "Длины общих префиксов соседних суффиксов в порядке SA",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-lcp-definition"
+      }
+    },
+    {
+      "id": "suffix-lce",
+      "displayNotation": "LCE(i,j)",
+      "shortName": "длиннейший общий префикс",
+      "explanation": "Длина общего префикса суффиксов, начинающихся в позициях i и j",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-lcp-rmq"
+      }
+    },
+    {
+      "id": "suffix-tree-edge",
+      "displayNotation": "u\\to v",
+      "shortName": "ребро суффиксного дерева",
+      "explanation": "Переход между вершинами компактного trie суффиксов",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-tree-edge-label"
+      }
+    },
+    {
+      "id": "suffix-edge-interval",
+      "displayNotation": "[l_v,r_v)",
+      "shortName": "метка ребра",
+      "explanation": "Полуинтервал исходного текста, задающий подпись ребра суффиксного дерева",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-tree-edge-label"
+      }
+    },
+    {
+      "id": "suffix-automaton-state",
+      "displayNotation": "v",
+      "shortName": "состояние суффиксного автомата",
+      "explanation": "Класс подстрок с одинаковым множеством конечных позиций",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-automaton-length-interval"
+      }
+    },
+    {
+      "id": "suffix-state-length",
+      "displayNotation": "len(v)",
+      "shortName": "максимальная длина состояния",
+      "explanation": "Наибольшая длина подстроки, представленной состоянием v",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-automaton-length-interval"
+      }
+    },
+    {
+      "id": "suffix-state-link",
+      "displayNotation": "link(v)",
+      "shortName": "суффиксная ссылка состояния",
+      "explanation": "Ссылка на класс длиннейшего собственного суффикса состояния v",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-automaton-length-interval"
+      }
+    },
+    {
+      "id": "suffix-distinct-count",
+      "displayNotation": "D(T)",
+      "shortName": "число различных подстрок",
+      "explanation": "Количество различных непустых подстрок индексируемого текста",
+      "scope": "local",
+      "chapterId": "suffix-indexes",
+      "firstDefinition": {
+        "chapterId": "suffix-indexes",
+        "anchor": "suffix-distinct-substrings"
+      }
+    },
+    {
+      "id": "string-bwt",
+      "displayNotation": "L",
+      "shortName": "последний столбец BWT",
+      "explanation": "Результат преобразования Барроуза — Уилера",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "bwt-definition"
+      }
+    },
+    {
+      "id": "string-sentinel",
+      "displayNotation": "\\mathtt{\\$}",
+      "shortName": "уникальный терминатор",
+      "explanation": "Специальный символ конца, отсутствующий в исходном тексте и фиксирующий циклический порядок",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "bwt-definition"
+      }
+    },
+    {
+      "id": "string-c-table",
+      "displayNotation": "C",
+      "shortName": "таблица предшествующих символов",
+      "explanation": "Для символа c хранит число символов текста, лексикографически меньших c",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "bwt-lf-mapping"
+      }
+    },
+    {
+      "id": "string-occ",
+      "displayNotation": "Occ(c,i)",
+      "shortName": "ранг символа",
+      "explanation": "Число появлений символа c в префиксе L[0:i]",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "bwt-lf-mapping"
+      }
+    },
+    {
+      "id": "string-lf-mapping",
+      "displayNotation": "LF(i)",
+      "shortName": "переход last-to-first",
+      "explanation": "Сопоставление строки по символу из последнего столбца с тем же по рангу символом первого столбца",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "bwt-lf-mapping"
+      }
+    },
+    {
+      "id": "string-fm-interval",
+      "displayNotation": "[l,r)",
+      "shortName": "интервал FM-index",
+      "explanation": "Диапазон строк отсортированной матрицы, начинающихся с уже обработанного фрагмента образца",
+      "scope": "local",
+      "chapterId": "bwt-fm-index",
+      "firstDefinition": {
+        "chapterId": "bwt-fm-index",
+        "anchor": "fm-backward-step"
+      }
+    },
+    {
+      "id": "string-edit-distance",
+      "displayNotation": "d(A,B)",
+      "shortName": "редакционное расстояние",
+      "explanation": "Минимальная суммарная стоимость допустимых правок, превращающих A в B",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "edit-distance-definition"
+      }
+    },
+    {
+      "id": "string-sequence",
+      "displayNotation": "A,B",
+      "shortName": "сравниваемые последовательности",
+      "explanation": "Две последовательности символов или элементов в задаче выравнивания",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "edit-distance-definition"
+      }
+    },
+    {
+      "id": "string-operation-cost",
+      "displayNotation": "c_{op}",
+      "shortName": "стоимость правки",
+      "explanation": "Неотрицательная цена выбранной операции вставки, удаления или замены",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "edit-distance-definition"
+      }
+    },
+    {
+      "id": "string-edit-table",
+      "displayNotation": "D[i,j]",
+      "shortName": "таблица редакционного расстояния",
+      "explanation": "Оптимальная стоимость преобразования первых i элементов A в первые j элементов B",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "edit-distance-recurrence"
+      }
+    },
+    {
+      "id": "string-minimum",
+      "displayNotation": "\\min",
+      "shortName": "выбор минимальной стоимости",
+      "explanation": "Операция выбора самого дешёвого из допустимых предыдущих состояний",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "edit-distance-recurrence"
+      }
+    },
+    {
+      "id": "string-lcs-table",
+      "displayNotation": "L[i,j]",
+      "shortName": "таблица LCS",
+      "explanation": "Длина наибольшей общей подпоследовательности префиксов длины i и j",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "lcs-recurrence"
+      }
+    },
+    {
+      "id": "string-maximum",
+      "displayNotation": "\\max",
+      "shortName": "выбор максимального значения",
+      "explanation": "Операция выбора лучшего из допустимых вариантов общей подпоследовательности",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "lcs-recurrence"
+      }
+    },
+    {
+      "id": "string-lcs",
+      "displayNotation": "LCS",
+      "shortName": "наибольшая общая подпоследовательность",
+      "explanation": "Подпоследовательность максимальной длины, сохраняющая порядок в обеих последовательностях",
+      "scope": "local",
+      "chapterId": "edit-distance-lcs",
+      "firstDefinition": {
+        "chapterId": "edit-distance-lcs",
+        "anchor": "lcs-insert-delete-relation"
+      }
+    },
+    {
+      "id": "compression-probability",
+      "displayNotation": "p(x)",
+      "shortName": "вероятность символа",
+      "explanation": "Вероятность появления символа x в принятой модели источника",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-entropy"
+      }
+    },
+    {
+      "id": "compression-information",
+      "displayNotation": "I(x)",
+      "shortName": "самоинформация",
+      "explanation": "Количество информации редкого события в битах, равное минус двоичному логарифму вероятности",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-entropy"
+      }
+    },
+    {
+      "id": "compression-entropy",
+      "displayNotation": "H(X)",
+      "shortName": "энтропия источника",
+      "explanation": "Средняя самоинформация символа случайной величины X",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-entropy"
+      }
+    },
+    {
+      "id": "compression-alphabet",
+      "displayNotation": "\\Sigma",
+      "shortName": "алфавит источника",
+      "explanation": "Множество символов, которым модель назначает вероятности или коды",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-entropy"
+      }
+    },
+    {
+      "id": "compression-code-length",
+      "displayNotation": "\\ell_x",
+      "shortName": "длина кодового слова",
+      "explanation": "Число битов в префиксном коде символа x",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-kraft"
+      }
+    },
+    {
+      "id": "compression-kraft-sum",
+      "displayNotation": "K",
+      "shortName": "сумма Крафта",
+      "explanation": "Сумма долей двоичного дерева, занятых кодовыми словами заданных длин",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-kraft"
+      }
+    },
+    {
+      "id": "compression-interval",
+      "displayNotation": "[L,H)",
+      "shortName": "арифметический интервал",
+      "explanation": "Текущий полуинтервал чисел, кодирующих уже обработанный префикс сообщения",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-arithmetic-step"
+      }
+    },
+    {
+      "id": "compression-cumulative",
+      "displayNotation": "C(x)",
+      "shortName": "накопленная вероятность",
+      "explanation": "Сумма вероятностей символов, предшествующих x в фиксированном порядке алфавита",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-arithmetic-step"
+      }
+    },
+    {
+      "id": "compression-window",
+      "displayNotation": "W",
+      "shortName": "размер словарного окна",
+      "explanation": "Максимальное расстояние назад, доступное ссылке LZ77",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-lz77-match"
+      }
+    },
+    {
+      "id": "compression-distance",
+      "displayNotation": "d",
+      "shortName": "расстояние ссылки",
+      "explanation": "Число позиций назад от текущего выхода до начала копируемого фрагмента",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-lz77-match"
+      }
+    },
+    {
+      "id": "compression-match-length",
+      "displayNotation": "\\ell",
+      "shortName": "длина совпадения",
+      "explanation": "Число символов, которые LZ77 копирует по ссылке",
+      "scope": "local",
+      "chapterId": "lossless-compression",
+      "firstDefinition": {
+        "chapterId": "lossless-compression",
+        "anchor": "compression-lz77-match"
+      }
+    },
+    {
+      "id": "string-comparison-count",
+      "displayNotation": "C_{\\mathrm{naive}}",
+      "shortName": "число сравнений наивного поиска",
+      "explanation": "Количество посимвольных сравнений, выполненных полным перебором допустимых сдвигов",
+      "scope": "local",
+      "chapterId": "exact-string-matching",
+      "firstDefinition": {
+        "chapterId": "exact-string-matching",
+        "anchor": "string-naive-comparisons"
+      }
     }
   ]
 }

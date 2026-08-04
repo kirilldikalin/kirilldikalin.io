@@ -76,7 +76,7 @@
         <section id="sweep-model">
           <h2>Линия замета хранит события и поперечное состояние</h2>
           <p>Представим вертикальную прямую $x=\xi$, которая движется слева направо. Между соседними критическими x-координатами комбинаторный порядок объектов на прямой не меняется. Изменение происходит в событии: начале или конце отрезка, пересечении, вершине многоугольника. Поэтому непрерывное движение можно заменить конечной отсортированной очередью событий.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-sweep-state" data-notation-coverage="interactive" data-required-notations="geometry-sweep-event,geometry-sweep-status">
+          <div id="geometry-sweep-state" class="atlas-math atlas-notation-formula" data-formula-id="geometry-sweep-state" data-notation-coverage="interactive" data-required-notations="geometry-sweep-event,geometry-sweep-status">
             \[
               \class{atlas-notation-token notation-id-geometry-sweep-event}{Q}
               =\text{очередь событий по }(x,y,\text{тип}),
@@ -94,7 +94,7 @@
           <p>Если задача спрашивает, пересекается ли хотя бы одна пара невырожденных отрезков в общем положении, при вставке отрезка проверяют его с соседями, при удалении — новых соседей друг с другом. Почему далекие в вертикальном порядке отрезки можно игнорировать? Чтобы два отрезка впервые поменяли порядок, они должны встретиться. Непосредственно перед первым пересечением между ними не может находиться третий активный отрезок, иначе порядок не смог бы измениться локально.</p>
           <section class="atlas-block" data-atlas-block="proof"><h3>Свидетельство первой пропущенной пары</h3><p>Предположим, алгоритм пропустил пересечение с минимальной x-координатой среди пропущенных. Возьмём два отрезка перед этой координатой. Их вертикальный порядок ещё не менялся через необработанное пересечение. Если между ними есть другой отрезок, то в точке встречи он должен выйти из промежутка, пересёкши один из двух раньше, что противоречит минимальности. Значит, пара стала соседней, и соответствующее локальное сравнение должно было её обнаружить.</p></section>
           <p>Для перечисления всех пересечений найденную точку добавляют в очередь как новое событие. В нём два отрезка меняются местами, после чего проверяются новые соседние пары. При $k$ пересечениях классическая оценка имеет вид $O((n+k)\log n)$ и память $O(n+k)$ при явном хранении событий. Если требуется только существование, выполнение можно завершить на первом свидетельстве.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-sweep-complexity" data-notation-coverage="interactive" data-required-notations="geometry-segment-count,geometry-intersection-count">
+          <div id="geometry-sweep-complexity" class="atlas-math atlas-notation-formula" data-formula-id="geometry-sweep-complexity" data-notation-coverage="interactive" data-required-notations="geometry-segment-count,geometry-intersection-count">
             \[
               T_{\mathrm{sweep}}(
               \class{atlas-notation-token notation-id-geometry-segment-count}{n},
@@ -122,7 +122,7 @@
         <section id="closest-problem">
           <h2>Ближайшая пара использует квадрат расстояния и точное сравнение</h2>
           <p>Для точек $p,q$ евклидово расстояние содержит квадратный корень. Чтобы найти минимум, корень не нужен: неотрицательная функция $\sqrt{x}$ монотонна. На целых координатах квадрат расстояния остаётся целым и сравнивается точно. Сам корень вычисляют только для подписи.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-closest-distance" data-notation-coverage="interactive" data-required-notations="geometry-closest-distance,geometry-point">
+          <div id="geometry-closest-distance" class="atlas-math atlas-notation-formula" data-formula-id="geometry-closest-distance" data-notation-coverage="interactive" data-required-notations="geometry-closest-distance,geometry-point">
             \[
               \class{atlas-notation-token notation-id-geometry-closest-distance}{\delta^2(p,q)}
               =(p_x-q_x)^2+(p_y-q_y)^2,
@@ -136,7 +136,7 @@
         <section id="closest-recursion">
           <h2>После решения половин остаётся только полоса вокруг разделителя</h2>
           <p>Сортируем точки по x и делим пополам. Рекурсивно находим минимальные расстояния $\delta_L$ и $\delta_R$, берём $\delta=\min(\delta_L,\delta_R)$. Любая пара, улучшающая ответ и использующая точки из разных половин, имеет горизонтальное расстояние меньше $\delta$. Следовательно, обе точки лежат в полосе ширины $2\delta$ вокруг разделяющей прямой.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-closest-strip" data-notation-coverage="interactive" data-required-notations="geometry-closest-strip,geometry-closest-distance">
+          <div id="geometry-closest-strip" class="atlas-math atlas-notation-formula" data-formula-id="geometry-closest-strip" data-notation-coverage="interactive" data-required-notations="geometry-closest-strip,geometry-closest-distance">
             \[
               \class{atlas-notation-token notation-id-geometry-closest-strip}{S}
               =\{p\in P:\ |p_x-x_m|&lt;
@@ -158,7 +158,7 @@
         <section id="range-model">
           <h2>Диапазонный запрос отделяет структуру индекса от формы области</h2>
           <p>Ортогональный запрос задаёт осевой прямоугольник и должен вернуть все точки внутри. Наивный просмотр имеет время $O(n+k)$, где $k$ — размер ответа. Индекс тратит время и память заранее, чтобы большинство пустых областей не посещать. В динамической задаче добавляются вставки и удаления, поэтому баланс между запросом и обновлением меняется.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-orthogonal-query" data-notation-coverage="interactive" data-required-notations="geometry-range-query,geometry-point">
+          <div id="geometry-orthogonal-query" class="atlas-math atlas-notation-formula" data-formula-id="geometry-orthogonal-query" data-notation-coverage="interactive" data-required-notations="geometry-range-query,geometry-point">
             \[
               \class{atlas-notation-token notation-id-geometry-range-query}{R}
               =[x_1,x_2]\times[y_1,y_2],
@@ -189,7 +189,7 @@
         <section id="dimensions">
           <h2>Проклятие размерности разрушает геометрическое отсечение</h2>
           <p>В $d$ измерениях объём шара сосредоточен иначе, число соседних ячеек растёт, а bounding boxes становятся слабыми. Для равномерных данных расстояния до ближайших и дальних точек могут сближаться относительно среднего масштаба. Запрос пересекает большое число областей дерева, и работа приближается к полному просмотру.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="geometry-kd-dimensional-cost" data-notation-coverage="interactive" data-required-notations="geometry-dimension,geometry-point-count">
+          <div id="geometry-kd-dimensional-cost" class="atlas-math atlas-notation-formula" data-formula-id="geometry-kd-dimensional-cost" data-notation-coverage="interactive" data-required-notations="geometry-dimension,geometry-point-count">
             \[
               \text{типичная эффективность pruning}=F(
               \class{atlas-notation-token notation-id-geometry-dimension}{d},

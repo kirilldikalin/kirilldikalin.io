@@ -2893,8 +2893,14 @@
       ],
       "related": [],
       "route": "./chapters/exact-string-matching.html",
-      "minutes": 42,
-      "reading": null,
+      "minutes": 40,
+      "reading": {
+        "words": 2574,
+        "formulaBlocks": 5,
+        "proofBlocks": 4,
+        "theoryMinutes": 20,
+        "labMinutes": 20
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -2920,8 +2926,14 @@
       ],
       "related": [],
       "route": "./chapters/string-hashing-multiple-patterns.html",
-      "minutes": 58,
-      "reading": null,
+      "minutes": 43,
+      "reading": {
+        "words": 2511,
+        "formulaBlocks": 7,
+        "proofBlocks": 3,
+        "theoryMinutes": 19,
+        "labMinutes": 24
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -2947,8 +2959,14 @@
       ],
       "related": [],
       "route": "./chapters/suffix-indexes.html",
-      "minutes": 62,
-      "reading": null,
+      "minutes": 49,
+      "reading": {
+        "words": 2591,
+        "formulaBlocks": 8,
+        "proofBlocks": 5,
+        "theoryMinutes": 21,
+        "labMinutes": 28
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -2974,8 +2992,14 @@
       ],
       "related": [],
       "route": "./chapters/bwt-fm-index.html",
-      "minutes": 60,
-      "reading": null,
+      "minutes": 41,
+      "reading": {
+        "words": 2563,
+        "formulaBlocks": 3,
+        "proofBlocks": 3,
+        "theoryMinutes": 18,
+        "labMinutes": 23
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3003,8 +3027,14 @@
         "advanced-dynamic-programming"
       ],
       "route": "./chapters/edit-distance-lcs.html",
-      "minutes": 61,
-      "reading": null,
+      "minutes": 43,
+      "reading": {
+        "words": 2579,
+        "formulaBlocks": 5,
+        "proofBlocks": 3,
+        "theoryMinutes": 19,
+        "labMinutes": 24
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3030,8 +3060,14 @@
       ],
       "related": [],
       "route": "./chapters/lossless-compression.html",
-      "minutes": 48,
-      "reading": null,
+      "minutes": 44,
+      "reading": {
+        "words": 2548,
+        "formulaBlocks": 4,
+        "proofBlocks": 4,
+        "theoryMinutes": 19,
+        "labMinutes": 25
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3057,8 +3093,14 @@
       ],
       "related": [],
       "route": "./chapters/geometric-predicates-convex-hull.html",
-      "minutes": 58,
-      "reading": null,
+      "minutes": 49,
+      "reading": {
+        "words": 2777,
+        "formulaBlocks": 7,
+        "proofBlocks": 3,
+        "theoryMinutes": 21,
+        "labMinutes": 28
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3084,8 +3126,14 @@
       ],
       "related": [],
       "route": "./chapters/sweep-line-closest-pair-range-search.html",
-      "minutes": 61,
-      "reading": null,
+      "minutes": 50,
+      "reading": {
+        "words": 2549,
+        "formulaBlocks": 6,
+        "proofBlocks": 3,
+        "theoryMinutes": 19,
+        "labMinutes": 31
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3111,8 +3159,14 @@
       ],
       "related": [],
       "route": "./chapters/voronoi-delaunay.html",
-      "minutes": 60,
-      "reading": null,
+      "minutes": 54,
+      "reading": {
+        "words": 2643,
+        "formulaBlocks": 8,
+        "proofBlocks": 5,
+        "theoryMinutes": 22,
+        "labMinutes": 32
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3138,8 +3192,14 @@
       ],
       "related": [],
       "route": "./chapters/integer-arithmetic-number-theory.html",
-      "minutes": 61,
-      "reading": null,
+      "minutes": 47,
+      "reading": {
+        "words": 2602,
+        "formulaBlocks": 6,
+        "proofBlocks": 3,
+        "theoryMinutes": 19,
+        "labMinutes": 28
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3165,8 +3225,14 @@
       ],
       "related": [],
       "route": "./chapters/modular-algorithms-primality.html",
-      "minutes": 62,
-      "reading": null,
+      "minutes": 48,
+      "reading": {
+        "words": 2503,
+        "formulaBlocks": 6,
+        "proofBlocks": 3,
+        "theoryMinutes": 19,
+        "labMinutes": 29
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3194,8 +3260,14 @@
         "divide-and-conquer"
       ],
       "route": "./chapters/polynomials-fft-ntt.html",
-      "minutes": 63,
-      "reading": null,
+      "minutes": 51,
+      "reading": {
+        "words": 2597,
+        "formulaBlocks": 6,
+        "proofBlocks": 5,
+        "theoryMinutes": 21,
+        "labMinutes": 30
+      },
       "features": {
         "proof": true,
         "interactive": true,
@@ -3221,8 +3293,14 @@
       ],
       "related": [],
       "route": "./chapters/matrices-linear-systems-stability.html",
-      "minutes": 64,
-      "reading": null,
+      "minutes": 55,
+      "reading": {
+        "words": 2741,
+        "formulaBlocks": 9,
+        "proofBlocks": 6,
+        "theoryMinutes": 23,
+        "labMinutes": 32
+      },
       "features": {
         "proof": true,
         "interactive": true,

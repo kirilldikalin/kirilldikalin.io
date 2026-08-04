@@ -77,6 +77,20 @@ test("continent 06 contains exactly the thirteen canonical published nodes", () 
   nodes.forEach((node) => {
     assert.equal(node.id, expectedIds.get(node.curriculumId));
     assert.equal(node.route, "./chapters/" + node.id + ".html");
+    const html = fs.readFileSync(
+      path.join(atlasRoot, "chapters", node.id + ".html"),
+      "utf8"
+    );
+    assert.equal(
+      html.match(/<h1>([^<]+)<\/h1>/)?.[1],
+      node.title,
+      node.id + " h1 must match the graph title"
+    );
+    assert.equal(
+      html.match(/<title>([^<]+)<\/title>/)?.[1],
+      node.title + " — Алгоритмический атлас",
+      node.id + " document title must match the graph title"
+    );
     assert.deepEqual(node.features, {
       proof: true,
       interactive: true,

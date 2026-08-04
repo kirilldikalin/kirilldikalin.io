@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Матрицы, линейные системы и устойчивость — Алгоритмический атлас</title>
+  <title>Матрицы, линейные системы и численная устойчивость — Алгоритмический атлас</title>
   <meta name="description" content="Матричное умножение, исключение Гаусса, обусловленность, устойчивость и итерационное уточнение">
-  <meta property="og:title" content="Матрицы, линейные системы и устойчивость — Алгоритмический атлас">
+  <meta property="og:title" content="Матрицы, линейные системы и численная устойчивость — Алгоритмический атлас">
   <meta property="og:description" content="Почему быстрый матричный алгоритм, точная задача и надёжный численный ответ — три разных вопроса">
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://kirilldikalin.github.io/kirilldikalin.io/algorithmic_atlas/chapters/matrices-linear-systems-stability.html">
@@ -32,11 +32,11 @@
   <script src="../chapter.js" defer></script>
 </head>
 <body class="atlas-chapter" data-atlas-node-id="matrices-linear-systems-stability" data-atlas-lab-minutes="32">
-  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки"><a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span><a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span><span>Матрицы, линейные системы и устойчивость</span></nav>
+  <nav class="atlas-chapter-breadcrumb" aria-label="Хлебные крошки"><a href="../../index.html">Kirill Dikalin</a><span aria-hidden="true">/</span><a href="../index.html">Алгоритмический атлас</a><span aria-hidden="true">/</span><span>Матрицы, линейные системы и численная устойчивость</span></nav>
   <main class="atlas-chapter-shell">
     <header class="atlas-chapter-header">
       <p class="atlas-chapter-kicker">Строки, геометрия и численные алгоритмы · точка 6.13</p>
-      <h1>Матрицы, линейные системы и устойчивость</h1>
+      <h1>Матрицы, линейные системы и численная устойчивость</h1>
       <p class="atlas-chapter-intro">Как отличить число арифметических операций от точности задачи и надёжности вычисленного ответа</p>
       <div class="atlas-chapter-meta"><span data-atlas-reading-time>Теория рассчитывается…</span><span data-atlas-lab-time>Лаборатория ≈ 32 мин</span><span>7 доказательств</span><span>12 упражнений</span></div>
     </header>
@@ -73,7 +73,7 @@
         <section id="matrix-model">
           <h2>Матрица хранит линейное преобразование, а не просто таблицу</h2>
           <p>Матрица $A\in\mathbb R^{m\times n}$ задаёт линейное отображение из $\mathbb R^n$ в $\mathbb R^m$. Столбцы показывают, куда переходят базисные векторы, а строка описывает одну линейную форму. Такое чтение сразу объясняет размеры: в произведении $Ax$ число координат $x$ должно совпадать с числом столбцов $A$, а результат имеет по одной координате на строку.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-vector-product" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-vector-b}{b}=\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x},\qquad b_i=\sum_{j=1}^{n}a_{ij}x_j.\]</p></div>
+          <div id="matrix-vector-product" class="atlas-math atlas-notation-formula" data-formula-id="matrix-vector-product" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-vector-b}{b}=\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x},\qquad b_i=\sum_{j=1}^{n}a_{ij}x_j.\]</p></div>
           <p>В вычислительной задаче одной формулы недостаточно. Нужно назвать поле или тип чисел, способ хранения, размеры, норму для измерения ошибок и требуемую точность. Матрица из целых коэффициентов может умножаться точно через <code>BigInt</code>, но решение системы обычно рационально. Матрица из <code>Number</code> использует приближённую двоичную арифметику даже тогда, когда все напечатанные числа выглядят десятичными целыми.</p>
           <p>Матрицы связывают предыдущие темы: быстрое умножение больших чисел используется внутри длинной арифметики, модульные матрицы работают в конечном поле, полиномиальные преобразования сами являются умножениями на структурированные матрицы. Здесь главный новый вопрос — как цена вычисления взаимодействует с ошибкой представления.</p>
         </section>
@@ -81,7 +81,7 @@
         <section id="multiplication">
           <h2>Обычное умножение собирает скалярные произведения</h2>
           <p>Для $A\in\mathbb R^{m\times k}$ и $B\in\mathbb R^{k\times n}$ элемент произведения берёт строку первой матрицы и столбец второй. Прямой алгоритм выполняет $mkn$ умножений с накоплением. Для квадратных матриц порядка $n$ получается $\Theta(n^3)$ арифметических операций и $\Theta(n^2)$ элементов результата.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-product-entry" data-notation-coverage="interactive" data-required-notations="matrix-c-entry,matrix-a-entry,matrix-b-entry"><p>\[\class{atlas-notation-token notation-id-matrix-c-entry}{c_{ij}}=\sum_{t=1}^{k}\class{atlas-notation-token notation-id-matrix-a-entry}{a_{it}}\class{atlas-notation-token notation-id-matrix-b-entry}{b_{tj}}.\]</p></div>
+          <div id="matrix-product-entry" class="atlas-math atlas-notation-formula" data-formula-id="matrix-product-entry" data-notation-coverage="interactive" data-required-notations="matrix-c-entry,matrix-a-entry,matrix-b-entry"><p>\[\class{atlas-notation-token notation-id-matrix-c-entry}{c_{ij}}=\sum_{t=1}^{k}\class{atlas-notation-token notation-id-matrix-a-entry}{a_{it}}\class{atlas-notation-token notation-id-matrix-b-entry}{b_{tj}}.\]</p></div>
           <p>Перестановка трёх циклов не меняет формулу и асимптотику, но заметно меняет последовательность обращений к памяти. В строковом хранении один порядок может читать соседние элементы, другой — перескакивать между удалёнными строками. Поэтому одинаковое число операций не означает одинаковое время на реальном процессоре.</p>
           <section class="atlas-block" data-atlas-block="proof"><h3>Почему произведение соответствует композиции</h3><p>Пусть сначала действует $B$, затем $A$. Координата $i$ результата равна $\sum_t a_{it}(Bx)_t=\sum_ta_{it}\sum_jb_{tj}x_j$. После перестановки конечных сумм коэффициент при $x_j$ равен $\sum_ta_{it}b_{tj}=c_{ij}$. Значит, матрица композиции именно $AB$, причём порядок множителей отражает порядок применения справа налево.</p></section>
         </section>
@@ -96,7 +96,7 @@
         <section id="strassen">
           <h2>Штрассен заменяет одно блочное умножение сложениями</h2>
           <p>Обычная формула для четырёх квадрантов использует восемь произведений половинного размера. В 1969 году Фолькер Штрассен показал, как получить те же четыре блока из семи произведений специально подобранных сумм и разностей. Число сложений увеличивается, зато дорогая рекурсивная операция встречается реже.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="strassen-recurrence" data-notation-coverage="interactive" data-required-notations="matrix-time-function,matrix-size-n"><p>\[\class{atlas-notation-token notation-id-matrix-time-function}{T}(\class{atlas-notation-token notation-id-matrix-size-n}{n})=7T(n/2)+\Theta(n^2)=\Theta\!\left(n^{\log_2 7}\right),\qquad \log_2 7\approx2{,}807.\]</p></div>
+          <div id="strassen-recurrence" class="atlas-math atlas-notation-formula" data-formula-id="strassen-recurrence" data-notation-coverage="interactive" data-required-notations="matrix-time-function,matrix-size-n"><p>\[\class{atlas-notation-token notation-id-matrix-time-function}{T}(\class{atlas-notation-token notation-id-matrix-size-n}{n})=7T(n/2)+\Theta(n^2)=\Theta\!\left(n^{\log_2 7}\right),\qquad \log_2 7\approx2{,}807.\]</p></div>
           <p>Семь промежуточных произведений обычно обозначают $M_1,\ldots,M_7$. Их конкретная схема важна меньше принципа: линейные комбинации входных блоков кодируют достаточно информации для восстановления всех четырёх выходных блоков. Проверить схему можно раскрытием скобок; каждый нежелательный член сокращается, а четыре нужные пары остаются.</p>
           <section class="atlas-block" data-atlas-block="proof"><h3>Почему показатель равен $\log_2 7$</h3><p>На глубине $d$ есть $7^d$ задач размера $n/2^d$. Рекурсия останавливается при $d=\log_2n$, поэтому число листьев равно $7^{\log_2 n}=n^{\log_2 7}$. Суммарные сложения по уровням образуют геометрическую сумму того же порядка. Это доказательство считает арифметические операции и не учитывает cache, округление и стоимость выделения временных буферов.</p></section>
           <p>Лаборатория строит трассу рекурсивного разбиения и сборки для $A^2$. На малом блоке она сознательно возвращается к прямому умножению: это crossover point. В реальной реализации порог измеряют для конкретного оборудования и типа данных, а не выводят только из асимптотики.</p>
@@ -112,7 +112,7 @@
         <section id="systems">
           <h2>Линейная система спрашивает не об обратной матрице</h2>
           <p>Задача $Ax=b$ требует найти вектор $x$. Если $A$ квадратна и невырождена, решение единственно. Формально можно написать $x=A^{-1}b$, но вычислять всю обратную матрицу обычно дороже и менее содержательно, чем факторизовать $A$ и решить систему.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="linear-system" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}.\]</p></div>
+          <div id="linear-system" class="atlas-math atlas-notation-formula" data-formula-id="linear-system" data-notation-coverage="interactive" data-required-notations="matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-a}{A}\class{atlas-notation-token notation-id-matrix-vector-x}{x}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}.\]</p></div>
           <p>Система может не иметь решений или иметь бесконечно много, если матрица прямоугольна или вырождена. Ранг описывает число независимых ограничений. Для квадратной матрицы ненулевой determinant эквивалентен обратимости в точной арифметике, но вычисление determinant отдельно не является хорошим численным тестом: значение может быть очень малым из-за масштаба, не отражая напрямую чувствительность решения.</p>
           <p>Политика главы: лаборатория принимает квадратные матрицы порядка от 1 до 8 и конечные числа. Вырожденный или численно неразличимый pivot отклоняется понятным сообщением. Ограничение связано с видимой трассой, а не с математическим пределом метода.</p>
         </section>
@@ -120,7 +120,7 @@
         <section id="gaussian">
           <h2>Исключение Гаусса превращает систему в треугольную</h2>
           <p>Элементарные операции над строками сохраняют множество решений: перестановка уравнений, умножение уравнения на ненулевое число и добавление кратного другого уравнения. На шаге $k$ алгоритм выбирает pivot в столбце $k$ и обнуляет элементы ниже него. После прямого хода остаётся верхнетреугольная система, решаемая обратной подстановкой.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="gaussian-elimination-step" data-notation-coverage="interactive" data-required-notations="matrix-elimination-factor,matrix-pivot"><p>\[\class{atlas-notation-token notation-id-matrix-elimination-factor}{m_{ik}}=\frac{a_{ik}}{\class{atlas-notation-token notation-id-matrix-pivot}{a_{kk}}},\qquad R_i\leftarrow R_i-m_{ik}R_k.\]</p></div>
+          <div id="gaussian-elimination-step" class="atlas-math atlas-notation-formula" data-formula-id="gaussian-elimination-step" data-notation-coverage="interactive" data-required-notations="matrix-elimination-factor,matrix-pivot"><p>\[\class{atlas-notation-token notation-id-matrix-elimination-factor}{m_{ik}}=\frac{a_{ik}}{\class{atlas-notation-token notation-id-matrix-pivot}{a_{kk}}},\qquad R_i\leftarrow R_i-m_{ik}R_k.\]</p></div>
           <p>На первом шаге обновляется примерно $(n-1)^2$ элементов, затем $(n-2)^2$ и так далее. Сумма квадратов даёт $\Theta(n^3)$ операций. Обратная подстановка требует только $\Theta(n^2)$. Для нескольких правых частей факторизацию выгодно выполнить один раз, а затем повторять дешёвые треугольные решения.</p>
           <section class="atlas-block" data-atlas-block="proof"><h3>Инвариант прямого хода</h3><p>После завершения столбцов $0,\ldots,k-1$ все элементы ниже диагонали в этих столбцах равны нулю, а новая расширенная матрица задаёт то же множество решений. Новый шаг использует допустимые операции строк и не меняет уже обнулённые позиции, потому что pivot-строка сама имеет нули в предыдущих столбцах. Индукция приводит к эквивалентной верхнетреугольной системе.</p></section>
         </section>
@@ -142,7 +142,7 @@
         <section id="floating-point">
           <h2>Плавающая точка хранит ближайшее представимое число</h2>
           <p>Упрощённая модель одной базовой операции записывается как $\operatorname{fl}(x\circ y)=(x\circ y)(1+\delta)$, где $|\delta|\le u$ и результат не вызывает overflow или underflow. Здесь $u$ — unit roundoff. Модель относительной ошибки удобна, но не описывает операции около нуля и специальные значения сама по себе.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="floating-point-model" data-notation-coverage="interactive" data-required-notations="floating-result,floating-roundoff"><p>\[\class{atlas-notation-token notation-id-floating-result}{\operatorname{fl}(x\circ y)}=(x\circ y)(1+\class{atlas-notation-token notation-id-floating-roundoff}{\delta}),\qquad |\delta|\le u.\]</p></div>
+          <div id="floating-point-model" class="atlas-math atlas-notation-formula" data-formula-id="floating-point-model" data-notation-coverage="interactive" data-required-notations="floating-result,floating-roundoff"><p>\[\class{atlas-notation-token notation-id-floating-result}{\operatorname{fl}(x\circ y)}=(x\circ y)(1+\class{atlas-notation-token notation-id-floating-roundoff}{\delta}),\qquad |\delta|\le u.\]</p></div>
           <p>При сложении близких чисел противоположных знаков возникает cancellation: абсолютная ошибка может остаться малой, а относительная ошибка результата стать большой, потому что точный результат почти нулевой. Overflow превращает конечный результат в бесконечность, underflow теряет младшие разряды около нуля. Масштабирование строк и столбцов иногда помогает, но не исправляет плохую обусловленность исходной задачи.</p>
           <p>JavaScript <code>Number</code> следует двоичной 64-битной арифметике IEEE 754. Он точно представляет целые только до $2^{53}-1$. Матричная лаборатория запрещает <code>NaN</code> и бесконечности, ограничивает размер визуализации, но не изображает результат символически точным. Для рационального эталона понадобилось бы другое ядро.</p>
         </section>
@@ -150,7 +150,7 @@
         <section id="errors">
           <h2>Residual, forward error и backward error отвечают на разные вопросы</h2>
           <p>Для вычисленного $\widehat x$ residual равен $r=b-A\widehat x$. Малый residual означает, что $\widehat x$ почти удовлетворяет записанным уравнениям. Forward error сравнивает $\widehat x$ с неизвестным точным решением $x$. Эти величины могут резко различаться в плохо обусловленной задаче.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="linear-system-residual" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}-\class{atlas-notation-token notation-id-matrix-a}{A}\widehat{\class{atlas-notation-token notation-id-matrix-vector-x}{x}}.\]</p></div>
+          <div id="linear-system-residual" class="atlas-math atlas-notation-formula" data-formula-id="linear-system-residual" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-a,matrix-vector-x,matrix-vector-b"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r}=\class{atlas-notation-token notation-id-matrix-vector-b}{b}-\class{atlas-notation-token notation-id-matrix-a}{A}\widehat{\class{atlas-notation-token notation-id-matrix-vector-x}{x}}.\]</p></div>
           <p>Backward error спрашивает, для какой близкой задачи вычисленный ответ был бы точным. Устойчивый алгоритм обычно гарантирует малую обратную ошибку. Затем обусловленность переводит её в возможную прямую ошибку. Так отделяется поведение алгоритма от чувствительности математической постановки.</p>
           <p>Residual нужно нормировать относительно масштаба $A$, $x$ и $b$. Абсолютное значение $10^{-8}$ великолепно для данных порядка единицы, но плохо для системы с коэффициентами $10^{-12}$. В лаборатории показывается норма $\|r\|_\infty$ как понятный индикатор, а текст главы предупреждает, что одной этой цифры недостаточно.</p>
         </section>
@@ -158,7 +158,7 @@
         <section id="conditioning">
           <h2>Число обусловленности измеряет чувствительность задачи</h2>
           <p>Для обратимой матрицы в согласованной операторной норме число обусловленности равно $\kappa(A)=\|A\|\,\|A^{-1}\|$. Оно не меньше единицы. Большое значение означает, что малое относительное возмущение данных может привести к заметному относительному изменению решения.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="matrix-condition-number" data-notation-coverage="interactive" data-required-notations="matrix-condition,matrix-a"><p>\[\class{atlas-notation-token notation-id-matrix-condition}{\kappa(A)}=\|\class{atlas-notation-token notation-id-matrix-a}{A}\|\,\|A^{-1}\|.\]</p></div>
+          <div id="matrix-condition-number" class="atlas-math atlas-notation-formula" data-formula-id="matrix-condition-number" data-notation-coverage="interactive" data-required-notations="matrix-condition,matrix-a"><p>\[\class{atlas-notation-token notation-id-matrix-condition}{\kappa(A)}=\|\class{atlas-notation-token notation-id-matrix-a}{A}\|\,\|A^{-1}\|.\]</p></div>
           <section class="atlas-block" data-atlas-block="proof"><h3>Почему масштаб не меняет обусловленность</h3><p>Для ненулевого $\alpha$ имеем $(\alpha A)^{-1}=\alpha^{-1}A^{-1}$. Однородность нормы даёт $\|\alpha A\|\,\|(\alpha A)^{-1}\|=|\alpha|\|A\|\cdot|\alpha|^{-1}\|A^{-1}\|=\kappa(A)$. Поэтому малый determinant из-за общего масштаба не доказывает плохую обусловленность.</p></section>
           <p>Оценка вида $\|\delta x\|/\|x\|\lesssim\kappa(A)\,\|\delta b\|/\|b\|$ показывает худшее возможное усиление малых возмущений правой части при фиксированной $A$. Это верхняя граница, а не обещание, что каждый шум усилится ровно во столько раз. Направление возмущения имеет значение.</p>
         </section>
@@ -181,7 +181,7 @@
         <section id="refinement">
           <h2>Итерационное уточнение использует residual как поправку</h2>
           <p>После приближённого решения $x_k$ вычислим $r_k=b-Ax_k$ и решим систему $Ad_k=r_k$. Тогда $x_{k+1}=x_k+d_k$. В точной арифметике одна такая поправка устранила бы всю ошибку, потому что $A(x-x_k)=r_k$. В плавающей точке остаётся новая ошибка, и шаг можно повторить.</p>
-          <div class="atlas-math atlas-notation-formula" data-formula-id="iterative-refinement" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-correction,matrix-iterate"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r_k}=b-A\class{atlas-notation-token notation-id-matrix-iterate}{x_k},\quad A\class{atlas-notation-token notation-id-matrix-correction}{d_k}=r_k,\quad x_{k+1}=x_k+d_k.\]</p></div>
+          <div id="iterative-refinement" class="atlas-math atlas-notation-formula" data-formula-id="iterative-refinement" data-notation-coverage="interactive" data-required-notations="matrix-residual,matrix-correction,matrix-iterate"><p>\[\class{atlas-notation-token notation-id-matrix-residual}{r_k}=b-A\class{atlas-notation-token notation-id-matrix-iterate}{x_k},\quad A\class{atlas-notation-token notation-id-matrix-correction}{d_k}=r_k,\quad x_{k+1}=x_k+d_k.\]</p></div>
           <p>Классический вариант повторно использует одну LU-factorization. Особенно полезно вычислять residual в более высокой точности, чем сам solve. Уточнение может улучшить ответ, но не является магическим лекарством: при слишком плохой обусловленности, неверной факторизации или stagnation correction перестаёт помогать.</p>
           <p>Лаборатория показывает норму residual после каждого шага и ограничивает число итераций. Автоматический запуск имеет паузу, пошаговый режим и предельное число кадров; длинная или не сходящаяся последовательность не блокирует основной поток страницы.</p>
         </section>

@@ -6,12 +6,13 @@
       "mathematical-tools",
       "data-structures",
       "algorithm-design",
-      "graphs-networks-optimization"
+      "graphs-networks-optimization",
+      "strings-geometry-numerics"
     ],
-    "publishedChapterCount": 57,
-    "displayFormulaTotal": 524,
+    "publishedChapterCount": 70,
+    "displayFormulaTotal": 604,
     "basicFormulaTotal": 35,
-    "interactiveFormulaTotal": 489
+    "interactiveFormulaTotal": 569
   },
   "fingerprint": {
     "algorithm": "sha256",

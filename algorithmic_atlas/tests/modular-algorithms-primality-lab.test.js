@@ -27,7 +27,7 @@ test("разложение n−1 корректно отделяет степе�
   assert.deepEqual(core.decomposeMinusOne(561n), { s: 4, d: 35n });
 });
 
-test("детерминированные основания классифицируют весь набор меньше 2^64", () => {
+test("детерминированные основания классифицируют контрольный набор меньше 2^64", () => {
   [2n, 3n, 5n, 97n, 2147483647n, 18446744073709551557n].forEach((n) => assert.equal(core.isPrime64(n), true, String(n)));
   [0n, 1n, 4n, 9n, 341n, 561n, 1105n, 3215031751n].forEach((n) => assert.equal(core.isPrime64(n), false, String(n)));
   assert.throws(() => core.isPrime64(1n << 64n), /2\^64/);
