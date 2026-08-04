@@ -52,6 +52,20 @@ test("число сравнений и длина видимой witness-цеп�
   assert.throws(() => core.witnessTrace(highPowerOfTwo, 2n), /слишком много/);
 });
 
+test("агрегированная окружность сохраняет относительное положение остатка", () => {
+  assert.equal(core.aggregateResidueSector(0n, 25n, 16), 0);
+  assert.equal(core.aggregateResidueSector(12n, 25n, 16), 7);
+  assert.equal(core.aggregateResidueSector(24n, 25n, 16), 15);
+  assert.equal(core.aggregateResidueSector(-1n, 25n, 16), 15);
+});
+
+test("максимальная допустимая witness-цепочка помещается в шесть строк", () => {
+  const n = (1n << 94n) + 1n;
+  const trace = core.witnessTrace(n, 2n);
+  assert.equal(trace.length, 95);
+  assert.ok(Math.ceil(trace.length / 16) <= 6);
+});
+
 test("решето воспроизводит простые до 30 и проверяет границу", () => {
   assert.deepEqual(core.sieve(30), [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]);
   assert.throws(() => core.sieve(1000001), /1000000/);
@@ -101,5 +115,9 @@ test("страница и адаптер используют общий кон�
   assert.ok((chapter.match(/target="_blank"/g) || []).length >= 3);
   assert.doesNotMatch(chapter.match(/class="atlas-chapter-intro">([^<]+)/)[1], /[.!?…]$/);
   assert.match(adapter, /runtime\.mount\(/);
+  assert.match(adapter, /drawWitnessChain/);
+  assert.match(adapter, /role:\s*"listitem"/);
+  assert.match(adapter, /aria-label.*exactLabel/);
+  assert.doesNotMatch(adapter, /residue\s*%\s*16n/);
   assert.doesNotMatch(adapter, /\beval\s*\(|new\s+Function\b/);
 });

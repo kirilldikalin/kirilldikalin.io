@@ -13,35 +13,81 @@
       if (field("mode").value === "crt") return core.createState({ mode: "crt", congruences: congruences() });
       return core.createState({ mode: field("mode").value, n: field("n").value, base: field("base").value });
     }
+
+    function compactInteger(value) {
+      const text = String(value);
+      if (text.length <= 9) return text;
+      const sign = text[0] === "-" ? "-" : "";
+      const digits = sign ? text.slice(1) : text;
+      return sign + digits.slice(0, 3) + "…" + digits.slice(-3);
+    }
+
     function drawModCircle(svg, residue, modulus, centerX, centerY, radius) {
       const exactTicks = modulus <= 24n;
       const tickCount = exactTicks ? Number(modulus) : 16;
-      visual.append(svg, "circle", { cx: centerX, cy: centerY, r: radius, class: "numeric-guide" });
+      const exactLabel = String(residue) + " modulo " + String(modulus);
+      const group = visual.append(svg, "g", { role: "img", "aria-label": exactLabel });
+      visual.append(group, "title", {}, exactLabel);
+      visual.append(group, "circle", { cx: centerX, cy: centerY, r: radius, class: "numeric-guide" });
       for (let index = 0; index < tickCount; index += 1) {
         const angle = -Math.PI / 2 + 2 * Math.PI * index / tickCount;
         const x = centerX + radius * Math.cos(angle);
         const y = centerY + radius * Math.sin(angle);
-        visual.append(svg, "circle", { cx: x, cy: y, r: 5, class: "numeric-matrix-cell" });
-        if (exactTicks) visual.text(svg, centerX + (radius + 22) * Math.cos(angle), centerY + (radius + 22) * Math.sin(angle) + 4, String(index), "is-muted", "middle");
+        visual.append(group, "circle", { cx: x, cy: y, r: 5, class: "numeric-matrix-cell" });
+        if (exactTicks) visual.text(group, centerX + (radius + 22) * Math.cos(angle), centerY + (radius + 22) * Math.sin(angle) + 4, String(index), "is-muted", "middle");
       }
-      const activeIndex = exactTicks ? Number(residue) : Number(residue % 16n);
+      const activeIndex = exactTicks ? Number(residue) : core.aggregateResidueSector(residue, modulus, tickCount);
       const activeAngle = -Math.PI / 2 + 2 * Math.PI * activeIndex / tickCount;
-      visual.append(svg, "circle", {
+      visual.append(group, "circle", {
         cx: centerX + radius * Math.cos(activeAngle),
         cy: centerY + radius * Math.sin(activeAngle),
         r: 11,
         class: "numeric-matrix-cell is-active",
       });
-      visual.text(svg, centerX, centerY + 5, String(residue) + " mod " + String(modulus), "is-strong", "middle");
-      if (!exactTicks) visual.text(svg, centerX, centerY + radius + 42, "16 агрегированных секторов", "is-muted", "middle");
+      visual.text(group, centerX, centerY - 3, "r = " + compactInteger(residue), "is-strong", "middle");
+      visual.text(group, centerX, centerY + 18, "mod " + compactInteger(modulus), "is-muted", "middle");
+      if (!exactTicks) visual.text(group, centerX, centerY + radius + 42, "16 агрегированных секторов", "is-muted", "middle");
+    }
+
+    function drawWitnessChain(svg, frames, activeIndex) {
+      const columns = 16;
+      const startX = 45;
+      const startY = 86;
+      const width = 46;
+      const height = 38;
+      const gapX = 6;
+      const gapY = 8;
+      frames.forEach(function (item, index) {
+        const column = index % columns;
+        const row = Math.floor(index / columns);
+        const x = startX + column * (width + gapX);
+        const y = startY + row * (height + gapY);
+        const exactLabel = "Шаг " + index + ": остаток " + String(item.value);
+        const group = visual.append(svg, "g", {
+          role: "listitem",
+          tabindex: "0",
+          "aria-label": exactLabel,
+        });
+        visual.append(group, "title", {}, exactLabel);
+        visual.append(group, "rect", {
+          x: x,
+          y: y,
+          width: width,
+          height: height,
+          rx: 3,
+          class: index === activeIndex ? "numeric-cell is-active" : "numeric-cell",
+        });
+        visual.text(group, x + width / 2, y + 24, compactInteger(item.value), "numeric-cell-label", "middle");
+      });
     }
     function render(state) {
       const frame = state.current; visual.clear(figure.svg, "Модульная трасса", frame.message);
       if (frame.mode === "miller-rabin") {
-        const chain = state.frames.filter(function (item) { return item.value !== undefined; }).map(function (item) { return String(item.value); });
-        visual.drawCells(figure.svg, chain, { x: 45, y: 125, width: Math.max(72, Math.min(150, 760 / chain.length)), height: 62, gap: 12, active: [Math.min(state.cursor, chain.length - 1)] });
+        const chain = state.frames.filter(function (item) { return item.value !== undefined; });
+        const chainGroup = visual.append(figure.svg, "g", { role: "list", "aria-label": "Цепочка остатков Миллера — Рабина" });
+        drawWitnessChain(chainGroup, chain, Math.min(state.cursor, chain.length - 1));
         visual.text(figure.svg, 45, 55, "n−1 = 2^" + frame.s + " · " + frame.d, "is-strong");
-        visual.text(figure.svg, 45, 245, "Ищем 1 в начале либо −1 на цепочке последовательных квадратов", "is-muted");
+        visual.text(figure.svg, 45, 395, "Ищем 1 в начале либо −1 на цепочке последовательных квадратов", "is-muted");
         panel.querySelector("[data-decomposition]").textContent = "2^" + frame.s + " · " + frame.d;
         panel.querySelector("[data-value]").textContent = visual.formatInteger(frame.value);
         panel.querySelector("[data-result]").textContent = frame.composite ? "составное" : frame.passed ? "witness пройден" : "проверка продолжается";

@@ -20,6 +20,15 @@
     return shared.mod(result.x, modulus);
   }
 
+  function aggregateResidueSector(residue, modulus, sectorCount) {
+    const count = shared.boundedInteger(sectorCount, "Число секторов", 1, 256);
+    if (typeof modulus !== "bigint" || modulus <= 0n) {
+      throw new RangeError("Модуль секторной проекции должен быть положительным BigInt.");
+    }
+    const normalized = shared.mod(BigInt(residue), modulus);
+    return Number(normalized * BigInt(count) / modulus);
+  }
+
   function combineCongruences(left, right) {
     const a = shared.mod(left.residue, left.modulus);
     const b = shared.mod(right.residue, right.modulus);
@@ -247,6 +256,7 @@
     DETERMINISTIC_BASES_64: DETERMINISTIC_BASES_64,
     MAX_CRT_CONGRUENCES: MAX_CRT_CONGRUENCES,
     MAX_WITNESS_FRAMES: MAX_WITNESS_FRAMES,
+    aggregateResidueSector: aggregateResidueSector,
     modularInverse: modularInverse,
     combineCongruences: combineCongruences,
     crtFrames: crtFrames,
